@@ -19,10 +19,29 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
   const handleClose = () => {
     setSummaryModal(false);
   };
-  const handleRemoveItem = (itemId) => {
-    const updatedModels = addedModels.filter((item) => item.label !== itemId);
-    dispatch(setAddedModels(updatedModels));
-  };
+
+
+const handleRemoveItem = (itemId) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This item will be removed!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, remove it!",
+ target: document.body, // 👈 forcefully body ke top-level pe inject karega
+  zIndex: 99999,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const updatedModels = addedModels.filter((item) => item.label !== itemId);
+      dispatch(setAddedModels(updatedModels));
+
+      Swal.fire("Removed!", "The item has been removed.", "success");
+    }
+  });
+};
+
   const handleConfirmOrder = () => {
     setSummaryModal(false);
     handleGetQuote(sceneRef,
@@ -35,14 +54,10 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
     )
   };
 
-
-
-  // const totalAmount = addedModels?.reduce((sum, item) => sum + item.price, 0);
-  // const itemCount = addedModels?.length;
   return (
     <>
       {SummaryModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-md bg-black/70 transition-all duration-300">
+        <div className="fixed inset-0 z-[99] flex items-center justify-center backdrop-blur-md bg-black/70 transition-all duration-300">
           <div className="bg-white shadow-2xl rounded-md w-[95%] max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-gray-300 relative animate-fade-in">
 
             {/* Header */}
@@ -75,8 +90,8 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
                           <p className="font-semibold text-dark font-heading text-sm truncate" title={item.label}>
                             {item.label}
                           </p>
-                           <p className=" text-dark font-heading text-sm truncate" title={item.category}>
-                           category: {item.category}
+                           <p className=" text-dark font-body font-semibold text-sm " title={item.category}>
+                          <span className="font-normal"> Category:</span> {item.category}
                           </p>
                           <p className="text-xs text-dark tracking-tighter truncate">{item.group}</p>
                         </div>

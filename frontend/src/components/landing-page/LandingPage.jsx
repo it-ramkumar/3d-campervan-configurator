@@ -87,7 +87,7 @@ const LandingPage = () => {
                   <Link
                     onClick={() => {
                       dispatch(setSelectLayout(card?.layout));
-                      if (card.layout === "Layout") {
+                      if (card.layout === "First Layout") {
                         dispatch(setAddedModels([]));
                       }
                     }}

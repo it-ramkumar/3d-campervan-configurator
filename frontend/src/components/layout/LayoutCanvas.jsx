@@ -71,7 +71,7 @@ const LayoutCanvas = ({allModels}) => {
   return (
 <>
 
-    <Canvas
+    <Canvas className="cursor-pointer"
 
       camera={{ position: [0, 2, 6], fov: 50, near: 0.1, far: 1000 }}
       dpr={[1, 1.5]}

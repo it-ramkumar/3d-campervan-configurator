@@ -207,7 +207,7 @@ const controlRef = useRef(null);
        <Link to={"/van"}>
         <button
           className="
-           text-dark bg-brand font-heading font-semibold text-base
+           text-dark bg-brand font-heading font-semibold text-base cursor-pointer
             px-6 py-2 rounded-md shadow
             hover:bg-brand hover:text-dark transition transform hover:-translate-y-0.5
           "

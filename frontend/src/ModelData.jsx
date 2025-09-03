@@ -351,7 +351,7 @@ export  const componentsMap = {
 // ------------------------
 const VanModel = [
     {
-    layout: "Layout",
+    layout: "First Layout",
     price: 29000,
     shortDescription:"",
     img: "./images/white-removebg-preview.png",
@@ -360,7 +360,7 @@ const VanModel = [
     component: Layout,
   },
   {
-    layout: "First Layout",
+    layout: "Second Layout",
     price: 39000,
     shortDescription:
       "Basic setup with convertible dinette bed, swivel seat, electrical system, heater, cabinets, and partition walls. Upgradable to elevator bed.",
@@ -378,7 +378,7 @@ const VanModel = [
     component: Layout,
   },
   {
-    layout: "Second Layout",
+    layout: "Third Layout",
     price: 59000,
     shortDescription:
       "Convertible rear-to-side dinette bed with swivel seat, large electrical system, heater, cabinets, and elevator bed included.",
@@ -395,7 +395,7 @@ const VanModel = [
     component: Layout,
   },
   {
-    layout: "Third Layout",
+    layout: "Fourth Layout",
     price: 58000,
     shortDescription:
       "Dinette bed with full-length kitchen, large electrical setup, heater, and wall cabinets throughout.",
@@ -417,7 +417,7 @@ const VanModel = [
     component: Layout,
   },
   {
-    layout: "Fourth Layout",
+    layout: "Fifth Layout",
     price: 78000,
     shortDescription:
       "Dinette bed with elevator bed, kitchen, full electrical setup, heater, and spacious wall cabinets.",
@@ -436,7 +436,7 @@ const VanModel = [
     component: Layout,
   },
   {
-    layout: "Fifth Layout",
+    layout: "Sixth Layout",
     price: 98000,
     shortDescription:
       "Luxury build with dinette, elevator bed, aluminum bathroom, full kitchen, induction cooktop, and premium electrical system.",

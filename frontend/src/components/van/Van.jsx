@@ -110,7 +110,7 @@ function Van() {
   {/* Canvas Section - 50% on mobile, 75% on desktop */}
   <div className="w-full md:w-3/4 h-1/2 md:h-full relative ">
     <div className="absolute inset-0">
-      <Canvas>
+      <Canvas className="cursor-grab">
         <CameraAssigner cameraRef={cameraRef} />
 
         {isIntView ? (
