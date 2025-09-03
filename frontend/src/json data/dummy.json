@@ -1,7 +1,7 @@
 
 {
     "Interior": [
-  "// ------------------------ Flooring -------------------------",
+
   {
     "_id": "689c529cadd8e1908fed9a36",
     "category": "interior",
@@ -42,7 +42,7 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Driver's Area -------------------------",
+
   {
     "_id": "689c581e47218e3b3ff6553b",
     "category": "interior",
@@ -109,7 +109,7 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Behind the Driver -------------------------",
+
   {
     "_id": "689c58c6c6b33edc3ca232eb",
     "category": "interior",
@@ -137,7 +137,7 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Behind the Passenger Seat -------------------------",
+
   {
     "_id": "689c75f401c6b8316af8d1aa",
     "category": "interior",
@@ -542,7 +542,6 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Bed/Dinette -------------------------",
   {
     "_id": "689c747d01c6b8316af8d18a",
     "category": "interior",
@@ -700,7 +699,6 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Shower -------------------------",
   {
     "_id": "689c7a9dfb2f9349fc82395b",
     "category": "interior",
@@ -728,7 +726,6 @@
     "extensionKey": []
   },
 
-  "// ------------------------ Interior Build -------------------------",
   {
     "_id": "689c7b2efb2f9349fc823971",
     "category": "interior",
