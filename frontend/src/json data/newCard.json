@@ -1,0 +1,93 @@
+{
+    "cards": [
+        {
+            "layout": "Layout",
+            "price": 29000,
+            "shortDescription": "",
+            "img": "./layout/layout0.png",
+            "includes": [],
+            "colors": "Standard"
+        },
+        {
+            "layout": "First Layout",
+            "price": 39000,
+            "shortDescription": "Dinette converts to bed, swivel double seat, electrical setup, air heater, wall cabinets, partition walls, upgradeable to elevator bed are included.",
+            "img": "./layout/layout1.png",
+            "includes": [
+                "Dinette S/N that converts to bed from rear doors to sliding door",
+                "Swivel double seat",
+                "Electrical set up: 600 amp hours, 2000 inverter, DCDC charger, 12v fridge chest like in the bench",
+                "Air Heater under the passenger seat",
+                "Wall cabinets on the Driver side all the way",
+                "Two partition walls",
+                "Option to upgrade to elevator S/N bed"
+            ],
+            "colors": "Standard"
+        },
+        {
+            "layout": "Second Layout",
+            "price": 59000,
+            "shortDescription": "Dinette bed, swivel seat, electrical setup, air heater, partial wall cabinets, elevator bed included",
+            "img": "./layout/layout2.png",
+            "includes": [
+                "Dinette S/N that converts to bed from rear doors to sliding door",
+                "Swivel double seat",
+                "Electrical set up: 600 amp hours, 2000 inverter, DCDC charger, 12v fridge chest like in the bench",
+                "Air Heater under the passenger seat",
+                "Wall cabinets on the Driver side from driver seat to partition wall",
+                "Two partition walls",
+                "Elevator S/N bed"
+            ],
+            "colors": "Different colors"
+        },
+        {
+            "layout": "Third Layout",
+            "price": 58000,
+            "shortDescription": "Dinette bed, kitchen on driver side, electrical setup, air heater, wall cabinets, partition walls included",
+            "img": "./layout/layout3.png",
+            "includes": [
+                "Dinette S/N that converts to bed from rear doors to sliding door",
+                "Kitchen on the driver side",
+                "Electrical set up: 600 amp hours, 2000 inverter, DCDC charger, 12v fridge chest like in the bench",
+                "Air Heater under the passenger seat",
+                "Wall cabinets on the Driver side all the way",
+                "Two partition walls"
+            ],
+            "colors": "Different colors"
+        },
+        {
+            "layout": "Fourth Layout",
+            "price": 78000,
+            "shortDescription": "Dinette bed, elevator bed, kitchen on driver side, electrical setup, air heater, wall cabinets, partition walls inclued",
+            "img": "./layout/layout4.png",
+            "includes": [
+                "Dinette S/N that converts to bed from rear doors to sliding door",
+                "Elevator bed S/N",
+                "Kitchen on the driver side",
+                "Electrical set up: 600 amp hours, 2000 inverter, DCDC charger, 12v fridge chest like in the bench",
+                "Air Heater under the passenger seat",
+                "Wall cabinets on the Driver side above kitchen",
+                "Two partition walls"
+            ],
+            "colors": "Different colors"
+        },
+        {
+            "layout": "Fifth Layout",
+            "price": 98000,
+            "shortDescription": "Dinette bed, elevator bed, aluminum bathroom, kitchen with fridge and induction, electrical setup, air heater, wall cabinets, partition walls included",
+            "img": "./layout/layout5.png",
+            "includes": [
+                "Dinette S/N that converts to bed from rear doors to sliding door",
+                "Elevator bed S/N",
+                "Aluminum bathroom on driver side by the partition wall",
+                "Kitchen sink cabinet behind the driver seat",
+                "Kitchen fridge cabinet with induction on top on the passenger side",
+                "Electrical set up: 600 amp hours, 2000 inverter, DCDC charger, 12v fridge chest like in the bench",
+                "Air Heater under the passenger seat",
+                "Wall cabinets on the Driver side above kitchen",
+                "Two partition walls"
+            ],
+            "colors": "Different colors"
+        }
+    ]
+}

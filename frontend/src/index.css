@@ -1,0 +1,133 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+
+@theme {
+  --color-brand: #e6e4e1;
+  --color-dark: #553e7a;
+  --color-grad: #a49cc4;
+}
+
+@theme {
+  --font-heading: "Merriweather", serif;
+  --font-body: "Open Sans", sans-serif;
+}
+
+* {
+  /* margin: 0; */
+  box-sizing: border-box;
+
+}
+
+/* Sirf .custom-scroll ke liye scrollbar style */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: var(--color-brand);
+  ;
+  /* Tailwind slate-100 */
+  border-radius: 8px;
+}
+
+/* Add to your CSS file */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.group:hover {
+  transform: rotateY(180deg);
+}
+
+/* Custom Scrollbar */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-brand);
+  ;
+  /* Tailwind blue-500 */
+  border-radius: 9999px;
+}
+/* ------------------------------- */
+/* color Scrollbar */
+.color-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.color-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.color-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-dark);
+  ;
+  /* Tailwind blue-500 */
+  border-radius: 9999px;
+}
+
+.my-confirm-btn {
+ background: var(--color-dark);/* your brand color */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin: 0 10px;
+  transition: background 0.2s ease;
+}
+
+.my-confirm-btn:hover {
+ background: var(--color-dark);; /* darker shade */
+}
+
+.my-cancel-btn {
+  background: var(--color-brand);;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.my-cancel-btn:hover {
+  background: var(--color-brand);
+}
+@keyframes drag {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(15px); }
+  50% { transform: translateX(-15px); }
+  100% { transform: translateX(0); }
+}
+
+/* @keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+} */
+
+.animate-drag {
+  animation: drag 2s infinite;
+}
+
+.animate-fadeInOut {
+  animation: fadeInOut 10s forwards;
+}
