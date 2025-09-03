@@ -1,0 +1,8 @@
+# Ye line backend waale .env ko ignore karegi
+/backend/.env
+/backend/node_modules
+
+# Ye line frontend waale .env ko ignore karegi
+/frontend/.env
+/frontend/node_modules
+/frontend/public
