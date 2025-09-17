@@ -85,6 +85,7 @@ router.get("/:id", async (req, res) => {
 // ✅ Update quote by ID
 router.put("/:id", async (req, res) => {
   try {
+  
     const updatedQuote = await Quote.findByIdAndUpdate(
       req.params.id,
       req.body,
