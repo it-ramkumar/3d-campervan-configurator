@@ -17,7 +17,7 @@ const dispatch = useDispatch();
     setData([]);
 
     try {
-      const res = await axios.get(`http://localhost:5000/api/quote/search`, {
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/quote/search`, {
         params: { email, phone },
       });
       if (res.status === 200) {

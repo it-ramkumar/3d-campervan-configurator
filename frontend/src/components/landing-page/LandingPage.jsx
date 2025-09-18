@@ -26,7 +26,15 @@ const LandingPage = () => {
           <h3 className="text-center py-2 mb-2 text-2xl font-heading font-bold sm:text-2xl md:text-3xl uppercase text-dark">
             Select Your Layout
           </h3>
+<div>
+  <Link to={"/admin"}>
+  <button>Admin</button>
+  </Link>
+   <Link to={"/preview"}>
+  <button>Preview</button>
+  </Link>
 
+</div>
           {/* Grid for Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
             {data?.cards?.map((card, index) => (
