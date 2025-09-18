@@ -15,8 +15,11 @@ const LandingPage = () => {
     dispatch(setSelectLayout(card?.layout));
     if (card.layout === "First Layout") {
       dispatch(setAddedModels([]));
+      navigate("/van");
     }
-    navigate("/layout"); // redirect to configurator
+    else{
+      navigate("/layout"); // redirect to configurator
+    }
   };
 
   return (
@@ -26,15 +29,19 @@ const LandingPage = () => {
           <h3 className="text-center py-2 mb-2 text-2xl font-heading font-bold sm:text-2xl md:text-3xl uppercase text-dark">
             Select Your Layout
           </h3>
-<div>
-  <Link to={"/admin"}>
-  <button>Admin</button>
-  </Link>
-   <Link to={"/preview"}>
-  <button>Preview</button>
-  </Link>
+ <div className="flex justify-between items-center w-full px-6 py-4 ">
+      <Link to="/admin">
+        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          Admin
+        </button>
+      </Link>
 
-</div>
+      <Link to="/preview">
+        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+          Preview
+        </button>
+      </Link>
+    </div>
           {/* Grid for Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
             {data?.cards?.map((card, index) => (
