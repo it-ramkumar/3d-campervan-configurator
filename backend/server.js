@@ -32,7 +32,7 @@ app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+app.set("trust proxy", 1);
 // 5️ Enable CORS
 app.use(corsMiddleware);
 
