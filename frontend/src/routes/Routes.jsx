@@ -5,6 +5,7 @@ import Van from "../pages/Van";
 import Layout from "../components/layout/Layout";
 import AdminUse from "../components/adminUse/AdminUse";
 import Preview from "../components/preview/Preview";
+import Changes from "../components/changes/Change"
 
 
 
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
+              <Route path="/changes" element={<Changes />} />
             <Route path="/layout" element={<Layout />} />
             <Route path="/van" element={<Van />} />
             <Route path="/admin" element={<AdminUse />} />

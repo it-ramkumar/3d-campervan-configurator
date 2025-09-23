@@ -128,9 +128,9 @@ const MultiStepForm = ({
     return <GIFVanLoader />
   }
   return (
- <div className="md:h-screen h-full flex flex-col bg-brand overflow-hidden max-w-full">
+ <div className="md:h-screen h-full flex flex-col bg-brand  max-w-full">
   {/* Top Section */}
-  <div className="shadow-md sticky top-0 z-30 w-full overflow-hidden">
+  <div className="shadow-md sticky top-0 z-30 w-full ">
     {/* Tabs */}
     <TabButtons
       activeTab={activeTab}
@@ -140,7 +140,7 @@ const MultiStepForm = ({
     />
 
     {/* Progress Bar */}
-    <div className="w-full h-2 overflow-hidden">
+    <div className="w-full h-2 ">
       <div
         className="h-full bg-dark transition-all duration-500"
         style={{ width: `${progressPercent}%` }}
@@ -148,7 +148,7 @@ const MultiStepForm = ({
     </div>
 
     {/* Heading */}
-    <div className="p-3 text-center bg-white max-w-full overflow-hidden">
+    <div className="p-3 text-center bg-white max-w-full">
       <h2 className="text-lg md:text-xl font-bold text-dark font-heading capitalize break-words truncate">
         {steps[currentStep][0].replace(/-/g, " ")}
       </h2>
@@ -159,7 +159,7 @@ const MultiStepForm = ({
   </div>
 
   {/* Cards Section */}
-  <div className="flex-1 overflow-y-auto min-w-0">
+  <div className="flex-1  min-w-0">
     <ModelsCard
       steps={steps}
       currentStep={currentStep}
@@ -176,7 +176,7 @@ const MultiStepForm = ({
   </div>
 
   {/* Bottom Section */}
-  <div className="bg-dark shadow-inner sticky bottom-0 z-30 md:py-4 w-full overflow-hidden">
+  <div className="bg-dark shadow-inner sticky bottom-0 z-30 md:py-4 w-full ">
     <div className="flex justify-between gap-2 px-2">
       {activeTab === "exterior" && currentStep === 0 ? (
         <NextBackButton

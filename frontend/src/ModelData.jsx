@@ -107,6 +107,7 @@ import Invertorcharger3000 from "./components/in-model-components/Invertorcharge
 import ElectricBench from "./components/in-model-components/ElectricBench";
 import CabinetLocks from "./components/in-model-components/CabinetLocks";
 import Layout from "./components/layout-model-components/Layout-one";
+import SantaMonika144 from "./components/van-model-components/VanModel"
 
 // ---------------
 
@@ -348,6 +349,23 @@ export  const componentsMap = {
 };
 
 // -----------------
+
+const vans =[
+  {
+    layout: "Mercedes-Benz Sprinter",
+    modelYear :"2022",
+    price: 224543,
+    shortDescription:"",
+    spec:{
+      wheelBase : 144,
+      drivetrain:"AWD",
+      "Sit&Sleep": 2-5
+    },
+    img: "./images/white-removebg-preview.png",
+    colors: "Standard",
+    component: SantaMonika144,
+  },
+]
 // ------------------------
 const VanModel = [
     {
@@ -1373,4 +1391,4 @@ const VanModel = [
 // ];// --- SYSTEM MODELS ---
 
 
-export { VanModel };
+export { VanModel,vans };

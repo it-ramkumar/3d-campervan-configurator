@@ -1,203 +1,176 @@
 const express = require('express');
 const router = express.Router();
 const PortfolioVan = require('../models/portfolio')// Adjust path as needed
+const multer = require("multer")
+const { portfolios } = require("../services/cloudinary")
+const upload = multer({ storage: portfolios });
 
-// Single Van Creation Route
-router.post('/', async (req, res) => {
+
+router.post(
+  "/",
+  upload.fields([
+    { name: "gallery", maxCount: 10 },
+    { name: "blockImages", maxCount: 20 },
+  ]),
+  async (req, res) => {
+    try {
+      // ✅ Extract gallery
+      const gallery = req.files["gallery"]?.map((f) => f.path) || [];
+
+      // ✅ Parse blocksData from body (captions etc.)
+      const blocksData = JSON.parse(req.body.blocksData || "[]");
+
+      // ✅ Merge images with captions
+      const blocks = blocksData.map((b, i) => ({
+        caption: b.caption,
+        image: req.files["blockImages"]?.[i]?.path || null,
+      }));
+
+      // ✅ Create new portfolioVan doc
+      const newPortfolio = new PortfolioVan({
+        slug: req.body.slug, // optional // ya title se auto generate hoga
+        van_listing: {
+          title: req.body.title,
+          description: req.body.description,
+          subtitle: req.body.subtitle,
+          price: req.body.price,
+          specifications: req.body.specifications
+            ? JSON.parse(req.body.specifications)
+            : undefined,
+        },
+        sold: req.body.sold || false,
+        gallery,
+        blocks, // ✅ ab schema ke hisaab se save hoga
+        detailed_features: req.body.detailed_features
+          ? JSON.parse(req.body.detailed_features)
+          : [],
+        media: req.body.media ? JSON.parse(req.body.media) : {},
+      });
+
+      await newPortfolio.save();
+
+      res.json({
+        success: true,
+        message: "Portfolio van created successfully",
+        data: newPortfolio,
+      });
+    } catch (err) {
+      console.error("Error creating portfolio:", err);
+      res.status(500).json({ success: false, message: "Upload failed" });
+    }
+  }
+);
+
+router.get("/", async (req, res) => {
   try {
-    const {
-      van_listing,
-      sold,
-      gallery,
-      detailed_features,
-      media
-    } = req.body;
+    const portfolios = await PortfolioVan.find();
+    res.json({ success: true, data: portfolios });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Fetch failed" });
+  }
+});
 
-    // Validate required fields
-    if (!van_listing || !van_listing.title) {
-      return res.status(400).json({
-        message: 'Van listing with title is required'
-      });
+/**
+ * READ (GET one by slug)
+ */
+router.get("/:slug", async (req, res) => {
+  try {
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    if (!portfolio) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Portfolio not found" });
     }
+    res.json({ success: true, data: portfolio });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Fetch failed" });
+  }
+});
 
-    // Generate slug if not provided
-    let slug = req.body.slug;
-    if (!slug) {
-      slug = await PortfolioVan.generateSlug(van_listing.title);
-    }
+/**
+ * UPDATE (PUT by slug)
+ */
+router.put(
+  "/:slug",
+  upload.fields([
+    { name: "gallery", maxCount: 10 },
+    { name: "blockImages", maxCount: 20 },
+  ]),
+  async (req, res) => {
+    try {
+      const gallery = req.files["gallery"]?.map((f) => f.path) || [];
 
-    // Check if slug already exists
-    const existingVan = await PortfolioVan.findOne({ slug });
-    if (existingVan) {
-      return res.status(409).json({
-        message: 'Van with this slug already exists'
-      });
-    }
+      const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-    // Create the van object
-    const vanData = {
-      slug,
+      const blocks = blocksData.map((b, i) => ({
+        caption: b.caption,
+        image: req.files["blockImages"]?.[i]?.path || b.image || null,
+      }));
+
+     const updatedPortfolio = await PortfolioVan.findOneAndUpdate(
+  { slug: req.body.slug || req.params.slug }, // filter
+  {
+    $set: {
       van_listing: {
-        title: van_listing.title,
-        description: van_listing.description || '',
-        subtitle: van_listing.subtitle || '',
-        price: van_listing.price || null,
-        specifications: van_listing.specifications || {}
+        title: req.body.title,
+        description: req.body.description,
+        subtitle: req.body.subtitle,
+        price: req.body.price,
+        specifications: req.body.specifications
+          ? JSON.parse(req.body.specifications)
+          : undefined,
       },
-      sold: sold || false,
-      gallery: gallery || [],
-      detailed_features: detailed_features || [],
-      media: media || {}
-    };
+      sold: req.body.sold || false,
+      blocks,
+      detailed_features: req.body.detailed_features
+        ? JSON.parse(req.body.detailed_features)
+        : [],
+      media: req.body.media ? JSON.parse(req.body.media) : {},
+    },
+    ...(gallery.length && { $push: { gallery: { $each: gallery } } }), // ✅ gallery ko push karna
+  },
+  { new: true, runValidators: true }
+);
 
-    // Handle specifications if provided
-    if (van_listing.specifications) {
-      vanData.van_listing.specifications = {
-        make_model: van_listing.specifications.make_model || '',
-        wheelbase: van_listing.specifications.wheelbase || '',
-        drivetrain: van_listing.specifications.drivetrain || '',
-        capacity: van_listing.specifications.capacity || {
-          sits: '',
-          sleeps: ''
-        }
-      };
-    }
 
-    // Create and save the van
-    const van = new PortfolioVan(vanData);
-    const newVan = await van.save();
-
-    res.status(201).json({
-      message: 'Van created successfully',
-      van: newVan
-    });
-  } catch (error) {
-    console.error('Error creating van:', error);
-
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(val => val.message);
-      return res.status(400).json({
-        message: 'Validation error',
-        errors
-      });
-    }
-
-    res.status(500).json({
-      message: 'Server error while creating van',
-      error: error.message
-    });
-  }
-});
-
-// Bulk Van Creation Route
-router.post('/bulk', async (req, res) => {
-  try {
-    const { vans } = req.body;
-
-    if (!Array.isArray(vans)) {
-      return res.status(400).json({
-        message: 'Request body must contain a vans array'
-      });
-    }
-
-    const results = {
-      successful: [],
-      failed: []
-    };
-
-    // Process each van
-    for (const vanData of vans) {
-      try {
-        let slug = vanData.slug;
-
-        // Generate slug if not provided
-        if (!slug && vanData.van_listing && vanData.van_listing.title) {
-          slug = await PortfolioVan.generateSlug(vanData.van_listing.title);
-        }
-
-        // Check if van already exists
-        const existingVan = await PortfolioVan.findOne({ slug });
-        if (existingVan) {
-          results.failed.push({
-            data: vanData,
-            error: 'Van with this slug already exists'
-          });
-          continue;
-        }
-
-        // Create and save van
-        const van = new PortfolioVan({
-          ...vanData,
-          slug
-        });
-
-        const savedVan = await van.save();
-        results.successful.push(savedVan);
-      } catch (error) {
-        results.failed.push({
-          data: vanData,
-          error: error.message
-        });
+      if (!updatedPortfolio) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Portfolio not found" });
       }
-    }
 
-    res.status(201).json({
-      message: 'Bulk create completed',
-      summary: {
-        total: vans.length,
-        successful: results.successful.length,
-        failed: results.failed.length
-      },
-      results
-    });
-  } catch (error) {
-    console.error('Error in bulk create:', error);
-    res.status(500).json({
-      message: 'Server error during bulk create',
-      error: error.message
-    });
-  }
-});
-// GET /vehicles - Get all vehicles
-router.get('/portfolio', async (req, res) => {
-  try {
-    const Portfolio = await PortfolioVan.find();
-    res.status(200).json({
-      message: 'Vehicles fetched successfully',
-      count: Portfolio.length,
-      Portfolio
-    });
-  } catch (error) {
-    console.error('Error fetching Portfolio:', error);
-    res.status(500).json({
-      message: 'Server error while fetching vehicles',
-      error: error.message
-    });
-  }
-});
-
-// GET /vehicles/:slug - Get a single vehicle by slug
-router.get('/:slug', async (req, res) => {
-  try {
-    const { slug } = req.params;
-    const Portfolio = await PortfolioVan.findOne({ slug });
-
-    if (!Portfolio) {
-      return res.status(404).json({
-        message: 'Portfolio not found'
+      res.json({
+        success: true,
+        message: "Portfolio van updated successfully",
+        data: updatedPortfolio,
       });
+    } catch (err) {
+      console.error("Error updating portfolio:", err);
+      res.status(500).json({ success: false, message: "Update failed" });
     }
+  }
+);
 
-    res.status(200).json({
-      message: 'Portfolio fetched successfully',
-      Portfolio
+/**
+ * DELETE (by slug)
+ */
+router.delete("/:slug", async (req, res) => {
+  try {
+    const deletedPortfolio = await PortfolioVan.findOneAndDelete({
+      slug: req.params.slug,
     });
-  } catch (error) {
-    console.error('Error fetching Portfolio:', error);
-    res.status(500).json({
-      message: 'Server error while fetching Portfolio',
-      error: error.message
+    if (!deletedPortfolio) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Portfolio not found" });
+    }
+    res.json({
+      success: true,
+      message: "Portfolio van deleted successfully",
+      data: deletedPortfolio,
     });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Delete failed" });
   }
 });
 

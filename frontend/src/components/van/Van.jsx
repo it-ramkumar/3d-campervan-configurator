@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Html,Preload } from "@react-three/drei";
 import { useDispatch, useSelector } from "react-redux";
-
-import Van_White from "../van-model-components/VanModel";
+// import Van_White from "../van-model-components/VanModel";
+import { vans } from "../../ModelData";
 import MultiStepForm from "../multi-step-form/MultiStepForm";
 import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
@@ -27,7 +27,8 @@ import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
 import { ModelPreloader } from "../model-preloader/ModelPreloader";
 
 function Van() {
-  const dispatch = useDispatch();
+  const Santa = vans[0].component
+    const dispatch = useDispatch();
   const vanName = useSelector((state) => state.vanName.vanName);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
 
@@ -99,18 +100,70 @@ function Van() {
     };
   }, []);
 
-  // Preload the van model
-  // console.log("Preloading model:", addedModels);
+
   ModelPreloader(vanName);
 
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
 
   return (
-<div className="flex flex-col md:flex-row h-screen md:gap-4">
+<div className=" grid md:grid-cols-12 gap-5">
   {/* Canvas Section - 50% on mobile, 75% on desktop */}
-  <div className="w-full md:w-3/4 h-1/2 md:h-full relative ">
-    <div className="absolute inset-0">
-      <Canvas className="cursor-grab">
+  <div className="canvas-parent md:md:col-span-8 ">
+<div className="meta-data bg-white shadow-lg rounded-xl p-4 flex  justify-between ">
+  {/* Left Section */}
+  <div className="">
+    <img src="/logobbv.jpg" alt="logo" className="w-15 h-15 rounded-lg " />
+    <div>
+      <h1 className="text-3xl mt-8  text-gray-800">
+        Mercedes-Benz Sprinter <sub className="text-gray-500 text-xs">2022</sub>
+      </h1>
+
+      <p className="text-sm  ">
+        Starting: <span className="">$20,323,342</span>
+      </p>
+    </div>
+  </div>
+
+  {/* Right Section */}
+  <div className="flex flex-col items-center md:items-end gap-4 w-full md:w-auto">
+    <h1 className="text-lg md:text-xl font-bold text-gray-900 text-right">
+      Van Customizer
+    </h1>
+
+    {/* Tab-like buttons */}
+    <div className="flex bg-gray-200 rounded-full ">
+      <button className="px-4 py-2 text-xs  rounded-full bg-white shadow-sm text-gray-800 transition">
+        Mercedes-Benz Sprinter 2022
+      </button>
+      <button className="px-4 py-2 text-xs rounded-full text-gray-600 hover:text-gray-900 transition">
+        Mercedes-Benz Sprinter 2025
+      </button>
+    </div>
+
+    {/* Table */}
+    <table className="w-full border bg-black text-white rounded-lg overflow-hidden text-sm">
+      <thead className="text-white">
+        <tr>
+          <th className="px-2 py-2">Wheel Base</th>
+          <th className="px-2 py-2">Drive Train</th>
+          <th className="px-2 py-2">Sit & Sleep</th>
+        </tr>
+      </thead>
+      <tbody className="">
+        <tr className="text-center">
+          <td className="px-2 py-2">144</td>
+          <td className="px-2 py-2">AWD</td>
+          <td className="px-2 py-2">2–5</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+    <div className="canvas">
+      <div className="h-[600px]">
+      <Canvas className="h-full">
         <CameraAssigner cameraRef={cameraRef} />
 
         {isIntView ? (
@@ -131,8 +184,8 @@ function Van() {
  <Suspense
         fallback={
           <Html fullscreen>
-            <div className="w-full h-full flex items-center justify-center">
-              <p className="mt-4 text-[#44444E] font-medium bg-none">
+            <div >
+              <p >
                 Good things take time — your model is on the way!
               </p>
             </div>
@@ -141,7 +194,7 @@ function Van() {
       >
         <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
             <Environment files="./textures/zwartkops_straight_afternoon_1k.hdr" />
-          <Van_White showExterior={showExterior} />
+          <Santa showExterior={showExterior} />
           {addedModels.map((model) => {
             const ModelComponent = model?.component;
             if (!ModelComponent) return null;
@@ -167,14 +220,12 @@ function Van() {
 
         <ExportableScene ref={sceneRef} exportSceneCallback={setSceneToExport} />
       </Canvas>
-    </div>
-
-    {/* Canvas Controls Overlay */}
-    <div className="absolute bottom-4 left-4 right-4 flex flex-col md:flex-row items-center gap-3">
+         </div>
+      <div className="camera-button bg-purple ">
       {/* View Toggle Button */}
       <button
         onClick={() => setIsIntView(!isIntView)}
-        className="bg-dark hover:shadow-md font-heading text-brand px-4 py-2 rounded-md flex items-center gap-2 transition-colors shadow-md"
+
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -185,11 +236,10 @@ function Van() {
 
       {/* Interior Navigation Buttons */}
       {isIntView && (
-        <div className="flex gap-4 bg-opacity-70 p-2 rounded-md">
+        <div >
           <button
             onClick={() => cameraDirectionBack(camPros, setTargetPos)}
-            className="bg-dark hover:bg-brand hover:text-dark text-brand p-2 rounded-md transition-colors"
-            aria-label="Previous view"
+
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
@@ -197,8 +247,7 @@ function Van() {
           </button>
           <button
             onClick={() => interiorDirectionNext(camPros, setTargetPos)}
-            className="bg-dark hover:bg-brand hover:text-dark text-brand p-2 rounded-md transition-colors"
-            aria-label="Next view"
+
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -207,15 +256,14 @@ function Van() {
         </div>
       )}
     </div>
-
-    {/* Title Overlay */}
-    <div className="absolute top-4 left-4 font-heading bg-dark bg-opacity-70 text-brand px-4 py-2 rounded-md">
-      <h2 className="text-lg font-semibold">Van Customizer</h2>
     </div>
+
+    {/* Canvas Controls Overlay */}
+
   </div>
 
   {/* Cards Section - 50% on mobile, 25% on desktop */}
-  <div className="w-full md:w-1/4 h-1/2 md:h-full overflow-hidden">
+  <div className="card-section md:col-span-4">
     <MultiStepForm
       addModelToScene={(m) =>
         addModelToScene(m, addedModels, dispatch, setActiveModelId, modelRefs, cameraRef, orbitControlsRef)

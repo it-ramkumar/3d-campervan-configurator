@@ -89,14 +89,22 @@ const detailedFeatureItemSchema = new mongoose.Schema({
   }]
 });
 
+// ✅ Block Schema (new)
+const blockSchema = new mongoose.Schema({
+  image: {
+    type: String,
+    trim: true,
+    required: false
+  },
+  caption: {
+    type: String,
+    trim: true
+  }
+});
+
 // Portfolio Van Schema
 const portfolioVanSchema = new mongoose.Schema({
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true
-  },
+  slug: { type: String, unique: true, trim: true },
   van_listing: {
     type: vanListingSchema,
     required: true
@@ -109,6 +117,7 @@ const portfolioVanSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
+  blocks: [blockSchema], // ✅ NEW FIELD
   detailed_features: [{
     type: detailedFeatureItemSchema
   }],
@@ -121,38 +130,35 @@ const portfolioVanSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-// Virtual for formatted price
 portfolioVanSchema.virtual('formatted_price').get(function() {
   if (!this.van_listing.price) return null;
   return `$${this.van_listing.price}`;
 });
 
-// Indexes for better query performance
-portfolioVanSchema.index({ slug: 1 });
+// Indexes
 portfolioVanSchema.index({ sold: 1 });
 portfolioVanSchema.index({ 'van_listing.title': 'text', 'van_listing.description': 'text' });
 
-// Pre-save middleware to generate slug if not provided
-portfolioVanSchema.pre('save', async function(next) {
-  if (this.isModified('van_listing.title') && !this.slug) {
+// ✅ Slug generator hook (sirf ek)
+portfolioVanSchema.pre("validate", async function (next) {
+  if (!this.slug && this.van_listing?.title) {
     this.slug = await this.constructor.generateSlug(this.van_listing.title);
   }
   next();
 });
 
-// Static method to generate a slug from title
+// ✅ Static method: generate slug
 portfolioVanSchema.statics.generateSlug = async function(title) {
   let baseSlug = title
     .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
-    .replace(/\s+/g, '-') // Replace spaces with -
-    .replace(/-+/g, '-') // Replace multiple - with single -
-    .trim('-');
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
   let slug = baseSlug;
   let counter = 1;
 
-  // Check if slug already exists
   while (await this.exists({ slug })) {
     slug = `${baseSlug}-${counter}`;
     counter++;
@@ -161,22 +167,17 @@ portfolioVanSchema.statics.generateSlug = async function(title) {
   return slug;
 };
 
-// Static method to find available vans
+// ✅ Helper methods
 portfolioVanSchema.statics.findAvailable = function() {
   return this.find({ sold: false });
 };
-
-// Static method to find sold vans
 portfolioVanSchema.statics.findSold = function() {
   return this.find({ sold: true });
 };
-
-// Instance method to mark as sold
 portfolioVanSchema.methods.markAsSold = function() {
   this.sold = true;
   return this.save();
 };
 
-const PortfolioVan = mongoose.model('PortfolioVan', portfolioVanSchema);
-
+const PortfolioVan = mongoose.model("Portfolio", portfolioVanSchema);
 module.exports = PortfolioVan;
