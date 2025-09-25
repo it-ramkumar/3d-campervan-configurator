@@ -1,5 +1,7 @@
  export const StepDescriptions = {
-    "Driver’s Area": "Enhance the driver's cabin for functionality.",
+  "Interior Build":"Optimize space behind the driver's seat.",
+  "Flooring": "Enhance the driver's cabin for functionality.",
+    "Driver's Area": "Enhance the driver's cabin for functionality.",
     "Behind the Driver": "Optimize space behind the driver's seat.",
     "Bed/Dinette": "Design a versatile sleeping and dining space.",
     Shower: "Incorporate efficient bathroom solutions.",

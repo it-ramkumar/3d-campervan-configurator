@@ -19,6 +19,7 @@ import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
 import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
 import { Interior, System, Exterior } from "../../json data/dummy.json";
+import { Forward } from 'lucide-react';
 
 
 
@@ -128,9 +129,13 @@ const MultiStepForm = ({
     return <GIFVanLoader />
   }
   return (
- <div className="md:h-screen h-full flex flex-col bg-brand  max-w-full">
+ <div className=" rounded-xl">
   {/* Top Section */}
-  <div className="shadow-md sticky top-0 z-30 w-full ">
+  <div className=" flex flex-col  bg-white  ">
+   {/* <h1 className="text-lg md:text-xl text-gray-900 text-center ">
+      Custpmize Your Van
+    </h1> */}
+    <div className="">
     {/* Tabs */}
     <TabButtons
       activeTab={activeTab}
@@ -140,26 +145,30 @@ const MultiStepForm = ({
     />
 
     {/* Progress Bar */}
-    <div className="w-full h-2 ">
+    <div>
       <div
-        className="h-full bg-dark transition-all duration-500"
+        className=" bg-dark p-1 my-1 rounded "
         style={{ width: `${progressPercent}%` }}
       />
     </div>
 
     {/* Heading */}
-    <div className="p-3 text-center bg-white max-w-full">
-      <h2 className="text-lg md:text-xl font-bold text-dark font-heading capitalize break-words truncate">
+    <div className="flex flex-col justify-center items-center p-3">
+   <div>
+       <h2 className="text-lg text-dark ">
         {steps[currentStep][0].replace(/-/g, " ")}
       </h2>
-      <p className="text-sm md:text-xs text-dark font-body tracking-tighter break-words">
+   </div>
+     <p className="text-sm text-gray-900 flex justify-center items-center">
         {StepDescriptions[steps[currentStep][0]]}
       </p>
     </div>
   </div>
+  </div>
+
 
   {/* Cards Section */}
-  <div className="flex-1  min-w-0">
+  <div className="bg-brand p-2 rounded-md md:h-[50vh] h-[33vh] overflow-y-auto color-scroll">
     <ModelsCard
       steps={steps}
       currentStep={currentStep}
@@ -176,8 +185,7 @@ const MultiStepForm = ({
   </div>
 
   {/* Bottom Section */}
-  <div className="bg-dark shadow-inner sticky bottom-0 z-30 md:py-4 w-full ">
-    <div className="flex justify-between gap-2 px-2">
+   <div className="flex justify-between p-2">
       {activeTab === "exterior" && currentStep === 0 ? (
         <NextBackButton
           onClick={() => {
@@ -235,9 +243,19 @@ const MultiStepForm = ({
         />
       )}
     </div>
+  <div className="  flex flex-col   justify-between  bg-dark shadow-lg rounded-xl p-4">
+
 
     {/* Save & Get Quote Button */}
-    <div className="w-full mt-3 p-1">
+
+    <div className="flex justify-between">
+          <h1 className="font-bold text-white text-base w-1/2">
+Mercedes-Benz Sprinter
+    </h1>
+      <h1 className=" font-bold text-white text-base">
+    $20,323,342
+    </h1>
+    </div>
       <button
         onClick={() =>
           handleGetQuote(
@@ -251,28 +269,14 @@ const MultiStepForm = ({
             dispatch
           )
         }
-        className="w-full bg-brand text-dark font-semibold py-3 md:py-4 px-4 rounded-md shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-opacity-50 flex items-center justify-center space-x-2 cursor-pointer max-w-full break-words"
+        className="px-2 py-2 mt-2 text-xs rounded-full bg-white shadow-sm text-gray-800 transition"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 shrink-0"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-          />
-        </svg>
-        <span className="text-sm md:text-base font-heading truncate">
+        <span className="">
           Save & Get a Quote
         </span>
       </button>
     </div>
-  </div>
+
 
   {/* Summary Modal */}
   {summaryModal && (

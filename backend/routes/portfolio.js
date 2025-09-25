@@ -70,6 +70,63 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+// wheelbase
+// GET /api/portfolioVans?wheelbase=144
+router.get("/wheelbase", async (req, res) => {
+  try {
+    const { wheelbase } = req.query; // frontend se aayega, e.g., 144 ya 170
+console.log(wheelbase,"wheelbase")
+    // Agar wheelbase pass hua ho to filter karein
+    const filter = {};
+    if (wheelbase) {
+      filter["van_listing.specifications.wheelbase"] = Number(wheelbase);
+    }
+
+    const vans = await PortfolioVan.find(filter);
+
+    res.json({
+      success: true,
+      data: vans,
+    });
+  } catch (err) {
+    console.error("Error fetching vans:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch vans" });
+  }
+});
+
+
+// GET /api/portfolio?page=1&limit=10
+router.get("/port", async (req, res) => {
+  try {
+    // query params (default values)
+    let { page = 1, limit = 1 } = req.query;
+    page = Number(page);
+    limit = Number(limit);
+
+    // total documents
+    const total = await PortfolioVan.countDocuments();
+
+    // fetch data with skip + limit
+    const vans = await PortfolioVan.find()
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 }); // latest vans first (optional)
+
+    res.json({
+      success: true,
+      total,                // total records
+      page,                 // current page
+      pages: Math.ceil(total / limit), // total pages
+      limit,                // per page limit
+      data: vans,           // actual data
+    });
+  } catch (err) {
+    console.error("Error fetching vans with pagination:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch vans" });
+  }
+});
+
 /**
  * READ (GET one by slug)
  */

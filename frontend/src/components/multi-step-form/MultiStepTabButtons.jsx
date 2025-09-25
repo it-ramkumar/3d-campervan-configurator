@@ -13,7 +13,7 @@ export default function TabButtons({
   ]);
 
   return (
-    <div className="p-1  flex justify-between bg-dark">
+    <div className="flex justify-between mt-1 bg-gray-200  rounded-full ">
       {tabs.map((t) => (
         <button
           key={t.key}
@@ -25,9 +25,9 @@ export default function TabButtons({
              if (t.key === "system") toggleExterior(true);
           }}
           aria-current={activeTab === t.key ? "page" : undefined}
-          className={`px-5 py-2.5 rounded-md text-sm font-medium transition-all cursor-pointer font-heading bg-brand duration-200 ease-in-out
+          className={`px-4 py-2 text-xs  rounded-full w-full  text-gray-800 transition
             ${activeTab === t.key
-             &&'bg-dark text-brand shadow-sm border-brand border'
+             &&'bg-dark text-white shadow-sm '
 
             }`}
         >

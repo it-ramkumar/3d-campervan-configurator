@@ -11,10 +11,7 @@ const InquerySchema = new mongoose.Schema(
       type: String, // Radio button
       required: true,
     },
-    people2: {
-      type: String, // Duplicate question
-      required: true,
-    },
+
     vanSize: {
       type: [String], // Multiple choices
       required: true,
