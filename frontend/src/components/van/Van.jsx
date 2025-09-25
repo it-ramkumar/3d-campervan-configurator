@@ -31,7 +31,7 @@ function Van() {
   const dispatch = useDispatch();
   const vanName = useSelector((state) => state.vanName.vanName);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
- const [isOpen, setIsOpen] = useState(false);
+ const [isOpen, setIsOpen] = useState(true);
   const [activeModelId, setActiveModelId] = useState(null);
   const [sceneToExport, setSceneToExport] = useState(null);
   const [showExterior, setShowExterior] = useState(false);
@@ -106,7 +106,7 @@ function Van() {
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 md:gap-2 h-screen overflow-auto bg-brand color-scroll">
+    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto bg-brand color-scroll">
 
 
       {/* Canvas Section - 50% on mobile, 75% on desktop */}
@@ -176,7 +176,7 @@ function Van() {
 
 
 
-        <div className="canvas bg-white relative h-[30vh] md:h-[93vh] ">
+        <div className="canvas bg-white relative h-[30vh] lg:h-[93vh] ">
           <div className="w-fulll h-full">
             <Canvas className="h-screen">
               <CameraAssigner cameraRef={cameraRef} />
@@ -195,13 +195,23 @@ function Van() {
               <Preload all />
               <Suspense
                 fallback={
-                  <Html fullscreen>
-                    <div >
-                      <p >
-                        Good things take time — your model is on the way!
-                      </p>
-                    </div>
-                  </Html>
+                 <Html fullscreen>
+      <div className="flex flex-col justify-center items-center h-full gap-4">
+        {/* 3D Cube Icon */}
+        <svg xmlns="http://www.w3.org/2000/svg"
+             className="h-12 w-12 animate-spin text-gray-700"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
+                   001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+        </svg>
+
+        {/* Loading Text */}
+        <p className="text-gray-800 font-medium text-center">
+          Good things take time — your model is on the way!
+        </p>
+      </div>
+    </Html>
                 }
               >
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
@@ -295,7 +305,7 @@ function Van() {
       </div>
 
       {/* Cards Section - 50% on mobile, 25% on desktop */}
-      <div className="card-section md:col-span-4 p-2 bg-white shadow-md ">
+      <div className="card-section col-span-4 p-2 bg-white shadow-md ">
         <MultiStepForm
           addModelToScene={(m) =>
             addModelToScene(m, addedModels, dispatch, setActiveModelId, modelRefs, cameraRef, orbitControlsRef)

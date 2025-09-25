@@ -45,7 +45,7 @@ export default function ModelsCard({
   return (
     <div
       ref={scrollRef}
-      className="md:max-h-[70vh] h-[33vh]"
+      className="lg:max-h-[70vh] h-[33vh]"
     >
       {Object.keys(groupedModels).map((type) => (
         <div key={type} className="mb-6">
@@ -103,7 +103,7 @@ export default function ModelsCard({
                         )
                         : undefined
                     }
-                    className={`flex items-center bg-white justify-between p-2 rounded-2xl mb-2 shadow-sm cursor-pointer border-2 border-gray-50 transition-all
+                    className={`flex items-center bg-white justify-between p-2 md:p-4 lg:p-2 rounded-2xl my-2 shadow-sm cursor-pointer border-2 border-gray-50 transition-all
       ${isSelected ? " shadow-md" : " hover:border-gray-300"}`}
                   >
                     {/* Image */}
@@ -111,7 +111,7 @@ export default function ModelsCard({
                       <img src={model.image} alt={model.label} className="w-10 h-10 object-contain" />
                       <div>
                         <h6 className="text-sm font-semibold">{model.label}</h6>
-                        {model.description && <p className="text-gray-500 text-sm">{model.description}</p>}
+                        {model.description && <p className="text-sm text-dark/80">{model.description}</p>}
                         {isDisabled && (
                           <p className="text-red-500 text-xs mt-1">
                             ⚠ {`You need to add ${missingDependencies

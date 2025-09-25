@@ -168,7 +168,7 @@ const MultiStepForm = ({
 
 
   {/* Cards Section */}
-  <div className="bg-brand p-2 rounded-md md:h-[50vh] h-[33vh] overflow-y-auto color-scroll">
+  <div className="bg-brand p-2 rounded-md lg:h-[50vh] h-[33vh] overflow-y-auto color-scroll">
     <ModelsCard
       steps={steps}
       currentStep={currentStep}
