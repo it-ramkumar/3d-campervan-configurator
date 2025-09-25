@@ -135,9 +135,9 @@ function Van() {
             Mercedes-Benz Sprinter{" "}
             <sub className="text-gray-500 text-xs">2022</sub>
           </h1>
-          <p className="text-sm">
+          {/* <p className="text-sm">
             Starting: <span>$20,323,342</span>
-          </p>
+          </p> */}
         </div>
 
         <div className="flex flex-col gap-2">

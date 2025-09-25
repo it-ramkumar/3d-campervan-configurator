@@ -252,9 +252,9 @@ const MultiStepForm = ({
           <h1 className="font-bold text-white text-base w-1/2">
 Mercedes-Benz Sprinter
     </h1>
-      <h1 className=" font-bold text-white text-base">
+      {/* <h1 className=" font-bold text-white text-base">
     $20,323,342
-    </h1>
+    </h1> */}
     </div>
       <button
         onClick={() =>
