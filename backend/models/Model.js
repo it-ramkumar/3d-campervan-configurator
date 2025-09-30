@@ -10,6 +10,7 @@ category: { type: String, required: true },
     type: Number,
     required: true
   },
+  shortId: { type: String, unique: true }, // new field
   image: {
     type: String,
     required: true

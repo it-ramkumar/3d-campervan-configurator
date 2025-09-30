@@ -6,7 +6,11 @@ import Layout from "../components/layout/Layout";
 import AdminUse from "../components/adminUse/AdminUse";
 import Preview from "../components/preview/Preview";
 import Changes from "../components/changes/Change"
-
+import Contact from "../websiteComponents/components/Contact/Contact";
+import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
+import Dashboard from "../websiteComponents/components/dashboard/Dashboard";
+import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/PortfolioForm";
+import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
 
 
 const AppRoutes = () => {
@@ -16,11 +20,16 @@ const AppRoutes = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/inquiry" element={<Inquiry />} />
+            <Route path="/van-form" element={<VanForm />} />
+            <Route path="/portfolio-form" element={<PortfolioForm />} />
+            <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/changes" element={<Changes />} />
             <Route path="/layout" element={<Layout />} />
             <Route path="/van" element={<Van />} />
             <Route path="/admin" element={<AdminUse />} />
             <Route path="/preview" element={<Preview />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </Router>
 

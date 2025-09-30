@@ -7,6 +7,7 @@ import AddedModelsReducer from "../slices/addedModels";
 import selectLayoutReducer from "../slices/selectLayout";
 import FetchModelReducer from "../slices/fetchModel/modelSlice";
 import PreviewReducer from "../slices/previewSlice";
+import editDataReducer from "../slices/editData";
 
 // Redux Persist config
 const persistConfig = {
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   selectLayout: selectLayoutReducer,
   models: FetchModelReducer,
   preview: PreviewReducer,
+  editData: editDataReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -27,11 +27,14 @@ import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
 import { ModelPreloader } from "../model-preloader/ModelPreloader";
 
 function Van() {
+  const [isSanta, setIsSanta] = useState(0)
   const Santa = vans[0].component
+  const SantaMonica = vans[0]
+  // console.log(SantaMonica,"Santa Monica")
   const dispatch = useDispatch();
   const vanName = useSelector((state) => state.vanName.vanName);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
- const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   const [activeModelId, setActiveModelId] = useState(null);
   const [sceneToExport, setSceneToExport] = useState(null);
   const [showExterior, setShowExterior] = useState(false);
@@ -91,7 +94,6 @@ function Van() {
 
     const handleContextLost = (event) => {
       event.preventDefault();
-      console.warn("WebGL context lost!", canvas);
     };
 
     canvas.addEventListener("webglcontextlost", handleContextLost);
@@ -100,7 +102,9 @@ function Van() {
     };
   }, []);
 
+  useEffect(() => {
 
+  }, [isSanta])
   ModelPreloader(vanName);
 
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
@@ -112,67 +116,71 @@ function Van() {
       {/* Canvas Section - 50% on mobile, 75% on desktop */}
       <div className="canvas-parent md:col-span-8" >
         <div className="meta-data bg-brand shadow-xl  p-2 relative">
-  {/* Toggle Button */}
-  <div
-    className="flex justify-between  cursor-pointer"
-    onClick={() => setIsOpen(!isOpen)}
-  >
-    <h1 className="text-sm font-bold text-dark">
-      See More Information
-    </h1>
+          {/* Toggle Button */}
+          <div
+            className="flex justify-between  cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <h1 className="text-sm font-bold text-dark">
+              See More Information
+            </h1>
 
-    <span className="text-dark">
-      {isOpen ? "▲" : "▼"}
-    </span>
-  </div>
+            <span className="text-dark">
+              {isOpen ? "▲" : "▼"}
+            </span>
+          </div>
 
-  {/* Accordion Overlay Content */}
-  {isOpen && (
-    <div className="absolute top-full left-0 w-full bg-white shadow-xl p-2 border z-50">
-      <div className="heading-button md:flex md:justify-between">
-        <div>
-          <h1 className="text-3xl text-dark">
-            Mercedes-Benz Sprinter{" "}
-            <sub className="text-gray-500 text-xs">2022</sub>
-          </h1>
-          {/* <p className="text-sm">
+          {/* Accordion Overlay Content */}
+          {isOpen && (
+            <div className="absolute top-full left-0 w-full bg-white shadow-xl p-2 border z-50">
+              <div className="heading-button md:flex md:justify-between">
+                <div>
+                  <h1 className="text-3xl text-dark">
+                    {SantaMonica.layout}
+                    <sub className="text-gray-500 text-xs">{SantaMonica.modelYear}</sub>
+                  </h1>
+                  {/* <p className="text-sm">
             Starting: <span>$20,323,342</span>
           </p> */}
-        </div>
+                </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="rounded-full flex bg-brand mt-3 md:mt-0">
-            <button className="px-4 py-2 text-xs rounded-full bg-white shadow-sm text-dark transition">
-              Mercedes-Benz Sprinter 2022
-            </button>
-            <button className="px-4 py-2 text-xs rounded-full text-dark hover:text-gray-900 transition">
-              Mercedes-Benz Sprinter 2025
-            </button>
-          </div>
+                <div className="flex flex-col gap-2">
+                  <div className="rounded-full flex bg-brand mt-3 md:mt-0">
+                    <button onClick={() => {
 
-          <div>
-            <table className="w-full border bg-dark text-brand rounded-lg overflow-hidden text-sm">
-              <thead>
-                <tr>
-                  <th className="px-2 py-2">Wheel Base</th>
-                  <th className="px-2 py-2">Drive Train</th>
-                  <th className="px-2 py-2">Sit & Sleep</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="text-center">
-                  <td className="px-2 py-2">144</td>
-                  <td className="px-2 py-2">AWD</td>
-                  <td className="px-2 py-2">2–5</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                      setIsSanta(0);
+                    }}
+                      className={`${isSanta === 0 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition " :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
+                      {vans[0].layout}
+                    </button>
+                    <button onClick={() => setIsSanta(1)} className={`${isSanta === 1 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition" :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
+                      {vans[1].layout}
+                    </button>
+                  </div>
+
+                  <div>
+                    <table className="w-full border bg-dark text-brand rounded-lg overflow-hidden text-sm">
+                      <thead>
+                        <tr>
+                          <th className="px-2 py-2">Wheel Base</th>
+                          <th className="px-2 py-2">Drive Train</th>
+                          <th className="px-2 py-2">Sit & Sleep</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="text-center">
+                          <td className="px-2 py-2">{SantaMonica.spec.wheelBase}</td>
+                          <td className="px-2 py-2">{SantaMonica.spec.drivetrain}</td>
+                          <td className="px-2 py-2">{SantaMonica.spec.SitSleep}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    </div>
-  )}
-</div>
 
 
 
@@ -195,23 +203,23 @@ function Van() {
               <Preload all />
               <Suspense
                 fallback={
-                 <Html fullscreen>
-      <div className="flex flex-col justify-center items-center h-full gap-4">
-        {/* 3D Cube Icon */}
-        <svg xmlns="http://www.w3.org/2000/svg"
-             className="h-12 w-12 animate-spin text-gray-700"
-             fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
+                  <Html fullscreen>
+                    <div className="flex flex-col justify-center items-center h-full gap-4">
+                      {/* 3D Cube Icon */}
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                        className="h-12 w-12 animate-spin text-gray-700"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
                    001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-        </svg>
+                      </svg>
 
-        {/* Loading Text */}
-        <p className="text-gray-800 font-medium text-center">
-          Good things take time — your model is on the way!
-        </p>
-      </div>
-    </Html>
+                      {/* Loading Text */}
+                      <p className="text-gray-800 font-medium text-center">
+                        Good things take time — your model is on the way!
+                      </p>
+                    </div>
+                  </Html>
                 }
               >
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
@@ -243,61 +251,61 @@ function Van() {
               <ExportableScene ref={sceneRef} exportSceneCallback={setSceneToExport} />
             </Canvas>
           </div>
- <div className="absolute top-1 left-3/8  gap-3">
-      {/* View Toggle Button */}
-    <div className="flex bg-brand  rounded-full">
-  {/* Interior View Button */}
-  <button
-    onClick={() => setIsIntView(false)}
-    className={`px-4 py-1 rounded-full flex items-center gap-2 text-sm transition-colors
+          <div className="absolute top-1 left-3/8  gap-3">
+            {/* View Toggle Button */}
+            <div className="flex bg-brand  rounded-full">
+              {/* Interior View Button */}
+              <button
+                onClick={() => setIsIntView(false)}
+                className={`px-4 py-1 rounded-full flex items-center gap-2 text-sm transition-colors
       ${!isIntView ? "bg-white text-dark" : ""}`}
-  >
+              >
 
-    Interior
-  </button>
+                Interior
+              </button>
 
-  {/* Exit Interior Button */}
-  <button
-    onClick={() => setIsIntView(true)}
-    className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm  transition-colors
+              {/* Exit Interior Button */}
+              <button
+                onClick={() => setIsIntView(true)}
+                className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm  transition-colors
       ${isIntView ? "bg-white text-dark" : ""}`}
-  >
+              >
 
-    Exterior
-  </button>
-</div>
+                Exterior
+              </button>
+            </div>
 
 
-      {/* Interior Navigation Buttons */}
+            {/* Interior Navigation Buttons */}
 
-    </div>
- {isIntView && (
-        <div className=" absolute gap-4 bg-opacity-70 p-2 bottom-5 flex flex-col right-0 rounded-md">
-          <button
-            onClick={() => cameraDirectionBack(camPros, setTargetPos)}
-            className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
-            aria-label="Previous view"
-          >
-          <svg xmlns="http://www.w3.org/2000/svg"
-     class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-  <path d="M12 4c.55 0 1 .45 1 1v6h6c.55 0 1 .45 1 1s-.45 1-1 1h-6v6c0 .55-.45 1-1
+          </div>
+          {isIntView && (
+            <div className=" absolute gap-4 bg-opacity-70 p-2 bottom-5 flex flex-col right-0 rounded-md">
+              <button
+                onClick={() => cameraDirectionBack(camPros, setTargetPos)}
+                className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
+                aria-label="Previous view"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4c.55 0 1 .45 1 1v6h6c.55 0 1 .45 1 1s-.45 1-1 1h-6v6c0 .55-.45 1-1
            1s-1-.45-1-1v-6H5c-.55 0-1-.45-1-1s.45-1 1-1h6V5c0-.55.45-1 1-1z"/>
-</svg>
-          </button>
-          <button
-            onClick={() => interiorDirectionNext(camPros, setTargetPos)}
-            className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
-            aria-label="Next view"
-          >
-          <svg xmlns="http://www.w3.org/2000/svg"
-     class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M20 12H4" />
-</svg>
+                </svg>
+              </button>
+              <button
+                onClick={() => interiorDirectionNext(camPros, setTargetPos)}
+                className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
+                aria-label="Next view"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20 12H4" />
+                </svg>
 
-          </button>
-        </div>
-      )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Canvas Controls Overlay */}
@@ -317,6 +325,7 @@ function Van() {
           cameraRef={cameraRef}
           modelRefs={modelRefs}
           orbitControlsRef={orbitControlsRef}
+          SantaMonica={SantaMonica}
         />
       </div>
     </div>

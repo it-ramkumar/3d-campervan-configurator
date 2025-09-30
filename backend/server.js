@@ -18,10 +18,11 @@ const Changed = require('./routes/changes')
 const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
 const youtubeRevenuew =require("./routes/youtubeCheck")
+const Export = require("./routes/exportModel");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const API_KEY = process.env.YOUTUBE_API_KEY;
+
 // console.log(API_KEY,"key")
 // 1️ Connect to MongoDB
 connectDB()
@@ -46,6 +47,7 @@ app.use(corsMiddleware);
 app.use(globalLimiter);
 app.use("/", Changed)
 app.use("/api/portfolio", portfolio)
+app.use("/api", Export)
 
 app.use("/api/van", van)
 app.use("/api/inquery", inquery)

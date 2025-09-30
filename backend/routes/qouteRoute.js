@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const Quote = require("../models/quote");
+const appendToSheet  = require("../services/appendToSheet");
+
 
 // POST - Create new quote request
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, model,parts } = req.body;
+    const { name, email, phone, model, parts } = req.body;
 
     // Validation
     if (!name || !email || !phone || !model || !model.id || !model.url) {
@@ -22,7 +24,20 @@ router.post("/", async (req, res) => {
     });
 
     await newQuote.save();
+    const sheetData = [
+      name,
+      email,
+      phone,
+      model.id,
+      model.url,
+      JSON.stringify(parts)
+    ];
 
+    // Spreadsheet ID
+    const SPREADSHEET_ID = "1hISY9VStJ1dGowqY2gxr751yueuw2bSHFaroe9hE1-w";
+
+    // Append to Google Sheet
+    await appendToSheet(SPREADSHEET_ID, sheetData);
     res.status(201).json({ message: "Quote request saved successfully.", quote: newQuote });
   } catch (err) {
     console.error("❌ Error saving quote:", err);
@@ -85,7 +100,7 @@ router.get("/:id", async (req, res) => {
 // ✅ Update quote by ID
 router.put("/:id", async (req, res) => {
   try {
-  
+
     const updatedQuote = await Quote.findByIdAndUpdate(
       req.params.id,
       req.body,

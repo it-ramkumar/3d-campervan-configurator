@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { toggleModelSelection } from "../../customeHooks/toogleModelSelection";
 import { isDependencyMet } from "../../customeHooks/isDependecyMet";
 // import Swal from "sweetalert2";
@@ -19,7 +19,7 @@ import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
 import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
 import { Interior, System, Exterior } from "../../json data/dummy.json";
-import { Forward } from 'lucide-react';
+
 
 
 
@@ -31,7 +31,8 @@ const MultiStepForm = ({
   sceneRef,
   cameraRef,
   modelRefs,
-  orbitControlsRef
+  orbitControlsRef,
+  SantaMonica
 
 
 }) => {
@@ -44,7 +45,7 @@ const MultiStepForm = ({
   const interior = models?.interior?.data.data ? models?.interior?.data.data : Interior;
   const exterior = models?.exterior?.data.data ? models?.exterior?.data.data : Exterior;
   const system   = models?.system?.data.data   ? models?.system?.data.data   : System;
-
+ const cancelSourceRef = useRef(null);
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -67,7 +68,11 @@ const MultiStepForm = ({
   const exteriorSteps = Object.entries(groupByGroup(exteriorWithComponents))
   const systemSteps = Object.entries(groupByGroup(systemWithComponents))
 
-
+  const handleCancel = () => {
+    if (cancelSourceRef.current) {
+      cancelSourceRef.current.cancel("Upload cancelled by user.");
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       let fetchingThunk;
@@ -250,12 +255,13 @@ const MultiStepForm = ({
 
     <div className="flex justify-between">
           <h1 className="font-bold text-white text-base w-1/2">
-Mercedes-Benz Sprinter
+{SantaMonica.layout}
     </h1>
       {/* <h1 className=" font-bold text-white text-base">
     $20,323,342
     </h1> */}
     </div>
+     <div className="mt-4">
       <button
         onClick={() =>
           handleGetQuote(
@@ -266,15 +272,16 @@ Mercedes-Benz Sprinter
             setModelUrl,
             addedModels,
             router,
-            dispatch
+            dispatch,
+            cancelSourceRef
           )
         }
-        className="px-2 py-2 mt-2 text-xs rounded-full bg-white shadow-sm text-gray-800 transition"
+        className="px-3 py-2 text-sm rounded-full bg-white text-dark w-full shadow-sm"
+        disabled={isUploading}
       >
-        <span className="">
-          Save & Get a Quote
-        </span>
+        Save & Get a Quote
       </button>
+    </div>
     </div>
 
 

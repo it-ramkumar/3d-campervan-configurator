@@ -3,6 +3,20 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+
+
+
+const categoryCodes = { interior: "44", exterior: "11", system: "99" };
+
+// ShortId generation function
+function generateShortId(label, category, type) {
+  const labelWords = label.split(" ").slice(0, 2); // max 2 words
+  const labelInitials = labelWords.map(w => w[0].toUpperCase()).join("");
+  const catCode = categoryCodes[category.toLowerCase()] || "00";
+  const typeInitials = type ? type.slice(0, 2).toUpperCase() : "XX";
+  return `${labelInitials}${catCode}${typeInitials}`;
+}
+
 function getModelByCategory(category) {
   if (category === "interior") return InteriorModel;
   if (category === "exterior") return ExteriorModel;
@@ -13,21 +27,26 @@ function getModelByCategory(category) {
 router.post("/", async (req, res) => {
   try {
     let { category, data } = req.body;
+
     // Agar direct array bheji hai without "data"
     if (Array.isArray(req.body) && req.body.length > 0) {
       data = req.body;
       category = req.body[0]?.category; // Pehle object se category le lo
     }
 
-    // Agar data me category nahi di aur upar se bhi nahi aayi
+    // Single object sent
+    if (!Array.isArray(data) && typeof data === "object" && data !== null) {
+      data = [data]; // single object ko array me convert kar do
+      category = data[0]?.category || category;
+    }
+
+    // Validation
     if (!category) {
       return res.status(400).json({
         success: false,
         message: "Category is required (interior, exterior, system)"
       });
     }
-
-    // Agar data valid array nahi hai
     if (!Array.isArray(data) || data.length === 0) {
       return res.status(400).json({
         success: false,
@@ -35,19 +54,19 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Model select kare category ke basis pe
-    let Model;
-    if (category === "interior") Model = InteriorModel;
-    else if (category === "exterior") Model = ExteriorModel;
-    else if (category === "system") Model = SystemModel;
-    else {
+    const Model = getModelByCategory(category.toLowerCase());
+    if (!Model) {
       return res.status(400).json({ success: false, message: "Invalid category" });
     }
 
-    // Insert data (category inject karke)
-    const insertedData = await Model.insertMany(
-      data.map(item => ({ ...item, category }))
-    );
+    // Generate shortId dynamically
+    const preparedData = data.map(item => ({
+      ...item,
+      category,
+      shortId: generateShortId(item.label, category, item.type)
+    }));
+
+    const insertedData = await Model.insertMany(preparedData);
 
     res.json({
       success: true,
@@ -57,11 +76,10 @@ router.post("/", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Bulk insert error:", error);
+    console.error("Insert error:", error);
     res.status(500).json({ success: false, error: "Failed to import data" });
   }
 });
-
 // ======================= GET SINGLE =======================
 router.get("/:category/:id", async (req, res) => {
   try {

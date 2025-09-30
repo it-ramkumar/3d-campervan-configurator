@@ -359,12 +359,26 @@ const vans =[
     spec:{
       wheelBase : 144,
       drivetrain:"AWD",
-      "Sit&Sleep": 2-5
+      SitSleep: "2-5"
     },
     img: "./images/white-removebg-preview.png",
     colors: "Standard",
     component: SantaMonika144,
   },
+    {
+    layout: "Santa Monica v6 turbo",
+    modelYear :"2022",
+    price: 224543,
+    shortDescription:"",
+    spec:{
+      wheelBase : 170,
+      drivetrain:"AWD",
+      SitSleep: "5-7"
+    },
+    img: "./images/white-removebg-preview.png",
+    colors: "Standard",
+    component: SantaMonika144,
+  }
 ]
 // ------------------------
 const VanModel = [
@@ -486,11 +500,11 @@ const VanModel = [
 // let interiorModels = [
 
 //   {
-//     label: "Flooring One",
-//     price: 1000,
+//    price: 1000,
 //     image: "/images/png/flooring-one.png",
 //     type: "flooring",
-//     group: "Flooring",
+//     gro label: "Flooring One",
+//     up: "Flooring",
 //     description: "Basic flooring option one.",
 //     component: FlooringOne,
 //   },

@@ -69,6 +69,21 @@ const gallery = req.files["gallery"]?.map((f) => ({
   }
 });
 
+// GET /api/vans/available
+router.get('/available', async (req, res) => {
+  try {
+    // sirf unsold vans fetch karo
+    const vans = await Van.find({ sold: false }).sort({ createdAt: -1 }); // latest pehle
+
+    res.status(200).json({
+      count: vans.length,
+      vans
+    });
+  } catch (err) {
+    console.error("SERVER ERROR:", err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
 
 // GET all vans// -------------------
 router.get('/', async (req, res) => {

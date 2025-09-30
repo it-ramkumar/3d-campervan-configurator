@@ -61,14 +61,14 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
-  try {
-    const portfolios = await PortfolioVan.find();
-    res.json({ success: true, data: portfolios });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Fetch failed" });
-  }
-});
+// router.get("/", async (req, res) => {
+//   try {
+//     const portfolios = await PortfolioVan.find();
+//     res.json({ success: true, data: portfolios });
+//   } catch (err) {
+//     res.status(500).json({ success: false, message: "Fetch failed" });
+//   }
+// });
 
 
 // wheelbase
@@ -76,8 +76,6 @@ router.get("/", async (req, res) => {
 router.get("/wheelbase", async (req, res) => {
   try {
     const { wheelbase } = req.query; // frontend se aayega, e.g., 144 ya 170
-console.log(wheelbase,"wheelbase")
-    // Agar wheelbase pass hua ho to filter karein
     const filter = {};
     if (wheelbase) {
       filter["van_listing.specifications.wheelbase"] = Number(wheelbase);
@@ -97,10 +95,10 @@ console.log(wheelbase,"wheelbase")
 
 
 // GET /api/portfolio?page=1&limit=10
-router.get("/port", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     // query params (default values)
-    let { page = 1, limit = 1 } = req.query;
+    let { page = 1, limit = 10 } = req.query;
     page = Number(page);
     limit = Number(limit);
 
