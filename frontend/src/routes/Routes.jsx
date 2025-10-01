@@ -8,10 +8,11 @@ import Preview from "../components/preview/Preview";
 import Changes from "../components/changes/Change"
 import Contact from "../websiteComponents/components/Contact/Contact";
 import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
-import Dashboard from "../websiteComponents/components/dashboard/Dashboard";
+import Dashboard from "../websiteComponents/components/Dashboard/Dashboard";
 import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/PortfolioForm";
 import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
 import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
+import Finishes from "../websiteComponents/components/Finishes/Finishes";
 
 
 const AppRoutes = () => {
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/finishes" element={<Finishes />} />
             <Route path="/vans-for-sale" element={<VansForSale />} />
             <Route path="/inquiry" element={<Inquiry />} />
             <Route path="/van-form" element={<VanForm />} />

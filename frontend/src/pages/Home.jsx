@@ -24,7 +24,7 @@ const Home = () => {
       <div className="tour-buy">
         <Buy />
       </div>
-      <div className="tour-customizer">
+      {/* <div className="tour-customizer">
         <Customize />
       </div>
   <div className="tour-portfolio">
@@ -32,7 +32,7 @@ const Home = () => {
       </div>
           <div className="tour-whychoose">
         <WhyChoose/>
-      </div>
+      </div> */}
     <div className="tour-our-process">
         <OurProcess />
       </div>

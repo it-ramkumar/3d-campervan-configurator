@@ -106,141 +106,142 @@ export default function Hero() {
   }, [swiper]);
 
   return (
-    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-screen overflow-hidden">
-      <Swiper
-        onSwiper={setSwiper}
-        modules={[Navigation, Pagination, Autoplay]}
-        slidesPerView={1}
-        autoplay={{
-          delay: 7000,
-          disableOnInteraction: false,
-        }}
-        speed={1500}
-        loop={true}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
-        }}
-        pagination={{
-          clickable: true,
-          el: ".custom-pagination",
-          bulletClass: "custom-bullet",
-          bulletActiveClass: "custom-bullet-active",
-        }}
-        className="w-full h-full"
-      >
-      {slides.map((slide) => (
-  <SwiperSlide key={slide.id}>
-    {/* Background Image */}
-    <img
-      src={slide.image}
-      alt={slide.title}
-      className="absolute inset-0 w-full h-full object-cover z-0 slide-bg-image"
-    />
+<div className="relative w-full h-[50vh] sm:h-[60vh] md:h-screen overflow-hidden">
+  <Swiper
+    onSwiper={setSwiper}
+    modules={[Navigation, Pagination, Autoplay]}
+    slidesPerView={1}
+    autoplay={{
+      delay: 7000,
+      disableOnInteraction: false,
+    }}
+    speed={1500}
+    loop={true}
+    navigation={{
+      prevEl: prevRef.current,
+      nextEl: nextRef.current,
+    }}
+    pagination={{
+      clickable: true,
+      el: ".custom-pagination",
+      bulletClass: "custom-bullet",
+      bulletActiveClass: "custom-bullet-active",
+    }}
+    className="w-full h-full"
+  >
+    {slides.map((slide) => (
+      <SwiperSlide key={slide.id}>
+        {/* Background Image */}
+        <img
+          src={slide.image}
+          alt={slide.title}
+          className="absolute inset-0 w-full h-full object-cover z-0 slide-bg-image"
+        />
 
-    {/* Dark Overlay */}
-    <div className="absolute inset-0 bg-black/50 z-10"></div>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
 
-    {/* Content */}
-    <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
-      <div className="max-w-4xl text-center space-y-4 animated-content -mt-10 md:mt-0">
-        <h1 className="text-4xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
-          {slide.title.split("").map((char, index) => (
-            <span
-              key={index}
-              className="inline-block title-char"
-              style={{ whiteSpace: "pre" }}
-            >
-              {char}
-            </span>
-          ))}
-        </h1>
+        {/* Content */}
+        <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
+          <div className="max-w-4xl text-center space-y-4 animated-content -mt-10 md:mt-0">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
+              {slide.title.split("").map((char, index) => (
+                <span
+                  key={index}
+                  className="inline-block title-char"
+                  style={{ whiteSpace: "pre" }}
+                >
+                  {char}
+                </span>
+              ))}
+            </h1>
 
-        <p className="text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
-          {slide.desc}
-        </p>
+            <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
+              {slide.desc}
+            </p>
 
-        <div className="flex flex-row gap-4 justify-center items-center pt-4">
-          <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2.5 px-3 md:px-5 rounded-md text-[14px] action-button">
-            View Van Inventory
-          </button>
-         <Link to="/inquiry">
-          <button className="bg-white cursor-pointer text-black font-bold py-2.5 px-3 md:px-5 rounded-md text-[14px] action-button">
-            Request a Build
-          </button></Link>
+            <div className="flex flex-row gap-4 justify-center items-center pt-4">
+              <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button">
+                View Van Inventory
+              </button>
+              <Link to="/inquiry">
+                <button className="bg-white cursor-pointer text-black font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button">
+                  Request a Build
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </SwiperSlide>
-))}
+      </SwiperSlide>
+    ))}
+  </Swiper>
 
-      </Swiper>
+  {/* Custom Navigation */}
+  <div className="absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2">
+    <button
+      ref={prevRef}
+      className="bg-white/20 backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
+      onClick={() => swiper?.slidePrev()}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5 md:w-6 md:h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
+  </div>
+  <div className="absolute right-4 md:right-6 top-1/2 z-30 -translate-y-1/2">
+    <button
+      ref={nextRef}
+      className="bg-white/20 backdrop-blur-sm pointer-events-auto text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
+      onClick={() => swiper?.slideNext()}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-5 h-5 md:w-6 md:h-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
+  </div>
 
-      {/* Custom Navigation */}
-      <div className="absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2">
-        <button
-          ref={prevRef}
-          className="bg-white/20 backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
-          onClick={() => swiper?.slidePrev()}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 md:w-6 md:h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-      </div>
-      <div className="absolute right-4 md:right-6 top-1/2 z-30 -translate-y-1/2">
-        <button
-          ref={nextRef}
-          className="bg-white/20 backdrop-blur-sm pointer-events-auto text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
-          onClick={() => swiper?.slideNext()}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 md:w-6 md:h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-      </div>
+  {/* Custom Pagination Container */}
+  <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3 custom-pagination"></div>
 
-      {/* Custom Pagination Container */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3 custom-pagination"></div>
+  <style jsx global>{`
+    .custom-pagination .custom-bullet {
+      width: 12px;
+      height: 12px;
+      background-color: grey;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+    .custom-pagination .custom-bullet-active {
+      background-color: white;
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  `}</style>
+</div>
 
-      <style jsx global>{`
-        .custom-pagination .custom-bullet {
-          width: 12px;
-          height: 12px;
-          background-color: grey;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          opacity: 0.8;
-        }
-        .custom-pagination .custom-bullet-active {
-          background-color: white;
-          opacity: 1;
-          transform: scale(1.2);
-        }
-      `}</style>
-    </div>
   )
 }
