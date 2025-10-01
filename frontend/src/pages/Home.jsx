@@ -4,7 +4,7 @@ import Buy from "../websiteComponents/components/HomePage/Buy/Buy";
 import Customize from "../websiteComponents/components/HomePage/Customize/Cutomize";
 import Portfolio from "../websiteComponents/components/HomePage/Portfolio/Portfolio";
 import WhyChoose from "../websiteComponents/components/HomePage/WhyChoose/WhyChoose";
-import OurProcess from "../websiteComponents/components/HomePage/Ourprocess/OurProcess";
+import OurProcess from "../websiteComponents/components/HomePage/OurProcess/OurProcess";
 import Testimonials from "../websiteComponents/components/HomePage/Testimonials/Testimonials";
 import Blog from "../websiteComponents/components/HomePage/Blog/Blog";
 import Consultation from "../websiteComponents/components/Consultation/Consultation";
