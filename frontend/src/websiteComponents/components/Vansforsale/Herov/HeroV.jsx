@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom"
 
 const heroImage = "/heroSlider/herov.jpg";
 const newTitleText = "Camper Vans For Sale";
@@ -69,10 +70,10 @@ export default function HeroV() {
       className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden "
     >
       <img
-  src={heroImage}
-  alt="Camper Vans For Sale"
-  className="absolute inset-0 w-full h-full object-cover z-0 bg-image object-top md:object-center"
-/>
+        src={heroImage}
+        alt="Camper Vans For Sale"
+        className="absolute inset-0 w-full h-full object-cover z-0 bg-image object-top md:object-center"
+      />
       <div className="absolute inset-0 bg-black/60 z-10"></div>
 
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
@@ -107,14 +108,15 @@ export default function HeroV() {
           {/* New Button Block */}
           {/* MODIFICATION 3: Added a larger top margin to create more space before the button */}
           <div
-              className="anim-item mt-8"
-              style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
+            className="anim-item mt-8"
+            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
           >
+            <Link to="/inquiry">
             <button
-              className="bg-[#2761FD] text-white font-bold text-[14px] px-5 py-[10px] rounded-[5px] transition duration-300 hover:bg-[#1f50c0] shadow-lg"
+              className="bg-[#2761FD] cursor-pointer text-white font-bold text-[14px] px-5 py-[10px] rounded-[5px] transition duration-300 hover:bg-[#1f50c0] shadow-lg"
             >
               Get a Quote
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

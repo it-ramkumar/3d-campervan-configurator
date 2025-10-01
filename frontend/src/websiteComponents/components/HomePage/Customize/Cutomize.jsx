@@ -239,7 +239,7 @@ export default function Customize() {
   }, []);
 
   return (
-    <section className="bg-white py-24 font-serif overflow-hidden">
+    <section className="bg-white py-14 font-serif overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Main Title */}
         <h1

@@ -121,7 +121,7 @@ export default function AvailableVans() {
         .font-noto-sans { font-family: 'Noto Sans', sans-serif; }
       `}</style>
 
-      <section ref={sectionRef} className="bg-white pt-0 pb-0 overflow-hidden">
+      <section ref={sectionRef} className="bg-white pt-0 pb-0 overflow-hidden mt-20">
         <div ref={headerRef} className="max-w-7xl mx-auto text-center mb-10 md:mb-16 px-4 md:px-8 lg:px-16">
           <h2 className="text-3xl md:text-4xl lg:text-[3rem] font-bold font-noto-serif text-black leading-tight">
             In-Stock & Ready to Roll Vans For Sale
