@@ -3,8 +3,8 @@ import Hero from "../websiteComponents/components/HomePage/Hero/Hero";
 import Buy from "../websiteComponents/components/HomePage/Buy/Buy";
 import Customize from "../websiteComponents/components/HomePage/Customize/Cutomize";
 import Portfolio from "../websiteComponents/components/HomePage/Portfolio/Portfolio";
-import WhyChoose from "../websiteComponents/components/HomePage/whychoose/WhyChoose";
-import OurProcess from "../websiteComponents/components/HomePage/ourprocess/OurProcess";
+import WhyChoose from "../websiteComponents/components/HomePage/Whychoose/WhyChoose";
+import OurProcess from "../websiteComponents/components/HomePage/Ourprocess/OurProcess";
 import Testimonials from "../websiteComponents/components/HomePage/Testimonials/Testimonials";
 import Blog from "../websiteComponents/components/HomePage/Blog/Blog";
 import Consultation from "../websiteComponents/components/Consultation/Consultation";
@@ -24,7 +24,7 @@ const Home = () => {
       <div className="tour-buy">
         <Buy />
       </div>
-      {/* <div className="tour-customizer">
+      <div className="tour-customizer">
         <Customize />
       </div>
   <div className="tour-portfolio">
@@ -32,7 +32,7 @@ const Home = () => {
       </div>
           <div className="tour-whychoose">
         <WhyChoose/>
-      </div> */}
+      </div>
     <div className="tour-our-process">
         <OurProcess />
       </div>
