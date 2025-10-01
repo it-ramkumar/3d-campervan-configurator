@@ -120,11 +120,11 @@ export default function Navbar() {
 
           {/* Center Nav Links */}
           <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-sans text-base">
-            <a href="/vans-for-sale" onMouseEnter={() => handleMenuHover("vans-for-sale")} onMouseLeave={handleMenuLeave}>Vans For Sale</a>
-            <a href="#" onMouseEnter={() => handleMenuHover("layouts")} onMouseLeave={handleMenuLeave}>Layouts</a>
-            <a href="/van" onMouseEnter={() => handleMenuHover("3d-van-builder")} onMouseLeave={handleMenuLeave}>3D Van Builder</a>
+            <Link to="/vans-for-sale" onMouseEnter={() => handleMenuHover("vans-for-sale")} onMouseLeave={handleMenuLeave}>Vans For Sale</Link>
+            <Link to="#" onMouseEnter={() => handleMenuHover("layouts")} onMouseLeave={handleMenuLeave}>Layouts</Link>
+            <Link to="/van" onMouseEnter={() => handleMenuHover("3d-van-builder")} onMouseLeave={handleMenuLeave}>3D Van Builder</Link>
             <Link to="/contact" onMouseEnter={() => handleMenuHover("contact-us")} onMouseLeave={handleMenuLeave}>Contact</Link>
-            <a href="#" onMouseEnter={() => handleMenuHover("discover")} onMouseLeave={handleMenuLeave}>Discover</a>
+            <Link to="#" onMouseEnter={() => handleMenuHover("discover")} onMouseLeave={handleMenuLeave}>Discover</Link>
           </div>
 
           {/* Right Spacer */}
@@ -183,11 +183,11 @@ export default function Navbar() {
         style={{ height: "0" }}
       >
         <div className="flex flex-col items-center py-8">
-          <a href="/vans-for-sale" className="text-xl font-semibold text-blackish py-3">Vans For Sale</a>
-          <a href="#" className="text-xl font-semibold text-blackish py-3">Layouts</a>
-          <a href="/van" className="text-xl font-semibold text-blackish py-3">3D Van Builder</a>
-          <a href="/contact" className="text-xl font-semibold text-blackish py-3">Contact</a>
-          <a href="/discover" className="text-xl font-semibold text-blackish py-3">Discover</a>
+          <Link to="/vans-for-sale" className="text-xl font-semibold text-blackish py-3">Vans For Sale</Link>
+          <Link to="#" className="text-xl font-semibold text-blackish py-3">Layouts</Link>
+          <Link to="/van" className="text-xl font-semibold text-blackish py-3">3D Van Builder</Link>
+          <Link to="/contact" className="text-xl font-semibold text-blackish py-3">Contact</Link>
+          <Link to="/discover" className="text-xl font-semibold text-blackish py-3">Discover</Link>
         </div>
       </div>
     </>
