@@ -1,6 +1,6 @@
 import React from 'react'
 import HeroV from './Herov/HeroV';
-import AvailableVans from './availablevans/AvailableVans';
+import AvailableVans from './AvailableVans/AvailableVans';
 import SoldVans from './SoldVans/SoldVans';
 import ConsultationV from './Consultationv/ConsultationV';
 import FaqV from './Faqv/FaqV';
