@@ -1,7 +1,7 @@
-import React, { useRef, useEffect,useState } from "react";
+"use client";
+import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {getAllPortfolio} from "../../../../api/portfolio/getAllPortfolio"
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -23,17 +23,6 @@ export default function Portfolio() {
   const subHeadingRef = useRef(null);
   const imageGridRef = useRef(null);
   const buttonRef = useRef(null);
-  const [portfolioData, setPortfolioData] = useState([]);
-
-  // useEffect(() => {
-  //   // Fetch portfolio data (currently not used in this static example)
-  //   const fetchPortfolio = async () => {
-  //     const data = await getAllPortfolio();
-  //     setPortfolioData(data.data.data || []);
-  //     // console.log(data.data.data || [],"portfolioData");
-  //   };
-  //   fetchPortfolio();
-  // }, []);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -130,7 +119,6 @@ export default function Portfolio() {
 
     return () => ctx.revert();
   }, []);
-const data = portfolioData && portfolioData.length > 0 ? portfolioData : images;
 
   return (
     <section ref={sectionRef} className="w-full py-24 bg-white overflow-hidden">
@@ -151,68 +139,103 @@ const data = portfolioData && portfolioData.length > 0 ? portfolioData : images;
           </p>
         </div>
 
-<div className="flex h-full gap-4">
-  {/* Left column */}
-  {data[0] && (
-    <div
-      className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[492px] h-[725px]"
-      style={{ transformStyle: "preserve-3d" }}
-      data-side="left"
-    >
-      <img
-        src={data[0]?.gallery?.[0] || data[0]?.src || ""}
-        alt={data[0]?.alt || ""}
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ filter: "contrast(1.05) saturate(1.1)" }}
-        quality={90}
-        sizes="492px"
-      />
-    </div>
-  )}
-
-  {/* Right column */}
-  <div className="flex-1 flex flex-col gap-4">
-    {/* Right top */}
-    {data[1] && (
-      <div
-        className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-full h-[402px]"
-        style={{ transformStyle: "preserve-3d" }}
-        data-side="right"
-      >
-        <img
-          src={data[1]?.gallery?.[0] || data[1]?.src || ""}
-          alt={data[1]?.alt || ""}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: "contrast(1.05) saturate(1.1)" }}
-          quality={90}
-          sizes="699px"
-        />
-      </div>
-    )}
-
-    {/* Right bottom row (3 images) */}
-    <div className="flex-1 flex gap-4">
-      {data.slice(2, 5).map((item) => (
+        {/* --- DESKTOP VIEW --- */}
         <div
-          key={item.id}
-          className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[227px] h-[313px]"
-          style={{ transformStyle: "preserve-3d" }}
-          data-side="right"
+          ref={imageGridRef}
+          className="mx-auto max-w-screen-xl h-[725px] hidden lg:block"
+          style={{ perspective: "1500px" }}
         >
-          <img
-            src={item?.gallery?.[0] || item?.src || ""}
-            alt={item?.alt || ""}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "contrast(1.05) saturate(1.1)" }}
-            quality={90}
-            sizes="227px"
-          />
-        </div>
-      ))}
-    </div>
-  </div>
+          <div className="flex h-full gap-4">
+            {/* Left Column (Image 1) */}
+        <div
+  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[492px] h-[725px]"
+  style={{ transformStyle: "preserve-3d" }}
+  data-side="left"
+>
+  <img
+    src={images[0].src}
+    alt={images[0].alt}
+    className="w-full h-full object-cover"
+    style={{ filter: "contrast(1.05) saturate(1.1)" }}
+  />
 </div>
 
+
+            {/* Right Column */}
+            <div className="flex-1 flex flex-col gap-4">
+              {/* Top Image (Image 2) */}
+             <div
+  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[699px] h-[402px]"
+  style={{ transformStyle: "preserve-3d" }}
+  data-side="right"
+>
+  <img
+    src={images[1].src}
+    alt={images[1].alt}
+    className="w-full h-full object-cover"
+    style={{ filter: "contrast(1.05) saturate(1.1)" }}
+  />
+</div>
+
+              {/* Bottom Row Images (3, 4, 5) */}
+              <div className="flex-1 flex gap-4">
+                {images.slice(2).map((image) => (
+              <div
+  key={image.id}
+  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[227px] h-[313px]"
+  style={{ transformStyle: "preserve-3d" }}
+  data-side="right"
+>
+  <img
+    src={image.src}
+    alt={image.alt}
+    className="w-full h-full object-cover"
+    style={{ filter: "contrast(1.05) saturate(1.1)" }}
+  />
+</div>
+
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* --- MOBILE VIEW --- */}
+        <div className="block lg:hidden mt-8">
+          {/* First row: 2 images */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            {images.slice(0, 2).map((image) => (
+            <div
+  key={image.id}
+  className="relative h-64 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
+>
+  <img
+    src={image.src}
+    alt={image.alt}
+    className="w-full h-full object-cover"
+  />
+</div>
+
+            ))}
+          </div>
+          {/* Second row: 3 images */}
+          <div className="grid grid-cols-3 gap-4">
+            {images.slice(2).map((image) => (
+             <div
+  key={image.id}
+  className="relative h-40 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
+>
+  <img
+    src={image.src}
+    alt={image.alt}
+    className="w-full h-full object-cover"
+    style={{ filter: "contrast(1.05) saturate(1.1)" }} // optional effect
+  />
+</div>
+
+            ))}
+          </div>
+        </div>
 
         {/* Button */}
         <div className="flex justify-center mt-16">

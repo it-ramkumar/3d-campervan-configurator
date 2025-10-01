@@ -11,6 +11,7 @@ import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
 import Dashboard from "../websiteComponents/components/dashboard/Dashboard";
 import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/PortfolioForm";
 import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
+import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
 
 
 const AppRoutes = () => {
@@ -20,6 +21,7 @@ const AppRoutes = () => {
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/vans-for-sale" element={<VansForSale />} />
             <Route path="/inquiry" element={<Inquiry />} />
             <Route path="/van-form" element={<VanForm />} />
             <Route path="/portfolio-form" element={<PortfolioForm />} />

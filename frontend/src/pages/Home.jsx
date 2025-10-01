@@ -24,18 +24,18 @@ const Home = () => {
       <div className="tour-buy">
         <Buy />
       </div>
-      {/* <div className="tour-customizer">
+      <div className="tour-customizer">
         <Customize />
-      </div> */}
+      </div>
   <div className="tour-portfolio">
         <Portfolio />
       </div>
-         {/*  <div className="tour-whychoose">
+          <div className="tour-whychoose">
         <WhyChoose/>
       </div>
     <div className="tour-our-process">
         <OurProcess />
-      </div> */}
+      </div>
       <div className="tour-testimonials">
         <Testimonials/>
       </div>

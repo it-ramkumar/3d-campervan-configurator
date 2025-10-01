@@ -137,21 +137,23 @@ export default function Navbar() {
     <>
       <nav className="w-full px-6 py-4 bg-whito shadow-md relative z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-          {/* Left - Logo */}
+
         <div className=" z-10 ">
-  <img
-    src="/images/logoo.png"
-    width={150}
-    height={100}
-    alt="BBV logo"
-  />
-</div>
+          <Link to="/" className="text-2xl font-bold text-blackish">
+            <img
+              src="/images/logoo.png"
+              width={150}
+              height={100}
+              alt="BBV logo"
+            />
+          </Link>
+        </div>
 
 
           {/* Center - Nav links */}
           <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-sans text-base">
             <a
-              href="#"
+              href="/vans-for-sale"
               className=" transition-colors"
               onMouseEnter={() => handleMenuHover("vans-for-sale")}
               onMouseLeave={handleMenuLeave}
@@ -260,19 +262,19 @@ export default function Navbar() {
         style={{ top: "76px", height: "0" }}
       >
         <div className="flex flex-col items-center py-8">
-          <a href="#" className="text-xl font-semibold text-blackish py-3">
+          <a href="/vans-for-sale" className="text-xl font-semibold text-blackish py-3">
             Vans For Sale
           </a>
           <a href="#" className="text-xl font-semibold text-blackish py-3">
             Layouts
           </a>
-          <a href="#" className="text-xl font-semibold text-blackish py-3">
+          <a href="/van" className="text-xl font-semibold text-blackish py-3">
             3D Van Builder
           </a>
-          <a href="#" className="text-xl font-semibold text-blackish py-3">
+          <a href="/contact" className="text-xl font-semibold text-blackish py-3">
             Contact
           </a>
-          <a href="#" className="text-xl font-semibold text-blackish py-3">
+          <a href="/discover" className="text-xl font-semibold text-blackish py-3">
             Discover
           </a>
         </div>
