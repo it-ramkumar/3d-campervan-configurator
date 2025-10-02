@@ -1,10 +1,11 @@
 "use client";
 
-import React,{useEffect,useState,useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { motion } from "framer-motion";
-import { availableVans } from '../../../../api/van/availableVans';
+// import { availableVans } from '../../../../api/van/availableVans';
+import { Link } from "react-router-dom"
 
 
 import 'swiper/css';
@@ -84,7 +85,7 @@ export default function Buy() {
             img: "/images/brown.jpg",
         },
     ];
-const data = slidesData && slidesData.length > 0 ? slidesData : slidesDummy;
+    const data = slidesData && slidesData.length > 0 ? slidesData : slidesDummy;
     return (
         <section className="bg-white py-16 font-serif overflow-x-hidden">
             <div className="container mx-auto px-4">
@@ -172,10 +173,10 @@ const data = slidesData && slidesData.length > 0 ? slidesData : slidesDummy;
                                         <div className="w-full max-w-[650px]">
                                             <p className="text-sm md:text-base font-normal mb-5">{slide.desc}</p>
                                             <div className="flex gap-4">
-                                                <button className="bg-white text-black font-sans font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                              <Link to='/inquiry'>   <button className="bg-white text-black font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     Buy Now
-                                                </button>
-                                                <button className="bg-[#2761FD] text-white font-sans font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                                </button></Link>
+                                                <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     More Details
                                                 </button>
                                             </div>
@@ -212,9 +213,11 @@ const data = slidesData && slidesData.length > 0 ? slidesData : slidesDummy;
                     viewport={{ once: true }}
                 >
 
-                    <button className="bg-[#2761FD] text-white font-sans font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
+                 <Link to="/vans-for-sale">
+                    <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
                         View Van Inventory
                     </button>
+                </Link>
                 </motion.div>
             </div>
         </section>

@@ -115,45 +115,48 @@ export default function ConsultationV() {
                 <input
                   type="text"
                   placeholder="Your Name"
-                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
                 />
               </div>
               <div className="relative">
                 <input
                   type="email"
                   placeholder="Your Email"
-                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
                 />
               </div>
               <div className="relative">
-                <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-sans">(Optional)</span>
+                <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-serif">(Optional)</span>
                 <input
                   type="tel"
                   placeholder="Your Phone Number"
-                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
                 />
               </div>
               <div className="relative">
-                <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-sans">(Optional)</span>
+                <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-serif">(Optional)</span>
                 <textarea
                   placeholder="Your Message"
                   rows="4"
-                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+                  className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
                 ></textarea>
               </div>
+               <button className=" px-6 md:px-8 py-2 md:py-3 rounded-md bg-[#2761FD] text-white font-bold text-lg md:text-xl hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300">
+          Submit
+        </button>
             </form>
           </div>
 
           <div className="w-full lg:w-[550px] flex flex-col items-center lg:items-start">
             <div className="flex flex-col items-center w-full mb-8">
               <img src="/images/logoo.png" alt="Big Bear Vans Logo" width={242} height={44} className="mb-4" />
-              <div className="flex space-x-4">
+               {/* <div className="flex space-x-4">
                 <FaTwitter size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaYoutube size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-                <FaLinkedin size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
+               <FaLinkedin size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaWhatsapp size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaInstagram size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-              </div>
+              </div> */}
             </div>
             <div className="relative w-full rounded-[20px] overflow-hidden group">
               <div className="absolute inset-0 z-10 p-4 md:p-8 flex items-start">
@@ -184,9 +187,7 @@ export default function ConsultationV() {
             </div>
           </div>
         </div>
-        <button className="mt-8 md:mt-12 px-6 md:px-8 py-2 md:py-3 rounded-md bg-[#2761FD] text-white font-bold text-lg md:text-xl hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300">
-          Submit
-        </button>
+
       </div>
       <style jsx global>{`
         @import "tailwindcss";
@@ -290,7 +291,7 @@ export default function ConsultationV() {
           --color-whito: #fff;
           --color-accent: #f97316;
           --color-grarish: #5c5e62;
-          --font-sans: "Noto Sans", system-ui, sans-serif;
+          --font-serif: "Noto Serif", system-ui, sans-serif;
           --font-serif: "Noto Serif", serif;
           --text-h1: 4rem;
           --font-weight-h1: 800;

@@ -241,7 +241,7 @@ export default function Portfolio() {
         <div className="flex justify-center mt-16">
           <button
             ref={buttonRef}
-            className="relative flex items-center justify-center text-white bg-[#2761FD] rounded-md font-sans font-bold text-sm h-12 w-48 transition-transform transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
+            className="relative flex items-center justify-center text-white bg-[#2761FD] rounded-md font-serif font-bold text-sm h-12 w-48 transition-transform transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
           >
             <span className="shimmer absolute top-0 left-0 w-full h-full bg-white/20 block"></span>
             <span className="relative z-10">View Our Portfolio</span>

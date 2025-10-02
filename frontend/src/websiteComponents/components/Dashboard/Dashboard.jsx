@@ -5,6 +5,8 @@ import VansForm from "../adminPanel/Vans/VansForm"
 import VanListing from "../adminPanel/Vans/VansListing"
 import PortfolioForm from "../adminPanel/Portfolio/PortfolioForm"
 import PortfolioListing from "../adminPanel/Portfolio/PortfolioLIsting"
+import BlogForm from "../adminPanel/Blog/Form"
+import BlogsListing from "../adminPanel/Blog/BlogsListing"
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -38,6 +40,20 @@ export default function Dashboard() {
       icon: "📋",
       description: "Manage portfolio items",
       color: "from-orange-500 to-red-500"
+    },
+        {
+      id: "Blogs-listing",
+      label: "Blogs Data",
+      icon: "📋",
+      description: "Manage blog items",
+      color: "from-red-500 to-pink-500"
+    },
+        {
+      id: "Blog-form",
+      label: "Blogs Form",
+      icon: "📋",
+      description: "Manage blog items",
+      color: "from-orange-500 to-red-500"
     }
   ];
 
@@ -53,6 +69,10 @@ export default function Dashboard() {
         return <PortfolioForm />;
       case "portfolio-listing":
         return <PortfolioListing />;
+      case "Blog-form":
+        return <BlogForm />;
+      case "Blogs-listing":
+        return <BlogsListing setSelected={setSelected} />;
       default:
         return <PortfolioListing />;
     }

@@ -119,9 +119,9 @@ export default function Navbar() {
           </div>
 
           {/* Center Nav Links */}
-          <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-sans text-base">
+          <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base">
             <Link to="/vans-for-sale" onMouseEnter={() => handleMenuHover("vans-for-sale")} onMouseLeave={handleMenuLeave}>Vans For Sale</Link>
-            <Link to="#" onMouseEnter={() => handleMenuHover("layouts")} onMouseLeave={handleMenuLeave}>Layouts</Link>
+            <Link to="/layouts" onMouseEnter={() => handleMenuHover("layouts")} onMouseLeave={handleMenuLeave}>Layouts</Link>
             <Link to="/van" onMouseEnter={() => handleMenuHover("3d-van-builder")} onMouseLeave={handleMenuLeave}>3D Van Builder</Link>
             <Link to="/contact" onMouseEnter={() => handleMenuHover("contact-us")} onMouseLeave={handleMenuLeave}>Contact</Link>
             <Link to="#" onMouseEnter={() => handleMenuHover("discover")} onMouseLeave={handleMenuLeave}>Discover</Link>
@@ -140,7 +140,7 @@ export default function Navbar() {
       </nav>
 
       {/* Desktop Mega Menu (absolute under navbar, not fixed) */}
-      {activeMenu && menuContent[activeMenu] && (
+      {/* {activeMenu && menuContent[activeMenu] && (
         <div
           ref={megaMenuRef}
           className="absolute left-0 w-full bg-white shadow-xl z-40 overflow-hidden"
@@ -153,7 +153,7 @@ export default function Navbar() {
               {menuContent[activeMenu].title}
             </h2>
             <div className="flex h-auto">
-              {/* Left Section */}
+
               <div className="w-1/2 pr-6 border-r border-gray-200">
                 <h3 className="text-xl font-semibold text-indigo-600 mb-4">{menuContent[activeMenu].sections[0].title}</h3>
                 <ul className="space-y-3">
@@ -162,7 +162,7 @@ export default function Navbar() {
                   ))}
                 </ul>
               </div>
-              {/* Right Section */}
+
               <div className="w-1/2 pl-6">
                 <h3 className="text-xl font-semibold text-indigo-600 mb-4">{menuContent[activeMenu].sections[1].title}</h3>
                 <ul className="space-y-3">
@@ -174,7 +174,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Mobile Menu */}
       <div
@@ -184,7 +184,7 @@ export default function Navbar() {
       >
         <div className="flex flex-col items-center py-8">
           <Link to="/vans-for-sale" className="text-xl font-semibold text-blackish py-3">Vans For Sale</Link>
-          <Link to="#" className="text-xl font-semibold text-blackish py-3">Layouts</Link>
+          <Link to="/layouts" className="text-xl font-semibold text-blackish py-3">Layouts</Link>
           <Link to="/van" className="text-xl font-semibold text-blackish py-3">3D Van Builder</Link>
           <Link to="/contact" className="text-xl font-semibold text-blackish py-3">Contact</Link>
           <Link to="/discover" className="text-xl font-semibold text-blackish py-3">Discover</Link>

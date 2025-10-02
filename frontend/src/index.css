@@ -1,22 +1,20 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
 
 @theme {
   --color-brand: #EEEEEE;
   --color-dark: black;
- 
-}
 
-/* @theme {
+  /* Fonts */
   --font-heading: "Merriweather", serif;
   --font-body: "Open Sans", sans-serif;
-} */
-@theme {
-  --font-heading: "Neue Haas Grotesk Display Pro", sans-serif;
-  --font-body: "Open Sans", sans-serif;
+  --font-serif: "Noto Serif", serif;
+  --font-haas: "Neue Haas Grotesk Display Pro", sans-serif;
 }
+
+/* ✅ Local font (Haas) */
 @font-face {
   font-family: "Neue Haas Grotesk Display Pro";
   src: url("/fonts/NeueHaasDisplayLight.ttf") format("truetype");
@@ -24,68 +22,38 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src: url("/fonts/NeueHaasDisplayBold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-}
-
-
+/* ✅ Reset / global */
 * {
-  /* margin: 0; */
   box-sizing: border-box;
-
 }
 
-/* Sirf .custom-scroll ke liye scrollbar style */
-.custom-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.custom-scroll::-webkit-scrollbar-track {
-  background: var(--color-brand);
-  ;
-  /* Tailwind slate-100 */
-  border-radius: 8px;
-}
-
-
-
-/* Custom Scrollbar */
+/* ✅ Custom Scrollbar (light) */
 .custom-scroll::-webkit-scrollbar {
   width: 6px;
 }
-
 .custom-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .custom-scroll::-webkit-scrollbar-thumb {
   background: var(--color-brand);
-  ;
-  /* Tailwind blue-500 */
   border-radius: 9999px;
 }
-/* ------------------------------- */
-/* color Scrollbar */
+
+/* ✅ Custom Scrollbar (dark) */
 .color-scroll::-webkit-scrollbar {
   width: 6px;
 }
-
 .color-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .color-scroll::-webkit-scrollbar-thumb {
   background: var(--color-dark);
-  ;
-  /* Tailwind blue-500 */
   border-radius: 9999px;
 }
 
+/* ✅ Buttons */
 .my-confirm-btn {
- background: var(--color-dark);/* your brand color */
+  background: var(--color-dark);
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
@@ -93,34 +61,35 @@
   margin: 0 10px;
   transition: background 0.2s ease;
 }
-
 .my-confirm-btn:hover {
- background: var(--color-dark);; /* darker shade */
+  background: #222; /* darker shade */
 }
-
 .my-cancel-btn {
-  background: var(--color-brand);;
+  background: var(--color-brand);
   color: #333;
   padding: 8px 16px;
   border-radius: 6px;
   font-weight: 500;
 }
-
 .my-cancel-btn:hover {
-  background: var(--color-brand);
+  background: #ddd;
 }
+
+/* ✅ Animations */
 @keyframes drag {
   0% { transform: translateX(0); }
   25% { transform: translateX(15px); }
   50% { transform: translateX(-15px); }
   100% { transform: translateX(0); }
 }
-
-
 .animate-drag {
   animation: drag 2s infinite;
 }
 
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
 .animate-fadeInOut {
   animation: fadeInOut 10s forwards;
 }

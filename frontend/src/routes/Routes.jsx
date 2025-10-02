@@ -1,6 +1,7 @@
 
 import Home from "../pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 import Van from "../pages/Van";
 import Layout from "../components/layout/Layout";
 import AdminUse from "../components/adminUse/AdminUse";
@@ -13,6 +14,9 @@ import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/
 import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
 import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
 import Finishes from "../websiteComponents/components/Finishes/Finishes";
+import Layouts from "../websiteComponents/components/Layouts/layouthero/Layouts";
+import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
+import Blogs from "../websiteComponents/components/Blogs/Blogs";
 
 
 const AppRoutes = () => {
@@ -20,8 +24,13 @@ const AppRoutes = () => {
 
   return (
         <Router>
+            <ScrollFromTop />
           <Routes>
+
             <Route path="/" element={<Home />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog-form" element={<BlogForm />} />
+            <Route path="/layouts" element={<Layouts />} />
             <Route path="/finishes" element={<Finishes />} />
             <Route path="/vans-for-sale" element={<VansForSale />} />
             <Route path="/inquiry" element={<Inquiry />} />

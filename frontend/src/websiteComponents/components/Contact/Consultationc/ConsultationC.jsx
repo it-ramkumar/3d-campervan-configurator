@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { FaTwitter, FaYoutube, FaLinkedin, FaWhatsapp, FaInstagram, FaCopy } from 'react-icons/fa';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import {Link} from "react-router-dom";
 
 export default function ConsultationC() {
   const [date, setDate] = useState(null);
@@ -102,31 +103,31 @@ export default function ConsultationC() {
             <input
               type="text"
               placeholder="Your Name"
-              className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
+              className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
             />
             <input
               type="email"
               placeholder="Your Email"
-              className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
+              className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
             />
             <div className="relative">
-              <span className="absolute top-2 right-2 text-black opacity-75 text-sm font-sans">(Optional)</span>
+              <span className="absolute top-2 right-2 text-black opacity-75 text-sm font-serif">(Optional)</span>
               <input
                 type="tel"
                 placeholder="Your Phone Number"
-                className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
+                className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-20"
               />
             </div>
             <div className="relative">
-              <span className="absolute top-2 right-2 text-black opacity-75 text-sm font-sans">(Optional)</span>
+              <span className="absolute top-2 right-2 text-black opacity-75 text-sm font-serif">(Optional)</span>
               <textarea
                 placeholder="Your Message"
-                className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-[220px] resize-none"
+                className="w-full p-6 text-lg rounded-xl bg-[#CFCFCF] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD] h-[220px] resize-none"
               ></textarea>
             </div>
           </form>
           <div className="w-full flex justify-center mt-8 md:mt-12">
-            <button className="px-6 py-3 rounded-md bg-[#2761FD] text-white font-sans font-bold text-sm hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300">
+            <button className="px-6 py-3 rounded-md bg-[#2761FD] text-white font-serif font-bold text-sm hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300">
               Submit
             </button>
           </div>
@@ -172,15 +173,25 @@ export default function ConsultationC() {
           ></iframe>
       </div>
       <div className="flex flex-col items-center">
-        <h3 className="font-sans font-bold text-2xl md:text-3xl text-black mb-6">
+        <h3 className="font-serif font-bold text-2xl md:text-3xl text-black mb-6">
           Follow Us
         </h3>
         <div className="flex space-x-4 md:space-x-8">
-            <FaTwitter className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300 h-8 w-8 md:h-12 md:w-12" />
-            <FaYoutube className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300 h-8 w-8 md:h-12 md:w-12" />
-            <FaLinkedin className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300 h-8 w-8 md:h-12 md:w-12" />
-            <FaWhatsapp className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300 h-8 w-8 md:h-12 md:w-12" />
-            <FaInstagram className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300 h-8 w-8 md:h-12 md:w-12" />
+             <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
+                        <FaTwitter size={30} className="text-black" />
+                      </Link>
+                      <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
+                        <FaYoutube size={30} className="text-black" />
+                      </Link>
+                      <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
+                        <FaLinkedin size={30} className="text-black" />
+                      </Link>
+                      {/* <Link to="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+                        <FaWhatsapp size={30} className="text-black" />
+                      </Link> */}
+                      <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
+                        <FaInstagram size={30} className="text-black" />
+                      </Link>
         </div>
       </div>
 

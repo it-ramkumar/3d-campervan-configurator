@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaClock, FaArrowRight, FaYoutube, FaWhatsapp, FaCopy } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
+import { FaTwitter, FaInstagram,  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin , FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
 const handleCopy = (text) => {
   navigator.clipboard.writeText(text);
   // Optional: Add a toast notification or some other feedback here
@@ -11,7 +11,7 @@ const handleCopy = (text) => {
 
 export default function Footer() {
   return (
-    <footer className="relative text-white pt-16 pb-8 bg-cover bg-center bg-no-repeat">
+    <footer className="relative text-white pt-16 pb-8 bg-cover bg-center bg-no-repeat font-serif">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center md:bg-no-repeat"
@@ -38,21 +38,21 @@ export default function Footer() {
 
             {/* Social Icons */}
             <div className="flex gap-4">
-              <a href="#" className="p-2 rounded-full transition-all duration-300 transform hover:scale-125">
-                <FaTwitter className="text-white text-lg" />
-              </a>
-              <a href="#" className="p-2 rounded-full transition-all duration-300 transform hover:scale-125">
-                <FaYoutube className="text-white text-lg" />
-              </a>
-              <a href="#" className="p-2 rounded-full transition-all duration-300 transform hover:scale-125">
-                <FaLinkedinIn className="text-white text-lg" />
-              </a>
-              <a href="#" className="p-2 rounded-full transition-all duration-300 transform hover:scale-125">
-                <FaWhatsapp className="text-white text-lg" />
-              </a>
-              <a href="#" className="p-2 rounded-full transition-all duration-300 transform hover:scale-125">
-                <FaInstagram className="text-white text-lg" />
-              </a>
+         <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaTwitter size={30} className="" />
+                   </Link>
+                   <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaYoutube size={30} className="" />
+                   </Link>
+                   <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaLinkedin size={30} className="" />
+                   </Link>
+                   {/* <Link to="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaWhatsapp size={30} className="text-black" />
+                   </Link> */}
+                   <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaInstagram size={30} className="" />
+                   </Link>
             </div>
           </div>
 
@@ -63,25 +63,25 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 list-disc list-inside">
               <li>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Home</a>
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Home</Link>
               </li>
               <li>
-                <a href="https://bigbearvans.com/vans-for-sale-2/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</a>
+                <Link to="vans-for-sale" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</Link>
               </li>
               <li>
-                <a href="https://bigbearvans.com/layout-page/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Portfolio</a>
+                <Link to="/portfolio" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Portfolio</Link>
               </li>
               <li>
-                <a href="https://bigbearvans.com/about-us/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">About Us</a>
+                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-300 underline">About Us</Link>
+              </li>
+              {/* <li>
+                <Link to="https://bigbearvans.com/careers/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Career</Link>
+              </li> */}
+              <li>
+                <Link to="/blog" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Blog</Link>
               </li>
               <li>
-                <a href="https://bigbearvans.com/careers/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Career</a>
-              </li>
-              <li>
-                <a href="https://bigbearvans.com/blog-page/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Blog</a>
-              </li>
-              <li>
-                <a href="https://bigbearvans.com/faqs/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">FAQ</a>
+                <Link to="/faqs" className="text-gray-300 hover:text-white transition-colors duration-300 underline">FAQ</Link>
               </li>
             </ul>
           </div>
@@ -165,13 +165,13 @@ export default function Footer() {
             © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
           </p>
           <div className="flex gap-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            <Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="#" className="hover:text-white transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>
-      
+
       {/* Chatmaxima Scripts - Added here at the end of the footer body */}
       <div className="hidden">
         <script

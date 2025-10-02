@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaTwitter, FaYoutube, FaLinkedin, FaWhatsapp, FaInstagram, FaPlus, FaMinus } from "react-icons/fa";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {Link} from "react-router-dom";
 
 // Register the GSAP plugin if in a browser environment
 if (typeof window !== "undefined") {
@@ -136,21 +137,21 @@ export default function FaqV() {
             <img src="/images/logoo.png" alt="Big Bear Vans Logo" width={242} height={44} />
           </div>
           <div ref={socialIconsRef} className="flex gap-4 mt-6">
-            <a href="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+             <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
               <FaTwitter size={30} className="text-black" />
-            </a>
-            <a href="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+            </Link>
+            <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
               <FaYoutube size={30} className="text-black" />
-            </a>
-            <a href="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+            </Link>
+            <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
               <FaLinkedin size={30} className="text-black" />
-            </a>
-            <a href="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+            </Link>
+            {/* <Link to="#" className="p-2 transition-all duration-300 transform hover:scale-125">
               <FaWhatsapp size={30} className="text-black" />
-            </a>
-            <a href="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+            </Link> */}
+            <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
               <FaInstagram size={30} className="text-black" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -28,9 +28,20 @@ const portfolios = new CloudinaryStorage({
   },
 });
 
+// 📌 Profile images storage
+const blogs = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'blogs',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }]
+  },
+});
+
 
 // ✅ Export both
 module.exports = {
 vans,
-portfolios
+portfolios,
+blogs
 };

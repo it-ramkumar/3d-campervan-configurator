@@ -19,6 +19,7 @@ const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
 const youtubeRevenuew =require("./routes/youtubeCheck")
 const Export = require("./routes/exportModel");
+const blogs = require("./routes/blog");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,6 +49,7 @@ app.use(globalLimiter);
 app.use("/", Changed)
 app.use("/api/portfolio", portfolio)
 app.use("/api", Export)
+app.use("/api/blog", blogs)
 
 app.use("/api/van", van)
 app.use("/api/inquery", inquery)

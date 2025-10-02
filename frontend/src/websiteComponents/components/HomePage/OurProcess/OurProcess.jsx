@@ -257,7 +257,7 @@ export default function OurProcess() {
         {/* Call to action button */}
         <div className="mt-16 text-center" ref={buttonRef}>
           <Link to="/inquiry" className="inline-block">
-            <button className="bg-white text-black py-3 px-8 cursor-pointer rounded-md font-sans font-bold text-sm">
+            <button className="bg-white text-black py-3 px-8 cursor-pointer rounded-md font-serif font-bold text-sm">
               Get a Quote
             </button>
           </Link>

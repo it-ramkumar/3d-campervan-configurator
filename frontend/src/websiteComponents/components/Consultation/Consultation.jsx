@@ -122,7 +122,7 @@ export default function Consultation() {
           value={formData.name}
           onChange={handleChange}
           placeholder="Your Name"
-          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
         />
       </div>
       <div className="relative">
@@ -132,29 +132,29 @@ export default function Consultation() {
           value={formData.email}
           onChange={handleChange}
           placeholder="Your Email"
-          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
         />
       </div>
       <div className="relative">
-        <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-sans">(Optional)</span>
+        <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-serif">(Optional)</span>
         <input
           type="tel"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
           placeholder="Your Phone Number"
-          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
         />
       </div>
       <div className="relative">
-        <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-sans">(Optional)</span>
+        <span className="absolute top-2 right-2 text-black opacity-75 text-xs md:text-sm font-serif">(Optional)</span>
         <textarea
           name="message"
           value={formData.message}
           onChange={handleChange}
           placeholder="Your Message"
           rows="4"
-          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-sans text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
+          className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl bg-[#D9D9D9] placeholder:text-black placeholder:opacity-75 font-serif text-black opacity-75 focus:outline-none focus:ring-2 focus:ring-[#2761FD]"
         ></textarea>
       </div>
 
@@ -168,15 +168,15 @@ export default function Consultation() {
           </div>
 
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
-            <div className="flex flex-col items-center w-full mb-8">
+            <div className="flex flex-col items-center w-full">
               <img src="/images/logoo.png" alt="Big Bear Vans Logo" width={242} height={44} className="mb-4" />
-              <div className="flex space-x-4">
+              {/* <div className="flex space-x-4">
                 <FaTwitter size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaYoutube size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaLinkedin size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaWhatsapp size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
                 <FaInstagram size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-              </div>
+              </div> */}
             </div>
             <div className="relative w-full rounded-[20px] overflow-hidden group">
               <div className="absolute inset-0 z-10 p-4 md:p-8 flex items-start">
@@ -310,7 +310,7 @@ export default function Consultation() {
           --color-whito: #fff;
           --color-accent: #f97316;
           --color-grarish: #5c5e62;
-          --font-sans: "Noto Sans", system-ui, sans-serif;
+          --font-serif: "Noto serif", system-ui, sans-serif;
           --font-serif: "Noto Serif", serif;
           --text-h1: 4rem;
           --font-weight-h1: 800;
