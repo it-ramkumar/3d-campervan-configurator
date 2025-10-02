@@ -96,6 +96,14 @@ export default function Blog() {
             </Link>
           ))}
         </div>
+        <div className="flex justify-center">
+
+        <Link to="/blogs" >
+          <button className="bg-[#2761FD] mt-14 text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
+                        Explore Blogs
+                    </button>
+        </Link>
+        </div>
       </div>
     </section>
   );
