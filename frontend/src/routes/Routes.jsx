@@ -5,7 +5,7 @@ import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 import Van from "../pages/Van";
 import Layout from "../components/layout/Layout";
 import AdminUse from "../components/adminUse/AdminUse";
-// import Preview from "../components/preview/Preview";
+import Preview from "../components/preview/Preview";
 import Changes from "../components/changes/Change"
 import Contact from "../websiteComponents/components/Contact/Contact";
 import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
@@ -44,7 +44,7 @@ const AppRoutes = () => {
         <Route path="/layout" element={<Layout />} />
         <Route path="/van" element={<Van />} />
         <Route path="/admin" element={<AdminUse />} />
-        {/* <Route path="/preview" element={<Preview />} /> */}
+        <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
