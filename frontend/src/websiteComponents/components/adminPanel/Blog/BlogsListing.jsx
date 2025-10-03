@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { useDispatch } from "react-redux";
 import { setEditData } from "../../../../redux/slices/editData";
+import { deleteBlog } from "../../../../api/blog/deleteBlog";
 export default function BlogsListing({setSelected}) {
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
@@ -61,6 +62,7 @@ export default function BlogsListing({setSelected}) {
             <button onClick={() => {dispatch(setEditData(blog))
               setSelected("Blog-form");
             }}>Edit</button>
+            <button onClick={() => deleteBlog(blog._id)}>Delete</button>
             </div>
         ))}
       </div>

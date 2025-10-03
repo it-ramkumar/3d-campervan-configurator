@@ -117,11 +117,10 @@ router.get("/", async (req, res) => {
 });
 
 // ----------------------------
-// Get single portfolio by ID
-// ----------------------------
-router.get("/:id", async (req, res) => {
+// DELETE portfolio by ID
+router.delete("/:id", async (req, res) => {
   try {
-    const portfolio = await PortfolioVan.findById(req.params.id);
+    const portfolio = await PortfolioVan.findByIdAndDelete(req.params.id);
 
     if (!portfolio) {
       return res.status(404).json({
@@ -132,21 +131,20 @@ router.get("/:id", async (req, res) => {
 
     res.json({
       success: true,
+      message: "Portfolio deleted successfully",
       data: portfolio,
     });
   } catch (err) {
-    console.error("Error fetching portfolio by ID:", err.message);
+    console.error("Error deleting portfolio:", err.message);
     res.status(500).json({
       success: false,
-      message: "Server error while fetching portfolio",
+      message: "Server error while deleting portfolio",
     });
   }
 });
 
 // ----------------------------
-// Get single portfolio by slug
-// ----------------------------
-router.get("/slug/:slug", async (req, res) => {
+router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
 
