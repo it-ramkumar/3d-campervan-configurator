@@ -17,7 +17,8 @@ import Finishes from "../websiteComponents/components/Finishes/Finishes";
 import Layouts from "../websiteComponents/components/Layouts/layouthero/Layouts";
 import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
 import Blogs from "../websiteComponents/components/Blogs/Blogs";
-
+import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayoutHero/FamilyLayout";
+import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayoutHero/CoupleLayout";
 
 const AppRoutes = () => {
 
@@ -28,6 +29,8 @@ const AppRoutes = () => {
           <Routes>
 
             <Route path="/" element={<Home />} />
+            <Route path="/family-layout" element={<FamilyLayout />} />
+            <Route path="/couples-layout" element={<Couples />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog-form" element={<BlogForm />} />
             <Route path="/layouts" element={<Layouts />} />

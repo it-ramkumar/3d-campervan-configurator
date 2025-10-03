@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import {Link} from "react-router-dom"
 
 // Placeholder images for the grid.
 const image1 = "/images/image5l.png";
@@ -62,7 +63,7 @@ export default function Couples() {
               transition={{ duration: 0.3 }}
             />
           </motion.div>
-          
+
           {/* Image 2 */}
           <motion.div className="col-span-1 h-48 md:h-96" variants={fadeInUp}>
             <motion.img
@@ -73,7 +74,7 @@ export default function Couples() {
               transition={{ duration: 0.3 }}
             />
           </motion.div>
-          
+
           {/* Image 4 (Tall one) */}
           <motion.div className="col-span-1 row-span-2" variants={fadeInUp}>
             <motion.img
@@ -84,7 +85,7 @@ export default function Couples() {
               transition={{ duration: 0.3 }}
             />
           </motion.div>
-          
+
           {/* Image 3 (Wide one) */}
           <motion.div className="col-span-2" variants={fadeInUp}>
             <motion.img
@@ -98,9 +99,10 @@ export default function Couples() {
         </motion.div>
 
         {/* Explore Button */}
+      <Link to="/couples-layout">
         <div className="flex justify-center">
           <motion.button
-            className="bg-[#2761FD] text-white font-sans font-bold text-lg rounded-lg w-48 h-12 flex items-center justify-center hover:bg-blue-600 transition-colors duration-300"
+            className="bg-[#2761FD] text-white cursor-pointer font-sans font-bold text-lg rounded-lg w-48 h-12 flex items-center justify-center hover:bg-blue-600 transition-colors duration-300"
             whileHover={{ scale: 1.1, y: -5 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -110,7 +112,7 @@ export default function Couples() {
           >
             Click To Explore
           </motion.button>
-        </div>
+        </div></Link>
       </div>
     </section>
   );
