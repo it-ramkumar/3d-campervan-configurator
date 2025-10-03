@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { FaTwitter, FaYoutube, FaLinkedin, FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { FaTwitter, FaYoutube, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import Calendar from 'react-calendar';
+import { Link } from 'react-router-dom';
 import 'react-calendar/dist/Calendar.css';
 import './Consultationlayout.css'; // Import the external CSS file
 
@@ -27,7 +28,7 @@ export default function ConsultationPage() {
         <h2 className="text-5xl font-bold font-serif text-black text-center mb-6 leading-tight">
           Ready to Buy Your Van for Sale?
         </h2>
-        
+
         <div className="w-full max-w-4xl text-left font-serif text-xl text-black/70 leading-tight mb-10 px-4 mr-auto">
           <p className="font-semibold">Still have questions? We’re here to help:</p>
           <ul className="list-disc list-inside mt-2 space-y-1">
@@ -141,7 +142,7 @@ export default function ConsultationPage() {
                   ></textarea>
                 </div>
             </form>
-            
+
             {/* CHANGED: Mobile button width reduced and centered */}
             <button className="mt-8 w-auto self-center px-8 py-3 rounded-md bg-[#2761FD] text-white font-bold text-lg hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300 lg:hidden">
               Submit
@@ -154,16 +155,26 @@ export default function ConsultationPage() {
             <div className="flex flex-col items-center w-full mb-8">
                 <img src="/images/logoo.png" alt="Big Bear Vans Logo" width={242} height={44} className="mb-4" />
                 <div className="flex space-x-4">
-                  <FaTwitter size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-                  <FaYoutube size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-                  <FaLinkedin size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-                  <FaWhatsapp size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-                  <FaInstagram size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
+                   <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaTwitter size={30} className="" />
+                   </Link>
+                   <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaYoutube size={30} className="" />
+                   </Link>
+                   <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaLinkedin size={30} className="" />
+                   </Link>
+                   {/* <Link to="#" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaWhatsapp size={30} className="text-black" />
+                   </Link> */}
+                   <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
+                     <FaInstagram size={30} className="" />
+                   </Link>
                 </div>
               </div>
               <div className="relative w-full rounded-[20px] overflow-hidden group">
                 <div className="absolute inset-0 z-10 p-4 md:p-8 flex items-start">
-                  
+
                 </div>
                 <iframe
                   src={`https://maps.google.com/maps?q=Big+Bear,+California&z=${mapZoom}&output=embed`}
@@ -190,7 +201,7 @@ export default function ConsultationPage() {
               </div>
           </div>
         </div>
-        
+
         {/* Desktop submit button (unchanged) */}
         <button className="hidden lg:block mt-8 md:mt-12 px-6 md:px-8 py-2 md:py-3 rounded-md bg-[#2761FD] text-white font-bold text-lg md:text-xl hover:bg-[#1a4ab9] transform hover:scale-105 transition-all duration-300">
           Submit

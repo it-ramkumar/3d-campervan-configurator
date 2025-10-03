@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "react-router-dom";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -239,13 +240,14 @@ export default function Portfolio() {
 
         {/* Button */}
         <div className="flex justify-center mt-16">
+          <Link to="/layouts">
           <button
             ref={buttonRef}
-            className="relative flex items-center justify-center text-white bg-[#2761FD] rounded-md font-serif font-bold text-sm h-12 w-48 transition-transform transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
+            className="relative flex items-center cursor-pointer justify-center text-white bg-[#2761FD] rounded-md font-serif font-bold text-sm h-12 w-48 transition-transform transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
           >
             <span className="shimmer absolute top-0 left-0 w-full h-full bg-white/20 block"></span>
             <span className="relative z-10">View Our Portfolio</span>
-          </button>
+          </button></Link>
         </div>
       </div>
     </section>
