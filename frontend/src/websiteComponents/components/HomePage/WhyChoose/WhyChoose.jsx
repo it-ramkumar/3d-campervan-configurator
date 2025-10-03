@@ -129,7 +129,7 @@ const WhyChoose = () => {
         <div className="py-10 flex justify-center">
           <Link
             to="/inquiry"
-            className="w-[149px] h-[39px] px-5 py-[10px] rounded-[5px] bg-[#2761FD] text-white
+            className=" h-[39px] px-5 py-[10px] rounded-[5px] bg-[#2761FD] text-white
               font-['Noto Sans'] text-sm font-bold shadow-md hover:bg-blue-600 transition-colors
               hover:scale-105 hover:shadow-lg transition-transform cursor-pointer"
           >

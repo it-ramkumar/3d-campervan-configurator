@@ -336,7 +336,7 @@ export default function Customize() {
            <Link to="/inquiry">
             <button
               className="section1-button bg-[#2761FD] text-white font-serif font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
-              style={{ width: '149px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Request a Build
             </button>
@@ -450,7 +450,7 @@ export default function Customize() {
        <Link to="/van">
             <button
               className="section2-button bg-[#2761FD] text-white font-serif font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
-              style={{ width: '178px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              style={{height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Try 3D Configurator
             </button></Link>
