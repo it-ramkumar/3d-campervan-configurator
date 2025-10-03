@@ -65,7 +65,9 @@ app.use("/api", youtubeRevenuew);
 // -----------------------------------------------
 // 9️ Global Error Handler (catches any thrown errors)
 app.use(errorHandler);
-
+app.get("/", (req, res) => {
+  res.send("Backend is working ✅");
+});
 // 10 Start the Server
 app.listen(PORT, "0.0.0.0", () => {
   console.log(` Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
