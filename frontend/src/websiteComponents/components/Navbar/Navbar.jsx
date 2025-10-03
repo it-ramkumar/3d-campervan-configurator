@@ -124,7 +124,7 @@ export default function Navbar() {
             <Link to="/layouts" onMouseEnter={() => handleMenuHover("layouts")} onMouseLeave={handleMenuLeave}>Layouts</Link>
             <Link to="/van" onMouseEnter={() => handleMenuHover("3d-van-builder")} onMouseLeave={handleMenuLeave}>3D Van Builder</Link>
             <Link to="/contact" onMouseEnter={() => handleMenuHover("contact-us")} onMouseLeave={handleMenuLeave}>Contact</Link>
-            <Link to="#" onMouseEnter={() => handleMenuHover("discover")} onMouseLeave={handleMenuLeave}>Discover</Link>
+            <Link to="/van" onMouseEnter={() => handleMenuHover("discover")} onMouseLeave={handleMenuLeave}>Discover</Link>
           </div>
 
           {/* Right Spacer */}
