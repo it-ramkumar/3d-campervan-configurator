@@ -74,11 +74,11 @@ export default function Buy() {
 
 
     const slidesDummy = [
-        {
-            title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
-            desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
-            img: "/images/Montrial.jpg",
-        },
+        // {
+        //     title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
+        //     desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
+        //     img: "/images/Montrial.jpg",
+        // },
         {
             title: "Santa Monica V6 Turbo",
             desc: "144 Sprinter is built for a family! Designed to sit & sleep 4. With indoor bathroom, kitchen, elevator bed, and dinette.",

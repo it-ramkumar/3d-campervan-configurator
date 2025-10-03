@@ -11,14 +11,14 @@ if (typeof window !== "undefined") {
 
 // Data for the van cards
 const VAN_CARDS = [
-  {
-    id: 1,
-    model: "Montreal 170 AWD Blue Gray",
-    image: "/images/Montrial.jpg",
-    link: "#",
-    price: "$196,000",
-    description: "Our Montreal 170 AWD blue-gray is a thoroughly insulated and winter-ready campervan, which is designed for 4-5 people.",
-  },
+  // {
+  //   id: 1,
+  //   model: "Montreal 170 AWD Blue Gray",
+  //   image: "/images/Montrial.jpg",
+  //   link: "#",
+  //   price: "$196,000",
+  //   description: "Our Montreal 170 AWD blue-gray is a thoroughly insulated and winter-ready campervan, which is designed for 4-5 people.",
+  // },
   {
     id: 2,
     model: "Santa Monica V6 Turbo",

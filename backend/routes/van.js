@@ -10,7 +10,7 @@ router.post('/',  upload.fields([
     { name: "blockImages", maxCount: 20 },
   ]), async (req, res) => {
   try {
-    console.log(req.files,"files")
+    // console.log(req.files,"files")
     // Parse JSON fields
       // ✅ Parse blocksData from body (captions etc.)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
