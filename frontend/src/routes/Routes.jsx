@@ -24,30 +24,30 @@ const AppRoutes = () => {
 
 
   return (
-        <Router>
-            <ScrollFromTop />
-          <Routes>
+    <Router>
+      <ScrollFromTop />
+      <Routes>
 
-            <Route path="/" element={<Home />} />
-            <Route path="/family-layout" element={<FamilyLayout />} />
-            <Route path="/couples-layout" element={<Couples />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/blog-form" element={<BlogForm />} />
-            <Route path="/layouts" element={<Layouts />} />
-            <Route path="/finishes" element={<Finishes />} />
-            <Route path="/vans-for-sale" element={<VansForSale />} />
-            <Route path="/inquiry" element={<Inquiry />} />
-            <Route path="/van-form" element={<VanForm />} />
-            <Route path="/portfolio-form" element={<PortfolioForm />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/changes" element={<Changes />} />
-            <Route path="/layout" element={<Layout />} />
-            <Route path="/van" element={<Van />} />
-            <Route path="/admin" element={<AdminUse />} />
-            <Route path="/preview" element={<Preview />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </Router>
+        <Route path="/" element={<Home />} />
+        <Route path="/family-layout" element={<FamilyLayout />} />
+        <Route path="/couples-layout" element={<Couples />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blog-form" element={<BlogForm />} />
+        <Route path="/layouts" element={<Layouts />} />
+        <Route path="/finishes" element={<Finishes />} />
+        <Route path="/vans-for-sale" element={<VansForSale />} />
+        <Route path="/inquiry" element={<Inquiry />} />
+        <Route path="/van-form" element={<VanForm />} />
+        <Route path="/portfolio-form" element={<PortfolioForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/changes" element={<Changes />} />
+        <Route path="/layout" element={<Layout />} />
+        <Route path="/van" element={<Van />} />
+        <Route path="/admin" element={<AdminUse />} />
+        <Route path="/preview" element={<Preview />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </Router>
 
   );
 };
