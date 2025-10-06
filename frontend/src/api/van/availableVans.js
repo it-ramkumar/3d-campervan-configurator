@@ -6,7 +6,9 @@ import axios from "axios";
  */
 export async function availableVans() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/van/available`);
+    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/van/available`, {
+      withCredentials: true,
+    });
     return {
       success: true,
       data: response.data.vans || [],

@@ -18,7 +18,9 @@ export const insertManyData = async (formData) => {
 export const updateItem = async (id, updatedData) => {
 
   try {
-    const res = await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/insertManyData/${id}`, updatedData);
+    const res = await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/insertManyData/${id}`, updatedData, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (err) {
     throw err.response?.data || err.message;
@@ -29,7 +31,9 @@ export const updateItem = async (id, updatedData) => {
 export const deleteItem = async (id) => {
 
   try {
-    const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/insertManyData/${id}`);
+    const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/insertManyData/${id}`, {
+      withCredentials: true,
+    });
     return res.data;
   } catch (err) {
     throw err.response?.data || err.message;

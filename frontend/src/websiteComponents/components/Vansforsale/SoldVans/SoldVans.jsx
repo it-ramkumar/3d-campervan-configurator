@@ -17,6 +17,7 @@ const FEATURED_VAN = {
 };
 
 const SOLD_VANS_GRID = [
+  // { id: 1, title: "Montreal", imageUrl: "/images/Montrial.jpg" },
   { id: 2, title: "2024 Mercedes Sprinter 170 AWD", imageUrl: "/images/sold2.jpg" },
   { id: 3, title: "Mercedes-Benz Sprinter 170 AWD", imageUrl: "/images/sold3.jpg" },
   { id: 4, title: "2022 Mercedes Sprinter 144 AWD", imageUrl: "/images/sold4.jpg" },

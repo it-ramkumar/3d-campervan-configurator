@@ -2,6 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/database");
 const axios = require('axios')
+const cookieParser = require("cookie-parser");
+
 
 const helmetMiddleware = require("./middleware/helmetMiddleware");
 const corsMiddleware = require("./middleware/corsMiddleware");
@@ -20,6 +22,7 @@ const inquery = require("./routes/inquery")
 const youtubeRevenuew =require("./routes/youtubeCheck")
 const Export = require("./routes/exportModel");
 const blogs = require("./routes/blog");
+const userRoute = require("./routes/authRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,7 +42,7 @@ app.use(morganMiddleware);
 // 4️ Body Parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 app.set("trust proxy", 1);
 // 5️ Enable CORS
 app.use(corsMiddleware);
@@ -52,6 +55,7 @@ app.use("/api", Export)
 app.use("/api/blog", blogs)
 
 app.use("/api/van", van)
+app.use("/api", userRoute);
 app.use("/api/inquery", inquery)
 app.use("/api/contact", contactUs);
 app.use("/api/quote", quoteRoutes);

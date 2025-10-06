@@ -23,7 +23,7 @@ const VAN_CARDS = [
     id: 2,
     model: "Santa Monica V6 Turbo",
     image: "/images/brown.jpg",
-    link: "#",
+    link: "/santa-monica",
     price: "$224,543",
     description: "The Santa Monica V6 Turbo is the ultimate adventure vehicle. With its powerful V6 Turbo engine.",
   },

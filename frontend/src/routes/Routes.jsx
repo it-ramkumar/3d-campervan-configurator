@@ -21,7 +21,9 @@ import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFami
 import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayoutHero/CoupleLayout";
 import DetailPage from "../detailPage";
 import SantaMonica from "../websiteComponents/components/SantaMonica/Santa";
-
+import Signup from "../websiteComponents/components/Auth/Signup";
+import Login from "../websiteComponents/components/Auth/Login";
+import OurProcess from "../websiteComponents/components/OurProcess/Processhero/OurProcess"
 
 const AppRoutes = () => {
 
@@ -31,7 +33,11 @@ const AppRoutes = () => {
       <ScrollFromTop />
       <Routes>
 
+
         <Route path="/" element={<Home />} />
+        <Route path="/our-process" element={<OurProcess />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/santa-monica" element={<SantaMonica />} />
         <Route path="/detail-page" element={<DetailPage />} />
         <Route path="/family-layout" element={<FamilyLayout />} />

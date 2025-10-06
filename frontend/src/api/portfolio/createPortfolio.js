@@ -5,6 +5,9 @@ const createPortfolio = async (formDataToSend) => {
     try {
         const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/portfolio`, formDataToSend, {
             headers: { "Content-Type": "multipart/form-data" },
+
+      withCredentials: true,
+
         });
         alert("Portfolio created successfully!");
         return res.data;
@@ -22,7 +25,7 @@ const updatePortfolio = async (editData, formDataToSend) => {
         const res = await axios.put(
             `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/${editData.slug}`,
             formDataToSend,
-            { headers: { "Content-Type": "multipart/form-data" } }
+            { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
         alert("Portfolio updated successfully!");
         console.log("✅ Success (Update):", res.data);

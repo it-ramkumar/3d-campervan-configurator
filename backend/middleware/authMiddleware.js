@@ -1,18 +1,24 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
-
-  if (!token) {
-    return res.status(401).json({ success: false, message: 'Access denied. Token missing.' });
-  }
+const protect = (req, res, next) => {
+  const token = req.cookies.token;
+  
+  if (!token) return res.status(401).json({ message: "Not authorized, no token" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (error) {
-    return res.status(403).json({ success: false, message: 'Invalid or expired token.' });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
+
+const adminOnly = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Access denied" });
+  }
+  next();
+};
+
+module.exports = { protect, adminOnly };

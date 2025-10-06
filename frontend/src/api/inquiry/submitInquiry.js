@@ -4,7 +4,7 @@ import axios from "axios";
 export const submitInquiry = async (formData) => {
   try {
     const { data } = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`, formData, {
-      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
     });
     return { success: true, data };
   } catch (error) {

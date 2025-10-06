@@ -7,8 +7,9 @@ export const updateBlog = async (editData, formDataToSend) => {
       formDataToSend,
       {
         headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+
+        withCredentials: true,
+      });
     alert("Van updated successfully!");
     console.log("✅ Update Response:", res.data);
     return res.data;

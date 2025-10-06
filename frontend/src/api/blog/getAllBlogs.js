@@ -6,7 +6,9 @@ import axios from "axios";
  */
 export async function getAllBlogs() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/blog`);
+    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/blog`,{
+           withCredentials: true,
+    });
     return {
       success: true,
       data: response.data.data || [],

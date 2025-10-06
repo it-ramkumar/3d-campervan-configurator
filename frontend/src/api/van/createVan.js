@@ -5,6 +5,8 @@ const createVan = async (formDataToSend) => {
   try {
     const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/van`, formDataToSend, {
       headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+
     });
     alert("Van created successfully!");
     console.log("✅ Create Response:", res.data);

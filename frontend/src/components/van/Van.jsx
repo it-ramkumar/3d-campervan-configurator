@@ -146,13 +146,13 @@ function Van() {
 
                 <div className="flex flex-col gap-2">
                   <div className="rounded-full flex bg-brand mt-3 md:mt-0">
-                    <button onClick={() => {
+                    {/* <button onClick={() => {
 
                       setIsSanta(0);
                     }}
                       className={`${isSanta === 0 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition " :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
                       {vans[0].layout}
-                    </button>
+                    </button> */}
                     <button onClick={() => setIsSanta(1)} className={`${isSanta === 1 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition" :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
                       {vans[1].layout}
                     </button>

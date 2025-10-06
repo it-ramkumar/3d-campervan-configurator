@@ -19,10 +19,10 @@ const BlogForm = () => {
       setBlocks(
         editData.blocks && editData.blocks.length > 0
           ? editData.blocks.map((b) => ({
-              heading: b.heading || "",
-              paragraph: b.paragraph || "",
-              image: null, // image ko user dobara upload karega
-            }))
+            heading: b.heading || "",
+            paragraph: b.paragraph || "",
+            image: null, // image ko user dobara upload karega
+          }))
           : [{ heading: "", paragraph: "", image: null }]
       );
     }
@@ -76,7 +76,9 @@ const BlogForm = () => {
           formData,
           {
             headers: { "Content-Type": "multipart/form-data" },
+            withCredentials: true,
           }
+
         );
         alert("Blog updated!");
       } else {
