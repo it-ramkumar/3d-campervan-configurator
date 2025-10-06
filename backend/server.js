@@ -62,8 +62,6 @@ app.use("/api", postModelDataRoute);
 app.use("/api", youtubeRevenuew);
 
 
-// -----------------------------------------------
-// 9️ Global Error Handler (catches any thrown errors)
 app.use(errorHandler);
 app.get("/", (req, res) => {
   res.send("Backend is working ✅");

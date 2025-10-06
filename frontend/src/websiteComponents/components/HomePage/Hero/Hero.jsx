@@ -35,76 +35,6 @@ export default function Hero() {
   const nextRef = useRef(null);
   const [swiper, setSwiper] = useState(null);
 
-  useEffect(() => {
-    if (!swiper) return;
-
-    // --- Animation function for slide content ---
-    const animateContent = (slide) => {
-      gsap.killTweensOf(slide.querySelectorAll(".animated-content"));
-
-      const titleChars = slide.querySelectorAll(".title-char");
-      const desc = slide.querySelector(".desc-text");
-      const buttons = slide.querySelectorAll(".action-button");
-
-      gsap.set([desc, buttons], { opacity: 0, y: 30 });
-      gsap.set(titleChars, { opacity: 0, y: 50 });
-
-      const tl = gsap.timeline();
-      tl.to(titleChars, {
-        opacity: 1,
-        y: 0,
-        stagger: 0.04,
-        duration: 0.8,
-        ease: "power3.out",
-      })
-        .to(desc, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power3.out",
-        }, "-=0.5")
-        .to(buttons, {
-          opacity: 1,
-          y: 0,
-          stagger: 0.2,
-          duration: 0.6,
-          ease: "power3.out",
-        }, "-=0.4");
-    };
-
-    // --- Animation function for background image (Ken Burns Effect) ---
-    const animateBackground = (slide) => {
-      const image = slide.querySelector(".slide-bg-image");
-      gsap.killTweensOf(image);
-
-      gsap.fromTo(
-        image,
-        { scale: 1, x: 0, y: 0 },
-        {
-          scale: 1.1,
-          x: "random(-5%, 5%)",
-          y: "random(-5%, 5%)",
-          duration: 10,
-          ease: "none",
-        }
-      );
-    };
-
-    const handleSlideChange = () => {
-      const activeSlide = swiper.slides[swiper.activeIndex];
-      animateContent(activeSlide);
-      animateBackground(activeSlide);
-    };
-
-    handleSlideChange();
-
-    swiper.on("slideChangeTransitionEnd", handleSlideChange);
-
-    return () => {
-      swiper.off("slideChangeTransitionEnd", handleSlideChange);
-    };
-  }, [swiper]);
-
   return (
     <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-screen overflow-hidden">
       <Swiper
@@ -139,25 +69,28 @@ export default function Hero() {
             />
 
             {/* Dark Overlay */}
-            <div className="absolute inset-0 bg-black/50 z-10"></div>
+
 
             {/* Content */}
-            <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
+
+          </SwiperSlide>
+        ))}
+        <div className="absolute inset-0 bg-black/50 z-10">  <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
               <div className="max-w-4xl text-center space-y-4 animated-content -mt-10 md:mt-0">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
-                  {slide.title.split("").map((char, index) => (
+
                     <span
-                      key={index}
+
                       className="inline-block title-char"
                       style={{ whiteSpace: "pre" }}
                     >
-                      {char}
+                 Custom Camper Vans
                     </span>
-                  ))}
+
                 </h1>
 
                 <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
-                  {slide.desc}
+              Buy, customize, or try the 3D configurator from Big Bear Vans today.
                 </p>
 
                 <div className="flex flex-row gap-4 justify-center items-center pt-4">
@@ -174,9 +107,7 @@ export default function Hero() {
                   </Link>
                 </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </div></div>
       </Swiper>
 
       {/* Custom Navigation */}
@@ -228,7 +159,7 @@ export default function Hero() {
       {/* Custom Pagination Container */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3 custom-pagination"></div>
 
-      <style jsx global>{`
+      <style>{`
     .custom-pagination .custom-bullet {
       width: 12px;
       height: 12px;

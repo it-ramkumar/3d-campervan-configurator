@@ -70,7 +70,7 @@ export default function Consultation() {
                   alt="Big Bear Vans Logo"
                   width={200}
                   height={70}
-                  objectFit="contain"
+                  
                 />
               </div>
             </div>
@@ -208,7 +208,7 @@ export default function Consultation() {
           </div>
         </div>
       </div>
-      <style jsx global>{`
+      <style>{`
         @import "tailwindcss";
 
         @keyframes fadeIn {

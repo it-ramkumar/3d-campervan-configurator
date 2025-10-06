@@ -215,7 +215,7 @@ export default function Testimonials() {
       )}
 
       {/* Custom CSS for smooth overlapping transitions and animations */}
-      <style jsx global>{`
+      <style>{`
         .swiper-slide {
           transition: transform 0.7s ease-out, opacity 0.7s ease-out;
         }

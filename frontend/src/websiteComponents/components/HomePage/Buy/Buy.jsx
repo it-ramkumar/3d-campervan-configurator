@@ -173,12 +173,12 @@ export default function Buy() {
                                         <div className="w-full max-w-[650px]">
                                             <p className="text-sm md:text-base font-normal mb-5">{slide.desc}</p>
                                             <div className="flex gap-4">
-                                              <Link to='/contact'>   <button className="bg-white text-black font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                              <Link to='/contact'>   <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     Buy Now
                                                 </button></Link>
-                                                <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                               <Link to="/santa-monica"> <button className="bg-[#2761FD] text-white cursor-pointer font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     More Details
-                                                </button>
+                                                </button></Link>
                                             </div>
                                         </div>
                                     </div>

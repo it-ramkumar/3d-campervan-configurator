@@ -58,7 +58,6 @@ export default function Blog() {
                 <img
                   src={post.image}
                   alt={post.title}
-                  fill
                   style={{ objectFit: 'cover' }}
                   quality={85}
                   className="transition-transform duration-500 ease-in-out group-hover:scale-115"
@@ -98,7 +97,7 @@ export default function Blog() {
         </div>
         <div className="flex justify-center">
 
-     
+
         </div>
       </div>
     </section>

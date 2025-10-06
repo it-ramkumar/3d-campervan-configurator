@@ -20,6 +20,9 @@ import Blogs from "../websiteComponents/components/Blogs/Blogs";
 import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayoutHero/FamilyLayout";
 import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayoutHero/CoupleLayout";
 import DetailPage from "../detailPage";
+import SantaMonica from "../websiteComponents/components/SantaMonica/Santa";
+
+
 const AppRoutes = () => {
 
 
@@ -29,6 +32,7 @@ const AppRoutes = () => {
       <Routes>
 
         <Route path="/" element={<Home />} />
+        <Route path="/santa-monica" element={<SantaMonica />} />
         <Route path="/detail-page" element={<DetailPage />} />
         <Route path="/family-layout" element={<FamilyLayout />} />
         <Route path="/couples-layout" element={<Couples />} />

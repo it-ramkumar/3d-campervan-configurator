@@ -57,7 +57,7 @@ const WhyChoose = () => {
   ];
 
   return (
-    <div className="bg-white text-blackish font-serif">
+    <div className="bg-white text-blackish font-serif overflow-hidden">
       <header className="py-16 text-center">
         <h1 className="text-4xl md:text-5xl font-bold font-serif leading-tight">
           Why Choose Big Bear Vans?
