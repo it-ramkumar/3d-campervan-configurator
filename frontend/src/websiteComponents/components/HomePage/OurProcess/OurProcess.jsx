@@ -93,10 +93,10 @@ export default function OurProcess() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16" ref={headerRef}>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-2 font-serif">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
             Our Process
           </h1>
-          <p className="text-base md:text-xl text-white/70 font-normal text-center font-serif">
+          <p className="text-sm sm:text-base text-white/70 font-normal text-center font-serif">
             Here's how our complete process of customization works from ideas to keys in your hand:
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left mb-10 lg:mb-0"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               Bring a van or let us source a discounted base vehicle for you.
             </p>
             <div
@@ -134,7 +134,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               Lock in your spot and timeline with a deposit.
             </p>
             <div
@@ -158,7 +158,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               Collaborate with our designers to shape the layout.
             </p>
             <div
@@ -184,7 +184,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               Review and refine 3D renderings until you love them.
             </p>
             <div
@@ -208,7 +208,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               We’ll build your van, sharing progress updates along the way.
             </p>
             <div
@@ -234,7 +234,7 @@ export default function OurProcess() {
             className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18"
             ref={addStepRef}
           >
-            <p className="text-lg md:text-xl font-normal mb-4 font-serif">
+            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
               Pick up your converted camper van in Big Bear.
             </p>
             <div

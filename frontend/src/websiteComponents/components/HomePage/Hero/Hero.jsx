@@ -75,39 +75,43 @@ export default function Hero() {
 
           </SwiperSlide>
         ))}
-        <div className="absolute inset-0 bg-black/50 z-10">  <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
-              <div className="max-w-4xl text-center space-y-4 animated-content -mt-10 md:mt-0">
-                <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
+        <div className="absolute inset-0 bg-black/50 z-10">
+  <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 sm:px-6 md:px-8">
+    <div className="max-w-4xl text-center space-y-3 sm:space-y-4 md:space-y-6 animated-content -mt-6 sm:-mt-8 md:mt-0">
 
-                    <span
+      {/* Title */}
+      <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight font-serif">
+        <span
+          className="inline-block title-char"
+          style={{ whiteSpace: "pre" }}
+        >
+          Custom Camper Vans
+        </span>
+      </h1>
 
-                      className="inline-block title-char"
-                      style={{ whiteSpace: "pre" }}
-                    >
-                 Custom Camper Vans
-                    </span>
+      {/* Subtitle / Description */}
+      <p className="text-sm sm:text-base  font-normal font-serif text-white/90">
+        Buy, customize, or try the 3D configurator from Big Bear Vans today.
+      </p>
 
-                </h1>
+      {/* Buttons */}
+      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center items-center pt-3 sm:pt-4">
+        <Link to="/vans-for-sale">
+          <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-blue-600 transition-transform hover:scale-105 shadow-md">
+            View Van Inventory
+          </button>
+        </Link>
 
-                <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
-              Buy, customize, or try the 3D configurator from Big Bear Vans today.
-                </p>
+        <Link to="/inquiry">
+          <button className="bg-white cursor-pointer text-black font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-gray-100 transition-transform hover:scale-105 shadow-md">
+            Order Custom Build
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</div>
 
-                <div className="flex flex-row gap-4 justify-center items-center pt-4">
-                  <Link to="/vans-for-sale">
-
-                    <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button">
-                      View Van Inventory
-                    </button>
-                  </Link>
-                  <Link to="/inquiry">
-                    <button className="bg-white cursor-pointer text-black font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button">
-                      Request a Build
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div></div>
       </Swiper>
 
       {/* Custom Navigation */}

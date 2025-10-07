@@ -13,13 +13,15 @@ import Footer from "../websiteComponents/components/Footer/Footer";
 
 const Home = () => {
   return (
-   <div className="">
+    <>
+
+     <Navbar />
+        <Hero />
+    <div className="space-y-30 overflow-x-hidden">
       <div className="navbar">
-        <Navbar />
       </div>
       {/* Page Sections */}
       <div className="tour-hero">
-        <Hero />
       </div>
       <div className="tour-buy">
         <Buy />
@@ -52,6 +54,7 @@ const Home = () => {
         <Footer />
       </div>
     </div>
+    </>
   );
 };
 

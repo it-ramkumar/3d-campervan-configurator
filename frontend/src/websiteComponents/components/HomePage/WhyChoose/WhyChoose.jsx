@@ -1,8 +1,16 @@
 "use client";
-import React from "react";
+import { useState } from "react";
 import {Link} from "react-router-dom";
 
 const WhyChoose = () => {
+    const [expandedSections, setExpandedSections] = useState({});
+
+  const toggleSection = (index) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
   const sections = [
     {
       title: "True Custom Builds",
@@ -57,20 +65,41 @@ const WhyChoose = () => {
   ];
 
   return (
-    <div className="bg-white text-blackish font-serif overflow-hidden">
-      <header className="py-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold font-serif leading-tight">
+    <div className="bg-white text-blackish font-serif overflow-x-hidden">
+      <header className="text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
           Why Choose Big Bear Vans?
         </h1>
-        <p className="text-lg md:text-xl font-serif mt-4 max-w-3xl mx-auto px-4">
+        <p className="text-sm sm:text-base font-serif mt-2 max-w-3xl mx-auto px-4">
           At Big Bear Vans, we have a full-fledged team of experienced campervan
           builders and engineers in Big Bear, California. Let us show you what
           nobody else does like we do.
         </p>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8">
-        {sections.map((section, index) => (
+ <main className="max-w-7xl mx-auto px-4 md:px-8">
+      {sections.map((section, index) => {
+        const isExpanded = expandedSections[index];
+        let descriptionHTML = section.description;
+        let listItemCount = 0;
+
+        // 🧠 Count list items
+        const match = descriptionHTML.match(/<li>[\s\S]*?<\/li>/g);
+        if (match) listItemCount = match.length;
+
+        // 🧩 Limit visible <li> to 3 if not expanded
+        if (!isExpanded && listItemCount > 3) {
+          descriptionHTML = descriptionHTML.replace(
+            /<ul>([\s\S]*?)<\/ul>/,
+            (match, listContent) => {
+              const items = listContent.match(/<li>[\s\S]*?<\/li>/g) || [];
+              const visibleItems = items.slice(0, 3).join("");
+              return `<ul>${visibleItems}</ul>`;
+            }
+          );
+        }
+
+        return (
           <section
             key={index}
             className={`py-16 flex flex-col md:flex-row items-center gap-10 md:gap-20 ${
@@ -78,30 +107,49 @@ const WhyChoose = () => {
             }`}
           >
             {/* Text Section */}
-            <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
-              <h2 className="text-3xl md:text-4xl font-bold font-serif">
+            <div
+              className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${
+                section.isReverse ? "ml-auto" : ""
+              }`}
+            >
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
                 {section.title}
               </h2>
+
               <div
-                className="text-base md:text-lg leading-relaxed space-y-3 md:space-y-4"
+                className="text-sm sm:text-base leading-relaxed space-y-3 md:space-y-4"
                 dangerouslySetInnerHTML={{
-                  __html: section.description.replace(
+                  __html: descriptionHTML.replace(
                     /<ul>/g,
                     '<ul class="list-disc list-inside space-y-2 mt-2 text-left">'
                   ),
                 }}
               />
+
+              {/* ✅ Show "See More" only if there are more than 3 items */}
+              {listItemCount > 3 && (
+                <button
+                  onClick={() => toggleSection(index)}
+                  className="text-blue-400 hover:text-blue-300 font-semibold transition"
+                >
+                  {isExpanded ? "See Less" : "See More"}
+                </button>
+              )}
             </div>
 
             {/* Image Section */}
             <div
-              className={`w-full md:w-1/2 relative flex items-center justify-center md:justify-start min-h-[350px] md:min-h-[450px] ${section.isReverse ? "md:justify-end" : ""}`}
+              className={`w-full md:w-1/2 relative flex items-center justify-center md:justify-start min-h-[350px] md:min-h-[450px] ${
+                section.isReverse ? "md:justify-end" : ""
+              }`}
             >
               <div
                 className={`w-11/12 max-w-[400px] h-[300px] md:h-[400px] relative rounded-3xl shadow-lg transform rotate-[-4.68deg] overflow-hidden
                   transition-transform duration-300 hover:scale-105 hover:z-10
                   md:w-[400px]
-                  ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-[3px] border-[#333]
+                  ${
+                    section.isReverse ? "md:ml-auto" : "md:mr-auto"
+                  } border-[3px] border-[#333]
                 `}
               >
                 <img
@@ -113,7 +161,11 @@ const WhyChoose = () => {
               <div
                 className={`w-2/3 max-w-[200px] h-[200px] md:max-w-[300px] md:h-[300px] absolute transform rotate-[-4.68deg] border-4 border-white rounded-2xl shadow-xl overflow-hidden
                   transition-transform duration-300 hover:scale-105 hover:z-20
-                  ${section.isReverse ? "bottom-[-20px] right-[-20px] md:left-[-20px]" : "bottom-[-20px] right-[-20px] md:right-[-20px]"}
+                  ${
+                    section.isReverse
+                      ? "bottom-[-20px] right-[-20px] md:left-[-20px]"
+                      : "bottom-[-20px] right-[-20px] md:right-[-20px]"
+                  }
                 `}
               >
                 <img
@@ -124,19 +176,20 @@ const WhyChoose = () => {
               </div>
             </div>
           </section>
-        ))}
+        );
+      })}
 
-        <div className="py-10 flex justify-center">
-          <Link
-            to="/inquiry"
-            className=" h-[39px] px-5 py-[10px] rounded-[5px] bg-[#2761FD] text-white
-              font-['Noto Sans'] text-sm font-bold shadow-md hover:bg-blue-600 transition-colors
-              hover:scale-105 hover:shadow-lg transition-transform cursor-pointer"
-          >
-            Request a Build
-          </Link>
-        </div>
-      </main>
+      <div className="py-10 flex justify-center">
+        <Link
+          to="/inquiry"
+          className="h-[39px] px-5 py-[10px] rounded-[5px] bg-[#2761FD] text-white
+            font-['Noto Sans'] text-sm font-bold shadow-md hover:bg-blue-600 transition-colors
+            hover:scale-105 hover:shadow-lg transition-transform cursor-pointer"
+        >
+          Order Custom Build
+        </Link>
+      </div>
+    </main>
     </div>
   );
 };

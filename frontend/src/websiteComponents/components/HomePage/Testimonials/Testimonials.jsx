@@ -101,10 +101,10 @@ export default function Testimonials() {
   }, [modalOpen]);
 
   return (
-    <section className="w-full py-16 md:py-24 bg-white overflow-hidden">
+    <section className="w-full  bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-5xl font-bold text-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
             See Why Our Customers Love Us
           </h2>
         </div>
@@ -158,7 +158,7 @@ export default function Testimonials() {
                   <div className="flex gap-1 text-[#FFEF5E]">
                     {renderStars(review.rating)}
                   </div>
-                  <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
+                  <p className="font-serif text-sm sm:text-base font-normal max-w-xl">
                     {review.text}
                   </p>
                 </div>
@@ -206,7 +206,7 @@ export default function Testimonials() {
               <div className="flex gap-1 text-[#FFEF5E]">
                 {renderStars(selectedReview.rating)}
               </div>
-              <p className="font-serif text-lg text-gray-300">
+              <p className="font-serif text-base text-gray-300">
                 {selectedReview.text}
               </p>
             </div>

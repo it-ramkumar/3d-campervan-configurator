@@ -122,19 +122,19 @@ export default function Portfolio() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-24 bg-white overflow-hidden">
+    <section ref={sectionRef} className="w-full bg-white">
       <div className="container mx-auto px-4">
         {/* Heading + Desc */}
         <div className="text-center mb-16">
           <h2
             ref={headingRef}
-            className="font-serif font-bold text-5xl leading-tight text-black max-w-3xl mx-auto"
+           className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif"
           >
             From Dream to Your Driveway
           </h2>
           <p
             ref={subHeadingRef}
-            className="font-serif text-xl text-black/70 max-w-4xl mx-auto mt-4"
+            className="font-serif sm:text-base text-sm  text-black/70 max-w-4xl mx-auto mt-4"
           >
             Take a look at some of our best custom vans.
           </p>

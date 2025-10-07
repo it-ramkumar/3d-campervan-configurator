@@ -37,10 +37,10 @@ export default function Blog() {
       <div className="container mx-auto px-4">
         {/* Heading and Subheading */}
         <div className="text-center mb-12">
-          <h2 className="font-serif text-5xl font-bold text-black mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
             Explore Our Van Life Blog
           </h2>
-          <p className="font-serif text-xl text-black/70 max-w-3xl mx-auto">
+          <p className="font-serif text-sm sm:text-base text-black/70 max-w-3xl mx-auto">
             Check our blog to learn everything about the vanlife, custom Sprinter vans, and other campervans.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function Blog() {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-serif text-[28px] font-semibold text-white leading-tight">
+                <h3 className="font-serif text-base font-semibold text-white leading-tight">
                   {post.title}
                 </h3>
               </div>

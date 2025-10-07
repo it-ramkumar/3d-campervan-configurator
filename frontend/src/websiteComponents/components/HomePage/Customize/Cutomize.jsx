@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, Suspense, useEffect } from "react";
+import React, { useRef, Suspense, useEffect,useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Center, useGLTF, Environment, Html } from "@react-three/drei";
 import gsap from "gsap";
@@ -54,6 +54,7 @@ export default function Customize() {
   const imageCardRef = useRef(null);
   const imageRef = useRef(null);
   const modelCanvasCardRef = useRef(null);
+  const [showMore, setShowMore] = useState(false);
 
   const parts = [
     { name: "Wall Panels", modelPath: "/models/in-parts144/wall-panels.glb", initialPos: [8, 0, 0] },
@@ -64,188 +65,188 @@ export default function Customize() {
     { name: "Solar Panel", modelPath: "/models/ex-parts144/solar.glb", assembledPos: [.5, 0, 0], initialPos: [0, -10, 0] }
   ];
 
-  useEffect(() => {
-    gsap.fromTo(mainTitleRef.current,
-      { y: -20, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.5,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: mainTitleRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.5,
-        }
-      }
-    );
+  // useEffect(() => {
+  //   gsap.fromTo(mainTitleRef.current,
+  //     { y: -20, opacity: 0 },
+  //     {
+  //       y: 0,
+  //       opacity: 1,
+  //       duration: 1.5,
+  //       ease: 'power3.out',
+  //       scrollTrigger: {
+  //         trigger: mainTitleRef.current,
+  //         start: "top bottom",
+  //         end: "bottom top",
+  //         scrub: 0.5,
+  //       }
+  //     }
+  //   );
 
-    if (section1Ref.current) {
-      gsap.from(section1Ref.current.querySelectorAll("h2, p, li"), {
-        scrollTrigger: {
-          trigger: section1Ref.current,
-          start: 'top 80%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        y: 40,
-        scale: 0.98,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.15,
-      });
+  //   if (section1Ref.current) {
+  //     gsap.from(section1Ref.current.querySelectorAll("h2, p, li"), {
+  //       scrollTrigger: {
+  //         trigger: section1Ref.current,
+  //         start: 'top 80%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       y: 40,
+  //       scale: 0.98,
+  //       duration: 0.8,
+  //       ease: 'power3.out',
+  //       stagger: 0.15,
+  //     });
 
-      gsap.from(section1Ref.current.querySelector(".image-container"), {
-        scrollTrigger: {
-          trigger: section1Ref.current,
-          start: 'top 80%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        x: 100,
-        rotationY: 15,
-        duration: 1.2,
-        ease: 'power3.out',
-      });
+  //     gsap.from(section1Ref.current.querySelector(".image-container"), {
+  //       scrollTrigger: {
+  //         trigger: section1Ref.current,
+  //         start: 'top 80%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       x: 100,
+  //       rotationY: 15,
+  //       duration: 1.2,
+  //       ease: 'power3.out',
+  //     });
 
-      gsap.from(section1Ref.current.querySelector(".section1-button"), {
-        scrollTrigger: {
-          trigger: section1Ref.current.querySelector(".section1-button"),
-          start: 'top 90%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.7,
-        ease: 'power2.out',
-      });
-    }
+  //     gsap.from(section1Ref.current.querySelector(".section1-button"), {
+  //       scrollTrigger: {
+  //         trigger: section1Ref.current.querySelector(".section1-button"),
+  //         start: 'top 90%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       y: 30,
+  //       duration: 0.7,
+  //       ease: 'power2.out',
+  //     });
+  //   }
 
-    if (section2Ref.current) {
-      gsap.from(section2Ref.current.querySelectorAll("h2, p, li"), {
-        scrollTrigger: {
-          trigger: section2Ref.current,
-          start: 'top 80%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        y: 40,
-        scale: 0.98,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.15,
-      });
+  //   if (section2Ref.current) {
+  //     gsap.from(section2Ref.current.querySelectorAll("h2, p, li"), {
+  //       scrollTrigger: {
+  //         trigger: section2Ref.current,
+  //         start: 'top 80%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       y: 40,
+  //       scale: 0.98,
+  //       duration: 0.8,
+  //       ease: 'power3.out',
+  //       stagger: 0.15,
+  //     });
 
-      gsap.from(section2Ref.current.querySelector(".model-container"), {
-        scrollTrigger: {
-          trigger: section2Ref.current,
-          start: 'top 80%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        x: -100,
-        rotationY: -15,
-        duration: 1.2,
-        ease: 'power3.out',
-      });
+  //     gsap.from(section2Ref.current.querySelector(".model-container"), {
+  //       scrollTrigger: {
+  //         trigger: section2Ref.current,
+  //         start: 'top 80%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       x: -100,
+  //       rotationY: -15,
+  //       duration: 1.2,
+  //       ease: 'power3.out',
+  //     });
 
-      gsap.from(section2Ref.current.querySelector(".section2-button"), {
-        scrollTrigger: {
-          trigger: section2Ref.current.querySelector(".section2-button"),
-          start: 'top 90%',
-          toggleActions: "play none none reverse",
-        },
-        opacity: 0,
-        y: 30,
-        duration: 0.7,
-        ease: 'power2.out',
-      });
-    }
+  //     gsap.from(section2Ref.current.querySelector(".section2-button"), {
+  //       scrollTrigger: {
+  //         trigger: section2Ref.current.querySelector(".section2-button"),
+  //         start: 'top 90%',
+  //         toggleActions: "play none none reverse",
+  //       },
+  //       opacity: 0,
+  //       y: 30,
+  //       duration: 0.7,
+  //       ease: 'power2.out',
+  //     });
+  //   }
 
-    if (imageCardRef.current && imageRef.current) {
-      const card = imageCardRef.current;
-      const imageElement = imageRef.current;
+  //   if (imageCardRef.current && imageRef.current) {
+  //     const card = imageCardRef.current;
+  //     const imageElement = imageRef.current;
 
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card, {
-          y: -10,
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(100,100,100,0.3)',
-          duration: 0.4,
-          ease: 'power2.out'
-        });
-        gsap.to(imageElement, {
-          scale: 1.1,
-          duration: 0.5,
-          ease: 'power2.out'
-        });
-      });
+  //     card.addEventListener('mouseenter', () => {
+  //       gsap.to(card, {
+  //         y: -10,
+  //         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(100,100,100,0.3)',
+  //         duration: 0.4,
+  //         ease: 'power2.out'
+  //       });
+  //       gsap.to(imageElement, {
+  //         scale: 1.1,
+  //         duration: 0.5,
+  //         ease: 'power2.out'
+  //       });
+  //     });
 
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          y: 0,
-          boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
-          duration: 0.4,
-          ease: 'power2.out'
-        });
-        gsap.to(imageElement, {
-          scale: 1,
-          duration: 0.5,
-          ease: 'power2.out'
-        });
-      });
-    }
+  //     card.addEventListener('mouseleave', () => {
+  //       gsap.to(card, {
+  //         y: 0,
+  //         boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+  //         duration: 0.4,
+  //         ease: 'power2.out'
+  //       });
+  //       gsap.to(imageElement, {
+  //         scale: 1,
+  //         duration: 0.5,
+  //         ease: 'power2.out'
+  //       });
+  //     });
+  //   }
 
-    if (modelCanvasCardRef.current) {
-      const card = modelCanvasCardRef.current;
+  //   if (modelCanvasCardRef.current) {
+  //     const card = modelCanvasCardRef.current;
 
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card, {
-          y: -10,
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(100,100,100,0.3)',
-          duration: 0.4,
-          ease: 'power2.out'
-        });
-      });
+  //     card.addEventListener('mouseenter', () => {
+  //       gsap.to(card, {
+  //         y: -10,
+  //         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(100,100,100,0.3)',
+  //         duration: 0.4,
+  //         ease: 'power2.out'
+  //       });
+  //     });
 
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          y: 0,
-          boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
-          duration: 0.4,
-          ease: 'power2.out'
-        });
-      });
-    }
+  //     card.addEventListener('mouseleave', () => {
+  //       gsap.to(card, {
+  //         y: 0,
+  //         boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+  //         duration: 0.4,
+  //         ease: 'power2.out'
+  //       });
+  //     });
+  //   }
 
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-      button.addEventListener('mousedown', () => {
-        gsap.to(button, { scale: 0.95, duration: 0.2, ease: 'power2.out' });
-      });
-      button.addEventListener('mouseup', () => {
-        gsap.to(button, { scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.5)' });
-      });
-      button.addEventListener('mouseleave', () => {
-        gsap.to(button, { scale: 1, duration: 0.3, ease: 'power2.out' });
-      });
-      button.addEventListener('mouseenter', () => {
-        gsap.to(button, { scale: 1.1, duration: 0.3, ease: 'power2.out' });
-      });
-      button.addEventListener('mouseleave', () => {
-        gsap.to(button, { scale: 1, duration: 0.3, ease: 'power2.out' });
-      });
-    });
+  //   const buttons = document.querySelectorAll('button');
+  //   buttons.forEach(button => {
+  //     button.addEventListener('mousedown', () => {
+  //       gsap.to(button, { scale: 0.95, duration: 0.2, ease: 'power2.out' });
+  //     });
+  //     button.addEventListener('mouseup', () => {
+  //       gsap.to(button, { scale: 1, duration: 0.3, ease: 'elastic.out(1, 0.5)' });
+  //     });
+  //     button.addEventListener('mouseleave', () => {
+  //       gsap.to(button, { scale: 1, duration: 0.3, ease: 'power2.out' });
+  //     });
+  //     button.addEventListener('mouseenter', () => {
+  //       gsap.to(button, { scale: 1.1, duration: 0.3, ease: 'power2.out' });
+  //     });
+  //     button.addEventListener('mouseleave', () => {
+  //       gsap.to(button, { scale: 1, duration: 0.3, ease: 'power2.out' });
+  //     });
+  //   });
 
-  }, []);
+  // }, []);
 
   return (
-    <section className="bg-white py-14 font-serif overflow-hidden">
+    <section className="bg-white font-serif overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Main Title */}
         <h1
           ref={mainTitleRef}
-          className="text-center text-4xl md:text-5xl font-bold font-serif text-blackish mb-10 md:mb-20"
+         className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl mb-14 font-extrabold leading-tight text-center tracking-tight font-serif"
         >
           Customize Van
         </h1>
@@ -276,28 +277,59 @@ export default function Customize() {
               </div>
             </div>
 
-            <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
-              <div className="text-white w-full md:w-1/2 pr-0 md:pr-8 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
-                  Customize Your Dream Van
-                </h2>
-                <div className="space-y-4 text-sm md:text-xl font-normal text-white/90">
-                  <p>
-                    When you give us 4-5 months, we design and build your custom camper van from scratch, the way you want it:
-                  </p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>3D renderings to help you visualise your future van before we even pick up a tool.</li>
-                    <li>3D Scanning, engineered CAD modelling (of your layout), and manufacturing in Automated CNC machines.</li>
-                    <li>Every cabinet, seat, and bed is built for your layout.</li>
-                    <li>Power, water, and heating systems are set up for real off-grid living.</li>
-                    <li>Interior finishes that look like a home, not like a cargo van.</li>
-                  </ul>
-                  <p>
-                    Start by filling out our TEST. We’ll ask a few questions and then give you a real estimate of what your dream van will cost.
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
+      <div className="text-white w-full md:w-1/2 pr-0 md:pr-8 text-center md:text-left">
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
+          Customize Your Dream Van
+        </h2>
+
+        <div className="space-y-4  font-normal text-white/90">
+          <p className="text-sm sm:text-base">
+            When you give us 4–5 months, we design and build your custom camper
+            van from scratch, exactly the way you want it.
+          </p>
+
+          <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
+            <li>
+              3D renderings to help you visualise your future van before we even
+              pick up a tool.
+            </li>
+            <li>
+              3D scanning, engineered CAD modelling (of your layout), and
+              manufacturing with automated CNC machines.
+            </li>
+
+            {/* Only show rest of the content when "showMore" is true */}
+            {showMore && (
+              <>
+                <li>Every cabinet, seat, and bed is built for your layout.</li>
+                <li>
+                  Power, water, and heating systems are set up for real off-grid
+                  living.
+                </li>
+                <li>
+                  Interior finishes that look like a home, not like a cargo van.
+                </li>
+              </>
+            )}
+          </ul>
+
+          {showMore && (
+            <p className="text-sm sm:text-base">
+              Start by filling out our TEST. We’ll ask a few questions and then
+              give you a real estimate of what your dream van will cost.
+            </p>
+          )}
+
+          <button
+            onClick={() => setShowMore(!showMore)}
+            className="text-blue-400 hover:text-blue-300 font-semibold transition"
+          >
+            {showMore ? "See Less" : "See More"}
+          </button>
+        </div>
+      </div>
+    </div>
           </div>
 
           {/* This container is for desktop only, using absolute positioning */}
@@ -338,7 +370,7 @@ export default function Customize() {
               className="section1-button bg-[#2761FD] text-white font-serif font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
               style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
-              Request a Build
+              Order Custom Build
             </button>
            </Link>
           </div>
@@ -387,10 +419,10 @@ export default function Customize() {
 
             <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20 justify-end">
               <div className="text-white w-full md:w-1/2 pl-0 md:pl-8 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
+                <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl font-extrabold leading-tight tracking-tight font-serif">
                   Try Our 3D Configurator
                 </h2>
-                <div className="space-y-4 text-sm md:text-xl font-normal text-white/90">
+                <div className="space-y-4 text-sm sm:text-base font-normal text-white/90">
                   <p>
                     Want to play around with ideas? Jump into our 3D Configurator and start designing your campervan.
                   </p>

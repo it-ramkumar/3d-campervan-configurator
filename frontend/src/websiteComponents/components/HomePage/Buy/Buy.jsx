@@ -74,11 +74,11 @@ export default function Buy() {
 
 
     const slidesDummy = [
-        // {
-        //     title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
-        //     desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
-        //     img: "/images/Montrial.jpg",
-        // },
+        {
+            title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
+            desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
+            img: "/images/Montrial.jpg",
+        },
         {
             title: "Santa Monica V6 Turbo",
             desc: "144 Sprinter is built for a family! Designed to sit & sleep 4. With indoor bathroom, kitchen, elevator bed, and dinette.",
@@ -87,8 +87,8 @@ export default function Buy() {
     ];
     const data = slidesData && slidesData.length > 0 ? slidesData : slidesDummy;
     return (
-        <section className="bg-white py-16 font-serif overflow-x-hidden">
-            <div className="container mx-auto px-4">
+        <section className="bg-white font-serif overflow-x-hidden">
+            <div className="md:container md:mx-auto md:px-4">
 
                 {/* Main Heading and Description Section (Changed for center alignment in mobile) */}
                 <motion.div
@@ -98,15 +98,15 @@ export default function Buy() {
                     variants={fadeInUp}
                     viewport={{ once: true, amount: 0.5 }}
                 >
-                    <h1 className="text-3xl md:text-5xl font-bold text-blackish mb-6 leading-tight">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
                         Buy a Ready-to-Go Campervan
                     </h1>
-                    <div className="max-w-[893px] mx-auto text-base font-normal text-gray-600 leading-relaxed text-center md:text-left">
+                    <div className=" sm:text-base text-sm font-normal leading-relaxed text-center md:text-left">
                         <p className="mb-4">
                             Skip the long (4-5 months) wait for customizing your van. And browse our vans for sale, equipped with top-of-the-line components:
                         </p>
                         <motion.ul
-                            className="list-disc list-inside space-y-2"
+                            className="list-disc list-inside space-y-2 sm:text-base text-sm  text-gray-500"
                             variants={staggerContainer}
                             initial="hidden"
                             whileInView="visible"
@@ -118,7 +118,7 @@ export default function Buy() {
                             <motion.li variants={fadeInUp}><strong className="font-bold">Advanced glycol heating:</strong> warms water, air, and floors off your diesel tank.</motion.li>
                         </motion.ul>
                     </div>
-                    <p className="space-y-6 max-w-[893px] mx-auto text-base font-normal text-gray-600 text-center md:text-left mt-4">
+                    <p className="space-y-6 max-w-[893px] mx-auto sm:text-base text-sm  font-normal text-gray-600 text-center md:text-left mt-4">
                         Just pay, sign, and drive away in your new mobile home.
                     </p>
 
@@ -136,24 +136,28 @@ export default function Buy() {
                         ref={swiperRef}
                         modules={[Navigation]}
                         loop={false}
-                        // UPDATED: Responsive breakpoints for Swiper to adjust spacing and slide view
                         breakpoints={{
                             0: {
-                                slidesPerView: 1.2,
-                                spaceBetween: 15,
-                                centeredSlides: true,
+                                slidesPerView: 1,        // ✅ full width slide
+                                spaceBetween: 0,         // ✅ no gap between slides
+                                centeredSlides: false,   // ✅ prevent centering gap
                             },
                             768: {
                                 slidesPerView: 'auto',
-                                spaceBetween: 30, // Default desktop spacing
+                                spaceBetween: 30,
                                 centeredSlides: true,
                             },
                         }}
                         className="!pb-16"
                     >
+
                         {data.map((slide, i) => (
                             // UPDATED: Removed fixed width on mobile view and updated image sizing
-                            <SwiperSlide key={i} className="group md:!w-[900px] md:!h-[500px]">
+                            <SwiperSlide
+                                key={i}
+                                className="group !w-full h-[400px] md:!w-[900px] md:!h-[500px]"
+                            >
+
                                 <div className="relative w-full h-[450px] md:h-full text-white rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 ease-in-out group-hover:shadow-2xl group-hover:scale-[1.03]">
                                     {/* Background Image */}
                                     <img
@@ -167,16 +171,16 @@ export default function Buy() {
 
                                     {/* Content */}
                                     <div className="relative z-10 flex flex-col justify-between items-start w-full h-full p-4 md:p-10 text-left">
-                                        <h3 className="text-xl md:text-3xl font-semibold whitespace-pre-line leading-tight md:leading-normal">
+                                        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
                                             {slide.title}
                                         </h3>
                                         <div className="w-full max-w-[650px]">
-                                            <p className="text-sm md:text-base font-normal mb-5">{slide.desc}</p>
+                                            <p className="sm:text-base text-sm  font-normal mb-5">{slide.desc}</p>
                                             <div className="flex gap-4">
-                                              <Link to='/contact'>   <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                                <Link to='/contact'>   <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     Buy Now
                                                 </button></Link>
-                                               <Link to="/santa-monica"> <button className="bg-[#2761FD] text-white cursor-pointer font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+                                                <Link to="/santa-monica"> <button className="bg-[#2761FD] text-white cursor-pointer font-serif font-bold text-sm px-4 md:px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                                                     More Details
                                                 </button></Link>
                                             </div>
@@ -206,18 +210,18 @@ export default function Buy() {
 
                 {/* Bottom Call-to-Action Section (No changes here) */}
                 <motion.div
-                    className="text-center mt-16"
+                    className="text-center -mt-10"
                     variants={fadeInUp}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
                 >
 
-                 <Link to="/vans-for-sale">
-                    <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
-                        View Van Inventory
-                    </button>
-                </Link>
+                    <Link to="/vans-for-sale">
+                        <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
+                            View Van Inventory
+                        </button>
+                    </Link>
                 </motion.div>
             </div>
         </section>
