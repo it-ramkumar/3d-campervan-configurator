@@ -24,6 +24,7 @@ import SantaMonica from "../websiteComponents/components/SantaMonica/Santa";
 import Signup from "../websiteComponents/components/Auth/Signup";
 import Login from "../websiteComponents/components/Auth/Login";
 import OurProcess from "../websiteComponents/components/OurProcess/Processhero/OurProcess"
+import AboutUs from "../websiteComponents/components/AboutUs/AboutUshero/Aboutus"
 
 const AppRoutes = () => {
 
@@ -35,6 +36,8 @@ const AppRoutes = () => {
 
 
         <Route path="/" element={<Home />} />
+        <Route path="/about-us" element={<AboutUs />} />
+
         <Route path="/our-process" element={<OurProcess />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

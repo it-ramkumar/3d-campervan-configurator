@@ -131,7 +131,7 @@ export default function Navbar() {
           title: "Company",
           items: [
             { label: "Our Process", link: "/our-process" },
-            { label: "Blog", link: "/blogs" },
+            { label: "About us", link: "/about-us" },
           ],
         },
       ],
