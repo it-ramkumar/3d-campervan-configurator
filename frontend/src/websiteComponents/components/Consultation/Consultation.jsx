@@ -49,7 +49,7 @@ export default function Consultation() {
   return (
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24">
       <div className="flex flex-col items-center mb-12 md:mb-16">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-black text-center mb-8 md:mb-12">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold font-serif text-black text-center mb-8 md:mb-12">
           Schedule a Free Consultation Call Today
         </h2>
         <div className="w-full max-w-4xl bg-black rounded-[30px] p-4 md:p-6 flex flex-col lg:flex-row items-center justify-between animate-fade-in-up transition-transform duration-700 hover:scale-[1.01] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]">
@@ -76,7 +76,7 @@ export default function Consultation() {
             </div>
 
             <div className="text-white mt-12 md:mt-16 lg:mt-28">
-              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
+              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-extrabold leading-tight tracking-tight font-serif">
                 Plan your Customvan Build!
               </h3>
               <p className="font-serif font-semibold text-sm sm:text-base leading-snug opacity-70 text-center lg:text-left">

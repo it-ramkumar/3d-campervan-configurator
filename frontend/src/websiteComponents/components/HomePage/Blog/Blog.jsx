@@ -88,7 +88,7 @@ export default function Blog() {
                 </div>
 
                 {/* Title */}
-                <h3 className="font-serif text-base font-semibold text-white leading-tight">
+                <h3 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-3xl font-semibold text-white leading-tight">
                   {post.title}
                 </h3>
               </div>

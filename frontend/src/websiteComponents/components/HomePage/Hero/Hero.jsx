@@ -75,7 +75,7 @@ export default function Hero() {
 
           </SwiperSlide>
         ))}
-        <div className="absolute inset-0 bg-black/50 z-10">
+        <div className="absolute inset-0 bg-black/30 z-10">
   <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 sm:px-6 md:px-8">
     <div className="max-w-4xl text-center space-y-3 sm:space-y-4 md:space-y-6 animated-content -mt-6 sm:-mt-8 md:mt-0">
 

@@ -102,11 +102,11 @@ export default function Buy() {
                         Buy a Ready-to-Go Campervan
                     </h1>
                     <div className=" sm:text-base text-sm font-normal leading-relaxed text-center md:text-left">
-                        <p className="mb-4">
+                        <p className="mb-4 px-2">
                             Skip the long (4-5 months) wait for customizing your van. And browse our vans for sale, equipped with top-of-the-line components:
                         </p>
                         <motion.ul
-                            className="list-disc list-inside space-y-2 sm:text-base text-sm  text-gray-500"
+                            className="list-disc list-inside space-y-2 sm:text-base text-sm px-2 text-gray-500"
                             variants={staggerContainer}
                             initial="hidden"
                             whileInView="visible"
@@ -171,7 +171,7 @@ export default function Buy() {
 
                                     {/* Content */}
                                     <div className="relative z-10 flex flex-col justify-between items-start w-full h-full p-4 md:p-10 text-left">
-                                        <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
+                                        <h3 className="text-xl sm:text-3xl md:text-4xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
                                             {slide.title}
                                         </h3>
                                         <div className="w-full max-w-[650px]">

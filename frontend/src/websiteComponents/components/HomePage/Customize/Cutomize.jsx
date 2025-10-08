@@ -246,7 +246,7 @@ export default function Customize() {
         {/* Main Title */}
         <h1
           ref={mainTitleRef}
-         className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl mb-14 font-extrabold leading-tight text-center tracking-tight font-serif"
+         className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl md:mb-20 mb-10 font-extrabold leading-tight text-center tracking-tight font-serif"
         >
           Customize Van
         </h1>
@@ -279,7 +279,7 @@ export default function Customize() {
 
           <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
       <div className="text-white w-full md:w-1/2 pr-0 md:pr-8 text-center md:text-left">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl py-10 font-extrabold leading-tight tracking-tight font-serif">
           Customize Your Dream Van
         </h2>
 
@@ -419,7 +419,7 @@ export default function Customize() {
 
             <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20 justify-end">
               <div className="text-white w-full md:w-1/2 pl-0 md:pl-8 text-center md:text-left">
-                <h2 className="text-xl sm:text-1xl md:text-2xl lg:text-3xl font-extrabold leading-tight tracking-tight font-serif">
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl py-10 font-extrabold leading-tight tracking-tight font-serif">
                   Try Our 3D Configurator
                 </h2>
                 <div className="space-y-4 text-sm sm:text-base font-normal text-white/90">

@@ -125,7 +125,7 @@ export default function Portfolio() {
     <section ref={sectionRef} className="w-full bg-white">
       <div className="container mx-auto px-4">
         {/* Heading + Desc */}
-        <div className="text-center mb-16">
+        <div className="text-center md:mb-16 mb-10">
           <h2
             ref={headingRef}
            className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif"

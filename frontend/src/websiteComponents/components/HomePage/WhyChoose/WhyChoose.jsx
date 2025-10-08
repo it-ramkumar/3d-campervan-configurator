@@ -112,7 +112,7 @@ const WhyChoose = () => {
                 section.isReverse ? "ml-auto" : ""
               }`}
             >
-              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight font-serif">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-extrabold leading-tight tracking-tight font-serif">
                 {section.title}
               </h2>
 

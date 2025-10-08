@@ -101,7 +101,7 @@ export default function FAQs() {
                 className="flex justify-between items-start cursor-pointer py-1"
                 onClick={() => handleToggle(index)}
               >
-                <h3 className="text-base font-semibold font-serif leading-snug pr-4 text-white">
+                <h3 className="sm:text-base text-sm font-semibold font-serif leading-snug pr-4 text-white">
                   {faq.question}
                 </h3>
                 <div className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-black border border-[#2761FD]">
@@ -119,7 +119,7 @@ export default function FAQs() {
                   openIndex === index ? "max-h-96 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
                 }`}
               >
-                <p className="text-gray-300 pr-4 text-base">
+                <p className="text-gray-300 pr-4 sm:text-base text-sm">
                   {faq.answer}
                 </p>
               </div>

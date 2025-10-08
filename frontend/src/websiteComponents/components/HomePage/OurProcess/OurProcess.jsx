@@ -96,8 +96,8 @@ export default function OurProcess() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
             Our Process
           </h1>
-          <p className="text-sm sm:text-base text-white/70 font-normal text-center font-serif">
-            Here's how our complete process of customization works from ideas to keys in your hand:
+          <p className="text-sm sm:text-base text-center font-serif">
+            Here's how our complete process of customization works from ideas to keys in your hand
           </p>
         </div>
 

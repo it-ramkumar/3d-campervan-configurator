@@ -29,10 +29,10 @@ export default function Footer() {
 
           {/* Company Info */}
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold">
               BIG BEAR VANS
             </h2>
-            <p className="text-gray-300 leading-relaxed max-w-xs text-base">
+            <p className="text-gray-300 leading-relaxed max-w-xs text-sm">
               Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
             </p>
 
@@ -58,12 +58,12 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-basefont-semibold mb-6 text-white">
+            <h3 className="sm:text-base text-sm font-semibold mb-6 text-white">
               Quick Links
             </h3>
-            <ul className="space-y-3 list-disc list-inside text-base">
+            <ul className="space-y-3 list-disc list-inside  text-sm">
               <li>
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Home</Link>
+                <Link to="/" className="text-gray-300  hover:text-white transition-colors duration-300 underline">Home</Link>
               </li>
               <li>
                 <Link to="vans-for-sale" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</Link>
@@ -88,32 +88,32 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">
+            <h3 className="text-base font-semibold mb-6 text-white">
               Contact Info
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <FaMapMarkerAlt className="text-white mt-1 text-base" />
+                <FaMapMarkerAlt className="text-white mt-1 text-sm" />
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-300 text-base">320 W Big Bear Blvd, Big Bear City, California, 92314, USA</span>
+                  <span className="text-gray-300 text-sm">320 W Big Bear Blvd, Big Bear City, California, 92314, USA</span>
                   <FaCopy onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <FaPhoneAlt className="text-white mt-1 text-base" />
+                <FaPhoneAlt className="text-white mt-1 text-sm" />
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-2 text-base">
+                  <div className="flex items-center gap-2 text-sm">
                     <a href="tel:+19514419748" className="text-gray-300 hover:text-white transition-colors">+1 (951) 441-9748</a>
                     <FaCopy onClick={() => handleCopy("+19514419748")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                   </div>
-                  <div className="flex items-center gap-2 text-base">
+                  <div className="flex items-center gap-2 text-sm">
                     <a href="tel:+19514419719" className="text-gray-300 hover:text-white transition-colors">+1 (951) 441-9719</a>
                     <FaCopy onClick={() => handleCopy("+19514419719")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                   </div>
                 </div>
               </li>
               <li className="flex items-start gap-3">
-                <FaEnvelope className="text-white mt-1 text-base" />
+                <FaEnvelope className="text-white mt-1 text-sm" />
                 <a href="mailto:info@bigbearvans.com" className="text-gray-300 hover:text-white transition-colors">info@bigbearvans.com</a>
               </li>
             </ul>
@@ -124,7 +124,7 @@ export default function Footer() {
             <h3 className="text-base font-semibold mb-6 text-white">
               Business Hours
             </h3>
-            <ul className="space-y-2 mb-6 text-base">
+            <ul className="space-y-2 mb-6 text-sm">
               <li className="flex justify-between text-gray-300">
                 <span>Mon - Fri:</span>
                 <span>9:00 AM - 6:00 PM</span>

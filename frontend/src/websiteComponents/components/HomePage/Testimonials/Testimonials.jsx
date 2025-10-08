@@ -71,6 +71,7 @@ export default function Testimonials() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
+  const [expandedReview, setExpandedReview] = useState(null);
 
   const openModal = (review) => {
     setSelectedReview(review);
@@ -109,63 +110,81 @@ export default function Testimonials() {
           </h2>
         </div>
 
-        <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
-          centeredSlides={true}
-          loop={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 100,
-            modifier: 2.5,
-            slideShadows: false,
-          }}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-            reverseDirection: true,
-            pauseOnMouseEnter: true, // Pause on hover
-          }}
-          speed={5000}
-          modules={[EffectCoverflow, Autoplay]}
-          className="w-full"
-        >
-          {reviews.map((review) => (
-            <SwiperSlide
-              key={review.id}
-              className="!w-[300px] sm:!w-[400px] !h-[300px] sm:!h-[400px] transition-all duration-1000 ease-out"
-            >
-              <div
-                className="relative w-full h-full rounded-2xl overflow-hidden group transform transition-transform duration-700 hover:scale-105 cursor-pointer"
-                onClick={() => openModal(review)}
-              >
-                {/* Background Image */}
-                <img
-                  src={vanBgImageUrl}
-                  alt="Van Interior"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* Semi-Transparent Overlay */}
-                <div className="absolute inset-0 bg-[#000000a6] transition-opacity duration-300 group-hover:bg-[#000000b9]"></div>
+  <Swiper
+  effect={'coverflow'}
+  grabCursor={true}
+  centeredSlides={true}
+  loop={true}
+  slidesPerView={'auto'}
+  coverflowEffect={{
+    rotate: 0,
+    stretch: 0,
+    depth: 100,
+    modifier: 2.5,
+    slideShadows: false,
+  }}
+  autoplay={{
+    delay: 0,
+    disableOnInteraction: false,
+    reverseDirection: true,
+    pauseOnMouseEnter: true,
+  }}
+  speed={5000}
+  modules={[EffectCoverflow, Autoplay]}
+  className="w-full"
+>
+  {reviews.map((review) => {
+    const isExpanded = expandedReview === review.id;
+    const shortText = review.text.slice(0, 120); // jitna text chhota dikhana hai
 
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
-                  <h3 className="font-serif font-semibold text-[28px] leading-tight">
-                    {review.name}
-                  </h3>
-                  <div className="flex gap-1 text-[#FFEF5E]">
-                    {renderStars(review.rating)}
-                  </div>
-                  <p className="font-serif text-sm sm:text-base font-normal max-w-xl">
-                    {review.text}
-                  </p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+    return (
+      <SwiperSlide
+        key={review.id}
+        className="!w-[300px] sm:!w-[400px] !h-[300px] sm:!h-[400px] transition-all duration-1000 ease-out"
+      >
+        <div
+          className="relative w-full h-full rounded-2xl overflow-hidden group transform transition-transform duration-700 hover:scale-105 cursor-pointer"
+          onClick={() => openModal(review)}
+        >
+          {/* Background Image */}
+          <img
+            src={vanBgImageUrl}
+            alt="Van Interior"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-[#000000a6] transition-opacity duration-300 group-hover:bg-[#000000b9]"></div>
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
+            <h3 className="font-serif font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl leading-tight">
+              {review.name}
+            </h3>
+
+            <div className="flex gap-1 text-[#FFEF5E]">
+              {renderStars(review.rating)}
+            </div>
+
+            <p className="font-serif text-sm sm:text-base font-normal max-w-xl">
+              {isExpanded ? review.text : shortText}
+              {review.text.length > 120 && (
+                <button
+                  className="ml-2 text-yellow-400 underline text-sm"
+                  onClick={(e) => {
+                    e.stopPropagation(); // modal open na ho click pe
+                  openModal(review)
+                  }}
+                >
+                  {isExpanded ? "See less" : "See more"}
+                </button>
+              )}
+            </p>
+          </div>
+        </div>
+      </SwiperSlide>
+    );
+  })}
+</Swiper>
       </div>
 
       {modalOpen && selectedReview && (
