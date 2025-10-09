@@ -1,5 +1,6 @@
-import      AboutusHero from "./AboutUshero"
-import ConsultationPage from "../../Layouts/Consultationlayout/Consultationlayout";
+import AboutusHero from "./AboutUshero"
+// import ConsultationPage from "../../Layouts/Consultationlayout/Consultationlayout";
+import Consultation from "../../Consultation/Consultation";
 import Mission from "../Mission/Mission";
 import Adventure from "../Adventure/Adventure";
 
@@ -21,11 +22,11 @@ export default function AboutUs() {
       <div className="tour-adventure">
         <Adventure />
       </div>
- 
+
        <div className="tour-consultation">
-        <ConsultationPage />
+        <Consultation vanForSale={true} />
       </div>
-    
+
       <Footer/>
     </>
   );

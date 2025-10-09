@@ -6,7 +6,7 @@ import "react-calendar/dist/Calendar.css";
 export default function CalendarSection({ date, setDate })  {
 
   return (
-    <div className="w-full lg:w-1/2 flex flex-col items-center px-6">
+    <div className="w-full lg:w-2/2 px-6">
       {/* ====== Header Section ====== */}
       <div className="flex flex-col items-center text-center mb-4">
         <h2 className="font-serif font-bold text-2xl md:text-3xl text-black">

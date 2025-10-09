@@ -1,7 +1,8 @@
 import Hero from "./layouthero"
 import Family from "../Family/Family";
 import Couples from "../Couples/Couples";
-import Consultationlayout from "../Consultationlayout/Consultationlayout";
+// import Consultationlayout from "../Consultationlayout/Consultationlayout";
+import Consultation from "../../Consultation/Consultation";
 
 import Navbar from "../../Navbar/Navbar";
 import Footer from "../../Footer/Footer";
@@ -22,7 +23,7 @@ export default function Layouts() {
         <Couples />
       </div>
        <div className="tour-consultation">
-        <Consultationlayout />
+        <Consultation vanForSale={true} />
       </div>
       <Footer/>
     </>

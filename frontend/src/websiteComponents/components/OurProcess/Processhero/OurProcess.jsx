@@ -1,5 +1,6 @@
 import ProcessHero from "./Processhero"
-import ConsultationPage from "../../Layouts/Consultationlayout/Consultationlayout";
+// import ConsultationPage from "../../Layouts/Consultationlayout/Consultationlayout";
+import Consultation from "../../Consultation/Consultation";
 import Processlist from "../ProcessList/Processlist";
 
 import Navbar from "../../Navbar/Navbar";
@@ -14,14 +15,14 @@ export default function OurProcess() {
       <div className="tour-hero">
         <ProcessHero />
       </div>
-  
-        <div className="tour-processlist">  
+
+        <div className="tour-processlist">
           <Processlist />
-      </div>  
-       <div className="tour-consultation">
-        <ConsultationPage />
       </div>
-    
+       <div className="tour-consultation">
+        <Consultation vanForSale={true} />
+      </div>
+
       <Footer/>
     </>
   );

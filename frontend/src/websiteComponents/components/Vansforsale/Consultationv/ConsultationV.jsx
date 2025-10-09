@@ -25,27 +25,7 @@ export default function ConsultationV() {
   return (
     // --- REMOVED ALL BOTTOM PADDING HERE (pb-8 md:pb-16 changed to pb-0) ---
     <div className="bg-white min-h-screen pt-0 pb-0 px-4 md:px-24 mt-10">
-      <div className="flex flex-col items-center mb-12 md:mb-16">
-        <h2 className="text-5xl font-bold font-serif text-black text-center mb-6 leading-tight">
-          Ready to Buy Your Van for Sale?
-        </h2>
 
-        <div className="w-full max-w-4xl text-left font-serif text-xl text-black/70 leading-tight mb-10 px-4 mr-auto">
-          <p className="font-semibold">Still have questions? We’re here to help:</p>
-          <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Confused about cost? Book a FREE Consultation Call.</li>
-            <li>Want to drive it first? Schedule a test drive.</li>
-            <li>Have a question? Send us an Email.</li>
-          </ul>
-        </div>
-
-        <h3 className="text-2xl md:text-[28px] font-semibold font-serif text-black text-center mb-3">
-          Schedule a Free Consultation Call Today
-        </h3>
-        <p className="max-w-2xl text-black/70 font-serif text-lg md:text-xl text-center">
-          Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
-        </p>
-      </div>
 
       <div className="flex flex-col items-center mb-12 md:mb-16">
         <div className="w-full max-w-4xl bg-black rounded-[30px] p-4 md:p-6 flex flex-col lg:flex-row items-center justify-between animate-fade-in-up transition-transform duration-700 hover:scale-[1.01] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]">

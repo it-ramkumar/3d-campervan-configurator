@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
+import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { FaTwitter, FaInstagram,  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin , FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
 const handleCopy = (text) => {
@@ -10,6 +11,29 @@ const handleCopy = (text) => {
 };
 
 export default function Footer() {
+    const [email, setEmail] = useState("");
+
+
+     const handleSubscribe = () => {
+    if (!email.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Email Required",
+        text: "Please enter your email address first!",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Subscribed!",
+      text: "You’ll receive notifications and updates soon 🎉",
+      confirmButtonColor: "#3085d6",
+    });
+
+    setEmail(""); // clear input
+  };
   return (
     <footer className="relative text-white pt-16 pb-8 bg-cover bg-center bg-no-repeat font-serif">
       {/* Background Image with Overlay */}
@@ -69,20 +93,20 @@ export default function Footer() {
                 <Link to="vans-for-sale" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</Link>
               </li>
               <li>
-                <Link to="/portfolio" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Portfolio</Link>
+                <Link to="/layouts" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Layout</Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-300 underline">About Us</Link>
+                <Link to="/about-us" className="text-gray-300 hover:text-white transition-colors duration-300 underline">About Us</Link>
               </li>
               {/* <li>
                 <Link to="https://bigbearvans.com/careers/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Career</Link>
               </li> */}
               <li>
-                <Link to="/blog" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Blog</Link>
+                <Link to="/blogs" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Blog</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/faqs" className="text-gray-300 hover:text-white transition-colors duration-300 underline">FAQ</Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -141,18 +165,23 @@ export default function Footer() {
 
             {/* Newsletter Signup */}
             <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-              <h4 className="font-medium mb-3 text-white">Stay Updated</h4>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
-                />
-                <button className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors">
-                  <FaArrowRight />
-                </button>
-              </div>
-            </div>
+      <h4 className="font-medium mb-3 text-white">Stay Updated</h4>
+      <div className="flex gap-2">
+        <input
+          type="email"
+          placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+        />
+        <button
+          onClick={handleSubscribe}
+          className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
+        >
+          <FaArrowRight />
+        </button>
+      </div>
+    </div>
           </div>
         </div>
 
@@ -164,11 +193,11 @@ export default function Footer() {
           <p className="text-gray-400 text-sm">
             © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
           </p>
-          <div className="flex gap-6 text-sm text-gray-400">
+          {/* <div className="flex gap-6 text-sm text-gray-400">
             <Link to="#" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="#" className="hover:text-white transition-colors">Terms of Service</Link>
             <Link to="#" className="hover:text-white transition-colors">Cookie Policy</Link>
-          </div>
+          </div> */}
         </div>
       </div>
 
