@@ -143,13 +143,15 @@ export default function Navbar() {
       {/* NAVBAR */}
       <nav className="sticky top-0 w-full px-6 py-4 bg-white shadow-md z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-          {/* LOGO LEFT */}
-          <div className="z-10">
-            <Link to="/" className="text-2xl font-bold text-blackish">
-              <img src="/images/logoo.png" width={150} height={100} alt="BBV logo" />
+          <div className="flex items-center">
+            <Link to="/" className="block">
+              <img
+                src="/images/logoo.png"
+                alt="BBV logo"
+                className="w-[150px] h-[30px] object-contain"
+              />
             </Link>
           </div>
-
           {/* CENTER MENU */}
           <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base">
             <Link to="/vans-for-sale" onMouseEnter={() => handleMenuHover("vans-for-sale")} onMouseLeave={handleMenuLeave}>Vans For Sale</Link>
@@ -222,75 +224,74 @@ export default function Navbar() {
         </div>
       </div>
       {/* MOBILE MENU */}
-<div
-  ref={mobileMenuRef}
-  className="md:hidden fixed top-[76px] left-0 w-full bg-white shadow-lg z-40 overflow-hidden"
-  style={{ height: "0" }}
->
-  <div className="flex flex-col items-center py-8 px-4">
-    {Object.keys(menuContent).map((key, idx) => (
-      <div key={idx} className="w-full mb-3">
-        <button
-          className="w-full text-xl font-semibold text-blackish py-3 flex justify-between items-center"
-          onClick={() =>
-            setActiveMenu(activeMenu === key ? null : key)
-          }
-        >
-          {menuContent[key].title}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`w-5 h-5 transform transition-transform ${
-              activeMenu === key ? "rotate-180" : ""
-            }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+      <div
+        ref={mobileMenuRef}
+        className="md:hidden fixed top-[76px] left-0 w-full bg-white shadow-lg z-40 overflow-hidden"
+        style={{ height: "0" }}
+      >
+        <div className="flex flex-col items-center py-8 px-4">
+          {Object.keys(menuContent).map((key, idx) => (
+            <div key={idx} className="w-full mb-3">
+              <button
+                className="w-full text-xl font-semibold text-blackish py-3 flex justify-between items-center"
+                onClick={() =>
+                  setActiveMenu(activeMenu === key ? null : key)
+                }
+              >
+                {menuContent[key].title}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`w-5 h-5 transform transition-transform ${activeMenu === key ? "rotate-180" : ""
+                    }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
 
-        {/* Submenu items */}
-        {activeMenu === key && (
-          <div className="pl-4 transition-all duration-300">
-            {menuContent[key]?.sections?.map((section, secIdx) => (
-              <div key={secIdx} className="mb-3">
-                <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
-                <ul className="space-y-2">
-                  {section.items.map((item, itemIdx) => (
-                    <li key={itemIdx}>
-                      <Link
-                        to={item.link}
-                        className="text-gray-700 hover:text-indigo-600 block py-1"
-                        onClick={() => setIsMobileMenuOpen(false)} // close after click
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
+              {/* Submenu items */}
+              {activeMenu === key && (
+                <div className="pl-4 transition-all duration-300">
+                  {menuContent[key]?.sections?.map((section, secIdx) => (
+                    <div key={secIdx} className="mb-3">
+                      <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
+                      <ul className="space-y-2">
+                        {section.items.map((item, itemIdx) => (
+                          <li key={itemIdx}>
+                            <Link
+                              to={item.link}
+                              className="text-gray-700 hover:text-indigo-600 block py-1"
+                              onClick={() => setIsMobileMenuOpen(false)} // close after click
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    ))}
+                </div>
+              )}
+            </div>
+          ))}
 
-    {/* Static links (optional) */}
-    <Link
-      to="/contact"
-      className="text-xl font-semibold text-blackish py-3 block w-full text-left"
-      onClick={() => setIsMobileMenuOpen(false)}
-    >
-      Contact
-    </Link>
-  </div>
-</div>
+          {/* Static links (optional) */}
+          <Link
+            to="/contact"
+            className="text-xl font-semibold text-blackish py-3 block w-full text-left"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Contact
+          </Link>
+        </div>
+      </div>
 
     </>
   );
