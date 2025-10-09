@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PortfolioVan = require('../models/portfolio')// Adjust path as needed
 const multer = require("multer")
-const { portfolios } = require("../services/cloudinary")
+const { portfolios } = require("../services/s3")
 const upload = multer({ storage: portfolios });
 
 
@@ -15,7 +15,7 @@ router.post(
   async (req, res) => {
     try {
       // ✅ Extract gallery
-      const gallery = req.files["gallery"]?.map((f) => f.path) || [];
+      const gallery = req.files["gallery"]?.map((f) => f.location) || [];
 
       // ✅ Parse blocksData from body (captions etc.)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
@@ -23,7 +23,7 @@ router.post(
       // ✅ Merge images with captions
       const blocks = blocksData.map((b, i) => ({
         caption: b.caption,
-        image: req.files["blockImages"]?.[i]?.path || null,
+        image: req.files["blockImages"]?.[i]?.location || null,
       }));
 
       // ✅ Create new portfolioVan doc
@@ -61,17 +61,6 @@ router.post(
   }
 );
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const portfolios = await PortfolioVan.find();
-//     res.json({ success: true, data: portfolios });
-//   } catch (err) {
-//     res.status(500).json({ success: false, message: "Fetch failed" });
-//   }
-// });
-
-
-// wheelbase
 // GET /api/portfolioVans?wheelbase=144
 router.get("/wheelbase", async (req, res) => {
   try {

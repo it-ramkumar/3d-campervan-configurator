@@ -74,11 +74,11 @@ export default function Buy() {
 
 
     const slidesDummy = [
-        {
-            title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
-            desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
-            img: "/images/Montrial.jpg",
-        },
+        // {
+        //     title: "Montreal 170 AWD Blue Gray\n2025 NEW Sprinter Van",
+        //     desc: "Our Montreal 170 AWD Blue-gray is a thoroughly insulated and winter ready camper van, which is designed for 4-5 people",
+        //     img: "/images/Montrial.jpg",
+        // },
         {
             title: "Santa Monica V6 Turbo",
             desc: "144 Sprinter is built for a family! Designed to sit & sleep 4. With indoor bathroom, kitchen, elevator bed, and dinette.",
@@ -98,7 +98,7 @@ export default function Buy() {
                     variants={fadeInUp}
                     viewport={{ once: true, amount: 0.5 }}
                 >
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl mb-10 lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
                         Buy a Ready-to-Go Campervan
                     </h1>
                     <div className=" sm:text-base text-sm font-normal leading-relaxed text-center md:text-left">

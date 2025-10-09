@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 // const path = require("path");
 const PortfolioVan = require("../models/blog");
-const { blogs } = require("../services/cloudinary");
+const { blogs } = require("../services/s3");
 const upload = multer({ storage: blogs });
 // const { protect, adminOnly } = require("../middleware/authMiddleware");
 
@@ -13,10 +13,11 @@ router.post(
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 50 }, // block images
   ]),
+
   async (req, res) => {
     try {
       // ✅ Gallery images
-      const gallery = req.files["gallery"]?.map((f) => f.path) || [];
+      const gallery = req.files["gallery"]?.map((f) => f.location) || [];
 
       // ✅ Parse blocksData (heading + paragraph)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
@@ -25,7 +26,7 @@ router.post(
       const blocks = blocksData.map((block, index) => ({
         heading: block.heading,
         paragraph: block.paragraph,
-        image: req.files["blockImages"]?.[index]?.path || null,
+       image: req.files["blockImages"]?.[index]?.location || null
       }));
 
       // ✅ Create portfolio doc (only title, slug, gallery, blocks)

@@ -96,17 +96,18 @@ export default function Hero() {
 
       {/* Buttons */}
       <div className="flex flex-wrap gap-3 sm:gap-4 justify-center items-center pt-3 sm:pt-4">
-        <Link to="/vans-for-sale">
-          <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-blue-600 transition-transform hover:scale-105 shadow-md">
-            View Van Inventory
-          </button>
-        </Link>
 
         <Link to="/inquiry">
           <button className="bg-white cursor-pointer text-black font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-gray-100 transition-transform hover:scale-105 shadow-md">
             Order Custom Build
           </button>
         </Link>
+        <Link to="/vans-for-sale">
+          <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-blue-600 transition-transform hover:scale-105 shadow-md">
+            View Van Inventory
+          </button>
+        </Link>
+
       </div>
     </div>
   </div>

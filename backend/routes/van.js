@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Van = require("../models/vanModel")
 const multer = require("multer")
-const { vans } = require("../services/cloudinary")
+const { vans } = require("../services/s3")
 const upload = multer({ storage: vans });
 
 router.post('/',  upload.fields([
@@ -18,7 +18,7 @@ router.post('/',  upload.fields([
       // ✅ Merge images with captions
       const blocks = blocksData.map((b, i) => ({
         caption: b.caption,
-        image: req.files["blockImages"]?.[i]?.path || null,
+        image: req.files["blockImages"]?.[i]?.location || null,
       }));
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const feature_highlights = JSON.parse(req.body.feature_highlights || "[]");
@@ -41,7 +41,7 @@ router.post('/',  upload.fields([
 
  // Gallery files
 const gallery = req.files["gallery"]?.map((f) => ({
-  url: f.path,
+  url: f.location,
   caption: ""
 }));
 
