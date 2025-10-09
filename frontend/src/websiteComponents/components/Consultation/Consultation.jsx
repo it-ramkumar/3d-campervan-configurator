@@ -64,7 +64,7 @@ export default function Consultation() {
     // 🟢 Step 2: If confirmed, send data
     setLoading(true);
     try {
-      await contact(finalData);
+      // await contact(finalData);
       Swal.fire({
         title: "Success!",
         text: "Your consultation request has been submitted successfully!",
