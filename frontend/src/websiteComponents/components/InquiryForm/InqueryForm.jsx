@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { submitInquiry } from "../../../api/inquiry/submitInquiry";
 import Navbar from "../Navbar/Navbar"
+import Swal from "sweetalert2";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
@@ -168,11 +170,7 @@ const formQuestions = [
 
 const QuestionGroup = ({ question, selected, onSelect }) => {
   const isRadio = question.inputType === "radio";
-
-  const isChecked = (option) => {
-    if (isRadio) return selected === option;
-    return (selected || []).includes(option);
-  };
+  const isChecked = (option) => (isRadio ? selected === option : (selected || []).includes(option));
 
   return (
     <div className="form-group mb-8">
@@ -181,10 +179,9 @@ const QuestionGroup = ({ question, selected, onSelect }) => {
         {question.options.map((option, index) => (
           <motion.label
             key={index}
-            htmlFor={`${question.id}-${index}`}
-            className="relative block"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            className="relative block"
           >
             <input
               type={isRadio ? "radio" : "checkbox"}
@@ -196,12 +193,11 @@ const QuestionGroup = ({ question, selected, onSelect }) => {
               className="hidden"
             />
             <span
-              className={`flex items-center h-full p-4 rounded-lg cursor-pointer border-2 justify-between transition-all duration-200
-                ${
-                  isChecked(option)
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-black border-black hover:bg-gray-100"
-                }`}
+              className={`flex items-center justify-between p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                isChecked(option)
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-black border-black hover:bg-gray-100"
+              }`}
             >
               {option}
               {isChecked(option) && <Check className="ml-2 text-white h-5 w-5" />}
@@ -230,22 +226,16 @@ const ContactField = ({ question, value, onSelect }) => (
 );
 
 const Summary = ({ formData }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
     <h3 className="text-2xl font-bold mb-6 text-black">Review Your Choices</h3>
-    {Object.keys(formData).map((key) => {
-      const questionData = formQuestions.flatMap((s) => s.questions).find((q) => q.id === key);
-      const value = formData[key];
-      if (!value || (Array.isArray(value) && value.length === 0)) return null;
-
-      return (
-        <div key={key} className="bg-white p-4 rounded-lg border-2 border-black">
-          <p className="text-black text-sm font-medium">{questionData?.question || key}</p>
-          <p className="text-lg text-black mt-1 font-semibold">
-            {Array.isArray(value) ? value.join(", ") : value}
-          </p>
-        </div>
-      );
-    })}
+    {Object.keys(formData).map((key) => (
+      <div key={key} className="bg-white p-4 mb-3 rounded-lg border-2 border-black">
+        <p className="text-sm font-medium text-black">{key}</p>
+        <p className="text-lg font-semibold text-black mt-1">
+          {Array.isArray(formData[key]) ? formData[key].join(", ") : formData[key]}
+        </p>
+      </div>
+    ))}
   </motion.div>
 );
 
@@ -253,37 +243,94 @@ export default function InquiryForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [validationMessage, setValidationMessage] = useState(null);
 
   const handleSelect = (id, value) => {
-    setValidationMessage(null);
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
+  // ✅ Step validation before moving forward
   const handleNext = () => {
+    const currentGroup = formQuestions[currentStep];
+    const unanswered = currentGroup.questions.filter(
+      (q) => !formData[q.id] && q.id !== "message"
+    );
+    if (unanswered.length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Incomplete Step",
+        text: "Please answer all required questions before continuing.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
     if (currentStep < formQuestions.length - 1) setCurrentStep((p) => p + 1);
   };
+
   const handlePrevious = () => {
     if (currentStep > 0) setCurrentStep((p) => p - 1);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ Final validation before submission
+    const missingFields = formQuestions
+      .flatMap((group) => group.questions)
+      .filter((q) => q.id !== "message" && !formData[q.id]);
+
+    if (missingFields.length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Incomplete Form",
+        text: "Please complete all required fields before submitting.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    // ✅ Show confirmation popup before final submission
+    const htmlDetails = Object.entries(formData)
+      .map(([key, value]) => `<p><b>${key}:</b> ${Array.isArray(value) ? value.join(", ") : value}</p>`)
+      .join("");
+
+    const result = await Swal.fire({
+      title: "Confirm Your Details",
+      html: `<div style="text-align:left">${htmlDetails}</div>`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Confirm & Submit",
+      cancelButtonText: "Go Back",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) return;
+
     setIsLoading(true);
-    const result = await submitInquiry(formData);
-    setMessage(result.success ? { type: "success", text: "Form submitted successfully!" } : { type: "error", text: "Submission failed." });
-    setIsLoading(false);
-    setFormData({})
-    setTimeout(() => setMessage(null), 5000);
+
+    try {
+      const res = await submitInquiry(formData);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Your quote request has been submitted successfully!",
+        timer: 2500,
+        showConfirmButton: false,
+      });
+      setFormData({});
+      setCurrentStep(0);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Something went wrong while submitting.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const isLastStep = currentStep === formQuestions.length - 1;
   const isSummaryStep = currentStep === formQuestions.length - 2;
-  const allSteps = formQuestions.map((q) => q.title);
   const progress = ((currentStep + 1) / formQuestions.length) * 100;
 
   const renderFormContent = () => {
@@ -312,106 +359,86 @@ export default function InquiryForm() {
 
   return (
     <>
-    <Navbar/>
-    <div className="bg-white text-black flex items-center justify-center ">
-      <div className="max-w-4xl w-full">
-        <div className="text-center mb-12">
-          <p className="text-base text-black mb-3 font-medium tracking-wide">STILL WONDERING WHAT TO CHOOSE?</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black">Get Your Perfect Van Quote</h1>
-          <p className="text-black max-w-2xl mx-auto text-lg">
-            Answer a few quick questions and we’ll help you find the ideal van conversion for your adventure.
-          </p>
-        </div>
-
-        <div className="bg-white rounded-xl border-2 border-black p-6 md:p-8 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-8 h-[90vh] custom-scroll  overflow-scroll">
-          <div className="w-full md:w-1/4">
-            <h3 className="text-lg font-bold mb-4 text-black">Your Progress</h3>
-            <div className="space-y-1">
-              {allSteps.map((title, index) => (
-                <div
-                  key={index}
-                  className={`py-2 px-3 rounded-lg border border-black transition-colors duration-200 ${
-                    currentStep === index
-                      ? "bg-black text-white font-semibold"
-                      : "text-black hover:bg-gray-100"
-                  }`}
-                >
-                  {`${index + 1}. ${title}`}
-                </div>
-              ))}
-            </div>
+      <Navbar />
+      <div className="bg-white text-black flex items-center justify-center">
+        <div className="max-w-4xl w-full">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black">Get Your Perfect Van Quote</h1>
+            <p className="text-black max-w-2xl mx-auto text-lg">
+              Answer a few quick questions and we’ll help you find the ideal van conversion for your adventure.
+            </p>
           </div>
 
-          <div className="w-full md:w-3/4">
-            <div className="w-full bg-gray-300 rounded-full h-2 mb-8">
-              <motion.div
-                className="bg-black h-2 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5 }}
-              />
+          <div className="bg-white rounded-xl border-2 border-black p-6 md:p-8 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-8 h-[90vh] custom-scroll overflow-scroll">
+            <div className="w-full md:w-1/4">
+              <h3 className="text-lg font-bold mb-4 text-black">Your Progress</h3>
+              <div className="space-y-1">
+                {formQuestions.map((q, i) => (
+                  <div
+                    key={i}
+                    className={`py-2 px-3 rounded-lg border border-black transition-colors duration-200 ${
+                      currentStep === i
+                        ? "bg-black text-white font-semibold"
+                        : "text-black hover:bg-gray-100"
+                    }`}
+                  >
+                    {`${i + 1}. ${q.title}`}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              {renderFormContent()}
+            <div className="w-full md:w-3/4">
+              <div className="w-full bg-gray-300 rounded-full h-2 mb-8">
+                <motion.div
+                  className="bg-black h-2 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
 
-              <div className="flex justify-between items-center mt-8 pt-6 border-t border-black">
-                <motion.button
-                  type="button"
-                  onClick={handlePrevious}
-                  disabled={currentStep === 0}
-                  className={`px-6 py-3 rounded-lg border-2 border-black flex items-center gap-2 transition-all duration-200 font-medium ${
-                    currentStep === 0
-                      ? "opacity-50 cursor-not-allowed text-gray-500"
-                      : "text-black hover:bg-black hover:text-white"
-                  }`}
-                >
-                  <ChevronLeft size={20} /> Previous
-                </motion.button>
+              <form onSubmit={handleSubmit}>
+                {renderFormContent()}
 
-                {isLastStep ? (
-                  <motion.button
-                    type="submit"
-                    disabled={isLoading}
-                    className="px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-                  >
-                    {isLoading ? "Submitting..." : "Submit Quote Request"} <ArrowUpRight size={20} />
-                  </motion.button>
-                ) : (
+                <div className="flex justify-between items-center mt-8 pt-6 border-t border-black">
                   <motion.button
                     type="button"
-                    onClick={handleNext}
-                    className="px-6 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                    onClick={handlePrevious}
+                    disabled={currentStep === 0}
+                    className={`px-6 py-3 rounded-lg border-2 border-black flex items-center gap-2 transition-all duration-200 font-medium ${
+                      currentStep === 0
+                        ? "opacity-50 cursor-not-allowed text-gray-500"
+                        : "text-black hover:bg-black hover:text-white"
+                    }`}
                   >
-                    {isSummaryStep ? "Continue to Contact" : "Next"}
-                    <ChevronRight size={20} />
+                    <ChevronLeft size={20} /> Previous
                   </motion.button>
-                )}
-              </div>
-            </form>
+
+                  {isLastStep ? (
+                    <motion.button
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                    >
+                      {isLoading ? "Submitting..." : "Submit Quote Request"} <ArrowUpRight size={20} />
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      type="button"
+                      onClick={handleNext}
+                      className="px-6 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
+                    >
+                      {isSummaryStep ? "Continue to Contact" : "Next"}
+                      <ChevronRight size={20} />
+                    </motion.button>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-
-        <AnimatePresence>
-          {message && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 50, scale: 0.8 }}
-              className={`fixed bottom-4 right-4 p-4 rounded-lg border-2 ${
-                message.type === "success" ? "bg-white text-black border-black" : "bg-black text-white border-white"
-              }`}
-            >
-              <span className="font-medium">{message.text}</span>
-              <button onClick={() => setMessage(null)} className="ml-2 hover:opacity-70 transition-opacity">
-                <X size={18} />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-    </div>
-        </>
-
+    </>
   );
 }

@@ -203,7 +203,7 @@ const WhyChoose = () => {
               font-['Noto Sans'] text-sm font-bold shadow-md hover:bg-gray-900 transition-colors
               hover:scale-105 hover:shadow-lg transition-transform cursor-pointer"
           >
-            Request a Build
+            Order Custom Build
           </Link>
         </div>
       </main>

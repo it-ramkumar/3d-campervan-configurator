@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "../../Loader/Loader"
 import { ChevronDown, ChevronUp } from 'lucide-react'; // Assuming you have lucide-react or similar icon library installed
+import { Link } from "react-router-dom";
 
 
 
@@ -383,12 +384,13 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-left mt-6 px-8 md:px-12">
+         <Link to={"/inquiry"}>
             <button
               className="section1-button bg-black text-white font-sans font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
-              style={{ width: '149px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
-              Request a Build
-            </button>
+              Order Custom Build
+            </button></Link>
           </div>
         </div>
 
@@ -495,12 +497,13 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
+          <Link to={"/van"}>
             <button
               className="section2-button bg-black text-white font-sans font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
-              style={{ width: '178px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              style={{ height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Try 3D Configurator
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

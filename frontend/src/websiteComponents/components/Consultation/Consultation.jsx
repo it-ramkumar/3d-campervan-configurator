@@ -23,71 +23,118 @@ export default function Consultation({vanForSale}) {
   };
 
   // ✅ Submit Combined Data (Form + Date)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const finalData = {
-      ...formData,
-      selectedDate: date.toDateString(),
-    };
+  // Validation (message optional)
+  if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+    let missingFields = [];
+    if (!formData.name.trim()) missingFields.push("Name");
+    if (!formData.email.trim()) missingFields.push("Email");
+    if (!formData.phone.trim()) missingFields.push("Phone");
 
-    const result = await Swal.fire({
-      title: "Please Confirm Your Details",
-      html: `
-        <div style="text-align:left;">
-          <p><b>Name:</b> ${finalData.name || "N/A"}</p>
-          <p><b>Email:</b> ${finalData.email || "N/A"}</p>
-          <p><b>Phone:</b> ${finalData.phone || "N/A"}</p>
-          <p><b>Message:</b> ${finalData.message || "N/A"}</p>
-          <p><b>Selected Date:</b> ${finalData.selectedDate}</p>
-        </div>
-      `,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Submit",
-      cancelButtonText: "Cancel",
-      reverseButtons: true,
+    Swal.fire({
+      title: "Missing Required Fields",
+      html: `<p>Please fill in the following required fields:</p>
+             <ul style="text-align:left; margin-top:10px;">
+               ${missingFields.map((f) => `<li><b>${f}</b></li>`).join("")}
+             </ul>`,
+      icon: "warning",
+      confirmButtonText: "OK",
+    });
+    return;
+  }
+
+  // Email validation
+  if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    Swal.fire({
+      title: "Invalid Email",
+      text: "Please enter a valid email address.",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+    return;
+  }
+
+  // Phone validation (10–15 digits)
+  if (!/^\d{10,15}$/.test(formData.phone)) {
+    Swal.fire({
+      title: "Invalid Phone Number",
+      text: "Please enter a valid phone number (10–15 digits).",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+    return;
+  }
+
+  // Prepare final data
+  const finalData = {
+    ...formData,
+    selectedDate: date.toDateString(),
+  };
+
+  // Confirm user details
+  const result = await Swal.fire({
+    title: "Please Confirm Your Details",
+    html: `
+      <div style="text-align:left;">
+        <p><b>Name:</b> ${finalData.name}</p>
+        <p><b>Email:</b> ${finalData.email}</p>
+        <p><b>Phone:</b> ${finalData.phone}</p>
+        <p><b>Message:</b> ${finalData.message || "N/A"}</p>
+        <p><b>Selected Date:</b> ${finalData.selectedDate}</p>
+      </div>
+    `,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Yes, Submit",
+    cancelButtonText: "Cancel",
+    reverseButtons: true,
+  });
+
+  // If cancelled
+  if (!result.isConfirmed) {
+    Swal.fire({
+      title: "Cancelled",
+      text: "You can review your details before submitting.",
+      icon: "info",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    return;
+  }
+
+  // Submit
+  setLoading(true);
+  try {
+    // await contact(finalData); // API call here
+    Swal.fire({
+      title: "Success!",
+      text: "Your consultation request has been submitted successfully!",
+      icon: "success",
+      timer: 2500,
+      showConfirmButton: false,
     });
 
-    if (!result.isConfirmed) {
-      Swal.fire({
-        title: "Cancelled",
-        text: "You can review your details before submitting.",
-        icon: "info",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      return;
-    }
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+  } catch (error) {
+    Swal.fire({
+      title: "Error!",
+      text: "Something went wrong while submitting the form.",
+      icon: "error",
+      confirmButtonText: "Try Again",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
-    setLoading(true);
-    try {
-      // await contact(finalData);
-      Swal.fire({
-        title: "Success!",
-        text: "Your consultation request has been submitted successfully!",
-        icon: "success",
-        timer: 2500,
-        showConfirmButton: false,
-      });
-
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
-    } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong while submitting the form.",
-        icon: "error",
-        confirmButtonText: "Try Again",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24">
