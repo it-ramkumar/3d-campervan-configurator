@@ -135,7 +135,7 @@ const WhyChoose = () => {
                     <button
                       onClick={() => toggleExpand(index)}
                       className={`
-                        relative z-10
+                        relative z-10 cursor-pointer
                         flex items-center justify-center
                         px-4 py-2
                         bg-black text-white rounded-lg

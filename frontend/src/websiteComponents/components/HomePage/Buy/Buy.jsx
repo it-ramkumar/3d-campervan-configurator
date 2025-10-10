@@ -234,7 +234,7 @@ export default function Buy() {
                   <div className="flex gap-4">
                     <Link to="/contact">
                       <button
-                        className="bg-white text-black font-serif font-bold text-sm
+                        className="bg-white cursor-pointer text-black font-serif font-bold text-sm
                         px-4 md:px-6 py-2 rounded-md transition-all duration-300
                         hover:scale-105 hover:shadow-lg"
                       >
@@ -243,7 +243,7 @@ export default function Buy() {
                     </Link>
                     <Link to="/santa-monica">
                       <button
-                        className="bg-[#2761FD] text-white font-serif font-bold text-sm
+                        className="bg-[#2761FD] cursor-pointer text-white font-serif font-bold text-sm
                         px-4 md:px-6 py-2 rounded-md transition-all duration-300
                         hover:scale-105 hover:shadow-lg"
                       >
@@ -266,7 +266,7 @@ export default function Buy() {
     >
       <button
         onClick={() => swiperRef.current?.swiper.slidePrev()}
-        className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full flex items-center justify-center
+        className="w-10 h-10 sm:w-12 sm:h-12 cursor-pointer bg-gray-800 rounded-full flex items-center justify-center
         transition-all duration-300 opacity-90 hover:opacity-100 hover:scale-110"
       >
         <span className="rotate-180">
@@ -275,7 +275,7 @@ export default function Buy() {
       </button>
       <button
         onClick={() => swiperRef.current?.swiper.slideNext()}
-        className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-800 rounded-full flex items-center justify-center
+        className="w-10 h-10 sm:w-12 sm:h-12 cursor-pointer bg-gray-800 rounded-full flex items-center justify-center
         transition-all duration-300 opacity-90 hover:opacity-100 hover:scale-110"
       >
         <ArrowIcon />
@@ -294,7 +294,7 @@ export default function Buy() {
                     viewport={{ once: true }}
                 >
                     <Link to="/vans-for-sale">
-                        <button className="bg-black text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
+                        <button className="bg-black cursor-pointer text-white font-serif font-bold text-sm px-8 py-3 rounded-md transform transition-transform duration-300 hover:scale-105">
                             View All Inventory
                         </button>
                     </Link>

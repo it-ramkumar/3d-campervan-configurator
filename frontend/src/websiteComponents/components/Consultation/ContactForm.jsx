@@ -39,7 +39,7 @@ export default function ContactForm({
       <button
         type="submit"
         disabled={loading}
-        className={`px-6 py-3 rounded-lg text-white flex items-center justify-center gap-2
+        className={`px-6 py-3 cursor-pointer rounded-lg text-white flex items-center justify-center gap-2
           ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
       >
         {loading ? "Submitting..." : "Submit"}

@@ -324,7 +324,7 @@ export default function Customize() {
                     <button
                       onClick={() => setExpanded(!expanded)}
                       className={`
-                        relative z-10
+                        relative z-10 cursor-pointer
                         flex items-center justify-center
                         px-4 py-2
                         bg-black text-white rounded-lg
@@ -386,7 +386,7 @@ export default function Customize() {
           <div className="w-full text-center md:text-left mt-6 px-8 md:px-12">
          <Link to={"/inquiry"}>
             <button
-              className="section1-button bg-black text-white font-sans font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
+              className="section1-button cursor-pointer bg-black text-white font-sans font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
               style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Order Custom Build
@@ -499,7 +499,7 @@ export default function Customize() {
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
           <Link to={"/van"}>
             <button
-              className="section2-button bg-black text-white font-sans font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
+              className="section2-button cursor-pointer bg-black text-white font-sans font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
               style={{ height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Try 3D Configurator
