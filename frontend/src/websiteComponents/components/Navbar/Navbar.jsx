@@ -172,8 +172,8 @@ export default function Navbar() {
       {activeMenu && menuContent[activeMenu]?.sections && (
         <div
           ref={megaMenuRef}
-          className="absolute left-0 w-full bg-white shadow-xl z-40 overflow-hidden"
-          style={{ top: "76px", height: "0" }}
+          className="fixed left-0 w-full bg-white shadow-xl z-40 overflow-hidden"
+          style={{ top: "63px", height: "0" }}
           onMouseEnter={() => handleMenuHover(activeMenu)}
           onMouseLeave={handleMenuLeave}
         >

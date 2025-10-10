@@ -46,7 +46,6 @@ export default function Portfolio() {
       );
 
       // --- UPDATED: More dynamic staggered reveal for images (Desktop) ---
-      // Apply these animations only to the desktop-specific grid
       if (imageGridRef.current) {
         const imageElements = gsap.utils.toArray(imageGridRef.current.querySelectorAll(".image-container"));
         gsap.fromTo(
@@ -102,19 +101,8 @@ export default function Portfolio() {
         });
       }
 
-      // --- UPDATED: Button hover effect ---
-      const button = buttonRef.current;
-      if (button) {
-        const shimmer = button.querySelector(".shimmer");
-
-        const buttonTl = gsap.timeline({ paused: true });
-        buttonTl.fromTo(shimmer,
-          { x: "-110%", skewX: -25 },
-          { x: "110%", duration: 0.7, ease: "power2.inOut" }
-        );
-
-        button.addEventListener("mouseenter", () => buttonTl.restart());
-      }
+      // --- CHANGE 1: REMOVED the GSAP shimmer animation for the button ---
+      // The previous GSAP code for the button's shimmer effect has been deleted.
 
     }, sectionRef);
 
@@ -122,19 +110,21 @@ export default function Portfolio() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full bg-white">
+    // FIX: Changed py-12 to pt-6 for reduced mobile top padding, and lg:pt-12 pb-12 for desktop and bottom padding.
+    <section ref={sectionRef} className="w-full pt-6 lg:pt-12 pb-12 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Heading + Desc */}
-        <div className="text-center md:mb-16 mb-10">
+        {/* FIX 2: Reduced bottom margin from mb-16 to mb-8 */}
+        <div className="text-center mb-8">
           <h2
             ref={headingRef}
-           className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif"
+            className="font-serif font-bold text-5xl leading-tight text-black max-w-3xl mx-auto"
           >
             From Dream to Your Driveway
           </h2>
           <p
             ref={subHeadingRef}
-            className="font-serif sm:text-base text-sm  text-black/70 max-w-4xl mx-auto mt-4"
+            className="font-serif text-xl text-black/70 max-w-4xl mx-auto mt-4"
           >
             Take a look at some of our best custom vans.
           </p>
@@ -148,52 +138,52 @@ export default function Portfolio() {
         >
           <div className="flex h-full gap-4">
             {/* Left Column (Image 1) */}
-        <div
-  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[492px] h-[725px]"
-  style={{ transformStyle: "preserve-3d" }}
-  data-side="left"
->
-  <img
-    src={images[0].src}
-    alt={images[0].alt}
-    className="w-full h-full object-cover"
-    style={{ filter: "contrast(1.05) saturate(1.1)" }}
-  />
-</div>
+            <div
+              className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[492px] h-[725px]"
+              style={{ transformStyle: "preserve-3d" }}
+              data-side="left"
+            >
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover"
+                style={{ filter: "contrast(1.05) saturate(1.1)" }}
+              />
+            </div>
 
 
             {/* Right Column */}
             <div className="flex-1 flex flex-col gap-4">
               {/* Top Image (Image 2) */}
-             <div
-  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[699px] h-[402px]"
-  style={{ transformStyle: "preserve-3d" }}
-  data-side="right"
->
-  <img
-    src={images[1].src}
-    alt={images[1].alt}
-    className="w-full h-full object-cover"
-    style={{ filter: "contrast(1.05) saturate(1.1)" }}
-  />
-</div>
+              <div
+                className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[699px] h-[402px]"
+                style={{ transformStyle: "preserve-3d" }}
+                data-side="right"
+              >
+                <img
+                  src={images[1].src}
+                  alt={images[1].alt}
+                  className="w-full h-full object-cover"
+                  style={{ filter: "contrast(1.05) saturate(1.1)" }}
+                />
+              </div>
 
               {/* Bottom Row Images (3, 4, 5) */}
               <div className="flex-1 flex gap-4">
                 {images.slice(2).map((image) => (
-              <div
-  key={image.id}
-  className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[227px] h-[313px]"
-  style={{ transformStyle: "preserve-3d" }}
-  data-side="right"
->
-  <img
-    src={image.src}
-    alt={image.alt}
-    className="w-full h-full object-cover"
-    style={{ filter: "contrast(1.05) saturate(1.1)" }}
-  />
-</div>
+                  <div
+                    key={image.id}
+                    className="image-container relative rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-2xl w-[227px] h-[313px]"
+                    style={{ transformStyle: "preserve-3d" }}
+                    data-side="right"
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="w-full h-full object-cover"
+                      style={{ filter: "contrast(1.05) saturate(1.1)" }}
+                    />
+                  </div>
 
                 ))}
               </div>
@@ -206,48 +196,49 @@ export default function Portfolio() {
           {/* First row: 2 images */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             {images.slice(0, 2).map((image) => (
-            <div
-  key={image.id}
-  className="relative h-64 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
->
-  <img
-    src={image.src}
-    alt={image.alt}
-    className="w-full h-full object-cover"
-  />
-</div>
+              <div
+                key={image.id}
+                className="relative h-64 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
             ))}
           </div>
           {/* Second row: 3 images */}
           <div className="grid grid-cols-3 gap-4">
             {images.slice(2).map((image) => (
-             <div
-  key={image.id}
-  className="relative h-40 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
->
-  <img
-    src={image.src}
-    alt={image.alt}
-    className="w-full h-full object-cover"
-    style={{ filter: "contrast(1.05) saturate(1.1)" }} // optional effect
-  />
-</div>
+              <div
+                key={image.id}
+                className="relative h-40 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover"
+                  style={{ filter: "contrast(1.05) saturate(1.1)" }} // optional effect
+                />
+              </div>
 
             ))}
           </div>
         </div>
 
-        {/* Button */}
+        {/* --- CHANGE 2: UPDATED THE BUTTON --- */}
         <div className="flex justify-center mt-16">
           <Link to="/layouts">
-          <button
-            ref={buttonRef}
-            className="relative flex items-center cursor-pointer justify-center text-white bg-[#2761FD] rounded-md font-serif font-bold text-sm h-12 w-48 transition-transform transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 overflow-hidden"
-          >
-            <span className="shimmer absolute top-0 left-0 w-full h-full bg-white/20 block"></span>
-            <span className="relative z-10">View Our Portfolio</span>
-          </button></Link>
+            <button
+              ref={buttonRef}
+              className="bg-black cursor-pointer text-white font-serif font-bold text-sm h-12 w-48 rounded-md
+                         transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+            >
+              View Our Portfolio
+            </button>
+          </Link>
         </div>
       </div>
     </section>

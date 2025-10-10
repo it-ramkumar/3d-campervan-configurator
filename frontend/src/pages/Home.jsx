@@ -17,7 +17,7 @@ const Home = () => {
 
      <Navbar />
         <Hero />
-    <div className="space-y-30 overflow-x-hidden">
+    <div className="space-y-10 overflow-x-hidden">
       <div className="navbar">
       </div>
       {/* Page Sections */}

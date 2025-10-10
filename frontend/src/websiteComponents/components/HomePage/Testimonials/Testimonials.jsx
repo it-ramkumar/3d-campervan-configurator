@@ -66,12 +66,22 @@ const CopyIcon = () => (
   </svg>
 );
 
+// Function to truncate text
+const truncateText = (text, maxLength) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength).trim() + '...';
+};
+
 export default function Testimonials() {
   const vanBgImageUrl = "/images/review.jpg";
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
-  const [expandedReview, setExpandedReview] = useState(null);
+
+  // Set max length for the text displayed in the slider
+  const maxTextLength = 150; // Adjust this value as needed
 
   const openModal = (review) => {
     setSelectedReview(review);
@@ -86,6 +96,7 @@ export default function Testimonials() {
 
   const handleCopy = () => {
     if (selectedReview?.text) {
+      // Use the full review text for copying
       navigator.clipboard.writeText(selectedReview.text).then(() => {
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 2000); // Reset icon after 2 seconds
@@ -102,89 +113,86 @@ export default function Testimonials() {
   }, [modalOpen]);
 
   return (
-    <section className="w-full  bg-white overflow-hidden">
+    <section className="w-full py-16 md:pt-16 md:pb-24 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
+          <h2 className="font-serif text-5xl font-bold text-black">
             See Why Our Customers Love Us
           </h2>
         </div>
 
-  <Swiper
-  effect={'coverflow'}
-  grabCursor={true}
-  centeredSlides={true}
-  loop={true}
-  slidesPerView={'auto'}
-  coverflowEffect={{
-    rotate: 0,
-    stretch: 0,
-    depth: 100,
-    modifier: 2.5,
-    slideShadows: false,
-  }}
-  autoplay={{
-    delay: 0,
-    disableOnInteraction: false,
-    reverseDirection: true,
-    pauseOnMouseEnter: true,
-  }}
-  speed={5000}
-  modules={[EffectCoverflow, Autoplay]}
-  className="w-full"
->
-  {reviews.map((review) => {
-    const isExpanded = expandedReview === review.id;
-    const shortText = review.text.slice(0, 120); // jitna text chhota dikhana hai
-
-    return (
-      <SwiperSlide
-        key={review.id}
-        className="!w-[300px] sm:!w-[400px] !h-[300px] sm:!h-[400px] transition-all duration-1000 ease-out"
-      >
-        <div
-          className="relative w-full h-full rounded-2xl overflow-hidden group transform transition-transform duration-700 hover:scale-105 cursor-pointer"
-          onClick={() => openModal(review)}
+        <Swiper
+          effect={'coverflow'}
+          grabCursor={true}
+          centeredSlides={true}
+          loop={true}
+          slidesPerView={'auto'}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 100,
+            modifier: 2.5,
+            slideShadows: false,
+          }}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+            reverseDirection: true,
+            pauseOnMouseEnter: true, // Pause on hover
+          }}
+          speed={5000}
+          modules={[EffectCoverflow, Autoplay]}
+          className="w-full"
         >
-          {/* Background Image */}
-          <img
-            src={vanBgImageUrl}
-            alt="Van Interior"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-[#000000a6] transition-opacity duration-300 group-hover:bg-[#000000b9]"></div>
+          {reviews.map((review) => {
+            const truncatedText = truncateText(review.text, maxTextLength);
+            const isTruncated = review.text.length > maxTextLength;
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
-            <h3 className="font-serif font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl leading-tight">
-              {review.name}
-            </h3>
-
-            <div className="flex gap-1 text-[#FFEF5E]">
-              {renderStars(review.rating)}
-            </div>
-
-            <p className="font-serif text-sm sm:text-base font-normal max-w-xl">
-              {isExpanded ? review.text : shortText}
-              {review.text.length > 120 && (
-                <button
-                  className="ml-2 text-yellow-400 underline text-sm"
-                  onClick={(e) => {
-                    e.stopPropagation(); // modal open na ho click pe
-                  openModal(review)
-                  }}
+            return (
+              <SwiperSlide
+                key={review.id}
+                className="!w-[300px] sm:!w-[400px] !h-[300px] sm:!h-[400px] transition-all duration-1000 ease-out"
+              >
+                <div
+                  className="relative w-full h-full rounded-2xl overflow-hidden group transform transition-transform duration-700 hover:scale-105 cursor-pointer"
+                  // NOTE: We keep the onClick here for the entire slide area to trigger the modal
+                  onClick={() => openModal(review)}
                 >
-                  {isExpanded ? "See less" : "See more"}
-                </button>
-              )}
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-    );
-  })}
-</Swiper>
+                  {/* Background Image */}
+                  <img
+                    src={vanBgImageUrl}
+                    alt="Van Interior"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* Semi-Transparent Overlay */}
+                  <div className="absolute inset-0 bg-[#000000a6] transition-opacity duration-300 group-hover:bg-[#000000b9]"></div>
+
+                  {/* Content */}
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
+                    <h3 className="font-serif font-semibold text-[28px] leading-tight">
+                      {review.name}
+                    </h3>
+                    <div className="flex gap-1 text-[#FFEF5E]">
+                      {renderStars(review.rating)}
+                    </div>
+                    
+                    {/* Display Truncated Text */}
+                    <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
+                      {truncatedText}
+                    </p>
+
+                    {/* Read More Link (Only show if text was truncated) */}
+                    {isTruncated && (
+                      <span className="text-sm font-semibold text-yellow-300 underline mt-2 hover:text-yellow-400">
+                        Read More
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </div>
 
       {modalOpen && selectedReview && (
@@ -217,7 +225,7 @@ export default function Testimonials() {
               )}
             </div>
 
-            {/* Modal content */}
+            {/* Modal content - Displays FULL TEXT */}
             <div className="flex flex-col items-center text-center space-y-6">
               <h3 className="font-serif font-bold text-4xl text-white">
                 {selectedReview.name}
@@ -225,7 +233,7 @@ export default function Testimonials() {
               <div className="flex gap-1 text-[#FFEF5E]">
                 {renderStars(selectedReview.rating)}
               </div>
-              <p className="font-serif text-base text-gray-300">
+              <p className="font-serif text-lg text-gray-300">
                 {selectedReview.text}
               </p>
             </div>

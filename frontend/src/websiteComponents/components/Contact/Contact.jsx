@@ -1,7 +1,8 @@
 
 import Hero from "./Heroc/HeroC";
 
-import Consultation from "./Consultationc/ConsultationC";
+// import Consultation from "./Consultationc/ConsultationC";
+import Consultation from "../Consultation/Consultation"
 import Portfolio from "../HomePage/Portfolio/Portfolio";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";

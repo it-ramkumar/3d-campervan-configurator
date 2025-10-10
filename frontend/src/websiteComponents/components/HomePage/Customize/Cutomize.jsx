@@ -5,7 +5,9 @@ import { OrbitControls, Center, useGLTF, Environment, Html } from "@react-three/
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "../../Loader/Loader"
-import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp } from 'lucide-react'; // Assuming you have lucide-react or similar icon library installed
+
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,7 +56,7 @@ export default function Customize() {
   const imageCardRef = useRef(null);
   const imageRef = useRef(null);
   const modelCanvasCardRef = useRef(null);
-  const [showMore, setShowMore] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
   const parts = [
     { name: "Wall Panels", modelPath: "/models/in-parts144/wall-panels.glb", initialPos: [8, 0, 0] },
@@ -241,12 +243,12 @@ export default function Customize() {
   // }, []);
 
   return (
-    <section className="bg-white font-serif overflow-hidden">
+    <section className="bg-white py-24 font-serif overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Main Title */}
         <h1
           ref={mainTitleRef}
-         className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl md:mb-20 mb-10 font-extrabold leading-tight text-center tracking-tight font-serif"
+          className="text-center text-4xl md:text-5xl font-bold font-serif text-blackish mb-10 md:mb-20"
         >
           Customize Van
         </h1>
@@ -276,58 +278,74 @@ export default function Customize() {
                 </div>
               </div>
             </div>
-
-          <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
+ <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
       <div className="text-white w-full md:w-1/2 pr-0 md:pr-8 text-center md:text-left">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl py-10 font-extrabold leading-tight tracking-tight font-serif">
+        <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
           Customize Your Dream Van
         </h2>
 
-        <div className="space-y-4  font-normal text-white/90">
-          <p className="text-sm sm:text-base">
-            When you give us 4–5 months, we design and build your custom camper
-            van from scratch, exactly the way you want it.
+        {/* Text content with toggle */}
+        <div
+          className={`space-y-4 text-sm md:text-xl font-normal text-white/90 overflow-hidden transition-all duration-500 ${
+            !expanded ? "max-h-[114px]" : "max-h-[1000px]"
+          }`}
+        >
+          <p>
+            When you give us 4-5 months, we design and build your custom camper
+            van from scratch, the way you want it:
           </p>
-
-          <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
+          <ul className="list-disc list-inside space-y-1">
             <li>
               3D renderings to help you visualise your future van before we even
               pick up a tool.
             </li>
             <li>
-              3D scanning, engineered CAD modelling (of your layout), and
-              manufacturing with automated CNC machines.
+              3D Scanning, engineered CAD modelling (of your layout), and
+              manufacturing in Automated CNC machines.
             </li>
-
-            {/* Only show rest of the content when "showMore" is true */}
-            {showMore && (
-              <>
-                <li>Every cabinet, seat, and bed is built for your layout.</li>
-                <li>
-                  Power, water, and heating systems are set up for real off-grid
-                  living.
-                </li>
-                <li>
-                  Interior finishes that look like a home, not like a cargo van.
-                </li>
-              </>
-            )}
+            <li>Every cabinet, seat, and bed is built for your layout.</li>
+            <li>
+              Power, water, and heating systems are set up for real off-grid
+              living.
+            </li>
+            <li>
+              Interior finishes that look like a home, not like a cargo van.
+            </li>
           </ul>
-
-          {showMore && (
-            <p className="text-sm sm:text-base">
-              Start by filling out our TEST. We’ll ask a few questions and then
-              give you a real estimate of what your dream van will cost.
-            </p>
-          )}
-
-          <button
-            onClick={() => setShowMore(!showMore)}
-            className="text-blue-400 hover:text-blue-300 font-semibold transition"
-          >
-            {showMore ? "See Less" : "See More"}
-          </button>
+          <p>
+            Start by filling out our TEST. We’ll ask a few questions and then
+            give you a real estimate of what your dream van will cost.
+          </p>
         </div>
+
+        {/* See More / See Less button */}
+        <div className="flex justify-center md:justify-start pt-4">
+                    <button
+                      onClick={() => setExpanded(!expanded)}
+                      className={`
+                        relative z-10
+                        flex items-center justify-center
+                        px-4 py-2
+                        bg-black text-white rounded-lg
+                        font-semibold text-sm
+                        transition-all duration-300
+                        shadow-lg
+                        transform
+                        hover:scale-[1.02] hover:bg-gray-800
+                        active:scale-[0.98]
+                      `}
+                    >
+                      {expanded ? (
+                       <>
+                                                 Show Less <ChevronUp className="ml-2 h-4 w-4" />
+                                               </>
+                                             ) : (
+                                               <>
+                                                 See More <ChevronDown className="ml-2 h-4 w-4" />
+                                               </>
+                      )}
+                    </button>
+                  </div>
       </div>
     </div>
           </div>
@@ -365,14 +383,12 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-left mt-6 px-8 md:px-12">
-           <Link to="/inquiry">
             <button
-              className="section1-button bg-[#2761FD] text-white font-serif font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
-              style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              className="section1-button bg-black text-white font-sans font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
+              style={{ width: '149px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
-              Order Custom Build
+              Request a Build
             </button>
-           </Link>
           </div>
         </div>
 
@@ -419,10 +435,10 @@ export default function Customize() {
 
             <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20 justify-end">
               <div className="text-white w-full md:w-1/2 pl-0 md:pl-8 text-center md:text-left">
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl py-10 font-extrabold leading-tight tracking-tight font-serif">
+                <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
                   Try Our 3D Configurator
                 </h2>
-                <div className="space-y-4 text-sm sm:text-base font-normal text-white/90">
+                <div className="space-y-4 text-sm md:text-xl font-normal text-white/90">
                   <p>
                     Want to play around with ideas? Jump into our 3D Configurator and start designing your campervan.
                   </p>
@@ -479,13 +495,12 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
-       <Link to="/van">
             <button
-              className="section2-button bg-[#2761FD] text-white font-serif font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
-              style={{height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
+              className="section2-button bg-black text-white font-sans font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
+              style={{ width: '178px', height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
             >
               Try 3D Configurator
-            </button></Link>
+            </button>
           </div>
         </div>
       </div>

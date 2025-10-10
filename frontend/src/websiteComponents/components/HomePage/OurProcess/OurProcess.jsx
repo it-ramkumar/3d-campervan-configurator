@@ -8,15 +8,123 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+// Data for the process steps
+const processSteps = [
+    {
+    time: "Immediate",
+    title: "Start Your Journey: Vehicle Sourcing",
+    imageSrc: "/images/process1.jpg",
+    altText: "Vans parked in a row",
+    details: [
+      {
+        subtitle: "Bring Your Van",
+        description:
+          "Already own a Sprinter? We’ll inspect it and plan your build.",
+      },
+      {
+        subtitle: "We’ll Source It For You",
+        description:
+          "Tap into our exclusive discounts at Mercedes dealerships in LA/San Diego. We handle negotiations, paperwork, and delivery to our facility.",
+      },
+    ],
+  },
+  {
+    time: "1 Month",
+    title: "Collaborative Design Phase",
+    imageSrc: "/images/process3.jpg",
+    altText: "Designers collaborating on a 3D model",
+    details: [
+      {
+        subtitle: "Zoom Consultations",
+        description:
+          "Meet your Project Manager to discuss needs (adventure trips, family size, storage priorities).",
+      },
+      {
+        subtitle: "3D Renderings",
+        description:
+          "Our designers create photorealistic visuals of your van’s layout, color schemes, and materials.",
+      },
+      {
+        subtitle: "Refine & Approve",
+        description: "Tweaks are unlimited until you’re 100% satisfied.",
+      },
+    ],
+  },
+  {
+    time: "2 Months",
+    title: "Engineering & Precision Planning",
+    imageSrc: "/images/process4.png",
+    altText: "3D rendering of a van interior",
+    details: [
+      {
+        subtitle: "What Happens",
+        description:
+          "Our engineers ensure every detail (electrical systems, storage dimensions, weight distribution) is optimized for safety and functionality.",
+      },
+      {
+        subtitle: "Client Involvement",
+        description:
+          "Approve final blueprints and material samples (e.g., countertop finishes, fabric swatches).",
+      },
+    ],
+  },
+  {
+    time: "3-4 Months",
+    title: "Build & Assembly",
+    imageSrc: "/images/process6.jpg",
+    altText: "A camper van being built in a workshop",
+    details: [
+      {
+        subtitle: "Interior Build (2 Months)",
+        description: "Cabinetry, electrical, plumbing, and insulation installed.",
+      },
+      {
+        subtitle: "Exterior Upgrades (1 Month)",
+        description:
+          "Roof racks, solar panels, custom paint/wraps, or off-grid packages.",
+      },
+      {
+        subtitle: "Quality Checks",
+        description: "Weekly photo/video updates sent to you.",
+      },
+    ],
+  },
+  {
+    time: "Pickup",
+    title: "Delivery & Beyond",
+    imageSrc: "/images/process5.jpg",
+    altText: "A converted camper van in a scenic location",
+    details: [
+      {
+        subtitle: "Walkthrough & Test Drive",
+        description: "Learn every feature with our team.",
+      },
+      {
+        subtitle: "Lifetime Support",
+        description: "1-Year Warranty (3 years extended) on craftsmanship.",
+      },
+      {
+        subtitle: "Upgrades & Servicing",
+        description:
+          "Visit our California workshops for maintenance or new features.",
+      },
+    ],
+  },
+];
+
 export default function OurProcess() {
   const imageSize = { width: 650, height: 400 };
 
-  // Create refs for the elements to be animated
   const headerRef = useRef(null);
   const stepsRef = useRef([]);
   const buttonRef = useRef(null);
+  const timelineRef = useRef(null);
+  const timelineFillRef = useRef(null);
 
-  // Add a ref to each element dynamically
+  useEffect(() => {
+    stepsRef.current = [];
+  }, []);
+
   const addStepRef = (el) => {
     if (el && !stepsRef.current.includes(el)) {
       stepsRef.current.push(el);
@@ -24,39 +132,70 @@ export default function OurProcess() {
   };
 
   useEffect(() => {
-    // Header animation on page load
+    // Header animation
     gsap.fromTo(
       headerRef.current,
-      { opacity: 0, y: -20 },
+      { opacity: 0, y: -50 },
       { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
     );
 
-    // Animate each step on scroll
+    // Timeline fill animation on scroll
+    gsap.fromTo(
+      timelineFillRef.current,
+      { height: 0 },
+      {
+        height: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: timelineRef.current,
+          start: "top center",
+          end: "bottom center",
+          scrub: true,
+        },
+      }
+    );
+
+    // Enhanced scroll animation for each step
     stepsRef.current.forEach((step, index) => {
       const isEven = index % 2 === 0;
-      const xDirection = isEven ? -50 : 50;
+      const textContent = step.querySelector(".text-content");
+      const imageContent = step.querySelector(".image-content");
+      const timelineCircle = step.querySelector(".timeline-circle");
 
-      gsap.fromTo(
-        step,
-        {
-          opacity: 0,
-          x: xDirection,
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: step,
+          start: "top 85%",
+          toggleActions: "play none none none",
         },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: step,
-            start: "top 80%", // Animation starts when the top of the step is 80% down from the top of the viewport
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      });
+
+      if (timelineCircle) {
+        tl.fromTo(
+          timelineCircle,
+          { scale: 0 },
+          { scale: 1, duration: 0.5, ease: "back.out(1.7)" }
+        );
+      }
+      if (textContent) {
+        tl.fromTo(
+          textContent,
+          { opacity: 0, x: isEven ? -50 : 50 },
+          { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
+          "-=0.3"
+        );
+      }
+      if (imageContent) {
+        tl.fromTo(
+          imageContent,
+          { opacity: 0, x: isEven ? 50 : -50 },
+          { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
+          "<"
+        );
+      }
     });
 
-    // Button animation on page load
+    // Button animation
     gsap.fromTo(
       buttonRef.current,
       { opacity: 0, scale: 0.8 },
@@ -65,199 +204,133 @@ export default function OurProcess() {
         scale: 1,
         duration: 0.8,
         ease: "back.out(1.7)",
-        delay: 0.5,
+        scrollTrigger: {
+          trigger: buttonRef.current,
+          start: "top 95%",
+          toggleActions: "play none none none",
+        },
       }
     );
   }, []);
 
-  // Function to handle image zoom on hover
-  const handleImageHover = (e) => {
-    gsap.to(e.currentTarget, {
-      scale: 1.05,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
-  // Function to handle image return on mouse leave
-  const handleImageLeave = (e) => {
-    gsap.to(e.currentTarget, {
-      scale: 1,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  };
-
   return (
-    <div className="bg-black/75 text-white py-20 px-4 md:px-8 font-serif">
+    <div className="bg-black/75 text-white py-20 px-4 md:px-8 font-serif overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16" ref={headerRef}>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold leading-tight tracking-tight font-serif">
-            Our Process
+        <div className="text-center mb-20" ref={headerRef}>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+            Big Bear Vans Custom Build Process
           </h1>
-          <p className="text-sm sm:text-base text-center font-serif">
-            Here's how our complete process of customization works from ideas to keys in your hand
+          <p className="text-base md:text-xl text-white/70 max-w-3xl mx-auto">
+            Our transparent, collaborative process ensures your vision comes to
+            life, from initial ideas to keys in your hand. Here's how it works.
           </p>
         </div>
 
-        {/* Process Steps */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          {/* Step 1: Immediate */}
+        {/* Process Steps Container with Timeline Line */}
+        <div
+          ref={timelineRef}
+          className="group relative space-y-24
+                     before:hidden before:lg:block before:absolute before:left-1/2 before:top-0
+                     before:h-full before:w-0.5 before:bg-[#4a4a4a] before:-translate-x-1/2"
+        >
           <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left mb-10 lg:mb-0"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              Bring a van or let us source a discounted base vehicle for you.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process1.jpg"
-                alt="Vans parked in a row"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
-          <div className="hidden lg:block"></div>
+            ref={timelineFillRef}
+            className="hidden lg:block absolute left-1/2 top-0 h-full w-0.5 bg-white
+                       -translate-x-1/2 transition-shadow duration-300 group-hover:shadow-glow"
+          ></div>
 
-          {/* Step 2: 1 Month */}
-          <div className="hidden lg:block"></div>
-          <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              Lock in your spot and timeline with a deposit.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process2.jpg"
-                alt="Customized van with open doors"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
+          {processSteps.map((step, index) => {
+            const isEven = index % 2 === 0;
 
-          {/* Step 3: 2 Months */}
-          <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              Collaborate with our designers to shape the layout.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process3.jpg"
-                alt="Designers collaborating on a 3D model"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
-          <div className="hidden lg:block"></div>
+            const textContent = (
+              <div
+                className="text-content relative lg:static border-l-4 border-[#4a4a4a] lg:border-none pl-8 lg:pl-0
+                           transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
+              >
+                <div
+                  className="absolute lg:hidden -left-[10px] top-2 w-5 h-5 bg-white rounded-full
+                             ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500"
+                ></div>
+                <div className="flex flex-col justify-center">
+                  <span className="text-lg font-bold text-gray-300">
+                    {step.time}
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mt-2 mb-6">
+                    {step.title}
+                  </h2>
+                  <div className="space-y-4">
+                    {step.details.map((item, idx) => (
+                      <div key={idx}>
+                        <h3 className="text-xl font-bold text-white">
+                          {item.subtitle}
+                        </h3>
+                        <p className="text-white/80 mt-1">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
 
-          {/* Step 4: 3 Months */}
-          <div className="hidden lg:block"></div>
-          <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              Review and refine 3D renderings until you love them.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process4.png"
-                alt="3D rendering of a van interior"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
+            const imageContent = (
+              <div
+                className="image-content w-full relative overflow-hidden rounded-lg shadow-2xl
+                           transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
+              >
+                <img
+                  src={step.imageSrc}
+                  alt={step.altText}
+                  width={imageSize.width}
+                  height={imageSize.height}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            );
 
-          {/* Step 5: 4 Months */}
-          <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18 mb-10 lg:mb-0"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              We’ll build your van, sharing progress updates along the way.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process6.jpg"
-                alt="A camper van being built in a workshop"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
-          <div className="hidden lg:block"></div>
+            const timelineCircle = (
+              <div className="timeline-circle hidden lg:flex items-center justify-center">
+                <div
+                  className="w-5 h-5 bg-white rounded-full z-10
+                             ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500
+                             transition-all duration-300 ease-in-out hover:ring-white hover:shadow-glow"
+                ></div>
+              </div>
+            );
 
-          {/* Step 6: Pickup */}
-          <div className="hidden lg:block"></div>
-          <div
-            className="flex flex-col items-center lg:items-start text-center lg:text-left -mt-10 lg:-mt-18"
-            ref={addStepRef}
-          >
-            <p className="text-sm sm:text-base font-normal mb-4 font-serif">
-              Pick up your converted camper van in Big Bear.
-            </p>
-            <div
-              className="w-full relative overflow-hidden rounded-md shadow-lg"
-              onMouseEnter={handleImageHover}
-              onMouseLeave={handleImageLeave}
-            >
-              <img
-                src="/images/process5.jpg"
-                alt="A converted camper van in a scenic location"
-                width={imageSize.width}
-                height={imageSize.height}
-                className="transition-transform duration-500 ease-in-out"
-                quality={85}
-              />
-            </div>
-          </div>
+            return (
+              <div
+                key={index}
+                ref={addStepRef}
+                className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] lg:gap-16 items-center"
+              >
+                {isEven ? (
+                  <>
+                    <div className="mb-8 lg:mb-0">{textContent}</div>
+                    {timelineCircle}
+                    <div>{imageContent}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mb-8 lg:mb-0 lg:col-start-3">{textContent}</div>
+                    <div className="lg:col-start-2 lg:row-start-1">{timelineCircle}</div>
+                    <div className="lg:col-start-1 lg:row-start-1">{imageContent}</div>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Call to action button */}
-        <div className="mt-16 text-center" ref={buttonRef}>
+        <div className="mt-20 text-center" ref={buttonRef}>
           <Link to="/contact" className="inline-block">
-            <button className="bg-white text-black py-3 px-8 cursor-pointer rounded-md font-serif font-bold text-sm">
+            <button
+              className="bg-white text-black py-3 px-6 cursor-pointer rounded-md font-bold text-base
+                         hover:bg-gray-200 hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
+            >
               Get a Quote
             </button>
           </Link>

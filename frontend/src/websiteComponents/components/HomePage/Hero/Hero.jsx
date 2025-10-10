@@ -9,6 +9,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 
+// Define the pure black color for buttons and primary accents
+const ACCENT_COLOR_CLASS = "bg-black";
+
 const slides = [
   {
     id: 1,
@@ -34,6 +37,16 @@ export default function Hero() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [swiper, setSwiper] = useState(null);
+
+  // useEffect is required to correctly initialize Swiper's navigation module with refs
+  useEffect(() => {
+    if (swiper) {
+      swiper.params.navigation.prevEl = prevRef.current;
+      swiper.params.navigation.nextEl = nextRef.current;
+      swiper.navigation.init();
+      swiper.navigation.update();
+    }
+  }, [swiper]);
 
   return (
     <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-screen overflow-hidden">
@@ -65,61 +78,58 @@ export default function Hero() {
             <img
               src={slide.image}
               alt={slide.title}
-              className="absolute inset-0 w-full h-full object-cover z-0 slide-bg-image"
+              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 1 ? 'brightness-[1.15]' : ''}`}
             />
-
-            {/* Dark Overlay */}
-
-
-            {/* Content */}
-
+            {/* Dark Overlay (Moved to apply over each slide) */}
+            <div className="absolute inset-0 md:bg-black/50 z-10"></div>
           </SwiperSlide>
         ))}
-        <div className="absolute inset-0 bg-black/30 z-10">
-  <div className="relative z-20 flex flex-col items-center justify-center h-full text-white px-4 sm:px-6 md:px-8">
-    <div className="max-w-4xl text-center space-y-3 sm:space-y-4 md:space-y-6 animated-content -mt-6 sm:-mt-8 md:mt-0">
 
-      {/* Title */}
-      <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight font-serif">
-        <span
-          className="inline-block title-char"
-          style={{ whiteSpace: "pre" }}
-        >
-          Custom Camper Vans
-        </span>
-      </h1>
+        {/* --- Content (Fixed over all slides) --- */}
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
+            {/* REMOVED POSITIVE MARGINS AND ADDED A SMALL NEGATIVE MARGIN FOR UPWARD SHIFT */}
+            <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
+                <span
+                  className="inline-block title-char"
+                  style={{ whiteSpace: "pre" }}
+                >
+                  Custom Camper Vans
+                </span>
+              </h1>
 
-      {/* Subtitle / Description */}
-      <p className="text-sm sm:text-base  font-normal font-serif text-white/90">
-        Buy, customize, or try the 3D configurator from Big Bear Vans today.
-      </p>
+              <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
+                Buy, customize, or try the 3D configurator from Big Bear Vans today.
+              </p>
 
-      {/* Buttons */}
-      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center items-center pt-3 sm:pt-4">
+              {/* --- Button Container with Mobile Adjustments --- */}
+              <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
+                {/* 1. ORDER CUSTOM BUILD Button (with hover effect) */}
+                <Link to="/inquiry">
+                  <button className={`${ACCENT_COLOR_CLASS} cursor-pointer text-white font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button
+                  transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg custom-mobile-button`}>
+                    Order Custom Build
+                  </button>
+                </Link>
 
-        <Link to="/inquiry">
-          <button className="bg-white cursor-pointer text-black font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-gray-100 transition-transform hover:scale-105 shadow-md">
-            Order Custom Build
-          </button>
-        </Link>
-        <Link to="/vans-for-sale">
-          <button className="bg-[#2761FD] cursor-pointer text-white font-bold py-2.5 px-4 sm:py-3 sm:px-5 rounded-md text-xs sm:text-sm md:text-[14px] hover:bg-blue-600 transition-transform hover:scale-105 shadow-md">
-            View Van Inventory
-          </button>
-        </Link>
-
-      </div>
-    </div>
-  </div>
-</div>
+                {/* 2. View Van Inventory Button */}
+                <Link to="/vans-for-sale">
+                  <button className="bg-white cursor-pointer text-black font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button
+                  transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg custom-mobile-button">
+                    View Van Inventory
+                  </button>
+                </Link>
+              </div>
+            </div>
+        </div>
 
       </Swiper>
 
-      {/* Custom Navigation */}
+      {/* Custom Navigation (Prev Button) */}
       <div className="absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2">
         <button
           ref={prevRef}
-          className="bg-white/20 backdrop-blur-sm text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
+          className="bg-white/20 backdrop-blur-sm text-white w-5 h-5 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
           onClick={() => swiper?.slidePrev()}
         >
           <svg
@@ -138,10 +148,12 @@ export default function Hero() {
           </svg>
         </button>
       </div>
+
+      {/* Custom Navigation (Next Button) */}
       <div className="absolute right-4 md:right-6 top-1/2 z-30 -translate-y-1/2">
         <button
           ref={nextRef}
-          className="bg-white/20 backdrop-blur-sm pointer-events-auto text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
+          className="bg-white/20 backdrop-blur-sm pointer-events-auto text-white w-5 h-5 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
           onClick={() => swiper?.slideNext()}
         >
           <svg
@@ -164,23 +176,43 @@ export default function Hero() {
       {/* Custom Pagination Container */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3 custom-pagination"></div>
 
+      {/* Combined styles for pagination, mobile button position, and image brightness */}
       <style>{`
-    .custom-pagination .custom-bullet {
-      width: 12px;
-      height: 12px;
-      background-color: grey;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      opacity: 0.8;
-    }
-    .custom-pagination .custom-bullet-active {
-      background-color: white;
-      opacity: 1;
-      transform: scale(1.2);
-    }
-  `}</style>
-    </div>
+        /* --- Image Brightness Fix --- */
+        .slide-bg-image {
+            transition: filter 0.5s ease;
+        }
 
+        /* --- Pagination Styling --- */
+        .custom-pagination .custom-bullet {
+          width: 12px;
+          height: 12px;
+          background-color: grey;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          opacity: 0.8;
+        }
+        .custom-pagination .custom-bullet-active {
+          background-color: white;
+          opacity: 1;
+          transform: scale(1.2);
+        }
+
+        /* --- Mobile Button Position & Size Fix --- */
+        @media (max-width: 768px) {
+            /* 1. LOWER BUTTONS (Increased margin to push them down more) */
+            .mobile-button-position {
+                margin-top: 50px;
+            }
+
+            /* 2. REDUCE BUTTON SIZE */
+            .custom-mobile-button {
+                padding: 8px 15px !important;
+                font-size: 12px !important;
+            }
+        }
+      `}</style>
+    </div>
   )
 }
