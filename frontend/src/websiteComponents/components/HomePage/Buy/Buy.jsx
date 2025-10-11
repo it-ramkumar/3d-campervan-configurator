@@ -129,7 +129,7 @@ export default function Buy() {
   viewport={{ once: true, amount: 0.2 }}
 >
   {/* ✅ Outer wrapper for responsive padding */}
-  <div className="px-3 sm:px-5 md:px-0">
+  <div className=" sm:px-0">
     <Swiper
       ref={swiperRef}
       modules={[Navigation]}
@@ -153,108 +153,138 @@ export default function Buy() {
           key={slide.id || i}
           className="group w-full md:!w-[900px] md:!h-[500px]"
         >
-          {slide.type === 'custom' ? (
-            // ✅ Custom Build (Video Slide)
-            <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg">
-              <video
-                src={slide.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover brightness-110"
-              />
-              <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-              <div className="relative z-10 flex flex-col justify-end items-start w-full h-full p-4 md:p-10 text-left text-white">
-                <div className="w-full max-w-[650px]">
-                  <h3
-                    className="text-xl md:text-3xl opacity-0 translate-y-5
-                    group-hover:opacity-100 group-hover:translate-y-0
-                    transition-all duration-700 ease-out font-semibold
-                    leading-tight md:leading-normal mb-2"
-                  >
-                    {slide.title}
-                  </h3>
-                  <p
-                    className="text-sm md:text-base font-normal mb-5
-                    opacity-0 translate-y-5 group-hover:opacity-100
-                    group-hover:translate-y-0 transition-all duration-700 ease-out"
-                  >
-                    {slide.desc}
-                  </p>
-                  <div className="flex gap-4">
-                    <Link to="/inquiry">
-                      <button
-                        className="bg-white cursor-pointer text-black font-serif font-bold
-                        text-xs px-3 py-1.5 md:text-sm md:px-6 md:py-2 rounded-md
-                        transform transition-all duration-300 ease-in-out
-                        hover:scale-105 hover:shadow-lg"
-                      >
-                        Start Your Custom Build
-                      </button>
-                    </Link>
-                    <Link to="/our-process">
-                      <button
-                        className="bg-[#2761FD] text-white cursor-pointer font-serif font-bold
-                        text-xs px-3 py-1.5 md:text-sm md:px-6 md:py-2 rounded-md
-                        transform transition-all duration-300 ease-in-out
-                        hover:scale-105 hover:shadow-lg"
-                      >
-                        Learn About Our Process
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            // ✅ Normal Van Slide (Image)
-            <div
-              className="relative w-full h-[450px] md:h-full text-white rounded-[30px]
-              overflow-hidden shadow-lg transition-all duration-500 ease-in-out
-              group-hover:shadow-2xl group-hover:scale-[1.03]"
+        {slide.type === 'custom' ? (
+  // ✅ Custom Build (Video Slide)
+  <div className="relative w-full h-[450px] md:h-full rounded-3xl  overflow-hidden shadow-lg">
+    <video
+      src={slide.video}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="absolute inset-0 w-full h-full object-cover brightness-110"
+    />
+    <div className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+
+    {/* ✅ Desktop View (unchanged) */}
+    <div className="hidden md:flex relative z-10 flex-col justify-end items-start w-full h-full p-10 text-left text-white">
+      <div className="w-full max-w-[650px]">
+        <h3
+          className="text-3xl font-semibold leading-normal mb-2 opacity-0 translate-y-5
+          group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 ease-out"
+        >
+          {slide.title}
+        </h3>
+        <p
+          className="text-base font-normal mb-5 opacity-0 translate-y-5
+          group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 ease-out"
+        >
+          {slide.desc}
+        </p>
+        <div className="flex gap-4">
+          <Link to="/inquiry">
+            <button
+              className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-6 py-2 rounded-md
+              transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             >
-              <img
-                src={slide.img}
-                alt={slide.title}
-                className="absolute inset-0 w-full h-full object-cover
-                transition-all duration-500 ease-in-out group-hover:scale-110"
-              />
-              <div
-                className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-black/50
-                to-transparent transition-all duration-500 ease-in-out
-                group-hover:bg-black/20 group-hover:from-black/70 group-hover:via-black/30"
-              ></div>
-              <div className="relative z-10 flex flex-col justify-between items-start w-full h-full p-4 md:p-10 text-left">
-                <h3 className="text-xl md:text-3xl font-semibold whitespace-pre-line leading-tight md:leading-normal">
-                  {slide.title}
-                </h3>
-                <div className="w-full max-w-[650px]">
-                  <p className="text-sm md:text-base font-normal mb-5">{slide.desc}</p>
-                  <div className="flex gap-4">
-                    <Link to="/contact">
-                      <button
-                        className="bg-white cursor-pointer text-black font-serif font-bold text-sm
-                        px-4 md:px-6 py-2 rounded-md transition-all duration-300
-                        hover:scale-105 hover:shadow-lg"
-                      >
-                        Buy Now
-                      </button>
-                    </Link>
-                    <Link to="/santa-monica">
-                      <button
-                        className="bg-[#2761FD] cursor-pointer text-white font-serif font-bold text-sm
-                        px-4 md:px-6 py-2 rounded-md transition-all duration-300
-                        hover:scale-105 hover:shadow-lg"
-                      >
-                        More Details
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+              Start Your Custom Build
+            </button>
+          </Link>
+          <Link to="/our-process">
+            <button
+              className="bg-[#2761FD] text-white cursor-pointer font-serif font-bold text-sm px-6 py-2 rounded-md
+              transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+            >
+              Learn About Our Process
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+
+    {/* ✅ Mobile View Overlay */}
+    <div className="md:hidden absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 rounded-b-[30px] text-white">
+      <h3 className="text-sm font-semibold leading-snug mb-1">{slide.title}</h3>
+      <p className="text-xs font-light mb-2 line-clamp-2">{slide.desc}</p>
+      <div className="flex gap-2">
+        <Link to="/inquiry">
+          <button className="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-md">
+            Start Build
+          </button>
+        </Link>
+        <Link to="/our-process">
+          <button className="bg-[#2761FD] text-white text-[10px] font-bold px-3 py-1 rounded-md">
+            Process
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+) : (
+  // ✅ Normal Van Slide (Image)
+  <div
+    className="relative w-full h-[450px] md:h-full text-white rounded-[30px]
+    overflow-hidden shadow-lg transition-all duration-500 ease-in-out
+    group-hover:shadow-2xl group-hover:scale-[1.03]"
+  >
+    <img
+      src={slide.img}
+      alt={slide.title}
+      className="absolute inset-0 w-full h-full object-cover
+      transition-all duration-500 ease-in-out group-hover:scale-110"
+    />
+    <div
+      className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-black/50
+      to-transparent transition-all duration-500 ease-in-out
+      group-hover:bg-black/20 group-hover:from-black/70 group-hover:via-black/30"
+    ></div>
+
+    {/* ✅ Desktop version (unchanged) */}
+    <div className="hidden md:flex relative z-10 flex-col justify-between items-start w-full h-full p-10 text-left">
+      <h3 className="text-3xl font-semibold whitespace-pre-line leading-normal">
+        {slide.title}
+      </h3>
+      <div className="w-full max-w-[650px]">
+        <p className="text-base font-normal mb-5">{slide.desc}</p>
+        <div className="flex gap-4">
+          <Link to="/contact">
+            <button
+              className="bg-white text-black font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              Buy Now
+            </button>
+          </Link>
+          <Link to="/santa-monica">
+            <button
+              className="bg-[#2761FD] text-white font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              More Details
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+
+    {/* ✅ Mobile version compact overlay */}
+    <div className="md:hidden absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 rounded-b-[30px] text-white">
+      <h3 className="text-sm font-semibold leading-snug mb-1">{slide.title}</h3>
+      <p className="text-xs font-light mb-2 line-clamp-2">{slide.desc}</p>
+      <div className="flex gap-2">
+        <Link to="/contact">
+          <button className="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-md">
+            Buy
+          </button>
+        </Link>
+        <Link to="/santa-monica">
+          <button className="bg-[#2761FD] text-white text-[10px] font-bold px-3 py-1 rounded-md">
+            Details
+          </button>
+        </Link>
+      </div>
+    </div>
+  </div>
+)}
+
         </SwiperSlide>
       ))}
     </Swiper>
