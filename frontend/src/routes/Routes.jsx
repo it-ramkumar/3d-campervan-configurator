@@ -26,6 +26,7 @@ import Login from "../websiteComponents/components/Auth/Login";
 import OurProcess from "../websiteComponents/components/OurProcess/Processhero/OurProcess"
 import AboutUs from "../websiteComponents/components/AboutUs/AboutUshero/Aboutus"
 import ShowRoom from "../websiteComponents/components/Showroom/Showroomhero/showroom"
+import NotFound from "../websiteComponents/components/NotFound/NotFound";
 
 const AppRoutes = () => {
 
@@ -39,8 +40,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/showroom" element={<ShowRoom/>}/>
-
-
+        <Route path="/*" element={<NotFound/>}/>
         <Route path="/our-process" element={<OurProcess />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
