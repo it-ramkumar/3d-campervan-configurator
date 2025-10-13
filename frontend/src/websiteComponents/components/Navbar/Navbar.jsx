@@ -81,6 +81,7 @@ export default function Navbar() {
           title: "Company",
           items: [
             { label: "Our Process", link: "/our-process" },
+            { label: "Showroom", link: "/showroom" },
             { label: "About us", link: "/about-us" },
           ],
         },

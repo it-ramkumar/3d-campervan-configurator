@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react"; 
+import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -26,7 +26,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
     const checkOverflow = () => {
       if (contentRef.current) {
         // Only run check on mobile/small screens (Tailwind's 'md' breakpoint is 768px by default)
-        if (window.innerWidth < 768) { 
+        if (window.innerWidth < 768) {
           // Check if the scroll height is greater than the client height (i.e., content overflows)
           const collapsedHeight = parseInt(getComputedStyle(document.documentElement).fontSize) * 15; // 15rem height check
           setIsOverflowing(contentRef.current.scrollHeight > collapsedHeight);
@@ -44,7 +44,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
 
     // Cleanup listener
     return () => window.removeEventListener('resize', checkOverflow);
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -97,17 +97,17 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
 
   // Determine container alignment and positioning classes
   const cardAlignment = isReversed ? 'ml-auto' : 'mr-auto';
-  
+
   // Custom height variables
-  const imageHorizontalPosition = 'calc(50% - 39rem)'; 
+  const imageHorizontalPosition = 'calc(50% - 39rem)';
 
   // EXTREME MAXIMIZED PADDING
   const extremePadding = '12rem';
   const innerPadding = '3rem'; // p-12 is 3rem
 
-  const textContainerPadding = isReversed 
-    ? `p-8 md:pt-${innerPadding} md:pb-${innerPadding} md:pl-${innerPadding} md:pr-[${extremePadding}]` 
-    : `p-8 md:pt-${innerPadding} md:pb-${innerPadding} md:pr-${innerPadding} md:pl-[${extremePadding}]`; 
+  const textContainerPadding = isReversed
+    ? `p-8 md:pt-${innerPadding} md:pb-${innerPadding} md:pl-${innerPadding} md:pr-[${extremePadding}]`
+    : `p-8 md:pt-${innerPadding} md:pb-${innerPadding} md:pr-${innerPadding} md:pl-[${extremePadding}]`;
 
   // Text alignment for the content *within* the text container
   const contentAlignment = isReversed ? 'md:items-end' : 'md:items-start';
@@ -118,9 +118,9 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
 
   // Define the margin class based on whether it's the last card
   const bottomMarginClass = isLastCard ? 'mb-8 md:mb-12' : 'mb-24 md:mb-32';
-  
+
   // MODIFICATION: Reduced max-h to 'max-h-[15rem]' (from max-h-[25rem]) for mobile
-  const collapseClasses = !isExpanded 
+  const collapseClasses = !isExpanded
     ? 'max-h-[15rem] overflow-hidden relative' // Collapsed state (mobile only): max-h and overflow hidden
     : ''; // Expanded state: no limit, relative is for positioning the gradient/button
 
@@ -134,7 +134,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
 
       {/* The background card: width 11/12 and aligned left/right */}
       <div className={`relative w-full md:w-11/12 ${cardAlignment} ${overlayColor} rounded-xl md:rounded-none`}>
-        
+
         {/* IMAGE BLOCK (Mobile visibility: always first) */}
         <div className={`block md:hidden w-full p-4`}>
           <div className="w-full overflow-hidden" style={{ height: '20rem', borderRadius: '0.75rem' }}>
@@ -148,11 +148,11 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
         </div>
 
         {/* TEXT BLOCK: Applying the dynamic text width */}
-        <div 
-          ref={textRef} 
+        <div
+          ref={textRef}
           // 🔑 FIX: Removed 'h-full' to allow the container to expand past minHeight when content is tall
           className={`flex flex-col items-center z-20 ${textContainerPadding} ${contentAlignment}`}
-          style={{ minHeight: '20rem' }} 
+          style={{ minHeight: '20rem' }}
         >
           {/* Text Content Wrapper for Collapse/Expand (Mobile Only) */}
           <div className={`text-white w-full ${textWidthClass} text-center md:text-left`}>
@@ -162,11 +162,11 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
               <h2 className={headingClasses} style={{ lineHeight: '100%', letterSpacing: '0%' }}>
                 {title}
               </h2>
-              
-              <p className="text-[1.25rem] font-normal text-white/90 mb-6"> 
+
+              <p className="text-[1.25rem] font-normal text-white/90 mb-6">
                 {description}
-              </p> 
-              
+              </p>
+
               {/* FEATURE LIST */}
               <ul className="list-disc list-inside space-y-2 text-[1.25rem] font-normal text-white/90 mb-6">
                 {features.map((feature, index) => (
@@ -181,7 +181,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
                 </p>
               )}
             </div>
-            
+
             {/* Gradient and See More/Less button for Mobile */}
             <div className={`md:hidden absolute inset-x-0 bottom-0 pointer-events-none ${gradientOverlay}`} style={{ height: '8rem' }}>
                 <div className="w-full h-full bg-gradient-to-t from-black/75 to-transparent"></div>
@@ -190,8 +190,8 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
             {/* See More/Less Button */}
             {isOverflowing && (
                 <div className="md:hidden w-full flex justify-center mt-4 -mb-4">
-                    <button 
-                        onClick={toggleExpand} 
+                    <button
+                        onClick={toggleExpand}
                         className="pointer-events-auto bg-white text-black font-bold py-2 px-6 rounded-full shadow-lg transform transition duration-300 hover:scale-105 hover:bg-gray-200 z-30"
                     >
                         {isExpanded ? "See Less" : "See More"}
@@ -201,7 +201,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
           </div>
         </div>
       </div>
-      
+
       {/* IMAGE BLOCK (Desktop Only, Absolute Positioning) - Uses desktopImageHeight prop */}
       <div
         className={`hidden md:block absolute top-1/2 transform -translate-y-1/2 z-10`}
@@ -209,15 +209,15 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
           width: '37.5rem', // 600px image width
           height: desktopImageHeight, // Dynamic height applied here
           // Extreme left/right positioning
-          [isReversed ? 'left' : 'right']: imageHorizontalPosition, 
+          [isReversed ? 'left' : 'right']: imageHorizontalPosition,
           [isReversed ? 'right' : 'left']: 'auto',
         }}
       >
-        <div 
-          ref={imageRef} 
+        <div
+          ref={imageRef}
           className="bg-white p-2 w-full h-full overflow-hidden rounded-3xl shadow-2xl transition duration-300 ease-out hover:shadow-3xl hover:-translate-y-1"
-          style={{ 
-            borderRadius: '1.875rem', 
+          style={{
+            borderRadius: '1.875rem',
             border: '2px solid #464444ff',
           }}
         >
@@ -225,7 +225,7 @@ const ShowroomCard = ({ title, description, features, conclusion, imageSrc, isRe
             src={imageSrc}
             alt={title}
             className="object-cover w-full h-full transform transition duration-500 ease-out hover:scale-105 hover:-translate-y-1" // Added hover effects
-            style={{ borderRadius: '1.75rem' }} 
+            style={{ borderRadius: '1.75rem' }}
           />
         </div>
       </div>
@@ -269,9 +269,9 @@ export default function Showroom() {
         "The high-quality materials that go into every van.",
       ],
       conclusion: null,
-      imageSrc: "/images/s1.png", 
+      imageSrc: "/images/s1.png",
       isReversed: false,
-      textWidthClass: "md:w-[65%]", 
+      textWidthClass: "md:w-[65%]",
       desktopImageHeight: '27rem', // Standard height
     },
     {
@@ -284,10 +284,10 @@ export default function Showroom() {
         "Compare different layouts to see what works well for you.",
       ],
       conclusion: "This hands-on experience gives a clear picture of what features matter most for your van’s interior and exterior.",
-      imageSrc: "/images/s2.png", 
+      imageSrc: "/images/s2.png",
       isReversed: true,
-      textWidthClass: "md:w-[55%]", 
-      desktopImageHeight: '32rem', 
+      textWidthClass: "md:w-[55%]",
+      desktopImageHeight: '32rem',
     },
     {
       title: "Have a Personal Design Session",
@@ -298,10 +298,10 @@ export default function Showroom() {
         "Which countertop and cabinet style feels right?",
       ],
       conclusion: null,
-      imageSrc: "/images/s3.png", 
+      imageSrc: "/images/s3.png",
       isReversed: false,
-      textWidthClass: "md:w-[55%]", 
-      desktopImageHeight: '32rem', 
+      textWidthClass: "md:w-[55%]",
+      desktopImageHeight: '32rem',
     },
   ];
 
@@ -313,19 +313,19 @@ export default function Showroom() {
         <div ref={mainTitleRef} className="text-center mb-[5rem] lg:mb-[7rem]">
 
           {/* Introductory text - Removed any 'dim' or reduced opacity effects */}
-          <p 
-            className="font-serif font-normal text-[1.5rem] text-black/90 max-w-[57.8125rem] mx-auto mb-16" 
-            style={{ 
-              lineHeight: '100%', 
-              letterSpacing: '0%', 
-              fontSize: '1.5rem' 
+          <p
+            className="font-serif font-normal text-[1.5rem] text-black/90 max-w-[57.8125rem] mx-auto mb-16"
+            style={{
+              // lineHeight: '100%',
+              // letterSpacing: '0%',
+              fontSize: '1.5rem'
             }}
           >
             Browsing websites is a good start, but the real thing is seeing the materials and testing the layouts firsthand to make clear decisions. That’s why we invite you to visit our workshop to see and select things personally.
           </p>
 
-          <h2 
-            className="text-[3rem] font-bold font-serif text-black leading-none mb-4" 
+          <h2
+            className="text-[3rem] font-bold font-serif text-black leading-none mb-4"
             style={{ lineHeight: '100%', letterSpacing: '0%' }}
           >
             Why visit us?
@@ -334,7 +334,7 @@ export default function Showroom() {
             When you step into our workshop, you become part of the build process. Here’s why a visit to our showroom is valuable for you:
           </p>
         </div>
-        
+
         {/* Showroom Cards */}
         {cardData.map((card, index) => (
           <ShowroomCard
@@ -346,8 +346,8 @@ export default function Showroom() {
             imageSrc={card.imageSrc}
             isReversed={card.isReversed}
             textWidthClass={card.textWidthClass}
-            desktopImageHeight={card.desktopImageHeight} 
-            sectionIndex={index} 
+            desktopImageHeight={card.desktopImageHeight}
+            sectionIndex={index}
             isLastCard={index === cardData.length - 1}
           />
         ))}
