@@ -288,7 +288,7 @@ export default function Customize() {
         {/* Text content with toggle */}
         <div
           className={`space-y-4 text-sm md:text-xl font-normal text-white/90 overflow-hidden transition-all duration-500 ${
-            !expanded ? "max-h-[114px]" : "max-h-[1000px]"
+            !expanded ? "max-h-[130px]" : "max-h-[1000px]"
           }`}
         >
           <p>

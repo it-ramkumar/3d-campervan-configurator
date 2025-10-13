@@ -25,7 +25,7 @@ const sections = [
       { src: "/images/w4.jpg", alt: "Campervan exterior under construction" },
     ],
     isReverse: true,
-    initialHeight: '150px'
+    initialHeight: '140px'
   },
   {
     title: "CNC Technology",
@@ -36,7 +36,7 @@ const sections = [
       { src: "/images/w6.jpg", alt: "Industrial CNC machine" },
     ],
     isReverse: false,
-    initialHeight: '150px'
+    initialHeight: '140px'
   },
   {
     title: "Family-friendly Layouts",
@@ -47,7 +47,7 @@ const sections = [
       { src: "/images/w8.jpg", alt: "Campervan with roof deck and awning" },
     ],
     isReverse: true,
-    initialHeight: '150px'
+    initialHeight: '140px'
   },
   {
     title: "Off-grid Ready",
@@ -58,7 +58,7 @@ const sections = [
       { src: "/images/w10.jpg", alt: "Interior of an off-grid ready van" },
     ],
     isReverse: false,
-    initialHeight: '150px'
+    initialHeight: '160px'
   },
 ];
 
