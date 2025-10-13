@@ -145,7 +145,7 @@ export default function ProcessPage() {
       circleColor: "bg-white",
       details: [
         { subtitle: "Bring Your Van", description: "Already own a Sprinter? We’ll inspect it and plan your build." },
-        { subtitle: "We’ll Source It For You", description: "Tap into our exclusive discounts at Mercedes dealerships in LA/San Diego. We handle negotiations, paperwork, and delivery to our facility." },
+        { subtitle: "We’ll Source It For You", description: "Access a brand-new van directly from a Mercedes dealer at a great price. We leverage our purchasing power in the LA/San Diego market to secure preferential pricing, handling all negotiations, paperwork, and delivery to our facility." },
       ],
     },
     {
