@@ -24,7 +24,7 @@ const processSteps = [
       {
         subtitle: "We’ll Source It For You",
         description:
-          "Tap into our exclusive discounts at Mercedes dealerships in LA/San Diego. We handle negotiations, paperwork, and delivery to our facility.",
+          "Access a brand-new van directly from a Mercedes dealer at a great price. We leverage our purchasing power in the LA/San Diego market to secure preferential pricing, handling all negotiations, paperwork, and delivery to our facility.",
       },
     ],
   },
