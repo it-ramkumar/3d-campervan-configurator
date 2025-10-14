@@ -5,7 +5,8 @@ import SantaMonica from "./SantaMonica";
 import Navbar from "../Navbar/Navbar";
 // CORRECTED PATH: The Footer component has the same issue
 import Footer from "../Footer/Footer";
-import ConsultationPage from "../Layouts/Consultationlayout/Consultationlayout";
+// import ConsultationPage from "../Layouts/Consultationlayout/Consultationlayout";
+import Consultation from "../Consultation/Consultation"
 
 
 export default function Layouts() {
@@ -17,7 +18,7 @@ export default function Layouts() {
         <SantaMonica />
       </div>
       <div className="tour-consultation">
-        <ConsultationPage />
+        <Consultation />
       </div>
 
       <Footer/>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom"
+import WhiteButton from "../../Common/Button/WhiteButton"
 
 const heroImage = "/heroSlider/herov.jpg";
 const newTitleText = "Camper Vans For Sale";
@@ -107,17 +108,10 @@ export default function HeroV() {
 
           {/* New Button Block */}
           {/* MODIFICATION 3: Added a larger top margin to create more space before the button */}
-          <div
-            className="anim-item mt-8"
-            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
-          >
-            <Link to="/inquiry">
-            <button
-              className="bg-[#2761FD] cursor-pointer text-white font-bold text-[14px] px-5 py-[10px] rounded-[5px] transition duration-300 hover:bg-[#1f50c0] shadow-lg"
-            >
-              Get a Quote
-            </button></Link>
-          </div>
+
+            <WhiteButton label={"Get a Quote"} link="/inquiry" className="!mt-2"/>
+
+
         </div>
       </div>
     </div>

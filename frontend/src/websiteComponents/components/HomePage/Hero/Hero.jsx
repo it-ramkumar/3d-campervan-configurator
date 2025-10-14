@@ -8,6 +8,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
+import BlackButton from "../../Common/Button/BlackButton";
+import WhiteButton from "../../Common/Button/WhiteButton";
 
 // Define the pure black color for buttons and primary accents
 const ACCENT_COLOR_CLASS = "bg-black";
@@ -102,23 +104,14 @@ export default function Hero() {
                 Buy, customize, or try the 3D configurator from Big Bear Vans today.
               </p>
 
-              {/* --- Button Container with Mobile Adjustments --- */}
+          
               <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
-                {/* 1. ORDER CUSTOM BUILD Button (with hover effect) */}
-                <Link to="/inquiry">
-                  <button className={`${ACCENT_COLOR_CLASS} cursor-pointer text-white font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button
-                  transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg custom-mobile-button`}>
-                    Order Custom Build
-                  </button>
-                </Link>
 
-                {/* 2. View Van Inventory Button */}
-                <Link to="/vans-for-sale">
-                  <button className="bg-white cursor-pointer text-black font-bold py-2 px-3 sm:py-2.5 sm:px-4 md:px-5 rounded-md text-xs sm:text-sm md:text-[14px] action-button
-                  transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg custom-mobile-button">
-                    View Van Inventory
-                  </button>
-                </Link>
+                <BlackButton label="Order Custom Build" link="/inquiry" />
+
+                <WhiteButton label="View Van Inventory" link="/vans-for-sale"/>
+
+
               </div>
             </div>
         </div>

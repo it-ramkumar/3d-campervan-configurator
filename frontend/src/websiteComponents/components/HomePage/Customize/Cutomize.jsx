@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "../../Loader/Loader"
 import { ChevronDown, ChevronUp } from 'lucide-react'; // Assuming you have lucide-react or similar icon library installed
 import { Link } from "react-router-dom";
+import BlackButton from "../../Common/Button/BlackButton";
 
 
 
@@ -320,33 +321,26 @@ export default function Customize() {
         </div>
 
         {/* See More / See Less button */}
-        <div className="flex justify-center md:justify-start pt-4">
-                    <button
-                      onClick={() => setExpanded(!expanded)}
-                      className={`
-                        relative z-10 cursor-pointer
-                        flex items-center justify-center
-                        px-4 py-2
-                        bg-black text-white rounded-lg
-                        font-semibold text-sm
-                        transition-all duration-300
-                        shadow-lg
-                        transform
-                        hover:scale-[1.02] hover:bg-gray-800
-                        active:scale-[0.98]
-                      `}
-                    >
-                      {expanded ? (
-                       <>
-                                                 Show Less <ChevronUp className="ml-2 h-4 w-4" />
-                                               </>
-                                             ) : (
-                                               <>
-                                                 See More <ChevronDown className="ml-2 h-4 w-4" />
-                                               </>
-                      )}
-                    </button>
-                  </div>
+
+<BlackButton
+  onClick={() => setExpanded(!expanded)}
+  label={
+    expanded ? (
+      <>
+        Show Less <ChevronUp className="inline w-4" />
+      </>
+    ) : (
+      <>
+        See More <ChevronDown className="inline w-4" />
+      </>
+    )
+  }
+  className="mt-4 !text-xs !px-2 !py-1"
+
+/>
+
+
+
       </div>
     </div>
           </div>
@@ -384,13 +378,9 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-left mt-6 px-8 md:px-12">
-         <Link to={"/inquiry"}>
-            <button
-              className="section1-button cursor-pointer bg-black text-white font-sans font-bold text-sm px-5 py-2.5 rounded-md hover:bg-opacity-80"
-              style={{  height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
-            >
-              Order Custom Build
-            </button></Link>
+                                <BlackButton label="Order Custom Build" link="/inquiry" />
+
+
           </div>
         </div>
 
@@ -497,13 +487,7 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
-          <Link to={"/van"}>
-            <button
-              className="section2-button cursor-pointer bg-black text-white font-sans font-bold text-sm px-5 py-2 rounded-md hover:bg-opacity-80"
-              style={{ height: '39px', fontSize: '14px', lineHeight: '100%', letterSpacing: '0%' }}
-            >
-              Try 3D Configurator
-            </button></Link>
+       <BlackButton label="Try 3D Configurator" link="/van" />
           </div>
         </div>
       </div>

@@ -1,4 +1,7 @@
 "use client";
+
+import BlackButton from "../Common/Button/BlackButton";
+
 export default function ContactForm({
   formData,
   handleChange,
@@ -36,14 +39,14 @@ export default function ContactForm({
         Selected Date: <b>{selectedDate.toDateString()}</b>
       </p>
 
-      <button
+      <BlackButton
         type="submit"
         disabled={loading}
-        className={`px-6 py-3 cursor-pointer rounded-lg text-white flex items-center justify-center gap-2
-          ${loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
-      >
-        {loading ? "Submitting..." : "Submit"}
-      </button>
+        label={loading ? "Submitting..." : "Submit"}
+      
+      />
+
+
     </form>
   );
 }

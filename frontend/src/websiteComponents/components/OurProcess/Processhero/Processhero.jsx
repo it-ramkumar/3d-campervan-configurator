@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
+import WhiteButton from "../../Common/Button/WhiteButton";
 
 // A more relevant placeholder image for van layouts.
 const heroImage = "/heroSlider/processhero.png";
@@ -72,11 +73,8 @@ export default function Hero() {
         </p>
 
         {/* Button */}
-      <Link to={"/contact"}>  <button className="anim-content mt-8 px-5 py-2.5 bg-[#2761FD] rounded-[5px] transition-colors hover:bg-blue-700">
-          <span className="font-sans font-bold text-sm text-white leading-none">
-            Contact Us
-          </span>
-        </button></Link>
+        <WhiteButton label={"Contact Us"} link={"contact"} className="!mt-4"/>
+
 
       </div>
     </div>

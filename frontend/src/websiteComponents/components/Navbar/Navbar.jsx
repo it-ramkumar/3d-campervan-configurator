@@ -71,64 +71,60 @@ export default function Navbar({ forceMobile }) {
   // ✅ MENU CONTENT
   const menuContent = {
 
-    CustomBuild: {
-      title: "Custom Build's",
-      sections: [
-        {
-          title: "Custom build",
-          items: [
-            { label: "3D Van Builder", link: "/van" },
-            { label: "Inquiry", link: "/inquiry" },
-            // { label: "option 3", link: "/" },
-          ],
-        },
-      ],
-    },
-    "vans-for-sale": { title: "Vans For Sale", link: "/vans-for-sale" },
-    layout: {
-      title: "Layouts Big Bear Vans",
-      sections: [
-        {
-          title: "Our Flagman",
-          items: [
-            { label: "our flagman in short vans Santa Monica", link: "/" },
-            { label: "Our flagman in long vans Montrea", link: "/" },
+  CustomBuild: {
+    title: "Custom Builds",
+    sections: [
+      {
+        title: "Start Your Custom Build",
+        items: [
+          { label: "3D Van Builder", link: "/van" },
+          { label: "Send an Inquiry", link: "/inquiry" },
+        ],
+      },
+    ],
+  },
 
+  "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
 
+  layout: {
+    title: "Layouts by Big Bear Vans",
+    sections: [
+      {
+        title: "Our Flagship Models",
+        items: [
+          { label: "Flagship Short Van — Santa Monica", link: "/" },
+          { label: "Flagship Long Van — Montreal", link: "/" },
+        ],
+      },
+      {
+        title: "Explore Layout Options",
+        items: [
+          { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
+          { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
+          { label: "Portfolio of Custom Builds", link: "/" },
+        ],
+      },
+    ],
+  },
 
-          ],
-        },
-        {
-          title: "Layouts",
-          items: [
+  "3d-van-builder": { title: "Build Your Dream Van", link: "/van" },
+  "contact-us": { title: "Contact Us", link: "/contact" },
 
-            { label: "Layouts for solo & couple travelers", link: "/couples-layout" },
-            { label: "Layouts for families 3-9 people", link: "/family-layout" },
-            { label: "Our portfolio of custom builds", link: "/" },
+  discover: {
+    title: "Discover Big Bear Vans",
+    sections: [
+      {
+        title: "Company Info",
+        items: [
+          { label: "Our Process", link: "/our-process" },
+          { label: "Showroom", link: "/showroom" },
+          { label: "About Us", link: "/about-us" },
+        ],
+      },
+    ],
+  },
+};
 
-
-          ],
-        },
-      ],
-    },
-
-    // layouts: { title: "Explore Layouts", link: "/layouts" },
-    "3d-van-builder": { title: "Build Your Dream Van", link: "/van" },
-    "contact-us": { title: "Contact Us", link: "/contact" },
-    discover: {
-      title: "Discover Big Bear Vans",
-      sections: [
-        {
-          title: "Company",
-          items: [
-            { label: "Our Process", link: "/our-process" },
-            { label: "Showroom", link: "/showroom" },
-            { label: "About us", link: "/about-us" },
-          ],
-        },
-      ],
-    },
-  };
 
   return (
     <>

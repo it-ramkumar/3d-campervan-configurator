@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-
+import WhiteButton from "../../Common/Button/WhiteButton";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -326,14 +326,9 @@ export default function OurProcess() {
 
         {/* Call to action button */}
         <div className="mt-20 text-center" ref={buttonRef}>
-          <Link to="/contact" className="inline-block">
-            <button
-              className="bg-white text-black py-3 px-6 cursor-pointer rounded-md font-bold text-base
-                         hover:bg-gray-200 hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
-            >
-              Get a Quote
-            </button>
-          </Link>
+                  <WhiteButton label={"Get a Quote"} link="/contact"/>
+
+
         </div>
       </div>
     </div>

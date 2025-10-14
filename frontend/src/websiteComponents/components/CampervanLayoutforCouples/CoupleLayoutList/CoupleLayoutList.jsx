@@ -2,7 +2,7 @@
 
 // Import the icons for the social media section
 import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from 'react-icons/fa';
-
+import BlackButton from '../../Common/Button/BlackButton';
 // MODIFIED: The project list has been completely replaced with your new data.
 // NOTE: You must update the `largeImage` and `smallImage` paths for each project.
 const projects = [
@@ -100,9 +100,8 @@ export default function CamperProjectsPage() {
                   <p className="text-xs md:text-base lg:text-[20px] leading-normal mb-6 lg:mb-10">
                     {project.description}
                   </p>
-                  <button className="bg-[#2761FD] text-white font-sans font-bold text-[10px] md:text-[14px] rounded-md lg:rounded-[5px] w-24 h-8 md:w-[126px] md:h-[39px] flex items-center justify-center self-center lg:self-start transition-all duration-300 ease-in-out shadow-lg lg:group-hover:scale-110 lg:group-hover:bg-blue-700 lg:group-hover:shadow-xl lg:group-hover:-translate-y-1">
-                    View Details
-                  </button>
+                                            <BlackButton label={"View Details"} link={"/"}/>
+              
                 </div>
 
                 <div className="relative w-1/2 h-[200px] sm:h-[280px] md:h-[450px] lg:h-[550px] flex-shrink-0">

@@ -2,7 +2,7 @@
 
 // MODIFIED: Added FaFacebook to the import
 import { FaTwitter, FaYoutube, FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
-
+import BlackButton from '../../Common/Button/BlackButton';
 // Data for all 24 camper van projects remains the same...
 const projects = [
     { id: 1, name: "Montreal", largeImage: "/FamilyLayout/FL1.jpg", smallImage: "/FamilyLayout/FL2.png", description: "Our Montreal 170 AWD Sprinter is a thoroughly insulated and winter-ready campervan, designed for 4-5 people. The van features a fully off-grid electrical system, a water-air diesel heater, a spacious indoor bathroom with a hidden pantry, and storage cabinets, making it an ideal home on wheels for you." },
@@ -52,9 +52,7 @@ export default function CamperProjectsPage() {
                   <p className="text-xs md:text-base lg:text-[20px] leading-normal mb-6 lg:mb-10">
                     {project.description}
                   </p>
-                  <button className="bg-[#2761FD] text-white font-sans font-bold text-[10px] md:text-[14px] rounded-md lg:rounded-[5px] w-24 h-8 md:w-[126px] md:h-[39px] flex items-center justify-center self-center lg:self-start transition-all duration-300 ease-in-out shadow-lg lg:group-hover:scale-110 lg:group-hover:bg-blue-700 lg:group-hover:shadow-xl lg:group-hover:-translate-y-1">
-                    View Details
-                  </button>
+                          <BlackButton label={"View Details"} link={"/"}/>
                 </div>
 
                 <div className="relative w-1/2 h-[200px] sm:h-[280px] md:h-[450px] lg:h-[550px] flex-shrink-0">
@@ -75,7 +73,7 @@ export default function CamperProjectsPage() {
             );
           })}
         </div>
-        
+
         {/* MODIFIED: Reduced top padding and spacing between logo and icons */}
         <div className="text-center pt-16 pb-0 flex flex-col items-center space-y-4">
           <img

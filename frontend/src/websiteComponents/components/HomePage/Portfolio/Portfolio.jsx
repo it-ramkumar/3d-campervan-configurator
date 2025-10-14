@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "react-router-dom";
+import BlackButton from "../../Common/Button/BlackButton";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -230,15 +231,8 @@ export default function Portfolio() {
 
         {/* --- CHANGE 2: UPDATED THE BUTTON --- */}
         <div className="flex justify-center mt-16">
-          <Link to="/layouts">
-            <button
-              ref={buttonRef}
-              className="bg-black cursor-pointer text-white font-serif font-bold text-sm h-12 w-48 rounded-md
-                         transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-            >
-              View Our Portfolio
-            </button>
-          </Link>
+          <BlackButton label="View Our Portfolio" link="/layouts" />
+
         </div>
       </div>
     </section>

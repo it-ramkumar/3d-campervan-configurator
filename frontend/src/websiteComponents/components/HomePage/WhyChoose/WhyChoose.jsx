@@ -1,69 +1,122 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, ChevronUp } from 'lucide-react'; // Assuming you have lucide-react or similar icon library installed
+import {
+  ChevronDown,
+  ChevronUp,
+  Palette,
+  BedDouble,
+  CookingPot,
+  ShowerHead,
+  Armchair,
+  Caravan,
+  ShieldCheck,
+  Wrench,
+  Computer,
+  Router,
+  Scan,
+  Users,
+  TentTree,
+  Table,
+  Utensils,
+  BatteryCharging,
+  Thermometer,
+  Droplets,
+  Wind,
+  AirVent,
+  Sun,
+} from 'lucide-react';
+import BlackButton from "../../Common/Button/BlackButton";
 
-// Data remains the same
+// --- Data with Enhanced Text and Icons ---
 const sections = [
   {
     title: "True Custom Builds",
-    description:
-      "Big Bear Vans is a fully custom engineering company where we create any configuration and style you want. Instead of pre-built layouts and generic templates, we customize your entire campervan from scratch. Here’s what you can choose:<ul><li>Ceiling, walls, and flooring kits in different colours and textures.</li><li>Space-saving elevator bed front or rear.</li><li>Kitchen with different customized cabinets and countertops.</li><li>Lightweight Aluminum bathrooms in different sizes.</li><li>Swivel seats or extendable benches.</li><li>Exterior upgrades like suspension, wheels, tires, awning, storage boxes, etc.</li></ul>We’re small, but high-tech. That’s why we can customize layouts and features other shops won’t even touch.",
+    intro: "Big Bear Vans is a fully custom engineering company where we create any configuration and style you want. Instead of pre-built layouts and generic templates, we customize your entire campervan from scratch. Here’s what you can choose:",
+    features: [
+      { text: "<strong>Ceiling, walls, and flooring kits</strong> in different colours and textures.", icon: <Palette size={20} /> },
+      { text: "Space-saving <strong>elevator bed</strong> front or rear.", icon: <BedDouble size={20} /> },
+      { text: "Kitchen with different <strong>customized cabinets and countertops.</strong>", icon: <CookingPot size={20} /> },
+      { text: "Lightweight <strong>Aluminum bathrooms</strong> in different sizes.", icon: <ShowerHead size={20} /> },
+      { text: "<strong>Swivel seats</strong> or <strong>extendable benches.</strong>", icon: <Armchair size={20} /> },
+      { text: "<strong>Exterior upgrades</strong> like suspension, wheels, tires, awning, storage boxes, etc.", icon: <Caravan size={20} /> },
+    ],
+    outro: "We’re small, but high-tech. That’s why we can customize layouts and features other shops won’t even touch.",
     images: [
       { src: "/images/w1.jpg", alt: "Campervan interior under construction" },
       { src: "/images/w2.jpg", alt: "Campervan kitchen and swivel seats" },
     ],
     isReverse: false,
-    initialHeight: '150px' // Initial height for the description before "See More"
+    initialHeight: '200px'
   },
   {
     title: "Post Build Support",
-    description:
-      "From first call to last key handover, we guide and support you at every step. Unlike other RV dealers, Big Bear Vans provides great after-sales support to its customers. We offer:<ul><li>1-year or 3-year extended warranty on our craftsmanship.</li><li>Servicing and installing upgrades in our workshop.</li></ul>",
+    intro: "From first call to last key handover, we guide and support you at every step. Unlike other RV dealers, Big Bear Vans provides great after-sales support to its customers. We offer:",
+    features: [
+      { text: "<strong>1-year or 3-year extended warranty</strong> on our craftsmanship.", icon: <ShieldCheck size={20} /> },
+      { text: "<strong>Servicing and installing upgrades</strong> in our workshop.", icon: <Wrench size={20} /> },
+    ],
     images: [
       { src: "/images/w3.jpg", alt: "Campervan wheel and tire installation" },
       { src: "/images/w4.jpg", alt: "Campervan exterior under construction" },
     ],
     isReverse: true,
-    initialHeight: '140px'
+    initialHeight: '170px'
   },
   {
     title: "CNC Technology",
-    description:
-      "Our Big Bear workshop is equipped with the latest industrial CNC technology. At our workshop:<ul><li>A team of 5+ designers uses CAD/CAM software to model every part of your van.</li><li>Components are cut by our two CNC router machines (metal & plywood).</li><li>We have several 3D scanners for precise measurements.</li></ul>The result? A fully custom campervan, exactly the way you want.",
+    intro: "Our Big Bear workshop is equipped with the latest industrial CNC technology. At our workshop:",
+    features: [
+      { text: "A team of 5+ designers uses <strong>CAD/CAM software</strong> to model every part of your van.", icon: <Computer size={20} /> },
+      { text: "Components are cut by our two <strong>CNC router machines</strong> (metal & plywood).", icon: <Router size={20} /> },
+      { text: "We have several <strong>3D scanners</strong> for precise measurements.", icon: <Scan size={20} /> },
+    ],
+    outro: "The result? A fully custom campervan, exactly the way you want.",
     images: [
       { src: "/images/w5.png", alt: "CNC machine cutting wood" },
       { src: "/images/w6.jpg", alt: "Industrial CNC machine" },
     ],
     isReverse: false,
-    initialHeight: '140px'
+    initialHeight: '150px'
   },
   {
     title: "Family-friendly Layouts",
-    description:
-      "While others are built for couples, ours are for the whole crew. We’re proud to have built several family-friendly campervans. In our family layouts, you can:<ul><li>Sit, sleep, and travel safely with 4 or even 9 people.</li><li>Enjoy outdoors in the rear foldable patio and roof deck.</li><li>Have a dinette area for meals, games, and homework.</li><li>Have a fully functional kitchen and a lightweight bathroom.</li></ul>",
+    intro: "While others are built for couples, ours are for the whole crew. We’re proud to have built several family-friendly campervans. In our family layouts, you can:",
+    features: [
+      { text: "Sit, sleep, and travel safely with <strong>4 or even 9 people.</strong>", icon: <Users size={20} /> },
+      { text: "Enjoy outdoors in the rear <strong>foldable patio and roof deck.</strong>", icon: <TentTree size={20} /> },
+      { text: "Have a <strong>dinette area</strong> for meals, games, and homework.", icon: <Table size={20} /> },
+      { text: "Have a fully functional <strong>kitchen and a lightweight bathroom.</strong>", icon: <Utensils size={20} /> },
+    ],
     images: [
       { src: "/images/w7.webp", alt: "Family-friendly campervan interior" },
       { src: "/images/w8.jpg", alt: "Campervan with roof deck and awning" },
     ],
     isReverse: true,
-    initialHeight: '140px'
+    initialHeight: '170px'
   },
   {
     title: "Off-grid Ready",
-    description:
-      "Every Big Bear van comes with a professional-grade electrical and water system, so you can go anywhere to stay without a second thought. We install:<ul><li>Rapid Alternator Charging: A DC-DC charger which delivers up to <strong>50A </strong> of charging while you drive and up to <strong>250A</strong> if 2nd alternator is installed.</strong></li><li>Self-heating lithium batteries with a capacity of <strong>15,600 watt-hours</strong> that operate down to sub-zero temperatures.</li><li>Integrated grey and fresh water tanks.</li><li>A diesel combined air and water heater that does not drain the battery and has excellent insulation.</li><li><strong>12V</strong> slim design optimized for vans A/C unit that works up to <strong>20 hours</strong> on the batteries.</li><li>Solar panels on the roof and hood.</li></ul>Off-grid freedom isn’t an upgrade in our converted vans, it’s a standard.",
+    intro: "Every Big Bear van comes with a professional-grade electrical and water system, so you can go anywhere to stay without a second thought. We install:",
+    features: [
+      { text: "<strong>Rapid Alternator Charging:</strong> A DC-DC charger delivering up to <strong>50A</strong>, and up to <strong>250A</strong> with a 2nd alternator.", icon: <BatteryCharging size={20} /> },
+      { text: "Self-heating <strong>lithium batteries (15,600 watt-hours)</strong> for sub-zero temperatures.", icon: <Thermometer size={20} /> },
+      { text: "Integrated <strong>grey and fresh water tanks.</strong>", icon: <Droplets size={20} /> },
+      { text: "A <strong>diesel combined air and water heater</strong> that saves battery and has excellent insulation.", icon: <Wind size={20} /> },
+      { text: "A <strong>12V slim A/C unit</strong> that runs for up to <strong>20 hours</strong> on the batteries.", icon: <AirVent size={20} /> },
+      { text: "<strong>Solar panels</strong> on the roof and hood.", icon: <Sun size={20} /> },
+    ],
+    outro: "Off-grid freedom isn’t an upgrade in our converted vans, it’s a standard.",
     images: [
       { src: "/images/w9.jpg", alt: "Solar panels on a campervan roof" },
       { src: "/images/w10.jpg", alt: "Interior of an off-grid ready van" },
     ],
     isReverse: false,
-    initialHeight: '160px'
+    initialHeight: '200px'
   },
 ];
 
 const WhyChoose = () => {
-  // State to track which sections are expanded. Initialize all to false (collapsed).
   const [expandedSections, setExpandedSections] = useState({});
 
   const toggleExpand = (index) => {
@@ -75,12 +128,11 @@ const WhyChoose = () => {
 
   return (
     <div className="bg-white text-blackish font-serif overflow-hidden">
-      {/* Header with reduced mobile top padding */}
-      <header className="py-6 md:py-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold font-serif leading-tight">
+      <header className="py-10 md:py-16 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold font-serif tracking-tight leading-tight">
           Why Choose Big Bear Vans?
         </h1>
-        <p className="text-lg md:text-xl font-serif mt-4 max-w-3xl mx-auto px-4">
+        <p className="text-lg md:text-xl text-slate-600 font-serif mt-4 max-w-4xl mx-auto px-4">
           At Big Bear Vans, we have a full-fledged team of experienced campervan
           builders and engineers in Big Bear, California. Let us show you what
           nobody else does like we do.
@@ -89,8 +141,8 @@ const WhyChoose = () => {
 
       <main className="max-w-7xl mx-auto px-4 md:px-8">
         {sections.map((section, index) => {
-          const isExpanded = expandedSections[index];
-          const contentRef = React.createRef();
+          const isExpanded = !!expandedSections[index];
+          const contentRef = useRef(null);
 
           return (
             <section
@@ -101,62 +153,64 @@ const WhyChoose = () => {
             >
               {/* Text Section */}
               <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
-                <h2 className="text-3xl md:text-4xl font-bold font-serif">
+                <h2 className="text-3xl md:text-4xl font-bold font-serif tracking-tight">
                   {section.title}
                 </h2>
 
                 {/* Content Wrapper for See More/Less */}
                 <div className="relative">
                   <div
-                    ref={contentRef}
-                    className="text-base md:text-lg leading-relaxed space-y-3 md:space-y-4 transition-all duration-700 ease-in-out overflow-hidden"
+                    className="transition-all duration-700 ease-in-out overflow-hidden"
                     style={{
-                      maxHeight: isExpanded ? `${contentRef.current?.scrollHeight || '1100px'}` : section.initialHeight,
+                      maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : section.initialHeight,
                     }}
                   >
-                    <div
-                      className="description-content"
-                      dangerouslySetInnerHTML={{
-                        __html: section.description.replace(
-                          /<ul>/g,
-                          '<ul class="list-disc list-inside space-y-2 mt-2 text-left">'
-                        ),
-                      }}
-                    />
+                    <div ref={contentRef} className="space-y-5">
+                      <p className="text-base md:text-lg text-slate-600 leading-relaxed text-left">
+                        {section.intro}
+                      </p>
+
+                      <div className="space-y-3 text-left">
+                        {section.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-start gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200/80 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
+                            <div className="flex-shrink-0 mt-0.5 text-slate-700 bg-slate-200/70 rounded-full p-2">
+                              {feature.icon}
+                            </div>
+                            <p className="text-base text-slate-700 flex-1" dangerouslySetInnerHTML={{ __html: feature.text }} />
+                          </div>
+                        ))}
+                      </div>
+
+                      {section.outro && (
+                        <p className="text-base md:text-lg text-slate-600 leading-relaxed text-left pt-2">
+                          {section.outro}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   {/* Aesthetic Fade Overlay */}
-                  {!isExpanded && (
-                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-                  )}
+                  {/* {!isExpanded && (
+                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-event"></div>
+                  )} */}
 
                   {/* See More/Less Button */}
-                  <div className="flex justify-center md:justify-start pt-4">
-                    <button
+                  <div className="">
+                    <BlackButton
                       onClick={() => toggleExpand(index)}
-                      className={`
-                        relative z-10 cursor-pointer
-                        flex items-center justify-center
-                        px-4 py-2
-                        bg-black text-white rounded-lg
-                        font-semibold text-sm
-                        transition-all duration-300
-                        shadow-lg
-                        transform
-                        hover:scale-[1.02] hover:bg-gray-800
-                        active:scale-[0.98]
-                      `}
-                    >
-                      {isExpanded ? (
+
+
+                      label={isExpanded ? (
                         <>
-                          Show Less <ChevronUp className="ml-2 h-4 w-4" />
+                          Show Less <ChevronUp className="inline w-4" />
                         </>
                       ) : (
                         <>
-                          See More <ChevronDown className="ml-2 h-4 w-4" />
+                          See More <ChevronDown className="inline w-4" />
                         </>
                       )}
-                    </button>
+                      className="mt-4 !text-xs !px-2 !py-1"
+                    />
                   </div>
                 </div>
               </div>
@@ -169,14 +223,13 @@ const WhyChoose = () => {
                   className={`w-11/12 max-w-[400px] h-[300px] md:h-[400px] relative rounded-3xl shadow-lg transform rotate-[-4.68deg] overflow-hidden
                     transition-transform duration-300 hover:scale-105 hover:z-10
                     md:w-[400px]
-                    ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-[3px] border-[#333]
+                    ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-4 border-blackish
                   `}
                 >
                   <img
                     src={section.images[0].src}
                     alt={section.images[0].alt}
-                    // Apply horizontal flip (scale-x-[-1]) ONLY to the image at index 3 (Family-friendly Layouts)
-                    className={`rounded-3xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
+                    className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
                   />
                 </div>
                 <div
@@ -188,7 +241,7 @@ const WhyChoose = () => {
                   <img
                     src={section.images[1].src}
                     alt={section.images[1].alt}
-                    className="rounded-2xl object-cover w-full h-full"
+                    className="rounded-xl object-cover w-full h-full"
                   />
                 </div>
               </div>
@@ -196,15 +249,9 @@ const WhyChoose = () => {
           );
         })}
 
-        <div className="py-10 flex justify-center">
-          <Link
-            to="/inquiry"
-            className=" h-[39px] px-5 py-[10px] rounded-[5px] bg-[#111110] text-white
-              font-['Noto Sans'] text-sm font-bold shadow-md hover:bg-gray-900 transition-colors
-              hover:scale-105 hover:shadow-lg transition-transform cursor-pointer"
-          >
-            Order Custom Build
-          </Link>
+        <div className="py-12 flex justify-center">
+          <BlackButton label={"Order Custom Build"} link={"/inquiry"}/>
+
         </div>
       </main>
     </div>

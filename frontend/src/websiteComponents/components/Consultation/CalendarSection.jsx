@@ -1,9 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-export default function CalendarSection({ date, setDate })  {
+export default function CalendarSection({ date, setDate, time, setTime }) {
+  // 🕒 Common time slots
+  const timeSlots = [
+    "09:00 AM", "10:00 AM", "11:00 AM",
+    "12:00 PM", "01:00 PM", "02:00 PM",
+    "03:00 PM", "04:00 PM", "05:00 PM",
+  ];
 
   return (
     <div className="w-full lg:w-2/2 px-6">
@@ -16,7 +22,7 @@ export default function CalendarSection({ date, setDate })  {
           If you have more queries, contact the host number below.
         </p>
         <p className="text-blue-600 font-semibold mt-1">
-          Host - +1 951-441-9748
+          Host : +1 (951) 441-9719
         </p>
       </div>
 
@@ -40,6 +46,25 @@ export default function CalendarSection({ date, setDate })  {
           Selected Date:{" "}
           <span className="font-bold text-blue-600">{date.toDateString()}</span>
         </p>
+
+        {/* 🕐 Time Selection Dropdown */}
+        <div className="mt-4 w-full">
+          <label className="block text-black font-medium mb-2">
+            Select Time:
+          </label>
+          <select
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-3 text-black"
+          >
+            <option value="">-- Choose a Time --</option>
+            {timeSlots.map((slot, index) => (
+              <option key={index} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );

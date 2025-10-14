@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {Link} from "react-router-dom"
+import BlackButton from "../../Common/Button/BlackButton";
 
 // Placeholder images for the grid.
 const image1 = "/images/limage1.png";
@@ -130,20 +131,10 @@ export default function Family() {
             />
           </motion.div>
         </motion.div>
-<Link to="/family-layout">
-        <div className="flex justify-center">
-          <motion.button
-            className="bg-[#2761FD] text-white font-sans cursor-pointer font-bold text-lg rounded-lg w-48 h-12 flex items-center justify-center hover:bg-blue-600 transition-colors duration-300"
-            whileHover={{ scale: 1.1, y: -5 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            Click To Explore
-          </motion.button>
-        </div></Link>
+<div className="flex justify-center">
+
+        <BlackButton label={" Click To Explore"} link={"/family-layout"}/>
+        </div>
       </div>
     </section>
   );

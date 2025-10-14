@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import WhiteButton from '../../Common/Button/WhiteButton';
 
 // Placeholder images - replace with your actual image paths
 const ownersImage = "/images/anna.png";
@@ -18,12 +19,12 @@ export default function AboutPage() {
     triggerOnce: true,
     threshold: 0.2, // Trigger when 20% of the section is visible
   });
-  
+
   // Use a separate InView hook for the card section to trigger the stagger animation
   const cardControls = useAnimation();
   const [cardRef, cardInView] = useInView({
     triggerOnce: true,
-    threshold: 0.1, 
+    threshold: 0.1,
   });
 
   useEffect(() => {
@@ -76,13 +77,13 @@ export default function AboutPage() {
   // NEW: Individual card entry animation (replaces old initial/animate/transition props)
   const cardItemVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { 
-        opacity: 1, 
-        y: 0, 
+    visible: {
+        opacity: 1,
+        y: 0,
         scale: 1,
         transition: {
-            type: "spring", 
-            stiffness: 100, 
+            type: "spring",
+            stiffness: 100,
             damping: 15,
         }
     },
@@ -133,14 +134,14 @@ export default function AboutPage() {
       <section className="bg-gray-50">
         <div className="container mx-auto px-6 pt-1 md:pt-3 pb-10 md:pb-14">
           {/* NEW: Wrapper motion.div for staggered animation */}
-          <motion.div 
+          <motion.div
             ref={cardRef}
             variants={cardContainerVariants}
             initial="hidden"
             animate={cardControls}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
-              
+
               {/* Card 1: Ambulance afterlife */}
               <motion.div
                 variants={cardItemVariants} // Apply item variant for staggered entry
@@ -153,7 +154,7 @@ export default function AboutPage() {
                     className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <motion.h2 
+                  <motion.h2
                     className="absolute bottom-8 left-8 text-white text-4xl font-bold"
                     // NEW: Sub-animation for title on card hover
                     initial={{ x: 0 }}
@@ -186,7 +187,7 @@ export default function AboutPage() {
                     className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <motion.h2 
+                  <motion.h2
                     className="absolute bottom-8 left-8 text-white text-4xl font-bold"
                     // NEW: Sub-animation for title on card hover
                     initial={{ x: 0 }}
@@ -216,7 +217,7 @@ export default function AboutPage() {
                     className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <motion.h2 
+                  <motion.h2
                     className="absolute bottom-8 left-8 text-white text-4xl font-bold"
                     // NEW: Sub-animation for title on card hover
                     initial={{ x: 0 }}
@@ -249,7 +250,7 @@ export default function AboutPage() {
                     className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <motion.h2 
+                  <motion.h2
                     className="absolute bottom-8 left-8 text-white text-4xl font-bold"
                     // NEW: Sub-animation for title on card hover
                     initial={{ x: 0 }}
@@ -319,19 +320,10 @@ export default function AboutPage() {
             vacation home. When you have a vision, we make it come true with
             innovative solutions tailored to your requests.
           </motion.p>
-          
-          <motion.a
-            href="/contact" // Change to your contact or build page link
-            className="bg-blue-600 text-white font-bold text-sm px-4 py-2 md:px-5 md:py-2.5 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-105 hover:shadow-2xl"
-            variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 1.8 } }
-            }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Start Your Build
-          </motion.a>
+
+
+          <WhiteButton label={"Start Your Build"} link={"/contact"}/>
+        
 
         </div>
       </motion.section>
