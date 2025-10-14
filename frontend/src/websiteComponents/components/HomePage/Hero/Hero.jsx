@@ -15,19 +15,19 @@ const ACCENT_COLOR_CLASS = "bg-black";
 const slides = [
   {
     id: 1,
-    image: "/heroSlider/heroimg1.png",
+    image: "/heroSlider/joinadventure.png",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
     id: 2,
-    image: "/heroSlider/heroimg2.jpg",
+    image: "/heroSlider/heroimg2.png",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
     id: 3,
-    image: "/heroSlider/heroimg3.jpg",
+    image: "/heroSlider/heroimg3.png",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
@@ -78,7 +78,7 @@ export default function Hero() {
             <img
               src={slide.image}
               alt={slide.title}
-              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 1 ? 'brightness-[1.15]' : ''}`}
+              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''}`}
             />
             {/* Dark Overlay (Moved to apply over each slide) */}
             <div className="absolute inset-0 md:bg-black/50 z-10"></div>

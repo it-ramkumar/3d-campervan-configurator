@@ -27,7 +27,7 @@ export default function PortfolioForm() {
   const [features, setFeatures] = useState([{ category: "", items: [""] }]);
 
   // Media (video)
-  const [video, setVideo] = useState({ title: "", platform: "", id: "" });
+  const [video, setVideo] = useState({ title: ""});
 
   // ✅ Gallery Change
  // ✅ Auto-fill if editData is available
@@ -47,7 +47,7 @@ export default function PortfolioForm() {
       );
 
       setFeatures(editData.detailed_features || [{ category: "", items: [""] }]);
-      setVideo(editData.media?.video || { title: "", platform: "", id: "" });
+      setVideo(editData.media?.video || { title: ""});
 
       if (editData.blocks?.length) {
         setBlocks(editData.blocks.map((b) => ({ caption: b.caption, image: null })));
@@ -289,20 +289,7 @@ export default function PortfolioForm() {
             onChange={(e) => setVideo({ ...video, title: e.target.value })}
             className="border p-2 rounded w-full"
           />
-          <input
-            type="text"
-            placeholder="Platform (e.g. YouTube)"
-            value={video.platform}
-            onChange={(e) => setVideo({ ...video, platform: e.target.value })}
-            className="border p-2 rounded w-full"
-          />
-          <input
-            type="text"
-            placeholder="Video ID"
-            value={video.id}
-            onChange={(e) => setVideo({ ...video, id: e.target.value })}
-            className="border p-2 rounded w-full"
-          />
+       
         </div>
 
         {/* GALLERY UPLOAD */}

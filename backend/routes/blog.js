@@ -1,55 +1,56 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-// const path = require("path");
-const PortfolioVan = require("../models/blog");
+const Blog = require("../models/blog");
 const { blogs } = require("../services/s3");
-const upload = multer({ storage: blogs });
-// const { protect, adminOnly } = require("../middleware/authMiddleware");
 
+const upload = multer({ storage: blogs });
+
+// 🟢 CREATE BLOG (with gallery + blocks)
 router.post(
   "/with-blocks",
   upload.fields([
     { name: "gallery", maxCount: 10 },
-    { name: "blockImages", maxCount: 50 }, // block images
+    { name: "blockImages", maxCount: 50 },
   ]),
-
   async (req, res) => {
     try {
-      // ✅ Gallery images
+      // ✅ Gallery images from S3
       const gallery = req.files["gallery"]?.map((f) => f.location) || [];
 
-      // ✅ Parse blocksData (heading + paragraph)
+      // ✅ Blocks data (heading, paragraph)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      // ✅ Merge each block with its image
+      // ✅ Merge each block with its uploaded image
       const blocks = blocksData.map((block, index) => ({
         heading: block.heading,
         paragraph: block.paragraph,
-       image: req.files["blockImages"]?.[index]?.location || null
+        image: req.files["blockImages"]?.[index]?.location || null,
       }));
 
-      // ✅ Create portfolio doc (only title, slug, gallery, blocks)
-      const newPortfolio = new PortfolioVan({
+      // ✅ Create new blog document
+      const newBlog = new Blog({
         title: req.body.title,
-        slug: req.body.slug,
+        des: req.body.des,
         gallery,
         blocks,
       });
 
-      await newPortfolio.save();
+      await newBlog.save();
 
       res.json({
         success: true,
-        message: "Portfolio created successfully",
-        data: newPortfolio,
+        message: "Blog created successfully",
+        data: newBlog,
       });
     } catch (err) {
-      console.error("Error creating portfolio:", err);
+      console.error("❌ Error creating blog:", err);
       res.status(500).json({ success: false, message: "Upload failed" });
     }
   }
 );
+
+// 🟡 UPDATE BLOG
 router.put(
   "/with-blocks/:id",
   upload.fields([
@@ -60,116 +61,113 @@ router.put(
     try {
       const { id } = req.params;
 
-      // ✅ Gallery images (if new uploaded, merge with old)
-      const gallery = req.files["gallery"]?.map((f) => f.path);
+      // ✅ New gallery images (if uploaded)
+      const newGallery = req.files["gallery"]?.map((f) => f.location) || [];
 
-      // ✅ Parse blocksData (heading + paragraph)
+      // ✅ Parse updated blocks
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      // ✅ Merge each block with its image
       const blocks = blocksData.map((block, index) => ({
         heading: block.heading,
         paragraph: block.paragraph,
-        image: req.files["blockImages"]?.[index]?.path || block.image || null, // keep old image if not updated
+        image: req.files["blockImages"]?.[index]?.location || block.image || null,
       }));
 
-      // ✅ Find and update
-      const updatedPortfolio = await PortfolioVan.findByIdAndUpdate(
+      // ✅ Update blog document
+      const updatedBlog = await Blog.findByIdAndUpdate(
         id,
         {
           title: req.body.title,
-          slug: req.body.slug,
-          ...(gallery ? { gallery } : {}), // only update gallery if new images uploaded
+          des: req.body.des,
+          ...(newGallery.length ? { gallery: newGallery } : {}), // only update gallery if new files uploaded
           blocks,
         },
         { new: true }
       );
 
-      if (!updatedPortfolio) {
-        return res.status(404).json({ success: false, message: "Portfolio not found" });
+      if (!updatedBlog) {
+        return res.status(404).json({ success: false, message: "Blog not found" });
       }
 
       res.json({
         success: true,
-        message: "Portfolio updated successfully",
-        data: updatedPortfolio,
+        message: "Blog updated successfully",
+        data: updatedBlog,
       });
     } catch (err) {
-      console.error("Error updating portfolio:", err);
+      console.error("❌ Error updating blog:", err);
       res.status(500).json({ success: false, message: "Update failed" });
     }
   }
 );
 
+// 🟣 GET ALL BLOGS
 router.get("/", async (req, res) => {
   try {
-    const portfolios = await PortfolioVan.find().sort({ createdAt: -1 }); // latest first
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.json({
       success: true,
-      count: portfolios.length,
-      data: portfolios,
+      count: blogs.length,
+      data: blogs,
     });
   } catch (err) {
-    console.error("Error fetching portfolios:", err.message);
+    console.error("❌ Error fetching blogs:", err.message);
     res.status(500).json({
       success: false,
-      message: "Server error while fetching portfolios",
+      message: "Server error while fetching blogs",
     });
   }
 });
 
-// ----------------------------
-// DELETE portfolio by ID
-router.delete("/:id", async (req, res) => {
-  try {
-    const portfolio = await PortfolioVan.findByIdAndDelete(req.params.id);
-
-    if (!portfolio) {
-      return res.status(404).json({
-        success: false,
-        message: "Portfolio not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      message: "Portfolio deleted successfully",
-      data: portfolio,
-    });
-  } catch (err) {
-    console.error("Error deleting portfolio:", err.message);
-    res.status(500).json({
-      success: false,
-      message: "Server error while deleting portfolio",
-    });
-  }
-});
-
-// ----------------------------
+// 🔵 GET BLOG BY SLUG
 router.get("/:slug", async (req, res) => {
   try {
-    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    const blog = await Blog.findOne({ slug: req.params.slug });
 
-    if (!portfolio) {
+    if (!blog) {
       return res.status(404).json({
         success: false,
-        message: "Portfolio not found with this slug",
+        message: "Blog not found with this slug",
       });
     }
 
     res.json({
       success: true,
-      data: portfolio,
+      data: blog,
     });
   } catch (err) {
-    console.error("Error fetching portfolio by slug:", err.message);
+    console.error("❌ Error fetching blog by slug:", err.message);
     res.status(500).json({
       success: false,
-      message: "Server error while fetching portfolio",
+      message: "Server error while fetching blog",
     });
   }
 });
 
+// 🔴 DELETE BLOG
+router.delete("/:id", async (req, res) => {
+  try {
+    const blog = await Blog.findByIdAndDelete(req.params.id);
 
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Blog deleted successfully",
+      data: blog,
+    });
+  } catch (err) {
+    console.error("❌ Error deleting blog:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error while deleting blog",
+    });
+  }
+});
 
 module.exports = router;

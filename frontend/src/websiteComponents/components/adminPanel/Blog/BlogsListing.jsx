@@ -9,10 +9,11 @@ export default function BlogsListing({setSelected}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
     const fetchBlogs = async () => {
       const result = await getAllBlogs();
+console.log(result,"result")
+
       if (result.success) {
         setBlogs(result.data);
       } else {

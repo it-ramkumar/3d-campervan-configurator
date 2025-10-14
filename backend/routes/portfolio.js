@@ -28,7 +28,7 @@ router.post(
 
       // ✅ Create new portfolioVan doc
       const newPortfolio = new PortfolioVan({
-        slug: req.body.slug, // optional // ya title se auto generate hoga
+        // slug: req.body.slug, // optional // ya title se auto generate hoga
         van_listing: {
           title: req.body.title,
           description: req.body.description,

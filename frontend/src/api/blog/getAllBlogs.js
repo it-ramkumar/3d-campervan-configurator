@@ -11,7 +11,7 @@ export async function getAllBlogs() {
     });
     return {
       success: true,
-      data: response.data.data || [],
+      data: response.data.data 
     };
   } catch (err) {
     console.error("Error fetching blogs:", err);

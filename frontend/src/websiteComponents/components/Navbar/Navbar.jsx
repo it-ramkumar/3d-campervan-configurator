@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({ forceMobile }) {
   const [darkMode, setDarkMode] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,15 +36,27 @@ export default function Navbar() {
   }, [activeMenu]);
 
   // ✅ Mobile menu animation fix (auto height)
+  // ✅ Mobile menu animation fix (only fade)
   useEffect(() => {
     if (!mobileMenuRef.current) return;
-    gsap.to(mobileMenuRef.current, {
-      height: isMobileMenuOpen ? "auto" : 0,
-      opacity: isMobileMenuOpen ? 1 : 0,
-      duration: 0.4,
-      ease: "power3.out",
-    });
+
+    if (isMobileMenuOpen) {
+      gsap.to(mobileMenuRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out",
+        pointerEvents: "auto",
+      });
+    } else {
+      gsap.to(mobileMenuRef.current, {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.in",
+        pointerEvents: "none",
+      });
+    }
   }, [isMobileMenuOpen]);
+
 
   // Handlers
   const handleMenuHover = (menu) => {
@@ -58,22 +70,51 @@ export default function Navbar() {
 
   // ✅ MENU CONTENT
   const menuContent = {
-    "vans-for-sale": {
-      title: "Vans For Sale",
-      link: "/vans-for-sale",
+
+    CustomBuild: {
+      title: "Custom Build's",
+      sections: [
+        {
+          title: "Custom build",
+          items: [
+            { label: "3D Van Builder", link: "/van" },
+            { label: "Inquiry", link: "/inquiry" },
+            // { label: "option 3", link: "/" },
+          ],
+        },
+      ],
     },
-    layouts: {
-      title: "Explore Layouts",
-      link: "/layouts",
+    "vans-for-sale": { title: "Vans For Sale", link: "/vans-for-sale" },
+    layout: {
+      title: "Layouts Big Bear Vans",
+      sections: [
+        {
+          title: "Our Flagman",
+          items: [
+            { label: "our flagman in short vans Santa Monica", link: "/" },
+            { label: "Our flagman in long vans Montrea", link: "/" },
+
+
+
+          ],
+        },
+        {
+          title: "Layouts",
+          items: [
+
+            { label: "Layouts for solo & couple travelers", link: "/couples-layout" },
+            { label: "Layouts for families 3-9 people", link: "/family-layout" },
+            { label: "Our portfolio of custom builds", link: "/" },
+
+
+          ],
+        },
+      ],
     },
-    "3d-van-builder": {
-      title: "Build Your Dream Van",
-      link: "/van",
-    },
-    "contact-us": {
-      title: "Contact Us",
-      link: "/contact",
-    },
+
+    // layouts: { title: "Explore Layouts", link: "/layouts" },
+    "3d-van-builder": { title: "Build Your Dream Van", link: "/van" },
+    "contact-us": { title: "Contact Us", link: "/contact" },
     discover: {
       title: "Discover Big Bear Vans",
       sections: [
@@ -92,10 +133,10 @@ export default function Navbar() {
   return (
     <>
       {/* NAVBAR */}
-      <nav className="sticky top-0 w-full px-6 py-4 bg-white shadow-md z-50">
+      <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 bg-white shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
           {/* LOGO */}
-          <div className="flex items-center">
+          {!forceMobile && <div className="flex items-center">
             <Link to="/" className="block">
               <img
                 src="/images/logoo.png"
@@ -103,10 +144,20 @@ export default function Navbar() {
                 className="w-[150px] h-[30px] object-contain"
               />
             </Link>
-          </div>
+          </div>}
 
           {/* CENTER MENU (Desktop) */}
-          <div className="hidden md:flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base">
+          <div
+            className={`${forceMobile ? "hidden" : "hidden md:flex"
+              } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base`}
+          >
+            <Link
+              to="/"
+              onMouseEnter={() => handleMenuHover("CustomBuild")}
+              onMouseLeave={handleMenuLeave}
+            >
+              Custom Build
+            </Link>
             <Link
               to="/vans-for-sale"
               onMouseEnter={() => handleMenuHover("vans-for-sale")}
@@ -116,18 +167,18 @@ export default function Navbar() {
             </Link>
             <Link
               to="/layouts"
-              onMouseEnter={() => handleMenuHover("layouts")}
+              onMouseEnter={() => handleMenuHover("layout")}
               onMouseLeave={handleMenuLeave}
             >
               Layouts
             </Link>
-            <Link
+            {/* <Link
               to="/van"
               onMouseEnter={() => handleMenuHover("3d-van-builder")}
               onMouseLeave={handleMenuLeave}
             >
               3D Van Builder
-            </Link>
+            </Link> */}
             <Link
               to="/contact"
               onMouseEnter={() => handleMenuHover("contact-us")}
@@ -145,11 +196,11 @@ export default function Navbar() {
           </div>
 
           {/* RIGHT SPACER */}
-          <div className="hidden md:block w-[150px]"></div>
+          <div className={`${forceMobile ? "hidden" : "hidden md:block"} w-[150px]`}></div>
 
           {/* MOBILE BUTTON */}
           <button
-            className="md:hidden text-gray-700 z-10"
+            className={`${forceMobile ? "" : "md:hidden"} text-gray-700 z-10`}
             onClick={toggleMobileMenu}
           >
             <svg
@@ -170,7 +221,7 @@ export default function Navbar() {
       </nav>
 
       {/* DESKTOP MEGA MENU (only Discover uses it) */}
-      {activeMenu && menuContent[activeMenu]?.sections && (
+      {activeMenu && !forceMobile && menuContent[activeMenu]?.sections && (
         <div
           ref={megaMenuRef}
           className="fixed left-0 w-full bg-white shadow-xl z-40 overflow-hidden"
@@ -186,7 +237,8 @@ export default function Navbar() {
               {menuContent[activeMenu]?.sections?.map((section, idx) => (
                 <div
                   key={idx}
-                  className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"}`}
+                  className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"
+                    }`}
                 >
                   <h3 className="text-xl font-semibold text-indigo-600 mb-4">
                     {section.title}
@@ -211,12 +263,28 @@ export default function Navbar() {
       )}
 
       {/* ✅ MOBILE MENU */}
+      {/* ✅ MOBILE MENU */}
+      {/* ✅ MOBILE MENU FIXED VERSION */}
       <div
         ref={mobileMenuRef}
-        className="md:hidden fixed top-[76px] left-0 w-full bg-white shadow-lg z-40 overflow-hidden"
-        style={{ height: "0" }}
+        className={`fixed left-0 top-[64px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[65%]" : "w-full md:hidden"
+          }`}
+        style={{
+          height: "calc(100vh - 64px)", // full height below navbar
+          overflowY: "auto", // stable vertical scroll
+          WebkitOverflowScrolling: "touch", // smooth on mobile
+        }}
       >
-        <div className="flex flex-col  py-8 px-4">
+        <div className="flex flex-col py-8 px-4 min-h-full">
+          {forceMobile && <div className="flex items-center mb-5">
+            <Link to="/" className="block">
+              <img
+                src="/images/logoo.png"
+                alt="BBV logo"
+                className="w-[150px] h-[30px] object-contain"
+              />
+            </Link>
+          </div>}
           {Object.keys(menuContent).map((key, idx) => {
             const menu = menuContent[key];
             const hasSubmenu = menu.sections && menu.sections.length > 0;
@@ -225,9 +293,8 @@ export default function Navbar() {
               <div key={idx} className="w-full mb-3">
                 {hasSubmenu ? (
                   <>
-                    {/* Dropdown button */}
                     <button
-                      className="w-full text-xl font-semibold text-blackish py-3 flex justify-between "
+                      className="w-full text-xl font-semibold text-blackish py-3 flex justify-between"
                       onClick={() =>
                         setActiveMenu(activeMenu === key ? null : key)
                       }
@@ -235,9 +302,8 @@ export default function Navbar() {
                       {menu.title}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className={`w-5 h-5 transform transition-transform ${
-                          activeMenu === key ? "rotate-180" : ""
-                        }`}
+                        className={`w-5 h-5 transform transition-transform ${activeMenu === key ? "rotate-180" : ""
+                          }`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -251,7 +317,6 @@ export default function Navbar() {
                       </svg>
                     </button>
 
-                    {/* Submenu items */}
                     {activeMenu === key && (
                       <div className="pl-4 transition-all duration-300">
                         {menu.sections.map((section, secIdx) => (
@@ -278,7 +343,6 @@ export default function Navbar() {
                     )}
                   </>
                 ) : (
-                  // Direct link for menus without submenus
                   <Link
                     to={menu.link}
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -292,6 +356,7 @@ export default function Navbar() {
           })}
         </div>
       </div>
+
     </>
   );
 }

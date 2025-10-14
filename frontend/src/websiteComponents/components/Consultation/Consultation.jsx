@@ -4,7 +4,7 @@ import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 import Swal from "sweetalert2";
-import { contact } from "../../../api/contact/contact";
+// import { contact } from "../../../api/contact/contact";
 
 export default function Consultation({vanForSale}) {
   const [date, setDate] = useState(new Date());
@@ -139,7 +139,7 @@ export default function Consultation({vanForSale}) {
   return (
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24">
       <div className="flex flex-col items-center text-center mb-12 md:mb-16 px-4">
-  {vanForSale && (
+  {/* {vanForSale && (
     <>
       <h2 className="text-3xl md:text-5xl font-bold font-serif text-black mb-6 leading-tight">
         Ready to Buy Your Van for Sale?
@@ -154,7 +154,7 @@ export default function Consultation({vanForSale}) {
         </ul>
       </div>
     </>
-  )}
+  )} */}
 
   <h3 className="text-2xl md:text-[28px] font-semibold font-serif text-black mb-3">
     Schedule a Free Consultation Call Today

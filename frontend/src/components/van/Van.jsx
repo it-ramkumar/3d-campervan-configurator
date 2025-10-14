@@ -10,6 +10,7 @@ import ExteriorCameraControls from "./VanExteriorCameraControl";
 import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
 import ExportableScene from "../exportable-scene/ExportableScene";
+import Navbar from "../../websiteComponents/components/Navbar/Navbar"
 
 import {
   addModelToScene,
@@ -110,8 +111,12 @@ function Van() {
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto bg-brand color-scroll">
+    <>
+    <div className="">
 
+
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto bg-brand color-scroll">
 
       {/* Canvas Section - 50% on mobile, 75% on desktop */}
       <div className="canvas-parent md:col-span-8" >
@@ -119,13 +124,13 @@ function Van() {
           {/* Toggle Button */}
           <div
             className="flex justify-between  cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
+
           >
-            <h1 className="text-sm font-bold text-dark">
-              See More Information
+            <h1 className="text-sm font-bold z-10000 text-dark">
+            <Navbar forceMobile={true}/>
             </h1>
 
-            <span className="text-dark">
+            <span  onClick={() => setIsOpen(!isOpen)} className="text-dark">
               {isOpen ? "▲" : "▼"}
             </span>
           </div>
@@ -331,7 +336,7 @@ function Van() {
     </div>
 
 
-
+</>
   );
 }
 

@@ -23,7 +23,7 @@ const vanListingSchema = new mongoose.Schema({
   subtitle: { type: String, trim: true },
   model_name: { type: String, trim: true },
   price: { type: Number },
-  status: { type: String, trim: true },
+  // status: { type: String, trim: true },
   tagline: { type: String, trim: true },
   specifications: { type: specificationsSchema }
 });
