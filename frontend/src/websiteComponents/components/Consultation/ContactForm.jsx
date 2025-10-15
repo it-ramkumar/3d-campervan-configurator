@@ -7,7 +7,6 @@ export default function ContactForm({
   handleChange,
   handleSubmit,
   loading,
-  selectedDate,
 }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 w-full">
@@ -35,15 +34,12 @@ export default function ContactForm({
         </div>
       ))}
 
-      <p className="text-sm text-gray-600">
-        Selected Date: <b>{selectedDate.toDateString()}</b>
-      </p>
 
       <BlackButton
         type="submit"
         disabled={loading}
         label={loading ? "Submitting..." : "Submit"}
-      
+
       />
 
 

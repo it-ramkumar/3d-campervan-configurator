@@ -10,8 +10,8 @@ export default function WhiteButton({
 }) {
   const baseClasses = `
     ${className}
-    bg-yellow-400
-    text-white font-semibold
+    bg-white
+    text-black font-semibold
     rounded-sm sm:rounded-base md:rounded-lg
     cursor-pointer transition-all duration-300 ease-in-out
     hover:scale-105 hover:shadow-lg active:scale-95
