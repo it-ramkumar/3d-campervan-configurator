@@ -263,7 +263,7 @@ export default function Navbar({ forceMobile }) {
       {/* ✅ MOBILE MENU FIXED VERSION */}
       <div
         ref={mobileMenuRef}
-        className={`fixed left-0 top-[64px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[65%]" : "w-full md:hidden"
+        className={`fixed left-0 top-[62px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[100%] md:w-[40%] backdrop-blur bg-white/50"   : "w-full md:hidden"
           }`}
         style={{
           height: "calc(100vh - 64px)", // full height below navbar

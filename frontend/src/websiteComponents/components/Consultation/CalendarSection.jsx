@@ -4,10 +4,10 @@ import { InlineWidget } from "react-calendly";
 
 export default function CalendarSection() {
   return (
- <div className="w-full px-6 bg-gray-100 shadow-lg">
+ <div className="w-full p-2  bg-gray-100 shadow-lg">
   <div className="flex flex-col lg:flex-row items-start">
     {/* ====== Left Side: Text ====== */}
-    <div className="w-full lg:w-1/2 flex flex-col items-center justify-between h-[90vh] text-left mb-8 lg:mb-0  p-4">
+    <div className="w-full lg:w-1/2 flex flex-col items-center justify-between h-[80vh] text-left mb-8 lg:mb-0  p-4">
     <div className="pt-10">
       <img src="/logobbv.jpg" alt="contact logo" className="w-40 h-40 rounded-full"/>
     </div>

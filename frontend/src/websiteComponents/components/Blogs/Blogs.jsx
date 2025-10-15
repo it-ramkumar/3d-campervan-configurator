@@ -3,6 +3,8 @@ import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
+import { CalendarDays } from "lucide-react";
+
 export default function BlogsListing() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,127 +13,226 @@ export default function BlogsListing() {
   // ✅ Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 6;
+const data = [
+  {
+    title: "Modern Website Design",
+    desc: "A sleek and responsive web design for a digital agency.",
+    block: {
+      title: "Main Project Overview",
+      desc: "This project focused on creating a strong brand presence online.",
+      image: "/images/w3.jpg",
+    },
+    gallery: [
+     "/images/w3.jpg",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+    ],
+  },
+  {
+    title: "E-commerce Platform",
+    desc: "A full-featured online store with admin panel and analytics.",
+    block: {
+      title: "Shop Smart",
+      desc: "We built an easy-to-navigate platform for users and admins.",
+      image: "https://via.placeholder.com/400x250",
+    },
+    gallery: [
+     "/images/w3.jpg",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+    ],
+  },
+];
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      const result = await getAllBlogs();
-      if (result.success) {
-        setBlogs(result.data);
-      } else {
-        setError(result.error || "Failed to fetch blogs");
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchBlogs = async () => {
+  //     const result = await getAllBlogs();
+  //     if (result.success) {
+  //       setBlogs(result.data);
+  //     } else {
+  //       setError(result.error || "Failed to fetch blogs");
+  //     }
+  //     setLoading(false);
+  //   };
 
-    fetchBlogs();
-  }, []);
+  //   fetchBlogs();
+  // }, []);
 
-  if (loading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-600">Error: {error}</div>;
+  // if (loading) return <div className="p-4">Loading...</div>;
+  // if (error) return <div className="p-4 text-red-600">Error: {error}</div>;
 
   // ✅ Pagination logic
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
-  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  // const indexOfLastBlog = currentPage * blogsPerPage;
+  // const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  // const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  // const totalPages = Math.ceil(blogs.length / blogsPerPage);
 
   return (
-    <>
-      <Navbar />
-<div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 text-center px-4">
-  <div className="max-w-md bg-white shadow-lg rounded-2xl p-8 border border-gray-200">
-    <h1 className="text-3xl font-bold text-gray-800 mb-4">
-      🚧 Coming Soon
-    </h1>
-    <p className="text-gray-600 mb-6">
-      Our website is currently in <span className="font-medium text-indigo-600">development phase</span>.
-      We're working hard to bring you something amazing. Stay tuned!
-    </p>
+<>
+  <Navbar />
 
-    <div className="flex justify-center space-x-3">
+  {/* ✅ Hero Section */}
+  <div className="relative h-screen flex flex-col items-center justify-center text-center text-white overflow-hidden rounded-md">
+    <img
+      src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
+      alt="Blogs Hero"
+      className="absolute inset-0 w-full h-full object-cover opacity-60"
+    />
+    <div className="relative z-10 px-6">
+      <h1 className="text-5xl md:text-6xl font-bold mb-4">Our Blogs</h1>
+      <p className="text-lg md:text-xl max-w-2xl mx-auto">
+        Latest updates, stories, and insights from our creative projects.
+      </p>
+    </div>
+  </div>
+
+  {/* ✅ Search Bar Section */}
+  <div className="flex flex-col items-center justify-center py-12 bg-white rounded-md">
+    <div className="w-full md:w-1/2 flex items-center border border-gray-300 rounded-full shadow-sm overflow-hidden">
+      {/* Search Icon */}
+      <div className="px-4 text-gray-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-5 h-5"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"
+          />
+        </svg>
+      </div>
+
+      {/* Input */}
       <input
-        type="email"
-        placeholder="Enter your email"
-        className="px-4 py-2 border border-gray-300 rounded-lg w-2/3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        type="text"
+        placeholder="Search blogs..."
+        className="flex-1 py-3 px-2 text-gray-700 focus:outline-none"
       />
-      <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-        Notify Me
-      </button>
+
+      {/* Category Dropdown */}
+      <div className="flex items-center bg-gray-100 px-4 py-3 border-l border-gray-300 rounded-r-full">
+        <select
+          className="bg-gray-100 text-gray-700 focus:outline-none text-sm"
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Category
+          </option>
+          <option>Design</option>
+          <option>Development</option>
+          <option>Marketing</option>
+          <option>Business</option>
+        </select>
+
+        {/* Dropdown Icon */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-4 h-4 ml-2 text-gray-500"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8.25 9.75L12 13.5l3.75-3.75"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {/* ✅ Recent Post Heading */}
+  <div className="px-6 md:px-12 lg:px-24 mt-8">
+    <h2 className="text-3xl font-bold text-gray-900 mb-6 text-left">
+      Recent Posts
+    </h2>
+  </div>
+
+  {/* ✅ Simple Blog List Section */}
+  <div className="py-16 px-6 md:px-12 lg:px-24 bg-gray-50 rounded-md">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      {data.slice(0, 4).map((item, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-md shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-200 flex flex-col justify-between"
+        >
+          <div className="bg-black/70 text-white text-xs px-3 py-1 rounded-full w-fit mb-2">
+            {item.date || "Oct 15, 2025"}
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1">
+            {item.title}
+          </h2>
+          <p className="text-gray-600 text-sm line-clamp-3">
+            {item.desc ||
+              "A short overview of this project. We focused on modern design and innovative solutions to achieve the client’s goals."}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* ✅ Main Projects Section (Original Cards) */}
+  <div className="py-20 px-6 md:px-12 lg:px-20 bg-gray-50 rounded-md">
+    <div className="text-center mb-12">
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        Our Projects
+      </h1>
+      <p className="text-gray-600 max-w-2xl mx-auto">
+        Explore our latest creative works — designed with passion and precision.
+      </p>
     </div>
 
-    <p className="text-sm text-gray-400 mt-6">
-      © {new Date().getFullYear()} YourCompany. All rights reserved.
-    </p>
-  </div>
-</div>
-
-      {/* ✅ Hero Section */}
-      {/* <div className="relative bg-gray-900 text-white h-64 flex items-center justify-center">
-        <img
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
-          alt="Blogs Hero"
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
-        />
-        <div className="relative z-10 text-center">
-          <h1 className="text-4xl font-bold">Our Blogs</h1>
-          <p className="mt-2 text-lg">Latest updates, stories, and insights</p>
-        </div>
-      </div> */}
-
-      {/* ✅ Blog Listing */}
-      {/* <div className="max-w-6xl mx-auto px-4 py-10">
-        <h2 className="text-3xl font-bold mb-8">Latest Blogs</h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-16">
-          {currentBlogs.map((blog) => (
-            <div
-              key={blog._id}
-              className="group block hover:shadow-lg transition p-2"
-            >
-
-              {blog.gallery.length > 0 && (
-                <img
-                  src={blog.gallery[0]}
-                  alt={blog.title}
-                  className="w-full h-48 object-cover  mb-4 transition-transform duration-300 group-hover:scale-105"
-                />
-              )}
-
-              <h2 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-black">
-                {blog.title}
-              </h2>
-
-
-              <p className="text-sm text-gray-500">
-                {new Date(blog.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </p>
+    {/* ✅ Cards Container */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {data.map((item, index) => (
+        <div
+          key={index}
+          className="relative bg-white p-4 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group rounded-md"
+        >
+          {/* ✅ Background Image */}
+          <div className="relative h-56 w-full overflow-hidden rounded-md">
+            <img
+              src={item.gallery[0]}
+              alt={item.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* ✅ Date (Top-left corner) */}
+            <div className="absolute top-3 left-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full">
+              {item.date || "Oct 15, 2025"}
             </div>
-          ))}
-        </div>
+          </div>
 
-
-        <div className="flex justify-center mt-10 space-x-2">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-4 py-2 rounded-md border ${
-                currentPage === i + 1
-                  ? "bg-black text-white"
-                  : "bg-white text-black"
-              }`}
+          {/* ✅ Content Section */}
+          <div className="pt-5">
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              {item.title}
+            </h2>
+            <p className="text-gray-600 text-sm line-clamp-3 mb-3">
+              {item.desc ||
+                "A short overview of this project. We focused on modern design and innovative solutions to achieve the client’s goals."}
+            </p>
+            <a
+              href="#"
+              className="text-blue-600 font-medium text-sm hover:underline"
             >
-              {i + 1}
-            </button>
-          ))}
+              See more →
+            </a>
+          </div>
         </div>
-      </div> */}
+      ))}
+    </div>
+  </div>
 
-      <Footer />
-    </>
+  <Footer />
+</>
+
+
   );
 }
