@@ -3,16 +3,19 @@ import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { useDispatch } from "react-redux";
 import { setEditData } from "../../../../redux/slices/editData";
 import { deleteBlog } from "../../../../api/blog/deleteBlog";
+import Detail from "./Detail";
 export default function BlogsListing({setSelected}) {
   const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [detail,setDetail] =useState()
+  const [isOpen,setIsopen] =useState(false)
 
   useEffect(() => {
     const fetchBlogs = async () => {
       const result = await getAllBlogs();
-console.log(result,"result")
+// console.log(result,"result")
 
       if (result.success) {
         setBlogs(result.data);
@@ -36,7 +39,9 @@ console.log(result,"result")
         {blogs.map((blog) => (
           <div
             key={blog._id}
-                className="group block"
+            onClick={()=>{setDetail(blog)
+               setIsopen(true)}}
+                className="group block cursor-pointer"
           >
             {/* Blog Image */}
             {blog.gallery.length > 0 && (
@@ -67,6 +72,7 @@ console.log(result,"result")
             </div>
         ))}
       </div>
+      {isOpen && <Detail setIsopen={setIsopen} detail={detail}/>}
     </div>
   );
 }

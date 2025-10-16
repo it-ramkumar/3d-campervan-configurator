@@ -7,11 +7,14 @@ import { setEditData } from "../../../../redux/slices/editData"
 import { useNavigate } from "react-router-dom";
 import { getAllPortfolio } from "../../../../api/portfolio/getAllPortfolio";
 import { deletePortfolio } from "../../../../api/portfolio/deletePortfolio";
-export default function PortfolioListing() {
+import Detail from "./Detail";
+export default function PortfolioListing({setSelected}) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [detail,setDetail] =useState()
+    const [isOpen,setIsopen] =useState(false)
 
   // Fetch all portfolios
   useEffect(() => {
@@ -84,17 +87,25 @@ export default function PortfolioListing() {
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
+                    onClick={()=>{setDetail(portfolio)
+               setIsopen(true)}}
+                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                >
+                  View
+                </button>
+                <button
                   onClick={() => {dispatch(setEditData(portfolio))
-                    navigate("/portfolio-form")
+                     setSelected("portfolio-form");
                   }}
                   className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-red-700"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() =>
+                  onClick={() =>{
                     handleDelete(portfolio.slug)
-                  }
+
+                  }}
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                 >
                   Delete
@@ -104,6 +115,8 @@ export default function PortfolioListing() {
           ))}
         </div>
       )}
+            {isOpen && <Detail setIsopen={setIsopen} detail={detail}/>}
+
     </div>
   );
 }

@@ -6,14 +6,17 @@ import { setEditData } from "../../../../redux/slices/editData"
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteVan } from "../../../../api/van/deleteVan";
-
-export default function VanListing() {
+import Detail from "./Detail";
+export default function VanListing({setSelected}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [vans, setVans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedVan, setSelectedVan] = useState(null);
+
+    const [detail,setDetail] =useState()
+    const [isOpen,setIsopen] =useState(false)
+
   useEffect(() => {
     fetchVans();
   }, []);
@@ -78,7 +81,8 @@ export default function VanListing() {
 
               <div className="mt-3 flex gap-2">
                 <button
-                  onClick={() => setSelectedVan(van)} // 🔹 Modal open
+                    onClick={()=>{setDetail(van)
+               setIsopen(true)}} // 🔹 Modal open
                   className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
                 >
                   View
@@ -86,14 +90,16 @@ export default function VanListing() {
                 <button
                   onClick={() => {
                     dispatch(setEditData(van));
-                    navigate("/van-form");
+                     setSelected("vans-form")
                   }}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(van.slug)}
+                  onClick={() => {handleDelete(van.slug)
+                   }
+                  }
                   className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                 >
                   Delete
@@ -103,6 +109,7 @@ export default function VanListing() {
           ))}
         </div>
       )}
+      {isOpen && <Detail setIsopen={setIsopen} detail={detail}/>}
 
     </div>
   );

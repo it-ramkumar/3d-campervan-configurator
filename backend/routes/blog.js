@@ -2,11 +2,10 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const Blog = require("../models/blog");
-const { blogs } = require("../services/s3");
 
-const upload = multer({ storage: blogs });
+const upload = multer({ storage: multer.memoryStorage() });
+const { uploadToS3 } = require("../services/s3")
 
-// 🟢 CREATE BLOG (with gallery + blocks)
 router.post(
   "/with-blocks",
   upload.fields([
@@ -15,19 +14,29 @@ router.post(
   ]),
   async (req, res) => {
     try {
-      // ✅ Gallery images from S3
-      const gallery = req.files["gallery"]?.map((f) => f.location) || [];
-
+    // Compress + upload gallery images
+      const gallery = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(file.buffer, "blogs/gallery", file.originalname)
+        )
+      );
       // ✅ Blocks data (heading, paragraph)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      // ✅ Merge each block with its uploaded image
-      const blocks = blocksData.map((block, index) => ({
-        heading: block.heading,
-        paragraph: block.paragraph,
-        image: req.files["blockImages"]?.[index]?.location || null,
-      }));
-
+    // Compress + upload block images
+      const blocks = await Promise.all(
+        blocksData.map(async (block, index) => ({
+          heading: block.heading,
+          paragraph: block.paragraph,
+          image: req.files["blockImages"]?.[index]
+            ? await uploadToS3(
+                req.files["blockImages"][index].buffer,
+                "blogs/blocks",
+                req.files["blockImages"][index].originalname
+              )
+            : null,
+        }))
+      );
       // ✅ Create new blog document
       const newBlog = new Blog({
         title: req.body.title,
@@ -62,16 +71,28 @@ router.put(
       const { id } = req.params;
 
       // ✅ New gallery images (if uploaded)
-      const newGallery = req.files["gallery"]?.map((f) => f.location) || [];
-
+ const gallery = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(file.buffer, "blogs/gallery", file.originalname)
+        )
+      );
       // ✅ Parse updated blocks
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      const blocks = blocksData.map((block, index) => ({
-        heading: block.heading,
-        paragraph: block.paragraph,
-        image: req.files["blockImages"]?.[index]?.location || block.image || null,
-      }));
+      // Compress + upload block images
+      const blocks = await Promise.all(
+        blocksData.map(async (block, index) => ({
+          heading: block.heading,
+          paragraph: block.paragraph,
+          image: req.files["blockImages"]?.[index]
+            ? await uploadToS3(
+                req.files["blockImages"][index].buffer,
+                "blogs/blocks",
+                req.files["blockImages"][index].originalname
+              )
+            : null,
+        }))
+      );
 
       // ✅ Update blog document
       const updatedBlog = await Blog.findByIdAndUpdate(
@@ -79,7 +100,7 @@ router.put(
         {
           title: req.body.title,
           des: req.body.des,
-          ...(newGallery.length ? { gallery: newGallery } : {}), // only update gallery if new files uploaded
+          ...(gallery.length ? { gallery: gallery } : {}), // only update gallery if new files uploaded
           blocks,
         },
         { new: true }

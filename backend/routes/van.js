@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Van = require("../models/vanModel")
 const multer = require("multer")
-const { vans } = require("../services/s3")
-const upload = multer({ storage: vans });
+// const { vans } = require("../services/s3")
+// const upload = multer({ storage: vans });
+const upload = multer({ storage: multer.memoryStorage() });
+const { uploadToS3 } = require("../services/s3")
+
 
 router.post('/',  upload.fields([
     { name: "gallery", maxCount: 10 },
@@ -15,11 +18,19 @@ router.post('/',  upload.fields([
       // ✅ Parse blocksData from body (captions etc.)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      // ✅ Merge images with captions
-      const blocks = blocksData.map((b, i) => ({
-        caption: b.caption,
-        image: req.files["blockImages"]?.[i]?.location || null,
-      }));
+const blocks = await Promise.all(
+  blocksData.map(async (block, index) => ({
+    caption: block.caption,
+    image: req.files["blockImages"]?.[index]
+      ? await uploadToS3(
+          req.files["blockImages"][index].buffer,
+          "van/blocks",
+          req.files["blockImages"][index].originalname
+        )
+      : null,
+  }))
+);
+
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const feature_highlights = JSON.parse(req.body.feature_highlights || "[]");
     const detailed_features = JSON.parse(req.body.detailed_features || "[]");
@@ -40,10 +51,13 @@ router.post('/',  upload.fields([
     }
 
  // Gallery files
-const gallery = req.files["gallery"]?.map((f) => ({
-  url: f.location,
-  caption: ""
-}));
+const gallery = await Promise.all(
+  (req.files["gallery"] || []).map(async file => ({
+    url: await uploadToS3(file.buffer, "van/gallery", file.originalname),
+    caption: "", // optional, ya req.body se le lo
+  }))
+);
+
 
     // Final object
     const vanData = {
@@ -138,8 +152,16 @@ router.put(
       const { slug } = req.params;
 
       const van = await Van.findOne({ slug });
-      if (!van)
-        return res.status(404).json({ message: "Van not found" });
+      if (!van) return res.status(404).json({ message: "Van not found" });
+
+      // ✅ Helper to parse JSON or fallback to existing
+      const parseJSONField = (field, fallback) => {
+        try {
+          return field ? JSON.parse(field) : fallback;
+        } catch {
+          return fallback;
+        }
+      };
 
       // ✅ Parse JSON fields
       const van_listing = parseJSONField(req.body.van_listing, van.van_listing);
@@ -153,28 +175,42 @@ router.put(
       );
       const media = parseJSONField(req.body.media, van.media);
       const sold =
-        req.body.sold !== undefined
-          ? req.body.sold === "true"
-          : van.sold;
+        req.body.sold !== undefined ? req.body.sold === "true" : van.sold;
 
-      // ✅ Gallery (replace only if new files uploaded)
-      let gallery = van.gallery;
-      if (req.files["gallery"] && req.files["gallery"].length > 0) {
-        gallery = req.files["gallery"].map((f) => ({
-          url: f.path,
-          caption: "",
-        }));
-      }
+      // ✅ Existing gallery & blocks
+      let existingGallery = van.gallery || [];
+      let existingBlocks = van.blocks || [];
 
-      // ✅ Blocks (captions + images)
-      let blocks = van.blocks || [];
-      if (req.body.blocksData) {
-        const blocksData = JSON.parse(req.body.blocksData || "[]");
-        blocks = blocksData.map((b, i) => ({
-          caption: b.caption,
-          image: req.files["blockImages"]?.[i]?.path || b.image || null, // keep old if no new upload
-        }));
-      }
+      // ✅ Upload new gallery images (append to existing)
+      const newGallery = await Promise.all(
+        (req.files["gallery"] || []).map(async (file) => ({
+          url: await uploadToS3(file.buffer, "van/gallery", file.originalname),
+          caption: "", // optional, ya req.body se le lo
+        }))
+      );
+      const updatedGallery = [...existingGallery, ...newGallery];
+
+      // ✅ Parse blocks data from body (captions)
+      const blocksData = parseJSONField(req.body.blocksData, []);
+
+      // ✅ Merge existing blocks with uploaded block images or new blocks
+      const updatedBlocks = await Promise.all(
+        blocksData.map(async (block, index) => {
+          const oldBlock = existingBlocks[index] || {};
+          const newImage = req.files["blockImages"]?.[index]
+            ? await uploadToS3(
+                req.files["blockImages"][index].buffer,
+                "van/blocks",
+                req.files["blockImages"][index].originalname
+              )
+            : oldBlock.image || null;
+
+          return {
+            caption: block.caption || oldBlock.caption || "",
+            image: newImage,
+          };
+        })
+      );
 
       // ✅ Assign updated values
       van.van_listing = van_listing;
@@ -182,22 +218,19 @@ router.put(
       van.detailed_features = detailed_features;
       van.media = media;
       van.sold = sold;
-      van.gallery = gallery;
-      van.blocks = blocks;
+      van.gallery = updatedGallery;
+      van.blocks = updatedBlocks;
 
       const updatedVan = await van.save();
 
-      res
-        .status(200)
-        .json({ message: "Van updated successfully", van: updatedVan });
+      res.status(200).json({ message: "Van updated successfully", van: updatedVan });
     } catch (error) {
       console.error("Error updating van:", error);
-      res
-        .status(500)
-        .json({ message: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 );
+;
 
 
 // -------------------

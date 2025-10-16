@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { createPortfolio, updatePortfolio } from "../../../../api/portfolio/createPortfolio";
+import {
+  createPortfolio,
+  updatePortfolio,
+} from "../../../../api/portfolio/createPortfolio";
 
 export default function PortfolioForm() {
-   const editData = useSelector((state)=> state.editData.editData)
+  const editData = useSelector((state) => state.editData.editData);
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [blocks, setBlocks] = useState([{ image: null, caption: "" }]);
 
@@ -27,10 +29,9 @@ export default function PortfolioForm() {
   const [features, setFeatures] = useState([{ category: "", items: [""] }]);
 
   // Media (video)
-  const [video, setVideo] = useState({ title: ""});
+  const [video, setVideo] = useState({ title: "" });
 
-  // ✅ Gallery Change
- // ✅ Auto-fill if editData is available
+  // ✅ Auto-fill if editData is available
   useEffect(() => {
     if (editData?._id) {
       setTitle(editData.van_listing?.title || "");
@@ -43,20 +44,27 @@ export default function PortfolioForm() {
       setWheelbase(editData.van_listing?.specifications?.wheelbase || "");
       setDrivetrain(editData.van_listing?.specifications?.drivetrain || "");
       setCapacity(
-        editData.van_listing?.specifications?.capacity || { sits: "", sleeps: "" }
+        editData.van_listing?.specifications?.capacity || {
+          sits: "",
+          sleeps: "",
+        }
       );
 
       setFeatures(editData.detailed_features || [{ category: "", items: [""] }]);
-      setVideo(editData.media?.video || { title: ""});
+      setVideo(editData.media?.video || { title: "" });
 
       if (editData.blocks?.length) {
-        setBlocks(editData.blocks.map((b) => ({ caption: b.caption, image: null })));
+        setBlocks(
+          editData.blocks.map((b) => ({ caption: b.caption, image: null }))
+        );
       }
     }
   }, [editData]);
 
   // ✅ Handlers
-  const handleGalleryChange = (e) => setGalleryFiles([...e.target.files]);
+  const handleGalleryChange = (e) => {
+    setGalleryFiles([...galleryFiles, ...e.target.files]);
+  };
 
   const handleBlockChange = (index, field, value) => {
     const newBlocks = [...blocks];
@@ -66,34 +74,48 @@ export default function PortfolioForm() {
 
   const addBlock = () => setBlocks([...blocks, { image: null, caption: "" }]);
 
+  const removeBlock = (index) => {
+    setBlocks(blocks.filter((_, i) => i !== index));
+  };
+
   const addFeatureCategory = () =>
     setFeatures([...features, { category: "", items: [""] }]);
 
- const handleFeatureChange = (fIndex, field, value, itemIndex = null) => {
-  setFeatures((prev) =>
-    prev.map((feature, i) => {
-      if (i !== fIndex) return feature; // other items same
-
-      if (field === "category") {
-        return { ...feature, category: value }; // new object with updated category
-      }
-
-      if (field === "item") {
-        const newItems = [...feature.items];
-        newItems[itemIndex] = value; // safe update
-        return { ...feature, items: newItems };
-      }
-
-      return feature;
-    })
-  );
-};
-
+  const handleFeatureChange = (fIndex, field, value, itemIndex = null) => {
+    setFeatures((prev) =>
+      prev.map((feature, i) => {
+        if (i !== fIndex) return feature;
+        if (field === "category") {
+          return { ...feature, category: value };
+        }
+        if (field === "item") {
+          const newItems = [...feature.items];
+          newItems[itemIndex] = value;
+          return { ...feature, items: newItems };
+        }
+        return feature;
+      })
+    );
+  };
 
   const addFeatureItem = (fIndex) => {
     const updated = [...features];
     updated[fIndex].items.push("");
     setFeatures(updated);
+  };
+
+  const removeFeatureCategory = (index) => {
+    setFeatures(features.filter((_, i) => i !== index));
+  };
+
+  const removeFeatureItem = (fIndex, iIndex) => {
+    const updated = [...features];
+    updated[fIndex].items.splice(iIndex, 1);
+    setFeatures(updated);
+  };
+
+  const removeGalleryImage = (index) => {
+    setGalleryFiles(galleryFiles.filter((_, i) => i !== index));
   };
 
   // ✅ Submit Handler
@@ -137,16 +159,15 @@ export default function PortfolioForm() {
 
     try {
       if (editData?._id) {
-    await updatePortfolio(editData, formDataToSend);
-  } else {
-    await createPortfolio(formDataToSend);
-  }
+        await updatePortfolio(editData, formDataToSend);
+      } else {
+        await createPortfolio(formDataToSend);
+      }
     } catch (error) {
       console.error("❌ Error uploading:", error);
       alert("Something went wrong!");
     }
   };
-
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
@@ -171,12 +192,14 @@ export default function PortfolioForm() {
             className="border p-2 rounded w-full"
           />
         </div>
+
         <textarea
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="border p-2 rounded w-full"
         />
+
         <div className="grid grid-cols-2 gap-4">
           <input
             type="text"
@@ -251,24 +274,41 @@ export default function PortfolioForm() {
               className="border p-2 rounded w-full mb-2"
             />
             {feature.items.map((item, i) => (
-              <input
-                key={i}
-                type="text"
-                placeholder="Feature item"
-                value={item}
-                onChange={(e) =>
-                  handleFeatureChange(fIndex, "item", e.target.value, i)
-                }
-                className="border p-2 rounded w-full mb-2"
-              />
+              <div key={i} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  placeholder="Feature item"
+                  value={item}
+                  onChange={(e) =>
+                    handleFeatureChange(fIndex, "item", e.target.value, i)
+                  }
+                  className="border p-2 rounded w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFeatureItem(fIndex, i)}
+                  className="bg-red-500 text-white px-2 rounded"
+                >
+                  ✕
+                </button>
+              </div>
             ))}
-            <button
-              type="button"
-              onClick={() => addFeatureItem(fIndex)}
-              className="bg-gray-500 text-white px-3 py-1 rounded"
-            >
-              + Add Item
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => addFeatureItem(fIndex)}
+                className="bg-gray-500 text-white px-3 py-1 rounded"
+              >
+                + Add Item
+              </button>
+              <button
+                type="button"
+                onClick={() => removeFeatureCategory(fIndex)}
+                className="bg-red-600 text-white px-3 py-1 rounded"
+              >
+                🗑️ Remove Category
+              </button>
+            </div>
           </div>
         ))}
         <button
@@ -281,16 +321,13 @@ export default function PortfolioForm() {
 
         {/* MEDIA */}
         <h3 className="text-lg font-semibold">Media (Video)</h3>
-        <div className="grid grid-cols-3 gap-4">
-          <input
-            type="text"
-            placeholder="Video Title"
-            value={video.title}
-            onChange={(e) => setVideo({ ...video, title: e.target.value })}
-            className="border p-2 rounded w-full"
-          />
-       
-        </div>
+        <input
+          type="text"
+          placeholder="Video Title"
+          value={video.title}
+          onChange={(e) => setVideo({ ...video, title: e.target.value })}
+          className="border p-2 rounded w-full"
+        />
 
         {/* GALLERY UPLOAD */}
         <div>
@@ -299,8 +336,28 @@ export default function PortfolioForm() {
             type="file"
             multiple
             onChange={handleGalleryChange}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded w-full mb-4"
           />
+
+          {/* Preview Gallery */}
+          <div className="flex flex-wrap gap-4">
+            {galleryFiles.map((file, index) => (
+              <div key={index} className="relative w-24 h-24">
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="w-full h-full object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeGalleryImage(index)}
+                  className="absolute top-0 right-0 bg-red-600 text-white text-xs px-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* BLOCKS */}
@@ -328,6 +385,13 @@ export default function PortfolioForm() {
                 }
                 className="border p-2 rounded w-full"
               />
+              <button
+                type="button"
+                onClick={() => removeBlock(index)}
+                className="bg-red-500 text-white px-3 py-1 rounded mt-2"
+              >
+                🗑️ Remove Block
+              </button>
             </div>
           ))}
           <button

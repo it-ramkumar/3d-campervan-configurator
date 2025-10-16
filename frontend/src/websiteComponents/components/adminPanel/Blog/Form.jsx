@@ -6,22 +6,22 @@ const BlogForm = () => {
   const editData = useSelector((state) => state.editData.editData);
 
   const [title, setTitle] = useState("");
-  const [des, setDes] = useState(""); // ✅ description added
-  const [gallery, setGallery] = useState([]);
+  const [des, setDes] = useState("");
+  const [gallery, setGallery] = useState([]); // new or existing gallery
   const [blocks, setBlocks] = useState([{ heading: "", paragraph: "", image: null }]);
 
-  // ✅ Prefill form when editData is available
+  // ✅ Prefill form when editing
   useEffect(() => {
     if (editData && editData._id) {
       setTitle(editData.title || "");
-      setDes(editData.des || ""); // ✅ prefill description
+      setDes(editData.des || "");
       setGallery(editData.gallery || []);
       setBlocks(
         editData.blocks && editData.blocks.length > 0
           ? editData.blocks.map((b) => ({
               heading: b.heading || "",
               paragraph: b.paragraph || "",
-              image: null, // user will re-upload image
+              image: null, // re-upload or keep null
             }))
           : [{ heading: "", paragraph: "", image: null }]
       );
@@ -40,22 +40,43 @@ const BlogForm = () => {
     setBlocks([...blocks, { heading: "", paragraph: "", image: null }]);
   };
 
-  // ✅ submit form
+  // ✅ remove block
+  const removeBlock = (index) => {
+    setBlocks(blocks.filter((_, i) => i !== index));
+  };
+
+  // ✅ remove block image
+  const removeBlockImage = (index) => {
+    const updatedBlocks = [...blocks];
+    updatedBlocks[index].image = null;
+    setBlocks(updatedBlocks);
+  };
+
+  // ✅ handle gallery change (add new)
+  const handleGalleryChange = (e) => {
+    setGallery([...gallery, ...Array.from(e.target.files)]);
+  };
+
+  // ✅ remove gallery image
+  const removeGalleryImage = (index) => {
+    const newGallery = gallery.filter((_, i) => i !== index);
+    setGallery(newGallery);
+  };
+
+  // ✅ Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("des", des); // ✅ added description field
+    formData.append("des", des);
 
-    // gallery
-    for (let i = 0; i < gallery.length; i++) {
-      if (gallery[i] instanceof File) {
-        formData.append("gallery", gallery[i]); // only new files
-      }
-    }
+    // gallery images
+    gallery.forEach((img) => {
+      if (img instanceof File) formData.append("gallery", img);
+    });
 
-    // blocksData JSON (without images)
+    // blocks (without images)
     const blocksData = blocks.map((b) => ({
       heading: b.heading,
       paragraph: b.paragraph,
@@ -70,7 +91,7 @@ const BlogForm = () => {
     try {
       let res;
       if (editData && editData._id) {
-        // ✅ UPDATE
+        // UPDATE
         res = await axios.put(
           `http://localhost:5000/api/blog/with-blocks/${editData._id}`,
           formData,
@@ -79,18 +100,17 @@ const BlogForm = () => {
             withCredentials: true,
           }
         );
-        alert("Blog updated!");
+        alert("✅ Blog updated!");
       } else {
-        // ✅ CREATE
+        // CREATE
         res = await axios.post("http://localhost:5000/api/blog/with-blocks", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Blog created!");
+        alert("✅ Blog created!");
       }
-      console.log("Success:", res.data);
     } catch (err) {
       console.error(err);
-      alert("Upload failed!");
+      alert("❌ Upload failed!");
     }
   };
 
@@ -121,19 +141,28 @@ const BlogForm = () => {
         ></textarea>
       </div>
 
-      {/* ✅ Gallery */}
+      {/* ✅ Gallery with preview + delete */}
       <div>
         <label className="block font-semibold">Gallery Images</label>
-        <input type="file" multiple onChange={(e) => setGallery([...e.target.files])} />
-        {editData && editData.gallery && editData.gallery.length > 0 && (
-          <div className="flex gap-2 mt-2">
-            {editData.gallery.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt="gallery"
-                className="h-16 w-16 object-cover rounded"
-              />
+        <input type="file" multiple onChange={handleGalleryChange} />
+
+        {gallery.length > 0 && (
+          <div className="flex flex-wrap gap-3 mt-3">
+            {gallery.map((img, i) => (
+              <div key={i} className="relative w-24 h-24">
+                <img
+                  src={img instanceof File ? URL.createObjectURL(img) : img}
+                  alt="gallery"
+                  className="w-full h-full object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeGalleryImage(i)}
+                  className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded"
+                >
+                  ✕
+                </button>
+              </div>
             ))}
           </div>
         )}
@@ -141,9 +170,17 @@ const BlogForm = () => {
 
       {/* ✅ Blocks */}
       <div>
-        <h3 className="font-bold">Blocks</h3>
+        <h3 className="font-bold mb-2">Blocks</h3>
         {blocks.map((block, index) => (
-          <div key={index} className="border p-3 mt-3 rounded bg-white">
+          <div key={index} className="border p-3 mt-3 rounded bg-white relative">
+            <button
+              type="button"
+              onClick={() => removeBlock(index)}
+              className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded"
+            >
+              ✕
+            </button>
+
             <input
               type="text"
               placeholder="Heading"
@@ -157,12 +194,33 @@ const BlogForm = () => {
               onChange={(e) => handleBlockChange(index, "paragraph", e.target.value)}
               className="border p-2 w-full mb-2"
             />
-            <input
-              type="file"
-              onChange={(e) => handleBlockChange(index, "image", e.target.files[0])}
-            />
+
+            {/* Image upload + preview + delete */}
+            <div className="flex items-center gap-3">
+              <input
+                type="file"
+                onChange={(e) => handleBlockChange(index, "image", e.target.files[0])}
+              />
+              {block.image && (
+                <div className="relative w-20 h-20">
+                  <img
+                    src={URL.createObjectURL(block.image)}
+                    alt="block"
+                    className="w-full h-full object-cover rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeBlockImage(index)}
+                    className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         ))}
+
         <button
           type="button"
           onClick={addBlock}

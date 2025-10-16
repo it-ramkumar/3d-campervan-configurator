@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const PortfolioVan = require('../models/portfolio')// Adjust path as needed
 const multer = require("multer")
-const { portfolios } = require("../services/s3")
-const upload = multer({ storage: portfolios });
+// const { portfolios } = require("../services/s3")
+// const upload = multer({ storage: portfolios });
+const upload = multer({ storage: multer.memoryStorage() });
+const { uploadToS3 } = require("../services/s3")
 
 
 router.post(
@@ -15,16 +17,27 @@ router.post(
   async (req, res) => {
     try {
       // ✅ Extract gallery
-      const gallery = req.files["gallery"]?.map((f) => f.location) || [];
-
+const gallery = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
+        )
+      );
       // ✅ Parse blocksData from body (captions etc.)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
       // ✅ Merge images with captions
-      const blocks = blocksData.map((b, i) => ({
-        caption: b.caption,
-        image: req.files["blockImages"]?.[i]?.location || null,
-      }));
+const blocks = await Promise.all(
+  blocksData.map(async (block, index) => ({
+    caption: block.caption, // <-- use 'block', not 'b'
+    image: req.files["blockImages"]?.[index]
+      ? await uploadToS3(
+          req.files["blockImages"][index].buffer,
+          "portfolio/blocks",
+          req.files["blockImages"][index].originalname
+        )
+      : null,
+  }))
+);
 
       // ✅ Create new portfolioVan doc
       const newPortfolio = new PortfolioVan({
@@ -142,14 +155,25 @@ router.put(
   ]),
   async (req, res) => {
     try {
-      const gallery = req.files["gallery"]?.map((f) => f.path) || [];
-
+const gallery = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
+        )
+      );
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      const blocks = blocksData.map((b, i) => ({
-        caption: b.caption,
-        image: req.files["blockImages"]?.[i]?.path || b.image || null,
-      }));
+      const blocks = await Promise.all(
+  blocksData.map(async (block, index) => ({
+    caption: block.caption, // <-- use 'block', not 'b'
+    image: req.files["blockImages"]?.[index]
+      ? await uploadToS3(
+          req.files["blockImages"][index].buffer,
+          "portfolio/blocks",
+          req.files["blockImages"][index].originalname
+        )
+      : null,
+  }))
+);
 
      const updatedPortfolio = await PortfolioVan.findOneAndUpdate(
   { slug: req.body.slug || req.params.slug }, // filter

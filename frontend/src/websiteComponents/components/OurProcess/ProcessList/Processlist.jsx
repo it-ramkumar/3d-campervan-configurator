@@ -1,6 +1,32 @@
 "use client";
 import { motion } from "framer-motion";
 
+// --- ICONS for the 'Fly in, Drive out' section ---
+const BuildIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-gray-700 group-hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-1.007 1.11-1.212l2.27-1.023a1.875 1.875 0 011.64 0l2.27 1.023c.55.205 1.02.67 1.11 1.212l.223 1.341c.12.721.57 1.362 1.173 1.73l1.98.99c.642.32 1.092.96 1.092 1.688V13.5a1.875 1.875 0 01-1.875 1.875h-2.25a1.875 1.875 0 01-1.875-1.875v-1.125a3.375 3.375 0 00-3.375-3.375H9.375a3.375 3.375 0 00-3.375 3.375v1.125A1.875 1.875 0 014.125 15.375H1.875A1.875 1.875 0 010 13.5v-2.073c0-.728.45-1.368 1.092-1.688l1.98-.99c.603-.368 1.053-1.009 1.173-1.73l.223-1.341z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75l-3.75-3.75M12 12l-3.75 3.75" />
+    </svg>
+);
+const PlaneIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-gray-700 group-hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+    </svg>
+);
+const CampgroundIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-gray-700 group-hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+    </svg>
+);
+
+// --- NEW ICON for Pro Tip Box ---
+const ProTipIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.4-2.4l-1.178-.398 1.178-.398a3.375 3.375 0 002.4-2.4l.398-1.178.398 1.178a3.375 3.375 0 002.4 2.4l1.178.398-1.178.398a3.375 3.375 0 00-2.4 2.4z" />
+    </svg>
+);
+
+
 // Animation Variants for re-use
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -24,20 +50,19 @@ const fadeInUp = {
   },
 };
 
-// CHANGED: Made title animation more pronounced
 const titleStagger = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05, // Slower stagger
+      staggerChildren: 0.05,
       delayChildren: 0.1,
     },
   },
 };
 
 const titleLetter = {
-  hidden: { opacity: 0, y: 20, x: -10 }, // Added x motion
+  hidden: { opacity: 0, y: 20, x: -10 },
   visible: {
     opacity: 1,
     y: 0,
@@ -87,7 +112,6 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
 
   return (
     <div className="grid grid-cols-[1fr_auto_2fr] md:grid-cols-[1fr_auto_3fr] gap-x-4 md:gap-x-6 items-start relative">
-
       <motion.div className="text-right" variants={textVariants}>
         <h4 className="font-serif font-semibold text-xl md:text-[28px] leading-none pt-1">
           {time}
@@ -136,6 +160,19 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
   );
 };
 
+const FlyInStep = ({ icon, text, isLast = false }) => (
+    <div className="flex items-start gap-x-4 group">
+        <div className="flex flex-col items-center shrink-0">
+            <div className="p-2 bg-gray-200 group-hover:bg-gray-300 transition-colors rounded-full border border-gray-300">
+                {icon}
+            </div>
+            {!isLast && <div className="w-px h-16 bg-gray-300 mt-2"></div>}
+        </div>
+        <p className="font-serif font-normal text-base md:text-xl leading-relaxed pt-1">
+            {text}
+        </p>
+    </div>
+);
 
 export default function ProcessPage() {
   const processData = [
@@ -191,6 +228,12 @@ export default function ProcessPage() {
     },
   ];
 
+  const flyInSteps = [
+    { text: "You order your van and we build it.", icon: <BuildIcon /> },
+    { text: "You fly in to pick it up.", icon: <PlaneIcon /> },
+    { text: "We book your first two nights at a local campground in Big Bear.", icon: <CampgroundIcon /> },
+  ];
+
   const mainTitle = "Big Bear Vans Custom Build Process";
 
   return (
@@ -204,7 +247,6 @@ export default function ProcessPage() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {/* CHANGED: Enhanced hover effect with scale and shadow */}
           <motion.div variants={fadeInUp} whileHover={{ y: -12, scale: 1.05, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
             <InfoCard
               title="Bring Your Van or Let Us Source It"
@@ -252,32 +294,55 @@ export default function ProcessPage() {
           ))}
         </div>
 
-        {/* CHANGED: Enhanced hover effect with scale and shadow */}
+        {/* --- REDESIGNED SECTION --- */}
         <motion.div
-          className="max-w-3xl mx-auto text-center mt-8 md:mt-12"
+          className="max-w-5xl mx-auto mt-8 md:mt-12 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-white to-gray-100 shadow-xl"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
-          whileHover={{ y: -12, scale: 1.02, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          whileHover={{ y: -10, scale: 1.01, boxShadow: "0px 20px 30px rgba(0, 0, 0, 0.1)" }}
         >
-            <h2 className="font-serif font-bold text-3xl md:text-[48px] leading-tight md:leading-none mb-8">
+            <h2 className="text-center font-serif font-bold text-3xl md:text-[48px] leading-tight md:leading-none mb-10">
                 Fly in, Drive out
             </h2>
-            <div className="font-serif text-base md:text-xl leading-relaxed space-y-4 text-left">
-                <p>For most of our clients, the process works like this:</p>
-                <ol className="list-decimal list-inside space-y-2">
-                    <li>You order your van and we build it.</li>
-                    <li>You fly in to pick it up.</li>
-                    <li>We book your first two nights at a local campground in Big Bear.</li>
-                </ol>
-                <p>This allows you to stay close by, test everything in the van, and drive back to our shop for any final tweaks.</p>
-                <p>
-                    <span className="font-bold">Pro Tip:</span> You can ship your personal gear directly to our shop before you arrive. We’ll load everything into your new van so you’re ready to hit the road immediately.
-                </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+                {/* Left Column: Timeline */}
+                <div className="flex flex-col justify-center h-full">
+                    <div className="space-y-2">
+                        {flyInSteps.map((step, index) => (
+                            <FlyInStep
+                                key={index}
+                                icon={step.icon}
+                                text={step.text}
+                                isLast={index === flyInSteps.length - 1}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Right Column: Text & Pro Tip */}
+                <div className="font-serif text-base md:text-xl leading-relaxed space-y-6 text-left">
+                    <p className="opacity-80">
+                        For most of our clients, the process is simple and seamless. We handle the logistics so you can focus on the adventure ahead.
+                    </p>
+                    <p className="opacity-80">
+                        This initial stay allows you to test everything in a real-world setting and drive back to our shop for any final tweaks before your journey home.
+                    </p>
+
+                    {/* Pro Tip Box */}
+                    <div className="bg-gray-800 text-white rounded-xl p-6 space-y-3 shadow-lg">
+                        <div className="flex items-center gap-x-3">
+                            <ProTipIcon />
+                            <h4 className="font-bold text-xl">Pro Tip</h4>
+                        </div>
+                        <p className="text-gray-300 leading-relaxed">
+                            You can ship personal gear directly to our shop before you arrive. We’ll load it into your new van so you’re ready to hit the road immediately.
+                        </p>
+                    </div>
+                </div>
             </div>
         </motion.div>
-
       </div>
     </section>
   );
