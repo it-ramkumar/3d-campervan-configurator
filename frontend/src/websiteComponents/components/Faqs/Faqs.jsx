@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { FaTwitter, FaYoutube, FaLinkedin, FaWhatsapp, FaInstagram, FaPlus, FaMinus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
 import { gsap } from "gsap";
-import {Link} from "react-router-dom";
 
 const faqs = [
   {
@@ -36,18 +35,11 @@ const faqs = [
 export default function FAQs() {
   const [openIndex, setOpenIndex] = useState(null);
   const sectionRef = useRef(null);
-  const logoRef = useRef(null);
-  const socialIconsRef = useRef(null);
   const faqItemsRef = useRef([]);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       // Animation for the logo and social icons
-      gsap.fromTo(
-        [logoRef.current, socialIconsRef.current],
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power2.out" }
-      );
 
       // Animation for the FAQ items
       gsap.fromTo(
@@ -127,7 +119,8 @@ export default function FAQs() {
           ))}
         </div>
 
-       
+        {/* Logo and Socials */}
+
       </div>
     </div>
   );

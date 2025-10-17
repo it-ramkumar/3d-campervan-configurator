@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-import { FaTwitter, FaYoutube, FaLinkedin, FaWhatsapp, FaInstagram, FaPlus, FaMinus } from "react-icons/fa";
+import {  FaPlus, FaMinus } from "react-icons/fa";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {Link} from "react-router-dom";
 
 // Register the GSAP plugin if in a browser environment
 if (typeof window !== "undefined") {
@@ -38,18 +37,13 @@ const faqs = [
 export default function FaqV() {
   const [openIndex, setOpenIndex] = useState(null);
   const sectionRef = useRef(null);
-  const logoRef = useRef(null);
-  const socialIconsRef = useRef(null);
+
   const faqItemsRef = useRef([]);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       // Animation for the logo and social icons
-      gsap.fromTo(
-        [logoRef.current, socialIconsRef.current],
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power2.out" }
-      );
+
 
       // Animation for the FAQ items
       gsap.fromTo(
@@ -79,7 +73,7 @@ export default function FaqV() {
 
   return (
     // --- REMOVED ALL BOTTOM PADDING HERE (pb-4 changed to pb-0) ---
-    <div ref={sectionRef} className="bg-white py-10 pb-14 px-4 md:px-8">
+    <div ref={sectionRef} className="bg-white pt-2 pb-15 px-4 md:px-8">
       <div className="max-w-4xl mx-auto">
         {/* FAQ Section Heading */}
         <div className="text-center mb-8">
