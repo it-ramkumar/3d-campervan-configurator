@@ -200,5 +200,3 @@ html {
   scrollbar-width: none;    /* Firefox */
 }
 .hide-scrollbar::-webkit-scrollbar { display: none; }
-p,li{
-  font-size: 15px}
