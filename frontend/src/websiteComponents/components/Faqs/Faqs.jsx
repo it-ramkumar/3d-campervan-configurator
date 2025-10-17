@@ -127,29 +127,7 @@ export default function FAQs() {
           ))}
         </div>
 
-        {/* Logo and Socials */}
-        <div className="mt-12 flex flex-col items-center">
-          <div ref={logoRef}>
-            <img src="/images/logoo.png" alt="Big Bear Vans Logo" width={242} height={44} />
-          </div>
-          <div ref={socialIconsRef} className="flex gap-4 mt-6">
-            <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
-              <FaTwitter size={30} className="text-black" />
-            </Link>
-            <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
-              <FaYoutube size={30} className="text-black" />
-            </Link>
-            <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
-              <FaLinkedin size={30} className="text-black" />
-            </Link>
-            {/* <Link to="#" className="p-2 transition-all duration-300 transform hover:scale-125">
-              <FaWhatsapp size={30} className="text-black" />
-            </Link> */}
-            <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
-              <FaInstagram size={30} className="text-black" />
-            </Link>
-          </div>
-        </div>
+       
       </div>
     </div>
   );

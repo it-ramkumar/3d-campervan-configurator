@@ -12,7 +12,7 @@ export default function BlackButton({
 }) {
   const baseClasses = `
     ${className}
-    bg-black
+    bg-gray-700
     text-white font-semibold
     rounded-sm sm:rounded-base md:rounded-lg
     cursor-pointer transition-all duration-300 ease-in-out

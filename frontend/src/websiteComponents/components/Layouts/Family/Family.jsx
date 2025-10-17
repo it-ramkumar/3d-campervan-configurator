@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 // --- NEW: Import icons from the library ---
 import { MdFamilyRestroom } from "react-icons/md";
 import { FaUserFriends } from "react-icons/fa";
+import BlackButton from "../../Common/Button/BlackButton";
 
 
 // --- Enhanced Compact Category Item Component (No changes here) ---
@@ -197,22 +198,11 @@ export default function Family() {
             />
           </motion.div>
         </motion.div>
+ <div className="flex justify-center">
 
-        <Link to="/family-layout">
-            <div className="flex justify-center">
-            <motion.button
-                className="bg-gradient-to-r from-[#2761FD] to-blue-600 text-white font-sans cursor-pointer font-bold text-lg rounded-xl w-48 h-12 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-600"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-            >
-                Click To Explore
-            </motion.button>
-            </div>
-        </Link>
+        <BlackButton label={" Click To Explore"} link={"/family-layout"}/>
+        </div>
+     
       </div>
     </section>
   );

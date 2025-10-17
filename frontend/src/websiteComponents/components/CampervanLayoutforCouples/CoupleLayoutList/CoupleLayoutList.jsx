@@ -101,7 +101,7 @@ export default function CamperProjectsPage() {
                     {project.description}
                   </p>
                                             <BlackButton label={"View Details"} link={"/"}/>
-              
+
                 </div>
 
                 <div className="relative w-1/2 h-[200px] sm:h-[280px] md:h-[450px] lg:h-[550px] flex-shrink-0">
@@ -124,30 +124,7 @@ export default function CamperProjectsPage() {
         </div>
 
         {/* ADDED: Logo and Social Media Icons Section */}
-        <div className="text-center pt-16 pb-0 flex flex-col items-center space-y-4">
-          <img
-            src="/images/logoo.png"
-            alt="Big Bear Vans Logo"
-            width={200}
-            height={70}
-            style={{ objectFit: 'contain' }}
-            loading="lazy"
-          />
-          <div className="flex justify-center space-x-6">
-            <a href="https://www.instagram.com/bigbearvans/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <FaInstagram size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-            </a>
-            <a href="https://www.facebook.com/bigbearvans" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <FaFacebook size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-            </a>
-            <a href="https://x.com/i/flow/login?redirect_after_login=%2Fbigbearvans_" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <FaTwitter size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-            </a>
-            <a href="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-              <FaYoutube size={30} className="text-black cursor-pointer transform hover:scale-125 transition-transform duration-300" />
-            </a>
-          </div>
-        </div>
+     
 
       </div>
     </section>
