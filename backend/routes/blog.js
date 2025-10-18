@@ -2,19 +2,21 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const Blog = require("../models/blog");
+const { protect, adminOnly } = require("../middleware/authMiddleware")
+
 
 const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3 } = require("../services/s3")
 
 router.post(
-  "/with-blocks",
+  "/with-blocks", protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 50 },
   ]),
   async (req, res) => {
     try {
-    // Compress + upload gallery images
+      // Compress + upload gallery images
       const gallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "blogs/gallery", file.originalname)
@@ -23,17 +25,17 @@ router.post(
       // ✅ Blocks data (heading, paragraph)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-    // Compress + upload block images
+      // Compress + upload block images
       const blocks = await Promise.all(
         blocksData.map(async (block, index) => ({
           heading: block.heading,
           paragraph: block.paragraph,
           image: req.files["blockImages"]?.[index]
             ? await uploadToS3(
-                req.files["blockImages"][index].buffer,
-                "blogs/blocks",
-                req.files["blockImages"][index].originalname
-              )
+              req.files["blockImages"][index].buffer,
+              "blogs/blocks",
+              req.files["blockImages"][index].originalname
+            )
             : null,
         }))
       );
@@ -61,7 +63,7 @@ router.post(
 
 // 🟡 UPDATE BLOG
 router.put(
-  "/with-blocks/:id",
+  "/with-blocks/:id", protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 50 },
@@ -71,7 +73,7 @@ router.put(
       const { id } = req.params;
 
       // ✅ New gallery images (if uploaded)
- const gallery = await Promise.all(
+      const gallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "blogs/gallery", file.originalname)
         )
@@ -86,10 +88,10 @@ router.put(
           paragraph: block.paragraph,
           image: req.files["blockImages"]?.[index]
             ? await uploadToS3(
-                req.files["blockImages"][index].buffer,
-                "blogs/blocks",
-                req.files["blockImages"][index].originalname
-              )
+              req.files["blockImages"][index].buffer,
+              "blogs/blocks",
+              req.files["blockImages"][index].originalname
+            )
             : null,
         }))
       );
@@ -166,7 +168,7 @@ router.get("/:slug", async (req, res) => {
 });
 
 // 🔴 DELETE BLOG
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",protect, adminOnly, async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
 

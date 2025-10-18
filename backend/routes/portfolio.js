@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const PortfolioVan = require('../models/portfolio')// Adjust path as needed
 const multer = require("multer")
-// const { portfolios } = require("../services/s3")
-// const upload = multer({ storage: portfolios });
 const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3 } = require("../services/s3")
+const { protect, adminOnly } = require("../middleware/authMiddleware")
+
 
 
 router.post(
-  "/",
+  "/",protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 20 },
@@ -148,7 +148,7 @@ router.get("/:slug", async (req, res) => {
  * UPDATE (PUT by slug)
  */
 router.put(
-  "/:slug",
+  "/:slug",protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 20 },
@@ -222,7 +222,7 @@ const gallery = await Promise.all(
 /**
  * DELETE (by slug)
  */
-router.delete("/:slug", async (req, res) => {
+router.delete("/:slug",protect, adminOnly, async (req, res) => {
   try {
     const deletedPortfolio = await PortfolioVan.findOneAndDelete({
       slug: req.params.slug,

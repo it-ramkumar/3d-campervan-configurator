@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Quote = require("../models/quote");
-const appendToSheet  = require("../services/appendToSheet");
+const appendToSheet = require("../services/appendToSheet");
+const { protect, adminOnly } = require("../middleware/authMiddleware")
+
 
 
 // POST - Create new quote request
@@ -45,7 +47,7 @@ router.post("/", async (req, res) => {
   }
 });
 // GET - Fetch quotes by email or phone
-router.get("/search", async (req, res) => {
+router.get("/search", protect, adminOnly, async (req, res) => {
 
   try {
     const { email, phone } = req.query; // dono params receive
@@ -73,7 +75,7 @@ router.get("/search", async (req, res) => {
 });
 
 // ✅ Get all quotes
-router.get("/all-quotes", async (req, res) => {
+router.get("/all-quotes", protect, adminOnly, async (req, res) => {
   try {
     const quotes = await Quote.find().sort({ createdAt: -1 });
     res.status(200).json({ data: quotes });
@@ -84,7 +86,7 @@ router.get("/all-quotes", async (req, res) => {
 });
 
 // ✅ Get quote by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", protect, adminOnly, async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id);
     if (!quote) {
@@ -98,7 +100,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // ✅ Update quote by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", protect, adminOnly, async (req, res) => {
   try {
 
     const updatedQuote = await Quote.findByIdAndUpdate(
@@ -117,7 +119,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // ✅ Delete quote by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const deletedQuote = await Quote.findByIdAndDelete(req.params.id);
     if (!deletedQuote) {

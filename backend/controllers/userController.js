@@ -73,27 +73,12 @@ const logoutUser = (req, res) => {
   res.json({ message: "Logged out successfully" });
 };
 
-// Profile
-const getProfile = async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.json(user);
-};
 
-// Admin only route
-const adminDashboard = (req, res) => {
-  res.json({ message: "Welcome Admin!" });
-};
 
-// Guest route
-const guestDashboard = (req, res) => {
-  res.json({ message: "Welcome Guest!" });
-};
 
 module.exports = {
   signupUser,
   loginUser,
   logoutUser,
-  getProfile,
-  adminDashboard,
-  guestDashboard,
+
 };

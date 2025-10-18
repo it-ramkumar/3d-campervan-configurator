@@ -1,18 +1,14 @@
-import React, { useState } from "react";
-import { deleteUser } from "../../api/user/deleteUser.js";
+import React, { useState,useEffect } from "react";
+import { deleteUser } from "../../../../api/user/deleteUser.js";
 import Swal from "sweetalert2";
-import { updateUser } from "../../api/user/updateUser.js";
+import { updateUser } from "../../../../api/user/updateUser.js";
+import { getUser } from "../../../../api/user/getUser.js";
 
-export default function UsersData({ searchQuery, users, setUsers }) {
+export default function UsersData() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [users,setUsers] = useState()
 
-  // Search filter
-  const filteredUsers = Array.isArray(users) ? users.filter(
-    (u) =>
-      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : [];
 
   // Handle status change inside modal
   const handleStatusChange = async (id, newStatus) => {
@@ -42,6 +38,14 @@ export default function UsersData({ searchQuery, users, setUsers }) {
     }
   };
 
+  useEffect(()=>{
+const fetch =async ()=>{
+    const users = await getUser()
+    setUsers(users.data)
+}
+fetch()
+  },[])
+  // console.log(users,"user")
   const deleteById = async (id) => {
     // confirm dialog
     const result = await Swal.fire({
@@ -61,7 +65,7 @@ export default function UsersData({ searchQuery, users, setUsers }) {
 
       try {
         const res = await deleteUser(id);
-        console.log(res, "res");
+        // console.log(res, "res");
 
         Swal.fire({
           title: "Deleted!",
@@ -104,7 +108,7 @@ export default function UsersData({ searchQuery, users, setUsers }) {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
           <div className="text-sm text-gray-500">
-            {filteredUsers.length} {filteredUsers.length === 1 ? 'user' : 'users'} found
+            {users?.length} {users?.length === 1 ? 'user' : 'users'} found
           </div>
         </div>
 
@@ -122,8 +126,8 @@ export default function UsersData({ searchQuery, users, setUsers }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => {
+                {users?.length > 0 ? (
+                  users?.map((user) => {
                     const statusColors = getStatusColor(user.status);
                     return (
                       <tr key={user._id} className="hover:bg-gray-50 transition-colors">

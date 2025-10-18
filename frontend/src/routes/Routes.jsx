@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 import Van from "../pages/Van";
 import Layout from "../components/layout/Layout";
-import AdminUse from "../components/adminUse/AdminUse";
 import Preview from "../components/preview/Preview";
-import Changes from "../components/changes/Change"
 import Contact from "../websiteComponents/components/Contact/Contact";
 import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
 import Dashboard from "../websiteComponents/components/Dashboard/Dashboard";
@@ -27,6 +25,7 @@ import OurProcess from "../websiteComponents/components/OurProcess/Processhero/O
 import AboutUs from "../websiteComponents/components/AboutUs/AboutUshero/Aboutus"
 import ShowRoom from "../websiteComponents/components/Showroom/Showroomhero/showroom"
 import NotFound from "../websiteComponents/components/NotFound/NotFound";
+import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"
 
 const AppRoutes = () => {
 
@@ -38,6 +37,8 @@ const AppRoutes = () => {
 
 
         <Route path="/" element={<Home />} />
+        <Route path="/configurator-form" element={<ConfiguratorForm />} />
+
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/showroom" element={<ShowRoom/>}/>
         <Route path="/*" element={<NotFound/>}/>
@@ -57,10 +58,8 @@ const AppRoutes = () => {
         <Route path="/van-form" element={<VanForm />} />
         <Route path="/portfolio-form" element={<PortfolioForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/changes" element={<Changes />} />
         <Route path="/layout" element={<Layout />} />
         <Route path="/van" element={<Van />} />
-        <Route path="/admin" element={<AdminUse />} />
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

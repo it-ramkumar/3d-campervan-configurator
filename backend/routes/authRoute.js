@@ -4,9 +4,6 @@ const {
   signupUser,
   loginUser,
   logoutUser,
-  getProfile,
-  adminDashboard,
-  guestDashboard,
 } = require("../controllers/userController")
 
 const { protect, adminOnly } = require("../middleware/authMiddleware")
@@ -15,11 +12,11 @@ const router = express.Router();
 
 router.post("/signup", signupUser);
 router.post("/login", loginUser);
-router.post("/logout", logoutUser);
+router.post("/logout",protect, logoutUser);
 
-router.get("/profile", protect, getProfile);
-router.get("/admin", protect, adminOnly, adminDashboard);
-router.get("/guest", protect, guestDashboard);
+// router.get("/profile", protect, getProfile);
+// router.get("/admin", protect, adminOnly, adminDashboard);
+// router.get("/guest", protect, guestDashboard);
 
 router.post("/create-admin", protect, adminOnly, async (req, res) => {
   try {

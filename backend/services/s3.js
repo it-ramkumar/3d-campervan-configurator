@@ -1,7 +1,6 @@
 const AWS = require("aws-sdk");
 const sharp = require("sharp");
 
-// AWS config
 AWS.config.update({
   accessKeyId: process.env.VITE_REACT_APP_AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.VITE_REACT_APP_AWS_SECRET_ACCESS_KEY,
@@ -10,23 +9,31 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-// Generic upload function with compression
-async function uploadToS3(fileBuffer, folderName, fileName) {
-  const compressedBuffer = await sharp(fileBuffer)
-    .resize({ width: 1200 })    // Max width
-    .jpeg({ quality: 80 })      // Compression
-    .toBuffer();
+async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
+  let uploadBuffer = fileBuffer;
+
+  // ✅ Compress only if it’s an image
+  if (mimetype && mimetype.startsWith("image/")) {
+    try {
+      uploadBuffer = await sharp(fileBuffer)
+        .resize({ width: 1200 })
+        .jpeg({ quality: 80 })
+        .toBuffer();
+    } catch (err) {
+      console.warn("⚠️ Image compression skipped:", err.message);
+    }
+  }
 
   const params = {
     Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
     Key: `${folderName}/${Date.now()}_${fileName}`,
-    Body: compressedBuffer,
+    Body: uploadBuffer,
     ACL: "public-read",
-    ContentType: "image/jpeg",
+    ContentType: mimetype || "application/octet-stream",
   };
 
   const data = await s3.upload(params).promise();
-  return data.Location; // Returns S3 URL
+  return data.Location;
 }
 
 module.exports = { uploadToS3 };

@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Van = require("../models/vanModel")
 const multer = require("multer")
-// const { vans } = require("../services/s3")
-// const upload = multer({ storage: vans });
 const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3 } = require("../services/s3")
+const { protect, adminOnly } = require("../middleware/authMiddleware")
 
 
-router.post('/',  upload.fields([
+
+router.post('/',  protect, adminOnly, upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 20 },
   ]), async (req, res) => {
@@ -126,23 +126,9 @@ router.get('/:slug', async (req, res) => {
 });
 
 // -------------------
-// Helper to safely parse JSON
-const parseJSONField = (field, fallback) => {
-  if (!field) return fallback;
-  if (typeof field === "string") {
-    try {
-      return JSON.parse(field);
-    } catch (err) {
-      return fallback;
-    }
-  }
-  return field; // already parsed
-};
-
-// -------------------
 // UPDATE van by slug
 router.put(
-  "/:slug",
+  "/:slug", protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 20 },
@@ -236,7 +222,7 @@ router.put(
 // -------------------
 // DELETE van by slug
 // -------------------
-router.delete('/:slug', async (req, res) => {
+router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {
     const { slug } = req.params;
 

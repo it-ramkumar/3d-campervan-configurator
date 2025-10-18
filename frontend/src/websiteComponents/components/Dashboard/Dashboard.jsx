@@ -7,12 +7,21 @@ import PortfolioForm from "../adminPanel/Portfolio/PortfolioForm";
 import PortfolioListing from "../adminPanel/Portfolio/PortfolioLIsting";
 import BlogForm from "../adminPanel/Blog/Form";
 import BlogsListing from "../adminPanel/Blog/BlogsListing";
+import ConfiguratorListing from "../adminPanel/Configurator/ConfiguratorListing";
+import ConfiguratorForm from "../adminPanel/Configurator/ConfiguratorForm"
+import UsersData from "../adminPanel/Users/User";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
+    {
+      id: "Users",
+      label: "Users",
+      icon: "🚐",
+      description: "Listing Users"
+    },
     {
       id: "vans-form",
       label: "Van Form",
@@ -48,6 +57,18 @@ export default function Dashboard() {
       label: "Blogs Form",
       icon: "✏️",
       description: "Create blog items"
+    },
+    {
+      id: "Configurator-data",
+      label: "Configurator Data",
+      icon: "✏️",
+      description: "Configurator Data"
+    },
+      {
+      id: "Configurator-form",
+      label: "Configurator Form",
+      icon: "✏️",
+      description: "Configurator Form"
     }
   ];
 
@@ -67,6 +88,12 @@ export default function Dashboard() {
         return <BlogForm />;
       case "Blogs-listing":
         return <BlogsListing setSelected={setSelected} />;
+         case "Configurator-data":
+        return <ConfiguratorListing setSelected={setSelected}/>;
+           case "Configurator-form":
+        return <ConfiguratorForm  />;
+         case "Users":
+        return <UsersData  />;
       default:
         return <PortfolioListing />;
     }
@@ -182,7 +209,7 @@ export default function Dashboard() {
           {/* Content Area */}
           <div className="p-4 lg:p-6">
             {/* Quick Stats Bar - Simplified */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
               <div className="bg-white border border-gray-200 rounded-lg p-4">
                 <div className="text-2xl font-semibold text-gray-900">24</div>
                 <div className="text-sm text-gray-600">Total Vans</div>
@@ -199,7 +226,7 @@ export default function Dashboard() {
                 <div className="text-2xl font-semibold text-gray-900">4</div>
                 <div className="text-sm text-gray-600">Sold</div>
               </div>
-            </div>
+            </div> */}
 
             {/* Main Content */}
             <div className="bg-white rounded-lg border border-gray-200">

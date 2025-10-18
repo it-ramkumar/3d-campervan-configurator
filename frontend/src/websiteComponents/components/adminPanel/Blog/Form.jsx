@@ -88,30 +88,35 @@ const BlogForm = () => {
       if (b.image) formData.append("blockImages", b.image);
     });
 
-    try {
-      let res;
-      if (editData && editData._id) {
-        // UPDATE
-        res = await axios.put(
-          `http://localhost:5000/api/blog/with-blocks/${editData._id}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-            withCredentials: true,
-          }
-        );
-        alert("✅ Blog updated!");
-      } else {
-        // CREATE
-        res = await axios.post("http://localhost:5000/api/blog/with-blocks", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        alert("✅ Blog created!");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("❌ Upload failed!");
-    }
+ try {
+  let res;
+  const config = {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true, // ✅ send cookies
+  };
+
+  if (editData && editData._id) {
+    // UPDATE
+    res = await axios.put(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks/${editData._id}`,
+      formData,
+      config
+    );
+    alert("✅ Blog updated!");
+  } else {
+    // CREATE
+    res = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks`,
+      formData,
+      config
+    );
+    alert("✅ Blog created!");
+  }
+} catch (err) {
+  console.error(err);
+  alert("❌ Upload failed!");
+}
+
   };
 
   return (

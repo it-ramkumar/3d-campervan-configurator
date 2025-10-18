@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const protect = (req, res, next) => {
   const token = req.cookies.token;
-  
+
   if (!token) return res.status(401).json({ message: "Not authorized, no token" });
 
   try {
@@ -15,6 +15,7 @@ const protect = (req, res, next) => {
 };
 
 const adminOnly = (req, res, next) => {
+  // console.log(req.user.role,"role")
   if (req.user.role !== "admin") {
     return res.status(403).json({ message: "Access denied" });
   }
