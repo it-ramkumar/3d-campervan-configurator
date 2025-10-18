@@ -55,11 +55,11 @@ app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 
 app.get("/auto", (req, res) => {
-  res.send("auto deployment is working  now✅");
+  res.send("auto deployment is working");
 });
 app.use(errorHandler);
 app.get("/", (req, res) => {
-  res.send("Backend is working ✅");
+  res.send("Backend is working auto deployemnet ✅");
 });
 // 10 Start the Server
 app.listen(PORT, "0.0.0.0", () => {
