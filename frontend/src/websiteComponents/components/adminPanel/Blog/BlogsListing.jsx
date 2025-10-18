@@ -15,7 +15,6 @@ export default function BlogsListing({setSelected}) {
   useEffect(() => {
     const fetchBlogs = async () => {
       const result = await getAllBlogs();
-// console.log(result,"result")
 
       if (result.success) {
         setBlogs(result.data);

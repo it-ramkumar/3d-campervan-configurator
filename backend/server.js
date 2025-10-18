@@ -55,7 +55,7 @@ app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 
 app.get("/auto", (req, res) => {
-  res.send("auto deploye is working ✅");
+  res.send("auto deployment is working  now✅");
 });
 app.use(errorHandler);
 app.get("/", (req, res) => {
