@@ -16,7 +16,6 @@ export default function Detail({ setIsopen, detail }) {
     }
   };
 
-  // Next image in gallery
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
       prev === detail.gallery.length - 1 ? 0 : prev + 1
