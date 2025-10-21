@@ -119,6 +119,8 @@ export default function Navbar({ forceMobile }) {
           { label: "Our Process", link: "/our-process" },
           { label: "Showroom", link: "/showroom" },
           { label: "About Us", link: "/about-us" },
+          { label: "Innovation", link: "/innovation" },
+
         ],
       },
     ],

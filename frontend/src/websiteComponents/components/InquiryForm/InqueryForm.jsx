@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import { submitInquiry } from "../../../api/inquiry/submitInquiry";
-import Navbar from "../Navbar/Navbar"
+import Navbar from "../Navbar/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
+// --------------------------- FORM QUESTIONS --------------------------- //
 const formQuestions = [
   {
     step: 1,
@@ -166,45 +167,34 @@ const formQuestions = [
   },
 ];
 
+// --------------------------- FORM COMPONENT --------------------------- //
+
 const QuestionGroup = ({ question, selected, onSelect }) => {
   const isRadio = question.inputType === "radio";
-
-  const isChecked = (option) => {
-    if (isRadio) return selected === option;
-    return (selected || []).includes(option);
-  };
+  const isChecked = (option) =>
+    isRadio ? selected === option : (selected || []).includes(option);
 
   return (
     <div className="form-group mb-8">
       <h3 className="text-xl font-semibold mb-4 text-black">{question.question}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {question.options.map((option, index) => (
-          <motion.label
-            key={index}
-            htmlFor={`${question.id}-${index}`}
-            className="relative block"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
+        {question.options.map((option, i) => (
+          <motion.label key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <input
               type={isRadio ? "radio" : "checkbox"}
-              id={`${question.id}-${index}`}
-              name={question.id}
               value={option}
               checked={isChecked(option)}
               onChange={() => onSelect(question.id, option)}
               className="hidden"
             />
             <span
-              className={`flex items-center h-full p-4 rounded-lg cursor-pointer border-2 justify-between transition-all duration-200
-                ${
-                  isChecked(option)
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-black border-black hover:bg-gray-100"
-                }`}
+              className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer transition-all
+              ${isChecked(option)
+                ? "bg-black text-white border-black"
+                : "bg-white text-black border-black hover:bg-gray-100"}`}
             >
               {option}
-              {isChecked(option) && <Check className="ml-2 text-white h-5 w-5" />}
+              {isChecked(option) && <Check className="ml-2 h-5 w-5" />}
             </span>
           </motion.label>
         ))}
@@ -219,10 +209,9 @@ const ContactField = ({ question, value, onSelect }) => (
       <h3 className="text-xl font-semibold mb-4 text-black">{question.question}</h3>
       <input
         type={question.type}
-        name={question.id}
         value={value}
         onChange={(e) => onSelect(question.id, e.target.value)}
-        className="w-full bg-white text-black border-2 border-black rounded-lg p-4 focus:outline-none focus:border-black focus:ring-0"
+        className="w-full border-2 border-black rounded-lg p-4"
         placeholder={question.placeholder}
       />
     </div>
@@ -230,24 +219,18 @@ const ContactField = ({ question, value, onSelect }) => (
 );
 
 const Summary = ({ formData }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-    <h3 className="text-2xl font-bold mb-6 text-black">Review Your Choices</h3>
-    {Object.keys(formData).map((key) => {
-      const questionData = formQuestions.flatMap((s) => s.questions).find((q) => q.id === key);
-      const value = formData[key];
-      if (!value || (Array.isArray(value) && value.length === 0)) return null;
-
-      return (
-        <div key={key} className="bg-white p-4 rounded-lg border-2 border-black">
-          <p className="text-black text-sm font-medium">{questionData?.question || key}</p>
-          <p className="text-lg text-black mt-1 font-semibold">
-            {Array.isArray(value) ? value.join(", ") : value}
-          </p>
-        </div>
-      );
-    })}
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+    <h3 className="text-2xl font-bold text-black mb-4">Review Your Choices</h3>
+    {Object.entries(formData).map(([key, val]) => (
+      <div key={key} className="border-2 border-black rounded-lg p-4">
+        <p className="font-semibold text-black">{key}</p>
+        <p className="text-black">{Array.isArray(val) ? val.join(", ") : val}</p>
+      </div>
+    ))}
   </motion.div>
 );
+
+// --------------------------- MAIN COMPONENT --------------------------- //
 
 export default function InquiryForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -257,209 +240,188 @@ export default function InquiryForm() {
   const [validationMessage, setValidationMessage] = useState(null);
 
   const handleSelect = (id, value) => {
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleNext = () => {
+    const group = formQuestions[currentStep];
+    const unfilled = (group.questions || []).filter(
+      (q) => !formData[q.id] || (Array.isArray(formData[q.id]) && formData[q.id].length === 0)
+    );
+    if (unfilled.length > 0) return setValidationMessage("⚠️ Please complete all required fields.");
     setValidationMessage(null);
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    setCurrentStep((s) => Math.min(s + 1, formQuestions.length - 1));
   };
 
- const handleNext = () => {
-  const currentGroup = formQuestions[currentStep];
-  if (!currentGroup) return;
+  const handlePrevious = () => setCurrentStep((s) => Math.max(s - 1, 0));
 
-  // ✅ Validation: Check if all required fields in this step are filled
-  const requiredQuestions = currentGroup.questions || [];
-  const unfilled = requiredQuestions.filter((q) => {
-    const value = formData[q.id];
-    return !value || (Array.isArray(value) && value.length === 0);
-  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
+    setValidationMessage(null);
 
-  if (unfilled.length > 0) {
-    setValidationMessage("⚠️ Please answer all required questions before continuing.");
-    return; // Stop going to next step
-  }
+    if (!formData.email && !formData.phone) {
+      setValidationMessage("⚠️ Please provide at least your email or phone.");
+      setIsLoading(false);
+      return;
+    }
 
-  setValidationMessage(null);
-  if (currentStep < formQuestions.length - 1) setCurrentStep((p) => p + 1);
-};
-
-  const handlePrevious = () => {
-    if (currentStep > 0) setCurrentStep((p) => p - 1);
+    try {
+      const result = await submitInquiry(formData);
+      if (result.success) {
+        setMessage({ type: "success", text: "Form submitted successfully!" });
+        setFormData({});
+        setCurrentStep(0);
+      } else {
+        setMessage({ type: "error", text: "Submission failed. Try again." });
+      }
+    } catch {
+      setMessage({ type: "error", text: "Something went wrong. Try again." });
+    } finally {
+      setIsLoading(false);
+      setTimeout(() => setMessage(null), 5000);
+    }
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  // 🔒 Disable multiple submissions
-  if (isLoading) return;
-
-  setIsLoading(true);
-  setValidationMessage(null);
-
-  // ✅ Require at least phone OR email before submitting
-  const hasEmail = formData.email && formData.email.trim() !== "";
-  const hasPhone = formData.phone && formData.phone.trim() !== "";
-
-  if (!hasEmail && !hasPhone) {
-    setValidationMessage("⚠️ Please provide at least your email or phone number.");
-    setIsLoading(false);
-    return;
-  }
-
-  try {
-    // const result = await submitInquiry(formData); // enable this when API ready
-    // if (result.success) {
-    setMessage({ type: "success", text: "Form submitted successfully!" });
-    setFormData({});
-    // } else {
-    //   setMessage({ type: "error", text: "Submission failed. Try again." });
-    // }
-  } catch (err) {
-    setMessage({ type: "error", text: "Something went wrong. Try again." });
-  } finally {
-    setIsLoading(false);
-    setTimeout(() => setMessage(null), 5000);
-  }
-};
-
+  const group = formQuestions[currentStep];
   const isLastStep = currentStep === formQuestions.length - 1;
   const isSummaryStep = currentStep === formQuestions.length - 2;
-  const allSteps = formQuestions.map((q) => q.title);
   const progress = ((currentStep + 1) / formQuestions.length) * 100;
-
-  const renderFormContent = () => {
-    if (isSummaryStep) return <Summary formData={formData} />;
-    const group = formQuestions[currentStep];
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={group.step}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          className="space-y-8"
-        >
-          {group.questions.map((q) =>
-            q.type ? (
-              <ContactField key={q.id} question={q} value={formData[q.id] || ""} onSelect={handleSelect} />
-            ) : (
-              <QuestionGroup key={q.id} question={q} selected={formData[q.id]} onSelect={handleSelect} />
-            )
-          )}
-        </motion.div>
-      </AnimatePresence>
-    );
-  };
 
   return (
     <>
-    <Navbar/>
-    <div className="bg-white text-black flex items-center justify-center ">
-      <div className="max-w-4xl w-full">
-        <div className="text-center mb-12">
-          <p className="text-base text-black mb-3 font-medium tracking-wide">STILL WONDERING WHAT TO CHOOSE?</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black">Get Your Perfect Van Quote</h1>
-          <p className="text-black max-w-2xl mx-auto text-lg">
-            Answer a few quick questions and we’ll help you find the ideal van conversion for your adventure.
-          </p>
-        </div>
+      <Navbar />
+      <div className="bg-white text-black flex items-center justify-center">
+        <div className="max-w-4xl w-full">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl font-bold mb-2">Get Your Perfect Van Quote</h1>
+            <p className="text-gray-700">Answer a few quick questions and we’ll help you find your dream van.</p>
+          </div>
 
-        <div className="bg-white rounded-xl border-2 border-black p-6 md:p-8 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-8 h-[90vh] custom-scroll  overflow-scroll">
-          <div className="w-full md:w-1/4">
-            <h3 className="text-lg font-bold mb-4 text-black">Your Progress</h3>
-            <div className="space-y-1">
-              {allSteps.map((title, index) => (
+          <div className="border-2 border-black rounded-xl p-6 flex flex-col md:flex-row gap-6 h-[90vh] overflow-scroll">
+            {/* Progress Sidebar */}
+            <div className="md:w-1/4">
+              <h3 className="font-bold mb-3">Your Progress</h3>
+              {formQuestions.map((f, i) => (
                 <div
-                  key={index}
-                  className={`py-2 px-3 rounded-lg border border-black transition-colors duration-200 ${
-                    currentStep === index
-                      ? "bg-black text-white font-semibold"
-                      : "text-black hover:bg-gray-100"
+                  key={i}
+                  className={`px-3 py-2 border border-black rounded mb-1 ${
+                    i === currentStep ? "bg-black text-white" : "hover:bg-gray-100"
                   }`}
                 >
-                  {`${index + 1}. ${title}`}
+                  {i + 1}. {f.title}
                 </div>
               ))}
             </div>
-          </div>
 
-          <div className="w-full md:w-3/4">
-            <div className="w-full bg-gray-300 rounded-full h-2 mb-8">
-              <motion.div
-                className="bg-black h-2 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5 }}
-              />
+            {/* Form Area */}
+            <div className="md:w-3/4">
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+                <motion.div
+                  className="bg-black h-2 rounded-full"
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={group.step}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                  >
+                    {isSummaryStep ? (
+                      <Summary formData={formData} />
+                    ) : (
+                      group.questions.map((q) =>
+                        q.type ? (
+                          <ContactField
+                            key={q.id}
+                            question={q}
+                            value={formData[q.id] || ""}
+                            onSelect={handleSelect}
+                          />
+                        ) : (
+                          <QuestionGroup
+                            key={q.id}
+                            question={q}
+                            selected={formData[q.id]}
+                            onSelect={handleSelect}
+                          />
+                        )
+                      )
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+
+                {validationMessage && (
+                  <p className="text-red-600 mt-4 text-sm">{validationMessage}</p>
+                )}
+
+                {/* Buttons */}
+                <div className="flex justify-between items-center mt-8 pt-6 border-t border-black">
+                  <button
+                    type="button"
+                    onClick={handlePrevious}
+                    disabled={currentStep === 0}
+                    className={`px-6 py-3 rounded-lg border-2 border-black ${
+                      currentStep === 0
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-black hover:text-white"
+                    }`}
+                  >
+                    <ChevronLeft size={20} /> Previous
+                  </button>
+
+                  {!isLastStep ? (
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="px-6 py-3 bg-black text-white rounded-lg flex items-center gap-2 hover:opacity-90"
+                    >
+                      {isSummaryStep ? "Continue to Contact" : "Next"}{" "}
+                      <ChevronRight size={20} />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="px-8 py-3 bg-black text-white rounded-lg flex items-center gap-2 hover:opacity-90"
+                    >
+                      {isLoading ? "Submitting..." : "Submit Quote Request"}{" "}
+                      <ArrowUpRight size={20} />
+                    </button>
+                  )}
+                </div>
+              </form>
             </div>
-
-            <form onSubmit={handleSubmit}>
-              {renderFormContent()}
-{validationMessage && (
-  <p className="text-red-600 text-sm font-medium mb-4">{validationMessage}</p>
-)}
-
-           <div className="flex justify-between items-center mt-8 pt-6 border-t border-black">
-  <motion.button
-    type="button"
-    onClick={handlePrevious}
-    disabled={currentStep === 0}
-    className={`px-6 py-3 rounded-lg border-2 border-black flex items-center gap-2 transition-all duration-200 font-medium ${
-      currentStep === 0
-        ? "opacity-50 cursor-not-allowed text-gray-500"
-        : "text-black hover:bg-black hover:text-white"
-    }`}
-  >
-    <ChevronLeft size={20} /> Previous
-  </motion.button>
-
-  {/* ✅ FIX: Only show submit on last step */}
-  {!isLastStep ? (
-    <motion.button
-      type="button"
-      onClick={handleNext}
-      className="px-6 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-    >
-      {isSummaryStep ? "Continue to Contact" : "Next"}
-      <ChevronRight size={20} />
-    </motion.button>
-  ) : (
-    <motion.button
-      type="submit"
-      disabled={isLoading}
-      className="px-8 py-3 bg-black text-white rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 hover:opacity-90"
-    >
-      {isLoading ? "Submitting..." : "Submit Quote Request"} <ArrowUpRight size={20} />
-    </motion.button>
-  )}
-</div>
-
-
-            </form>
           </div>
+
+          {/* Toast */}
+          <AnimatePresence>
+            {message && (
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 40 }}
+                className={`fixed bottom-4 right-4 p-4 rounded-lg border-2 ${
+                  message.type === "success"
+                    ? "bg-white text-black border-black"
+                    : "bg-black text-white border-white"
+                }`}
+              >
+                {message.text}
+                <button onClick={() => setMessage(null)} className="ml-3">
+                  <X size={18} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        <AnimatePresence>
-          {message && (
-            <motion.div
-              initial={{ opacity: 0, y: 50, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 50, scale: 0.8 }}
-              className={`fixed bottom-4 right-4 p-4 rounded-lg border-2 ${
-                message.type === "success" ? "bg-white text-black border-black" : "bg-black text-white border-white"
-              }`}
-            >
-              <span className="font-medium">{message.text}</span>
-              <button onClick={() => setMessage(null)} className="ml-2 hover:opacity-70 transition-opacity">
-                <X size={18} />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
-    </div>
-        </>
-
+    </>
   );
 }

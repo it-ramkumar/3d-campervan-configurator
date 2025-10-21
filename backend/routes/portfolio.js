@@ -9,39 +9,41 @@ const { protect, adminOnly } = require("../middleware/authMiddleware")
 
 
 router.post(
-  "/",protect, adminOnly,
+  "/",
+  protect,
+  adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
     { name: "blockImages", maxCount: 20 },
   ]),
   async (req, res) => {
     try {
-      // ✅ Extract gallery
-const gallery = await Promise.all(
+      // ✅ Upload gallery images
+      const gallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-      // ✅ Parse blocksData from body (captions etc.)
+
+      // ✅ Parse blocksData (captions, etc.)
       const blocksData = JSON.parse(req.body.blocksData || "[]");
 
-      // ✅ Merge images with captions
-const blocks = await Promise.all(
-  blocksData.map(async (block, index) => ({
-    caption: block.caption, // <-- use 'block', not 'b'
-    image: req.files["blockImages"]?.[index]
-      ? await uploadToS3(
-          req.files["blockImages"][index].buffer,
-          "portfolio/blocks",
-          req.files["blockImages"][index].originalname
-        )
-      : null,
-  }))
-);
+      // ✅ Merge images with captions for blocks
+      const blocks = await Promise.all(
+        blocksData.map(async (block, index) => ({
+          caption: block.caption,
+          image: req.files["blockImages"]?.[index]
+            ? await uploadToS3(
+                req.files["blockImages"][index].buffer,
+                "portfolio/blocks",
+                req.files["blockImages"][index].originalname
+              )
+            : null,
+        }))
+      );
 
-      // ✅ Create new portfolioVan doc
+      // ✅ Create new PortfolioVan document
       const newPortfolio = new PortfolioVan({
-        // slug: req.body.slug, // optional // ya title se auto generate hoga
         van_listing: {
           title: req.body.title,
           description: req.body.description,
@@ -52,8 +54,12 @@ const blocks = await Promise.all(
             : undefined,
         },
         sold: req.body.sold || false,
+
+        // ✅ Category added here
+        category: req.body.category,
+
         gallery,
-        blocks, // ✅ ab schema ke hisaab se save hoga
+        blocks,
         detailed_features: req.body.detailed_features
           ? JSON.parse(req.body.detailed_features)
           : [],
@@ -73,6 +79,7 @@ const blocks = await Promise.all(
     }
   }
 );
+
 
 // GET /api/portfolioVans?wheelbase=144
 router.get("/wheelbase", async (req, res) => {
@@ -127,26 +134,91 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * READ (GET one by slug)
- */
-router.get("/:slug", async (req, res) => {
+
+
+// ✅ 1. Get all portfolios (optional general route)
+router.get("/category", async (req, res) => {
   try {
-    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
-    if (!portfolio) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Portfolio not found" });
-    }
-    res.json({ success: true, data: portfolio });
+    const { categorySlug } = req.query;
+    console.log(categorySlug)
+    if (!categorySlug)
+      return res.status(400).json({ success: false, message: "Category required" });
+
+    const portfolios = await PortfolioVan.find({ category: categorySlug });
+
+    if (!portfolios.length)
+      return res.status(404).json({ success: false, message: "Portfolio not found" });
+
+    res.json({ success: true, portfolios });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Fetch failed" });
+    console.error("Error fetching portfolios:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-/**
- * UPDATE (PUT by slug)
- */
+
+
+// ✅ 2. Filter by category (5 fixed endpoints)
+router.get("/flagship-short-van-santa-monica", async (req, res) => {
+  try {
+    const data = await PortfolioVan.find({
+      category: "Flagship Short Van — Santa Monica",
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, portfolios: data });
+  } catch (err) {
+    console.error("Error fetching:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/flagship-long-van-montreal", async (req, res) => {
+  try {
+    const data = await PortfolioVan.find({
+      category: "Flagship Long Van — Montreal",
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, portfolios: data });
+  } catch (err) {
+    console.error("Error fetching:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/layouts-solo-couple", async (req, res) => {
+  // console.log("hello")
+  try {
+    const data = await PortfolioVan.find({
+      category: "Layouts for Solo & Couple Travelers",
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, portfolios: data });
+  } catch (err) {
+    console.error("Error fetching:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/layouts-families", async (req, res) => {
+  try {
+    const data = await PortfolioVan.find({
+      category: "Layouts for Families (3–9 People)",
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, portfolios: data });
+  } catch (err) {
+    console.error("Error fetching:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/portfolio-custom-builds", async (req, res) => {
+  try {
+    const data = await PortfolioVan.find({
+      category: "Portfolio of Custom Builds",
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, portfolios: data });
+  } catch (err) {
+    console.error("Error fetching:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 router.put(
   "/:slug",protect, adminOnly,
   upload.fields([
@@ -219,9 +291,6 @@ const gallery = await Promise.all(
   }
 );
 
-/**
- * DELETE (by slug)
- */
 router.delete("/:slug",protect, adminOnly, async (req, res) => {
   try {
     const deletedPortfolio = await PortfolioVan.findOneAndDelete({
@@ -241,6 +310,17 @@ router.delete("/:slug",protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, message: "Delete failed" });
   }
 });
-
-
+router.get("/:slug", async (req, res) => {
+  try {
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    if (!portfolio) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Portfolio not found" });
+    }
+    res.json({ success: true, data: portfolio });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Fetch failed" });
+  }
+});
 module.exports = router;

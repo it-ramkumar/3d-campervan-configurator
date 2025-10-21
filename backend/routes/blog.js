@@ -143,9 +143,9 @@ router.get("/", async (req, res) => {
 });
 
 // 🔵 GET BLOG BY SLUG
-router.get("/:slug", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const blog = await Blog.findOne({ slug: req.params.slug });
+    const blog = await Blog.findOne({ _id: req.params.id });
 
     if (!blog) {
       return res.status(404).json({

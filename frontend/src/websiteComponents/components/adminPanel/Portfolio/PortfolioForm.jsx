@@ -30,6 +30,8 @@ export default function PortfolioForm() {
 
   // Media (video)
   const [video, setVideo] = useState({ title: "" });
+  // ✅ CATEGORY
+  const [category, setCategory] = useState("");
 
   // ✅ Auto-fill if editData is available
   useEffect(() => {
@@ -50,6 +52,8 @@ export default function PortfolioForm() {
         }
       );
 
+      // ✅ Category load
+      setCategory(editData.category || "");
       setFeatures(editData.detailed_features || [{ category: "", items: [""] }]);
       setVideo(editData.media?.video || { title: "" });
 
@@ -147,6 +151,8 @@ export default function PortfolioForm() {
     formDataToSend.append("price", price);
     formDataToSend.append("sold", sold);
 
+    // ✅ Category add
+    formDataToSend.append("category", category);
     // Specifications
     const specifications = { make_model: makeModel, wheelbase, drivetrain, capacity };
     formDataToSend.append("specifications", JSON.stringify(specifications));
@@ -328,6 +334,32 @@ export default function PortfolioForm() {
           onChange={(e) => setVideo({ ...video, title: e.target.value })}
           className="border p-2 rounded w-full"
         />
+  <div>
+          <label className="block font-medium mb-2">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border p-2 rounded w-full"
+            required
+          >
+            <option value="" disabled>-- Select Category --</option>
+            <option value="Flagship Short Van — Santa Monica">
+              Flagship Short Van — Santa Monica
+            </option>
+            <option value="Flagship Long Van — Montreal">
+              Flagship Long Van — Montreal
+            </option>
+            <option value="Layouts for Solo & Couple Travelers">
+              Layouts for Solo & Couple Travelers
+            </option>
+            <option value="Layouts for Families (3–9 People)">
+              Layouts for Families (3–9 People)
+            </option>
+            <option value="Portfolio of Custom Builds">
+              Portfolio of Custom Builds
+            </option>
+          </select>
+        </div>
 
         {/* GALLERY UPLOAD */}
         <div>

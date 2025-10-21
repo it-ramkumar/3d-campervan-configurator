@@ -4,6 +4,7 @@ import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 import Swal from "sweetalert2";
+import { contact } from "../../../api/contact/contact";
 
 export default function Consultation({ vanForSale }) {
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ export default function Consultation({ vanForSale }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 🔹 Required field validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
       let missingFields = [];
       if (!formData.name.trim()) missingFields.push("Name");
@@ -40,6 +42,7 @@ export default function Consultation({ vanForSale }) {
       return;
     }
 
+    // 🔹 Email validation
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
       Swal.fire({
         title: "Invalid Email",
@@ -50,6 +53,7 @@ export default function Consultation({ vanForSale }) {
       return;
     }
 
+    // 🔹 Phone validation
     if (!/^\d{10,15}$/.test(formData.phone)) {
       Swal.fire({
         title: "Invalid Phone Number",
@@ -60,56 +64,34 @@ export default function Consultation({ vanForSale }) {
       return;
     }
 
-
-
-    const finalData = {
-      ...formData
-    }
-    const result = await Swal.fire({
-      title: "Please Confirm Your Details",
-      html: `
-        <div style="text-align:left;">
-          <p><b>Name:</b> ${finalData.name}</p>
-          <p><b>Email:</b> ${finalData.email}</p>
-          <p><b>Phone:</b> ${finalData.phone}</p>
-          <p><b>Message:</b> ${finalData.message || "N/A"}</p>
-        </div>
-      `,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Submit",
-      cancelButtonText: "Cancel",
-      reverseButtons: true,
-    });
-
-    if (!result.isConfirmed) {
-      Swal.fire({
-        title: "Cancelled",
-        text: "You can review your details before submitting.",
-        icon: "info",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      return;
-    }
-
     setLoading(true);
     try {
-      Swal.fire({
-        title: "Success!",
-        text: "Your consultation request has been submitted successfully!",
-        icon: "success",
-        timer: 2500,
-        showConfirmButton: false,
-      });
+      const result = await contact(formData);
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      if (result.success) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your consultation request has been submitted successfully!",
+          icon: "success",
+          timer: 2500,
+          showConfirmButton: false,
+        });
 
+        // 🔹 Reset form
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while submitting the form.",
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      }
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -161,7 +143,6 @@ export default function Consultation({ vanForSale }) {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           loading={loading}
-          // selectedDate={date}
         />
       </div>
 

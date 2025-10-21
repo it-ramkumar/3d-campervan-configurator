@@ -113,6 +113,21 @@ const portfolioVanSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+
+  // ✅ New category field
+  category: {
+    type: String,
+    enum: [
+      "Flagship Short Van — Santa Monica",
+      "Flagship Long Van — Montreal",
+      "Layouts for Solo & Couple Travelers",
+      "Layouts for Families (3–9 People)",
+      "Portfolio of Custom Builds"
+    ],
+    required: true,
+    trim: true
+  },
+
   gallery: [{
     type: String,
     trim: true

@@ -60,7 +60,7 @@ const FEATURES = [
     { text: "Space-saving elevator & dinette bed", icon: <BedIcon />, textFirst: false },
 ];
 
-export default function AvailableVans() {
+export default function AvailableVans({availableVans}) {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const contentRef = useRef(null);
@@ -499,7 +499,7 @@ export default function AvailableVans() {
         <div className="relative pt-8 pb-12 md:pt-12 md:pb-16">
           <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
           <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
-            {VAN_CARDS.map((van, index) => (
+            {availableVans.map((van, index) => (
               <div
                 key={van.id}
                 ref={el => cardsRef.current[index] = el}
@@ -510,28 +510,28 @@ export default function AvailableVans() {
                 <div className="card-glow absolute -inset-2.5 bg-slate-900 rounded-[30px] blur-2xl opacity-0 z-[-1] transition-opacity duration-300"></div>
                 <div className="relative w-full h-[400px] rounded-[30px] overflow-hidden shadow-xl">
                   <img
-                    src={van.image}
+                    src={van.gallery[0].url}
                     alt={van.model}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
                   <div className="absolute top-0 left-0 bg-black text-white p-2.5 rounded-tl-[30px] z-20">
                     <p className="font-noto-serif font-semibold text-[28px] leading-none tracking-tight px-2 py-1">
-                      {van.price}
+                      {van.van_listing.price}
                     </p>
                   </div>
                   <Link
-                    to={van.link}
+                    to={`/detail-page/${van.slug}`}
                     className="details-button absolute top-4 right-4 bg-slate-900 text-white font-bold font-noto-sans text-[0.875rem] py-2 px-5 rounded-md transition-all duration-300 hover:bg-slate-700 z-20"
                   >
                     More Details
                   </Link>
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
                     <h3 className="font-noto-serif font-semibold text-white text-[28px] leading-tight mb-3">
-                      {van.model}
+                      {van.van_listing.model_name}
                     </h3>
                     <p className="font-noto-serif text-white/80 text-sm leading-normal">
-                      {van.description}
+                      {van.van_listing.description}
                     </p>
                   </div>
                 </div>

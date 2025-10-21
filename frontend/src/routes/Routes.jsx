@@ -17,8 +17,7 @@ import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
 import Blogs from "../websiteComponents/components/Blogs/Blogs";
 import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayoutHero/FamilyLayout";
 import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayoutHero/CoupleLayout";
-import DetailPage from "../detailPage";
-import SantaMonica from "../websiteComponents/components/SantaMonica/Santa";
+import DetailPage from "../websiteComponents/components/DetailPage/DetailPgae";
 import Signup from "../websiteComponents/components/Auth/Signup";
 import Login from "../websiteComponents/components/Auth/Login";
 import OurProcess from "../websiteComponents/components/OurProcess/Processhero/OurProcess"
@@ -26,7 +25,8 @@ import AboutUs from "../websiteComponents/components/AboutUs/AboutUshero/Aboutus
 import ShowRoom from "../websiteComponents/components/Showroom/Showroomhero/showroom"
 import NotFound from "../websiteComponents/components/NotFound/NotFound";
 import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"
-
+import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exteriorhero/Exterior";
+import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
 const AppRoutes = () => {
 
 
@@ -45,8 +45,13 @@ const AppRoutes = () => {
         <Route path="/our-process" element={<OurProcess />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/santa-monica" element={<SantaMonica />} />
-        <Route path="/detail-page" element={<DetailPage />} />
+        <Route path="/detail-page/:slug" element={<DetailPage />} />
+        <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
+
+
+        <Route path="/innovation" element={<Exteriorpage />} />
+
+
         <Route path="/family-layout" element={<FamilyLayout />} />
         <Route path="/couples-layout" element={<Couples />} />
         <Route path="/blogs" element={<Blogs />} />
