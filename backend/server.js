@@ -1,6 +1,5 @@
 require("dotenv").config();
 const fs = require("fs");
-const https = require("https");
 const http = require("http");
 const express = require("express");
 const connectDB = require("./config/database");
@@ -27,7 +26,6 @@ const userRoute = require("./routes/authRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 443;
 
 // 1️⃣ Connect MongoDB
 connectDB()
@@ -56,32 +54,13 @@ app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 
 // 4️⃣ Test Route
-app.get("/auto", (req, res) => {
-  res.send("🚀 Auto deployment working... done");
-});
-
 app.get("/", (req, res) => {
-  res.send("✅ Backend is working with HTTPS support!");
+  res.send("✅ Backend is running via Nginx reverse proxy (HTTP 5000)!");
 });
 
 app.use(errorHandler);
 
-// 5️⃣ HTTPS Setup (only if certs exist)
-const keyPath = "./certs/server.key";
-const certPath = "./certs/server.cert";
-
-if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
-  const options = {
-    key: fs.readFileSync(keyPath),
-    cert: fs.readFileSync(certPath),
-  };
-
-  https.createServer(options, app).listen(HTTPS_PORT, "0.0.0.0", () => {
-    console.log(`✅ HTTPS Server running on port ${HTTPS_PORT}`);
-  });
-} else {
-  // Fallback to HTTP if no cert found
-  http.createServer(app).listen(PORT, "0.0.0.0", () => {
-    console.log(`⚠️ HTTPS certs not found. Running HTTP on port ${PORT}`);
-  });
-}
+// ✅ Only HTTP – Nginx will handle HTTPS
+http.createServer(app).listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
