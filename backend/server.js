@@ -55,7 +55,7 @@ app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 
 app.get("/auto", (req, res) => {
-  res.send("auto deployment is working...cold ");
+  res.send("auto deployment is working...3001 ");
 });
 app.use(errorHandler);
 app.get("/", (req, res) => {
