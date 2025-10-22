@@ -136,20 +136,45 @@ router.get("/", async (req, res) => {
 
 
 
-// ✅ 1. Get all portfolios (optional general route)
+// ✅ 1. Get portfolios by category with pagination
 router.get("/category", async (req, res) => {
   try {
-    const { categorySlug } = req.query;
-    console.log(categorySlug)
-    if (!categorySlug)
-      return res.status(400).json({ success: false, message: "Category required" });
+    const { categorySlug, page = 1, limit = 2 } = req.query;
 
-    const portfolios = await PortfolioVan.find({ category: categorySlug });
+    if (!categorySlug) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Category required" });
+    }
 
-    if (!portfolios.length)
-      return res.status(404).json({ success: false, message: "Portfolio not found" });
+    // Convert query params to numbers
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
 
-    res.json({ success: true, portfolios });
+    // ✅ Get total count first
+    const total = await PortfolioVan.countDocuments({ category: categorySlug });
+
+    // ✅ Fetch paginated data
+    const portfolios = await PortfolioVan.find({ category: categorySlug })
+      .skip(skip)
+      .limit(limitNum)
+      .sort({ createdAt: -1 }); // latest first
+
+    if (!portfolios.length) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No portfolios found" });
+    }
+
+    // ✅ Response with meta info
+    res.json({
+      success: true,
+      total,
+      page: pageNum,
+      pages: Math.ceil(total / limitNum),
+      portfolios,
+    });
   } catch (err) {
     console.error("Error fetching portfolios:", err);
     res.status(500).json({ success: false, message: "Server error" });

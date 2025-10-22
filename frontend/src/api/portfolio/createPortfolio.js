@@ -6,7 +6,7 @@ const createPortfolio = async (formDataToSend) => {
         const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/portfolio`, formDataToSend, {
             headers: { "Content-Type": "multipart/form-data" },
 
-      withCredentials: true,
+            withCredentials: true,
 
         });
         alert("Portfolio created successfully!");
