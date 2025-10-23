@@ -1,9 +1,10 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton";
+import { getAllPortfolio } from "../../../../api/portfolio/getAllPortfolio";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -24,7 +25,10 @@ export default function Portfolio() {
   const headingRef = useRef(null);
   const subHeadingRef = useRef(null);
   const imageGridRef = useRef(null);
-  const buttonRef = useRef(null);
+  const [loading,setLoading]=useState(false)
+  const [portfolio,setPortfolio]=useState()
+  const [page,setPages]=useState()
+  // const buttonRef = useRef(null);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -109,6 +113,21 @@ export default function Portfolio() {
 
     return () => ctx.revert();
   }, []);
+  useEffect(() => {
+    const fetchVans = async () => {
+      setLoading(true);
+      const result = await getAllPortfolio(page, ); // 6 items per page
+      if (result.success) {
+        console.log(result.data.data,"data"); // actual vans
+        setPages(result.data.pages); // total pages
+      } else {
+        console.error(result.error);
+      }
+      setLoading(false);
+    };
+
+    fetchVans();
+  }, [page]); // ✅ refetch when page changes
 
   return (
     // FIX: Changed py-12 to pt-6 for reduced mobile top padding, and lg:pt-12 pb-12 for desktop and bottom padding.

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import { updateBlog,createBlog } from "../../../../api/blog/createBlogs";
 
 const BlogForm = () => {
   const editData = useSelector((state) => state.editData.editData);
@@ -9,6 +9,7 @@ const BlogForm = () => {
   const [des, setDes] = useState("");
   const [gallery, setGallery] = useState([]); // new or existing gallery
   const [blocks, setBlocks] = useState([{ heading: "", paragraph: "", image: null }]);
+  const [loader,setLoader]=useState(false)
 
   // ✅ Prefill form when editing
   useEffect(() => {
@@ -87,35 +88,18 @@ const BlogForm = () => {
     blocks.forEach((b) => {
       if (b.image) formData.append("blockImages", b.image);
     });
-
  try {
-  let res;
-  const config = {
-    headers: { "Content-Type": "multipart/form-data" },
-    withCredentials: true, // ✅ send cookies
-  };
-
-  if (editData && editData._id) {
-    // UPDATE
-    res = await axios.put(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks/${editData._id}`,
-      formData,
-      config
-    );
-    alert("✅ Blog updated!");
-  } else {
-    // CREATE
-    res = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks`,
-      formData,
-      config
-    );
-    alert("✅ Blog created!");
+  setLoader(true)
+    if (editData && editData._id) {
+      await updateBlog(editData._id, formData);
+    } else {
+      await createBlog(formData);
+    }
+  } catch (err) {
+    console.error("Error:", err);
+  } finally{
+    setLoader(false)
   }
-} catch (err) {
-  console.error(err);
-  alert("❌ Upload failed!");
-}
 
   };
 
@@ -235,10 +219,21 @@ const BlogForm = () => {
         </button>
       </div>
 
-      {/* ✅ Submit */}
-      <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
-        {editData && editData._id ? "Update Blog" : "Create Blog"}
-      </button>
+     {/* ✅ Submit */}
+<button
+  type="submit"
+  className={`px-4 py-2 rounded text-white ${
+    loader ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+  }`}
+  disabled={loader} // ✅ disable while loading
+>
+  {loader
+    ? "Loading..." // ✅ you can replace this with a spinner
+    : editData && editData._id
+    ? "Update Blog"
+    : "Create Blog"}
+</button>
+
     </form>
   );
 };

@@ -17,25 +17,25 @@ export default function Blog() {
   // console.log(blogs,"blogs");
   const blogPosts = [
     {
-      id: 1,
+      _id: 1,
       title: "Van Kitchen Appliances",
       gallery: [{url: "/images/b1.jpg",id: 1}],
       link: "/blog/van-kitchen-appliances",
     },
     {
-      id: 2,
+      _id: 2,
       title: "Camper Mattress Sizes",
       gallery: [{url: "/images/b2.jpg",id: 2}],
       link: "/blog/camper-mattress-sizes",
     },
     {
-      id: 3,
+      _id: 3,
       title: "Camper Van Bathroom",
       gallery: [{url: "/images/b3.jpg",id: 3}],
       link: "/blog/camper-van-bathroom",
     },
     {
-      id: 4,
+      _id: 4,
       title: "Campervan Electrical Systems",
       gallery: [{url: "/images/b4.jpg",id: 4}],
       link: "/blog/campervan-electrical-systems",
@@ -58,9 +58,9 @@ const data = blogs.length > 0 ? blogs : blogPosts;
 
         {/* Blog Post Cards */}
         <div className="flex flex-col items-center md:flex-row md:justify-center gap-6 md:gap-8 lg:gap-10">
-          {data.map((post) => (
+          {data?.map((post) => (
             <Link
-              key={post.id}
+              key={post._id}
               to={post.link}
               className="group relative w-[300px] h-[350px] rounded-[31px] border-4 border-gray-800 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-gray-700 transform transition-all duration-300 hover:-translate-y-2"
             >
@@ -68,7 +68,7 @@ const data = blogs.length > 0 ? blogs : blogPosts;
               <div className="relative w-full h-full">
                 <img
                   src={post.gallery[0]}
-                  alt={post.gallery[0].url}
+                  alt={post.gallery[0]}
                   style={{ objectFit: 'cover' }}
                   className="transition-transform duration-500 ease-in-out group-hover:scale-115"
                 />

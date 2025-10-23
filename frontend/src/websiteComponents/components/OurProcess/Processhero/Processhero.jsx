@@ -73,7 +73,7 @@ export default function Hero() {
         </p>
 
         {/* Button */}
-        <WhiteButton label={"Contact Us"} link={"contact"} className="!mt-4"/>
+        <WhiteButton label={"Contact Us"} link={"/contact"} className="!mt-4"/>
 
 
       </div>

@@ -91,7 +91,7 @@ useEffect(() => {
 
     // Basic Information Validation
     if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
-    if (!formData.van_listing.model_name?.trim()) newErrors.model_name = "Model name is required";
+    // if (!formData.van_listing.model_name?.trim()) newErrors.model_name = "Model name is required";
     if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
     if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
 
@@ -99,15 +99,15 @@ useEffect(() => {
     if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
     if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
     if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
-    if (!formData.van_listing.specifications.engine?.trim()) newErrors.engine = "Engine is required";
+    // if (!formData.van_listing.specifications.engine?.trim()) newErrors.engine = "Engine is required";
     if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
     if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
     // Feature Highlights Validation
-    formData.feature_highlights.forEach((feature, index) => {
-      if (!feature.title?.trim()) newErrors[`feature_title_${index}`] = "Feature title is required";
-      if (!feature.description?.trim()) newErrors[`feature_desc_${index}`] = "Feature description is required";
-    });
+    // formData.feature_highlights.forEach((feature, index) => {
+    //   if (!feature.title?.trim()) newErrors[`feature_title_${index}`] = "Feature title is required";
+    //   if (!feature.description?.trim()) newErrors[`feature_desc_${index}`] = "Feature description is required";
+    // });
 
     // Detailed Features Validation
     formData.detailed_features.forEach((feature, index) => {
@@ -118,9 +118,9 @@ useEffect(() => {
     });
 
     // Media Validation
-    formData.media.forEach((media, index) => {
-      if (!media?.trim()) newErrors[`media_${index}`] = "Media URL is required";
-    });
+    // formData.media.forEach((media, index) => {
+    //   if (!media?.trim()) newErrors[`media_${index}`] = "Media URL is required";
+    // });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -349,9 +349,6 @@ const removeExistingGalleryImage = (index) => {
       setLoading(false);
     }
   };
-  // --------------------------------
-
-  // ----------- Render (clean UI) -----------
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-5xl mx-auto">

@@ -107,7 +107,7 @@ router.get("/wheelbase", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     // query params (default values)
-    let { page = 1, limit = 10 } = req.query;
+    let { page = 1, limit = 3 } = req.query;
     page = Number(page);
     limit = Number(limit);
 

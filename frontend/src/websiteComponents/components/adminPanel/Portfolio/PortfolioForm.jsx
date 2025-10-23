@@ -32,6 +32,7 @@ export default function PortfolioForm() {
   const [video, setVideo] = useState({ title: "" });
   // ✅ CATEGORY
   const [category, setCategory] = useState("");
+  const [loading,setLoading]=useState(false)
 
   // ✅ Auto-fill if editData is available
   useEffect(() => {
@@ -164,6 +165,7 @@ export default function PortfolioForm() {
     formDataToSend.append("media", JSON.stringify({ video }));
 
     try {
+      setLoading(true)
       if (editData?._id) {
         await updatePortfolio(editData, formDataToSend);
       } else {
@@ -172,6 +174,8 @@ export default function PortfolioForm() {
     } catch (error) {
       console.error("❌ Error uploading:", error);
       alert("Something went wrong!");
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -436,12 +440,16 @@ export default function PortfolioForm() {
         </div>
 
         {/* SUBMIT */}
-        <button
-          type="submit"
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-        >
-          Submit
-        </button>
+       <button
+  type="submit"
+  disabled={loading} // ✅ disable while loading
+  className={`bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 ${
+    loading ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
+  }`}
+>
+  {loading ? "Submitting..." : "Submit"}
+</button>
+
       </form>
     </div>
   );

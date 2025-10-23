@@ -322,7 +322,7 @@ export default function AvailableVans({availableVans}) {
 
   return (
     <>
-      <style jsx>{`
+      <style>{`
         .font-noto-serif { font-family: 'Noto Serif', serif; }
         .font-noto-sans { font-family: 'Noto Sans', sans-serif; }
 

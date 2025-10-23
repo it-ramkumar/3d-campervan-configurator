@@ -20,6 +20,7 @@ export default function VansForSale() {
   const soldVans = vans.filter(v => v.sold);
 const availableVans = vans.filter(v => !v.sold);
 
+
   return (
     <div>
         <Navbar />
