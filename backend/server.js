@@ -59,7 +59,7 @@ app.get("/auto", (req, res) => {
 });
 app.use(errorHandler);
 app.get("/", (req, res) => {
-  res.send("Backend is working auto deployemnet....new");
+  res.send("Backend is working auto deployemnet....");
 });
 // 10 Start the Server
 app.listen(PORT, "0.0.0.0", () => {
