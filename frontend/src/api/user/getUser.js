@@ -1,5 +1,5 @@
 import axios from "axios";
-// ✅ Delete Item
+
 export const getUser = async () => {
 
   try {

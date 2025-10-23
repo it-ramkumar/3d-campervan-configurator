@@ -1,31 +1,32 @@
+import axios from "axios";
 
 export const createModel = async (formData) => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/models/add`, {
-      method: "POST",
-      body: formData,
-      credentials: "include",
+    const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/models/add`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
     });
 
-    return await res.json();
+    return res.data;
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
 
-/**
- * Update an existing model
- */
+
 export const updateModel = async (editData, formData) => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/models/edit/${editData._id}`, {
-      method: "PUT",
-      body: formData,
-      credentials: "include",
+    const res = await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/models/edit/${editData._id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // ✅ same reason as above
+      },
+      withCredentials: true,
     });
 
-    return await res.json();
+    return res.data;
   } catch (err) {
     console.error(err);
     throw err;
