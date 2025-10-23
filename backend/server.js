@@ -28,7 +28,7 @@ connectDB()
   .then(() => logger.info(" Connected to MongoDB"))
   .catch((err) => logger.error(` MongoDB connection error: ${err.message}`));
 
-  
+
 app.use(helmetMiddleware);
 app.use(morganMiddleware);
 app.use(express.json());
@@ -38,6 +38,11 @@ app.set("trust proxy", 1);
 app.use(corsMiddleware);
 app.use(globalLimiter);
 
+
+app.use((req, res, next) => {
+  console.log("✅ Request reached:", req.method, req.originalUrl);
+  next();
+});
 
 app.use("/api/portfolio", portfolio)
 app.use("/api", Export)
