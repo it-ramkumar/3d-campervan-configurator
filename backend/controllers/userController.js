@@ -27,12 +27,13 @@ const signupUser = async (req, res) => {
     });
 
     const token = generateToken(user);
-   res.cookie("token", token, {
+res.cookie("token", token, {
   httpOnly: true,
-  secure: false, // HTTP pe send karne ke liye
-  sameSite: "Lax", // cross-origin HTTP request ke liye
+  secure: true, // ✅ must be true in production (HTTPS)
+  sameSite: "None", // ✅ required for cross-site cookies
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
+
 
 
     res.status(201).json({ message: "Signup successful", user });
@@ -55,12 +56,13 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
 
     const token = generateToken(user);
- res.cookie("token", token, {
+res.cookie("token", token, {
   httpOnly: true,
-  secure: false, // HTTP pe send karne ke liye
-  sameSite: "Lax", // cross-origin HTTP request ke liye
+  secure: true, // ✅ must be true in production (HTTPS)
+  sameSite: "None", // ✅ required for cross-site cookies
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
+
 
 
     res.json({ message: "Login successful", user });
