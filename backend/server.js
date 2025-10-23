@@ -29,18 +29,18 @@ connectDB()
   .catch((err) => logger.error(` MongoDB connection error: ${err.message}`));
 
 
+app.use(corsMiddleware);
 app.use(helmetMiddleware);
 app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("trust proxy", 1);
-app.use(corsMiddleware);
 app.use(globalLimiter);
 
 
 app.use((req, res, next) => {
-  console.log("✅ Request reached:", req.method, req.originalUrl);
+  console.log("Incoming:", req.method, req.url);
   next();
 });
 

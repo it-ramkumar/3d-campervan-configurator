@@ -76,13 +76,12 @@ export default function ConfiguratorForm() {
   if (image) formDataToSend.append("image", image);
   if (glbFile) formDataToSend.append("glbFile", glbFile);
  try {
-    // const formDataToSend = buildModelFormData(form, image, glbFile);
-
     let data;
-    if (editData) {
+    if (editData._id) {
       data = await updateModel(editData, formDataToSend);
     } else {
       data = await createModel(formDataToSend);
+      console.log(data,"data")
     }
 
     if (data.success) {

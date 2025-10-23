@@ -19,9 +19,9 @@ const cors = require('cors');
 //for testing i have allow all links here
 const corsOptions = {
   origin: [
+    "https://zain.d2qr91yoy4oomc.amplifyapp.com",
     "http://localhost:5173",
     "https://new.bigbearvans.com",
-    "https://zain.d2qr91yoy4oomc.amplifyapp.com",
     "https://bigbearvans.com",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
