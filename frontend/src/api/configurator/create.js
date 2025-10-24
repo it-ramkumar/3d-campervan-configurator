@@ -1,12 +1,8 @@
 import axios from "axios";
 
 export const createModel = async (formData) => {
-  console.log(formData,"forData")
   try {
     const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/models/add`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
       withCredentials: true,
     });
 

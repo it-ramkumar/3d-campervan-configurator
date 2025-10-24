@@ -12,17 +12,33 @@ export default function Detail({ setIsopen, detail }) {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
-    function getYouTubeVideoId(url) {
-  const urlObj = new URL(url);
-  return urlObj.searchParams.get("v");
+// ✅ Safe YouTube video ID extractor
+function getYouTubeVideoId(url) {
+  try {
+    // Handle missing or non-string values
+    if (!url || typeof url !== "string") return null;
+
+    // Handle direct YouTube video IDs (11 characters)
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+
+    // Only try parsing if it looks like a URL
+    if (!url.startsWith("http")) return null;
+
+    const urlObj = new URL(url);
+
+    // Works with both standard YouTube links & short youtu.be links
+    return (
+      urlObj.searchParams.get("v") ||
+      urlObj.pathname.split("/").pop()
+    );
+  } catch {
+    // If URL parsing fails, just return null instead of crashing
+    return null;
+  }
 }
-const videoId = getYouTubeVideoId(detail.media.video.title);
-    // Close modal when clicking on backdrop
-    const handleBackdropClick = (e) => {
-        if (e.target === e.currentTarget) {
-            setIsopen(false);
-        }
-    };
+// ✅ Extract safely
+const videoUrl = detail?.media?.video?.title || "";
+const videoId = getYouTubeVideoId(videoUrl);
 
     // Next image in gallery
     const nextImage = () => {
@@ -51,6 +67,13 @@ const videoId = getYouTubeVideoId(detail.media.video.title);
             // await updateGalleryOrder(newGallery);
         }
     };
+
+    // ✅ Close modal function
+const handleBackdropClick = (e) => {
+  if (e.target === e.currentTarget) {
+    setIsopen(false);
+  }
+};
 
     return (
         <div
@@ -311,49 +334,83 @@ const videoId = getYouTubeVideoId(detail.media.video.title);
                             </div>
                         )}
 
-                        {detail.media?.video && (
-                            <div className="mb-8">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Media</h3>
-                                <div className="bg-gray-100 rounded-lg p-6">
-                                    <h4 className="text-lg font-semibold text-gray-800 mb-3">
-                                        {detail.media.video.title}
-                                    </h4>
+                      {detail.media?.video && (
+  <div className="mb-8">
+    <h3 className="text-2xl font-bold text-gray-900 mb-6">Media</h3>
+    <div className="bg-gray-100 rounded-lg p-6">
+      <h4 className="text-lg font-semibold text-gray-800 mb-3">
+        {detail.media.video.title || "YouTube Video"}
+      </h4>
 
-                                    {/* YouTube Video Player */}
-                                    <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                                      <iframe
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=0`}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-      ></iframe>
-                                    </div>
+      {/* 🎥 YouTube Video Player */}
+      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+        {videoId ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=0`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            }}
+          ></iframe>
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+            Invalid or missing YouTube URL
+          </div>
+        )}
+      </div>
 
-                                    {/* Video Info */}
-                                    <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
-                                        <span className="flex items-center">
-                                            <svg className="w-4 h-4 mr-1 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                                            </svg>
-                                            YouTube Video
-                                        </span>
-                                        <a
-                                            href={detail.media.video}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-600 hover:text-blue-800 underline flex items-center"
-                                        >
-                                            Open on YouTube
-                                            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+      {/* ℹ️ Video Info */}
+      <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+        <span className="flex items-center">
+          <svg
+            className="w-4 h-4 mr-1 text-red-600"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+          </svg>
+          YouTube Video
+        </span>
+
+        {videoUrl && (
+          <a
+            href={
+              videoUrl.startsWith("http")
+                ? videoUrl
+                : `https://www.youtube.com/watch?v=${videoId}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline flex items-center"
+          >
+            Open on YouTube
+            <svg
+              className="w-4 h-4 ml-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
                     </div>
                 </div>
             </div>

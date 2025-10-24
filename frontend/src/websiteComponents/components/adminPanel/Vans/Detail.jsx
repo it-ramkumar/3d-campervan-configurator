@@ -7,12 +7,30 @@ export default function Detail({ setIsopen, detail }) {
   const [gallery, setGallery] = useState(detail.gallery || []);
 
 //   console.log(detail, "dt");
+// 🧩 Safe YouTube ID extractor
+function getYouTubeVideoId(url) {
+  try {
+    // 1️⃣ Handle missing or invalid input
+    if (!url || typeof url !== "string") return null;
 
-  // Format date for better display
-  function getYouTubeVideoId(url) {
-  const urlObj = new URL(url);
-  return urlObj.searchParams.get("v");
+    // 2️⃣ Handle direct YouTube IDs (11 characters)
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+
+    // 3️⃣ Only try to parse if it looks like a valid URL
+    if (!url.startsWith("http")) return null;
+
+    const urlObj = new URL(url);
+
+    // 4️⃣ Try multiple formats (works for both full and short links)
+    return (
+      urlObj.searchParams.get("v") || // normal YouTube links
+      urlObj.pathname.split("/").pop() // short youtu.be links
+    );
+  } catch {
+    return null; // 5️⃣ On any error, return null (no crash)
+  }
 }
+
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -335,35 +353,46 @@ export default function Detail({ setIsopen, detail }) {
               </div>
             )}
 
-            {/* Media Section */}
-            {detail.media && detail.media.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Media</h3>
-                <div className="space-y-4">
-                  {detail.media.map((mediaItem, index) => {
-                    const youtubeId = getYouTubeVideoId(mediaItem);
-                    return youtubeId ? (
-                      <div key={index} className="bg-gray-100 rounded-lg p-6">
-                        <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${youtubeId}`}
-                            className="w-full h-full"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title={`YouTube Video ${index + 1}`}
-                          ></iframe>
-                        </div>
-                      </div>
-                    ) : (
-                      <div key={index} className="bg-gray-100 rounded-lg p-4">
-                        <p className="text-gray-700">{mediaItem}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+         {/* ✅ Media Section */}
+{detail.media && detail.media.length > 0 && (
+  <div className="mb-8">
+    <h3 className="text-2xl font-bold text-gray-900 mb-6">Media</h3>
+    <div className="space-y-4">
+      {detail.media.map((mediaItem, index) => {
+        const youtubeId = getYouTubeVideoId(mediaItem);
+
+        return youtubeId ? (
+          // 🎥 YouTube Video
+          <div key={index} className="bg-gray-100 rounded-lg p-6">
+            <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}`}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={`YouTube Video ${index + 1}`}
+              ></iframe>
+            </div>
+          </div>
+        ) : (
+          // 🖼️ Non-YouTube item (text, image, etc.)
+          <div key={index} className="bg-gray-100 rounded-lg p-4">
+            {mediaItem.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+              <img
+                src={mediaItem}
+                alt={`Media ${index + 1}`}
+                className="rounded-lg w-full"
+              />
+            ) : (
+              <p className="text-gray-700 break-all">{mediaItem}</p>
             )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
           </div>
         </div>
       </div>

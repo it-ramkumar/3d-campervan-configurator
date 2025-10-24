@@ -14,9 +14,6 @@ router.post("/signup", signupUser);
 router.post("/login", loginUser);
 router.post("/logout",protect, logoutUser);
 
-// router.get("/profile", protect, getProfile);
-// router.get("/admin", protect, adminOnly, adminDashboard);
-// router.get("/guest", protect, guestDashboard);
 
 router.post("/create-admin", protect, adminOnly, async (req, res) => {
   try {

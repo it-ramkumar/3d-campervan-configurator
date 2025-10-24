@@ -35,14 +35,10 @@ app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.set("trust proxy", 1);
-app.use(globalLimiter);
+// app.set("trust proxy", 1);
+// app.use(globalLimiter);
 
 
-app.use((req, res, next) => {
-  console.log("Incoming:", req.method, req.url);
-  next();
-});
 
 app.use("/api/portfolio", portfolio)
 app.use("/api", Export)
@@ -55,7 +51,7 @@ app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 
 app.get("/auto", (req, res) => {
-  res.send("auto deployment is working...3001 ");
+  res.send("auto deployment is working...remove limit ");
 });
 app.use(errorHandler);
 app.get("/", (req, res) => {

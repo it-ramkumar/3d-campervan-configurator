@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { createModel,updateModel } from "../../../../api/configurator/create";
+import { createModel, updateModel } from "../../../../api/configurator/create";
 
 export default function ConfiguratorForm() {
   const editData = useSelector((state) => state.editData.editData);
@@ -64,49 +64,50 @@ export default function ConfiguratorForm() {
 
     setLoading(true);
     setMessage("");
- const formDataToSend = new FormData();
-  Object.keys(form).forEach((key) => {
-    if (key === "extensionKey") {
-      form[key].forEach((ext) => formDataToSend.append("extensionKey[]", ext));
-    } else {
-      formDataToSend.append(key, form[key]);
-    }
-  });
+    const formDataToSend = new FormData();
+    Object.keys(form).forEach((key) => {
+      if (key === "extensionKey") {
+        form[key].forEach((ext) => formDataToSend.append("extensionKey[]", ext));
+      } else {
+        formDataToSend.append(key, form[key]);
+      }
+    });
 
-  if (image) formDataToSend.append("image", image);
-  if (glbFile) formDataToSend.append("glbFile", glbFile);
- try {
-    let data;
-    if (editData._id) {
-      data = await updateModel(editData, formDataToSend);
-    } else {
-      data = await createModel(formDataToSend);
-      console.log(data,"data")
-    }
+    if (image) formDataToSend.append("image", image);
+    if (glbFile) formDataToSend.append("glbFile", glbFile);
+    try {
+      // const formDataToSend = buildModelFormData(form, image, glbFile);
 
-    if (data.success) {
-      setMessage(editData ? "✅ Model updated successfully!" : "✅ Model uploaded successfully!");
-      setForm({
-        category: "",
-        label: "",
-        price: "",
-        description: "",
-        type: "",
-        group: "",
-        hasSink: false,
-        extensionKey: [],
-      });
-      setImage(null);
-      setGlbFile(null);
-      setNewExtension("");
-    } else {
-      setMessage("❌ Error: " + data.message);
+      let data;
+      if (editData) {
+        data = await updateModel(editData, formDataToSend);
+      } else {
+        data = await createModel(formDataToSend);
+      }
+
+      if (data.success) {
+        setMessage(editData ? "✅ Model updated successfully!" : "✅ Model uploaded successfully!");
+        setForm({
+          category: "",
+          label: "",
+          price: "",
+          description: "",
+          type: "",
+          group: "",
+          hasSink: false,
+          extensionKey: [],
+        });
+        setImage(null);
+        setGlbFile(null);
+        setNewExtension("");
+      } else {
+        setMessage("❌ Error: " + data.message);
+      }
+    } catch (err) {
+      setMessage("⚠️ Upload failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setMessage("⚠️ Upload failed. Please try again.");
-  } finally {
-    setLoading(false);
-  }
 
   };
 
@@ -256,12 +257,12 @@ export default function ConfiguratorForm() {
 
         {/* Submit */}
         <button
-  type="submit"
-  disabled={loading}
-  className="w-full bg-blue-600 text-white font-semibold rounded-lg py-2 hover:bg-blue-700 disabled:bg-gray-400"
->
-  {loading ? "Uploading..." : editData ? "Update Model" : "Add Model"}
-</button>
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white font-semibold rounded-lg py-2 hover:bg-blue-700 disabled:bg-gray-400"
+        >
+          {loading ? "Uploading..." : editData ? "Update Model" : "Add Model"}
+        </button>
       </form>
 
       {message && <p className="mt-4 text-center text-gray-700">{message}</p>}

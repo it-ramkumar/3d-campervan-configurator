@@ -12,7 +12,7 @@ router.post(
   "/with-blocks", protect, adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
-    { name: "blockImages", maxCount: 50 },
+    { name: "blockImages", maxCount: 10 },
   ]),
   async (req, res) => {
     try {
