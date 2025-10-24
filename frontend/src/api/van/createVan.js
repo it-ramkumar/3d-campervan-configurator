@@ -1,4 +1,6 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+
 
 // ✅ Create Van
 const createVan = async (formDataToSend) => {
@@ -8,34 +10,53 @@ const createVan = async (formDataToSend) => {
       withCredentials: true,
 
     });
-    alert("Van created successfully!");
-    console.log("✅ Create Response:", res.data);
+    // alert("Van created successfully!");
+    // console.log("✅ Create Response:", res.data);
     return res.data;
   } catch (error) {
-    console.error("❌ Error creating van:", error);
-    alert("Something went wrong while creating van!");
+      Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: error.response.data.message,
+    });
+
+    // console.log("❌ Error creating van:", error.response.data.message);
+    // alert("Something went wrong while creating van!");
     throw error;
   }
 };
 
-// ✅ Update Van
 const updateVan = async (editData, formDataToSend) => {
   try {
-    if (!editData?._id) throw new Error("No van ID to update!");
+    // if (!editData?._id) throw new Error("No van ID to update!");
+
+    // for (let pair of formDataToSend.entries()) {
+    //   console.log(pair[0] + ": ", pair[1]);
+    // }
+
     const res = await axios.put(
       `${import.meta.env.VITE_REACT_APP_API_URL}/van/${editData.slug}`,
       formDataToSend,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
+      { withCredentials: true } // keep cookie session
     );
-    alert("Van updated successfully!");
-    console.log("✅ Update Response:", res.data);
+    Swal.fire({
+          icon: "success",
+          title: "Successfully!",
+          text: "Your Data has been successfully Submitted.",
+        });
+    // alert("Van updated successfully!");
+    // console.log("✅ Update Response:", res.data);
     return res.data;
   } catch (error) {
-    console.error("❌ Error updating van:", error);
-    alert("Something went wrong while updating van!");
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: error.response.data.message,
+    });
+    // console.error("❌ Error updating van:", error);
+    // alert("Something went wrong while updating van!");
     throw error;
   }
 };
+
 export { createVan, updateVan };

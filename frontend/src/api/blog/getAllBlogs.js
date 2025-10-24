@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 /**
  * Fetch all vans from backend
@@ -14,10 +15,15 @@ export async function getAllBlogs() {
       data: response.data.data
     };
   } catch (err) {
-    console.error("Error fetching blogs:", err);
-    return {
-      success: false,
-      error: err.response?.data?.message || "Something went wrong",
-    };
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
+    // console.error("Error fetching blogs:", err);
+    // return {
+    //   success: false,
+    //   error: err.response?.data?.message || "Something went wrong",
+    // };
   }
 }

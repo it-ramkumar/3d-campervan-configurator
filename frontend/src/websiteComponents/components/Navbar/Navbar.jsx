@@ -107,7 +107,7 @@ export default function Navbar({ forceMobile }) {
     ],
   },
 
-  "3d-van-builder": { title: "Build Your Dream Van", link: "/van" },
+  "3d-van-builder": { title: "Build Your Dream Van", link: "https://www.vanbuild3d.com/van" },
   "contact-us": { title: "Contact Us", link: "/contact" },
 
   discover: {

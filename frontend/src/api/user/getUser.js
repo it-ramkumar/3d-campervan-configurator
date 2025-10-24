@@ -1,4 +1,7 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+
+
 
 export const getUser = async () => {
 
@@ -8,6 +11,12 @@ export const getUser = async () => {
     });
     return res.data;
   } catch (err) {
-    throw err.response?.data || err.message;
+      Swal.fire({
+          icon: "Error",
+          title: "Error",
+          text: err.response.data.message,
+        });
+
+    throw err.response?.data
   }
 };

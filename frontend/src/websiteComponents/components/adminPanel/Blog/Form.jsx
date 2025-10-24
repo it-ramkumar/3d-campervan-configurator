@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { updateBlog,createBlog } from "../../../../api/blog/createBlogs";
 
+
 const BlogForm = () => {
   const editData = useSelector((state) => state.editData.editData);
 
@@ -96,7 +97,7 @@ const BlogForm = () => {
       await createBlog(formData);
     }
   } catch (err) {
-    console.error("Error:", err);
+    console.log("Error:", err.response.data.message);
   } finally{
     setLoader(false)
   }

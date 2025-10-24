@@ -1,46 +1,85 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setEditData } from "../../../../redux/slices/editData"
-import { useNavigate } from "react-router-dom";
+import { setEditData } from "../../../../redux/slices/editData";
 import { getAllPortfolio } from "../../../../api/portfolio/getAllPortfolio";
 import { deletePortfolio } from "../../../../api/portfolio/deletePortfolio";
 import Detail from "./Detail";
-export default function PortfolioListing({setSelected}) {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+import Swal from "sweetalert2";
+
+export default function PortfolioListing({ setSelected }) {
+  const dispatch = useDispatch();
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [detail,setDetail] =useState()
-    const [isOpen,setIsopen] =useState(false)
+  const [detail, setDetail] = useState();
+  const [isOpen, setIsopen] = useState(false);
 
   // Fetch all portfolios
   useEffect(() => {
     fetchData();
   }, []);
-   const fetchData = async () => {
-      try {
-        const res = await getAllPortfolio();
-        // console.log(res.data,"res")
-        setPortfolios(res.data.data || []);
-      } catch (err) {
-        console.error("❌ Error fetching portfolios:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-  // Delete portfolio
-  const handleDelete = async (slug) => {
-    if (!confirm("Are you sure you want to delete this portfolio?")) return;
+
+  const fetchData = async () => {
     try {
-      await deletePortfolio(slug);
-      fetchData(); // Refresh the list after deletion
+      const res = await getAllPortfolio();
+      setPortfolios(res.data.data || []);
     } catch (err) {
-      console.error("❌ Error deleting portfolio:", err);
-      alert("Failed to delete portfolio ❌");
+      console.error("❌ Error fetching portfolios:", err);
+      Swal.fire("Error!", err.response?.data?.message || err.message, "error");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Delete portfolio with SweetAlert
+  const handleDelete = (slug) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deletePortfolio(slug);
+          Swal.fire("Deleted!", "The portfolio has been deleted.", "success");
+          fetchData(); // refresh list
+        } catch (err) {
+          console.error("❌ Error deleting portfolio:", err);
+          Swal.fire(
+            "Error!",
+            err.response?.data?.message || err.message,
+            "error"
+          );
+        }
+      }
+    });
+  };
+
+  // Edit portfolio with loader SweetAlert
+  const handleEdit = (portfolio) => {
+    Swal.fire({
+      title: "Preparing Editor...",
+      didOpen: () => Swal.showLoading(),
+      allowOutsideClick: false,
+    });
+
+    dispatch(setEditData(portfolio));
+    setSelected("portfolio-form");
+
+    setTimeout(() => {
+      Swal.close();
+    }, 500);
+  };
+
+  // View portfolio in modal
+  const handleView = (portfolio) => {
+    setDetail(portfolio);
+    setIsopen(true);
   };
 
   if (loading) {
@@ -55,7 +94,7 @@ export default function PortfolioListing({setSelected}) {
         <p>No portfolios found.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {portfolios?.map((portfolio) => (
+          {portfolios.map((portfolio) => (
             <div
               key={portfolio._id}
               className="border rounded-xl shadow-md p-4 bg-white"
@@ -87,25 +126,19 @@ export default function PortfolioListing({setSelected}) {
               {/* Buttons */}
               <div className="flex gap-3">
                 <button
-                    onClick={()=>{setDetail(portfolio)
-               setIsopen(true)}}
+                  onClick={() => handleView(portfolio)}
                   className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
                 >
                   View
                 </button>
                 <button
-                  onClick={() => {dispatch(setEditData(portfolio))
-                     setSelected("portfolio-form");
-                  }}
-                  className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                  onClick={() => handleEdit(portfolio)}
+                  className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() =>{
-                    handleDelete(portfolio.slug)
-
-                  }}
+                  onClick={() => handleDelete(portfolio.slug)}
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                 >
                   Delete
@@ -115,8 +148,9 @@ export default function PortfolioListing({setSelected}) {
           ))}
         </div>
       )}
-            {isOpen && <Detail setIsopen={setIsopen} detail={detail}/>}
 
+      {/* Modal */}
+      {isOpen && <Detail setIsopen={setIsopen} detail={detail} />}
     </div>
   );
 }

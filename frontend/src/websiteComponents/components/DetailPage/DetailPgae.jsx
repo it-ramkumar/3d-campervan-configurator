@@ -23,7 +23,7 @@ export default function Layouts() {
   }, [slug]);
 
   if (!van) return <p>Loading...</p>;
-  console.log(van,"van")
+  // console.log(van,"van")
 
   return (
     <>

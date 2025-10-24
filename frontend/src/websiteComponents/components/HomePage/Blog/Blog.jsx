@@ -58,7 +58,7 @@ const data = blogs.length > 0 ? blogs : blogPosts;
 
         {/* Blog Post Cards */}
         <div className="flex flex-col items-center md:flex-row md:justify-center gap-6 md:gap-8 lg:gap-10">
-          {data?.map((post) => (
+          {data?.slice(0,4).map((post) => (
             <Link
               key={post._id}
               to={post.link}

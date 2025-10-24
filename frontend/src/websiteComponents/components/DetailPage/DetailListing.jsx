@@ -139,7 +139,7 @@ const SvgExterior = ({ className }) => (
 // =================== MAIN COMPONENT ===================
 const VanPage = ({ vanDetail }) => {
   const heroRef = useRef(null);
-  console.log(vanDetail, "vanDetail");
+  // console.log(vanDetail, "vanDetail");
 
   const van = {
     hero: {

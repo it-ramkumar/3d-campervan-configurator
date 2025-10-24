@@ -1,4 +1,6 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+
 
 // ✅ Create portfolio
 const createPortfolio = async (formDataToSend) => {
@@ -9,11 +11,16 @@ const createPortfolio = async (formDataToSend) => {
             withCredentials: true,
 
         });
-        alert("Portfolio created successfully!");
+        // alert("Portfolio created successfully!");
         return res.data;
     } catch (error) {
-        console.error("❌ Error creating portfolio:", error);
-        alert("Something went wrong while creating!");
+             Swal.fire({
+              icon: "Error",
+              title: "Error",
+              text: error.response.data.message,
+            });
+        // console.error("❌ Error creating portfolio:", error);
+        // alert("Something went wrong while creating!");
         throw error;
     }
 };
@@ -27,12 +34,17 @@ const updatePortfolio = async (editData, formDataToSend) => {
             formDataToSend,
             { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
-        alert("Portfolio updated successfully!");
-        console.log("✅ Success (Update):", res.data);
+        // alert("Portfolio updated successfully!");
+        // console.log("✅ Success (Update):", res.data);
         return res.data;
     } catch (error) {
-        console.error("❌ Error updating portfolio:", error);
-        alert("Something went wrong while updating!");
+             Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: error.response.data.message,
+    });
+        // console.error("❌ Error updating portfolio:", error);
+        // alert("Something went wrong while updating!");
         throw error;
     }
 };

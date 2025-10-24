@@ -1,5 +1,6 @@
 // blogApi.js
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const config = {
   headers: { "Content-Type": "multipart/form-data" },
@@ -17,14 +18,23 @@ export const createBlog = async (formData) => {
       formData,
       config
     );
-    alert("✅ Blog created!");
+       Swal.fire({
+      icon: "success",
+      title: "Blog Submmited!",
+      text: "Your blog has been submit successfully.",
+    });
     return res.data;
   } catch (err) {
-    console.error(err);
-    alert("❌ Blog creation failed!");
+       Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
+
     throw err;
   }
 };
+
 
 /**
  * UPDATE an existing blog
@@ -38,11 +48,19 @@ export const updateBlog = async (blogId, formData) => {
       formData,
       config
     );
-    alert("✅ Blog updated!");
+    Swal.fire({
+      icon: "success",
+      title: "Blog Updated!",
+      text: "Your blog has been updated successfully.",
+    });
     return res.data;
   } catch (err) {
-    console.error(err);
-    alert("❌ Blog update failed!");
+      Swal.fire({
+      icon: "warning",
+      title: "warning",
+      text: err.response.data.message,
+    });
+
     throw err;
   }
 };

@@ -1,14 +1,24 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const createModel = async (formData) => {
   try {
     const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/models/add`, formData, {
       withCredentials: true,
     });
-
+    Swal.fire({
+          icon: "success",
+          title: "successfully!",
+          text: "Your data has been successfully.",
+        });
     return res.data;
   } catch (err) {
-    console.error(err);
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
+    // console.error(err);
     throw err;
   }
 };
@@ -22,10 +32,19 @@ export const updateModel = async (editData, formData) => {
       },
       withCredentials: true,
     });
-
+    Swal.fire({
+          icon: "success",
+          title: " successfully!",
+          text: "Your blog has been successfully.",
+        });
     return res.data;
   } catch (err) {
-    console.error(err);
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
+    // console.error(err);
     throw err;
   }
 };

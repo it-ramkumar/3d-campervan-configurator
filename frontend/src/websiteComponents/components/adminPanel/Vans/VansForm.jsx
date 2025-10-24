@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { createVan, updateVan } from "../../../../api/van/createVan";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { clearEditData } from "../../../../redux/slices/editData";
 
 const VansForm = () => {
   const editData = useSelector((state) => state.editData.editData);
-
+const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     van_listing: {
       title: "",
@@ -293,7 +294,7 @@ const removeExistingGalleryImage = (index) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      alert("Please fill all required fields");
+      // alert("Please fill all required fields");
       return;
     }
 
@@ -337,14 +338,16 @@ const removeExistingGalleryImage = (index) => {
 
       if (editData?._id) {
         await updateVan(editData, formToSend);
+        dispatch(clearEditData())
         alert("Van updated successfully");
+
       } else {
         await createVan(formToSend);
-        alert("Van created successfully");
+        // alert("Van created successfully");
       }
     } catch (err) {
-      console.error("Error submitting form:", err);
-      alert("Error creating/updating van. Check console for details.");
+      console.warn(err);
+      // alert("Error creating/updating van. Check console for details.");
     } finally {
       setLoading(false);
     }

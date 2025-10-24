@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const updateUser = async (id, newStatus) => {
   try {
@@ -8,12 +9,19 @@ export const updateUser = async (id, newStatus) => {
    , {
       withCredentials: true,
     } );
-
-    // console.log("🔄 response:", res);
-    // console.log("✅ sent body:", { status: newStatus });
+    Swal.fire({
+          icon: "success",
+          title: "Delete successfully!",
+          text: "Your User has been Deleted successfully.",
+        });
 
     return res;
   } catch (err) {
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
     throw err.response?.data || err.message;
   }
 };

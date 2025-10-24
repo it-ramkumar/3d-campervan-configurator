@@ -173,7 +173,7 @@ export default function PortfolioForm() {
       }
     } catch (error) {
       console.error("❌ Error uploading:", error);
-      alert("Something went wrong!");
+      // alert("Something went wrong!");
     } finally{
       setLoading(false)
     }

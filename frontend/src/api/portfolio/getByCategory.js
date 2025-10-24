@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export async function getByCategory(categorySlug, page = 1, limit = 2) {
   try {
@@ -23,10 +24,12 @@ export async function getByCategory(categorySlug, page = 1, limit = 2) {
       pages: response.data?.pages || 1,
     };
   } catch (err) {
-    console.error("❌ Error fetching portfolio:", err);
-    return {
-      success: false,
-      error: err.response?.data?.message || "Something went wrong",
-    };
+        Swal.fire({
+      icon: "Error",
+      title: "Error",
+      text: err.response.data.message,
+    });
+    // console.error("❌ Error fetching portfolio:", err);
+  
   }
 }

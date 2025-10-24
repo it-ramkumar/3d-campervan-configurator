@@ -38,13 +38,19 @@ export default function UsersData() {
     }
   };
 
-  useEffect(()=>{
-const fetch =async ()=>{
-    const users = await getUser()
-    setUsers(users.data)
-}
-fetch()
-  },[])
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await getUser();
+        setUsers(response.data);
+      } catch (error) {
+        console.warn(error.message);
+      }
+    };
+
+    fetch();
+  }, []);
+
   // console.log(users,"user")
   const deleteById = async (id) => {
     // confirm dialog
