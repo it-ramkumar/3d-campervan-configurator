@@ -17,7 +17,7 @@ export default function PortfolioForm() {
   const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [sold, setSold] = useState(false);
+  // const [sold, setSold] = useState(false);
 
   // Specifications
   const [makeModel, setMakeModel] = useState("");
@@ -34,6 +34,40 @@ export default function PortfolioForm() {
   const [category, setCategory] = useState("");
   const [loading,setLoading]=useState(false)
 
+
+
+  // Function to clear/reset all fields
+const clearForm = () => {
+  // Media
+  setGalleryFiles([]);
+  setBlocks([{ image: null, caption: "" }]);
+
+  // Basic Info
+  setTitle("");
+  setSubtitle("");
+  setDescription("");
+  setPrice("");
+  // setSold(false);
+
+  // Specifications
+  setMakeModel("");
+  setWheelbase("");
+  setDrivetrain("");
+  setCapacity({ sits: "", sleeps: "" });
+
+  // Features
+  setFeatures([{ category: "", items: [""] }]);
+
+  // Video
+  setVideo({ title: "" });
+
+  // Category
+  setCategory("");
+
+  // Loading state (optional reset)
+  // setLoading(false);
+};
+
   // ✅ Auto-fill if editData is available
   useEffect(() => {
     if (editData?._id) {
@@ -41,7 +75,7 @@ export default function PortfolioForm() {
       setSubtitle(editData.van_listing?.subtitle || "");
       setDescription(editData.van_listing?.description || "");
       setPrice(editData.van_listing?.price || "");
-      setSold(editData.sold || false);
+      // setSold(editData.sold || false);
 
       setMakeModel(editData.van_listing?.specifications?.make_model || "");
       setWheelbase(editData.van_listing?.specifications?.wheelbase || "");
@@ -150,7 +184,7 @@ export default function PortfolioForm() {
     formDataToSend.append("subtitle", subtitle);
     formDataToSend.append("description", description);
     formDataToSend.append("price", price);
-    formDataToSend.append("sold", sold);
+    // formDataToSend.append("sold", sold);
 
     // ✅ Category add
     formDataToSend.append("category", category);
@@ -168,8 +202,10 @@ export default function PortfolioForm() {
       setLoading(true)
       if (editData?._id) {
         await updatePortfolio(editData, formDataToSend);
+        clearForm()
       } else {
         await createPortfolio(formDataToSend);
+        clearForm()
       }
     } catch (error) {
       console.error("❌ Error uploading:", error);
@@ -218,14 +254,14 @@ export default function PortfolioForm() {
             onChange={(e) => setPrice(e.target.value)}
             className="border p-2 rounded w-full"
           />
-          <label className="flex items-center gap-2">
+          {/* <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={sold}
               onChange={(e) => setSold(e.target.checked)}
             />
             Sold
-          </label>
+          </label> */}
         </div>
 
         {/* SPECIFICATIONS */}

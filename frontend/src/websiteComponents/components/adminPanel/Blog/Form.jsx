@@ -29,6 +29,13 @@ const BlogForm = () => {
       );
     }
   }, [editData]);
+// Function to reset all fields
+const clearForm = () => {
+  setTitle("");
+  setDes("");
+  setGallery([]);
+  setBlocks([{ heading: "", paragraph: "", image: null }]);
+};
 
   // ✅ handle block change
   const handleBlockChange = (index, field, value) => {
@@ -93,8 +100,10 @@ const BlogForm = () => {
   setLoader(true)
     if (editData && editData._id) {
       await updateBlog(editData._id, formData);
+      clearForm()
     } else {
       await createBlog(formData);
+      clearForm()
     }
   } catch (err) {
     console.log("Error:", err.response.data.message);

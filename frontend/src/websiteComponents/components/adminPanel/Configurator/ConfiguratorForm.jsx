@@ -20,6 +20,7 @@ export default function ConfiguratorForm() {
   const [message, setMessage] = useState("");
   const [newExtension, setNewExtension] = useState("");
 
+  
   useEffect(() => {
     if (editData) {
       setForm({

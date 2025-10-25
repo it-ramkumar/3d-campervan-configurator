@@ -22,24 +22,24 @@ export default function Dashboard() {
       icon: "🚐",
       description: "Listing Users"
     },
-    {
-      id: "vans-form",
-      label: "Van Form",
-      icon: "🚐",
-      description: "Create new van listings"
-    },
+    // {
+    //   id: "vans-form",
+    //   label: "Van Form",
+    //   icon: "🚐",
+    //   description: "Create new van listings"
+    // },
     {
       id: "Vans-listing",
       label: "Van Data",
       icon: "📊",
       description: "Manage existing vans"
     },
-    {
-      id: "portfolio-form",
-      label: "Portfolio Form",
-      icon: "⭐",
-      description: "Create portfolio items"
-    },
+    // {
+    //   id: "portfolio-form",
+    //   label: "Portfolio Form",
+    //   icon: "⭐",
+    //   description: "Create portfolio items"
+    // },
     {
       id: "portfolio-listing",
       label: "Portfolio Data",
@@ -52,52 +52,52 @@ export default function Dashboard() {
       icon: "📝",
       description: "Manage blog items"
     },
-    {
-      id: "Blog-form",
-      label: "Blogs Form",
-      icon: "✏️",
-      description: "Create blog items"
-    },
+    // {
+    //   id: "Blog-form",
+    //   label: "Blogs Form",
+    //   icon: "✏️",
+    //   description: "Create blog items"
+    // },
     {
       id: "Configurator-data",
       label: "Configurator Data",
       icon: "✏️",
       description: "Configurator Data"
     },
-      {
-      id: "Configurator-form",
-      label: "Configurator Form",
-      icon: "✏️",
-      description: "Configurator Form"
-    }
+    //   {
+    //   id: "Configurator-form",
+    //   label: "Configurator Form",
+    //   icon: "✏️",
+    //   description: "Configurator Form"
+    // }
   ];
 
   const currentItem = menuItems.find(item => item.id === selected);
+const renderContent = () => {
+  switch (selected) {
+    case "vans-form":
+      return <VansForm />;
+    case "Vans-listing":
+      return <VanListing setSelected={setSelected} />;
+    case "portfolio-form":
+      return <PortfolioForm />;
+    case "portfolio-listing":
+      return <PortfolioListing setSelected={setSelected} />;
+    case "Blog-form":
+      return <BlogForm />;
+    case "Blogs-listing":
+      return <BlogsListing setSelected={setSelected} />;
+    case "Configurator-form":
+      return <ConfiguratorForm />;
+    case "Configurator-data":
+      return <ConfiguratorListing setSelected={setSelected} />;
+    case "Users":
+      return <UsersData />;
+    default:
+      return <PortfolioListing />;
+  }
+};
 
-  const renderContent = () => {
-    switch (selected) {
-      case "vans-form":
-        return <VansForm />;
-      case "Vans-listing":
-        return <VanListing setSelected={setSelected}/>;
-      case "portfolio-form":
-        return <PortfolioForm />;
-      case "portfolio-listing":
-        return <PortfolioListing setSelected={setSelected}/>;
-      case "Blog-form":
-        return <BlogForm />;
-      case "Blogs-listing":
-        return <BlogsListing setSelected={setSelected} />;
-         case "Configurator-data":
-        return <ConfiguratorListing setSelected={setSelected}/>;
-           case "Configurator-form":
-        return <ConfiguratorForm  />;
-         case "Users":
-        return <UsersData  />;
-      default:
-        return <PortfolioListing />;
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">

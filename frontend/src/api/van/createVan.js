@@ -10,7 +10,7 @@ const createVan = async (formDataToSend) => {
       withCredentials: true,
 
     });
-    // alert("Van created successfully!");
+    alert("Van created successfully!");
     // console.log("✅ Create Response:", res.data);
     return res.data;
   } catch (error) {
@@ -44,7 +44,7 @@ const updateVan = async (editData, formDataToSend) => {
           title: "Successfully!",
           text: "Your Data has been successfully Submitted.",
         });
-    // alert("Van updated successfully!");
+    alert("Van updated successfully!");
     // console.log("✅ Update Response:", res.data);
     return res.data;
   } catch (error) {

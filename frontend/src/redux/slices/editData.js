@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null, // yahan object save hoga
+  editData: null, // must match what component uses
 };
 
 const editDataSlice = createSlice({
@@ -9,10 +9,10 @@ const editDataSlice = createSlice({
   initialState,
   reducers: {
     setEditData: (state, action) => {
-      state.editData = action.payload; // pura object save karega
+      state.editData = action.payload; // save the object
     },
     clearEditData: (state) => {
-      state.editData = null;
+      state.editData = null; // reset
     },
   },
 });

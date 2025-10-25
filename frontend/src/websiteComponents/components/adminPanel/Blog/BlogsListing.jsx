@@ -5,6 +5,7 @@ import { setEditData } from "../../../../redux/slices/editData";
 import { deleteBlog } from "../../../../api/blog/deleteBlog";
 import Detail from "./Detail";
 import Swal from "sweetalert2";
+import { clearEditData } from "../../../../redux/slices/editData";
 
 export default function BlogsListing({ setSelected }) {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default function BlogsListing({ setSelected }) {
 
     setTimeout(() => {
       Swal.close();
-    }, 500); 
+    }, 500);
   };
 
 
@@ -93,7 +94,18 @@ export default function BlogsListing({ setSelected }) {
     );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-12 relative">
+      {/* Add Blog Button */}
+      <button
+        onClick={() => {setSelected("Blog-form")
+                dispatch(clearEditData())
+
+        }}
+        className="absolute top-6 right-6 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+      >
+        + Add Blog
+      </button>
+
       <h1 className="text-3xl font-bold mb-10 text-gray-800">Blogs</h1>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -140,7 +152,9 @@ export default function BlogsListing({ setSelected }) {
                 </button>
 
                 <button
-                  onClick={() => handleEdit(blog)}
+                  onClick={() => {
+                    handleEdit(blog)
+                  }}
                   className="px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
                 >
                   Edit
@@ -161,5 +175,6 @@ export default function BlogsListing({ setSelected }) {
       {/* Modal */}
       {isOpen && <Detail setIsopen={setIsopen} detail={detail} />}
     </div>
+
   );
 }

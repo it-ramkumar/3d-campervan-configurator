@@ -6,6 +6,7 @@ import { getAllVans } from "../../../../api/van/getAllVans";
 import { deleteVan } from "../../../../api/van/deleteVan";
 import Detail from "./Detail";
 import Swal from "sweetalert2";
+import { clearEditData } from "../../../../redux/slices/editData";
 
 export default function VanListing({ setSelected }) {
   const dispatch = useDispatch();
@@ -88,55 +89,66 @@ export default function VanListing({ setSelected }) {
   if (vans.length === 0) return <p className="text-gray-500 p-4">No vans available</p>;
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">All Vans</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {vans.map((van) => (
-          <div
-            key={van._id}
-            className="border rounded-lg p-4 shadow hover:shadow-lg transition"
-          >
-            {/* Thumbnail */}
-            {van.gallery?.length > 0 ? (
-              <img
-                src={van.gallery[0].url}
-                alt={van.van_listing.title}
-                className="w-full h-40 object-cover rounded mb-3"
-              />
-            ) : (
-              <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-3">
-                <span className="text-gray-500">No Image</span>
-              </div>
-            )}
+   <div className="p-4 relative">
+  {/* Add Button */}
+  <button
+    onClick={() => {setSelected("vans-form")
+      dispatch(clearEditData())
+    }}
+    className="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition"
+  >
+    + Add Van
+  </button>
 
-            <h3 className="font-semibold text-lg">{van.van_listing.title}</h3>
-            <p className="text-gray-600">{van.van_listing.description}</p>
-            <p className="mt-1 font-medium">Price: ${van.van_listing.price}</p>
-
-            <div className="mt-3 flex gap-2">
-              <button
-                onClick={() => handleView(van)}
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-              >
-                View
-              </button>
-              <button
-                onClick={() => handleEdit(van)}
-                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(van.slug)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
+  <h2 className="text-2xl font-bold mb-4">All Vans</h2>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {vans.map((van) => (
+      <div
+        key={van._id}
+        className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+      >
+        {/* Thumbnail */}
+        {van.gallery?.length > 0 ? (
+          <img
+            src={van.gallery[0].url}
+            alt={van.van_listing.title}
+            className="w-full h-40 object-cover rounded mb-3"
+          />
+        ) : (
+          <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-3">
+            <span className="text-gray-500">No Image</span>
           </div>
-        ))}
+        )}
+
+        <h3 className="font-semibold text-lg">{van.van_listing.title}</h3>
+        <p className="text-gray-600">{van.van_listing.description}</p>
+        <p className="mt-1 font-medium">Price: ${van.van_listing.price}</p>
+
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => handleView(van)}
+            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          >
+            View
+          </button>
+          <button
+            onClick={() => handleEdit(van)}
+            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(van.slug)}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </div>
       </div>
-      {isOpen && <Detail setIsopen={setIsopen} detail={detail} />}
-    </div>
+    ))}
+  </div>
+  {isOpen && <Detail setIsopen={setIsopen} detail={detail} />}
+</div>
+
   );
 }

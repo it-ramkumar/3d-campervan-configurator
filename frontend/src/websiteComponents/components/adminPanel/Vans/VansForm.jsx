@@ -85,6 +85,43 @@ useEffect(() => {
     }
   }
 }, [editData]);
+// Form reset function
+const resetForm = () => {
+  // Reset main form data
+  setFormData({
+    van_listing: {
+      title: "",
+      description: "",
+      subtitle: "",
+      model_name: "",
+      price: "",
+      tagline: "",
+      specifications: {
+        make_model: "",
+        wheelbase: "",
+        drivetrain: "",
+        engine: "",
+        capacity: { sits: "", sleeps: "" },
+      },
+    },
+    sold: false,
+    gallery: [],
+    feature_highlights: [{ title: "", description: "" }],
+    detailed_features: [{ category: "", items: [""] }],
+    media: [""],
+  });
+
+  // Reset blocks and gallery
+  setBlocks([{ image: null, caption: "", preview: null }]);
+  setGalleryFiles([]);
+  setGalleryPreviews([]);
+  setExistingGallery([]);
+  setRemovedExistingGallery([]);
+  setRemovedExistingBlockPreviews([]);
+
+  // Clear Redux edit data
+  dispatch(clearEditData());
+};
 
   // ----------- Validation (kept from your original) -----------
   const validateForm = () => {
@@ -338,11 +375,13 @@ const removeExistingGalleryImage = (index) => {
 
       if (editData?._id) {
         await updateVan(editData, formToSend);
-        dispatch(clearEditData())
-        alert("Van updated successfully");
+resetForm()
+        // alert("Van updated successfully");
 
       } else {
         await createVan(formToSend);
+resetForm()
+
         // alert("Van created successfully");
       }
     } catch (err) {
