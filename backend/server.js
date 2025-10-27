@@ -1,11 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/database");
-const axios = require('axios')
 const cookieParser = require("cookie-parser");
 const helmetMiddleware = require("./middleware/helmetMiddleware");
 const corsMiddleware = require("./middleware/corsMiddleware");
-const { globalLimiter } = require("./middleware/rateLimiting");
+// const { globalLimiter } = require("./middleware/rateLimiting");
 const { morganMiddleware, logger } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const quoteRoutes = require("./routes/qouteRoute");
@@ -36,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("trust proxy", 1);
-app.use(globalLimiter);
+// app.use(globalLimiter);
 
 
 

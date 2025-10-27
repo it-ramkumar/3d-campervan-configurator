@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 
 // --- SVG Icons (no design change) ---
 const SvgInsulation = ({ className }) => (
@@ -294,9 +295,10 @@ const VanPage = ({ vanDetail }) => {
           <p className="text-xl font-normal leading-relaxed mb-8">
             {van.flagship.description}
           </p>
+          <Link to={"contact-us"}>
           <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
             Book a call now
-          </button>
+          </button></Link>
         </div>
       </div>
 
