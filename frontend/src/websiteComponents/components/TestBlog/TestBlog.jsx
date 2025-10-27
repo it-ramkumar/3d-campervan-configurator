@@ -1,65 +1,63 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { updateBlog,createBlog } from "../../../../api/blog/createBlogs";
+import { Link } from "react-router-dom";
 
-export default function BlogForm() {
-  const editData = useSelector((state) => state.editData.editData);
+
+export default function BlogEditorForm() {
   const [title, setTitle] = useState("");
   const [blocks, setBlocks] = useState([]);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [loading,setLoading] =useState(false)
+  const [data, setData] = useState()
 
-  // 🔹 Detect edit mode and prefill data
-  useEffect(() => {
-    if (editData && editData._id) {
-      setIsEditMode(true);
-      setTitle(editData.title || "");
-
-      // Parse content safely
-      try {
-        const parsed = typeof editData.content === "string"
-          ? JSON.parse(editData.content)
-          : editData.content;
-        setBlocks(parsed || []);
-      } catch (err) {
-        console.error("Error parsing editData.content:", err);
-      }
-    }
-  }, [editData]);
-
-  // 🔹 Add new block
   const addBlock = (type) => {
     const newBlock =
       type === "paragraph"
         ? { type, text: "" }
         : type === "heading"
-        ? { type, text: "" }
-        : type === "image"
-        ? { type, file: null, preview: "" }
-        : type === "table"
-        ? { type, rows: [["", ""], ["", ""]] }
-        : type === "proscons"
-        ? { type, pros: [""], cons: [""] }
-        : null;
+          ? { type, text: "" }
+          : type === "image"
+            ? { type, file: null, preview: "" }
+            : type === "table"
+              ? { type, rows: [["", ""], ["", ""]] }
+              : type === "proscons"
+                ? { type, pros: [""], cons: [""] }
+                : null;
 
     setBlocks([...blocks, newBlock]);
   };
 
-  // 🔹 Remove block
-  const removeBlock = (index) => {
-    const updated = [...blocks];
-    updated.splice(index, 1);
-    setBlocks(updated);
-  };
 
   const handleChange = (index, field, value) => {
     const updated = [...blocks];
     updated[index][field] = value;
     setBlocks(updated);
   };
+  // ✅ Fetch blog data when editing
+  useEffect(() => {
+    // only fetch if editing
 
+    const fetchBlog = async () => {
+      try {
+        // setLoading(true);
+        // setError("");
+
+        const res = await axios.get(`http://localhost:5000/api/test-blog`);
+        const blog = res.data.data;
+        setData(blog)
+
+        // ✅ Fill data in form
+        setTitle(blog.title || "");
+        setBlocks(blog.content || []);
+      } catch (err) {
+        console.error("❌ Error fetching blog:", err);
+        // setError("Failed to fetch blog data");
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, []);
   const handleImageChange = (index, file) => {
     const updated = [...blocks];
     updated[index].file = file;
@@ -78,14 +76,13 @@ export default function BlogForm() {
     updated[blockIndex].rows.push(["", ""]);
     setBlocks(updated);
   };
-
-  // 🔹 Submit (Create or Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", title);
 
+    // Prepare blocks (JSON content)
     const cleanedBlocks = blocks.map((b, i) => {
       if (b.type === "image" && b.file) {
         return { type: "image", imageField: `image_${i}` };
@@ -95,43 +92,32 @@ export default function BlogForm() {
 
     formData.append("content", JSON.stringify(cleanedBlocks));
 
-    // Attach new images only
+    // ✅ Append all block images
     blocks.forEach((b, i) => {
       if (b.type === "image" && b.file) {
-        formData.append("images", b.file);
+        formData.append("images", b.file); // keep key "images" for all
       }
     });
 
-    setLoading(true)
-try {
-  let res;
-
-  if (isEditMode) {
-    res = await updateBlog(editData._id, formData);
-    alert("✅ Blog updated successfully!");
-  } else {
-    res = await createBlog(formData);
-    alert("✅ Blog uploaded successfully!");
-  }
-setBlocks([])
-setTitle("")
-  // console.log(res.data);
-} catch (err) {
-  console.error(err);
-  alert("❌ Upload failed");
-} finally{
-  setLoading(false)
-}
+    try {
+      const res = await axios.post("http://localhost:5000/api/test-blog", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("✅ Blog uploaded successfully!");
+      console.log(res.data.data)
+    } catch (err) {
+      console.error(err);
+      alert("❌ Upload failed");
+    }
   };
+
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        {isEditMode ? "✏️ Edit Blog" : "📝 Create New Blog"}
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Create New Blog</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
+        {/* Blog Title */}
         <input
           type="text"
           placeholder="Blog Title"
@@ -141,64 +127,53 @@ setTitle("")
           required
         />
 
-        {/* Blocks */}
+        {/* Render Dynamic Blocks */}
         {blocks.map((block, i) => (
-          <div key={i} className="relative border p-3 rounded bg-gray-50">
-            {/* ❌ Remove Button */}
-            <button
-              type="button"
-              onClick={() => removeBlock(i)}
-              className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm font-semibold"
-            >
-              ✕ Remove
-            </button>
-
-            {/* Heading */}
+          <div key={i} className="border p-3 rounded bg-gray-50">
             {block.type === "heading" && (
               <input
                 type="text"
                 placeholder="Heading..."
-                value={block.text || ""}
+                value={block.text}
                 onChange={(e) => handleChange(i, "text", e.target.value)}
                 className="w-full border p-2 rounded"
               />
             )}
 
-            {/* Paragraph */}
             {block.type === "paragraph" && (
               <textarea
                 placeholder="Write paragraph..."
-                value={block.text || ""}
+                value={block.text}
                 onChange={(e) => handleChange(i, "text", e.target.value)}
                 className="w-full border p-2 rounded"
                 rows="4"
               />
             )}
 
-            {/* Image */}
             {block.type === "image" && (
               <div>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleImageChange(i, e.target.files[0])}
+                  onChange={(e) =>
+                    handleImageChange(i, e.target.files[0])
+                  }
                 />
-                {(block.preview || block.url) && (
+                {block.preview && (
                   <img
-                    src={block.preview || block.url}
+                    src={block.preview}
                     alt="preview"
-                    className="w-48 mt-2 rounded shadow"
+                    className="w-48 mt-2 rounded"
                   />
                 )}
               </div>
             )}
 
-            {/* Table */}
             {block.type === "table" && (
               <div>
                 <table className="border w-full text-left">
                   <tbody>
-                    {block.rows?.map((row, rowIndex) => (
+                    {block.rows.map((row, rowIndex) => (
                       <tr key={rowIndex}>
                         {row.map((cell, colIndex) => (
                           <td key={colIndex} className="border p-2">
@@ -226,12 +201,11 @@ setTitle("")
               </div>
             )}
 
-            {/* Pros & Cons */}
             {block.type === "proscons" && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-semibold">Pros</h4>
-                  {block.pros?.map((pro, idx) => (
+                  {block.pros.map((pro, idx) => (
                     <input
                       key={idx}
                       type="text"
@@ -260,7 +234,7 @@ setTitle("")
 
                 <div>
                   <h4 className="font-semibold">Cons</h4>
-                  {block.cons?.map((con, idx) => (
+                  {block.cons.map((con, idx) => (
                     <input
                       key={idx}
                       type="text"
@@ -293,27 +267,58 @@ setTitle("")
 
         {/* Add Block Buttons */}
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => addBlock("heading")} className="px-3 py-1 bg-blue-600 text-white rounded">
+          <button
+            type="button"
+            onClick={() => addBlock("heading")}
+            className="px-3 py-1 bg-blue-600 text-white rounded"
+          >
             + Heading
           </button>
-          <button type="button" onClick={() => addBlock("paragraph")} className="px-3 py-1 bg-green-600 text-white rounded">
+          <button
+            type="button"
+            onClick={() => addBlock("paragraph")}
+            className="px-3 py-1 bg-green-600 text-white rounded"
+          >
             + Paragraph
           </button>
-          <button type="button" onClick={() => addBlock("image")} className="px-3 py-1 bg-purple-600 text-white rounded">
+          <button
+            type="button"
+            onClick={() => addBlock("image")}
+            className="px-3 py-1 bg-purple-600 text-white rounded"
+          >
             + Image
           </button>
-          <button type="button" onClick={() => addBlock("table")} className="px-3 py-1 bg-orange-600 text-white rounded">
+          <button
+            type="button"
+            onClick={() => addBlock("table")}
+            className="px-3 py-1 bg-orange-600 text-white rounded"
+          >
             + Table
           </button>
-          <button type="button" onClick={() => addBlock("proscons")} className="px-3 py-1 bg-pink-600 text-white rounded">
+          <button
+            type="button"
+            onClick={() => addBlock("proscons")}
+            className="px-3 py-1 bg-pink-600 text-white rounded"
+          >
             + Pros & Cons
           </button>
         </div>
 
-        <button disabled={loading} type="submit" className="w-full bg-black text-white py-2 rounded font-semibold">
-          { loading ? "Saving" : "Submit"}
+        <button
+          type="submit"
+          className="w-full bg-black text-white py-2 rounded font-semibold"
+        >
+          Submit Blog
         </button>
       </form>
+
+{data?.map((item) => (
+  <div key={item._id} className="p-2">
+    <Link to={`/test/${item._id}`} className="text-blue-600 hover:underline">
+      {item.title}
+    </Link>
+  </div>
+))}
     </div>
   );
 }

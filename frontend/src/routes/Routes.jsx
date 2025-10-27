@@ -27,6 +27,9 @@ import NotFound from "../websiteComponents/components/NotFound/NotFound";
 import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"
 import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exteriorhero/Exterior";
 import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
+import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
+import TestBlog from "../websiteComponents/components/TestBlog/TestBlog"
+import TestBlogDetail from "../websiteComponents/components/TestBlog/Detailpage"
 const AppRoutes = () => {
 
 
@@ -35,10 +38,12 @@ const AppRoutes = () => {
       <ScrollFromTop />
       <Routes>
 
+      <Route path="/test" element={<TestBlog />} />
+      <Route path="/test/:id" element={<TestBlogDetail />} />
+
 
         <Route path="/" element={<Home />} />
         <Route path="/configurator-form" element={<ConfiguratorForm />} />
-
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/showroom" element={<ShowRoom/>}/>
         <Route path="/*" element={<NotFound/>}/>
@@ -47,11 +52,8 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/detail-page/:slug" element={<DetailPage />} />
         <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
-
-
+        <Route path="/blog-detail/:slug" element={<BlogDetail />} />
         <Route path="/innovation" element={<Exteriorpage />} />
-
-
         <Route path="/family-layout" element={<FamilyLayout />} />
         <Route path="/couples-layout" element={<Couples />} />
         <Route path="/blogs" element={<Blogs />} />

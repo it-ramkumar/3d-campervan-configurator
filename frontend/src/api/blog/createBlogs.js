@@ -14,7 +14,7 @@ const config = {
 export const createBlog = async (formData) => {
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks`,
+      `${import.meta.env.VITE_REACT_APP_API_URL}/test-blog`,
       formData,
       config
     );
@@ -44,7 +44,7 @@ export const createBlog = async (formData) => {
 export const updateBlog = async (blogId, formData) => {
   try {
     const res = await axios.put(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/blog/with-blocks/${blogId}`,
+      `${import.meta.env.VITE_REACT_APP_API_URL}/test-blog/${blogId}`,
       formData,
       config
     );

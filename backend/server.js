@@ -16,6 +16,7 @@ const inquery = require("./routes/inquery")
 const Export = require("./routes/exportModel");
 const blogs = require("./routes/blog");
 const userRoute = require("./routes/authRoute");
+const TestBlog = require("./routes/testBlog")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,6 +39,7 @@ app.set("trust proxy", 1);
 // app.use(globalLimiter);
 
 
+app.use("/api/test-blog", TestBlog)
 
 app.use("/api/portfolio", portfolio)
 app.use("/api", Export)

@@ -59,6 +59,7 @@ export default function BlogsListing({ setSelected }) {
 
   // Edit blog with loader SweetAlert
   const handleEdit = (blog) => {
+    // console.log(blog)
     Swal.fire({
       title: 'Preparing Editor...',
       didOpen: () => Swal.showLoading(),
@@ -109,13 +110,13 @@ export default function BlogsListing({ setSelected }) {
       <h1 className="text-3xl font-bold mb-10 text-gray-800">Blogs</h1>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogs.map((blog) => (
+        {blogs?.map((blog) => (
           <div
             key={blog._id}
             className="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col"
           >
             {/* Blog Image */}
-            {blog.gallery.length > 0 ? (
+            {/* {blog.gallery.length > 0 ? (
               <img
                 src={blog.gallery[0]}
                 alt={blog.title}
@@ -125,7 +126,7 @@ export default function BlogsListing({ setSelected }) {
               <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
                 No Image
               </div>
-            )}
+            )} */}
 
             {/* Content */}
             <div className="p-5 flex-1 flex flex-col justify-between">

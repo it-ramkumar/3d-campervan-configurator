@@ -4,6 +4,7 @@ import Footer from "../Footer/Footer";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { CalendarDays, Clock, Search, Filter, ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 
 export default function BlogsListing() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -266,7 +267,7 @@ fetch()
                   {blog.des}
                 </p>
                 <a
-                  href={`/blog/${blog.slug}`}
+                  href={`/blog-detail/${blog.slug}`}
                   className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800 transition-all"
                 >
                   Read More
