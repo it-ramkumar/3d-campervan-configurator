@@ -285,7 +285,7 @@ export default function Buy() {
                                                             Buy Now
                                                         </button>
                                                     </Link>
-                                                    <Link to="/santa-monica">
+                                                    <Link to={`/detail-page/${slide.slug}`}>
                                                         <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
                                                             More Details
                                                         </button>

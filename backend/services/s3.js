@@ -12,7 +12,6 @@ const s3 = new AWS.S3();
 async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
   let uploadBuffer = fileBuffer;
 
-  // ✅ Compress only if it’s an image
   if (mimetype && mimetype.startsWith("image/")) {
     try {
       uploadBuffer = await sharp(fileBuffer)
@@ -25,7 +24,7 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
   }
 
   const params = {
-    Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
+    Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME, // ✅ same env var
     Key: `${folderName}/${Date.now()}_${fileName}`,
     Body: uploadBuffer,
     ACL: "public-read",
@@ -36,4 +35,22 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
   return data.Location;
 }
 
-module.exports = { uploadToS3 };
+const deleteFromS3 = async (fileUrl) => {
+  if (!fileUrl) return;
+
+  const urlParts = fileUrl.split("/");
+  const key = urlParts.slice(3).join("/"); // adjust slice based on your bucket URL
+
+  const params = {
+    Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME, // ✅ match upload bucket
+    Key: key,
+  };
+
+  try {
+    await s3.deleteObject(params).promise();
+  } catch (err) {
+    console.error("❌ Failed to delete from S3:", err);
+  }
+};
+
+module.exports = { uploadToS3, deleteFromS3 };

@@ -242,10 +242,13 @@ const VanPage = ({ vanDetail }) => {
               </div>
             ))}
           </div>
+<Link to={"/contact"}>
 
-          <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
+   <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
             Book A Call Now
           </button>
+</Link>
+
         </div>
       </div>
 
@@ -281,9 +284,12 @@ const VanPage = ({ vanDetail }) => {
           </div>
 
           <div className="text-center mt-16">
-            <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
+            <Link to={"/contact"}>
+              <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
               Buy Now
             </button>
+            </Link>
+
           </div>
         </div>
       </div>
@@ -295,7 +301,7 @@ const VanPage = ({ vanDetail }) => {
           <p className="text-xl font-normal leading-relaxed mb-8">
             {van.flagship.description}
           </p>
-          <Link to={"contact-us"}>
+          <Link to={"/contact"}>
           <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
             Book a call now
           </button></Link>

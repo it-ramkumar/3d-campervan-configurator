@@ -123,6 +123,14 @@ export default function Navbar({ forceMobile }) {
 
         ],
       },
+        {
+        title: "Insights",
+        items: [
+          { label: "Blogs", link: "/blogs" },
+
+
+        ],
+      },
     ],
   },
 };
