@@ -41,7 +41,7 @@ export default function BlogEditorForm() {
         // setLoading(true);
         // setError("");
 
-        const res = await axios.get(`http://localhost:5000/api/test-blog`);
+        const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog`);
         const blog = res.data.data;
         setData(blog)
 
@@ -100,7 +100,7 @@ export default function BlogEditorForm() {
     });
 
     try {
-      const res = await axios.post("http://localhost:5000/api/test-blog", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("✅ Blog uploaded successfully!");

@@ -13,7 +13,7 @@ export default function BlogDetail() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/test-blog/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog/${id}`);
         setBlog(res.data.data);
       } catch (err) {
         console.error("Error fetching blog:", err);
