@@ -11,7 +11,7 @@ export default function BlogsListing() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const containerRef = useRef(null);
   const [blogs ,setBlogs]=useState()
-
+console.log(blogs)
   const heroImage = "/heroSlider/bloghero.png";
 
   // Exact blog data with your content only
@@ -254,18 +254,18 @@ fetch()
               key={blog._id}
               className="group bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              <img
+              {/* <img
                 src={blog.gallery[0]}
                 alt={blog.title}
                 className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              /> */}
               <div className="p-5">
                 <h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-gray-700">
                   {blog.title}
                 </h3>
-                <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                {/* <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                   {blog.des}
-                </p>
+                </p> */}
                 <a
                   href={`/blog-detail/${blog.slug}`}
                   className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800 transition-all"

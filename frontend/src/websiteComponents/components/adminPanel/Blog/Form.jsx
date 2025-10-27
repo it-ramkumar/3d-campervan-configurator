@@ -1,27 +1,29 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
-import { updateBlog,createBlog } from "../../../../api/blog/createBlogs";
+import { updateBlog, createBlog } from "../../../../api/blog/createBlogs";
 
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [gallery, setGallery] = useState([]);
   const [blocks, setBlocks] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [loading,setLoading] =useState(false)
+  const [loading, setLoading] = useState(false);
 
   // 🔹 Detect edit mode and prefill data
   useEffect(() => {
     if (editData && editData._id) {
       setIsEditMode(true);
       setTitle(editData.title || "");
-
-      // Parse content safely
+      setDescription(editData.description || "");
+      setGallery(editData.gallery || []);
       try {
-        const parsed = typeof editData.content === "string"
-          ? JSON.parse(editData.content)
-          : editData.content;
+        const parsed =
+          typeof editData.content === "string"
+            ? JSON.parse(editData.content)
+            : editData.content;
         setBlocks(parsed || []);
       } catch (err) {
         console.error("Error parsing editData.content:", err);
@@ -43,7 +45,6 @@ export default function BlogForm() {
         : type === "proscons"
         ? { type, pros: [""], cons: [""] }
         : null;
-
     setBlocks([...blocks, newBlock]);
   };
 
@@ -79,50 +80,80 @@ export default function BlogForm() {
     setBlocks(updated);
   };
 
-  // 🔹 Submit (Create or Update)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("title", title);
-
-    const cleanedBlocks = blocks.map((b, i) => {
-      if (b.type === "image" && b.file) {
-        return { type: "image", imageField: `image_${i}` };
-      }
-      return b;
-    });
-
-    formData.append("content", JSON.stringify(cleanedBlocks));
-
-    // Attach new images only
-    blocks.forEach((b, i) => {
-      if (b.type === "image" && b.file) {
-        formData.append("images", b.file);
-      }
-    });
-
-    setLoading(true)
-try {
-  let res;
-
-  if (isEditMode) {
-    res = await updateBlog(editData._id, formData);
-    alert("✅ Blog updated successfully!");
-  } else {
-    res = await createBlog(formData);
-    alert("✅ Blog uploaded successfully!");
-  }
-setBlocks([])
-setTitle("")
-  // console.log(res.data);
-} catch (err) {
-  console.error(err);
-  alert("❌ Upload failed");
-} finally{
-  setLoading(false)
-}
+  // 🔹 Handle gallery upload
+  const handleGalleryChange = (files) => {
+    const fileArray = Array.from(files);
+    const previews = fileArray.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+    setGallery(previews);
   };
+
+  // 🔹 Submit (Create or Update)
+// 🔹 Submit (Create or Update)
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description);
+
+  // 🔹 FIX: Track image index separately
+  let imageIndex = 0;
+  const cleanedBlocks = blocks.map((block) => {
+    if (block.type === "image" && block.file) {
+      const newBlock = {
+        type: "image",
+        imageField: `image_${imageIndex}`,
+        ...(block.url && { url: block.url })
+      };
+      imageIndex++; // Only increment for actual images
+      return newBlock;
+    }
+    return block;
+  });
+
+  formData.append("content", JSON.stringify(cleanedBlocks));
+
+  // 🔹 FIX: Attach images in correct order
+  blocks.forEach((block) => {
+    if (block.type === "image" && block.file) {
+      formData.append("images", block.file);
+    }
+  });
+
+  // Attach gallery images
+  gallery.forEach((imgObj) => {
+    if (imgObj.file) formData.append("gallery", imgObj.file);
+  });
+
+  console.log("Sending blocks:", cleanedBlocks); // Debug log
+
+  setLoading(true);
+  try {
+    let res;
+    if (isEditMode) {
+      res = await updateBlog(editData._id, formData);
+      alert("✅ Blog updated successfully!");
+    } else {
+      res = await createBlog(formData);
+      alert("✅ Blog uploaded successfully!");
+    }
+
+    // Reset form
+    setBlocks([]);
+    setTitle("");
+    setDescription("");
+    setGallery([]);
+    setIsEditMode(false);
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("❌ Upload failed: " + (err.response?.data?.message || err.message));
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -140,6 +171,36 @@ setTitle("")
           className="w-full border p-2 rounded"
           required
         />
+
+        {/* Description */}
+        <textarea
+          placeholder="Short Description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full border p-2 rounded"
+          rows="3"
+        />
+
+        {/* Gallery Upload */}
+        <div>
+          <label className="block font-semibold mb-1">Upload Gallery</label>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(e) => handleGalleryChange(e.target.files)}
+          />
+          <div className="flex flex-wrap gap-3 mt-3">
+            {gallery.map((img, i) => (
+              <img
+                key={i}
+                src={img.preview || img}
+                alt={`gallery-${i}`}
+                className="w-24 h-24 rounded shadow object-cover"
+              />
+            ))}
+          </div>
+        </div>
 
         {/* Blocks */}
         {blocks.map((block, i) => (
@@ -206,7 +267,12 @@ setTitle("")
                               type="text"
                               value={cell}
                               onChange={(e) =>
-                                handleTableChange(i, rowIndex, colIndex, e.target.value)
+                                handleTableChange(
+                                  i,
+                                  rowIndex,
+                                  colIndex,
+                                  e.target.value
+                                )
                               }
                               className="w-full border-none outline-none"
                             />
@@ -310,8 +376,12 @@ setTitle("")
           </button>
         </div>
 
-        <button disabled={loading} type="submit" className="w-full bg-black text-white py-2 rounded font-semibold">
-          { loading ? "Saving" : "Submit"}
+        <button
+          disabled={loading}
+          type="submit"
+          className="w-full bg-black text-white py-2 rounded font-semibold"
+        >
+          {loading ? "Saving..." : "Submit"}
         </button>
       </form>
     </div>

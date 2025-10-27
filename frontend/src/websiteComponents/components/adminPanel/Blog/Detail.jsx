@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function Detail({ setIsopen, detail }) {
   // Format date for better display
+  // console.log(detail)
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);

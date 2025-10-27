@@ -1,51 +1,92 @@
 const express = require("express");
 const multer = require("multer");
-const { uploadToS3 } = require("../services/s3");
+const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const Blog = require("../models/testBlog"); // your blog model
 const router = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage() });
-
-// 🧠 Route: Create Blog
 router.post(
   "/",
-  upload.fields([{ name: "images", maxCount: 20 }]), // all block images
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "gallery", maxCount: 10 }
+  ]),
   async (req, res) => {
     try {
-      const { title, content } = req.body;
+      console.log("FILES RECEIVED:", req.files);
+      console.log("BODY RECEIVED:", req.body);
 
-      // Parse content blocks (sent as JSON string)
+      const { title, description, content } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
-      // ✅ Upload all images to S3
-      const uploadedImages = await Promise.all(
-        (req.files["images"] || []).map((file, index) =>
-          uploadToS3(file.buffer, "blogs", file.originalname)
+      // 🔹 FIX: Create proper mapping from imageField to S3 URL
+      const blockImages = req.files["images"] || [];
+      const imageFieldToUrlMap = {};
+
+      // Upload all block images and create mapping
+      await Promise.all(
+        blockImages.map(async (file, index) => {
+          try {
+            const imageFieldName = `image_${index}`;
+            const s3Url = await uploadToS3(
+              file.buffer,
+              "blogs/blocks",
+              `${Date.now()}_${file.originalname}`
+            );
+            imageFieldToUrlMap[imageFieldName] = s3Url;
+            console.log(`✅ Mapped ${imageFieldName} to ${s3Url}`);
+          } catch (error) {
+            console.error(`Error uploading image ${index}:`, error);
+            imageFieldToUrlMap[`image_${index}`] = null;
+          }
+        })
+      );
+
+      console.log("Image Mapping:", imageFieldToUrlMap);
+
+      // 🔹 Upload gallery images to S3
+      const uploadedGalleryUrls = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(
+            file.buffer,
+            "blogs/gallery",
+            `${Date.now()}_${file.originalname}`
+          )
         )
       );
 
-      // ✅ Map images back into their respective blocks
-      const finalBlocks = blocksData.map((block, i) => {
+      // 🔹 FIX: Map S3 URLs to blocks using the mapping
+      const finalBlocks = blocksData.map(block => {
         if (block.type === "image" && block.imageField) {
-          const imageIndex = parseInt(block.imageField.split("_")[1]); // get 0,1,2...
-          block.image = uploadedImages[imageIndex] || null;
+          const imageUrl = imageFieldToUrlMap[block.imageField];
+          console.log(`Mapping ${block.imageField} to:`, imageUrl);
+
+          if (imageUrl) {
+            block.image = imageUrl;
+          }
+          // Remove temporary field
+          delete block.imageField;
         }
         return block;
       });
 
-      // ✅ Save in MongoDB
+      console.log("Final Blocks:", finalBlocks);
+
+      // 🔹 Save blog in MongoDB
       const newBlog = new Blog({
         title,
-        content: finalBlocks,
+        description,
+        gallery: uploadedGalleryUrls,
+        content: finalBlocks
       });
 
       await newBlog.save();
 
       res.json({
         success: true,
-        message: "Blog uploaded successfully!",
-        data: newBlog,
+        message: "✅ Blog uploaded successfully!",
+        data: newBlog
       });
     } catch (err) {
       console.error("Error creating blog:", err);
@@ -53,6 +94,7 @@ router.post(
     }
   }
 );
+
 
 /* ---------------------------------------
    🔵 GET ALL BLOGS
@@ -71,10 +113,11 @@ router.get("/", async (req, res) => {
    🟣 GET SINGLE BLOG BY ID
 --------------------------------------- */
 router.get("/:id", async (req, res) => {
-  // console.log(req.params.id)
   try {
     const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+    if (!blog)
+      return res.status(404).json({ success: false, message: "Blog not found" });
+
     res.json({ success: true, data: blog });
   } catch (err) {
     console.error("Error fetching blog:", err);
@@ -87,38 +130,55 @@ router.get("/:id", async (req, res) => {
 --------------------------------------- */
 router.put(
   "/:id",
-
-  upload.fields([{ name: "images", maxCount: 20 }]),
+  upload.fields([
+    { name: "images", maxCount: 20 },
+    { name: "gallery", maxCount: 10 }
+  ]),
   async (req, res) => {
     try {
       const blog = await Blog.findById(req.params.id);
-      if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+      if (!blog)
+        return res.status(404).json({ success: false, message: "Blog not found" });
 
-      const { title, content } = req.body;
+      const { title, content, description } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
-      // Upload new images if provided
+      // ✅ Upload new block images
       const uploadedImages = await Promise.all(
         (req.files["images"] || []).map(file =>
-          uploadToS3(file.buffer, "blogs", file.originalname)
+          uploadToS3(file.buffer, "blogs/blocks", file.originalname)
         )
       );
 
-      // Merge new images into blocks
-      const updatedBlocks = blocksData.map((block, i) => {
+      // ✅ Upload new gallery images
+      const newGallery = await Promise.all(
+        (req.files["gallery"] || []).map(file =>
+          uploadToS3(file.buffer, "blogs/gallery", file.originalname)
+        )
+      );
+
+      // ✅ Merge images into blocks
+      const updatedBlocks = blocksData.map(block => {
         if (block.type === "image" && block.imageField) {
-          const index = parseInt(block.imageField.split("_")[1]);
-          block.image = uploadedImages[index] || block.image; // keep existing if not replaced
+          const idx = parseInt(block.imageField.split("_")[1]);
+          block.image = uploadedImages[idx] || block.image; // keep old if not replaced
         }
         return block;
       });
 
+      // ✅ Update fields
       blog.title = title;
+      blog.description = description;
       blog.content = updatedBlocks;
+      if (newGallery.length > 0) blog.gallery = newGallery;
 
       await blog.save();
 
-      res.json({ success: true, message: "Blog updated", data: blog });
+      res.json({
+        success: true,
+        message: "✅ Blog updated successfully!",
+        data: blog,
+      });
     } catch (err) {
       console.error("Error updating blog:", err);
       res.status(500).json({ success: false, message: "Failed to update blog" });
@@ -132,21 +192,24 @@ router.put(
 router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ success: false, message: "Blog not found" });
+    if (!blog)
+      return res.status(404).json({ success: false, message: "Blog not found" });
 
-    // Delete blog images from S3 (optional but clean)
-    await Promise.all(
-      blog.content
-        .filter(block => block.type === "image" && block.image)
-        .map(block => deleteFromS3(block.image))
-    );
+    // ✅ Optional: delete all S3 images
+    await Promise.all([
+      ...blog.content
+        .filter(b => b.type === "image" && b.image)
+        .map(b => deleteFromS3(b.image)),
+      ...(blog.gallery || []).map(g => deleteFromS3(g)),
+    ]);
 
     await Blog.findByIdAndDelete(req.params.id);
 
-    res.json({ success: true, message: "Blog deleted successfully" });
+    res.json({ success: true, message: "✅ Blog deleted successfully!" });
   } catch (err) {
     console.error("Error deleting blog:", err);
     res.status(500).json({ success: false, message: "Failed to delete blog" });
   }
 });
+
 module.exports = router;
