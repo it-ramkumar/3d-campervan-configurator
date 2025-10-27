@@ -35,7 +35,7 @@ router.post(
               `${Date.now()}_${file.originalname}`
             );
             imageFieldToUrlMap[imageFieldName] = s3Url;
-            console.log(`✅ Mapped ${imageFieldName} to ${s3Url}`);
+            // console.log(`✅ Mapped ${imageFieldName} to ${s3Url}`);
           } catch (error) {
             console.error(`Error uploading image ${index}:`, error);
             imageFieldToUrlMap[`image_${index}`] = null;
@@ -43,8 +43,8 @@ router.post(
         })
       );
 
-      console.log("Image Mapping:", imageFieldToUrlMap);
-
+      // console.log("Image Mapping:", imageFieldToUrlMap);
+//
       // 🔹 Upload gallery images to S3
       const uploadedGalleryUrls = await Promise.all(
         (req.files["gallery"] || []).map(file =>
@@ -71,7 +71,7 @@ router.post(
         return block;
       });
 
-      console.log("Final Blocks:", finalBlocks);
+      // console.log("Final Blocks:", finalBlocks);
 
       // 🔹 Save blog in MongoDB
       const newBlog = new Blog({
