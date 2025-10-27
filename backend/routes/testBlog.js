@@ -14,8 +14,8 @@ router.post(
   ]),
   async (req, res) => {
     try {
-      console.log("FILES RECEIVED:", req.files);
-      console.log("BODY RECEIVED:", req.body);
+      // console.log("FILES RECEIVED:", req.files);
+      // console.log("BODY RECEIVED:", req.body);
 
       const { title, description, content } = req.body;
       const blocksData = JSON.parse(content || "[]");

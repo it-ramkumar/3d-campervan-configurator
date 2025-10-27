@@ -29,7 +29,7 @@ import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exteriorh
 import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
 import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
 import TestBlog from "../websiteComponents/components/TestBlog/TestBlog"
-import TestBlogDetail from "../websiteComponents/components/TestBlog/Detailpage"
+// import TestBlogDetail from "../websiteComponents/components/TestBlog/Detailpage"
 const AppRoutes = () => {
 
 
@@ -39,7 +39,7 @@ const AppRoutes = () => {
       <Routes>
 
       <Route path="/test" element={<TestBlog />} />
-      <Route path="/test/:id" element={<TestBlogDetail />} />
+      {/* <Route path="/test/:id" element={<TestBlogDetail />} /> */}
 
 
         <Route path="/" element={<Home />} />
@@ -52,7 +52,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/detail-page/:slug" element={<DetailPage />} />
         <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
-        <Route path="/blog-detail/:slug" element={<BlogDetail />} />
+        <Route path="/blog-detail/:id" element={<BlogDetail />} />
         <Route path="/innovation" element={<Exteriorpage />} />
         <Route path="/family-layout" element={<FamilyLayout />} />
         <Route path="/couples-layout" element={<Couples />} />
