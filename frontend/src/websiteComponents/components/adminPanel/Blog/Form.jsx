@@ -12,13 +12,14 @@ export default function BlogForm() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Detect edit mode and prefill data
+  // Prefill edit data
   useEffect(() => {
     if (editData && editData._id) {
       setIsEditMode(true);
       setTitle(editData.title || "");
       setDescription(editData.description || "");
-      setGallery(editData.gallery || []);
+      const galleryPreviews = (editData.gallery || []).map((url) => ({ url }));
+      setGallery(galleryPreviews);
       try {
         const parsed =
           typeof editData.content === "string"
@@ -31,7 +32,7 @@ export default function BlogForm() {
     }
   }, [editData]);
 
-  // 🔹 Add new block
+  // Add new block
   const addBlock = (type) => {
     const newBlock =
       type === "paragraph"
@@ -39,121 +40,143 @@ export default function BlogForm() {
         : type === "heading"
         ? { type, text: "" }
         : type === "image"
-        ? { type, file: null, preview: "" }
+        ? { type, file: null, preview: "", url: "" }
         : type === "table"
         ? { type, rows: [["", ""], ["", ""]] }
         : type === "proscons"
         ? { type, pros: [""], cons: [""] }
         : null;
-    setBlocks([...blocks, newBlock]);
+    setBlocks((prev) => [...prev, newBlock]);
   };
 
-  // 🔹 Remove block
+  // Remove block
   const removeBlock = (index) => {
-    const updated = [...blocks];
-    updated.splice(index, 1);
-    setBlocks(updated);
+    setBlocks((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleChange = (index, field, value) => {
-    const updated = [...blocks];
-    updated[index][field] = value;
-    setBlocks(updated);
+  // Handle text change in block
+  const handleBlockChange = (blockIndex, key, value, nestedIndex, nestedColIndex) => {
+    setBlocks((prev) => {
+      const newBlocks = [...prev];
+      const block = { ...newBlocks[blockIndex] };
+
+      if (key === "pros") {
+        const pros = [...(block.pros || [])];
+        pros[nestedIndex] = value;
+        block.pros = pros;
+      } else if (key === "cons") {
+        const cons = [...(block.cons || [])];
+        cons[nestedIndex] = value;
+        block.cons = cons;
+      } else if (key === "table") {
+        const rows = block.rows.map((row, rIdx) =>
+          rIdx === nestedIndex
+            ? row.map((cell, cIdx) => (cIdx === nestedColIndex ? value : cell))
+            : row
+        );
+        block.rows = rows;
+      } else {
+        block[key] = value;
+      }
+
+      newBlocks[blockIndex] = block;
+      return newBlocks;
+    });
   };
 
-  const handleImageChange = (index, file) => {
-    const updated = [...blocks];
-    updated[index].file = file;
-    updated[index].preview = URL.createObjectURL(file);
-    setBlocks(updated);
+  // Handle image change
+  const handleImageChange = (blockIndex, file) => {
+    setBlocks((prev) => {
+      const newBlocks = [...prev];
+      const block = { ...newBlocks[blockIndex], file, preview: URL.createObjectURL(file) };
+      newBlocks[blockIndex] = block;
+      return newBlocks;
+    });
   };
 
-  const handleTableChange = (blockIndex, rowIndex, colIndex, value) => {
-    const updated = [...blocks];
-    updated[blockIndex].rows[rowIndex][colIndex] = value;
-    setBlocks(updated);
-  };
-
+  // Add table row
   const addTableRow = (blockIndex) => {
-    const updated = [...blocks];
-    updated[blockIndex].rows.push(["", ""]);
-    setBlocks(updated);
+    setBlocks((prev) => {
+      const newBlocks = [...prev];
+      const block = { ...newBlocks[blockIndex], rows: [...newBlocks[blockIndex].rows, ["", ""]] };
+      newBlocks[blockIndex] = block;
+      return newBlocks;
+    });
   };
 
-  // 🔹 Handle gallery upload
+  // Add pros/cons
+  const addProsOrCons = (blockIndex, type) => {
+    setBlocks((prev) => {
+      const newBlocks = [...prev];
+      const block = { ...newBlocks[blockIndex] };
+      if (type === "pros") block.pros = [...(block.pros || []), ""];
+      if (type === "cons") block.cons = [...(block.cons || []), ""];
+      newBlocks[blockIndex] = block;
+      return newBlocks;
+    });
+  };
+
+  // Handle gallery upload
   const handleGalleryChange = (files) => {
     const fileArray = Array.from(files);
-    const previews = fileArray.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
+    const previews = fileArray.map((file) => ({ file, preview: URL.createObjectURL(file) }));
     setGallery(previews);
   };
 
-  // 🔹 Submit (Create or Update)
-// 🔹 Submit (Create or Update)
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  // Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("title", title);
-  formData.append("description", description);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
 
-  // 🔹 FIX: Track image index separately
-  let imageIndex = 0;
-  const cleanedBlocks = blocks.map((block) => {
-    if (block.type === "image" && block.file) {
-      const newBlock = {
-        type: "image",
-        imageField: `image_${imageIndex}`,
-        ...(block.url && { url: block.url })
-      };
-      imageIndex++; // Only increment for actual images
-      return newBlock;
+    let imageIndex = 0;
+    const cleanedBlocks = blocks.map((block) => {
+      if (block.type === "image" && (block.file || block.url)) {
+        const newBlock = { type: "image", imageField: `image_${imageIndex}` };
+        if (block.url) newBlock.url = block.url;
+        imageIndex++;
+        return newBlock;
+      }
+      return block;
+    });
+
+    formData.append("content", JSON.stringify(cleanedBlocks));
+
+    // Attach images
+    blocks.forEach((block) => {
+      if (block.type === "image" && block.file) formData.append("images", block.file);
+    });
+
+    // Attach gallery images
+    gallery.forEach((imgObj) => {
+      if (imgObj.file) formData.append("gallery", imgObj.file);
+    });
+
+    setLoading(true);
+    try {
+      if (isEditMode) {
+        await updateBlog(editData._id, formData);
+        alert("✅ Blog updated successfully!");
+      } else {
+        await createBlog(formData);
+        alert("✅ Blog uploaded successfully!");
+      }
+
+      // Reset form
+      setBlocks([]);
+      setTitle("");
+      setDescription("");
+      setGallery([]);
+      setIsEditMode(false);
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("❌ Upload failed: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
     }
-    return block;
-  });
-
-  formData.append("content", JSON.stringify(cleanedBlocks));
-
-  // 🔹 FIX: Attach images in correct order
-  blocks.forEach((block) => {
-    if (block.type === "image" && block.file) {
-      formData.append("images", block.file);
-    }
-  });
-
-  // Attach gallery images
-  gallery.forEach((imgObj) => {
-    if (imgObj.file) formData.append("gallery", imgObj.file);
-  });
-
-  console.log("Sending blocks:", cleanedBlocks); // Debug log
-
-  setLoading(true);
-  try {
-    let res;
-    if (isEditMode) {
-      res = await updateBlog(editData._id, formData);
-      alert("✅ Blog updated successfully!");
-    } else {
-      res = await createBlog(formData);
-      alert("✅ Blog uploaded successfully!");
-    }
-
-    // Reset form
-    setBlocks([]);
-    setTitle("");
-    setDescription("");
-    setGallery([]);
-    setIsEditMode(false);
-  } catch (err) {
-    console.error("Upload error:", err);
-    alert("❌ Upload failed: " + (err.response?.data?.message || err.message));
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -162,7 +185,6 @@ const handleSubmit = async (e) => {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
         <input
           type="text"
           placeholder="Blog Title"
@@ -171,8 +193,6 @@ const handleSubmit = async (e) => {
           className="w-full border p-2 rounded"
           required
         />
-
-        {/* Description */}
         <textarea
           placeholder="Short Description..."
           value={description}
@@ -181,23 +201,13 @@ const handleSubmit = async (e) => {
           rows="3"
         />
 
-        {/* Gallery Upload */}
+        {/* Gallery */}
         <div>
           <label className="block font-semibold mb-1">Upload Gallery</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => handleGalleryChange(e.target.files)}
-          />
+          <input type="file" accept="image/*" multiple onChange={(e) => handleGalleryChange(e.target.files)} />
           <div className="flex flex-wrap gap-3 mt-3">
             {gallery.map((img, i) => (
-              <img
-                key={i}
-                src={img.preview || img}
-                alt={`gallery-${i}`}
-                className="w-24 h-24 rounded shadow object-cover"
-              />
+              <img key={i} src={img.preview || img.url} alt={`gallery-${i}`} className="w-24 h-24 rounded shadow object-cover" />
             ))}
           </div>
         </div>
@@ -205,7 +215,6 @@ const handleSubmit = async (e) => {
         {/* Blocks */}
         {blocks.map((block, i) => (
           <div key={i} className="relative border p-3 rounded bg-gray-50">
-            {/* ❌ Remove Button */}
             <button
               type="button"
               onClick={() => removeBlock(i)}
@@ -214,47 +223,30 @@ const handleSubmit = async (e) => {
               ✕ Remove
             </button>
 
-            {/* Heading */}
             {block.type === "heading" && (
               <input
                 type="text"
                 placeholder="Heading..."
                 value={block.text || ""}
-                onChange={(e) => handleChange(i, "text", e.target.value)}
+                onChange={(e) => handleBlockChange(i, "text", e.target.value)}
                 className="w-full border p-2 rounded"
               />
             )}
-
-            {/* Paragraph */}
             {block.type === "paragraph" && (
               <textarea
                 placeholder="Write paragraph..."
                 value={block.text || ""}
-                onChange={(e) => handleChange(i, "text", e.target.value)}
+                onChange={(e) => handleBlockChange(i, "text", e.target.value)}
                 className="w-full border p-2 rounded"
                 rows="4"
               />
             )}
-
-            {/* Image */}
             {block.type === "image" && (
               <div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(i, e.target.files[0])}
-                />
-                {(block.preview || block.url) && (
-                  <img
-                    src={block.preview || block.url}
-                    alt="preview"
-                    className="w-48 mt-2 rounded shadow"
-                  />
-                )}
+                <input type="file" accept="image/*" onChange={(e) => handleImageChange(i, e.target.files[0])} />
+                {(block.preview || block.url) && <img src={block.preview || block.url} alt="preview" className="w-48 mt-2 rounded shadow" />}
               </div>
             )}
-
-            {/* Table */}
             {block.type === "table" && (
               <div>
                 <table className="border w-full text-left">
@@ -266,14 +258,7 @@ const handleSubmit = async (e) => {
                             <input
                               type="text"
                               value={cell}
-                              onChange={(e) =>
-                                handleTableChange(
-                                  i,
-                                  rowIndex,
-                                  colIndex,
-                                  e.target.value
-                                )
-                              }
+                              onChange={(e) => handleBlockChange(i, "table", e.target.value, rowIndex, colIndex)}
                               className="w-full border-none outline-none"
                             />
                           </td>
@@ -282,17 +267,11 @@ const handleSubmit = async (e) => {
                     ))}
                   </tbody>
                 </table>
-                <button
-                  type="button"
-                  onClick={() => addTableRow(i)}
-                  className="mt-2 text-sm text-blue-500"
-                >
+                <button type="button" onClick={() => addTableRow(i)} className="mt-2 text-sm text-blue-500">
                   + Add Row
                 </button>
               </div>
             )}
-
-            {/* Pros & Cons */}
             {block.type === "proscons" && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -303,27 +282,14 @@ const handleSubmit = async (e) => {
                       type="text"
                       placeholder="Add a pro"
                       value={pro}
-                      onChange={(e) => {
-                        const updated = [...blocks];
-                        updated[i].pros[idx] = e.target.value;
-                        setBlocks(updated);
-                      }}
+                      onChange={(e) => handleBlockChange(i, "pros", e.target.value, idx)}
                       className="w-full border p-2 rounded mt-2"
                     />
                   ))}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const updated = [...blocks];
-                      updated[i].pros.push("");
-                      setBlocks(updated);
-                    }}
-                    className="text-sm text-blue-500 mt-2"
-                  >
+                  <button type="button" onClick={() => addProsOrCons(i, "pros")} className="text-sm text-blue-500 mt-2">
                     + Add Pro
                   </button>
                 </div>
-
                 <div>
                   <h4 className="font-semibold">Cons</h4>
                   {block.cons?.map((con, idx) => (
@@ -332,23 +298,11 @@ const handleSubmit = async (e) => {
                       type="text"
                       placeholder="Add a con"
                       value={con}
-                      onChange={(e) => {
-                        const updated = [...blocks];
-                        updated[i].cons[idx] = e.target.value;
-                        setBlocks(updated);
-                      }}
+                      onChange={(e) => handleBlockChange(i, "cons", e.target.value, idx)}
                       className="w-full border p-2 rounded mt-2"
                     />
                   ))}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const updated = [...blocks];
-                      updated[i].cons.push("");
-                      setBlocks(updated);
-                    }}
-                    className="text-sm text-blue-500 mt-2"
-                  >
+                  <button type="button" onClick={() => addProsOrCons(i, "cons")} className="text-sm text-blue-500 mt-2">
                     + Add Con
                   </button>
                 </div>
@@ -357,7 +311,7 @@ const handleSubmit = async (e) => {
           </div>
         ))}
 
-        {/* Add Block Buttons */}
+        {/* Add Blocks Buttons */}
         <div className="flex flex-wrap gap-3">
           <button type="button" onClick={() => addBlock("heading")} className="px-3 py-1 bg-blue-600 text-white rounded">
             + Heading
@@ -376,11 +330,7 @@ const handleSubmit = async (e) => {
           </button>
         </div>
 
-        <button
-          disabled={loading}
-          type="submit"
-          className="w-full bg-black text-white py-2 rounded font-semibold"
-        >
+        <button disabled={loading} type="submit" className="w-full bg-black text-white py-2 rounded font-semibold">
           {loading ? "Saving..." : "Submit"}
         </button>
       </form>

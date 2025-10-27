@@ -143,34 +143,52 @@ router.put(
       const { title, content, description } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
-      // ✅ Upload new block images
-      const uploadedImages = await Promise.all(
-        (req.files["images"] || []).map(file =>
-          uploadToS3(file.buffer, "blogs/blocks", file.originalname)
-        )
+      // 🔹 Map imageField to S3 URL for updated/new block images
+      const blockImages = req.files["images"] || [];
+      const imageFieldToUrlMap = {};
+
+      await Promise.all(
+        blockImages.map(async (file, index) => {
+          const imageFieldName = `image_${index}`;
+          try {
+            const s3Url = await uploadToS3(
+              file.buffer,
+              "blogs/blocks",
+              `${Date.now()}_${file.originalname}`
+            );
+            imageFieldToUrlMap[imageFieldName] = s3Url;
+          } catch (err) {
+            console.error(`Error uploading block image ${index}:`, err);
+            imageFieldToUrlMap[imageFieldName] = null;
+          }
+        })
       );
 
-      // ✅ Upload new gallery images
-      const newGallery = await Promise.all(
+      // 🔹 Upload new gallery images to S3
+      const uploadedGalleryUrls = await Promise.all(
         (req.files["gallery"] || []).map(file =>
-          uploadToS3(file.buffer, "blogs/gallery", file.originalname)
+          uploadToS3(file.buffer, "blogs/gallery", `${Date.now()}_${file.originalname}`)
         )
       );
 
-      // ✅ Merge images into blocks
+      // 🔹 Map S3 URLs to blocks
       const updatedBlocks = blocksData.map(block => {
         if (block.type === "image" && block.imageField) {
-          const idx = parseInt(block.imageField.split("_")[1]);
-          block.image = uploadedImages[idx] || block.image; // keep old if not replaced
+          block.image = imageFieldToUrlMap[block.imageField] || block.image || null;
+          delete block.imageField;
         }
         return block;
       });
 
-      // ✅ Update fields
+      // 🔹 Update blog fields
       blog.title = title;
       blog.description = description;
       blog.content = updatedBlocks;
-      if (newGallery.length > 0) blog.gallery = newGallery;
+
+      // 🔹 Merge galleries (append new to existing)
+      if (uploadedGalleryUrls.length > 0) {
+        blog.gallery = [...(blog.gallery || []), ...uploadedGalleryUrls];
+      }
 
       await blog.save();
 
