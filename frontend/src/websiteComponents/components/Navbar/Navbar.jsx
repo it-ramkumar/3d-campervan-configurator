@@ -77,7 +77,7 @@ export default function Navbar({ forceMobile }) {
       {
         title: "Start Your Custom Build",
         items: [
-          { label: "3D Van Builder", link: "/van" },
+          { label: "3D Van Builder", link: "https://www.vanbuild3d.com/van" },
           { label: "Send an Inquiry", link: "/inquiry" },
         ],
       },
@@ -119,13 +119,13 @@ export default function Navbar({ forceMobile }) {
           { label: "Our Process", link: "/our-process" },
           { label: "Showroom", link: "/showroom" },
           { label: "About Us", link: "/about-us" },
-          { label: "Innovation", link: "/innovation" },
 
         ],
       },
         {
         title: "Insights",
         items: [
+          { label: "Innovation", link: "/innovation" },
           { label: "Blogs", link: "/blogs" },
 
 

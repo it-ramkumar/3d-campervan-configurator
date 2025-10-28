@@ -270,7 +270,7 @@ export default function InquiryForm() {
     try {
       const result = await submitInquiry(formData);
       if (result.success) {
-        setMessage({ type: "success", text: "Form submitted successfully!" });
+        // setMessage({ type: "success", text: "Form submitted successfully!" });
         setFormData({});
         setCurrentStep(0);
       } else {

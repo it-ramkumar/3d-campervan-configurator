@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export async function getByCategory(categorySlug, page = 1, limit = 2) {
+export async function getByCategory(categorySlug, page = 1, limit = 10) {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/category`,
@@ -30,6 +30,6 @@ export async function getByCategory(categorySlug, page = 1, limit = 2) {
       text: err.response.data.message,
     });
     // console.error("❌ Error fetching portfolio:", err);
-  
+
   }
 }

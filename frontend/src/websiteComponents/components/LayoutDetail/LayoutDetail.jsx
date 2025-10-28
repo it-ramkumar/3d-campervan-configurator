@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import gsap from "gsap";
 import Navbar from "../Navbar/Navbar";
@@ -98,10 +98,11 @@ export default function LayoutDetail() {
       );
     })}
 </div>
-
-          <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
-            Book A Call Now
-          </button>
+<Link to="/contact">
+  <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
+    Book A Call Now
+  </button>
+</Link>
         </div>
       </div>
 
@@ -137,9 +138,14 @@ export default function LayoutDetail() {
           </div>
 
           <div className="text-center mt-16">
-            <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-              Buy Now
-            </button>
+                 <button
+  disabled={true}
+  className={`px-5 py-2.5 font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out
+    ${true ? "bg-gray-400 cursor-not-allowed text-gray-200" : "bg-[#2761FD] text-white hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1"}
+  `}
+>
+  Buy Now
+</button>
           </div>
         </div>
       </div>
@@ -151,9 +157,15 @@ export default function LayoutDetail() {
           <p className="text-xl font-normal leading-relaxed mb-8">
             {van_listing.description}
           </p>
-          <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-            Book a call now
-          </button>
+         <button
+  disabled={true}
+  className={`px-5 py-2.5 font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out
+    ${true ? "bg-gray-400 cursor-not-allowed text-gray-200" : "bg-[#2761FD] text-white hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1"}
+  `}
+>
+  Book a call now
+</button>
+
         </div>
       </div>
 

@@ -38,16 +38,23 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
 const deleteFromS3 = async (fileUrl) => {
   if (!fileUrl) return;
 
-  const urlParts = fileUrl.split("/");
-  const key = urlParts.slice(3).join("/"); // adjust slice based on your bucket URL
-
-  const params = {
-    Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME, // ✅ match upload bucket
-    Key: key,
-  };
-
   try {
+    // ✅ Extract the key (path after .amazonaws.com/)
+    const key = fileUrl.split(".amazonaws.com/")[1];
+
+    if (!key) {
+      console.error("❌ Could not extract S3 key from URL:", fileUrl);
+      return;
+    }
+
+    const params = {
+      Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    // 🗑️ Delete the object
     await s3.deleteObject(params).promise();
+    // console.log("✅ Successfully deleted from S3:", key);
   } catch (err) {
     console.error("❌ Failed to delete from S3:", err);
   }

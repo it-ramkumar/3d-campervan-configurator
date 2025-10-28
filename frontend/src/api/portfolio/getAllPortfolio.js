@@ -5,7 +5,7 @@ import axios from "axios";
  * @param {number} page - current page number
  * @param {number} limit - items per page
  */
-export async function getAllPortfolio(page = 1, limit = 30) {
+export async function getAllPortfolio(page = 1, limit = 50) {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio`,

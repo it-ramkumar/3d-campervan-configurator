@@ -7,10 +7,12 @@ export const submitInquiry = async (formData) => {
     const { data } = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`, formData, {
       withCredentials: true,
     });
+
+    console.log(data)
         Swal.fire({
           icon: "success",
           title: "Successfully!",
-          text: "Your blog has been successfully.",
+          text:data.message,
         });
     return { success: true, data };
   } catch (error) {

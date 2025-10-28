@@ -107,7 +107,7 @@ router.get("/wheelbase", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     // query params (default values)
-    let { page = 1, limit = 30 } = req.query;
+    let { page = 1, limit = 50 } = req.query;
     page = Number(page);
     limit = Number(limit);
 
@@ -139,7 +139,7 @@ router.get("/", async (req, res) => {
 // ✅ 1. Get portfolios by category with pagination
 router.get("/category", async (req, res) => {
   try {
-    const { categorySlug, page = 1, limit = 2 } = req.query;
+    const { categorySlug, page = 1, limit = 10 } = req.query;
 
     if (!categorySlug) {
       return res
