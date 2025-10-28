@@ -218,7 +218,7 @@ const handleSubmit = async (e) => {
     if (removedExistingGallery.length > 0) {
       await Promise.all(
         removedExistingGallery.map(url =>
-          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image"`, { imageUrl: url })
+          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-imag`, { imageUrl: url })
         )
       );
     }
