@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 export default function Detail({ setIsopen, detail }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [gallery, setGallery] = useState(detail.gallery || []);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
+    console.log(detail,"portfolio")
 
     // console.log(detail, "data");
 

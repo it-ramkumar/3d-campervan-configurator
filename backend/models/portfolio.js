@@ -53,29 +53,6 @@ const vanListingSchema = new mongoose.Schema({
   }
 });
 
-// Video Schema
-const videoSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    trim: true
-  },
-  platform: {
-    type: String,
-    trim: true
-  },
-  id: {
-    type: String,
-    trim: true
-  }
-});
-
-// Media Schema
-const mediaSchema = new mongoose.Schema({
-  video: {
-    type: videoSchema
-  }
-});
-
 // Detailed Feature Item Schema
 const detailedFeatureItemSchema = new mongoose.Schema({
   category: {
@@ -89,22 +66,13 @@ const detailedFeatureItemSchema = new mongoose.Schema({
   }]
 });
 
-// ✅ Block Schema (new)
-const blockSchema = new mongoose.Schema({
-  image: {
-    type: String,
-    trim: true,
-    required: false
-  },
-  caption: {
-    type: String,
-    trim: true
-  }
-});
-
 // Portfolio Van Schema
 const portfolioVanSchema = new mongoose.Schema({
-  slug: { type: String, unique: true, trim: true },
+  slug: {
+    type: String,
+    unique: true,
+    trim: true
+  },
   van_listing: {
     type: vanListingSchema,
     required: true
@@ -114,7 +82,7 @@ const portfolioVanSchema = new mongoose.Schema({
     default: false
   },
 
-  // ✅ New category field
+  // ✅ Category field
   category: {
     type: String,
     enum: [
@@ -128,17 +96,21 @@ const portfolioVanSchema = new mongoose.Schema({
     trim: true
   },
 
+  // ✅ Simple string array for gallery (image URLs)
   gallery: [{
     type: String,
     trim: true
   }],
-  blocks: [blockSchema], // ✅ NEW FIELD
+
   detailed_features: [{
     type: detailedFeatureItemSchema
   }],
-  media: {
-    type: mediaSchema
-  }
+
+  // ✅ Media as simple string array for URLs only
+  media: [{
+    type: String,
+    trim: true
+  }]
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -152,9 +124,10 @@ portfolioVanSchema.virtual('formatted_price').get(function() {
 
 // Indexes
 portfolioVanSchema.index({ sold: 1 });
+portfolioVanSchema.index({ category: 1 });
 portfolioVanSchema.index({ 'van_listing.title': 'text', 'van_listing.description': 'text' });
 
-// ✅ Slug generator hook (sirf ek)
+// ✅ Slug generator hook
 portfolioVanSchema.pre("validate", async function (next) {
   if (!this.slug && this.van_listing?.title) {
     this.slug = await this.constructor.generateSlug(this.van_listing.title);
@@ -186,9 +159,15 @@ portfolioVanSchema.statics.generateSlug = async function(title) {
 portfolioVanSchema.statics.findAvailable = function() {
   return this.find({ sold: false });
 };
+
 portfolioVanSchema.statics.findSold = function() {
   return this.find({ sold: true });
 };
+
+portfolioVanSchema.statics.findByCategory = function(category) {
+  return this.find({ category });
+};
+
 portfolioVanSchema.methods.markAsSold = function() {
   this.sold = true;
   return this.save();

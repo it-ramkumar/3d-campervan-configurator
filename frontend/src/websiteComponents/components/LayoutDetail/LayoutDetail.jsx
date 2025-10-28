@@ -64,7 +64,7 @@ export default function LayoutDetail() {
             {/* {van_listing.subtitle} */}
           </h1>
           <p className="text-lg md:text-2xl mt-4 max-w-2xl opacity-90">
-            {van_listing.description}
+            {van_listing.subtitle}
           </p>
 <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
   {van_listing?.specifications &&

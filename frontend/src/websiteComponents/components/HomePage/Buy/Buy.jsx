@@ -261,7 +261,7 @@ export default function Buy() {
         group-hover:shadow-2xl group-hover:scale-[1.03]"
                                     >
                                         <img
-                                            src={slide?.gallery?.[0]?.url}
+                                            src={slide?.gallery?.[0]}
                                             alt={slide.van_listing?.title || "Ready to Go Van"}
                                             className="absolute inset-0 w-full h-full object-cover
           transition-all duration-500 ease-in-out group-hover:scale-110"

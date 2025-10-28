@@ -16,6 +16,7 @@ const inquery = require("./routes/inquery")
 const Export = require("./routes/exportModel");
 const userRoute = require("./routes/authRoute");
 const TestBlog = require("./routes/testBlog")
+const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
 
 
 const app = express();
@@ -38,7 +39,7 @@ app.use(cookieParser());
 app.set("trust proxy", 1);
 // app.use(globalLimiter);
 
-
+app.use("/api", DelelteImageFromS3);
 app.use("/api/test-blog", TestBlog)
 app.use("/api/portfolio", portfolio)
 app.use("/api", Export)

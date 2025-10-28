@@ -148,7 +148,7 @@ const VanPage = ({ vanDetail }) => {
       titleSecondary:
         vanDetail?.van_listing?.title?.split(" ").slice(1).join(" ") || "",
       tagline: vanDetail?.van_listing?.description || "",
-      backgroundImage: vanDetail?.gallery?.[0]?.url || "/default-hero.jpg",
+      backgroundImage: vanDetail?.gallery?.[0] || "/default-hero.jpg",
     },
     specifications: [
       {
@@ -315,8 +315,8 @@ const VanPage = ({ vanDetail }) => {
             {van.gallery.map((img, i) => (
               <img
                 key={i}
-                src={img.url}
-                alt={img.url}
+                src={img}
+                alt={img}
                 className="w-full h-64 object-cover rounded-lg shadow-md hover:scale-[1.02] transition-transform duration-300"
               />
             ))}

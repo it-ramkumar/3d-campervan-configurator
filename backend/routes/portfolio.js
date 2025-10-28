@@ -1,74 +1,78 @@
 const express = require('express');
 const router = express.Router();
-const PortfolioVan = require('../models/portfolio')// Adjust path as needed
-const multer = require("multer")
+const PortfolioVan = require('../models/portfolio');
+const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { uploadToS3 } = require("../services/s3")
-const { protect, adminOnly } = require("../middleware/authMiddleware")
+const { uploadToS3 } = require("../services/s3");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-
-
+// CREATE new portfolio van
 router.post(
   "/",
   protect,
   adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
-    { name: "blockImages", maxCount: 10 },
   ]),
   async (req, res) => {
     try {
-      // ✅ Upload gallery images
+      // Parse JSON fields
+      const van_listing = JSON.parse(req.body.van_listing || "{}");
+      const detailed_features = JSON.parse(req.body.detailed_features || "[]");
+      const media = JSON.parse(req.body.media || "[]"); // ✅ Simple string array for URLs
+      const sold = req.body.sold === "true";
+
+      if (!van_listing || !van_listing.title) {
+        return res.status(400).json({
+          success: false,
+          message: "Van listing with title is required"
+        });
+      }
+
+      // Generate slug
+      let slug = req.body.slug || await PortfolioVan.generateSlug(van_listing.title);
+
+      // Check if slug exists
+      const existingVan = await PortfolioVan.findOne({ slug });
+      if (existingVan) {
+        return res.status(409).json({
+          success: false,
+          message: "Van with this slug already exists"
+        });
+      }
+
+      // Upload gallery images
       const gallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
 
-      // ✅ Parse blocksData (captions, etc.)
-      const blocksData = JSON.parse(req.body.blocksData || "[]");
+      // ✅ Media is simple string array - no file upload for media
+      // Media contains only URLs like:
+      // ["https://youtube.com/watch?v=abc123", "https://vimeo.com/123456"]
 
-      // ✅ Merge images with captions for blocks
-      const blocks = await Promise.all(
-        blocksData.map(async (block, index) => ({
-          caption: block.caption,
-          image: req.files["blockImages"]?.[index]
-            ? await uploadToS3(
-                req.files["blockImages"][index].buffer,
-                "portfolio/blocks",
-                req.files["blockImages"][index].originalname
-              )
-            : null,
-        }))
-      );
-
-      // ✅ Create new PortfolioVan document
+      // Create new PortfolioVan document
       const newPortfolio = new PortfolioVan({
+        slug,
         van_listing: {
-          title: req.body.title,
-          description: req.body.description,
-          subtitle: req.body.subtitle,
-          price: req.body.price,
-          specifications: req.body.specifications
-            ? JSON.parse(req.body.specifications)
-            : undefined,
+          ...van_listing,
+          price: van_listing.price ? String(van_listing.price) : null,
+          specifications: van_listing.specifications ? {
+            ...van_listing.specifications,
+            capacity: van_listing.specifications.capacity || {}
+          } : undefined,
         },
-        sold: req.body.sold || false,
-
-        // ✅ Category added here
-        category: req.body.category,
-
-        gallery,
-        blocks,
-        detailed_features: req.body.detailed_features
-          ? JSON.parse(req.body.detailed_features)
-          : [],
-        media: req.body.media ? JSON.parse(req.body.media) : {},
+        sold,
+        category: req.body.category, // Required category
+        gallery, // Array of image URLs
+        detailed_features,
+        media, // ✅ Simple array of URL strings
       });
 
       await newPortfolio.save();
 
-      res.json({
+      res.status(201).json({
         success: true,
         message: "Portfolio van created successfully",
         data: newPortfolio,
@@ -80,14 +84,87 @@ router.post(
   }
 );
 
+// GET all portfolio vans with pagination
+router.get("/", async (req, res) => {
+  try {
+    let { page = 1, limit = 50, category, sold } = req.query;
+    page = Number(page);
+    limit = Number(limit);
 
-// GET /api/portfolioVans?wheelbase=144
+    // Build filter object
+    const filter = {};
+    if (category) filter.category = category;
+    if (sold !== undefined) filter.sold = sold === "true";
+
+    // Total documents
+    const total = await PortfolioVan.countDocuments(filter);
+
+    // Fetch data with pagination
+    const vans = await PortfolioVan.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      limit,
+      data: vans,
+    });
+  } catch (err) {
+    console.error("Error fetching vans with pagination:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch vans" });
+  }
+});
+
+// GET portfolios by category with pagination
+router.get("/category", async (req, res) => {
+  try {
+    const { category, page = 1, limit = 10 } = req.query;
+
+    if (!category) {
+      return res.status(400).json({
+        success: false,
+        message: "Category parameter is required"
+      });
+    }
+
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+    // Get total count
+    const total = await PortfolioVan.countDocuments({ category });
+
+    // Fetch paginated data
+    const portfolios = await PortfolioVan.find({ category })
+      .skip(skip)
+      .limit(limitNum)
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      total,
+      page: pageNum,
+      pages: Math.ceil(total / limitNum),
+      data: portfolios,
+    });
+  } catch (err) {
+    console.error("Error fetching portfolios by category:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// GET by wheelbase filter
 router.get("/wheelbase", async (req, res) => {
   try {
-    const { wheelbase } = req.query; // frontend se aayega, e.g., 144 ya 170
+    const { wheelbase } = req.query;
     const filter = {};
+
     if (wheelbase) {
-      filter["van_listing.specifications.wheelbase"] = Number(wheelbase);
+      filter["van_listing.specifications.wheelbase"] = wheelbase;
     }
 
     const vans = await PortfolioVan.find(filter);
@@ -97,212 +174,77 @@ router.get("/wheelbase", async (req, res) => {
       data: vans,
     });
   } catch (err) {
-    console.error("Error fetching vans:", err);
+    console.error("Error fetching vans by wheelbase:", err);
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
 
-
-// GET /api/portfolio?page=1&limit=10
-router.get("/", async (req, res) => {
-  try {
-    // query params (default values)
-    let { page = 1, limit = 50 } = req.query;
-    page = Number(page);
-    limit = Number(limit);
-
-    // total documents
-    const total = await PortfolioVan.countDocuments();
-
-    // fetch data with skip + limit
-    const vans = await PortfolioVan.find()
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ createdAt: -1 }); // latest vans first (optional)
-
-    res.json({
-      success: true,
-      total,                // total records
-      page,                 // current page
-      pages: Math.ceil(total / limit), // total pages
-      limit,                // per page limit
-      data: vans,           // actual data
-    });
-  } catch (err) {
-    console.error("Error fetching vans with pagination:", err);
-    res.status(500).json({ success: false, message: "Failed to fetch vans" });
-  }
-});
-
-
-
-// ✅ 1. Get portfolios by category with pagination
-router.get("/category", async (req, res) => {
-  try {
-    const { categorySlug, page = 1, limit = 10 } = req.query;
-
-    if (!categorySlug) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Category required" });
-    }
-
-    // Convert query params to numbers
-    const pageNum = parseInt(page);
-    const limitNum = parseInt(limit);
-    const skip = (pageNum - 1) * limitNum;
-
-    // ✅ Get total count first
-    const total = await PortfolioVan.countDocuments({ category: categorySlug });
-
-    // ✅ Fetch paginated data
-    const portfolios = await PortfolioVan.find({ category: categorySlug })
-      .skip(skip)
-      .limit(limitNum)
-      .sort({ createdAt: -1 }); // latest first
-
-    if (!portfolios.length) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No portfolios found" });
-    }
-
-    // ✅ Response with meta info
-    res.json({
-      success: true,
-      total,
-      page: pageNum,
-      pages: Math.ceil(total / limitNum),
-      portfolios,
-    });
-  } catch (err) {
-    console.error("Error fetching portfolios:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-
-
-// ✅ 2. Filter by category (5 fixed endpoints)
-router.get("/flagship-short-van-santa-monica", async (req, res) => {
-  try {
-    const data = await PortfolioVan.find({
-      category: "Flagship Short Van — Santa Monica",
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, portfolios: data });
-  } catch (err) {
-    console.error("Error fetching:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/flagship-long-van-montreal", async (req, res) => {
-  try {
-    const data = await PortfolioVan.find({
-      category: "Flagship Long Van — Montreal",
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, portfolios: data });
-  } catch (err) {
-    console.error("Error fetching:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/layouts-solo-couple", async (req, res) => {
-  // console.log("hello")
-  try {
-    const data = await PortfolioVan.find({
-      category: "Layouts for Solo & Couple Travelers",
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, portfolios: data });
-  } catch (err) {
-    console.error("Error fetching:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/layouts-families", async (req, res) => {
-  try {
-    const data = await PortfolioVan.find({
-      category: "Layouts for Families (3–9 People)",
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, portfolios: data });
-  } catch (err) {
-    console.error("Error fetching:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/portfolio-custom-builds", async (req, res) => {
-  try {
-    const data = await PortfolioVan.find({
-      category: "Portfolio of Custom Builds",
-    }).sort({ createdAt: -1 });
-    res.json({ success: true, portfolios: data });
-  } catch (err) {
-    console.error("Error fetching:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
+// UPDATE portfolio van by slug
 router.put(
-  "/:slug",protect, adminOnly,
+  "/:slug",
+  protect,
+  adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
-    { name: "blockImages", maxCount: 20 },
   ]),
   async (req, res) => {
     try {
-const gallery = await Promise.all(
+      const { slug } = req.params;
+
+      const portfolio = await PortfolioVan.findOne({ slug });
+      if (!portfolio) {
+        return res.status(404).json({
+          success: false,
+          message: "Portfolio not found"
+        });
+      }
+
+      // Parse JSON fields
+      const van_listing = JSON.parse(req.body.van_listing || JSON.stringify(portfolio.van_listing));
+      const detailed_features = JSON.parse(req.body.detailed_features || JSON.stringify(portfolio.detailed_features));
+      const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media)); // ✅ Simple URLs
+      const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
+      const category = req.body.category || portfolio.category;
+
+      // Handle gallery images (append to existing)
+      const existingGallery = portfolio.gallery || [];
+      const newGallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-      const blocksData = JSON.parse(req.body.blocksData || "[]");
+      const updatedGallery = [...existingGallery, ...newGallery];
 
-      const blocks = await Promise.all(
-  blocksData.map(async (block, index) => ({
-    caption: block.caption, // <-- use 'block', not 'b'
-    image: req.files["blockImages"]?.[index]
-      ? await uploadToS3(
-          req.files["blockImages"][index].buffer,
-          "portfolio/blocks",
-          req.files["blockImages"][index].originalname
-        )
-      : null,
-  }))
-);
+      // ✅ Media is simple string array - no file processing needed
+      // Just use the URLs from req.body.media
 
-     const updatedPortfolio = await PortfolioVan.findOneAndUpdate(
-  { slug: req.body.slug || req.params.slug }, // filter
-  {
-    $set: {
-      van_listing: {
-        title: req.body.title,
-        description: req.body.description,
-        subtitle: req.body.subtitle,
-        price: req.body.price,
-        specifications: req.body.specifications
-          ? JSON.parse(req.body.specifications)
-          : undefined,
-      },
-      sold: req.body.sold || false,
-      blocks,
-      detailed_features: req.body.detailed_features
-        ? JSON.parse(req.body.detailed_features)
-        : [],
-      media: req.body.media ? JSON.parse(req.body.media) : {},
-    },
-    ...(gallery.length && { $push: { gallery: { $each: gallery } } }), // ✅ gallery ko push karna
-  },
-  { new: true, runValidators: true }
-);
+      // Update portfolio
+      portfolio.van_listing = {
+        ...portfolio.van_listing,
+        ...van_listing,
+        price: van_listing.price ? String(van_listing.price) : portfolio.van_listing.price,
+        specifications: van_listing.specifications ? {
+          ...portfolio.van_listing.specifications,
+          ...van_listing.specifications,
+          capacity: van_listing.specifications.capacity ? {
+            ...portfolio.van_listing.specifications?.capacity,
+            ...van_listing.specifications.capacity
+          } : portfolio.van_listing.specifications?.capacity
+        } : portfolio.van_listing.specifications
+      };
 
+      portfolio.category = category;
+      portfolio.sold = sold;
+      portfolio.gallery = updatedGallery;
+      portfolio.detailed_features = detailed_features;
+      portfolio.media = media; // ✅ Direct assignment of URL strings
 
-      if (!updatedPortfolio) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Portfolio not found" });
+      // If title changed, generate new slug
+      if (van_listing.title && van_listing.title !== portfolio.van_listing.title) {
+        portfolio.slug = await PortfolioVan.generateSlug(van_listing.title);
       }
+
+      const updatedPortfolio = await portfolio.save();
 
       res.json({
         success: true,
@@ -316,36 +258,51 @@ const gallery = await Promise.all(
   }
 );
 
-router.delete("/:slug",protect, adminOnly, async (req, res) => {
+// DELETE portfolio van by slug
+router.delete("/:slug", protect, adminOnly, async (req, res) => {
   try {
     const deletedPortfolio = await PortfolioVan.findOneAndDelete({
       slug: req.params.slug,
     });
+
     if (!deletedPortfolio) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Portfolio not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Portfolio not found"
+      });
     }
+
     res.json({
       success: true,
       message: "Portfolio van deleted successfully",
       data: deletedPortfolio,
     });
   } catch (err) {
+    console.error("Error deleting portfolio:", err);
     res.status(500).json({ success: false, message: "Delete failed" });
   }
 });
+
+// GET single portfolio van by slug
 router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+
     if (!portfolio) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Portfolio not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Portfolio not found"
+      });
     }
-    res.json({ success: true, data: portfolio });
+
+    res.json({
+      success: true,
+      data: portfolio
+    });
   } catch (err) {
+    console.error("Error fetching portfolio:", err);
     res.status(500).json({ success: false, message: "Fetch failed" });
   }
 });
+
 module.exports = router;

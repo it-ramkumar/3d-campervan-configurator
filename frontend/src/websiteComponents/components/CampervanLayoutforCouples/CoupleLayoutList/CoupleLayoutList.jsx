@@ -18,7 +18,7 @@ export default function CamperProjectsPage() {
         const data = await getByCategory(category, page); // pass page here
 
         if (data?.success) {
-          setLayouts(data?.portfolios || []);
+          setLayouts(data?.data || []);
           setTotalPages(data?.pages || 1);
         } else {
           console.error("Failed to fetch:", data?.message);

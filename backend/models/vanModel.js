@@ -23,55 +23,43 @@ const vanListingSchema = new mongoose.Schema({
   subtitle: { type: String, trim: true },
   model_name: { type: String, trim: true },
   price: { type: Number },
-  // status: { type: String, trim: true },
   tagline: { type: String, trim: true },
   specifications: { type: specificationsSchema }
 });
 
-// Feature Highlight Schema
-const featureHighlightSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true },
-  description: { type: String, trim: true }
-});
+
 
 // Detailed Feature Item Schema
 const detailedFeatureItemSchema = new mongoose.Schema({
   category: { type: String, required: true, trim: true },
   items: [{ type: String, trim: true }]
 });
-// ✅ Block Schema (new)
-const blockSchema = new mongoose.Schema({
-  image: {
-    type: String,
-    trim: true,
-    required: false
+
+
+// ✅ Main Van Schema
+const vanSchema = new mongoose.Schema(
+  {
+    slug: { type: String, required: true, unique: true, trim: true },
+    van_listing: { type: vanListingSchema, required: true },
+    sold: { type: Boolean, default: false },
+
+    gallery: {
+      type: [String],
+      default: []
+    },
+    detailed_features: [detailedFeatureItemSchema],
+    media: {
+      type: [String],
+      default: []
+    },
   },
-  caption: {
-    type: String,
-    trim: true
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
-});
+);
 
-const gallerySchema = new mongoose.Schema({
-  url: { type: String, required: true },
-  caption: { type: String, trim: true }
-});
-
-// Main Van Schema
-const vanSchema = new mongoose.Schema({
-  slug: { type: String, required: true, unique: true, trim: true },
-  van_listing: { type: vanListingSchema, required: true },
-  sold: { type: Boolean, default: false },
-  gallery: [gallerySchema],
-    blocks: [blockSchema], // ✅ NEW FIELD
-  feature_highlights: [featureHighlightSchema],
-  detailed_features: [detailedFeatureItemSchema],
-   media: [{ type: String }],   // ✅ ab ye bhi array of objects
-}, {
-  timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
-});
 
 // Virtual for formatted price
 vanSchema.virtual('formatted_price').get(function () {
