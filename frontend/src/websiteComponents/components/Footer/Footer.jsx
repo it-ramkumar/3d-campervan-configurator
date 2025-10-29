@@ -90,7 +90,7 @@ export default function Footer() {
                 <Link to="/" className="text-gray-300  hover:text-white transition-colors duration-300 underline">Home</Link>
               </li>
               <li>
-                <Link to="vans-for-sale" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</Link>
+                <Link to="/vans-for-sale" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Vans For Sale</Link>
               </li>
               <li>
                 <Link to="/layouts" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Layout</Link>
@@ -172,7 +172,7 @@ export default function Footer() {
           placeholder="Your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+          className="flex-1 min-w-0 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
         />
         <button
           onClick={handleSubscribe}
