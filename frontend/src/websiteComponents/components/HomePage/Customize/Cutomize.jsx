@@ -487,7 +487,7 @@ export default function Customize() {
           </div>
 
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
-       <BlackButton label="Try 3D Configurator" link="https://www.vanbuild3d.com/van" />
+       <BlackButton label="Try 3D Configurator" link="https://configurator.bigbearvans.com" />
           </div>
         </div>
       </div>
