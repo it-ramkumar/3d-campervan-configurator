@@ -77,7 +77,7 @@ export default function Navbar({ forceMobile }) {
       {
         title: "Start Your Custom Build",
         items: [
-          { label: "3D Van Builder", link: "/van" },
+          { label: "3D Van Builder", link: "https://configurator.bigbearvans.com" },
           { label: "Send an Inquiry", link: "/inquiry" },
         ],
       },
