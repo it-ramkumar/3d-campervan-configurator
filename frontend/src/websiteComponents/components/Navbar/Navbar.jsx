@@ -77,7 +77,7 @@ export default function Navbar({ forceMobile }) {
       {
         title: "Start Your Custom Build",
         items: [
-          { label: "3D Van Builder", link: "https://www.vanbuild3d.com/van" },
+          { label: "3D Van Builder", link: "/van" },
           { label: "Send an Inquiry", link: "/inquiry" },
         ],
       },
@@ -107,7 +107,7 @@ export default function Navbar({ forceMobile }) {
     ],
   },
 
-  "3d-van-builder": { title: "Build Your Dream Van", link: "https://www.vanbuild3d.com/van" },
+  // "3d-van-builder": { title: "Build Your Dream Van", link: "https://www.vanbuild3d.com/van" },
   "contact-us": { title: "Contact Us", link: "/contact" },
 
   discover: {
@@ -125,8 +125,8 @@ export default function Navbar({ forceMobile }) {
         {
         title: "Insights",
         items: [
-          { label: "Innovation", link: "/innovation" },
-          { label: "Blogs", link: "/blogs" },
+          { label: "Exterior", link: "/innovation" },
+          { label: "Blog", link: "/blogs" },
 
 
         ],

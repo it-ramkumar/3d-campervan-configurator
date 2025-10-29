@@ -51,8 +51,8 @@ router.get("/search", protect, adminOnly, async (req, res) => {
 
   try {
     const { email, phone } = req.query; // dono params receive
-    console.log("Received email:", email);
-    console.log("Received phone:", phone);
+    // console.log("Received email:", email);
+    // console.log("Received phone:", phone);
 
     if (!email || !phone) {
       return res.status(400).json({ message: "Both email and phone are required." });

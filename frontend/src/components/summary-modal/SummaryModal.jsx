@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAddedModels } from '../../redux/slices/addedModels.js'
 import Swal from "sweetalert2";
@@ -13,6 +13,8 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
 }) {
   const dispatch = useDispatch();
   const router = useNavigate()
+   const cancelSourceRef = useRef(null);
+
   const addedModels = useSelector((state) => state.addedModels.addedModels);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -21,26 +23,26 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
   };
 
 
-const handleRemoveItem = (itemId) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "This item will be removed!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, remove it!",
- target: document.body, // 👈 forcefully body ke top-level pe inject karega
-  zIndex: 99999,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const updatedModels = addedModels.filter((item) => item.label !== itemId);
-      dispatch(setAddedModels(updatedModels));
+  const handleRemoveItem = (itemId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This item will be removed!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+      target: document.body, // 👈 forcefully body ke top-level pe inject karega
+      zIndex: 99999,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedModels = addedModels.filter((item) => item.label !== itemId);
+        dispatch(setAddedModels(updatedModels));
 
-      Swal.fire("Removed!", "The item has been removed.", "success");
-    }
-  });
-};
+        Swal.fire("Removed!", "The item has been removed.", "success");
+      }
+    });
+  };
 
   const handleConfirmOrder = () => {
     setSummaryModal(false);
@@ -50,7 +52,8 @@ const handleRemoveItem = (itemId) => {
       setUploadSuccess,
       setModelUrl, addedModels,
       router,
-      dispatch
+      dispatch,
+      cancelSourceRef
     )
   };
 
@@ -90,8 +93,8 @@ const handleRemoveItem = (itemId) => {
                           <p className="font-semibold text-dark font-heading text-sm truncate" title={item.label}>
                             {item.label}
                           </p>
-                           <p className=" text-dark font-body font-semibold text-sm " title={item.category}>
-                          <span className="font-normal"> Category:</span> {item.category}
+                          <p className=" text-dark font-body font-semibold text-sm " title={item.category}>
+                            <span className="font-normal"> Category:</span> {item.category}
                           </p>
                           <p className="text-xs text-dark tracking-tighter truncate">{item.group}</p>
                         </div>

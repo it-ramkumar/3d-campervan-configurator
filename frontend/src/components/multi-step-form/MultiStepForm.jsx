@@ -68,11 +68,7 @@ const MultiStepForm = ({
   const exteriorSteps = Object.entries(groupByGroup(exteriorWithComponents))
   const systemSteps = Object.entries(groupByGroup(systemWithComponents))
 
-  const handleCancel = () => {
-    if (cancelSourceRef.current) {
-      cancelSourceRef.current.cancel("Upload cancelled by user.");
-    }
-  };
+
   useEffect(() => {
     const fetchData = async () => {
       let fetchingThunk;

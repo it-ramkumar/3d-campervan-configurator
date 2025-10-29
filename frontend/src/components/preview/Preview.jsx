@@ -10,7 +10,7 @@ const Preview = () => {
   return (
     <div className="preview-container p-4 md:p-3 max-w-7xl mx-auto space-y-8">
         {/* Search Button */}
-          <div className="flex justify-end">
+          {/* <div className="flex justify-end">
             <button
               onClick={() => setIsOpen(true)}
               className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl shadow-md transition-all duration-200 flex items-center"
@@ -20,7 +20,7 @@ const Preview = () => {
               </svg>
               Search for Quote
             </button>
-          </div>
+          </div> */}
 
       {/* Top Section - Left (User Info + Model Info) and Right (Canvas) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

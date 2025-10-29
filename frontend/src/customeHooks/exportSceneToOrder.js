@@ -101,6 +101,7 @@ export const ExportScene = async (
           reject(err);
         } finally {
           setIsUploading(false);
+          cancelSourceRef.current = null; // ✅ reset for next upload
         }
       },
       (error) => reject(error),

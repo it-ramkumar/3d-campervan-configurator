@@ -510,7 +510,7 @@ export default function AvailableVans({availableVans}) {
                 <div className="card-glow absolute -inset-2.5 bg-slate-900 rounded-[30px] blur-2xl opacity-0 z-[-1] transition-opacity duration-300"></div>
                 <div className="relative w-full h-[400px] rounded-[30px] overflow-hidden shadow-xl">
                   <img
-                    src={van.gallery[0].url}
+                    src={van.gallery[0]}
                     alt={van.model}
                     className="w-full h-full object-cover"
                   />

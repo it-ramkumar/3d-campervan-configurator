@@ -39,9 +39,6 @@ const AppRoutes = () => {
       <Routes>
 
       <Route path="/test" element={<TestBlog />} />
-      {/* <Route path="/test/:id" element={<TestBlogDetail />} /> */}
-
-
         <Route path="/" element={<Home />} />
         <Route path="/configurator-form" element={<ConfiguratorForm />} />
         <Route path="/about-us" element={<AboutUs />} />
