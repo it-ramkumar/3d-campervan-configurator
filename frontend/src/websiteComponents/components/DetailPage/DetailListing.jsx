@@ -237,8 +237,8 @@ console.log(vanDetail,"vanDetail")
       <p className="text-xs md:text-sm opacity-80">Make & Model</p>
       <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
     </div>
-    <p className="font-bold text-base md:text-lg mt-1">
-      {vanDetail?.specifications?.make_model || "N/A"}
+    <p className="font-bold text-base md:text-lg mt-1 w-60">
+      {vanDetail?.van_listing.specifications?.make_model || "N/A"}
     </p>
   </div>
 

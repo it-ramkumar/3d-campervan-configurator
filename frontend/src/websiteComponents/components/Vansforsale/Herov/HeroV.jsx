@@ -1,12 +1,13 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Link } from "react-router-dom"
-import WhiteButton from "../../Common/Button/WhiteButton"
+import { Link } from "react-router-dom";
 
 const heroImage = "/heroSlider/herov.jpg";
 const newTitleText = "Camper Vans For Sale";
-const newDescriptionText = "Buy our exclusive and ready-to-roll vans for sale Today.";
-
+const newDescriptionText =
+  "Buy our exclusive and ready-to-roll vans for sale Today.";
 
 export default function HeroV() {
   const containerRef = useRef(null);
@@ -52,15 +53,32 @@ export default function HeroV() {
     return () => ctx.revert();
   }, []);
 
-  // Function to render text with character splitting for GSAP
+  // UPDATED Function to render text with word-wrapping awareness
   const renderTitle = (text) => {
-    return text.split("").map((char, index) => (
-      <span
-        key={index}
-        className="inline-block title-char"
-        style={{ whiteSpace: "pre" }}
-      >
-        {char}
+    const words = text.split(' '); // Split by words
+
+    return words.map((word, wordIndex) => (
+      // 1. Create a wrapper for each word that prevents internal wrapping
+      <span key={wordIndex} className="inline-block whitespace-nowrap">
+        {/* 2. Split the word into characters for the animation */}
+        {word.split('').map((char, charIndex) => (
+          <span
+            key={charIndex}
+            className="inline-block title-char"
+            style={{ whiteSpace: "pre" }}
+          >
+            {char}
+          </span>
+        ))}
+        {/* 3. Add the space back *after* the word, as its own animated character */}
+        {wordIndex < words.length - 1 && (
+          <span
+            className="inline-block title-char"
+            style={{ whiteSpace: "pre" }}
+          >
+            {' '}
+          </span>
+        )}
       </span>
     ));
   };
@@ -108,10 +126,18 @@ export default function HeroV() {
 
           {/* New Button Block */}
           {/* MODIFICATION 3: Added a larger top margin to create more space before the button */}
-
-            <WhiteButton label={"Get a Quote"} link="/inquiry" className="!mt-2"/>
-
-
+          <div
+            className="anim-item mt-8"
+            style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
+          >
+            <Link to="/inquiry">
+              <button
+                className="bg-[#2761FD] cursor-pointer text-white font-bold text-[14px] px-5 py-[10px] rounded-[5px] transition duration-300 hover:bg-[#1f50c0] shadow-lg"
+              >
+                Get a Quote
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
