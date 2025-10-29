@@ -4,6 +4,7 @@ import axios from "axios";
 import gsap from "gsap";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import Loader from "../Loader/Loader"
 export default function LayoutDetail() {
   const { slug } = useParams();
   const [van, setVan] = useState(null);
@@ -25,7 +26,7 @@ export default function LayoutDetail() {
     };
     if (slug) fetchLayout();
   }, [slug]);
-
+// console.log(van,"van")
   useEffect(() => {
     if (van && containerRef.current) {
       gsap.fromTo(
@@ -36,7 +37,7 @@ export default function LayoutDetail() {
     }
   }, [van]);
 
-  if (loading) return <div className="text-center py-20 text-gray-500 text-xl">Loading...</div>;
+  if (loading) return <Loader />;
   if (!van)
     return <div className="text-center py-20 text-red-500 text-xl">Layout not found</div>;
 
@@ -67,37 +68,45 @@ export default function LayoutDetail() {
             {van_listing.subtitle}
           </p>
 <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
-  {van_listing?.specifications &&
-    Object.entries(van_listing.specifications).map(([key, value]) => {
-      if (key === "_id" || key === "id") return null; // skip top-level IDs
+  {/* Make & Model */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Make & Model</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">{van_listing?.specifications?.make_model}</p>
+  </div>
 
-      if (typeof value === "object") {
-        // nested object (like capacity)
-        return Object.entries(value).map(([subKey, subValue]) => {
-          if (subKey === "_id" || subKey === "id") return null; // skip nested IDs
-          return (
-            <div key={subKey} className="group py-2 cursor-pointer">
-              <div className="relative pb-2">
-                <p className="text-xs md:text-sm opacity-80">{subKey}</p>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-              </div>
-              <p className="font-bold text-base md:text-lg mt-1">{subValue}</p>
-            </div>
-          );
-        });
-      }
+  {/* Wheelbase */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Wheelbase</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">{van_listing?.specifications?.wheelbase}</p>
+  </div>
 
-      return (
-        <div key={key} className="group py-2 cursor-pointer">
-          <div className="relative pb-2">
-            <p className="text-xs md:text-sm opacity-80">{key}</p>
-            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-          </div>
-          <p className="font-bold text-base md:text-lg mt-1">{value}</p>
-        </div>
-      );
-    })}
+  {/* Drivetrain */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Drivetrain</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">{van_listing?.specifications?.drivetrain}</p>
+  </div>
+
+  {/* Sit & Sleep */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Sit & Sleep</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {van_listing?.specifications?.capacity?.sits} - {van_listing?.specifications?.capacity?.sleeps}
+    </p>
+  </div>
 </div>
+
 <Link to="/contact">
   <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
     Book A Call Now
@@ -138,14 +147,7 @@ export default function LayoutDetail() {
           </div>
 
           <div className="text-center mt-16">
-                 <button
-  disabled={true}
-  className={`px-5 py-2.5 font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out
-    ${true ? "bg-gray-400 cursor-not-allowed text-gray-200" : "bg-[#2761FD] text-white hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1"}
-  `}
->
-  Buy Now
-</button>
+
           </div>
         </div>
       </div>
@@ -157,14 +159,11 @@ export default function LayoutDetail() {
           <p className="text-xl font-normal leading-relaxed mb-8">
             {van_listing.description}
           </p>
-         <button
-  disabled={true}
-  className={`px-5 py-2.5 font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out
-    ${true ? "bg-gray-400 cursor-not-allowed text-gray-200" : "bg-[#2761FD] text-white hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1"}
-  `}
->
-  Book a call now
-</button>
+    <Link to="/contact">
+  <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
+    Book A Call Now
+  </button>
+</Link>
 
         </div>
       </div>

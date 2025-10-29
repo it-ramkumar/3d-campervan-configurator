@@ -64,12 +64,12 @@ export default function Hero() {
   {/* Text Content */}
   <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4 md:px-8">
     <h1 className="text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight font-serif drop-shadow-lg">
-      <span className="text-[#2761FD]">{part1Text}</span>
+      <span className="text-gray-300">{part1Text}</span>
       <br className="md:hidden" />
-      <span className="text-white">{part2TextMain}{part2TextLast}</span>
+      <span className="text-gray-100">{part2TextMain}{part2TextLast}</span>
     </h1>
 
-    <p className="mt-4 text-base md:text-lg lg:text-[20px] font-medium font-serif max-w-3xl mx-auto drop-shadow-md">
+    <p className="mt-4 text-base text-gray-200 md:text-lg lg:text-[20px] font-medium font-serif max-w-3xl mx-auto drop-shadow-md">
       Contact Big Bear Vans today for your custom van conversion. Our
       team of expert van builders in Big Bear City, California, is
       ready to help you begin your dream van life.

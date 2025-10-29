@@ -193,7 +193,7 @@ const VanPage = ({ vanDetail }) => {
     },
     gallery: vanDetail?.gallery || [],
   };
-
+console.log(vanDetail,"vanDetail")
   // Background animation
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -214,34 +214,80 @@ const VanPage = ({ vanDetail }) => {
         className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
       >
         <img
-          src={van.hero.backgroundImage}
-          alt={`${van.hero.titlePrimary} custom van`}
+          src={vanDetail.gallery[0]}
+          alt={`${vanDetail.van_listing.title} custom van`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-[linear-gradient(270.39deg,rgba(0,0,0,0)_0.33%,#000000_106.96%)]"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-start md:justify-center items-start text-left px-4 pt-64 md:pt-0 sm:px-8 md:px-16">
-          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-[64px] leading-tight max-w-4xl">
-            <span className="text-[#2761FD]">{van.hero.titlePrimary}</span>{" "}
-            {van.hero.titleSecondary}
+          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-[64px] leading-tight max-w-2xl">
+            <span>{vanDetail.van_listing.title}</span>{" "}
+            {/* {vanDetail.hero.titleSecondar} */}
           </h1>
           <p className="text-lg md:text-2xl mt-4 max-w-2xl opacity-90">
-            {van.hero.tagline}
+            {vanDetail.van_listing.subtitle}
           </p>
 
-          <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
-            {van.specifications.map((spec, index) => (
-              <div key={index} className="group py-2 cursor-pointer">
-                <div className="relative pb-2">
-                  <p className="text-xs md:text-sm opacity-80">{spec.label}</p>
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-                </div>
-                <p className="font-bold text-base md:text-lg mt-1">
-                  {spec.value}
-                </p>
-              </div>
-            ))}
-          </div>
+         <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
+
+  {/* Make & Model */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Make & Model</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {vanDetail?.specifications?.make_model || "N/A"}
+    </p>
+  </div>
+
+  {/* Wheelbase */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Wheelbase</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {vanDetail?.van_listing.specifications?.wheelbase || "N/A"}
+    </p>
+  </div>
+
+  {/* Drivetrain */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Drivetrain</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {vanDetail?.van_listing.specifications?.drivetrain || "N/A"}
+    </p>
+  </div>
+
+  {/* Engine */}
+  {/* <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Engine</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {vanDetail?.van_listing.specifications?.engine || "N/A"}
+    </p>
+  </div> */}
+
+  {/* Sit & Sleep */}
+  <div className="group py-2 cursor-pointer">
+    <div className="relative pb-2">
+      <p className="text-xs md:text-sm opacity-80">Sit & Sleep</p>
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+    <p className="font-bold text-base md:text-lg mt-1">
+      {vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - {vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}
+    </p>
+  </div>
+
+</div>
+
 <Link to={"/contact"}>
 
    <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">

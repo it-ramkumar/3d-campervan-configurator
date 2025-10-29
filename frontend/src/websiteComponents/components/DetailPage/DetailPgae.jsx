@@ -1,15 +1,15 @@
-// C:\Users\PMYLS\3d-campervan-configurator\frontend\src\websiteComponents\components\SantaMonica\Santa.jsx
-
+import { useState, useEffect } from "react";
 import SantaMonica from "./DetailListing";
-// CORRECTED PATH: Only go up one level to the 'components' directory
 import Navbar from "../Navbar/Navbar";
-// CORRECTED PATH: The Footer component has the same issue
 import Footer from "../Footer/Footer";
-// import ConsultationPage from "../Layouts/Consultationlayout/Consultationlayout";
 import Consultation from "../Consultation/Consultation"
 import { useParams } from "react-router-dom";
 import { getBySlug } from "../../../api/van/getBySlug";
-import { useState, useEffect } from "react";
+import Loader from "../Loader/Loader"
+
+
+
+
 export default function Layouts() {
   const { slug } = useParams();
   const [van, setVan] = useState(null);
@@ -22,7 +22,7 @@ export default function Layouts() {
     fetchVan();
   }, [slug]);
 
-  if (!van) return <p>Loading...</p>;
+  if (!van) return <Loader />;
   // console.log(van,"van")
 
   return (

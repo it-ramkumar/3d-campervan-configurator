@@ -1,8 +1,11 @@
-export default function Loader() {
+import React from "react";
+import { Loader2 } from "lucide-react";
+
+export default function BigBearLoader() {
   return (
-    <div className="w-full h-full flex items-center justify-center bg-white">
-      <div className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
-      <p className="ml-3 text-brand font-medium">Loading 3D Model...</p>
+    <div className="flex flex-col items-center justify-center h-[80vh] text-white">
+      <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
+      <p className="mt-4 text-sm text-blue-900">Loading Big Bear Vans...</p>
     </div>
   );
 }
