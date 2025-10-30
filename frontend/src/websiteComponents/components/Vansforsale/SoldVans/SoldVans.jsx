@@ -115,7 +115,7 @@ export default function SoldVans({ soldVans = [] }) {
 <Link to={`/detail-page/${van.slug}`}>
     <div className="relative w-full h-full rounded-[17.5px] overflow-hidden group">
   <img
-    src={van?.gallery?.[0]?.url || "/images/default-placeholder.jpg"}
+    src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
     alt={van?.van_listing?.model_name || "Sold camper van image"}
     className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
   />
@@ -131,7 +131,7 @@ export default function SoldVans({ soldVans = [] }) {
   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:from-black/80"></div>
   <div className="absolute inset-0 p-4 flex flex-col justify-end">
     <h3 className="font-serif text-base sm:text-2xl font-semibold text-white leading-tight transform transition-all duration-300 ease-in-out sm:translate-y-8 sm:opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-      {van?.van_listing?.model_name || "Unnamed Model"}
+      {van?.van_listing?.title || "Unnamed Model"}
     </h3>
   </div>
 </div></Link>

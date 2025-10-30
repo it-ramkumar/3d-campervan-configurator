@@ -343,9 +343,9 @@ console.log(vanDetail,"vanDetail")
       {/* ================= Flagship ================= */}
       <div className="px-8 md:pl-[132px] md:pr-16 bg-gray-50">
         <div className="max-w-3xl text-left py-8">
-          <h2 className="font-bold text-4xl mb-6">{van.flagship.title}</h2>
+          <h2 className="font-bold text-4xl mb-6">{vanDetail.van_listing.title}</h2>
           <p className="text-xl font-normal leading-relaxed mb-8">
-            {van.flagship.description}
+            {vanDetail.van_listing.description}
           </p>
           <Link to={"/contact"}>
           <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
