@@ -5,6 +5,7 @@ import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
 
 
+
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
   useEffect(() => {
@@ -15,33 +16,8 @@ export default function Blog() {
     fetchBlogs();
   }, []);
   // console.log(blogs,"blogs");
-  const blogPosts = [
-    {
-      _id: 1,
-      title: "Van Kitchen Appliances",
-      gallery: [{url: "/images/b1.jpg",id: 1}],
-      link: "/blog/van-kitchen-appliances",
-    },
-    {
-      _id: 2,
-      title: "Camper Mattress Sizes",
-      gallery: [{url: "/images/b2.jpg",id: 2}],
-      link: "/blog/camper-mattress-sizes",
-    },
-    {
-      _id: 3,
-      title: "Camper Van Bathroom",
-      gallery: [{url: "/images/b3.jpg",id: 3}],
-      link: "/blog/camper-van-bathroom",
-    },
-    {
-      _id: 4,
-      title: "Campervan Electrical Systems",
-      gallery: [{url: "/images/b4.jpg",id: 4}],
-      link: "/blog/campervan-electrical-systems",
-    },
-  ];
-const data = blogs.length > 0 ? blogs : blogPosts;
+
+const data = blogs.length > 0 ? blogs : [];
   return (
     // MINIMAL TOP PADDING: pt-4 (1rem / 16px)
     <section className="w-full pt-4 pb-16 bg-white">

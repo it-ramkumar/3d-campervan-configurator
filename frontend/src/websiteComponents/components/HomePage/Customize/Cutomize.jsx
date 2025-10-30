@@ -51,23 +51,23 @@ const VanPart = ({
 
 
 export default function Customize() {
-  const modelSectionRef = useRef(null);
+  // const modelSectionRef = useRef(null);
   const mainTitleRef = useRef(null);
   const section1Ref = useRef(null);
-  const section2Ref = useRef(null);
+  // const section2Ref = useRef(null);
   const imageCardRef = useRef(null);
   const imageRef = useRef(null);
-  const modelCanvasCardRef = useRef(null);
+  // const modelCanvasCardRef = useRef(null);
     const [expanded, setExpanded] = useState(false);
 
-  const parts = [
-    { name: "Wall Panels", modelPath: "/models/in-parts144/wall-panels.glb", initialPos: [8, 0, 0] },
-    { name: "Fridge", modelPath: "/models/in-parts144/TallFridge.glb", initialPos: [-8, 0, 0] },
-    { name: "Swivel Table", modelPath: "/models/in-parts144/swivel-table.glb", initialPos: [0, 8, 0], initialRotation: [0, 0, Math.PI / 4] },
-    { name: "Awning", modelPath: "/models/ex-parts144/awning.glb", initialPos: [0, -8, 0] },
-    { name: "Roof Rack", modelPath: "/models/ex-parts144/roof-rack.glb", initialPos: [0, 10, 0] },
-    { name: "Solar Panel", modelPath: "/models/ex-parts144/solar.glb", assembledPos: [.5, 0, 0], initialPos: [0, -10, 0] }
-  ];
+  // const parts = [
+  //   { name: "Wall Panels", modelPath: "/models/in-parts144/wall-panels.glb", initialPos: [8, 0, 0] },
+  //   { name: "Fridge", modelPath: "/models/in-parts144/TallFridge.glb", initialPos: [-8, 0, 0] },
+  //   { name: "Swivel Table", modelPath: "/models/in-parts144/swivel-table.glb", initialPos: [0, 8, 0], initialRotation: [0, 0, Math.PI / 4] },
+  //   { name: "Awning", modelPath: "/models/ex-parts144/awning.glb", initialPos: [0, -8, 0] },
+  //   { name: "Roof Rack", modelPath: "/models/ex-parts144/roof-rack.glb", initialPos: [0, 10, 0] },
+  //   { name: "Solar Panel", modelPath: "/models/ex-parts144/solar.glb", assembledPos: [.5, 0, 0], initialPos: [0, -10, 0] }
+  // ];
 
   // useEffect(() => {
   //   gsap.fromTo(mainTitleRef.current,
@@ -245,7 +245,7 @@ export default function Customize() {
   // }, []);
 
   return (
-    <section className="bg-white py-24 font-serif overflow-hidden">
+    <section className="bg-white mt-24 font-serif overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Main Title */}
         <h1
@@ -270,7 +270,7 @@ export default function Customize() {
               >
                 <div className="w-full h-full overflow-hidden" style={{ borderRadius: '28px' }}>
                   <img
-                    src="/images/custom4.jpg"
+                    src="/images/custom4.webp"
                     alt="Custom van interior"
                     width={500}
                     height={500}
@@ -366,7 +366,7 @@ export default function Customize() {
               <div className="w-full h-full overflow-hidden" style={{ borderRadius: '28px' }}>
                 <img
                   ref={imageRef}
-                  src="/images/custom4.jpg"
+                  src="/images/custom4.webp"
                   alt="Custom van interior"
                   width={500}
                   height={500}
@@ -385,9 +385,9 @@ export default function Customize() {
         </div>
 
         {/* SECTION 2: Try Our 3D Configurator */}
-        <div ref={section2Ref} className="relative mt-16 md:mt-24 w-full mx-auto" style={{ maxWidth: '1320px' }}>
+        {/* <div ref={section2Ref} className="relative mt-16 md:mt-24 w-full mx-auto" style={{ maxWidth: '1320px' }}>
           <div className="relative w-full md:w-11/12 ml-auto bg-black/75 rounded-2xl md:rounded-none" style={{ height: 'auto', minHeight: '400px' }}>
-            {/* Model container for mobile */}
+
             <div
               className="block md:hidden w-full h-80 px-4 py-6"
               ref={modelSectionRef}
@@ -443,7 +443,6 @@ export default function Customize() {
             </div>
           </div>
 
-          {/* This container is for desktop only, using absolute positioning */}
           <div
             className="hidden md:block absolute top-[45%] left-0 transform -translate-y-1/2 z-10"
             ref={modelCanvasCardRef}
@@ -489,7 +488,7 @@ export default function Customize() {
           <div className="w-full text-center md:text-right mt-6 px-8 md:px-12">
        <BlackButton label="Try 3D Configurator" link="https://configurator.bigbearvans.com" />
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

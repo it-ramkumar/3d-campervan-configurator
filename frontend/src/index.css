@@ -22,6 +22,49 @@
   font-style: normal;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomSlow {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+/* Animation utilities */
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.animate-zoomSlow {
+  animation: zoomSlow 15s ease-in-out infinite alternate;
+}
+
+/* Optional staggered delays */
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+.animation-delay-700 {
+  animation-delay: 0.7s;
+}
+
 /* ✅ Reset / global */
 * {
   box-sizing: border-box;

@@ -10,7 +10,7 @@ export default function BlogsListing() {
   const [searchTerm, setSearchTerm] = useState("");
   const [blogs, setBlogs] = useState([]);
   const containerRef = useRef(null);
-  const heroImage = "/heroSlider/bloghero.png";
+  const heroImage = "/heroSlider/bloghero.webp";
 
   // ✅ Fetch blogs from backend
   useEffect(() => {
@@ -26,33 +26,33 @@ export default function BlogsListing() {
   }, []);
 
   // ✅ GSAP animation
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".bg-image",
-        { scale: 1 },
-        {
-          scale: 1.1,
-          x: "random(-3%, 3%)",
-          y: "random(-3%, 3%)",
-          duration: 15,
-          ease: "none",
-          repeat: -1,
-          yoyo: true,
-        }
-      );
+  // useEffect(() => {
+  //   const ctx = gsap.context(() => {
+  //     gsap.fromTo(
+  //       ".bg-image",
+  //       { scale: 1 },
+  //       {
+  //         scale: 1.1,
+  //         x: "random(-3%, 3%)",
+  //         y: "random(-3%, 3%)",
+  //         duration: 15,
+  //         ease: "none",
+  //         repeat: -1,
+  //         yoyo: true,
+  //       }
+  //     );
 
-      gsap.from(".anim-content", {
-        y: 80,
-        opacity: 0,
-        stagger: 0.2,
-        duration: 1.2,
-        ease: "power3.out",
-      });
-    }, containerRef);
+  //     gsap.from(".anim-content", {
+  //       y: 80,
+  //       opacity: 0,
+  //       stagger: 0.2,
+  //       duration: 1.2,
+  //       ease: "power3.out",
+  //     });
+  //   }, containerRef);
 
-    return () => ctx.revert();
-  }, []);
+  //   return () => ctx.revert();
+  // }, []);
 
   // ✅ Filter blogs by search term
   const filteredBlogs = blogs.filter((blog) => {

@@ -2,8 +2,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { gsap } from "gsap";
-import { Link } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -12,24 +10,24 @@ import BlackButton from "../../Common/Button/BlackButton";
 import WhiteButton from "../../Common/Button/WhiteButton";
 
 // Define the pure black color for buttons and primary accents
-const ACCENT_COLOR_CLASS = "bg-black";
+
 
 const slides = [
   {
     id: 1,
-    image: "/heroSlider/joinadventure.png",
+    image: "/heroSlider/joinadventure.webp",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
     id: 2,
-    image: "/heroSlider/heroimg2.png",
+    image: "/heroSlider/heroimg2.webp",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
     id: 3,
-    image: "/heroSlider/heroimg3.png",
+    image: "/heroSlider/heroimg3.webp",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
@@ -104,7 +102,7 @@ export default function Hero() {
                 Buy, customize, or try the 3D configurator from Big Bear Vans today.
               </p>
 
-          
+
               <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
 
                 <BlackButton label="Order Custom Build" link="/inquiry" />

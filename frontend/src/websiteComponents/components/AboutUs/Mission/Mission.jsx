@@ -143,7 +143,7 @@ const advantages = [
             whileHover={{ y: "-0.75rem", scale: 1.02, boxShadow: "0px 10px 30px rgba(0,0,0,0.1)" }}
           >
             <img
-              src="/images/mission.png"
+              src="/images/mission.webp"
               alt="Cozy interior of a custom campervan"
               className="rounded-[15px] w-full h-auto object-cover max-w-[650px] mx-auto max-h-[550px]"
             />

@@ -3,7 +3,7 @@ import Home from "../pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 import Van from "../pages/Van";
-import Layout from "../components/layout/Layout";
+// import Layout from "../components/layout/Layout";
 import Preview from "../components/preview/Preview";
 import Contact from "../websiteComponents/components/Contact/Contact";
 import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
@@ -62,7 +62,7 @@ const AppRoutes = () => {
         <Route path="/van-form" element={<VanForm />} />
         <Route path="/portfolio-form" element={<PortfolioForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/layout" element={<Layout />} />
+        {/* <Route path="/layout" element={<Layout />} /> */}
         <Route path="/van" element={<Van />} />
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />

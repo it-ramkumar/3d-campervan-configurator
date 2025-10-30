@@ -1,51 +1,51 @@
 "use client";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+// import { useEffect, useRef } from "react";
+// import { gsap } from "gsap";
 
 // A relevant placeholder image for van exterior upgrades.
-const heroImage = "/heroSlider/exteriorhero.png";
+const heroImage = "/heroSlider/exteriorhero.webp";
 
 export default function Hero() {
-  const containerRef = useRef(null);
+  // const containerRef = useRef(null);
 
-  useEffect(() => {
-    // GSAP context for safe cleanup
-    const ctx = gsap.context(() => {
-      // Background image animation (Ken Burns effect)
-      gsap.fromTo(
-        ".bg-image",
-        { scale: 1, x: 0, y: 0 },
-        {
-          scale: 1.1,
-          x: "random(-3%, 3%)",
-          y: "random(-3%, 3%)",
-          duration: 15,
-          ease: "none",
-          repeat: -1,
-          yoyo: true,
-        }
-      );
+  // useEffect(() => {
+  //   // GSAP context for safe cleanup
+  //   const ctx = gsap.context(() => {
+  //     // Background image animation (Ken Burns effect)
+  //     gsap.fromTo(
+  //       ".bg-image",
+  //       { scale: 1, x: 0, y: 0 },
+  //       {
+  //         scale: 1.1,
+  //         x: "random(-3%, 3%)",
+  //         y: "random(-3%, 3%)",
+  //         duration: 15,
+  //         ease: "none",
+  //         repeat: -1,
+  //         yoyo: true,
+  //       }
+  //     );
 
-      // Text animation timeline
-      const tl = gsap.timeline();
+  //     // Text animation timeline
+  //     const tl = gsap.timeline();
 
-      // Animate the new content elements sequentially
-      tl.from(".anim-content", {
-        y: 80, // Animate from bottom
-        opacity: 0,
-        stagger: 0.2, // Small delay between each element
-        duration: 1.2,
-        ease: "power3.out",
-      });
-    }, containerRef);
+  //     // Animate the new content elements sequentially
+  //     tl.from(".anim-content", {
+  //       y: 80, // Animate from bottom
+  //       opacity: 0,
+  //       stagger: 0.2, // Small delay between each element
+  //       duration: 1.2,
+  //       ease: "power3.out",
+  //     });
+  //   }, containerRef);
 
-    // Cleanup function to revert animations when the component unmounts
-    return () => ctx.revert();
-  }, []);
+  //   // Cleanup function to revert animations when the component unmounts
+  //   return () => ctx.revert();
+  // }, []);
 
   return (
     // The ref is attached here for GSAP's context
-    <div ref={containerRef} className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden">
+    <div className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden">
       {/* Background Image */}
       <img
         src={heroImage}

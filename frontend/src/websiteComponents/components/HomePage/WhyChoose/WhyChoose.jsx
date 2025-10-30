@@ -43,8 +43,8 @@ const sections = [
     ],
     outro: "We’re small, but high-tech. That’s why we can customize layouts and features other shops won’t even touch.",
     images: [
-      { src: "/images/w1.jpg", alt: "Campervan interior under construction" },
-      { src: "/images/w2.jpg", alt: "Campervan kitchen and swivel seats" },
+      { src: "/images/w1.webp", alt: "Campervan interior under construction" },
+      { src: "/images/w2.webp", alt: "Campervan kitchen and swivel seats" },
     ],
     isReverse: false,
     initialHeight: '200px'
@@ -57,8 +57,8 @@ const sections = [
       { text: "<strong>Servicing and installing upgrades</strong> in our workshop.", icon: <Wrench size={20} /> },
     ],
     images: [
-      { src: "/images/w3.jpg", alt: "Campervan wheel and tire installation" },
-      { src: "/images/w4.jpg", alt: "Campervan exterior under construction" },
+      { src: "/images/w3.webp", alt: "Campervan wheel and tire installation" },
+      { src: "/images/w4.webp", alt: "Campervan exterior under construction" },
     ],
     isReverse: true,
     initialHeight: '170px'
@@ -73,8 +73,8 @@ const sections = [
     ],
     outro: "The result? A fully custom campervan, exactly the way you want.",
     images: [
-      { src: "/images/w5.png", alt: "CNC machine cutting wood" },
-      { src: "/images/w6.jpg", alt: "Industrial CNC machine" },
+      { src: "/images/w5.webp", alt: "CNC machine cutting wood" },
+      { src: "/images/w6.webp", alt: "Industrial CNC machine" },
     ],
     isReverse: false,
     initialHeight: '150px'
@@ -90,7 +90,7 @@ const sections = [
     ],
     images: [
       { src: "/images/w7.webp", alt: "Family-friendly campervan interior" },
-      { src: "/images/w8.jpg", alt: "Campervan with roof deck and awning" },
+      { src: "/images/w8.webp", alt: "Campervan with roof deck and awning" },
     ],
     isReverse: true,
     initialHeight: '170px'
@@ -108,8 +108,8 @@ const sections = [
     ],
     outro: "Off-grid freedom isn’t an upgrade in our converted vans, it’s a standard.",
     images: [
-      { src: "/images/w9.jpg", alt: "Solar panels on a campervan roof" },
-      { src: "/images/w10.jpg", alt: "Interior of an off-grid ready van" },
+      { src: "/images/w9.webp", alt: "Solar panels on a campervan roof" },
+      { src: "/images/w10.webp", alt: "Interior of an off-grid ready van" },
     ],
     isReverse: false,
     initialHeight: '200px'

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+// import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 
-const heroImage = "/heroSlider/herov.jpg";
+const heroImage = "/heroSlider/herov.webp";
 const newTitleText = "Camper Vans For Sale";
 const newDescriptionText =
   "Buy our exclusive and ready-to-roll vans for sale Today.";
@@ -12,46 +12,46 @@ const newDescriptionText =
 export default function HeroV() {
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+  // useEffect(() => {
+  //   const ctx = gsap.context(() => {
+  //     const tl = gsap.timeline();
 
-      // Background Parallax/Ken Burns Effect (kept as is)
-      gsap.fromTo(
-        ".bg-image",
-        { scale: 1, x: 0, y: 0 },
-        {
-          scale: 1.1,
-          x: "random(-3%, 3%)",
-          y: "random(-3%, 3%)",
-          duration: 15,
-          ease: "none",
-          repeat: -1,
-          yoyo: true,
-        }
-      );
+  //     // Background Parallax/Ken Burns Effect (kept as is)
+  //     gsap.fromTo(
+  //       ".bg-image",
+  //       { scale: 1, x: 0, y: 0 },
+  //       {
+  //         scale: 1.1,
+  //         x: "random(-3%, 3%)",
+  //         y: "random(-3%, 3%)",
+  //         duration: 15,
+  //         ease: "none",
+  //         repeat: -1,
+  //         yoyo: true,
+  //       }
+  //     );
 
-      // Text and Button Entrance Animation (kept as is)
-      tl.from(".title-char", {
-        y: 80,
-        opacity: 0,
-        stagger: 0.03,
-        duration: 1.2,
-        ease: "power3.out",
-      }).from(
-        ".anim-item",
-        {
-          y: 50,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-          stagger: 0.2,
-        },
-        "-=0.8"
-      );
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
+  //     // Text and Button Entrance Animation (kept as is)
+  //     tl.from(".title-char", {
+  //       y: 80,
+  //       opacity: 0,
+  //       stagger: 0.03,
+  //       duration: 1.2,
+  //       ease: "power3.out",
+  //     }).from(
+  //       ".anim-item",
+  //       {
+  //         y: 50,
+  //         opacity: 0,
+  //         duration: 1,
+  //         ease: "power3.out",
+  //         stagger: 0.2,
+  //       },
+  //       "-=0.8"
+  //     );
+  //   }, containerRef);
+  //   return () => ctx.revert();
+  // }, []);
 
   // UPDATED Function to render text with word-wrapping awareness
   const renderTitle = (text) => {

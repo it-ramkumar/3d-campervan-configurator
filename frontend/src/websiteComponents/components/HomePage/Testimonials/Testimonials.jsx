@@ -75,7 +75,7 @@ const truncateText = (text, maxLength) => {
 };
 
 export default function Testimonials() {
-  const vanBgImageUrl = "/images/review.jpg";
+  const vanBgImageUrl = "/images/review.webp";
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -175,7 +175,7 @@ export default function Testimonials() {
                     <div className="flex gap-1 text-[#FFEF5E]">
                       {renderStars(review.rating)}
                     </div>
-                    
+
                     {/* Display Truncated Text */}
                     <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
                       {truncatedText}

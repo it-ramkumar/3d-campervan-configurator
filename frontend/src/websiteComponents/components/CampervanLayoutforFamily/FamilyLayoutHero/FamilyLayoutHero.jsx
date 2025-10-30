@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const heroImage = "/heroSlider/CampervansLayoutforFamilyhero.jpg";
+const heroImage = "/heroSlider/CampervansLayoutforFamilyhero.webp";
 
 const line1Text = "Campervans Layouts";
 const line2Part1Text = "for Family ";

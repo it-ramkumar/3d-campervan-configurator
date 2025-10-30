@@ -145,7 +145,7 @@ export default function Navbar({ forceMobile }) {
           {!forceMobile && <div className="flex items-center">
             <Link to="/" className="block">
               <img
-                src="/images/logoo.png"
+                src="/images/logoo.webp"
                 alt="BBV logo"
                 className="w-[150px] h-[30px] object-contain"
               />
@@ -285,7 +285,7 @@ export default function Navbar({ forceMobile }) {
           {forceMobile && <div className="flex items-center mb-5">
             <Link to="/" className="block">
               <img
-                src="/images/logoo.png"
+                src="/images/logoo.webp"
                 alt="BBV logo"
                 className="w-[150px] h-[30px] object-contain"
               />

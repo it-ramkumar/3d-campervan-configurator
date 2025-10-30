@@ -6,12 +6,12 @@ import { useInView } from 'react-intersection-observer';
 import WhiteButton from '../../Common/Button/WhiteButton';
 
 // Placeholder images - replace with your actual image paths
-const ownersImage = "/images/anna.png";
-const ambulanceImage = "/images/ambulance.png";
-const prototypeImage = "/images/liftbed.png";
-const blueWhaleImage = "/images/bluewhale.png";
-const grayWolfImage = "/images/greywolf.png";
-const ctaBgImage = "/images/joinadventure.png";
+const ownersImage = "/images/anna.webp";
+const ambulanceImage = "/images/ambulance.webp";
+const prototypeImage = "/images/liftbed.webp";
+const blueWhaleImage = "/images/bluewhale.webp";
+const grayWolfImage = "/images/greywolf.webp";
+// const ctaBgImage = "/images/joinadventure.webp";
 
 export default function AboutPage() {
   const controls = useAnimation();
@@ -285,9 +285,9 @@ export default function AboutPage() {
         animate={controls}
       >
         <motion.img
-          src={ctaBgImage}
+          // src={ctaBgImage}
           alt="Scenic view from inside a custom camper van"
-          className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
+          className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
           initial={{ scale: 1.15 }}
           variants={{
             visible: { scale: 1.05, transition: { duration: 2, ease: "easeOut" } }
@@ -323,7 +323,7 @@ export default function AboutPage() {
 
 
           <WhiteButton label={"Start Your Build"} link={"/contact"}/>
-        
+
 
         </div>
       </motion.section>

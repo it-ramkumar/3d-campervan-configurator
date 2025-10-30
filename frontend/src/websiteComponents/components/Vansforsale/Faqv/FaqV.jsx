@@ -1,15 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-
-import {  FaPlus, FaMinus } from "react-icons/fa";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register the GSAP plugin if in a browser environment
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import React, { useState } from "react";
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 const faqs = [
   {
@@ -36,44 +28,13 @@ const faqs = [
 
 export default function FaqV() {
   const [openIndex, setOpenIndex] = useState(null);
-  const sectionRef = useRef(null);
-
-  const faqItemsRef = useRef([]);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // Animation for the logo and social icons
-
-
-      // Animation for the FAQ items
-      gsap.fromTo(
-        faqItemsRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    // --- REMOVED ALL BOTTOM PADDING HERE (pb-4 changed to pb-0) ---
-    <div ref={sectionRef} className="bg-white pt-2 pb-15 px-4 md:px-8">
+    <div className="bg-white pt-2 pb-15 px-4 md:px-8 scroll-smooth">
       <div className="max-w-4xl mx-auto">
         {/* FAQ Section Heading */}
         <div className="text-center mb-8">
@@ -87,11 +48,10 @@ export default function FaqV() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              ref={el => (faqItemsRef.current[index] = el)}
               className="bg-black text-white rounded-lg p-3 relative overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.01] hover:shadow-lg"
             >
               {/* Left Border */}
-              <div className="absolute top-0 left-0 w-2 h-full bg-[#2761FD]"></div>
+              <div className="absolute top-0 left-0 w-2 h-full bg-[#2761FD]" />
 
               {/* Question and Toggle Button */}
               <div
@@ -113,7 +73,9 @@ export default function FaqV() {
               {/* Answer Content */}
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === index ? "max-h-96 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
+                  openIndex === index
+                    ? "max-h-96 opacity-100 mt-2"
+                    : "max-h-0 opacity-0 mt-0"
                 }`}
               >
                 <p
@@ -124,8 +86,6 @@ export default function FaqV() {
             </div>
           ))}
         </div>
-
-
       </div>
     </div>
   );

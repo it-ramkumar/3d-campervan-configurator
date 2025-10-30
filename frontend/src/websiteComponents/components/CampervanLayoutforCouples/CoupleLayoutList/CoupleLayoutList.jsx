@@ -95,12 +95,10 @@ useEffect(() => {
 
                     <img
                       src={
-                        project.blocks?.[0]?.image ||
-                        project.gallery?.[0] ||
-                        "/fallback.jpg"
+                        project.gallery?.[0]
                       }
                       alt={`${project.van_listing?.title || "Van"} small view`}
-                      loading="lazy"
+                      // loading="lazy"
                       className={`absolute w-[50%] h-[55%] object-cover rounded-md lg:rounded-[10px] shadow-2xl -bottom-2 md:-bottom-4 border-2 md:border-4 border-white transition-all duration-500 ease-in-out lg:group-hover:scale-115 lg:group-hover:shadow-2xl ${
                         isReversed ? "right-[5%]" : "left-[5%]"
                       }`}

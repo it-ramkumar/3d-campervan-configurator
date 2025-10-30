@@ -13,7 +13,7 @@ const processSteps = [
     {
     time: "Immediate",
     title: "Start Your Journey: Vehicle Sourcing",
-    imageSrc: "/images/process1.jpg",
+    imageSrc: "/images/process1.webp",
     altText: "Vans parked in a row",
     details: [
       {
@@ -31,7 +31,7 @@ const processSteps = [
   {
     time: "1 Month",
     title: "Collaborative Design Phase",
-    imageSrc: "/images/process3.jpg",
+    imageSrc: "/images/process3.webp",
     altText: "Designers collaborating on a 3D model",
     details: [
       {
@@ -53,7 +53,7 @@ const processSteps = [
   {
     time: "2 Months",
     title: "Engineering & Precision Planning",
-    imageSrc: "/images/process4.png",
+    imageSrc: "/images/process4.webp",
     altText: "3D rendering of a van interior",
     details: [
       {
@@ -71,7 +71,7 @@ const processSteps = [
   {
     time: "3-4 Months",
     title: "Build & Assembly",
-    imageSrc: "/images/process6.jpg",
+    imageSrc: "/images/process6.webp",
     altText: "A camper van being built in a workshop",
     details: [
       {
@@ -92,7 +92,7 @@ const processSteps = [
   {
     time: "Pickup",
     title: "Delivery & Beyond",
-    imageSrc: "/images/process5.jpg",
+    imageSrc: "/images/process5.webp",
     altText: "A converted camper van in a scenic location",
     details: [
       {
