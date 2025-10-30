@@ -12,7 +12,7 @@ export default function InqueryListing() {
   // ✅ Fetch all inquiries
   const fetchInquiries = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/inquery`);
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`);
       const data = res.data.data || res.data; // handle both formats
       setInquiries(data);
       setFiltered(data);
@@ -26,7 +26,7 @@ export default function InqueryListing() {
   // ✅ Update status
   const updateStatus = async (id, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/inquery/${id}/status`, {
+      await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}/status`, {
         status: newStatus,
       });
       fetchInquiries(); // Refresh list
