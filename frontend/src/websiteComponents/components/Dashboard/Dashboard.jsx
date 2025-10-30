@@ -10,6 +10,7 @@ import BlogsListing from "../adminPanel/Blog/BlogsListing";
 import ConfiguratorListing from "../adminPanel/Configurator/ConfiguratorListing";
 import ConfiguratorForm from "../adminPanel/Configurator/ConfiguratorForm"
 import UsersData from "../adminPanel/Users/User";
+import InqueryListing from "../adminPanel/Inquery/InqueryListing";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -64,6 +65,12 @@ export default function Dashboard() {
       icon: "✏️",
       description: "Configurator Data"
     },
+    {
+      id: "Inquery-data",
+      label: "Inquery Data",
+      icon: "✏️",
+      description: "Inquery Data"
+    },
     //   {
     //   id: "Configurator-form",
     //   label: "Configurator Form",
@@ -91,6 +98,8 @@ const renderContent = () => {
       return <ConfiguratorForm />;
     case "Configurator-data":
       return <ConfiguratorListing setSelected={setSelected} />;
+    case "Inquery-data":
+      return <InqueryListing setSelected={setSelected} />;
     case "Users":
       return <UsersData />;
     default:
