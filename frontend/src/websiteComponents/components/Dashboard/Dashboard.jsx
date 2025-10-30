@@ -66,10 +66,10 @@ export default function Dashboard() {
       description: "Configurator Data"
     },
     {
-      id: "Inquery-data",
-      label: "Inquery Data",
+      id: "Inquiry-data",
+      label: "Inquiry Data",
       icon: "✏️",
-      description: "Inquery Data"
+      description: "Inquiry Data"
     },
     //   {
     //   id: "Configurator-form",
@@ -98,7 +98,7 @@ const renderContent = () => {
       return <ConfiguratorForm />;
     case "Configurator-data":
       return <ConfiguratorListing setSelected={setSelected} />;
-    case "Inquery-data":
+    case "Inquiry-data":
       return <InqueryListing setSelected={setSelected} />;
     case "Users":
       return <UsersData />;
