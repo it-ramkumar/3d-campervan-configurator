@@ -122,5 +122,28 @@ router.put("/:id/status", async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+// 🟢 DELETE INQUIRY (Admin deletes an inquiry)
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedInquiry = await Inquery.findByIdAndDelete(req.params.id);
+
+    if (!deletedInquiry) {
+      return res.status(404).json({
+        success: false,
+        message: "Inquiry not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Inquiry deleted successfully.",
+      data: deletedInquiry,
+    });
+  } catch (error) {
+    console.error("Error deleting inquiry:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 
 module.exports = router;
