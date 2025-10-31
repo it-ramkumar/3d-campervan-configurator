@@ -167,265 +167,295 @@ const handleSubmit = async (e) => {
   }, [blocks, galleryFiles]);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        {isEditMode ? "✏️ Edit Blog" : "📝 Create New Blog"}
-      </h1>
+  <div className="p-6 max-w-4xl mx-auto">
+  <h1 className="text-2xl font-bold mb-4">
+    {isEditMode ? "✏️ Edit Blog" : "📝 Create New Blog"}
+  </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
-        <input
-          type="text"
-          placeholder="Blog Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full border p-2 rounded"
-          required
-        />
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* Title */}
+    <input
+      type="text"
+      placeholder="Blog Title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="w-full border p-2 rounded"
+      required
+    />
 
-        {/* Description */}
-        <textarea
-          placeholder="Short Description..."
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full border p-2 rounded"
-          rows="3"
-        />
+    {/* Description */}
+    <textarea
+      placeholder="Short Description..."
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      className="w-full border p-2 rounded"
+      rows="3"
+    />
 
-        {/* ✅ FIXED: Gallery Section */}
-        <div className="border p-4 rounded">
-          <h3 className="font-semibold mb-3">Gallery Images</h3>
+    {/* ✅ Gallery Section */}
+    <div className="border p-4 rounded">
+      <h3 className="font-semibold mb-3">Gallery Images</h3>
 
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(event) => handleGalleryChange(event, setGalleryFiles)}
-            className="w-full border p-2 rounded mb-3"
-          />
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={(event) => handleGalleryChange(event, setGalleryFiles)}
+        className="w-full border p-2 rounded mb-3"
+      />
 
-          {/* Existing Gallery Images */}
-          {gallery.length > 0 && (
-            <div className="mb-4">
-              <h4 className="font-medium mb-2">Existing Images:</h4>
-              <div className="flex flex-wrap gap-3">
-                {gallery.map((img, i) => (
-                  <div key={`existing-${i}`} className="relative">
-                    <img loading="lazy"
-                      src={img.preview || img.url}
-                      alt={`gallery-${i}`}
-                      className="w-24 h-24 rounded shadow object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeExistingGalleryImage(i, setGallery, setRemovedGallery, gallery)}
-                      className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* New Gallery Images */}
-          {galleryFiles.length > 0 && (
-            <div>
-              <h4 className="font-medium mb-2">New Images:</h4>
-              <div className="flex flex-wrap gap-3">
-                {galleryFiles.map((img, i) => (
-                  <div key={`new-${i}`} className="relative">
-                    <img loading="lazy"
-                      src={img.preview}
-                      alt={`new-gallery-${i}`}
-                      className="w-24 h-24 rounded shadow object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeNewGalleryImage(i, setGalleryFiles, galleryFiles)}
-                      className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {gallery.length === 0 && galleryFiles.length === 0 && (
-            <p className="text-gray-500 text-center py-4">No gallery images added yet</p>
-          )}
-        </div>
-
-        {/* Blocks */}
-        {blocks.map((block, i) => (
-          <div key={i} className="relative border p-4 rounded bg-gray-50">
-            <button
-              type="button"
-              onClick={() => removeBlock(i, setBlocks)}
-              className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm font-semibold"
-            >
-              ✕ Remove
-            </button>
-
-            {block.type === "heading" && (
-              <input
-                type="text"
-                placeholder="Heading..."
-                value={block.text || ""}
-                onChange={(e) => handleBlockChange(i, "text", e.target.value, null, null,setBlocks)}
-                className="w-full border p-2 rounded text-lg font-semibold"
-              />
-            )}
-            {block.type === "subheading" && (
-  <input
-    type="text"
-    placeholder="Sub Heading..."
-    value={block.text || ""}
-    onChange={(e) =>
-      handleBlockChange(i, "text", e.target.value, null, null, setBlocks)
-    }
-    className="w-full border p-2 rounded text-md font-semibold text-gray-700"
-  />
-)}
-
-            {block.type === "paragraph" && (
-              <textarea
-                placeholder="Write paragraph..."
-                value={block.text || ""}
-                onChange={(e) => handleBlockChange(i, "text", e.target.value, null, null,setBlocks)}
-                className="w-full border p-2 rounded"
-                rows="4"
-              />
-            )}
-
-            {block.type === "image" && (
-              <div className="space-y-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(i, e.target.files[0], setBlocks)}
-                  className="w-full border p-2 rounded"
+      {/* Existing Gallery Images */}
+      {gallery.length > 0 && (
+        <div className="mb-4">
+          <h4 className="font-medium mb-2">Existing Images:</h4>
+          <div className="flex flex-wrap gap-3">
+            {gallery.map((img, i) => (
+              <div key={`existing-${i}`} className="relative">
+                <img
+                  loading="lazy"
+                  src={img.preview || img.url}
+                  alt={`gallery-${i}`}
+                  className="w-24 h-24 rounded shadow object-cover"
                 />
-                {(block.preview || block.url) && (
-                  <img loading="lazy"
-                    src={block.preview || block.url}
-                    alt="preview"
-                    className="w-48 mt-2 rounded shadow"
-                  />
-                )}
-              </div>
-            )}
-
-            {block.type === "table" && (
-              <div>
-                <table className="border w-full text-left">
-                  <tbody>
-                    {block.rows?.map((row, rowIndex) => (
-                      <tr key={rowIndex}>
-                        {row.map((cell, colIndex) => (
-                          <td key={colIndex} className="border p-2">
-                            <input
-                              type="text"
-                              value={cell}
-                              onChange={(e) => handleBlockChange(i, "table", e.target.value, rowIndex, colIndex,setBlocks)}
-                              className="w-full border-none outline-none"
-                            />
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
                 <button
                   type="button"
-                  onClick={() => addTableRow(i, setBlocks)}
-                  className="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm"
+                  onClick={() =>
+                    removeExistingGalleryImage(i, setGallery, setRemovedGallery, gallery)
+                  }
+                  className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                 >
-                  + Add Row
+                  ×
                 </button>
               </div>
-            )}
+            ))}
+          </div>
+        </div>
+      )}
 
-            {block.type === "proscons" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold text-green-600">Pros</h4>
-                  {block.pros?.map((pro, idx) => (
-                    <input
-                      key={idx}
-                      type="text"
-                      placeholder="Add a pro"
-                      value={pro}
-                      onChange={(e) => handleBlockChange(i, "pros", e.target.value, idx,null,setBlocks)}
-                      className="w-full border p-2 rounded mt-2"
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addProsOrCons(i, "pros", setBlocks)}
-                    className="mt-2 px-3 py-1 bg-green-600 text-white rounded text-sm"
-                  >
-                    + Add Pro
-                  </button>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-red-600">Cons</h4>
-                  {block.cons?.map((con, idx) => (
-                    <input
-                      key={idx}
-                      type="text"
-                      placeholder="Add a con"
-                      value={con}
-                      onChange={(e) => handleBlockChange(i, "cons", e.target.value, idx,null,setBlocks)}
-                      className="w-full border p-2 rounded mt-2"
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addProsOrCons(i, "cons", setBlocks)}
-                    className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm"
-                  >
-                    + Add Con
-                  </button>
-                </div>
+      {/* New Gallery Images */}
+      {galleryFiles.length > 0 && (
+        <div>
+          <h4 className="font-medium mb-2">New Images:</h4>
+          <div className="flex flex-wrap gap-3">
+            {galleryFiles.map((img, i) => (
+              <div key={`new-${i}`} className="relative">
+                <img
+                  loading="lazy"
+                  src={img.preview}
+                  alt={`new-gallery-${i}`}
+                  className="w-24 h-24 rounded shadow object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeNewGalleryImage(i, setGalleryFiles, galleryFiles)}
+                  className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
+                >
+                  ×
+                </button>
               </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {gallery.length === 0 && galleryFiles.length === 0 && (
+        <p className="text-gray-500 text-center py-4">No gallery images added yet</p>
+      )}
+    </div>
+
+    {/* Blocks */}
+    {blocks.map((block, i) => (
+      <div key={i} className="relative border p-4 rounded bg-gray-50 mb-6">
+        <button
+          type="button"
+          onClick={() => removeBlock(i, setBlocks)}
+          className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm font-semibold"
+        >
+          ✕ Remove
+        </button>
+
+        {/* Heading */}
+        {block.type === "heading" && (
+          <input
+            type="text"
+            placeholder="Heading..."
+            value={block.text || ""}
+            onChange={(e) =>
+              handleBlockChange(i, "text", e.target.value, null, null, setBlocks)
+            }
+            className="w-full border p-2 rounded text-lg font-semibold"
+          />
+        )}
+
+        {/* Subheading */}
+        {block.type === "subheading" && (
+          <input
+            type="text"
+            placeholder="Sub Heading..."
+            value={block.text || ""}
+            onChange={(e) =>
+              handleBlockChange(i, "text", e.target.value, null, null, setBlocks)
+            }
+            className="w-full border p-2 rounded text-md font-semibold text-gray-700"
+          />
+        )}
+
+        {/* Paragraph */}
+        {block.type === "paragraph" && (
+          <textarea
+            placeholder="Write paragraph..."
+            value={block.text || ""}
+            onChange={(e) =>
+              handleBlockChange(i, "text", e.target.value, null, null, setBlocks)
+            }
+            className="w-full border p-2 rounded"
+            rows="4"
+          />
+        )}
+
+        {/* Image */}
+        {block.type === "image" && (
+          <div className="space-y-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageChange(i, e.target.files[0], setBlocks)}
+              className="w-full border p-2 rounded"
+            />
+            {(block.preview || block.url) && (
+              <img
+                loading="lazy"
+                src={block.preview || block.url}
+                alt="preview"
+                className="w-48 mt-2 rounded shadow"
+              />
             )}
           </div>
-        ))}
+        )}
 
-        {/* Add Blocks Buttons */}
-        <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => addBlock("heading", setBlocks)} className="px-3 py-2 bg-blue-600 text-white rounded">
-            + Heading
-          </button>
-          <button type="button" onClick={() => addBlock("subheading", setBlocks)} className="px-3 py-2 bg-blue-600 text-white rounded">
-            + Sub Heading
-          </button>
-          <button type="button" onClick={() => addBlock("paragraph", setBlocks)} className="px-3 py-2 bg-green-600 text-white rounded">
-            + Paragraph
-          </button>
-          <button type="button" onClick={() => addBlock("image", setBlocks)} className="px-3 py-2 bg-purple-600 text-white rounded">
-            + Image
-          </button>
-          <button type="button" onClick={() => addBlock("table", setBlocks)} className="px-3 py-2 bg-orange-600 text-white rounded">
-            + Table
-          </button>
-          <button type="button" onClick={() => addBlock("proscons", setBlocks)} className="px-3 py-2 bg-pink-600 text-white rounded">
-            + Pros & Cons
-          </button>
+        {/* Table */}
+        {block.type === "table" && (
+          <div>
+            <table className="border w-full text-left">
+              <tbody>
+                {block.rows?.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, colIndex) => (
+                      <td key={colIndex} className="border p-2">
+                        <input
+                          type="text"
+                          value={cell}
+                          onChange={(e) =>
+                            handleBlockChange(
+                              i,
+                              "table",
+                              e.target.value,
+                              rowIndex,
+                              colIndex,
+                              setBlocks
+                            )
+                          }
+                          className="w-full border-none outline-none"
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              type="button"
+              onClick={() => addTableRow(i, setBlocks)}
+              className="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm"
+            >
+              + Add Row
+            </button>
+          </div>
+        )}
+
+        {/* Pros & Cons */}
+        {block.type === "proscons" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-semibold text-green-600">Pros</h4>
+              {block.pros?.map((pro, idx) => (
+                <input
+                  key={idx}
+                  type="text"
+                  placeholder="Add a pro"
+                  value={pro}
+                  onChange={(e) =>
+                    handleBlockChange(i, "pros", e.target.value, idx, null, setBlocks)
+                  }
+                  className="w-full border p-2 rounded mt-2"
+                />
+              ))}
+              <button
+                type="button"
+                onClick={() => addProsOrCons(i, "pros", setBlocks)}
+                className="mt-2 px-3 py-1 bg-green-600 text-white rounded text-sm"
+              >
+                + Add Pro
+              </button>
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-red-600">Cons</h4>
+              {block.cons?.map((con, idx) => (
+                <input
+                  key={idx}
+                  type="text"
+                  placeholder="Add a con"
+                  value={con}
+                  onChange={(e) =>
+                    handleBlockChange(i, "cons", e.target.value, idx, null, setBlocks)
+                  }
+                  className="w-full border p-2 rounded mt-2"
+                />
+              ))}
+              <button
+                type="button"
+                onClick={() => addProsOrCons(i, "cons", setBlocks)}
+                className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm"
+              >
+                + Add Con
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ✅ New Add Block Section (Between Blocks) */}
+        <div className="mt-4 border-t pt-3 flex flex-wrap gap-2">
+          <span className="text-sm text-gray-500">Add block below:</span>
+          <button onClick={() => addBlock("heading", setBlocks, i)} type="button" className="text-xs bg-blue-600 text-white px-2 py-1 rounded">+ Heading</button>
+          <button onClick={() => addBlock("subheading", setBlocks, i)} type="button" className="text-xs bg-sky-600 text-white px-2 py-1 rounded">+ Subheading</button>
+          <button onClick={() => addBlock("paragraph", setBlocks, i)} type="button" className="text-xs bg-green-600 text-white px-2 py-1 rounded">+ Paragraph</button>
+          <button onClick={() => addBlock("image", setBlocks, i)} type="button" className="text-xs bg-purple-600 text-white px-2 py-1 rounded">+ Image</button>
+          <button onClick={() => addBlock("table", setBlocks, i)} type="button" className="text-xs bg-orange-600 text-white px-2 py-1 rounded">+ Table</button>
+          <button onClick={() => addBlock("proscons", setBlocks, i)} type="button" className="text-xs bg-pink-600 text-white px-2 py-1 rounded">+ Pros & Cons</button>
         </div>
+      </div>
+    ))}
 
-        <button
-          disabled={loading}
-          type="submit"
-          className="w-full bg-black text-white py-3 rounded font-semibold disabled:bg-gray-400"
-        >
-          {loading ? "Saving..." : (isEditMode ? "Update Blog" : "Create Blog")}
-        </button>
-      </form>
+    {/* Add Blocks at End */}
+    <div className="flex flex-wrap gap-3">
+      <button onClick={() => addBlock("heading", setBlocks)} type="button" className="px-3 py-2 bg-blue-600 text-white rounded">+ Heading</button>
+      <button onClick={() => addBlock("subheading", setBlocks)} type="button" className="px-3 py-2 bg-sky-600 text-white rounded">+ Sub Heading</button>
+      <button onClick={() => addBlock("paragraph", setBlocks)} type="button" className="px-3 py-2 bg-green-600 text-white rounded">+ Paragraph</button>
+      <button onClick={() => addBlock("image", setBlocks)} type="button" className="px-3 py-2 bg-purple-600 text-white rounded">+ Image</button>
+      <button onClick={() => addBlock("table", setBlocks)} type="button" className="px-3 py-2 bg-orange-600 text-white rounded">+ Table</button>
+      <button onClick={() => addBlock("proscons", setBlocks)} type="button" className="px-3 py-2 bg-pink-600 text-white rounded">+ Pros & Cons</button>
     </div>
+
+    <button
+      disabled={loading}
+      type="submit"
+      className="w-full bg-black text-white py-3 rounded font-semibold disabled:bg-gray-400"
+    >
+      {loading ? "Saving..." : isEditMode ? "Update Blog" : "Create Blog"}
+    </button>
+  </form>
+</div>
+
   );
 }

@@ -6,6 +6,7 @@ export default function Detail({ setIsopen, detail }) {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+// console.log(detail,"detail")
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) setIsopen(false);
   };

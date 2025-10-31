@@ -1,4 +1,5 @@
-export const addBlock = (type, setBlocks) => {
+// ✅ addBlock.js
+export const addBlock = (type, setBlocks, index = null) => {
   let newBlock;
 
   switch (type) {
@@ -8,7 +9,7 @@ export const addBlock = (type, setBlocks) => {
     case "heading":
       newBlock = { type, text: "" };
       break;
-    case "subheading": // ✅ Added new block type
+    case "subheading":
       newBlock = { type, text: "" };
       break;
     case "image":
@@ -24,5 +25,15 @@ export const addBlock = (type, setBlocks) => {
       return;
   }
 
-  setBlocks((prev) => [...prev, newBlock]);
+  setBlocks((prev) => {
+    const newBlocks = [...prev];
+    if (index !== null) {
+      // Insert at specific position
+      newBlocks.splice(index + 1, 0, newBlock);
+    } else {
+      // Add to end
+      newBlocks.push(newBlock);
+    }
+    return newBlocks;
+  });
 };
