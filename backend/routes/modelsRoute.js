@@ -12,7 +12,7 @@ const upload = multer({ storage });
 
 router.post("/add", protect, adminOnly, upload.fields([{ name: "image" }, { name: "glbFile" }]), async (req, res) => {
   try {
-    console.log("first")
+    // console.log("first")
     const { category, ...data } = req.body;
     const imageFile = req.files["image"]?.[0];
     const glbFile = req.files["glbFile"]?.[0];

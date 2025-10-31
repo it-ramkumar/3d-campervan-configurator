@@ -1,5 +1,9 @@
 const AWS = require("aws-sdk");
 const sharp = require("sharp");
+const fs = require("fs");
+const path = require("path");
+const { exec } = require("child_process");
+
 
 AWS.config.update({
   accessKeyId: process.env.VITE_REACT_APP_AWS_ACCESS_KEY_ID,
@@ -9,20 +13,51 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
+
+async function compressGLB(originalBuffer, originalName) {
+  const inputPath = path.join(__dirname, `temp_${Date.now()}_${originalName}`);
+  const outputPath = path.join(__dirname, `compressed_${Date.now()}_${originalName}`);
+
+  fs.writeFileSync(inputPath, originalBuffer);
+
+  return new Promise((resolve, reject) => {
+    const cmd = `npx gltfpack -i "${inputPath}" -o "${outputPath}" -cc -tc -si 0.8`;
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.error("❌ GLB compression failed:", stderr);
+        fs.unlinkSync(inputPath);
+        return reject(error);
+      }
+
+      const compressedBuffer = fs.readFileSync(outputPath);
+      fs.unlinkSync(inputPath);
+      fs.unlinkSync(outputPath);
+
+      resolve(compressedBuffer);
+    });
+  });
+}
+
+
 async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
   let uploadBuffer = fileBuffer;
 
-  if (mimetype && mimetype.startsWith("image/")) {
-    try {
+  try {
+    if (mimetype?.startsWith("image/")) {
+      // ✅ Compress image
       uploadBuffer = await sharp(fileBuffer)
         .resize({ width: 1200 })
         .jpeg({ quality: 80 })
         .toBuffer();
-    } catch (err) {
-      console.warn("⚠️ Image compression skipped:", err.message);
+      console.log("🖼️ Image compressed before upload.");
+    } else if (mimetype === "model/gltf-binary" || fileName.endsWith(".glb")) {
+      // ✅ Compress GLB
+      uploadBuffer = await compressGLB(fileBuffer, fileName);
+      console.log("🪶 GLB model compressed before upload.");
     }
+  } catch (err) {
+    console.warn("⚠️ Compression skipped:", err.message);
   }
-
   const params = {
     Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME, // ✅ same env var
     Key: `${folderName}/${Date.now()}_${fileName}`,
