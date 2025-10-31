@@ -3,6 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { updateBlog, createBlog } from "../../../../api/blog/createBlogs";
 import axios from "axios";
+import { addBlock } from "../../../CustamHooks/addBlock";
+import { removeBlock } from "../../../CustamHooks/removeBlock";
+import { removeExistingGalleryImage } from "../../../CustamHooks/removeExistingGallery";
+import { removeNewGalleryImage } from "../../../CustamHooks/removeNewGallery";
+import { handleBlockChange } from "../../../CustamHooks/handleBlockChanges";
+import { handleImageChange } from "../../../CustamHooks/handleImageChange";
+import { addTableRow } from "../../../CustamHooks/addTableRow";
+import { addProsOrCons } from "../../../CustamHooks/addProsOrCons";
+import { handleGalleryChange } from "../../../CustamHooks/handleGalleryChange";
 
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
@@ -52,147 +61,6 @@ export default function BlogForm() {
     }
   }, [editData]);
 
-  // ✅ FIXED: Add new block
-  const addBlock = (type) => {
-    let newBlock;
-    switch (type) {
-      case "paragraph":
-        newBlock = { type, text: "" };
-        break;
-      case "heading":
-        newBlock = { type, text: "" };
-        break;
-      case "image":
-        newBlock = { type, file: null, preview: "", url: "" };
-        break;
-      case "table":
-        newBlock = { type, rows: [["", ""], ["", ""]] };
-        break;
-      case "proscons":
-        newBlock = { type, pros: [""], cons: [""] };
-        break;
-      default:
-        return;
-    }
-    setBlocks((prev) => [...prev, newBlock]);
-  };
-
-  // Remove block
-  const removeBlock = (index) => {
-    setBlocks((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // ✅ FIXED: Remove existing gallery image
-  const removeExistingGalleryImage = (index) => {
-    const imageToRemove = gallery[index];
-
-    if (imageToRemove.url) {
-      // Track removed images for backend deletion
-      setRemovedGallery((prev) => [...prev, imageToRemove.url]);
-    }
-
-    // Remove from gallery array
-    setGallery((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // ✅ FIXED: Remove new gallery image
-  const removeNewGalleryImage = (index) => {
-    const imageToRemove = galleryFiles[index];
-
-    // Revoke object URL
-    if (imageToRemove.preview) {
-      URL.revokeObjectURL(imageToRemove.preview);
-    }
-
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // ✅ FIXED: Handle text change in block
-  const handleBlockChange = (blockIndex, key, value, nestedIndex, nestedColIndex) => {
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const block = { ...newBlocks[blockIndex] };
-
-      if (key === "pros") {
-        const pros = [...(block.pros || [])];
-        pros[nestedIndex] = value;
-        block.pros = pros;
-      } else if (key === "cons") {
-        const cons = [...(block.cons || [])];
-        cons[nestedIndex] = value;
-        block.cons = cons;
-      } else if (key === "table") {
-        const rows = block.rows.map((row, rIdx) =>
-          rIdx === nestedIndex
-            ? row.map((cell, cIdx) => (cIdx === nestedColIndex ? value : cell))
-            : row
-        );
-        block.rows = rows;
-      } else {
-        block[key] = value;
-      }
-
-      newBlocks[blockIndex] = block;
-      return newBlocks;
-    });
-  };
-
-  // ✅ FIXED: Handle image change in blocks
-  const handleImageChange = (blockIndex, file) => {
-    if (!file) return;
-
-    const preview = URL.createObjectURL(file);
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const block = {
-        ...newBlocks[blockIndex],
-        file,
-        preview,
-        url: "" // Clear existing URL when new file is selected
-      };
-      newBlocks[blockIndex] = block;
-      return newBlocks;
-    });
-  };
-
-  // Add table row
-  const addTableRow = (blockIndex) => {
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const block = {
-        ...newBlocks[blockIndex],
-        rows: [...newBlocks[blockIndex].rows, ["", ""]]
-      };
-      newBlocks[blockIndex] = block;
-      return newBlocks;
-    });
-  };
-
-  // Add pros/cons item
-  const addProsOrCons = (blockIndex, type) => {
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const block = { ...newBlocks[blockIndex] };
-      if (type === "pros") block.pros = [...(block.pros || []), ""];
-      if (type === "cons") block.cons = [...(block.cons || []), ""];
-      newBlocks[blockIndex] = block;
-      return newBlocks;
-    });
-  };
-
-  // ✅ FIXED: Handle gallery upload
-  const handleGalleryChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const newGalleryFiles = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      url: ""
-    }));
-
-    setGalleryFiles((prev) => [...prev, ...newGalleryFiles]);
-  };
 
   // ✅ FIXED: Submit form
 const handleSubmit = async (e) => {
@@ -332,7 +200,7 @@ const handleSubmit = async (e) => {
             type="file"
             multiple
             accept="image/*"
-            onChange={handleGalleryChange}
+            onChange={(event) => handleGalleryChange(event, setGalleryFiles)}
             className="w-full border p-2 rounded mb-3"
           />
 
@@ -350,7 +218,7 @@ const handleSubmit = async (e) => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeExistingGalleryImage(i)}
+                      onClick={() => removeExistingGalleryImage(i, setGallery, setRemovedGallery, gallery)}
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
                       ×
@@ -375,7 +243,7 @@ const handleSubmit = async (e) => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeNewGalleryImage(i)}
+                      onClick={() => removeNewGalleryImage(i, setGalleryFiles, galleryFiles)}
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
                       ×
@@ -396,7 +264,7 @@ const handleSubmit = async (e) => {
           <div key={i} className="relative border p-4 rounded bg-gray-50">
             <button
               type="button"
-              onClick={() => removeBlock(i)}
+              onClick={() => removeBlock(i, setBlocks)}
               className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm font-semibold"
             >
               ✕ Remove
@@ -407,16 +275,27 @@ const handleSubmit = async (e) => {
                 type="text"
                 placeholder="Heading..."
                 value={block.text || ""}
-                onChange={(e) => handleBlockChange(i, "text", e.target.value)}
+                onChange={(e) => handleBlockChange(i, "text", e.target.value, null, null,setBlocks)}
                 className="w-full border p-2 rounded text-lg font-semibold"
               />
             )}
+            {block.type === "subheading" && (
+  <input
+    type="text"
+    placeholder="Sub Heading..."
+    value={block.text || ""}
+    onChange={(e) =>
+      handleBlockChange(i, "text", e.target.value, null, null, setBlocks)
+    }
+    className="w-full border p-2 rounded text-md font-semibold text-gray-700"
+  />
+)}
 
             {block.type === "paragraph" && (
               <textarea
                 placeholder="Write paragraph..."
                 value={block.text || ""}
-                onChange={(e) => handleBlockChange(i, "text", e.target.value)}
+                onChange={(e) => handleBlockChange(i, "text", e.target.value, null, null,setBlocks)}
                 className="w-full border p-2 rounded"
                 rows="4"
               />
@@ -427,7 +306,7 @@ const handleSubmit = async (e) => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleImageChange(i, e.target.files[0])}
+                  onChange={(e) => handleImageChange(i, e.target.files[0], setBlocks)}
                   className="w-full border p-2 rounded"
                 />
                 {(block.preview || block.url) && (
@@ -451,7 +330,7 @@ const handleSubmit = async (e) => {
                             <input
                               type="text"
                               value={cell}
-                              onChange={(e) => handleBlockChange(i, "table", e.target.value, rowIndex, colIndex)}
+                              onChange={(e) => handleBlockChange(i, "table", e.target.value, rowIndex, colIndex,setBlocks)}
                               className="w-full border-none outline-none"
                             />
                           </td>
@@ -462,7 +341,7 @@ const handleSubmit = async (e) => {
                 </table>
                 <button
                   type="button"
-                  onClick={() => addTableRow(i)}
+                  onClick={() => addTableRow(i, setBlocks)}
                   className="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm"
                 >
                   + Add Row
@@ -480,13 +359,13 @@ const handleSubmit = async (e) => {
                       type="text"
                       placeholder="Add a pro"
                       value={pro}
-                      onChange={(e) => handleBlockChange(i, "pros", e.target.value, idx)}
+                      onChange={(e) => handleBlockChange(i, "pros", e.target.value, idx,null,setBlocks)}
                       className="w-full border p-2 rounded mt-2"
                     />
                   ))}
                   <button
                     type="button"
-                    onClick={() => addProsOrCons(i, "pros")}
+                    onClick={() => addProsOrCons(i, "pros", setBlocks)}
                     className="mt-2 px-3 py-1 bg-green-600 text-white rounded text-sm"
                   >
                     + Add Pro
@@ -500,13 +379,13 @@ const handleSubmit = async (e) => {
                       type="text"
                       placeholder="Add a con"
                       value={con}
-                      onChange={(e) => handleBlockChange(i, "cons", e.target.value, idx)}
+                      onChange={(e) => handleBlockChange(i, "cons", e.target.value, idx,null,setBlocks)}
                       className="w-full border p-2 rounded mt-2"
                     />
                   ))}
                   <button
                     type="button"
-                    onClick={() => addProsOrCons(i, "cons")}
+                    onClick={() => addProsOrCons(i, "cons", setBlocks)}
                     className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm"
                   >
                     + Add Con
@@ -519,19 +398,22 @@ const handleSubmit = async (e) => {
 
         {/* Add Blocks Buttons */}
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={() => addBlock("heading")} className="px-3 py-2 bg-blue-600 text-white rounded">
+          <button type="button" onClick={() => addBlock("heading", setBlocks)} className="px-3 py-2 bg-blue-600 text-white rounded">
             + Heading
           </button>
-          <button type="button" onClick={() => addBlock("paragraph")} className="px-3 py-2 bg-green-600 text-white rounded">
+          <button type="button" onClick={() => addBlock("subheading", setBlocks)} className="px-3 py-2 bg-blue-600 text-white rounded">
+            + Sub Heading
+          </button>
+          <button type="button" onClick={() => addBlock("paragraph", setBlocks)} className="px-3 py-2 bg-green-600 text-white rounded">
             + Paragraph
           </button>
-          <button type="button" onClick={() => addBlock("image")} className="px-3 py-2 bg-purple-600 text-white rounded">
+          <button type="button" onClick={() => addBlock("image", setBlocks)} className="px-3 py-2 bg-purple-600 text-white rounded">
             + Image
           </button>
-          <button type="button" onClick={() => addBlock("table")} className="px-3 py-2 bg-orange-600 text-white rounded">
+          <button type="button" onClick={() => addBlock("table", setBlocks)} className="px-3 py-2 bg-orange-600 text-white rounded">
             + Table
           </button>
-          <button type="button" onClick={() => addBlock("proscons")} className="px-3 py-2 bg-pink-600 text-white rounded">
+          <button type="button" onClick={() => addBlock("proscons", setBlocks)} className="px-3 py-2 bg-pink-600 text-white rounded">
             + Pros & Cons
           </button>
         </div>
