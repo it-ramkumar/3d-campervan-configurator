@@ -136,7 +136,7 @@ const Preview = () => {
       >
         <div className="flex flex-col items-center">
           <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
-            <img
+            <img loading="lazy"
               src={part.image}
               alt={part.label}
               className="w-full h-full object-contain"

@@ -23,10 +23,13 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    status: {
+      type: String,
+      enum: ["New", "In Progress", "Resolved"], // allowed values
+      default: "New", // default status
+    },
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Contact", contactSchema);
-
-

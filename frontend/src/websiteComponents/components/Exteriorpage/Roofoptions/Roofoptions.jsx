@@ -378,7 +378,7 @@ function InteractiveSection({
                       >
                         <div className="relative z-10 h-full flex flex-col">
                           <div className="overflow-hidden flex-1">
-                            <img
+                            <img loading="lazy"
                               src={subOption.image}
                               alt={subOption.title}
                               className="w-full h-48 sm:h-64 object-cover transition-transform duration-700 group-hover:scale-110"
@@ -436,7 +436,7 @@ function InteractiveSection({
                       <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm"></div>
                       <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500"></div>
 
-                      <img
+                      <img loading="lazy"
                         src={selectedOptionData?.image}
                         alt={selectedOptionData?.title}
                         className="relative w-full h-auto object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl aspect-[4/3] transform group-hover:scale-[1.02] sm:group-hover:scale-[1.03] transition-transform duration-700 border-2 border-gray-800/20"
@@ -505,7 +505,7 @@ function AdditionalAccessories() {
                                 className="group relative overflow-hidden rounded-lg sm:rounded-xl shadow-md sm:shadow-lg cursor-pointer bg-white border border-gray-300 hover:border-gray-900 transition-all duration-500"
                             >
                                 <div className="relative overflow-hidden">
-                                    <img
+                                    <img loading="lazy"
                                         src={item.image}
                                         alt={item.title}
                                         className="w-full h-32 sm:h-40 md:h-48 object-cover transition-transform duration-700 ease-out group-hover:scale-110"

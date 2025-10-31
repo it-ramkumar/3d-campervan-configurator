@@ -84,7 +84,7 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
                       style={{ height: '170px' }}
                     >
                       <div className="flex items-start gap-3">
-                        <img
+                        <img loading="lazy"
                           src={item.image}
                           alt={item.label}
                           className="w-14 h-14 object-cover rounded-md border shadow-sm"
@@ -169,7 +169,7 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
 
                     {/* Image */}
                     <div className="w-full md:w-[45%]">
-                      <img
+                      <img loading="lazy"
                         src={selectedItem.image}
                         alt={selectedItem.label}
                         className="w-full h-60 object-cover rounded-md shadow-md transition hover:scale-105"

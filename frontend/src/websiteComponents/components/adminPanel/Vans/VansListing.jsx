@@ -104,7 +104,7 @@ export default function VanListing({ setSelected }) {
             <div key={van._id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
               {/* Thumbnail */}
               {van.gallery?.length > 0 ? (
-                <img
+                <img  loading="lazy"
                   src={van.gallery[0]?.url || van.gallery[0]} // fallback to string if no url
                   alt={van.van_listing?.title || "Van Image"}
                   className="w-full h-40 object-cover rounded mb-3"

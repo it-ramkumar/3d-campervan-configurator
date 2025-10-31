@@ -43,6 +43,7 @@ const FeatureCard = ({ matchedModels, isLoading }) => {
               `}
             >
               <img
+              loading="lazy"
                 src={model.image}
                 alt={model.label}
                 className="max-w-full max-h-full object-contain

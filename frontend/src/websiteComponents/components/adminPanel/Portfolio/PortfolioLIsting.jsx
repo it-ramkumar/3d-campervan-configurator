@@ -105,7 +105,7 @@ export default function PortfolioListing({ setSelected }) {
             >
               {/* Gallery */}
               {portfolio.gallery?.[0] ? (
-                <img
+                <img loading="lazy"
                   src={typeof portfolio.gallery[0] === "string" ? portfolio.gallery[0] : portfolio.gallery[0]?.url}
                   alt={portfolio.van_listing?.title || "Portfolio Image"}
                   className="w-full h-48 object-cover rounded-lg mb-3"

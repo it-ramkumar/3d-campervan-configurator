@@ -104,7 +104,7 @@ const handleBackdropClick = (e) => {
                     {gallery.length > 0 && (
                         <div className="relative w-full h-80 sm:h-96 md:h-[500px] bg-gray-900 overflow-hidden">
                             {/* Main Image */}
-                            <img
+                            <img loading="lazy"
                                 src={gallery[currentImageIndex]}
                                 alt={detail.van_listing?.title || 'Van Image'}
                                 className="w-full h-full object-contain"
@@ -151,7 +151,7 @@ const handleBackdropClick = (e) => {
                                                 } transition-all duration-200`}
                                             onClick={() => setCurrentImageIndex(index)}
                                         >
-                                            <img
+                                            <img loading="lazy"
                                                 src={image}
                                                 alt={`Thumbnail ${index + 1}`}
                                                 className="w-full h-full object-cover"
@@ -322,7 +322,7 @@ const handleBackdropClick = (e) => {
                                             )}
                                             {block.image && (
                                                 <div className="mt-4 bg-gray-100 rounded-lg overflow-hidden">
-                                                    <img
+                                                    <img loading="lazy"
                                                         src={block.image}
                                                         alt={block.caption || 'Content image'}
                                                         className="w-full h-auto max-h-96 object-cover"

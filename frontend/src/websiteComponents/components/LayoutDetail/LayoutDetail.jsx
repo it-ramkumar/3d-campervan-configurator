@@ -52,7 +52,7 @@ export default function LayoutDetail() {
 
         className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
       >
-        <img
+        <img loading="lazy"
           src={van.gallery[0]}
           alt={`${van.van_listing.title}`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
@@ -173,7 +173,7 @@ export default function LayoutDetail() {
         {van.gallery.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {van.gallery.map((img, i) => (
-              <img
+              <img loading="lazy"
                 key={i}
                 src={img}
                 alt={img}

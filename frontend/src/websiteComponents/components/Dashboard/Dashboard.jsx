@@ -11,6 +11,7 @@ import ConfiguratorListing from "../adminPanel/Configurator/ConfiguratorListing"
 import ConfiguratorForm from "../adminPanel/Configurator/ConfiguratorForm"
 import UsersData from "../adminPanel/Users/User";
 import InqueryListing from "../adminPanel/Inquery/InqueryListing";
+import ContactListing from "../adminPanel/Contact/ContactListing";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -71,12 +72,12 @@ export default function Dashboard() {
       icon: "✏️",
       description: "Inquiry Data"
     },
-    //   {
-    //   id: "Configurator-form",
-    //   label: "Configurator Form",
-    //   icon: "✏️",
-    //   description: "Configurator Form"
-    // }
+    {
+      id: "Contact-data",
+      label: "Contact Data",
+      icon: "✏️",
+      description: "Contact Data"
+    }
   ];
 
   const currentItem = menuItems.find(item => item.id === selected);
@@ -100,6 +101,8 @@ const renderContent = () => {
       return <ConfiguratorListing setSelected={setSelected} />;
     case "Inquiry-data":
       return <InqueryListing setSelected={setSelected} />;
+    case "Contact-data":
+      return <ContactListing setSelected={setSelected} />;
     case "Users":
       return <UsersData />;
     default:

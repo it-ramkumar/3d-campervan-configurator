@@ -563,7 +563,7 @@ const handleSubmit = async (e) => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {existingGallery.map((url, index) => (
                   <div key={index} className="relative group">
-                    <img
+                    <img loading="lazy"
                       src={url}
                       alt={`Existing ${index + 1}`}
                       className="w-full h-24 object-cover rounded-lg border border-gray-300"
@@ -596,7 +596,7 @@ const handleSubmit = async (e) => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {galleryPreviews.map((preview, index) => (
                   <div key={index} className="relative group">
-                    <img
+                    <img loading="lazy"
                       src={preview}
                       alt={`Preview ${index + 1}`}
                       className="w-full h-24 object-cover rounded-lg border border-gray-300"

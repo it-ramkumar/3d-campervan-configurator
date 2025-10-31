@@ -46,7 +46,7 @@ export default function BlogDetail() {
       {/* 🔥 HERO SECTION */}
       <section className="relative bg-gray-900 text-white">
         <div className="absolute inset-0 bg-black opacity-50"></div>
-        <img
+        <img loading="lazy"
           src={heroImage}
           alt={blog.title}
           className="w-full h-96 object-cover"
@@ -102,7 +102,7 @@ export default function BlogDetail() {
                     </div>
                     <div className="order-1 md:order-2">
                       {nextBlock.image ? (
-                        <img
+                        <img loading="lazy"
                           src={nextBlock.image}
                           alt={block.text}
                           className="rounded-2xl shadow-xl w-full h-64 object-cover"
@@ -145,7 +145,7 @@ export default function BlogDetail() {
                   return (
                     <div key={index} className="my-8">
                       {block.image ? (
-                        <img
+                        <img loading="lazy"
                           src={block.image}
                           alt="Blog visual"
                           className="rounded-2xl shadow-xl w-full max-w-2xl mx-auto object-cover"
@@ -259,7 +259,7 @@ export default function BlogDetail() {
               {/* MAIN GALLERY IMAGE */}
               {blog.gallery && blog.gallery.length > 0 && (
                 <div className="mb-4">
-                  <img
+                  <img loading="lazy"
                     src={blog.gallery[currentGalleryImage]}
                     alt={`Gallery ${currentGalleryImage + 1}`}
                     className="w-full h-48 object-cover rounded-xl shadow-md mb-3"
@@ -277,7 +277,7 @@ export default function BlogDetail() {
                             : "border-transparent"
                         }`}
                       >
-                        <img
+                        <img loading="lazy"
                           src={img}
                           alt={`Thumbnail ${index + 1}`}
                           className="w-full h-16 object-cover"

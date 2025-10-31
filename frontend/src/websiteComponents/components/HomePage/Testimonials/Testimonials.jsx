@@ -159,7 +159,7 @@ export default function Testimonials() {
                   onClick={() => openModal(review)}
                 >
                   {/* Background Image */}
-                  <img
+                  <img loading="lazy"
                     src={vanBgImageUrl}
                     alt="Van Interior"
                     className="absolute inset-0 w-full h-full object-cover"

@@ -166,7 +166,7 @@ export default function Portfolio() {
               style={{ transformStyle: "preserve-3d" }}
               data-side="left"
             >
-              <img
+              <img loading="lazy"
                 src={images[0].src}
                 alt={images[0].alt}
                 className="w-full h-full object-cover"
@@ -183,7 +183,7 @@ export default function Portfolio() {
                 style={{ transformStyle: "preserve-3d" }}
                 data-side="right"
               >
-                <img
+                <img loading="lazy"
                   src={images[1].src}
                   alt={images[1].alt}
                   className="w-full h-full object-cover"
@@ -200,7 +200,7 @@ export default function Portfolio() {
                     style={{ transformStyle: "preserve-3d" }}
                     data-side="right"
                   >
-                    <img
+                    <img loading="lazy"
                       src={image.src}
                       alt={image.alt}
                       className="w-full h-full object-cover"
@@ -223,7 +223,7 @@ export default function Portfolio() {
                 key={image.id}
                 className="relative h-64 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
               >
-                <img
+                <img loading="lazy"
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover"
@@ -239,7 +239,7 @@ export default function Portfolio() {
                 key={image.id}
                 className="relative h-40 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
               >
-                <img
+                <img loading="lazy"
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover"

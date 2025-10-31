@@ -280,7 +280,7 @@ export default function OurProcess() {
                 className="image-content w-full relative overflow-hidden rounded-lg shadow-2xl
                            transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
               >
-                <img
+                <img loading="lazy"
                   src={step.imageSrc}
                   alt={step.altText}
                   width={imageSize.width}

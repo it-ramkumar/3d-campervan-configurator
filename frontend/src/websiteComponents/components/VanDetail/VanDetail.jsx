@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import SantaMonica from "./DetailListing";
+import SantaMonica from "./VanListing";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Consultation from "../Consultation/Consultation"
@@ -23,7 +23,7 @@ export default function Layouts() {
   }, [slug]);
 
   if (!van) return <Loader />;
-  // console.log(van,"van")
+  
 
   return (
     <>

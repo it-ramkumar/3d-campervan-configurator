@@ -75,7 +75,7 @@ export default function Hero() {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             {/* Background Image */}
-            <img
+            <img loading="lazy"
               src={slide.image}
               alt={slide.title}
               className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''}`}

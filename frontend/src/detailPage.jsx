@@ -166,6 +166,7 @@ const VanDetails = () => {
               {van.gallery.map((img) => (
                 <div key={img.id} className="group relative">
                   <img
+                  loading="lazy"
                     src={img.url}
                     alt={img.caption || "Van image"}
                     className="w-full h-32 object-cover rounded-lg transition-transform group-hover:scale-105"
@@ -187,6 +188,7 @@ const VanDetails = () => {
               {van.blocks.map((block) => (
                 <div key={block.id} className="border rounded-lg overflow-hidden">
                   <img
+                  loading="lazy"
                     src={block.image}
                     alt={block.caption || "Block image"}
                     className="w-full h-48 object-cover"

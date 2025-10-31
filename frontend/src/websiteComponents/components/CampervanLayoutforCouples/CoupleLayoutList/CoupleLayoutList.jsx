@@ -84,16 +84,16 @@ useEffect(() => {
 
                   {/* RIGHT SIDE (images) */}
                   <div className="relative w-1/2 h-[200px] sm:h-[280px] md:h-[450px] lg:h-[550px] flex-shrink-0">
-                    <img
+                    <img loading="lazy"
                       src={project.gallery?.[0] || "/fallback.jpg"}
                       alt={`${project.van_listing?.title || "Van"} large view`}
-                      loading="lazy"
+                    
                       className={`absolute top-0 w-[70%] h-full object-cover rounded-md lg:rounded-[10px] scale-x-[-1] transition-all duration-500 ease-in-out lg:group-hover:scale-110 lg:group-hover:brightness-105 ${
                         isReversed ? "left-0" : "right-0"
                       }`}
                     />
 
-                    <img
+                    <img loading="lazy"
                       src={
                         project.gallery?.[0]
                       }

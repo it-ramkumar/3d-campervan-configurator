@@ -498,7 +498,7 @@ export default function AvailableVans({availableVans}) {
                 <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
                 <div className="card-glow absolute -inset-2.5 bg-slate-900 rounded-[30px] blur-2xl opacity-0 z-[-1] transition-opacity duration-300"></div>
                 <div className="relative w-full h-[400px] rounded-[30px] overflow-hidden shadow-xl">
-                  <img
+                  <img loading="lazy"
                     src={van.gallery[0]}
                     alt={van.model}
                     className="w-full h-full object-cover"
@@ -510,7 +510,7 @@ export default function AvailableVans({availableVans}) {
                     </p>
                   </div>
                   <Link
-                    to={`/detail-page/${van.slug}`}
+                    to={`/van-detail/${van.slug}`}
                     className="details-button absolute top-4 right-4 bg-slate-900 text-white font-bold font-noto-sans text-[0.875rem] py-2 px-5 rounded-md transition-all duration-300 hover:bg-slate-700 z-20"
                   >
                     More Details

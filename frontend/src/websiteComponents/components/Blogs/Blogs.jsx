@@ -3,8 +3,8 @@ import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { Search, ArrowRight } from "lucide-react";
-import { gsap } from "gsap";
 import { Link } from "react-router-dom";
+import HeroSection from "../HeroSection/HeroSection";
 
 export default function BlogsListing() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,22 +65,7 @@ export default function BlogsListing() {
   return (
     <>
       <Navbar />
-
-      {/* ✅ Hero Section */}
-      <div ref={containerRef} className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden">
-        <img src={heroImage} alt="Blogs Hero" className="absolute inset-0 w-full h-full object-cover bg-image" />
-        <div className="absolute inset-0 bg-black/60"></div>
-
-        <div className="relative flex flex-col items-center justify-center h-full text-center px-6 pb-20">
-          <h1 className="font-serif font-extrabold text-4xl md:text-6xl text-white mb-4 drop-shadow-xl">
-            Blogs
-          </h1>
-          <p className="text-lg md:text-2xl text-gray-300 max-w-2xl mx-auto font-light drop-shadow-lg">
-            Read our latest articles, tips, and insights
-          </p>
-        </div>
-      </div>
-
+      <HeroSection title="Blogs" description="Read our latest articles, tips, and insights" image={heroImage} showButton={false} />
       {/* ✅ Main Content */}
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-[95%] mx-auto px-4 lg:px-8 py-16">
@@ -117,7 +102,7 @@ export default function BlogsListing() {
                   key={blog._id}
                   className="group bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
-                  <img
+                  <img loading="lazy"
                     src={blog.gallery?.[0]}
                     alt={blog.title}
                     className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"

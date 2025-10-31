@@ -42,7 +42,7 @@ const data = blogs.length > 0 ? blogs : [];
     >
       {/* Background Image with smooth zoom */}
       <div className="relative w-full h-full overflow-hidden">
-        <img
+        <img 
           src={post.gallery[0]}
           alt={post.title}
           loading="lazy"

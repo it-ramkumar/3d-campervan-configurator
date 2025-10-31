@@ -1,160 +1,106 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
 
-export default function InqueryListing() {
-  const [inquiries, setInquiries] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+export default function ContactListing() {
+  const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedContact, setSelectedContact] = useState(null);
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
-  const [selectedInquiry, setSelectedInquiry] = useState(null);
 
-  // ✅ Fetch all inquiries
-  const fetchInquiries = async () => {
+  // ✅ Fetch all contacts
+  const fetchContacts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`);
-      const data = res.data.data || res.data;
-      setInquiries(data);
-      setFiltered(data);
+      const res = await axios.get(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/contact`
+      );
+      setContacts(res.data.data);
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching inquiries:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to fetch inquiries',
-        timer: 3000,
-        showConfirmButton: false
-      });
-    } finally {
+      console.error("Error fetching contacts:", error);
       setLoading(false);
     }
   };
 
-  // ✅ Update status
-  const updateStatus = async (id, newStatus) => {
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  // ✅ Delete contact
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this contact?")) return;
+
     try {
-      await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}/status`, {
-        status: newStatus,
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}`
+      );
+      setContacts(contacts.filter((c) => c._id !== id));
+      if (selectedContact && selectedContact._id === id) {
+        setSelectedContact(null);
+      }
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+    }
+  };
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Updated!',
-        text: 'Status updated successfully',
-        timer: 2000,
-        showConfirmButton: false
-      });
+  // ✅ Update status only
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}/status`,
+        { status: newStatus }
+      );
 
-      fetchInquiries();
+      setContacts(
+        contacts.map((c) =>
+          c._id === id ? { ...c, status: newStatus } : c
+        )
+      );
+
+      // Update selected contact if it's the one being modified
+      if (selectedContact && selectedContact._id === id) {
+        setSelectedContact({ ...selectedContact, status: newStatus });
+      }
     } catch (error) {
       console.error("Error updating status:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to update status',
-        timer: 3000,
-        showConfirmButton: false
-      });
     }
   };
 
-  // ✅ Delete inquiry
-  const deleteInquiry = async (id, email) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: `You are about to delete inquiry from ${email}. This action cannot be undone!`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      reverseButtons: true
-    });
+  // ✅ Filter and sort contacts
+  const filteredContacts = contacts
+    .filter((contact) => {
+      const matchesSearch =
+        contact.name.toLowerCase().includes(search.toLowerCase()) ||
+        contact.email.toLowerCase().includes(search.toLowerCase()) ||
+        contact.phone.toLowerCase().includes(search.toLowerCase());
 
-    if (result.isConfirmed) {
-      try {
-        await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}`);
+      const matchesStatus = statusFilter === "All" || contact.status === statusFilter;
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: 'Inquiry has been deleted successfully',
-          timer: 2000,
-          showConfirmButton: false
-        });
-
-        fetchInquiries();
-        if (selectedInquiry && selectedInquiry._id === id) {
-          setSelectedInquiry(null);
-        }
-      } catch (error) {
-        console.error("Error deleting inquiry:", error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to delete inquiry',
-          timer: 3000,
-          showConfirmButton: false
-        });
-      }
-    }
-  };
-
-  // ✅ Filter and sort logic
-  useEffect(() => {
-    let data = inquiries;
-
-    if (searchTerm) {
-      const lower = searchTerm.toLowerCase();
-      data = data.filter(
-        (inq) =>
-          (inq.email && inq.email.toLowerCase().includes(lower)) ||
-          (inq.phone && inq.phone.toLowerCase().includes(lower)) ||
-          (inq.budget && inq.budget.toLowerCase().includes(lower)) ||
-          (inq.message && inq.message.toLowerCase().includes(lower))
-      );
-    }
-
-    if (statusFilter !== "All") {
-      data = data.filter(
-        (inq) => inq.status.toLowerCase() === statusFilter.toLowerCase()
-      );
-    }
-
-    // Sort the data
-    data = data.sort((a, b) => {
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
       switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "status":
+          return a.status.localeCompare(b.status);
         case "newest":
           return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
         case "oldest":
           return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
-        case "email":
-          return (a.email || '').localeCompare(b.email || '');
-        case "status":
-          return (a.status || '').localeCompare(b.status || '');
         default:
           return 0;
       }
     });
 
-    setFiltered(data);
-  }, [searchTerm, statusFilter, sortBy, inquiries]);
-
-  useEffect(() => {
-    fetchInquiries();
-  }, []);
-
   // ✅ Status badge component
   const StatusBadge = ({ status }) => {
     const statusConfig = {
       "New": { color: "bg-blue-100 text-blue-800 border-blue-200", dot: "bg-blue-500" },
-      "Contacted": { color: "bg-purple-100 text-purple-800 border-purple-200", dot: "bg-purple-500" },
       "In Progress": { color: "bg-yellow-100 text-yellow-800 border-yellow-200", dot: "bg-yellow-500" },
-      "Closed": { color: "bg-green-100 text-green-800 border-green-200", dot: "bg-green-500" }
+      "Resolved": { color: "bg-green-100 text-green-800 border-green-200", dot: "bg-green-500" }
     };
 
     const config = statusConfig[status] || statusConfig["New"];
@@ -167,16 +113,12 @@ export default function InqueryListing() {
     );
   };
 
-  if (loading) {
+  if (loading)
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 text-lg font-medium">Loading inquiries...</p>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -184,10 +126,10 @@ export default function InqueryListing() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Client Inquiries
+            Contact Messages
           </h1>
           <p className="text-gray-600">
-            Manage and respond to client inquiries efficiently
+            Manage and respond to customer inquiries
           </p>
         </div>
 
@@ -199,8 +141,8 @@ export default function InqueryListing() {
                 <span className="text-blue-600 text-xl">📩</span>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Inquiries</p>
-                <p className="text-2xl font-bold text-gray-900">{inquiries.length}</p>
+                <p className="text-sm font-medium text-gray-600">Total Messages</p>
+                <p className="text-2xl font-bold text-gray-900">{contacts.length}</p>
               </div>
             </div>
           </div>
@@ -213,7 +155,7 @@ export default function InqueryListing() {
               <div>
                 <p className="text-sm font-medium text-gray-600">New</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {inquiries.filter(inq => inq.status === "New").length}
+                  {contacts.filter(c => c.status === "New").length}
                 </p>
               </div>
             </div>
@@ -227,7 +169,7 @@ export default function InqueryListing() {
               <div>
                 <p className="text-sm font-medium text-gray-600">In Progress</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {inquiries.filter(inq => inq.status === "In Progress").length}
+                  {contacts.filter(c => c.status === "In Progress").length}
                 </p>
               </div>
             </div>
@@ -239,9 +181,9 @@ export default function InqueryListing() {
                 <span className="text-green-600 text-xl">✅</span>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600">Closed</p>
+                <p className="text-sm font-medium text-gray-600">Resolved</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {inquiries.filter(inq => inq.status === "Closed").length}
+                  {contacts.filter(c => c.status === "Resolved").length}
                 </p>
               </div>
             </div>
@@ -261,10 +203,10 @@ export default function InqueryListing() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search by email, phone, budget, or message..."
+                  placeholder="Search by name, email, or phone..."
                   className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-80"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
@@ -276,9 +218,8 @@ export default function InqueryListing() {
               >
                 <option value="All">All Statuses</option>
                 <option value="New">New</option>
-                <option value="Contacted">Contacted</option>
                 <option value="In Progress">In Progress</option>
-                <option value="Closed">Closed</option>
+                <option value="Resolved">Resolved</option>
               </select>
 
               {/* Sort */}
@@ -289,13 +230,13 @@ export default function InqueryListing() {
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
-                <option value="email">By Email</option>
+                <option value="name">By Name</option>
                 <option value="status">By Status</option>
               </select>
             </div>
 
             <button
-              onClick={fetchInquiries}
+              onClick={fetchContacts}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,22 +247,22 @@ export default function InqueryListing() {
           </div>
         </div>
 
-        {/* Inquiries Table */}
-        {filtered.length === 0 ? (
+        {/* Contacts Table */}
+        {filteredContacts.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border p-12 text-center">
             <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No inquiries found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No contacts found</h3>
             <p className="text-gray-600 mb-4">
-              {searchTerm || statusFilter !== "All"
+              {search || statusFilter !== "All"
                 ? "Try adjusting your search or filter criteria"
-                : "No inquiries have been received yet"}
+                : "No contact messages have been received yet"}
             </p>
-            {(searchTerm || statusFilter !== "All") && (
+            {(search || statusFilter !== "All") && (
               <button
                 onClick={() => {
-                  setSearchTerm("");
+                  setSearch("");
                   setStatusFilter("All");
                 }}
                 className="text-blue-600 hover:text-blue-700 font-medium"
@@ -343,9 +284,6 @@ export default function InqueryListing() {
                       Details
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Budget
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -354,56 +292,53 @@ export default function InqueryListing() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filtered.map((inq) => (
+                  {filteredContacts.map((contact) => (
                     <tr
-                      key={inq._id}
+                      key={contact._id}
                       className="hover:bg-gray-50 transition duration-150 cursor-pointer group"
-                      onClick={() => setSelectedInquiry(inq)}
+                      onClick={() => setSelectedContact(contact)}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600">
-                            {inq.email || "—"}
+                            {contact.name}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {inq.phone || "No phone"}
+                            {contact.email}
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 truncate max-w-xs">
-                          {inq.message || "No message provided"}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                          {inq.budget || "—"}
-                        </span>
+                        <div className="text-sm text-gray-900">{contact.phone}</div>
+                        <div className="text-sm text-gray-500 truncate max-w-xs">
+                          {contact.message}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div onClick={(e) => e.stopPropagation()}>
                           <select
-                            value={inq.status}
-                            onChange={(e) => updateStatus(inq._id, e.target.value)}
+                            value={contact.status}
+                            onChange={(e) =>
+                              handleStatusChange(contact._id, e.target.value)
+                            }
                             className="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
                           >
                             <option value="New">New</option>
-                            <option value="Contacted">Contacted</option>
                             <option value="In Progress">In Progress</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Resolved">Resolved</option>
                           </select>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-2" onClick={(e) => e.stopPropagation()}>
                           <button
-                            onClick={() => setSelectedInquiry(inq)}
+                            onClick={() => setSelectedContact(contact)}
                             className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg transition duration-200"
                           >
                             View
                           </button>
                           <button
-                            onClick={() => deleteInquiry(inq._id, inq.email)}
+                            onClick={() => handleDelete(contact._id)}
                             className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition duration-200"
                           >
                             Delete
@@ -418,19 +353,14 @@ export default function InqueryListing() {
           </div>
         )}
 
-        {/* Footer Info */}
-        <div className="mt-6 text-center text-gray-500 text-sm">
-          <p>Showing {filtered.length} of {inquiries.length} inquiries</p>
-        </div>
-
         {/* Modal for Full Details */}
-        {selectedInquiry && (
+        {selectedContact && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
             <div className="bg-white rounded-xl w-full max-w-2xl shadow-2xl transform transition-all">
               <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900">Inquiry Details</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Contact Details</h2>
                 <button
-                  onClick={() => setSelectedInquiry(null)}
+                  onClick={() => setSelectedContact(null)}
                   className="text-gray-400 hover:text-gray-600 transition duration-200 p-2 hover:bg-gray-100 rounded-lg"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -442,21 +372,21 @@ export default function InqueryListing() {
               <div className="p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
+                    <label className="text-sm font-medium text-gray-500 block mb-1">Name</label>
+                    <p className="text-lg text-gray-900 font-medium">{selectedContact.name}</p>
+                  </div>
+                  <div>
                     <label className="text-sm font-medium text-gray-500 block mb-1">Email</label>
-                    <p className="text-lg text-gray-900 font-medium">{selectedInquiry.email || "—"}</p>
+                    <p className="text-lg text-gray-900 font-medium">{selectedContact.email}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-500 block mb-1">Phone</label>
-                    <p className="text-lg text-gray-900 font-medium">{selectedInquiry.phone || "—"}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-500 block mb-1">Budget</label>
-                    <p className="text-lg text-gray-900 font-medium">{selectedInquiry.budget || "—"}</p>
+                    <p className="text-lg text-gray-900 font-medium">{selectedContact.phone}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-500 block mb-1">Status</label>
                     <div className="mt-1">
-                      <StatusBadge status={selectedInquiry.status} />
+                      <StatusBadge status={selectedContact.status} />
                     </div>
                   </div>
                 </div>
@@ -464,15 +394,13 @@ export default function InqueryListing() {
                 <div>
                   <label className="text-sm font-medium text-gray-500 block mb-3">Message</label>
                   <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                    <p className="text-gray-700 whitespace-pre-wrap">
-                      {selectedInquiry.message || "No message provided"}
-                    </p>
+                    <p className="text-gray-700 whitespace-pre-wrap">{selectedContact.message}</p>
                   </div>
                 </div>
 
-                {selectedInquiry.createdAt && (
+                {selectedContact.createdAt && (
                   <div className="text-sm text-gray-500 border-t border-gray-200 pt-4">
-                    Received on {new Date(selectedInquiry.createdAt).toLocaleDateString('en-US', {
+                    Received on {new Date(selectedContact.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
@@ -485,23 +413,23 @@ export default function InqueryListing() {
 
               <div className="flex justify-end space-x-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-xl">
                 <button
-                  onClick={() => setSelectedInquiry(null)}
+                  onClick={() => setSelectedContact(null)}
                   className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition duration-200"
                 >
                   Close
                 </button>
                 <button
                   onClick={() => {
-                    const newStatus = selectedInquiry.status === "Closed" ? "New" : "Closed";
-                    updateStatus(selectedInquiry._id, newStatus);
+                    const newStatus = selectedContact.status === "Resolved" ? "New" : "Resolved";
+                    handleStatusChange(selectedContact._id, newStatus);
                   }}
                   className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
-                    selectedInquiry.status === "Closed"
+                    selectedContact.status === "Resolved"
                       ? "bg-blue-600 hover:bg-blue-700 text-white"
                       : "bg-green-600 hover:bg-green-700 text-white"
                   }`}
                 >
-                  {selectedInquiry.status === "Closed" ? "Reopen" : "Mark Closed"}
+                  {selectedContact.status === "Resolved" ? "Reopen" : "Mark Resolved"}
                 </button>
               </div>
             </div>

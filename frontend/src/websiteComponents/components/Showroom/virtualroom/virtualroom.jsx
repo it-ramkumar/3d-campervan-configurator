@@ -29,7 +29,7 @@ export default function ShowroomAndTours() {
 
       {/* --- HERO / SHOWROOM SECTION --- */}
       <section className="relative w-full h-[250px] overflow-hidden group">
-        <img
+        <img loading="lazy"
           src="/images/virtuaal1.webp"
           alt="Big Bear Lake and mountains"
           className="absolute inset-0 w-full h-full object-cover origin-center transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:brightness-110"
@@ -59,7 +59,7 @@ export default function ShowroomAndTours() {
           <div className="w-full md:w-7/12 lg:w-1/2 group relative animate-fadeInUp">
             <div className="absolute -inset-1.5 bg-gradient-to-r from-slate-400 to-slate-700 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-1000"></div>
             <div className="relative aspect-[700/500] bg-gray-200 overflow-hidden rounded-xl border-2 border-slate-800/80 shadow-2xl">
-              <img
+              <img loading="lazy"
                 src="/images/virtuaal2.webp"
                 alt="Laptop showing virtual tour"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

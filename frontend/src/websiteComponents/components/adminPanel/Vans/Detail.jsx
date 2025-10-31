@@ -75,7 +75,7 @@ export default function Detail({ setIsopen, detail }) {
           {gallery.length > 0 && (
             <div className="relative w-full h-80 sm:h-96 md:h-[500px] bg-black overflow-hidden">
               {/* Main Image */}
-              <img
+              <img loading="lazy"
                 src={gallery[currentImageIndex]}
                 alt={detail.van_listing?.title || 'Van Image'}
                 className="w-full h-full object-contain"
@@ -123,7 +123,7 @@ export default function Detail({ setIsopen, detail }) {
                       } transition-all duration-200`}
                       onClick={() => setCurrentImageIndex(index)}
                     >
-                      <img
+                      <img loading="lazy"
                         src={image}
                         alt={`Thumbnail ${index + 1}`}
                         className="w-full h-full object-cover"
@@ -310,7 +310,7 @@ export default function Detail({ setIsopen, detail }) {
                       // Image or other media
                       <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                         {mediaItem.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-                          <img
+                          <img loading="lazy"
                             src={mediaItem}
                             alt={`Media ${index + 1}`}
                             className="rounded-lg w-full max-w-2xl mx-auto"

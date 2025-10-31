@@ -33,7 +33,7 @@ export default function Detail({ setIsopen, detail }) {
         if (!item.image) return null;
         return (
           <div className="my-6 bg-gray-100 rounded-xl overflow-hidden shadow-lg">
-            <img
+            <img loading="lazy"
               src={item.image}
               alt="Content image"
               className="w-full h-auto max-h-96 object-contain mx-auto"
@@ -169,7 +169,7 @@ export default function Detail({ setIsopen, detail }) {
                       key={i}
                       className="overflow-hidden rounded-xl shadow-lg bg-gray-100 flex items-center justify-center"
                     >
-                      <img
+                      <img loading="lazy"
                         src={imgUrl}
                         alt={`Gallery image ${i + 1}`}
                         className="w-full h-48 object-cover"

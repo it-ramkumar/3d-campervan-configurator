@@ -113,7 +113,7 @@ export default function BlogsListing({ setSelected }) {
             >
               {/* Blog Image */}
               {blog.gallery?.length > 0 ? (
-                <img
+                <img loading="lazy"
                   src={typeof blog.gallery[0] === "string" ? blog.gallery[0] : blog.gallery[0]?.url}
                   alt={blog.title || "Blog Image"}
                   className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"

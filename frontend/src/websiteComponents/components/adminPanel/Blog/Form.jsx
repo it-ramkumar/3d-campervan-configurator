@@ -343,7 +343,7 @@ const handleSubmit = async (e) => {
               <div className="flex flex-wrap gap-3">
                 {gallery.map((img, i) => (
                   <div key={`existing-${i}`} className="relative">
-                    <img
+                    <img loading="lazy"
                       src={img.preview || img.url}
                       alt={`gallery-${i}`}
                       className="w-24 h-24 rounded shadow object-cover"
@@ -368,7 +368,7 @@ const handleSubmit = async (e) => {
               <div className="flex flex-wrap gap-3">
                 {galleryFiles.map((img, i) => (
                   <div key={`new-${i}`} className="relative">
-                    <img
+                    <img loading="lazy"
                       src={img.preview}
                       alt={`new-gallery-${i}`}
                       className="w-24 h-24 rounded shadow object-cover"
@@ -431,7 +431,7 @@ const handleSubmit = async (e) => {
                   className="w-full border p-2 rounded"
                 />
                 {(block.preview || block.url) && (
-                  <img
+                  <img loading="lazy"
                     src={block.preview || block.url}
                     alt="preview"
                     className="w-48 mt-2 rounded shadow"

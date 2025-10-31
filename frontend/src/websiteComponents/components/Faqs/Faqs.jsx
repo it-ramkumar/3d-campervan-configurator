@@ -3,35 +3,9 @@
 import React, { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
-const faqs = [
-  {
-    question: "What Van Models Do You Customise at Big Bear Vans?",
-    answer:
-      "At Big Bear Vans, we mainly customise Mercedes-Benz Sprinter, RAM ProMaster, and Ford Transit vans.",
-  },
-  {
-    question: "Do you offer financing options?",
-    answer:
-      "Yes, financing is available for already-built vans through partners like Trident Funding (RV loans) or ADU Loans (using real estate). Many clients also finance a new Sprinter van through Mercedes and pay cash for the conversion. Alternatively, our partner dealership can provide full financing for both a new van and the custom build in a single auto loan.",
-  },
-  {
-    question: "How Long Does It Take to Build a Custom Van?",
-    answer:
-      "It depends on various factors like your requirements, our availability, etc. Usually, it takes us about 4 to 5 months to design and build a conversion van.",
-  },
-  {
-    question: "Do you offer a warranty on your van conversions?",
-    answer:
-      "Yes, all our van conversions come with a 1-year warranty against workmanship defects, starting from the pickup date. Moreover, we also offer a 3-year extended warranty on our craftsmanship. Please note that while Big Bear Vans warrants its services, this warranty does not cover third-party products themselves.",
-  },
-  {
-    question: "Do I need to own a van, or can you source one for my conversion?",
-    answer:
-      "We can do both. At Big Bear Vans, we can convert your existing campervan or source a new Class B RV for you, often with discounts of up to $8,000 off MSRP.",
-  },
-];
 
-export default function FAQs() {
+
+export default function FAQs({ faqs }) {
   const [openIndex, setOpenIndex] = useState(null);
 
   const handleToggle = (index) => {

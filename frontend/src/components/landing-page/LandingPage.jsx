@@ -49,6 +49,7 @@ const LandingPage = () => {
                 <div className="w-full max-w-xs sm:max-w-[18rem] md:max-w-[20rem] h-56 rounded-md shadow-md overflow-hidden relative">
                   <div className="absolute inset-0 w-full h-full overflow-hidden">
                     <img
+                    loading="lazy"
                       src={card?.img}
                       alt={card?.title}
                       className="h-full w-full object-cover transition-all duration-300 group-hover:scale-110"

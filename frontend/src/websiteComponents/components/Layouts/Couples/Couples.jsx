@@ -22,7 +22,7 @@ export default function Couples() {
         <div className="grid grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
           {/* Image 1 */}
           <div className="col-span-1 h-48 md:h-96 opacity-0 translate-y-10 animate-fadeInUp delay-[0.1s]">
-            <img
+            <img loading="lazy"
               src={image1}
               alt="Campervan interior for couples"
               className="w-full h-full object-cover rounded-3xl shadow-md hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
@@ -31,7 +31,7 @@ export default function Couples() {
 
           {/* Image 2 */}
           <div className="col-span-1 h-48 md:h-96 opacity-0 translate-y-10 animate-fadeInUp delay-[0.2s]">
-            <img
+            <img loading="lazy"
               src={image2}
               alt="Campervan kitchen and seating area for couples"
               className="w-full h-full object-cover rounded-3xl shadow-md hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
@@ -40,7 +40,7 @@ export default function Couples() {
 
           {/* Image 4 (Tall one) */}
           <div className="col-span-1 row-span-2 opacity-0 translate-y-10 animate-fadeInUp delay-[0.3s]">
-            <img
+            <img loading="lazy"
               src={image4}
               alt="Detailed view of campervan bedroom for couples"
               className="w-full h-full object-cover rounded-3xl shadow-md hover:shadow-xl hover:scale-[1.03] transition-all duration-300"
@@ -49,7 +49,7 @@ export default function Couples() {
 
           {/* Image 3 (Wide one) */}
           <div className="col-span-2 opacity-0 translate-y-10 animate-fadeInUp delay-[0.4s]">
-            <img
+            <img loading="lazy"
               src={image3}
               alt="Spacious interior view of a couple's campervan"
               className="w-full h-48 md:h-full object-cover rounded-3xl shadow-md hover:shadow-xl hover:scale-[1.03] transition-all duration-300"

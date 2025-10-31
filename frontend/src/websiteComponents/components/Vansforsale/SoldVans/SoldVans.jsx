@@ -112,9 +112,9 @@ export default function SoldVans({ soldVans = [] }) {
                 ref={(el) => (gridCardsRef.current[index] = el)}
                 className="relative w-full aspect-[4/3] p-0.5 rounded-[18px] shadow-lg shadow-gray-700/50 animated-border-wrap transition-transform duration-300 ease-in-out transform hover:scale-110 hover:z-10"
               >
-<Link to={`/detail-page/${van.slug}`}>
+<Link to={`/van-detail/${van.slug}`}>
     <div className="relative w-full h-full rounded-[17.5px] overflow-hidden group">
-  <img
+  <img loading="lazy"
     src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
     alt={van?.van_listing?.model_name || "Sold camper van image"}
     className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"

@@ -93,7 +93,7 @@ export default function Family() {
         {/* Image Grid */}
         <div className="grid grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
           <div className="col-span-1 h-48 md:h-96 animate-fadeInUp delay-[0.1s]">
-            <img
+            <img loading="lazy"
               src={image1}
               alt="Campervan interior with bunk beds"
               className="w-full h-full object-cover rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
@@ -101,7 +101,7 @@ export default function Family() {
           </div>
 
           <div className="col-span-1 h-48 md:h-96 animate-fadeInUp delay-[0.2s]">
-            <img
+            <img loading="lazy"
               src={image2}
               alt="Campervan kitchen and seating area"
               className="w-full h-full object-cover rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
@@ -109,7 +109,7 @@ export default function Family() {
           </div>
 
           <div className="col-span-1 row-span-2 animate-fadeInUp delay-[0.3s]">
-            <img
+            <img loading="lazy"
               src={image4}
               alt="Detailed view of campervan kitchen amenities"
               className="w-full h-full object-cover rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
@@ -117,7 +117,7 @@ export default function Family() {
           </div>
 
           <div className="col-span-2 animate-fadeInUp delay-[0.4s]">
-            <img
+            <img loading="lazy"
               src={image3}
               alt="Spacious interior view of a family campervan"
               className="w-full h-48 md:h-full object-cover rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"

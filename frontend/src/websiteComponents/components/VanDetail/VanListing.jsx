@@ -213,7 +213,7 @@ console.log(vanDetail,"vanDetail")
         ref={heroRef}
         className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
       >
-        <img
+        <img loading="lazy"
           src={vanDetail.gallery[0]}
           alt={`${vanDetail.van_listing.title} custom van`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
@@ -359,7 +359,7 @@ console.log(vanDetail,"vanDetail")
         {van.gallery.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {van.gallery.map((img, i) => (
-              <img
+              <img loading="lazy"
                 key={i}
                 src={img}
                 alt={img}

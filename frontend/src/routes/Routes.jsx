@@ -3,7 +3,6 @@ import Home from "../pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 import Van from "../pages/Van";
-// import Layout from "../components/layout/Layout";
 import Preview from "../components/preview/Preview";
 import Contact from "../websiteComponents/components/Contact/Contact";
 import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
@@ -12,24 +11,22 @@ import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/
 import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
 import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
 import Finishes from "../websiteComponents/components/Finishes/Finishes";
-import Layouts from "../websiteComponents/components/Layouts/layouthero/Layouts";
+import Layouts from "../websiteComponents/components/Layouts/Layouts";
 import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
 import Blogs from "../websiteComponents/components/Blogs/Blogs";
-import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayoutHero/FamilyLayout";
-import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayoutHero/CoupleLayout";
-import DetailPage from "../websiteComponents/components/DetailPage/DetailPgae";
+import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayout";
+import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayout";
+import VanDetail from "../websiteComponents/components/VanDetail/VanDetail";
 import Signup from "../websiteComponents/components/Auth/Signup";
 import Login from "../websiteComponents/components/Auth/Login";
-import OurProcess from "../websiteComponents/components/OurProcess/Processhero/OurProcess"
-import AboutUs from "../websiteComponents/components/AboutUs/AboutUshero/Aboutus"
-import ShowRoom from "../websiteComponents/components/Showroom/Showroomhero/showroom"
+import OurProcess from "../websiteComponents/components/OurProcess/OurProcess"
+import AboutUs from "../websiteComponents/components/AboutUs/Aboutus"
+import ShowRoom from "../websiteComponents/components/Showroom/showroom"
 import NotFound from "../websiteComponents/components/NotFound/NotFound";
 import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"
-import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exteriorhero/Exterior";
+import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exterior";
 import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
 import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
-import TestBlog from "../websiteComponents/components/TestBlog/TestBlog"
-// import TestBlogDetail from "../websiteComponents/components/TestBlog/Detailpage"
 const AppRoutes = () => {
 
 
@@ -37,8 +34,6 @@ const AppRoutes = () => {
     <Router>
       <ScrollFromTop />
       <Routes>
-
-      <Route path="/test" element={<TestBlog />} />
         <Route path="/" element={<Home />} />
         <Route path="/configurator-form" element={<ConfiguratorForm />} />
         <Route path="/about-us" element={<AboutUs />} />
@@ -47,7 +42,7 @@ const AppRoutes = () => {
         <Route path="/our-process" element={<OurProcess />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/detail-page/:slug" element={<DetailPage />} />
+        <Route path="/van-detail/:slug" element={<VanDetail />} />
         <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
         <Route path="/blog-detail/:id" element={<BlogDetail />} />
         <Route path="/innovation" element={<Exteriorpage />} />
@@ -62,7 +57,6 @@ const AppRoutes = () => {
         <Route path="/van-form" element={<VanForm />} />
         <Route path="/portfolio-form" element={<PortfolioForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        {/* <Route path="/layout" element={<Layout />} /> */}
         <Route path="/van" element={<Van />} />
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />
