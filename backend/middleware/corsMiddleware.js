@@ -23,6 +23,7 @@ const corsOptions = {
     "http://localhost:5173",
     "https://new.bigbearvans.com",
     "https://bigbearvans.com",
+    "https://www.bigbearvans.com",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
