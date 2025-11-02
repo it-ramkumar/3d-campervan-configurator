@@ -15,6 +15,7 @@ import { handleGalleryChange } from "../../../CustamHooks/handleGalleryChange";
 
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
+  console.log(editData,"data")
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [gallery, setGallery] = useState([]); // {file: File, preview: string, url: string}[]
@@ -40,15 +41,31 @@ export default function BlogForm() {
       setGallery(existingGallery);
       setGalleryFiles([]); // Reset new files
 
-      try {
-        const parsed = typeof editData.content === "string"
-          ? JSON.parse(editData.content)
-          : editData.content;
-        setBlocks(parsed || []);
-      } catch (err) {
-        console.error("Error parsing editData.content:", err);
-        setBlocks([]);
-      }
+try {
+  const parsed = typeof editData.content === "string"
+    ? JSON.parse(editData.content)
+    : editData.content;
+
+  const processedBlocks = (parsed || []).map(block => {
+    if (block.type === "image") {
+      const imageUrl = block.url || block.preview || block.image; // handle all
+      return {
+        ...block,
+        url: imageUrl,
+        preview: imageUrl,
+        file: null
+      };
+    }
+    return block;
+  });
+
+  setBlocks(processedBlocks);
+} catch (err) {
+  console.error("Error parsing editData.content:", err);
+  setBlocks([]);
+}
+
+
     } else {
       // Reset form when not editing
       setIsEditMode(false);
@@ -322,14 +339,15 @@ const handleSubmit = async (e) => {
               onChange={(e) => handleImageChange(i, e.target.files[0], setBlocks)}
               className="w-full border p-2 rounded"
             />
-            {(block.preview || block.url) && (
-              <img
-                loading="lazy"
-                src={block.preview || block.url}
-                alt="preview"
-                className="w-48 mt-2 rounded shadow"
-              />
-            )}
+       {(block.preview || block.url) && (
+  <img
+    loading="lazy"
+    src={block.preview || block.url}
+    alt="preview"
+    className="w-48 mt-2 rounded shadow"
+  />
+)}
+
           </div>
         )}
 
