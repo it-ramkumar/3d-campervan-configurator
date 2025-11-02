@@ -506,7 +506,7 @@ export default function AvailableVans({availableVans}) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
                   <div className="absolute top-0 left-0 bg-black text-white p-2.5 rounded-tl-[30px] z-20">
                     <p className="font-noto-serif font-semibold text-[28px] leading-none tracking-tight px-2 py-1">
-                      {van.van_listing.price}
+                      $ {van.van_listing.price}
                     </p>
                   </div>
                   <Link
