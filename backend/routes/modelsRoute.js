@@ -9,41 +9,66 @@ const { protect, adminOnly } = require("../middleware/authMiddleware")
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// --------------------- /add Route Example ---------------------
+router.post(
+  "/add",
+  protect,
+  adminOnly,
+  upload.fields([{ name: "image" }, { name: "glbFile" }]),
+  async (req, res) => {
+    try {
+      const { category, ...data } = req.body;
+      const imageFile = req.files["image"]?.[0];
+      const glbFile = req.files["glbFile"]?.[0];
 
-router.post("/add", protect, adminOnly, upload.fields([{ name: "image" }, { name: "glbFile" }]), async (req, res) => {
-  try {
-    // console.log("first")
-    const { category, ...data } = req.body;
-    const imageFile = req.files["image"]?.[0];
-    const glbFile = req.files["glbFile"]?.[0];
-    if (!imageFile) return res.status(400).json({ success: false, message: "Image file is required" });
-    if (!glbFile) return res.status(400).json({ success: false, message: "GLB file is required" });
-    const imageUrl = await uploadToS3(imageFile.buffer, "configurator/images", imageFile.originalname, imageFile.mimetype);
-    const modelUrl = await uploadToS3(glbFile.buffer, "configurator/models", glbFile.originalname, glbFile.mimetype);
+      if (!imageFile)
+        return res.status(400).json({ success: false, message: "Image file is required" });
+      if (!glbFile)
+        return res.status(400).json({ success: false, message: "GLB file is required" });
 
-    const Model =
-      category === "interior"
-        ? InteriorModel
-        : category === "exterior"
+      // Compress and upload image
+      const imageUrl = await uploadToS3(
+        imageFile.buffer,
+        "configurator/images",
+        imageFile.originalname,
+        imageFile.mimetype
+      );
+
+      // Compress and upload GLB (mesh + textures) with fallback
+      const modelUrl = await uploadToS3(
+        glbFile.buffer,
+        "configurator/models",
+        glbFile.originalname,
+        glbFile.mimetype
+      );
+
+      const Model =
+        category === "interior"
+          ? InteriorModel
+          : category === "exterior"
           ? ExteriorModel
           : category === "system"
-            ? SystemModel
-            : null;
+          ? SystemModel
+          : null;
 
-    if (!Model) return res.status(400).json({ success: false, message: "Invalid category" });
+      if (!Model)
+        return res.status(400).json({ success: false, message: "Invalid category" });
 
-    const saved = await Model.create({
-      ...data,
-      category,
-      image: imageUrl,
-      glbFile: modelUrl, // correctly saved to required field
-    });
-    res.json({ success: true, data: saved });
-  } catch (err) {
-    console.error("Upload error:", err);
-    res.status(500).json({ success: false, error: err.message });
+      const saved = await Model.create({
+        ...data,
+        category,
+        image: imageUrl,
+        glbFile: modelUrl,
+      });
+
+      res.json({ success: true, data: saved });
+    } catch (err) {
+      console.error("Upload error:", err);
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-});
+);
+
 
 router.put("/edit/:id", protect, adminOnly, upload.fields([{ name: "image" }, { name: "glbFile" }]), async (req, res) => {
   try {

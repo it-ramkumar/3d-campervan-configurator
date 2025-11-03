@@ -14,11 +14,11 @@ export const createModel = async (formData) => {
     return res.data;
   } catch (err) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });
-    // console.error(err);
+    console.error(err);
     throw err;
   }
 };
@@ -40,7 +40,7 @@ export const updateModel = async (editData, formData) => {
     return res.data;
   } catch (err) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });

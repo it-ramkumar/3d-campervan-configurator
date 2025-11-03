@@ -125,9 +125,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/* ---------------------------------------
-   🟠 UPDATE BLOG
---------------------------------------- */
+
 router.put(
   "/:id",
   upload.fields([
@@ -139,14 +137,17 @@ router.put(
       const blog = await Blog.findById(req.params.id);
       if (!blog)
         return res.status(404).json({ success: false, message: "Blog not found" });
+      console.log("Blog found:", blog);
 
-      const { title, content, description } = req.body;
+      const { title, content, description, deleteGallery = [] } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
-      // 🔹 Map imageField to S3 URL for updated/new block images
+      console.log("Received blocks data:", blocksData); // Debug log
+
       const blockImages = req.files["images"] || [];
       const imageFieldToUrlMap = {};
 
+      // Upload new block images
       await Promise.all(
         blockImages.map(async (file, index) => {
           const imageFieldName = `image_${index}`;
@@ -157,6 +158,7 @@ router.put(
               `${Date.now()}_${file.originalname}`
             );
             imageFieldToUrlMap[imageFieldName] = s3Url;
+            console.log(`Uploaded ${imageFieldName}:`, s3Url);
           } catch (err) {
             console.error(`Error uploading block image ${index}:`, err);
             imageFieldToUrlMap[imageFieldName] = null;
@@ -164,31 +166,60 @@ router.put(
         })
       );
 
-      // 🔹 Upload new gallery images to S3
+      console.log("Image field mapping:", imageFieldToUrlMap); // Debug log
+
+      // Upload new gallery images
       const uploadedGalleryUrls = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "blogs/gallery", `${Date.now()}_${file.originalname}`)
         )
       );
 
-      // 🔹 Map S3 URLs to blocks
+      // 🔹 Merge gallery: remove explicitly deleted ones
+      let mergedGallery = blog.gallery || [];
+      const deleteGalleryArray = Array.isArray(deleteGallery) ? deleteGallery : JSON.parse(deleteGallery || "[]");
+
+      if (deleteGalleryArray.length > 0) {
+        mergedGallery = mergedGallery.filter(url => !deleteGalleryArray.includes(url));
+      }
+      // Append newly uploaded gallery images
+      mergedGallery = [...mergedGallery, ...uploadedGalleryUrls];
+
+      // ✅ FIXED: Map S3 URLs to blocks while preserving existing images
       const updatedBlocks = blocksData.map(block => {
-        if (block.type === "image" && block.imageField) {
-          block.image = imageFieldToUrlMap[block.imageField] || block.image || null;
-          delete block.imageField;
+        if (block.type === "image") {
+          // Case 1: New image uploaded (has imageField)
+          if (block.imageField && imageFieldToUrlMap[block.imageField]) {
+            console.log(`Setting new image for ${block.imageField}:`, imageFieldToUrlMap[block.imageField]);
+            return {
+              ...block,
+              image: imageFieldToUrlMap[block.imageField]
+            };
+          }
+          // Case 2: Existing image (has image URL)
+          else if (block.image) {
+            console.log(`Preserving existing image:`, block.image);
+            return block; // Keep as is
+          }
+          // Case 3: Image removed or no image
+          else {
+            console.log(`No image for block`);
+            return {
+              ...block,
+              image: null
+            };
+          }
         }
         return block;
       });
+
+      // console.log("Final blocks:", updatedBlocks); // Debug log
 
       // 🔹 Update blog fields
       blog.title = title;
       blog.description = description;
       blog.content = updatedBlocks;
-
-      // 🔹 Merge galleries (append new to existing)
-      if (uploadedGalleryUrls.length > 0) {
-        blog.gallery = [...(blog.gallery || []), ...uploadedGalleryUrls];
-      }
+      blog.gallery = mergedGallery;
 
       await blog.save();
 
@@ -204,9 +235,7 @@ router.put(
   }
 );
 
-/* ---------------------------------------
-   🔴 DELETE BLOG
---------------------------------------- */
+
 router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);

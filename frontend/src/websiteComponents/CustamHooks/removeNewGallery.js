@@ -1,11 +1,15 @@
-// ✅ FIXED: Remove new gallery image
+// ✅ Remove new gallery image
 export const removeNewGalleryImage = (index, setGalleryFiles, galleryFiles) => {
-    const imageToRemove = galleryFiles[index];
+  const imageToRemove = galleryFiles[index];
 
-    // Revoke object URL
-    if (imageToRemove.preview) {
-      URL.revokeObjectURL(imageToRemove.preview);
-    }
+  console.log("New Gallery before remove:", galleryFiles);
+  console.log("Removing new image preview:", imageToRemove.preview);
 
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
-  };
+  // Revoke object URL
+  if (imageToRemove.preview) {
+    URL.revokeObjectURL(imageToRemove.preview);
+  }
+
+  setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+};
+
