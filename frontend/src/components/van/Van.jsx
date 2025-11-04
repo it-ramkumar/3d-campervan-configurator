@@ -273,7 +273,7 @@ const { scene } = useGLTF(model.glbFile);
                 }
               >
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-                  <Environment files="./textures/zwartkops_straight_afternoon_1k.hdr" />
+                  <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
                   <Santa showExterior={showExterior} />
                 {addedModels.map((model) => (
         <DynamicModel
