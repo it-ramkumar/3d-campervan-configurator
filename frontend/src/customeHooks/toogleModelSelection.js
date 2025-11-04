@@ -93,10 +93,13 @@ dispatch(setAddedModels([...addedModels, model]));
 
 
 
-    const modelToAdd = {
-      ...model,
-      id: `${model.label}-${model.type}-${model.group}`,
-    };
+   const modelToAdd = {
+  ...model,
+  id: model._id || `${model.label}-${model.type}-${model.group}`, // ✅ prefer backend ID
+  modelUrl: model.glbFile, // ✅ pass S3 model link for 3D loading
+  imageUrl: model.image,   // ✅ optional for thumbnails
+};
+
 
     addModelToScene(modelToAdd);
     updated.push(modelToAdd);

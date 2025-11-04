@@ -35,14 +35,14 @@ const data = blogs.length > 0 ? blogs : [];
       {/* Blog Post Cards */}
 <div className="flex flex-col items-center md:flex-row md:justify-center flex-wrap gap-8 lg:gap-10 px-4">
   {data?.slice(0, 4).map((post) => (
-    <Link
+    <div
       key={post._id}
       to={`/blog-detail/${post._id}`}
       className="group relative w-[300px] h-[370px] rounded-[28px] border-[3px] border-gray-700 overflow-hidden shadow-md hover:shadow-2xl hover:shadow-gray-800 transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.02]"
     >
       {/* Background Image with smooth zoom */}
       <div className="relative w-full h-full overflow-hidden">
-        <img 
+        <img
           src={post.gallery[0]}
           alt={post.title}
           loading="lazy"
@@ -84,10 +84,8 @@ const data = blogs.length > 0 ? blogs : [];
 
         </div>
       </div>
-
-      {/* Decorative hover border glow */}
       <div className="absolute inset-0 border-[3px] border-transparent group-hover:border-white/40 rounded-[28px] transition-all duration-500"></div>
-    </Link>
+    </div>
   ))}
 </div>
 

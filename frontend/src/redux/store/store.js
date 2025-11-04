@@ -1,8 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"; // localStorage use karega
 import { persistReducer, persistStore } from "redux-persist";
-
-import VanNameReducer from "../slices/vanNameSlice";
 import AddedModelsReducer from "../slices/addedModels";
 import selectLayoutReducer from "../slices/selectLayout";
 import FetchModelReducer from "../slices/fetchModel/modelSlice";
@@ -17,7 +15,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  vanName: VanNameReducer,
+
   addedModels: AddedModelsReducer,
   selectLayout: selectLayoutReducer,
   models: FetchModelReducer,

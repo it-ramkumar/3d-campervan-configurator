@@ -16,6 +16,7 @@ export default function ModelsCard({
 }) {
   const dispatch = useDispatch();
   const addedModels = useSelector((state) => state.addedModels.addedModels);
+  // console.log(addedModels)
   const scrollRef = useRef(null);
   const [expandedCountertops, setExpandedCountertops] = useState({});
 

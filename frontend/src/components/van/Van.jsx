@@ -3,7 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, Html, Preload } from "@react-three/drei";
 import { useDispatch, useSelector } from "react-redux";
 // import Van_White from "../van-model-components/VanModel";
-import { vans } from "../../ModelData";
+// import { vans } from "../../ModelData";
 import MultiStepForm from "../multi-step-form/MultiStepForm";
 import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
@@ -25,17 +25,46 @@ import { centerModelByBoundingBox } from "../../customeHooks/centerCanvas";
 import { cameraDirectionBack } from "../../customeHooks/interiorDirectionBack";
 import { interiorDirectionNext } from "../../customeHooks/interiorDirectionNext";
 import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
-import { ModelPreloader } from "../model-preloader/ModelPreloader";
+ import { useGLTF } from "@react-three/drei";
+ import SantaMonika144 from "../../components/van-model-components/VanModel"
 
 function Van() {
+  const vans =[
+  {
+    layout: "Mercedes-Benz Sprinter",
+    modelYear :"2022",
+    price: 224543,
+    shortDescription:"",
+    spec:{
+      wheelBase : 144,
+      drivetrain:"AWD",
+      SitSleep: "2-5"
+    },
+    img: "./images/white-removebg-preview.png",
+    colors: "Standard",
+    component: SantaMonika144,
+  },
+    {
+    layout: "Santa Monica v6 turbo",
+    modelYear :"2022",
+    price: 224543,
+    shortDescription:"",
+    spec:{
+      wheelBase : 170,
+      drivetrain:"AWD",
+      SitSleep: "5-7"
+    },
+    img: "./images/white-removebg-preview.png",
+    colors: "Standard",
+    component: SantaMonika144,
+  }
+]
   const [isSanta, setIsSanta] = useState(0)
   const Santa = vans[0].component
   const SantaMonica = vans[0]
-  // console.log(SantaMonica,"Santa Monica")
   const dispatch = useDispatch();
-  const vanName = useSelector((state) => state.vanName.vanName);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [activeModelId, setActiveModelId] = useState(null);
   const [sceneToExport, setSceneToExport] = useState(null);
   const [showExterior, setShowExterior] = useState(false);
@@ -56,12 +85,9 @@ function Van() {
     targetPos[2] + CAMERA_OFFSET,
   ];
 
-  // Center model whenever groupRef changes
   useEffect(() => {
     if (groupRef.current) centerModelByBoundingBox(groupRef);
   }, [groupRef.current]);
-
-  // Reset targetPos when interior view toggles
   useEffect(() => {
     setTargetPos([0, 0, 0]);
   }, [isIntView]);
@@ -106,15 +132,34 @@ function Van() {
   useEffect(() => {
 
   }, [isSanta])
-  ModelPreloader(vanName);
+
 
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
+
+
+
+
+function DynamicModel({ model, setActiveModelId, modelRefs }) {
+const { scene } = useGLTF(model.glbFile);
+
+  return (
+    <primitive
+      object={scene}
+      ref={(el) => (modelRefs.current[model.id] = el)}
+      position={model.position || [0, 0, 0]}
+      scale={model.scale || [1, 1, 1]}
+      rotation={model.rotation || [0, 0, 0]}
+      castShadow
+      receiveShadow
+      onClick={() => setActiveModelId(model.id)}
+    />
+  );
+}
+
 
   return (
     <>
     <div className="">
-
-
     </div>
     <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto bg-brand color-scroll">
 
@@ -230,21 +275,14 @@ function Van() {
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
                   <Environment files="./textures/zwartkops_straight_afternoon_1k.hdr" />
                   <Santa showExterior={showExterior} />
-                  {addedModels.map((model) => {
-                    const ModelComponent = model?.component;
-                    if (!ModelComponent) return null;
-                    return (
-                      <group key={model.id || model.label} ref={(el) => modelRefs.current[model.id] = el} position={model.position}>
-                        <ModelComponent
-                          castShadow
-                          receiveShadow
-                          scale={model.scale}
-                          rotation={model.rotation}
-                          onClick={() => setActiveModelId(model.id)}
-                        />
-                      </group>
-                    );
-                  })}
+                {addedModels.map((model) => (
+        <DynamicModel
+          key={model._id || model.id}
+          model={model}
+          setActiveModelId={setActiveModelId}
+          modelRefs={modelRefs}
+        />
+      ))}
                 </group>
               </Suspense>
               {isIntView ? (

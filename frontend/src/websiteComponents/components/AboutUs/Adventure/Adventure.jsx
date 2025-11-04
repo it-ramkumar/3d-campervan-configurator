@@ -11,7 +11,7 @@ const ambulanceImage = "/images/ambulance.webp";
 const prototypeImage = "/images/liftbed.webp";
 const blueWhaleImage = "/images/bluewhale.webp";
 const grayWolfImage = "/images/greywolf.webp";
-// const ctaBgImage = "/images/joinadventure.webp";
+const ctaBgImage = "/heroSlider/joinadventure.webp";
 
 export default function AboutPage() {
   const controls = useAnimation();
@@ -285,7 +285,7 @@ export default function AboutPage() {
         animate={controls}
       >
         <motion.img
-          // src={ctaBgImage}
+          src={ctaBgImage}
           alt="Scenic view from inside a custom camper van"
           className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
           initial={{ scale: 1.15 }}

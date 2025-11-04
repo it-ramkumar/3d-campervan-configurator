@@ -116,38 +116,46 @@ router.put("/edit/:id", protect, adminOnly, upload.fields([{ name: "image" }, { 
 router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
-    const { category } = req.query; // ✅ query se category le rahe hain
+    const { category } = req.query; // ✅ category from query
 
     if (!category) {
       return res.status(400).json({ success: false, message: "Category is required" });
     }
 
-    // Model select based on category
+    // Select model based on category
     const Model =
       category === "interior"
         ? InteriorModel
         : category === "exterior"
-          ? ExteriorModel
-          : category === "system"
-            ? SystemModel
-            : null;
+        ? ExteriorModel
+        : category === "system"
+        ? SystemModel
+        : null;
 
     if (!Model) {
       return res.status(400).json({ success: false, message: "Invalid category" });
     }
 
-    const deleted = await Model.findByIdAndDelete(id);
-
-    if (!deleted) {
+    // ✅ Find the document before deleting (to get image & glbFile URLs)
+    const existing = await Model.findById(id);
+    if (!existing) {
       return res.status(404).json({ success: false, message: "Model not found" });
     }
 
-    res.json({ success: true, message: "Deleted successfully" });
+    // ✅ Delete files from S3 first
+    await deleteFromS3(existing.image);
+    await deleteFromS3(existing.glbFile);
+
+    // ✅ Then delete from DB
+    await Model.findByIdAndDelete(id);
+
+    res.json({ success: true, message: "Deleted successfully (S3 + DB)" });
   } catch (err) {
     console.error("Delete error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 router.get("/interior", async (req, res) => {
   try {

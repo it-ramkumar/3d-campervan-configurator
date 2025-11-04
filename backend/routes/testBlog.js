@@ -137,12 +137,12 @@ router.put(
       const blog = await Blog.findById(req.params.id);
       if (!blog)
         return res.status(404).json({ success: false, message: "Blog not found" });
-      console.log("Blog found:", blog);
+      // console.log("Blog found:", blog);
 
       const { title, content, description, deleteGallery = [] } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
-      console.log("Received blocks data:", blocksData); // Debug log
+      // console.log("Received blocks data:", blocksData); // Debug log
 
       const blockImages = req.files["images"] || [];
       const imageFieldToUrlMap = {};
@@ -158,7 +158,7 @@ router.put(
               `${Date.now()}_${file.originalname}`
             );
             imageFieldToUrlMap[imageFieldName] = s3Url;
-            console.log(`Uploaded ${imageFieldName}:`, s3Url);
+            // console.log(`Uploaded ${imageFieldName}:`, s3Url);
           } catch (err) {
             console.error(`Error uploading block image ${index}:`, err);
             imageFieldToUrlMap[imageFieldName] = null;
@@ -166,7 +166,7 @@ router.put(
         })
       );
 
-      console.log("Image field mapping:", imageFieldToUrlMap); // Debug log
+      // console.log("Image field mapping:", imageFieldToUrlMap);
 
       // Upload new gallery images
       const uploadedGalleryUrls = await Promise.all(

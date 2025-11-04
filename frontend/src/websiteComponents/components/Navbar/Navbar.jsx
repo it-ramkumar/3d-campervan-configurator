@@ -68,7 +68,7 @@ export default function Navbar({ forceMobile }) {
   };
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-  // ✅ MENU CONTENT
+
   const menuContent = {
 
   CustomBuild: {
@@ -119,13 +119,15 @@ export default function Navbar({ forceMobile }) {
           { label: "Our Process", link: "/our-process" },
           { label: "Showroom", link: "/showroom" },
           { label: "About Us", link: "/about-us" },
+          { label: "Our CLients", link: "/our-clients" },
+
 
         ],
       },
         {
         title: "Insights",
         items: [
-          { label: "Exterior", link: "/innovation" },
+          { label: "Exterior Choice", link: "/innovation" },
           { label: "Blog", link: "/blogs" },
 
 
@@ -138,10 +140,10 @@ export default function Navbar({ forceMobile }) {
 
   return (
     <>
-      {/* NAVBAR */}
+
       <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 bg-white shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-          {/* LOGO */}
+
           {!forceMobile && <div className="flex items-center">
             <Link to="/" className="block">
               <img loading="lazy"

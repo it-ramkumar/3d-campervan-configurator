@@ -2,22 +2,9 @@ import { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { useSelector } from "react-redux";
-
 export default function VanModel({ showExterior }) {
-  const vanName= useSelector((state)=>state.vanName.vanName)
 
-  const formattedVanName = vanName?.replace(/\s+/g, "_"); // "blue sky" → "blue_sky"
-  const models = {
-    White: "/models/AllColorGLB144/Van_White.glb",
-    Black: "/models/AllColorGLB144/Van_Black.glb",
-    Silver_Grey: "/models/AllColorGLB144/Van_SilverGrey.glb",
-    Blue_Grey: "/models/AllColorGLB144/Van_BlueGrey.glb",
-    Pebble: "/models/AllColorGLB144/Van_Pebble.glb",
-    Stone_Grey: "/models/AllColorGLB144/Van_StoneGrey.glb",
-    Graphite_Grey: "/models/AllColorGLB144/Van_GraphiteGrey.glb",
-  };
-  const selectedModelPath = models[formattedVanName] || models["White"];
+  const selectedModelPath = "/models/Van_White.glb";
   const { nodes, materials } = useGLTF(selectedModelPath);
   const { camera } = useThree();
   const groupRef = useRef();

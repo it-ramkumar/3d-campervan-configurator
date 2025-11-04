@@ -2,15 +2,6 @@
 import { Hand } from "lucide-react";
 
 export default function CanvasHint() {
-//   const [show, setShow] = useState(true);
-
-//   useEffect(() => {
-//     const timer = setTimeout(() => setShow(false), 10000); // 10 sec
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   if (!show) return null;
-
   return (
  <div className="fixed inset-x-0 z-[9999] w-[90%] max-w-sm
   top-1/2 -translate-y-1/2 sm:top-auto sm:bottom-4 sm:translate-y-0">

@@ -10,7 +10,6 @@ import Dashboard from "../websiteComponents/components/Dashboard/Dashboard";
 import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/PortfolioForm";
 import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
 import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
-import Finishes from "../websiteComponents/components/Finishes/Finishes";
 import Layouts from "../websiteComponents/components/Layouts/Layouts";
 import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
 import Blogs from "../websiteComponents/components/Blogs/Blogs";
@@ -27,12 +26,14 @@ import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configu
 import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exterior";
 import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
 import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
+import OurClients from "../websiteComponents/components/OurClients/Clienthero/Client"
+import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
 const AppRoutes = () => {
-
 
   return (
     <Router>
       <ScrollFromTop />
+         <ChatWidget />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/configurator-form" element={<ConfiguratorForm />} />
@@ -51,15 +52,16 @@ const AppRoutes = () => {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog-form" element={<BlogForm />} />
         <Route path="/layouts" element={<Layouts />} />
-        <Route path="/finishes" element={<Finishes />} />
         <Route path="/vans-for-sale" element={<VansForSale />} />
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/van-form" element={<VanForm />} />
         <Route path="/portfolio-form" element={<PortfolioForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/van" element={<Van />} />
+        <Route path="/test" element={<Van />} />
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/our-clients" element={<OurClients />} />
+
       </Routes>
     </Router>
 

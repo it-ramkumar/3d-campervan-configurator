@@ -14,11 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchInterior } from "../../api/model/modelInterior.js";
 import { fetchExterior } from "../../api/model/modelExterior.js";
 import { fetchSystem } from "../../api/model/modelSystem.js";
-import { componentsMap } from "../../ModelData";
 import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
 import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
-import { Interior, System, Exterior } from "../../json data/dummy.json";
+import { useGLTF } from "@react-three/drei";
+
+
 
 
 
@@ -40,11 +41,9 @@ const MultiStepForm = ({
   const router = useNavigate()
   const models = useSelector((state) => state.models || []);
   const addedModels = useSelector((state) => state.addedModels.addedModels)
-  // fallback if redux empty
-  // console.log(models?.interior?.data.data,"models");
-  const interior = models?.interior?.data.data ? models?.interior?.data.data : Interior;
-  const exterior = models?.exterior?.data.data ? models?.exterior?.data.data : Exterior;
-  const system   = models?.system?.data.data   ? models?.system?.data.data   : System;
+  const interior = models?.interior?.data.data ;
+  const exterior = models?.exterior?.data.data;
+  const system   = models?.system?.data.data   ;
  const cancelSourceRef = useRef(null);
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
@@ -54,57 +53,58 @@ const MultiStepForm = ({
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [modelUrl, setModelUrl] = useState(null);
 
-  function attachComponentsToMetadata(metadataArray, components) {
-    return metadataArray?.map(item => ({
-      ...item,
-      component: components[item.componentKey] || null
-    }));
+  const interiorSteps = Object.entries(groupByGroup(interior))
+  const exteriorSteps = Object.entries(groupByGroup(exterior))
+  const systemSteps = Object.entries(groupByGroup(system))
+
+// Helper to preload GLTF
+const preloadGLTF = (url) => {
+  try {
+    useGLTF.preload(url); // ✅ drei preload, cache me store karega
+    console.log("✅ Preloaded GLTF:", url);
+  } catch (err) {
+    console.warn("⚠️ Failed to preload GLTF:", url, err);
   }
-  const interiorWithComponents = attachComponentsToMetadata(interior, componentsMap);
-  const exteriorWithComponents = attachComponentsToMetadata(exterior, componentsMap);
-  const systemWithComponents = attachComponentsToMetadata(system, componentsMap);
+};
 
-  const interiorSteps = Object.entries(groupByGroup(interiorWithComponents))
-  const exteriorSteps = Object.entries(groupByGroup(exteriorWithComponents))
-  const systemSteps = Object.entries(groupByGroup(systemWithComponents))
+useEffect(() => {
+  const fetchAndPreload = async () => {
+    let fetchingThunk;
 
+    if (activeTab === "interior") fetchingThunk = fetchInterior;
+    else if (activeTab === "exterior") fetchingThunk = fetchExterior;
+    else if (activeTab === "system") fetchingThunk = fetchSystem;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let fetchingThunk;
+    if (!fetchingThunk) return;
 
-      if (activeTab === "interior") {
-        fetchingThunk = fetchInterior;
-      } else if (activeTab === "exterior") {
-        fetchingThunk = fetchExterior;
-      } else if (activeTab === "system") {
-        fetchingThunk = fetchSystem;
+    try {
+      const resultAction = await dispatch(fetchingThunk());
+
+      if (fetchingThunk.rejected.match(resultAction)) {
+        console.warn("❌ Fetch error:", resultAction.error.message);
+        return;
       }
 
-      if (fetchingThunk) {
-        try {
-          const resultAction = await dispatch(fetchingThunk());
+      const fetchedData = resultAction.payload?.data || [];
+      console.log("✅ Data fetched for:", activeTab, "Models:", fetchedData.length);
 
-          // Check if action was rejected
-          if (fetchingThunk.rejected.match(resultAction)) {
-            // return Swal.fire({
-            //   text: resultAction.error.message,
-            //   icon: 'error',
-            // })
-            console.warn(resultAction.error.message,"error");
-          }
-          // else {
-          //   console.log("Data fetched successfully:", resultAction.payload);
-          // }
-        } catch (err) {
-          console.error("Unexpected error:", err);
+      // 🔹 Preload GLTF models
+      fetchedData.forEach((model) => {
+        if (model?.glbFile) preloadGLTF(model.glbFile);
+
+        // Optional: preload thumbnail
+        if (model?.thumbnailUrl) {
+          const img = new Image();
+          img.src = model.thumbnailUrl;
         }
-      }
-    };
+      });
+    } catch (err) {
+      console.error("⚠️ Unexpected error:", err);
+    }
+  };
 
-    fetchData();
-  }, [activeTab, dispatch]);
-
+  fetchAndPreload();
+}, [activeTab, dispatch]);
 
 
   let steps;
@@ -117,25 +117,15 @@ const MultiStepForm = ({
   }
 
 
-
-
-
-
-
   const progressPercent = Math.round(((currentStep + 1) / steps.length) * 100);
 
-
-
-  if (interior.length < 0 || !steps || steps.length === 0 || !steps[currentStep]) {
+  if (interior?.length < 0 || !steps || steps.length === 0 || !steps[currentStep]) {
     return <GIFVanLoader />
   }
   return (
  <div className=" rounded-xl">
   {/* Top Section */}
   <div className=" flex flex-col  bg-white  ">
-   {/* <h1 className="text-lg md:text-xl text-gray-900 text-center ">
-      Custpmize Your Van
-    </h1> */}
     <div className="">
     {/* Tabs */}
     <TabButtons
