@@ -55,9 +55,13 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
     if (mimetype?.startsWith("image/")) {
       uploadBuffer = await sharp(fileBuffer)
         .resize({ width: 1200 })
-        .jpeg({ quality: 80 })
+        .webp({ quality: 80 }) // ✅ Convert to WebP for best compression
         .toBuffer();
-      console.log("🖼️ Image compressed before upload.");
+      console.log("🖼️ Image converted to WebP and compressed before upload.");
+
+      // Change filename extension to .webp
+      fileName = fileName.replace(/\.[^/.]+$/, ".webp");
+      mimetype = "image/webp";
     } else if (mimetype === "model/gltf-binary" || fileName.endsWith(".glb")) {
       uploadBuffer = await compressGLB(fileBuffer, fileName);
       console.log("🪶 GLB uploaded successfully (mesh + textures compressed).");
@@ -66,17 +70,23 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
     console.warn("⚠️ Compression skipped:", err.message);
   }
 
+  const key = `${folderName}/${Date.now()}_${fileName}`;
+
   const params = {
     Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
-    Key: `${folderName}/${Date.now()}_${fileName}`,
+    Key: key,
     Body: uploadBuffer,
     ACL: "public-read",
     ContentType: mimetype || "application/octet-stream",
   };
 
   const data = await s3.upload(params).promise();
-  return data.Location;
+
+  // ✅ Return CloudFront URL instead of S3
+  const cdnUrl = `https://${process.env.CLOUDFRONT_URL}/${key}`;
+  return cdnUrl;
 }
+
 
 // --------------------- S3 Delete ---------------------
 const deleteFromS3 = async (fileUrl) => {

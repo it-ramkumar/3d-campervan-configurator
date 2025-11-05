@@ -3,163 +3,33 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { updateBlog, createBlog } from "../../../../api/blog/createBlogs";
 import axios from "axios";
+import { addBlock } from "../../../CustomHooks/addBlock";
+import { removeBlock } from "../../../CustomHooks/removeBlock";
+import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
+import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
+import {handleBlockChange} from "../../../CustomHooks/handleBlockChanges";
+import {handleImageChange} from "../../../CustomHooks/handleImageChange";
+import {addTableRow} from "../../../CustomHooks/addTableRow";
+import {addProsOrCons} from "../../../CustomHooks/addProsOrCons";
+import {handleGalleryChange} from "../../../CustomHooks/handleGalleryChange";
 
-// Custom hook functions integrated into the same file
 
-// Add new block
-const addBlock = (type, setBlocks, insertIndex = null) => {
-  const newBlock = { type };
 
-  switch (type) {
-    case "heading":
-    case "subheading":
-    case "paragraph":
-      newBlock.text = "";
-      break;
-    case "image":
-      newBlock.file = null;
-      newBlock.preview = "";
-      newBlock.url = "";
-      break;
-    case "table":
-      newBlock.rows = [["", ""]];
-      break;
-    case "proscons":
-      newBlock.pros = [""];
-      newBlock.cons = [""];
-      break;
-    default:
-      break;
-  }
 
-  setBlocks(prev => {
-    if (insertIndex !== null) {
-      const newBlocks = [...prev];
-      newBlocks.splice(insertIndex + 1, 0, newBlock);
-      return newBlocks;
-    }
-    return [...prev, newBlock];
-  });
-};
 
-// Remove block
-const removeBlock = (index, setBlocks) => {
-  setBlocks(prev => prev.filter((_, i) => i !== index));
-};
 
-// Remove existing gallery image
-const removeExistingGalleryImage = (index, setGallery, setRemovedGallery, gallery) => {
-  const imageToRemove = gallery[index];
-  if (imageToRemove.url) {
-    setRemovedGallery(prev => [...prev, imageToRemove.url]);
-  }
-  setGallery(prev => prev.filter((_, i) => i !== index));
-};
 
-// Remove new gallery image
-const removeNewGalleryImage = (index, setGalleryFiles, galleryFiles) => {
-  const imageToRemove = galleryFiles[index];
-  if (imageToRemove.preview) {
-    URL.revokeObjectURL(imageToRemove.preview);
-  }
-  setGalleryFiles(prev => prev.filter((_, i) => i !== index));
-};
 
-// Handle block changes
-const handleBlockChange = (blockIndex, field, value, rowIndex, colIndex, setBlocks) => {
-  setBlocks(prev => {
-    const updatedBlocks = [...prev];
-    const block = { ...updatedBlocks[blockIndex] };
 
-    if (field === "table" && rowIndex !== null && colIndex !== null) {
-      // Handle table cell changes
-      const updatedRows = block.rows.map((row, rIdx) =>
-        rIdx === rowIndex
-          ? row.map((cell, cIdx) => (cIdx === colIndex ? value : cell))
-          : row
-      );
-      block.rows = updatedRows;
-    } else if (field === "pros" || field === "cons") {
-      // Handle pros/cons changes
-      const updatedArray = [...(block[field] || [])];
-      updatedArray[rowIndex] = value;
-      block[field] = updatedArray;
-    } else {
-      // Handle other field changes
-      block[field] = value;
-    }
 
-    updatedBlocks[blockIndex] = block;
-    return updatedBlocks;
-  });
-};
 
-// ✅ FIXED: Handle image change for blocks - Preserve existing URL
-const handleImageChange = (blockIndex, file, setBlocks) => {
-  if (!file) return;
 
-  const previewUrl = URL.createObjectURL(file);
 
-  setBlocks(prev => {
-    const updatedBlocks = [...prev];
-    const block = { ...updatedBlocks[blockIndex] };
 
-    // Clean up previous preview if it was a blob URL
-    if (block.preview && block.preview.startsWith('blob:')) {
-      URL.revokeObjectURL(block.preview);
-    }
-
-    block.file = file;
-    block.preview = previewUrl;
-    // ✅ FIX: Don't clear existing URL, keep it for reference
-    // block.url remains unchanged so backend knows which image to replace
-
-    updatedBlocks[blockIndex] = block;
-    return updatedBlocks;
-  });
-};
-
-// Add table row
-const addTableRow = (blockIndex, setBlocks) => {
-  setBlocks(prev => {
-    const updatedBlocks = [...prev];
-    const block = { ...updatedBlocks[blockIndex] };
-    const columns = block.rows[0]?.length || 2;
-    const newRow = Array(columns).fill("");
-    block.rows = [...block.rows, newRow];
-    updatedBlocks[blockIndex] = block;
-    return updatedBlocks;
-  });
-};
-
-// Add pros or cons
-const addProsOrCons = (blockIndex, type, setBlocks) => {
-  setBlocks(prev => {
-    const updatedBlocks = [...prev];
-    const block = { ...updatedBlocks[blockIndex] };
-    block[type] = [...(block[type] || []), ""];
-    updatedBlocks[blockIndex] = block;
-    return updatedBlocks;
-  });
-};
-
-// Handle gallery change
-const handleGalleryChange = (event, setGalleryFiles) => {
-  const files = Array.from(event.target.files);
-
-  const newGalleryFiles = files.map(file => ({
-    file,
-    preview: URL.createObjectURL(file),
-    url: ""
-  }));
-
-  setGalleryFiles(prev => [...prev, ...newGalleryFiles]);
-  event.target.value = ""; // Reset input
-};
 
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
-  console.log(editData,"data")
+  // console.log(editData,"data")
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [gallery, setGallery] = useState([]); // {file: File, preview: string, url: string}[]
