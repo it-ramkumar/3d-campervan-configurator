@@ -4,6 +4,7 @@ const multer = require("multer");
 const { uploadToS3 } = require("../services/s3");
 const { InteriorModel, ExteriorModel, SystemModel } = require("../models/modelsByCategory");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
+const { deleteFromS3 } = require("../services/s3");
 
 
 const storage = multer.memoryStorage();
