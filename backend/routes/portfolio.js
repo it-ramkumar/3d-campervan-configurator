@@ -84,26 +84,32 @@ router.post(
   }
 );
 
-// GET all portfolio vans with pagination
 router.get("/", async (req, res) => {
   try {
-    let { page = 1, limit = 50, category, sold } = req.query;
+    let { page = 1, limit = 50, category, sold, search } = req.query;
     page = Number(page);
     limit = Number(limit);
 
-    // Build filter object
     const filter = {};
+
     if (category) filter.category = category;
     if (sold !== undefined) filter.sold = sold === "true";
 
-    // Total documents
+    // ✅ Search by nested title
+    if (search && search.trim() !== "") {
+      const regex = new RegExp(search, "i");
+      filter["van_listing.title"] = regex;
+    }
+
     const total = await PortfolioVan.countDocuments(filter);
 
-    // Fetch data with pagination
     const vans = await PortfolioVan.find(filter)
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ createdAt: -1 });
+
+    console.log("Filter used:", filter);
+    console.log("Matched documents:", vans.length);
 
     res.json({
       success: true,

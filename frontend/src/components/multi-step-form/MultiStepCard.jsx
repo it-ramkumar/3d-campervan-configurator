@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { TYPE_DEPENDENCIES } from '../../customeHooks/typeDependencyData';
+import ImageWithSkeleton from '../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx';
 
 export default function ModelsCard({
   steps,
@@ -109,7 +110,7 @@ export default function ModelsCard({
                   >
                     {/* Image */}
                     <div className="flex items-center space-x-4">
-                      <img loading="lazy" src={model.image} alt={model.label} className="w-10 h-10 object-contain" />
+                      <ImageWithSkeleton  src={model.image} alt={model.label} className="w-10 h-10 object-contain" />
                       <div>
                         <h6 className="text-sm font-semibold">{model.label}</h6>
                         {model.description && <p className="text-sm text-dark/80">{model.description}</p>}
@@ -183,7 +184,7 @@ export default function ModelsCard({
                   ${isExtDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                               >
                                 <div className="flex items-center space-x-4">
-                                  <img loading="lazy" src={ext.image} alt={ext.label} className="w-16 h-16 object-contain" />
+                                  <ImageWithSkeleton src={ext.image} alt={ext.label} className="w-16 h-16 object-contain" />
                                   <div>
                                     <h6 className="text-base font-medium">{ext.label}</h6>
                                     {ext.description && <p className="text-gray-500 text-sm">{ext.description}</p>}

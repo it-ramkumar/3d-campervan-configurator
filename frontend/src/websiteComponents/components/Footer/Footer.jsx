@@ -40,7 +40,7 @@ export default function Footer() {
       <div
         className="absolute inset-0 bg-cover bg-center md:bg-no-repeat"
         style={{
-          backgroundImage: "url('/heroSlider/Screenshot_6.webp')",
+          backgroundImage: "url('/heroSlider/Screenshot.webp')",
         }}
       />
 

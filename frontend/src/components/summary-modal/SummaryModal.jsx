@@ -4,6 +4,7 @@ import { setAddedModels } from '../../redux/slices/addedModels.js'
 import Swal from "sweetalert2";
 import { handleGetQuote } from '../../customeHooks/handleQuote.js';
 import { useNavigate } from 'react-router-dom';
+import ImageWithSkeleton from '../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx';
 
 export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
   setUploadProgress,
@@ -84,10 +85,10 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
                       style={{ height: '170px' }}
                     >
                       <div className="flex items-start gap-3">
-                        <img loading="lazy"
+                        <ImageWithSkeleton
                           src={item.image}
                           alt={item.label}
-                          className="w-14 h-14 object-cover rounded-md border shadow-sm"
+                          className="w-14 h-14 object-cover"
                         />
                         <div className="flex-1 overflow-hidden">
                           <p className="font-semibold text-dark font-heading text-sm truncate" title={item.label}>
@@ -169,10 +170,10 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
 
                     {/* Image */}
                     <div className="w-full md:w-[45%]">
-                      <img loading="lazy"
+                      <ImageWithSkeleton
                         src={selectedItem.image}
                         alt={selectedItem.label}
-                        className="w-full h-60 object-cover rounded-md shadow-md transition hover:scale-105"
+                        className="w-full h-60 object-cover"
                       />
                     </div>
 

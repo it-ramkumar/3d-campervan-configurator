@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function Navbar({ forceMobile }) {
   const [darkMode, setDarkMode] = useState(false);
@@ -146,10 +147,10 @@ export default function Navbar({ forceMobile }) {
 
           {!forceMobile && <div className="flex items-center">
             <Link to="/" className="block">
-              <img loading="lazy"
+              <ImageWithSkeleton
                 src="/images/logoo.webp"
                 alt="BBV logo"
-                className="w-[150px] h-[30px] object-contain"
+                className="w-[170px] h-[30px] border-none object-contain"
               />
             </Link>
           </div>}
@@ -286,7 +287,7 @@ export default function Navbar({ forceMobile }) {
         <div className="flex flex-col py-8 px-4 min-h-full">
           {forceMobile && <div className="flex items-center mb-5">
             <Link to="/" className="block">
-              <img loading="lazy"
+              <ImageWithSkeleton
                 src="/images/logoo.webp"
                 alt="BBV logo"
                 className="w-[150px] h-[30px] object-contain"

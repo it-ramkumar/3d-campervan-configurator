@@ -20,6 +20,8 @@ import {
   Heart,
 } from "lucide-react";
 
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton.jsx";
+import { Link } from "react-router-dom";
 // Reusable Components
 function SectionHeader({ title, subtitle, icon: Icon }) {
   return (
@@ -47,33 +49,33 @@ function ClassicImageGrid({ images, layout = "standard" }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* This first column stacks vertically on mobile by default */}
         <div className="grid grid-rows-2 gap-4 md:gap-6">
-          <img
+          <ImageWithSkeleton
             src={images[0]}
             alt="Vermont van 1"
-            className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-64 md:h-80 object-cover "
           />
-          <img
+          <ImageWithSkeleton
             src={images[1]}
             alt="Vermont van 2"
-            className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-64 md:h-80 object-cover "
           />
         </div>
         {/* This second column becomes 2-wide on mobile */}
         <div className="grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-3 gap-4 md:gap-6">
-          <img
+          <ImageWithSkeleton
             src={images[2]}
             alt="Vermont van 3"
-            className="w-full h-48 md:h-52 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 md:h-52 object-cover "
           />
-          <img
+          <ImageWithSkeleton
             src={images[3]}
             alt="Vermont van 4"
-            className="w-full h-48 md:h-52 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 md:h-52 object-cover"
           />
-          <img
+          <ImageWithSkeleton
             src={images[4]}
             alt="Vermont van 5"
-            className="w-full h-48 md:h-52 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300 col-span-2 lg:col-span-1"
+            className="w-full h-48 md:h-52 object-cover  col-span-2 lg:col-span-1"
           />
         </div>
       </div>
@@ -86,31 +88,31 @@ function ClassicImageGrid({ images, layout = "standard" }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         {/* Image 1: Full width on mobile, spans 2 on desktop */}
         <div className="md:col-span-2">
-          <img
+          <ImageWithSkeleton
             src={images[0]}
             alt="Blue Whale van 1"
-            className="w-full h-64 md:h-96 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-64 md:h-96 object-cover"
           />
         </div>
         {/* Images 2 & 3: 2 cols on mobile, 1 col (stacked) on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-1 md:grid-rows-2 gap-4 md:gap-6">
-          <img
+          <ImageWithSkeleton
             src={images[1]}
             alt="Blue Whale van 2"
-            className="w-full h-40 md:h-44 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-40 md:h-44 object-cover "
           />
-          <img
+          <ImageWithSkeleton
             src={images[2]}
             alt="Blue Whale van 3"
-            className="w-full h-40 md:h-44 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-40 md:h-44 object-cover "
           />
         </div>
         {/* Image 4: Full width on mobile, spans 3 on desktop */}
         <div className="md:col-span-3">
-          <img
+          <ImageWithSkeleton
             src={images[3]}
             alt="Blue Whale van 4"
-            className="w-full h-64 md:h-72 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-64 md:h-72 object-cover "
           />
         </div>
       </div>
@@ -123,34 +125,34 @@ function ClassicImageGrid({ images, layout = "standard" }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {/* Image 1: Full width on mobile, correct span on desktop */}
         <div className="col-span-2 md:col-span-2 md:row-span-2">
-          <img
+          <ImageWithSkeleton
             src={images[0]}
             alt="MotoVan 1"
-            className="w-full h-full min-h-[300px] object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-full min-h-[300px] object-cover "
           />
         </div>
         {/* Image 2: Full width on mobile, correct span on desktop */}
         <div className="col-span-2 md:col-span-2">
-          <img
+          <ImageWithSkeleton
             src={images[1]}
             alt="MotoVan 2"
-            className="w-full h-48 md:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 md:h-56 object-cover "
           />
         </div>
         {/* Image 3: Half width on mobile */}
         <div>
-          <img
+          <ImageWithSkeleton
             src={images[2]}
             alt="MotoVan 3"
-            className="w-full h-48 md:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 md:h-56 object-cover "
           />
         </div>
         {/* Image 4: Half width on mobile */}
         <div>
-          <img
+          <ImageWithSkeleton
             src={images[3]}
             alt="MotoVan 4"
-            className="w-full h-48 md:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full h-48 md:h-56 object-cover "
           />
         </div>
       </div>
@@ -171,11 +173,11 @@ function ClassicImageGrid({ images, layout = "standard" }) {
               : "col-span-1"
           }`}
         >
-          <img
+          <ImageWithSkeleton
             src={image}
             alt={`Van image ${index + 1}`}
             // Fixed height for small images on mobile, full height/min-h on desktop
-            className={`w-full object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300 ${
+            className={`w-full object-cover  ${
               index === 0
                 ? "h-64 md:h-full md:min-h-[300px]"
                 : "h-48 md:h-full md:min-h-[300px]"
@@ -786,21 +788,21 @@ export default function ClientStories() {
 
               <div className="grid grid-cols-1 gap-4 md:gap-6">
                 <div className="grid grid-cols-2 gap-4 md:gap-6">
-                  <img
+                  <ImageWithSkeleton
                     src={imageData.cusco[0]}
                     alt="Cusco interior"
-                    className="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 sm:h-56 object-cover "
                   />
-                  <img
+                  <ImageWithSkeleton
                     src={imageData.cusco[1]}
                     alt="Cusco kitchen"
-                    className="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 sm:h-56 object-cover "
                   />
                 </div>
-                <img
+                <ImageWithSkeleton
                   src={imageData.cusco[2]}
                   alt="Cusco exterior"
-                  className="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 sm:h-56 object-cover "
                 />
               </div>
             </div>

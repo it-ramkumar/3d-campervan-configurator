@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import {
   ChevronDown,
   ChevronUp,
@@ -27,6 +26,7 @@ import {
   Sun,
 } from 'lucide-react';
 import BlackButton from "../../Common/Button/BlackButton";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 // --- Data with Enhanced Text and Icons ---
 const sections = [
@@ -189,10 +189,6 @@ const WhyChoose = () => {
                     </div>
                   </div>
 
-                  {/* Aesthetic Fade Overlay */}
-                  {/* {!isExpanded && (
-                    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-event"></div>
-                  )} */}
 
                   {/* See More/Less Button */}
                   <div className="">
@@ -226,7 +222,7 @@ const WhyChoose = () => {
                     ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-4 border-blackish
                   `}
                 >
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={section.images[0].src}
                     alt={section.images[0].alt}
                     className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
@@ -238,7 +234,7 @@ const WhyChoose = () => {
                     ${section.isReverse ? "bottom-[-20px] right-[-20px] md:left-[-20px]" : "bottom-[-20px] right-[-20px] md:right-[-20px]"}
                   `}
                 >
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={section.images[1].src}
                     alt={section.images[1].alt}
                     className="rounded-xl object-cover w-full h-full"

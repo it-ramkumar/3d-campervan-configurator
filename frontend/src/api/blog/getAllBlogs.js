@@ -2,28 +2,28 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 /**
- * Fetch all vans from backend
- * @returns {Promise<{success: boolean, data?: any, error?: string}>}
+ * Fetch paginated blogs
+ * @param {number} page - current page number
+ * @returns {Promise<{success: boolean, data?: any, pagination?: object}>}
  */
-export async function getAllBlogs() {
+export async function getAllBlogs(page = 1, search = "") {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog`,{
-           withCredentials: true,
-    });
+    const response = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/test-blog?page=${page}&search=${encodeURIComponent(search)}`,
+      { withCredentials: true }
+    );
+
     return {
       success: true,
-      data: response.data.data
+      data: response.data.data,
+      pagination: response.data.pagination,
     };
   } catch (err) {
-        Swal.fire({
-      icon: "Error",
+    Swal.fire({
+      icon: "error",
       title: "Error",
-      text: err.response.data.message,
+      text: err.response?.data?.message || "Failed to fetch blogs",
     });
-    // console.error("Error fetching blogs:", err);
-    // return {
-    //   success: false,
-    //   error: err.response?.data?.message || "Something went wrong",
-    // };
   }
 }
+

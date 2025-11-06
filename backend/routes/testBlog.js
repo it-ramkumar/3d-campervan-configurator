@@ -101,17 +101,43 @@ router.post(
 --------------------------------------- */
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: blogs });
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+
+    const query = search
+      ? {
+          $or: [
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const blogs = await Blog.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalBlogs = await Blog.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: blogs,
+      pagination: {
+        totalBlogs,
+        currentPage: page,
+        totalPages: Math.ceil(totalBlogs / limit),
+      },
+    });
   } catch (err) {
     console.error("Error fetching blogs:", err);
     res.status(500).json({ success: false, message: "Failed to fetch blogs" });
   }
 });
 
-/* ---------------------------------------
-   🟣 GET SINGLE BLOG BY ID
---------------------------------------- */
+
 router.get("/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);

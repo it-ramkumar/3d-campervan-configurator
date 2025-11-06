@@ -4,6 +4,7 @@ import { createVan, updateVan } from "../../../../api/van/createVan";
 import { useSelector, useDispatch } from "react-redux";
 import { clearEditData } from "../../../../redux/slices/editData";
 import axios from "axios";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 const VansForm = () => {
   const editData = useSelector((state) => state.editData.editData);
@@ -568,10 +569,10 @@ const handleSubmit = async (e) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {existingGallery.map((url, index) => (
                     <div key={index} className="relative group">
-                      <img loading="lazy"
+                      <ImageWithSkeleton
                         src={url}
                         alt={`existing-${index}`}
-                        className="w-full h-32 object-cover rounded-lg border-2 border-gray-300"
+                        className="w-full h-32 object-cover "
                       />
                       <button
                         type="button"
@@ -593,10 +594,10 @@ const handleSubmit = async (e) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                   {galleryPreviews.map((previewUrl, index) => (
                     <div key={index} className="relative group">
-                      <img loading="lazy"
+                      <ImageWithSkeleton
                         src={previewUrl}
                         alt={`preview-${index}`}
-                        className="w-full h-32 object-cover rounded-lg border-2 border-green-500"
+                        className="w-full h-32 object-cover "
                       />
                       <button
                         type="button"

@@ -12,6 +12,7 @@ import {handleImageChange} from "../../../CustomHooks/handleImageChange";
 import {addTableRow} from "../../../CustomHooks/addTableRow";
 import {addProsOrCons} from "../../../CustomHooks/addProsOrCons";
 import {handleGalleryChange} from "../../../CustomHooks/handleGalleryChange";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 
 
@@ -260,11 +261,11 @@ const handleSubmit = async (e) => {
               <div className="flex flex-wrap gap-3">
                 {gallery.map((img, i) => (
                   <div key={`existing-${i}`} className="relative">
-                    <img
-                      loading="lazy"
+                    <ImageWithSkeleton
+
                       src={img.preview || img.url}
                       alt={`gallery-${i}`}
-                      className="w-24 h-24 rounded shadow object-cover"
+                      className="w-24 h-24 object-cover"
                     />
                     <button
                       type="button"
@@ -288,11 +289,11 @@ const handleSubmit = async (e) => {
               <div className="flex flex-wrap gap-3">
                 {galleryFiles.map((img, i) => (
                   <div key={`new-${i}`} className="relative">
-                    <img
-                      loading="lazy"
+                    <ImageWithSkeleton
+
                       src={img.preview}
                       alt={`new-gallery-${i}`}
-                      className="w-24 h-24 rounded shadow object-cover"
+                      className="w-24 h-24 object-cover"
                     />
                     <button
                       type="button"
@@ -373,11 +374,11 @@ const handleSubmit = async (e) => {
                 />
                 {(block.preview || block.url) && (
                   <div className="mt-2">
-                    <img
-                      loading="lazy"
+                    <ImageWithSkeleton
+
                       src={block.preview || block.url}
                       alt="preview"
-                      className="w-48 rounded shadow"
+                      className="w-48 "
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       {block.file ? "New image selected" : "Existing image"}

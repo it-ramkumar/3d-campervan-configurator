@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 // --- SVG Icons (no design change) ---
 const SvgInsulation = ({ className }) => (
@@ -213,7 +214,7 @@ console.log(vanDetail,"vanDetail")
         ref={heroRef}
         className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
       >
-        <img loading="lazy"
+        <ImageWithSkeleton
           src={vanDetail.gallery[0]}
           alt={`${vanDetail.van_listing.title} custom van`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
@@ -359,11 +360,11 @@ console.log(vanDetail,"vanDetail")
         {van.gallery.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {van.gallery.map((img, i) => (
-              <img loading="lazy"
+              <ImageWithSkeleton
                 key={i}
                 src={img}
                 alt={img}
-                className="w-full h-64 object-cover rounded-lg shadow-md hover:scale-[1.02] transition-transform duration-300"
+                className="w-full h-64 object-cover "
               />
             ))}
           </div>

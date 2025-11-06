@@ -7,6 +7,8 @@ import { setEditData, clearEditData } from "../../../../redux/slices/editData";
 import { deleteBlog } from "../../../../api/blog/deleteBlog";
 import Detail from "./Detail";
 import Swal from "sweetalert2";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { Search } from "lucide-react";
 
 export default function BlogsListing({ setSelected }) {
   const dispatch = useDispatch();
@@ -16,17 +18,29 @@ export default function BlogsListing({ setSelected }) {
   const [detail, setDetail] = useState(null);
   const [isOpen, setIsopen] = useState(false);
 
+  // ✅ Pagination
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // ✅ Search
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); // actual term sent to API
+
+  // ✅ Fetch blogs when page or searchQuery changes
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [page, searchQuery]);
 
   const fetchBlogs = async () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await getAllBlogs();
+      const result = await getAllBlogs(page, searchQuery);
+
       if (result.success && Array.isArray(result.data)) {
-        setBlogs(result.data);
+        if (page === 1) setBlogs(result.data);
+        else setBlogs((prev) => [...prev, ...result.data]);
+        setTotalPages(result.pagination?.totalPages || 1);
       } else {
         setBlogs([]);
       }
@@ -37,6 +51,11 @@ export default function BlogsListing({ setSelected }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = () => {
+    setPage(1);
+    setSearchQuery(searchTerm);
   };
 
   const handleDelete = (blogId) => {
@@ -55,11 +74,7 @@ export default function BlogsListing({ setSelected }) {
           Swal.fire("Deleted!", "The blog has been deleted.", "success");
           setBlogs((prev) => prev.filter((b) => b._id !== blogId));
         } catch (err) {
-          Swal.fire(
-            "Error!",
-            err.response?.data?.message || err.message || "Failed to delete",
-            "error"
-          );
+          Swal.fire("Error!", err.response?.data?.message || err.message || "Failed to delete", "error");
         }
       }
     });
@@ -74,7 +89,6 @@ export default function BlogsListing({ setSelected }) {
 
     dispatch(setEditData(blog));
     setSelected("Blog-form");
-
     setTimeout(() => Swal.close(), 500);
   };
 
@@ -83,13 +97,13 @@ export default function BlogsListing({ setSelected }) {
     setIsopen(true);
   };
 
-  if (loading) {
+  if (loading && page === 1) {
     return <div className="p-10 text-center text-lg font-medium text-gray-600">Loading...</div>;
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 relative">
-      {/* Add Blog Button */}
+      {/* ✅ Add Blog Button */}
       <button
         onClick={() => {
           setSelected("Blog-form");
@@ -102,6 +116,28 @@ export default function BlogsListing({ setSelected }) {
 
       <h1 className="text-3xl font-bold mb-10 text-gray-800">Blogs</h1>
 
+      {/* 🔍 Search Bar */}
+      <div className="mb-8 max-w-md flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          <input
+            type="text"
+            placeholder="Search blog..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full border rounded-lg focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          onClick={handleSearch}
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+        >
+          {loading && page === 1 ? "Searching..." : "Search"}
+        </button>
+      </div>
+
+      {/* ✅ Blog Cards */}
       {blogs.length === 0 ? (
         <p className="text-gray-500 text-center">No blogs found.</p>
       ) : (
@@ -113,10 +149,10 @@ export default function BlogsListing({ setSelected }) {
             >
               {/* Blog Image */}
               {blog.gallery?.length > 0 ? (
-                <img loading="lazy"
+                <ImageWithSkeleton
                   src={typeof blog.gallery[0] === "string" ? blog.gallery[0] : blog.gallery[0]?.url}
                   alt={blog.title || "Blog Image"}
-                  className="w-full h-48 object-cover transition-transform duration-300 hover:scale-105"
+                  className="w-full h-48 object-cover"
                 />
               ) : (
                 <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
@@ -169,6 +205,34 @@ export default function BlogsListing({ setSelected }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ✅ Pagination Buttons */}
+      {blogs.length > 0 && (
+        <div className="text-center mt-10 flex justify-center gap-4">
+          {page < totalPages && (
+            <button
+              onClick={() => setPage((prev) => prev + 1)}
+              disabled={loading}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+
+          {page > 1 && (
+            <button
+              onClick={() => {
+                setPage((prev) => prev - 1);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              disabled={loading}
+              className="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition disabled:opacity-50"
+            >
+              See Less
+            </button>
+          )}
         </div>
       )}
 

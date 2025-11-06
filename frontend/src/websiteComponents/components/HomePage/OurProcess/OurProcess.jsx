@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import WhiteButton from "../../Common/Button/WhiteButton";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -113,7 +113,7 @@ const processSteps = [
 ];
 
 export default function OurProcess() {
-  const imageSize = { width: 650, height: 400 };
+
 
   const headerRef = useRef(null);
   const stepsRef = useRef([]);
@@ -280,13 +280,11 @@ export default function OurProcess() {
                 className="image-content w-full relative overflow-hidden rounded-lg shadow-2xl
                            transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
               >
-                <img loading="lazy"
+                <ImageWithSkeleton
                   src={step.imageSrc}
                   alt={step.altText}
-                  width={imageSize.width}
-                  height={imageSize.height}
-                  className="w-full h-full object-cover"
-                />
+                      className=" object-cover"
+                    />
               </div>
             );
 

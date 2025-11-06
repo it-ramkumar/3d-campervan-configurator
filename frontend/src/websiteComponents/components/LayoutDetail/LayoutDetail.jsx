@@ -5,6 +5,7 @@ import gsap from "gsap";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 export default function LayoutDetail() {
   const { slug } = useParams();
   const [van, setVan] = useState(null);
@@ -52,7 +53,7 @@ export default function LayoutDetail() {
 
         className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
       >
-        <img loading="lazy"
+        <ImageWithSkeleton
           src={van.gallery[0]}
           alt={`${van.van_listing.title}`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
@@ -173,11 +174,11 @@ export default function LayoutDetail() {
         {van.gallery.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {van.gallery.map((img, i) => (
-              <img loading="lazy"
+              <ImageWithSkeleton
                 key={i}
                 src={img}
                 alt={img}
-                className="w-full h-64 object-cover rounded-lg shadow-md hover:scale-[1.02] transition-transform duration-300"
+                className="w-full h-64 object-cover "
               />
             ))}
           </div>

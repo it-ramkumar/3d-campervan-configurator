@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import WhiteButton from '../../Common/Button/WhiteButton';
+import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 
 // Placeholder images - replace with your actual image paths
 const ownersImage = "/images/anna.webp";
@@ -104,10 +105,10 @@ export default function AboutPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 }}
           >
-            <img loading="lazy"
+            <ImageWithSkeleton
               src={ownersImage}
               alt="Artur and Anna, owners of Big Bear Vans"
-              className="w-full h-auto !max-h-64 md:!max-h-[700px] object-cover rounded-lg shadow-xl border-2 border-gray-800 transition-all duration-500 ease-in-out hover:scale-105 hover:border-blue-400 hover:shadow-blue-500/50 hover:shadow-3xl"
+              className="w-full h-auto !max-h-64 md:!max-h-[700px] object-cover "
             />
           </motion.div>
           <motion.div
@@ -148,10 +149,10 @@ export default function AboutPage() {
                 className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
               >
                 <div className="relative overflow-hidden">
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={ambulanceImage}
                     alt="The first Sprinter ambulance conversion"
-                    className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    className="w-full h-96 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <motion.h2
@@ -181,10 +182,10 @@ export default function AboutPage() {
                 className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
               >
                 <div className="relative overflow-hidden">
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={prototypeImage}
                     alt="Van featuring an elevator bed prototype"
-                    className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    className="w-full h-96 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <motion.h2
@@ -211,10 +212,10 @@ export default function AboutPage() {
                 className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
               >
                 <div className="relative overflow-hidden">
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={blueWhaleImage}
                     alt="The Blue Whale, a Ford Transit high roof van"
-                    className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    className="w-full h-96 object-cover "
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <motion.h2
@@ -244,10 +245,10 @@ export default function AboutPage() {
                 className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
               >
                 <div className="relative overflow-hidden">
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={grayWolfImage}
                     alt="The Gray Wolf, a 144 wheelbase Sprinter van"
-                    className="w-full h-96 object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    className="w-full h-96 object-cover "
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                   <motion.h2

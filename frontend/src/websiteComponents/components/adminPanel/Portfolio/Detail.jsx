@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 
 export default function Detail({ setIsopen, detail }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [gallery, setGallery] = useState(detail.gallery || []);
     // const [loading, setLoading] = useState(false);
-    console.log(detail,"portfolio")
+    // console.log(detail,"portfolio")
 
     // console.log(detail, "data");
 
@@ -104,7 +105,7 @@ const handleBackdropClick = (e) => {
                     {gallery.length > 0 && (
                         <div className="relative w-full h-80 sm:h-96 md:h-[500px] bg-gray-900 overflow-hidden">
                             {/* Main Image */}
-                            <img loading="lazy"
+                            <ImageWithSkeleton
                                 src={gallery[currentImageIndex]}
                                 alt={detail.van_listing?.title || 'Van Image'}
                                 className="w-full h-full object-contain"
@@ -151,7 +152,7 @@ const handleBackdropClick = (e) => {
                                                 } transition-all duration-200`}
                                             onClick={() => setCurrentImageIndex(index)}
                                         >
-                                            <img loading="lazy"
+                                            <ImageWithSkeleton
                                                 src={image}
                                                 alt={`Thumbnail ${index + 1}`}
                                                 className="w-full h-full object-cover"
@@ -322,7 +323,7 @@ const handleBackdropClick = (e) => {
                                             )}
                                             {block.image && (
                                                 <div className="mt-4 bg-gray-100 rounded-lg overflow-hidden">
-                                                    <img loading="lazy"
+                                                    <ImageWithSkeleton
                                                         src={block.image}
                                                         alt={block.caption || 'Content image'}
                                                         className="w-full h-auto max-h-96 object-cover"

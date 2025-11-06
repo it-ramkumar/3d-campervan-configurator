@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getByCategory } from "../../../../api/portfolio/getByCategory";
 import BlackButton from "../../Common/Button/BlackButton";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function CamperProjectsPage() {
   const [layouts, setLayouts] = useState([]);
@@ -84,22 +85,22 @@ useEffect(() => {
 
                   {/* RIGHT SIDE (images) */}
                   <div className="relative w-1/2 h-[200px] sm:h-[280px] md:h-[450px] lg:h-[550px] flex-shrink-0">
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={project.gallery?.[0] || "/fallback.jpg"}
                       alt={`${project.van_listing?.title || "Van"} large view`}
-                    
-                      className={`absolute top-0 w-[70%] h-full object-cover rounded-md lg:rounded-[10px] scale-x-[-1] transition-all duration-500 ease-in-out lg:group-hover:scale-110 lg:group-hover:brightness-105 ${
+
+                      className={`absolute top-0 w-[70%] h-full  ${
                         isReversed ? "left-0" : "right-0"
                       }`}
                     />
 
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={
                         project.gallery?.[0]
                       }
                       alt={`${project.van_listing?.title || "Van"} small view`}
-                      // loading="lazy"
-                      className={`absolute w-[50%] h-[55%] object-cover rounded-md lg:rounded-[10px] shadow-2xl -bottom-2 md:-bottom-4 border-2 md:border-4 border-white transition-all duration-500 ease-in-out lg:group-hover:scale-115 lg:group-hover:shadow-2xl ${
+
+                      className={`absolute w-[50%] h-[55%] object-cover  -bottom-2 md:-bottom-4  ${
                         isReversed ? "right-[5%]" : "left-[5%]"
                       }`}
                     />

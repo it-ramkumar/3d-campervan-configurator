@@ -6,9 +6,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-// -------------------
-// CREATE new van
-// -------------------
+
 router.post('/', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
   // ✅ Media file upload removed - sirf gallery ke liye
@@ -75,9 +73,7 @@ router.post('/', protect, adminOnly, upload.fields([
   }
 });
 
-// -------------------
-// GET available vans (not sold)
-// -------------------
+
 router.get('/available', async (req, res) => {
   try {
     const vans = await Van.find({ sold: false })
@@ -96,30 +92,41 @@ router.get('/available', async (req, res) => {
   }
 });
 
-// -------------------
-// GET all vans
-// -------------------
-router.get('/', async (req, res) => {
+
+router.get("/", async (req, res) => {
   try {
-    const allVans = await Van.find().sort({ createdAt: -1 });
+    let { page = 1, limit = 8 } = req.query; // frontend se aayega
+    page = Number(page);
+    limit = Number(limit);
+
+    // total vans count
+    const total = await Van.countDocuments();
+
+    // vans with skip + limit
+    const vans = await Van.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     res.status(200).json({
-      message: 'Vans fetched successfully',
-      count: allVans.length,
-      vans: allVans
+      success: true,
+      message: "Vans fetched successfully",
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      vans,
     });
   } catch (error) {
-    console.error('Error fetching vans:', error);
+    console.error("Error fetching vans:", error);
     res.status(500).json({
-      message: 'Server error',
-      error: error.message
+      success: false,
+      message: "Server error",
+      error: error.message,
     });
   }
 });
 
-// -------------------
-// GET single van by slug
-// -------------------
+
 router.get('/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
@@ -142,9 +149,7 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
-// -------------------
-// UPDATE van by slug
-// -------------------
+
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
   // ✅ Media file upload removed
@@ -227,9 +232,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
   }
 });
 
-// -------------------
-// DELETE van by slug
-// -------------------
+
 router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {
     const { slug } = req.params;

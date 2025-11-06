@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 const heroImage = "/OurClients/client.png";
 const newTitleText = "Our Clients at Big Bear Vans";
@@ -75,7 +76,7 @@ export default function HeroV() {
       ref={containerRef}
       className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden "
     >
-      <img
+      <ImageWithSkeleton
         src={heroImage}
         alt="Camper Vans For Sale"
         className="absolute inset-0 w-full h-full object-cover z-0 bg-image object-top md:object-center"

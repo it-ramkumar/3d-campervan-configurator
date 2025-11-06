@@ -2,6 +2,7 @@
 import React, { useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import BlackButton from "../Common/Button/BlackButton";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function Customize({
   mainTitle ,
@@ -57,11 +58,9 @@ export default function Customize({
                   className="w-full h-full overflow-hidden"
                   style={{ borderRadius: "28px" }}
                 >
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={image}
                     alt="Custom van interior"
-                    width={500}
-                    height={500}
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -137,12 +136,11 @@ export default function Customize({
                 className="w-full h-full overflow-hidden"
                 style={{ borderRadius: "28px" }}
               >
-                <img loading="lazy"
+                <ImageWithSkeleton
                   ref={imageRef}
                   src={image}
                   alt="Custom van interior"
-                  width={500}
-                  height={500}
+                  
                   className="object-cover w-full h-full"
                 />
               </div>

@@ -7,6 +7,7 @@ import {
   updatePortfolio,
 } from "../../../../api/portfolio/createPortfolio";
 import axios from "axios";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function PortfolioForm() {
   const editData = useSelector((state) => state.editData.editData);
@@ -563,10 +564,10 @@ const handleSubmit = async (e) => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {existingGallery.map((url, index) => (
                   <div key={index} className="relative group">
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={url}
                       alt={`Existing ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border border-gray-300"
+                      className="w-full h-24 object-cover"
                     />
                     <button
                       type="button"
@@ -596,10 +597,10 @@ const handleSubmit = async (e) => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {galleryPreviews.map((preview, index) => (
                   <div key={index} className="relative group">
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={preview}
                       alt={`Preview ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg border border-gray-300"
+                      className="w-full h-24 object-cover "
                     />
                     <button
                       type="button"

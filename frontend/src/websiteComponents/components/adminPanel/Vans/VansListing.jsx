@@ -6,6 +6,7 @@ import { getAllVans } from "../../../../api/van/getAllVans";
 import { deleteVan } from "../../../../api/van/deleteVan";
 import Detail from "./Detail";
 import Swal from "sweetalert2";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function VanListing({ setSelected }) {
   const dispatch = useDispatch();
@@ -104,10 +105,10 @@ export default function VanListing({ setSelected }) {
             <div key={van._id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
               {/* Thumbnail */}
               {van.gallery?.length > 0 ? (
-                <img  loading="lazy"
+                <ImageWithSkeleton
                   src={van.gallery[0]?.url || van.gallery[0]} // fallback to string if no url
                   alt={van.van_listing?.title || "Van Image"}
-                  className="w-full h-40 object-cover rounded mb-3"
+                  className="w-full h-40 object-cover "
                 />
               ) : (
                 <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-3">

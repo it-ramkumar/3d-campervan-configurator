@@ -1,96 +1,60 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { getAllVans } from "../../../../api/van/getAllVans";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-const AnimatedBorderStyles = () => (
-  <style jsx global>{`
-    @keyframes rotate {
-      from {
-        --angle: 0deg;
-      }
-      to {
-        --angle: 360deg;
-      }
-    }
-    .animated-border-wrap {
-      --angle: 0deg;
-      background: conic-gradient(
-        from var(--angle),
-        #000000,
-        #333333,
-        #999999,
-        #000000
-      );
-      animation: rotate 5s linear infinite;
-      transition: animation-duration 0.3s ease-in-out;
-    }
-    .animated-border-wrap:hover {
-      animation-duration: 1.5s;
-    }
-    .animated-border-wrap > div {
-      background-color: white;
-    }
-  `}</style>
-);
-
-export default function SoldVans({ soldVans = [] }) {
-  const sectionRef = useRef(null);
-  const textContentRef = useRef(null);
-  const gridCardsRef = useRef([]);
+export default function SoldVans( ) {
+  const [soldVans, setSoldVans] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const limit = 8;
+  const isFetching = useRef(false);
 
   useEffect(() => {
-    if (!soldVans.length) return;
+    const fetchVans = async () => {
+      if (isFetching.current) return; // prevent double call
+      isFetching.current = true;
+      setLoading(true);
 
-    const ctx = gsap.context(() => {
-      gsap.from(textContentRef.current.children, {
-        opacity: 0,
-        y: 60,
-        duration: 1,
-        ease: "back.out(1.7)",
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: textContentRef.current,
-          start: "top 85%",
-        },
-      });
+      try {
+        const result = await getAllVans(page, limit);
+        if (result.success) {
+          const newSoldVans = result.data.filter((v) => v.sold);
 
-      gsap.from(gridCardsRef.current, {
-        opacity: 0,
-        y: 60,
-        scale: 0.9,
-        rotationZ: 3,
-        duration: 1,
-        ease: "back.out(1.4)",
-        stagger: {
-          amount: 0.5,
-          from: "start",
-        },
-        scrollTrigger: {
-          trigger: gridCardsRef.current[0],
-          start: "top 90%",
-        },
-      });
-    }, sectionRef);
+          // ✅ Merge + remove duplicates
+          setSoldVans((prev) => {
+            const combined = [...prev, ...newSoldVans];
+            return combined.filter(
+              (v, i, arr) => arr.findIndex((x) => x._id === v._id) === i
+            );
+          });
 
-    return () => ctx.revert();
-  }, [soldVans]);
+          setHasMore(result.data.length === limit);
+
+        }
+      } catch (err) {
+        console.error("Error fetching vans:", err);
+      }
+
+      setLoading(false);
+      isFetching.current = false;
+    };
+
+    fetchVans();
+  }, [page]);
+
+  const handleLoadMore = () => {
+    if (hasMore && !loading) setPage((prev) => prev + 1);
+  };
 
   return (
-    <section
-      ref={sectionRef}
-      className="bg-white pt-0 pb-4 px-4 md:px-8 overflow-hidden"
-    >
-      <AnimatedBorderStyles />
+    <section className="bg-white pt-0 pb-12 px-4 md:px-8 overflow-hidden">
       <div className="max-w-screen-2xl mx-auto">
-        {/* Text Content */}
-        <div ref={textContentRef} className="text-center mb-12 md:mb-16">
+        {/* Heading Section */}
+        <div className="text-center mb-12 md:mb-16">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-black leading-tight">
             A Showcase of our Sold Camper Vans
           </h2>
@@ -103,39 +67,38 @@ export default function SoldVans({ soldVans = [] }) {
           </p>
         </div>
 
-        {/* Grid of Cards */}
+        {/* Vans Grid */}
         <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
           {soldVans?.length > 0 ? (
-            soldVans.map((van, index) => (
+            soldVans.map((van) => (
               <div
-                key={van._id || index}
-                ref={(el) => (gridCardsRef.current[index] = el)}
+                key={van._id}
                 className="relative w-full aspect-[4/3] p-0.5 rounded-[18px] shadow-lg shadow-gray-700/50 animated-border-wrap transition-transform duration-300 ease-in-out transform hover:scale-110 hover:z-10"
               >
-<Link to={`/van-detail/${van.slug}`}>
-    <div className="relative w-full h-full rounded-[17.5px] overflow-hidden group">
-  <img loading="lazy"
-    src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
-    alt={van?.van_listing?.model_name || "Sold camper van image"}
-    className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-  />
+                <Link to={`/van-detail/${van.slug}`}>
+                  <div className="relative w-full h-full rounded-[17.5px] overflow-hidden group">
+                    <ImageWithSkeleton
+                      src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
+                      alt={van?.van_listing?.title || "Sold camper van"}
+                      className="w-full h-full object-cover border border-gray-200 rounded-md transition-all duration-300 hover:scale-105"
+                    />
 
-  {/* SOLD Stamp */}
-  <div className="absolute inset-0 flex items-center justify-center">
-    <div className="absolute transform rotate-[-30deg] bg-red-600/80 text-white font-extrabold text-xl sm:text-3xl px-10 py-2 rounded-md shadow-lg border-2 border-white">
-      SOLD
-    </div>
-  </div>
+                    {/* SOLD Stamp */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="absolute transform rotate-[-30deg] bg-red-600/80 text-white font-extrabold text-xl sm:text-3xl px-10 py-2 rounded-md shadow-lg border-2 border-white">
+                        SOLD
+                      </div>
+                    </div>
 
-  {/* Dark overlay & text */}
-  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:from-black/80"></div>
-  <div className="absolute inset-0 p-4 flex flex-col justify-end">
-    <h3 className="font-serif text-base sm:text-2xl font-semibold text-white leading-tight transform transition-all duration-300 ease-in-out sm:translate-y-8 sm:opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-      {van?.van_listing?.title || "Unnamed Model"}
-    </h3>
-  </div>
-</div></Link>
-
+                    {/* Title Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent transition-all duration-300 group-hover:from-black/80"></div>
+                    <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                      <h3 className="font-serif text-base sm:text-2xl font-semibold text-white leading-tight transform transition-all duration-300 ease-in-out sm:translate-y-8 sm:opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                        {van?.van_listing?.title || "Unnamed Model"}
+                      </h3>
+                    </div>
+                  </div>
+                </Link>
               </div>
             ))
           ) : (
@@ -144,6 +107,19 @@ export default function SoldVans({ soldVans = [] }) {
             </p>
           )}
         </div>
+
+        {/* ✅ Load More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={handleLoadMore}
+              disabled={loading}
+              className="px-8 py-3 bg-black text-white rounded-md font-semibold hover:bg-gray-800 transition-all duration-300 disabled:opacity-60"
+            >
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,17 +1,8 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Link } from "react-router-dom";
+import React, { useRef } from "react";
 import BlackButton from "../../Common/Button/BlackButton";
-// import { getAllPortfolio } from "../../../../api/portfolio/getAllPortfolio";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
-// Register ScrollTrigger
-// if (typeof window !== "undefined") {
-//   gsap.registerPlugin(ScrollTrigger);
-// }
-
-// Image sources for the layout
 const images = [
   { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior with wood paneling" },
   { id: 2, src: "/images/p2.webp", alt: "Overhead view of a custom van kitchen and seating area" },
@@ -25,113 +16,7 @@ export default function Portfolio() {
   const headingRef = useRef(null);
   const subHeadingRef = useRef(null);
   const imageGridRef = useRef(null);
-  // const [loading,setLoading]=useState(false)
-  // const [portfolio,setPortfolio]=useState()
-  // const [page,setPages]=useState()
-  // const buttonRef = useRef(null);
 
-  // useEffect(() => {
-  //   let ctx = gsap.context(() => {
-  //     // Animate heading and description
-  //     gsap.fromTo(
-  //       [headingRef.current, subHeadingRef.current],
-  //       { y: 50, opacity: 0 },
-  //       {
-  //         y: 0,
-  //         opacity: 1,
-  //         duration: 0.8,
-  //         stagger: 0.2,
-  //         ease: "power3.out",
-  //         scrollTrigger: {
-  //           trigger: headingRef.current,
-  //           start: "top 85%",
-  //           toggleActions: "play none none reverse",
-  //         },
-  //       }
-  //     );
-
-  //     // --- UPDATED: More dynamic staggered reveal for images (Desktop) ---
-  //     if (imageGridRef.current) {
-  //       const imageElements = gsap.utils.toArray(imageGridRef.current.querySelectorAll(".image-container"));
-  //       gsap.fromTo(
-  //         imageElements,
-  //         { y: 60, opacity: 0, scale: 0.95, rotation: 'random(-5, 5)' },
-  //         {
-  //           y: 0,
-  //           opacity: 1,
-  //           scale: 1,
-  //           rotation: 0,
-  //           duration: 1.2,
-  //           stagger: 0.15,
-  //           ease: 'power4.out',
-  //           scrollTrigger: {
-  //             trigger: imageGridRef.current,
-  //             start: "top 80%",
-  //             toggleActions: "play none none reverse",
-  //           },
-  //         }
-  //       );
-
-  //       gsap.to(imageGridRef.current, {
-  //         y: "-5vh",
-  //         ease: "none",
-  //         scrollTrigger: {
-  //           trigger: sectionRef.current,
-  //           start: "top bottom",
-  //           end: "bottom top",
-  //           scrub: true,
-  //         }
-  //       });
-
-  //       // --- UPDATED: Advanced 3D Tilt + Glow hover effects for each image (Desktop) ---
-  //       imageElements.forEach((container) => {
-  //         const image = container.querySelector('img');
-  //         const tl = gsap.timeline({ paused: true });
-
-  //         tl.to(container, {
-  //           rotationY: container.dataset.side === 'left' ? -8 : 8,
-  //           rotationX: 5,
-  //           boxShadow: "0px 25px 40px -15px rgba(0,0,0,0.4)",
-  //           duration: 0.6,
-  //           ease: "power3.out",
-  //         }).to(image, {
-  //           scale: 1.1,
-  //           filter: "brightness(1.1)",
-  //           duration: 0.6,
-  //           ease: "power3.out",
-  //         }, 0);
-
-  //         container.addEventListener("mouseenter", () => tl.play());
-  //         container.addEventListener("mouseleave", () => tl.reverse());
-  //       });
-  //     }
-
-  //     // --- CHANGE 1: REMOVED the GSAP shimmer animation for the button ---
-  //     // The previous GSAP code for the button's shimmer effect has been deleted.
-
-  //   }, sectionRef);
-
-  //   return () => ctx.revert();
-  // }, []);
-  // useEffect(() => {
-  //   const fetchVans = async () => {
-  //     setLoading(true);
-  //     const result = await getAllPortfolio(); // 6 items per page
-  //     if (result.success) {
-  //       setPortfolio(result.data.data);
-  //       // console.log(result.data.data,"data"); // actual vans
-  //       // setPages(result.data.pages); // total pages
-  //     } else {
-  //       console.error(result.error);
-  //     }
-  //     setLoading(false);
-  //   };
-
-  //   fetchVans();
-  // }, []); // ✅ refetch when page changes
-// const latest5 = portfolio.slice(-5);
-
-  // console.log(latest5,"portfolio");
   return (
     // FIX: Changed py-12 to pt-6 for reduced mobile top padding, and lg:pt-12 pb-12 for desktop and bottom padding.
     <section ref={sectionRef} className="w-full pt-6 lg:pt-12 pb-12 bg-white overflow-hidden">
@@ -166,11 +51,11 @@ export default function Portfolio() {
               style={{ transformStyle: "preserve-3d" }}
               data-side="left"
             >
-              <img loading="lazy"
+              <ImageWithSkeleton
                 src={images[0].src}
                 alt={images[0].alt}
                 className="w-full h-full object-cover"
-                style={{ filter: "contrast(1.05) saturate(1.1)" }}
+
               />
             </div>
 
@@ -183,11 +68,10 @@ export default function Portfolio() {
                 style={{ transformStyle: "preserve-3d" }}
                 data-side="right"
               >
-                <img loading="lazy"
+                <ImageWithSkeleton
                   src={images[1].src}
                   alt={images[1].alt}
                   className="w-full h-full object-cover"
-                  style={{ filter: "contrast(1.05) saturate(1.1)" }}
                 />
               </div>
 
@@ -200,11 +84,11 @@ export default function Portfolio() {
                     style={{ transformStyle: "preserve-3d" }}
                     data-side="right"
                   >
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={image.src}
                       alt={image.alt}
                       className="w-full h-full object-cover"
-                      style={{ filter: "contrast(1.05) saturate(1.1)" }}
+
                     />
                   </div>
 
@@ -223,7 +107,7 @@ export default function Portfolio() {
                 key={image.id}
                 className="relative h-64 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
               >
-                <img loading="lazy"
+                <ImageWithSkeleton
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover"
@@ -239,11 +123,11 @@ export default function Portfolio() {
                 key={image.id}
                 className="relative h-40 rounded-xl overflow-hidden shadow-lg border-2 border-gray-800"
               >
-                <img loading="lazy"
+                <ImageWithSkeleton
                   src={image.src}
                   alt={image.alt}
                   className="w-full h-full object-cover"
-                  style={{ filter: "contrast(1.05) saturate(1.1)" }} // optional effect
+
                 />
               </div>
 

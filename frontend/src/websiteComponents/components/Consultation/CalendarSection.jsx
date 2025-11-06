@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { InlineWidget } from "react-calendly";
+import ImageWithSkeleton from "../../components/Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function CalendarSection() {
   return (
@@ -9,7 +10,7 @@ export default function CalendarSection() {
     {/* ====== Left Side: Text ====== */}
     <div className="w-full lg:w-1/2 flex flex-col items-center justify-between h-[80vh] text-left mb-8 lg:mb-0  p-4">
     <div className="pt-10">
-      <img src="/logobbv.jpg" alt="contact logo" className="w-40 h-40 rounded-full"/>
+      <ImageWithSkeleton src="/logobbv.jpg" alt="contact logo" className="w-40 h-40"/>
     </div>
     <div className="pb-10">
     <h2 className="font-serif font-bold text-2xl md:text-3xl text-black mb-2 md:4/6">

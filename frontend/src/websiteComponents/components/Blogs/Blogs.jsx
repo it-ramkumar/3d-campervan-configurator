@@ -1,111 +1,111 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function BlogsListing() {
+  const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [blogs, setBlogs] = useState([]);
-  const containerRef = useRef(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+
   const heroImage = "/heroSlider/bloghero.webp";
 
-  // ✅ Fetch blogs from backend
+  // ✅ Fetch Blogs
   useEffect(() => {
-    const fetch = async () => {
+    const fetchBlogs = async () => {
+      setLoading(true);
       try {
-        const data = await getAllBlogs();
+        const data = await getAllBlogs(page, searchTerm);
         setBlogs(data.data);
-      } catch (err) {
-        console.error("Error fetching blogs:", err);
+        setTotalPages(data.pagination.totalPages);
+      } finally {
+        setLoading(false);
       }
     };
-    fetch();
-  }, []);
+    fetchBlogs();
+  }, [page, searchTerm]);
 
-  // ✅ GSAP animation
-  // useEffect(() => {
-  //   const ctx = gsap.context(() => {
-  //     gsap.fromTo(
-  //       ".bg-image",
-  //       { scale: 1 },
-  //       {
-  //         scale: 1.1,
-  //         x: "random(-3%, 3%)",
-  //         y: "random(-3%, 3%)",
-  //         duration: 15,
-  //         ease: "none",
-  //         repeat: -1,
-  //         yoyo: true,
-  //       }
-  //     );
+  // ✅ Handle Search Click
+  const handleSearch = () => {
+    setPage(1);
+    setSearchTerm(searchInput);
+  };
 
-  //     gsap.from(".anim-content", {
-  //       y: 80,
-  //       opacity: 0,
-  //       stagger: 0.2,
-  //       duration: 1.2,
-  //       ease: "power3.out",
-  //     });
-  //   }, containerRef);
+  // ✅ Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
-  //   return () => ctx.revert();
-  // }, []);
+  const handleNext = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
 
-  // ✅ Filter blogs by search term
-  const filteredBlogs = blogs.filter((blog) => {
-    const title = blog.title?.toLowerCase() || "";
-    const desc = blog.description?.toLowerCase() || "";
-    const term = searchTerm.toLowerCase();
-    return title.includes(term) || desc.includes(term);
-  });
+  const handlePrev = () => {
+    if (page > 1) setPage(page - 1);
+  };
 
   return (
     <>
       <Navbar />
-      <HeroSection title="Blogs" description="Read our latest articles, tips, and insights" image={heroImage} showButton={false} />
-      {/* ✅ Main Content */}
+      <HeroSection
+        title="Blogs"
+        description="Read our latest articles, tips, and insights"
+        image={heroImage}
+        showButton={false}
+      />
+
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-[95%] mx-auto px-4 lg:px-8 py-16">
-
-          {/* Search */}
+          {/* 🔍 Search */}
           <div className="mb-12">
             <label className="block text-sm font-semibold text-gray-700 mb-3 uppercase">
               Search Articles
             </label>
-            <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-800 text-lg shadow-md"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Search articles..."
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-800 text-lg shadow-md"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300"
+              >
+                Search
+              </button>
             </div>
           </div>
 
           {/* ✅ Latest Articles */}
           <div>
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Latest Articles</h2>
-              <span className="text-sm text-gray-500 bg-gray-100 px-4 py-2 rounded-full border">
-                {filteredBlogs?.length || 0} articles
-              </span>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Latest Articles
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8 w-full">
-              {filteredBlogs.map((blog) => (
+              {blogs.map((blog) => (
                 <article
                   key={blog._id}
                   className="group bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
                 >
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={blog.gallery?.[0]}
                     alt={blog.title}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-56 object-cover"
                   />
                   <div className="p-5">
                     <h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-gray-700">
@@ -126,9 +126,42 @@ export default function BlogsListing() {
               ))}
             </div>
 
-            {filteredBlogs.length === 0 && (
+            {blogs.length === 0 && !loading && (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">No articles found.</p>
+              </div>
+            )}
+
+            {/* ✅ Simple Pagination (Page X of Y) */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-4 mt-16">
+                <button
+                  onClick={handlePrev}
+                  disabled={page === 1}
+                  className={`px-4 py-2 rounded-md border text-sm md:text-base ${
+                    page === 1
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-black text-white hover:bg-gray-800 transition"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                <span className="text-lg font-semibold text-gray-700">
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  onClick={handleNext}
+                  disabled={page === totalPages}
+                  className={`px-4 py-2 rounded-md border text-sm md:text-base ${
+                    page === totalPages
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-black text-white hover:bg-gray-800 transition"
+                  }`}
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>

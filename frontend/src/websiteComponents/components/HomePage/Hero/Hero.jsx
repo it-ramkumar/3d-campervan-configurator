@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import BlackButton from "../../Common/Button/BlackButton";
 import WhiteButton from "../../Common/Button/WhiteButton";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 // Define the pure black color for buttons and primary accents
 
@@ -75,7 +76,7 @@ export default function Hero() {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             {/* Background Image */}
-            <img loading="lazy"
+            <ImageWithSkeleton
               src={slide.image}
               alt={slide.title}
               className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''}`}

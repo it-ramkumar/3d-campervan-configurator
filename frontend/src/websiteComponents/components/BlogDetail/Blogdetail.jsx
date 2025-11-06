@@ -5,6 +5,8 @@ import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { motion } from "framer-motion";
 import { CalendarDays, Clock, Image as ImageIcon, FileText, Heading, Table, ThumbsUp, ThumbsDown, Share2, Eye, BookOpen } from "lucide-react";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -153,11 +155,11 @@ export default function BlogDetail() {
               <div className="relative w-full group">
                 <div className="bg-white rounded-lg lg:rounded-xl p-3 lg:p-4 shadow-lg border border-gray-300 transform group-hover:scale-[1.02] transition-transform duration-300">
                   {nextBlock.image ? (
-                    <img
-                      loading="lazy"
+                    <ImageWithSkeleton
+
                       src={nextBlock.image}
                       alt={block.text}
-                      className="rounded-lg w-full h-48 lg:h-64 object-cover"
+                      className=" w-full h-48 lg:h-64 object-cover"
                     />
                   ) : (
                     <div className="bg-gray-200 rounded-lg w-full h-48 lg:h-64 flex items-center justify-center text-gray-500">
@@ -223,11 +225,11 @@ export default function BlogDetail() {
           >
             <div className="bg-white rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
               {block.image ? (
-                <img
-                  loading="lazy"
+                <ImageWithSkeleton
+
                   src={block.image}
                   alt="Blog visual"
-                  className="rounded-lg lg:rounded-xl w-full max-w-4xl mx-auto object-cover transform group-hover:scale-[1.01] transition-transform duration-300"
+                  className=" w-full max-w-4xl mx-auto object-cover "
                 />
               ) : (
                 <div className="text-gray-500 text-center py-12 lg:py-20 bg-gray-100 rounded-lg lg:rounded-xl">
@@ -378,11 +380,11 @@ export default function BlogDetail() {
       {/* HERO SECTION - MOBILE OPTIMIZED */}
       <section className="relative bg-gray-900 overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            loading="eager"
+          <ImageWithSkeleton
+
             src={heroImage}
             alt={blog.title}
-            className="w-full h-full object-cover brightness-80 contrast-105"
+            className="w-full h-full object-cover "
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/60 lg:from-black/40 lg:via-black/20 lg:to-black/60"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30 lg:from-black/30 lg:via-transparent lg:to-black/20"></div>
@@ -577,8 +579,8 @@ export default function BlogDetail() {
 
                   <div className="mb-4">
                     <div className="bg-white rounded-lg lg:rounded-xl shadow-sm overflow-hidden mb-3 lg:mb-4 border border-gray-300 transform hover:scale-[1.02] transition-transform duration-300">
-                      <img
-                        loading="lazy"
+                      <ImageWithSkeleton
+
                         src={blog.gallery[currentGalleryImage]}
                         alt={`Gallery ${currentGalleryImage + 1}`}
                         className="w-full h-32 lg:h-48 object-cover"
@@ -596,8 +598,8 @@ export default function BlogDetail() {
                               : "border-gray-300 hover:border-gray-600"
                           }`}
                         >
-                          <img
-                            loading="lazy"
+                          <ImageWithSkeleton
+
                             src={img}
                             alt={`Thumbnail ${index + 1}`}
                             className="w-full h-12 lg:h-16 object-cover"

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 
 
@@ -42,11 +43,10 @@ const data = blogs.length > 0 ? blogs : [];
     >
       {/* Background Image with smooth zoom */}
       <div className="relative w-full h-full overflow-hidden">
-        <img
+        <ImageWithSkeleton
           src={post.gallery[0]}
           alt={post.title}
-          loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.12]"
+          className="w-full h-full object-cover "
         />
       </div>
 

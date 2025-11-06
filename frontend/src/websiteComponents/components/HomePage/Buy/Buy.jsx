@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton"
 import { availableVans } from '../../../../api/van/availableVans';
+import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 
 // Custom Arrow Component for Slider Navigation
 const ArrowIcon = () => (
@@ -31,40 +32,6 @@ const VanIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h2a1 1 0 001-1V6a1 1 0 00-1-1h-2v11z" />
   </svg>
 );
-
-// --- Animation Variants for Framer Motion ---
-// const fadeInUp = {
-//     hidden: { opacity: 0, y: 30 },
-//     visible: {
-//         opacity: 1,
-//         y: 0,
-//         transition: {
-//             duration: 0.6,
-//             ease: "easeOut"
-//         }
-//     }
-// };
-
-// const staggerContainer = {
-//     hidden: {},
-//     visible: {
-//         transition: {
-//             staggerChildren: 0.2
-//         }
-//     }
-// };
-
-// const slideInRight = {
-//     hidden: { opacity: 0, x: 100 },
-//     visible: {
-//         opacity: 1,
-//         x: 0,
-//         transition: {
-//             duration: 0.8,
-//             ease: [0.22, 1, 0.36, 1]
-//         }
-//     }
-// };
 
 export default function Buy() {
   const swiperRef = useRef(null);
@@ -224,10 +191,10 @@ export default function Buy() {
                   overflow-hidden shadow-lg transition-all duration-500 ease-in-out
                   group-hover:shadow-2xl group-hover:scale-[1.03]"
                   >
-                    <img loading="lazy"
+                    <ImageWithSkeleton
                       src={slide?.gallery?.[0]}
                       alt={slide.van_listing?.title || "Ready to Go Van"}
-                      className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out group-hover:scale-110"
+                      className="absolute inset-0 w-full h-full object-cover "
                     />
                     <div
                       className="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 via-black/50

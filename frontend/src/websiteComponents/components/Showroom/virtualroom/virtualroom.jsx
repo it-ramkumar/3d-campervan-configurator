@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import AirService from "../../AirService/AirService";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 // --- Framer Motion Animation Variants ---
 const containerVariants = {
@@ -68,10 +69,10 @@ const ShowroomAndTours = () => {
     <div className="bg-slate-50 text-blackish font-sans">
       {/* Big Bear Destination Section */}
       <section className="relative w-full h-[250px] overflow-hidden group">
-        <img
+        <ImageWithSkeleton
           src="/images/virtuaal1.webp"
           alt="Big Bear Lake and mountains"
-          className="absolute inset-0 w-full h-full object-cover origin-center transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:brightness-110"
+          className="absolute inset-0 w-full h-full object-cover origin-center "
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         <div className="relative z-10 flex items-center justify-center h-full p-6 text-center">
@@ -108,10 +109,10 @@ const ShowroomAndTours = () => {
             <motion.div variants={imageVariants} className="w-full md:w-7/12 lg:w-1/2 group relative">
                 <div className="absolute -inset-1.5 bg-gradient-to-r from-slate-400 to-slate-700 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-1000"></div>
                 <div className="relative aspect-[700/500] bg-gray-200 overflow-hidden rounded-xl border-2 border-slate-800/80 shadow-2xl">
-                    <img
+                    <ImageWithSkeleton
                         src="/images/virtuaal2.webp"
                         alt="Laptop screen showing a virtual tour of a campervan"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover"
                     />
                 </div>
             </motion.div>

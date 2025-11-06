@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function Detail({ setIsopen, detail }) {
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-console.log(detail,"detail")
+// console.log(detail,"detail")
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) setIsopen(false);
   };
@@ -33,7 +34,7 @@ console.log(detail,"detail")
         if (!item.image) return null;
         return (
           <div className="my-6 bg-gray-100 rounded-xl overflow-hidden shadow-lg">
-            <img loading="lazy"
+            <ImageWithSkeleton
               src={item.image}
               alt="Content image"
               className="w-full h-auto max-h-96 object-contain mx-auto"
@@ -169,7 +170,7 @@ console.log(detail,"detail")
                       key={i}
                       className="overflow-hidden rounded-xl shadow-lg bg-gray-100 flex items-center justify-center"
                     >
-                      <img loading="lazy"
+                      <ImageWithSkeleton
                         src={imgUrl}
                         alt={`Gallery image ${i + 1}`}
                         className="w-full h-48 object-cover"

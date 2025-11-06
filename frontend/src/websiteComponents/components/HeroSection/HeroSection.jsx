@@ -1,5 +1,6 @@
 "use client";
 import { Link } from "react-router-dom";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function HeroV({
   title,
@@ -11,7 +12,7 @@ export default function HeroV({
 }) {
   return (
     <div className="relative w-full h-[60vh] md:h-[90vh] overflow-hidden">
-      <img loading="lazy"
+      <ImageWithSkeleton
         src={image}
         alt="Camper Vans For Sale"
         className="absolute inset-0 w-full h-full object-cover z-0 bg-image object-top md:object-center"

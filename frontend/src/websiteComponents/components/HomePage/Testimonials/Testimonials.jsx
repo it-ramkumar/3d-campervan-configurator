@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+
+// Import Swiper styles
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -159,7 +162,7 @@ export default function Testimonials() {
                   onClick={() => openModal(review)}
                 >
                   {/* Background Image */}
-                  <img loading="lazy"
+                  <ImageWithSkeleton
                     src={vanBgImageUrl}
                     alt="Van Interior"
                     className="absolute inset-0 w-full h-full object-cover"

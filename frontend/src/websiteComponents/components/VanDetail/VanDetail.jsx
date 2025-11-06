@@ -23,7 +23,7 @@ export default function Layouts() {
   }, [slug]);
 
   if (!van) return <Loader />;
-  
+
 
   return (
     <>

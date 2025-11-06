@@ -2,6 +2,7 @@ import { useState } from "react";
 import PreviewModal from "./PreviewModal";
 import PreviewCanvas from "./PreviewCanvas";
 import { useSelector } from "react-redux";
+import ImageWithSkeleton from "../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx";
 
 const Preview = () => {
   const modelData = useSelector((state) => state.preview.preview);
@@ -136,7 +137,7 @@ const Preview = () => {
       >
         <div className="flex flex-col items-center">
           <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
-            <img loading="lazy"
+            <ImageWithSkeleton
               src={part.image}
               alt={part.label}
               className="w-full h-full object-contain"
