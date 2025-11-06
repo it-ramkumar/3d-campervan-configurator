@@ -11,7 +11,7 @@ function ChatWidget() {
 
     // ✅ Script dynamically add karna
     const script = document.createElement("script");
-    script.src = "https://widget.chatmaxima.com/embed.min.js";
+    script.src = "https://widget.chatmaxima.com/embed.min.js?v=" + new Date().getTime();
     script.id = "miutk867bnhw";
     script.defer = true;
     document.body.appendChild(script);
