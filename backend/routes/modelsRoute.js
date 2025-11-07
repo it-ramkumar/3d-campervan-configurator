@@ -5,8 +5,6 @@ const { uploadToS3 } = require("../services/s3");
 const { InteriorModel, ExteriorModel, SystemModel } = require("../models/modelsByCategory");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
 const { deleteFromS3 } = require("../services/s3");
-
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -151,7 +149,6 @@ router.put(
   }
 );
 
-
 router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
@@ -194,7 +191,6 @@ router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
 
 router.get("/interior", async (req, res) => {
   try {

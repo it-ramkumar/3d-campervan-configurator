@@ -7,10 +7,10 @@ import Swal from "sweetalert2";
  * @param {number} [limit=8] - Number of vans per page
  * @returns {Promise<{success: boolean, data?: any, total?: number, page?: number, pages?: number, error?: string}>}
  */
-export async function getAllVans(page = 1, limit = 8) {
+export async function getAllVans(page = 1, limit = 8, search = "") {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/van?page=${page}&limit=${limit}`,
+      `${import.meta.env.VITE_REACT_APP_API_URL}/van?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
       { withCredentials: true }
     );
 
@@ -18,21 +18,15 @@ export async function getAllVans(page = 1, limit = 8) {
 
     return {
       success: true,
-      data: data?.data || data?.vans || [],
-      total: data?.total || data?.count || 0,
+      data: data?.vans || [],
+      total: data?.total || 0,
       page: data?.page || page,
-      pages: data?.pages || Math.ceil((data?.total || 0) / limit),
+      pages: data?.pages || 1,
     };
   } catch (err) {
     console.error("Error fetching vans:", err);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err?.response?.data?.message || "Failed to fetch vans",
-    });
-    return {
-      success: false,
-      error: err?.response?.data?.message || "Failed to fetch vans",
-    };
+    return { success: false, error: err.message };
   }
 }
+
+

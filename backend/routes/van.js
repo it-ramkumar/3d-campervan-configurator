@@ -92,18 +92,23 @@ router.get('/available', async (req, res) => {
   }
 });
 
-
 router.get("/", async (req, res) => {
   try {
-    let { page = 1, limit = 8 } = req.query; // frontend se aayega
+    let { page = 1, limit = 8, search = "" } = req.query; // ✅ search add kiya
     page = Number(page);
     limit = Number(limit);
 
-    // total vans count
-    const total = await Van.countDocuments();
+    // ✅ Build filter condition
+    const query = {};
+    if (search) {
+      query["van_listing.title"] = { $regex: search, $options: "i" }; // case-insensitive search
+    }
 
-    // vans with skip + limit
-    const vans = await Van.find()
+    // ✅ Total vans count (filtered)
+    const total = await Van.countDocuments(query);
+
+    // ✅ Vans with pagination + search
+    const vans = await Van.find(query)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit);
