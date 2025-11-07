@@ -17,22 +17,31 @@ export default function BlogsListing() {
 
   const heroImage = "/heroSlider/bloghero.webp";
 
-  // ✅ Fetch Blogs
+  // ✅ Fetch Blogs (Fixed for Strict Mode)
   useEffect(() => {
+    let isMounted = true; // flag to prevent double fetch
     const fetchBlogs = async () => {
       setLoading(true);
       try {
         const data = await getAllBlogs(page, searchTerm);
-        setBlogs(data.data);
-        setTotalPages(data.pagination.totalPages);
+        if (isMounted && data?.data) {
+          setBlogs(data.data);
+          setTotalPages(data.pagination?.totalPages || 1);
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchBlogs();
+
+    return () => {
+      isMounted = false; // cleanup on unmount
+    };
   }, [page, searchTerm]);
 
-  // ✅ Handle Search Click
+  // ✅ Handle Search
   const handleSearch = () => {
     setPage(1);
     setSearchTerm(searchInput);
@@ -44,11 +53,11 @@ export default function BlogsListing() {
   }, [page]);
 
   const handleNext = () => {
-    if (page < totalPages) setPage(page + 1);
+    if (page < totalPages) setPage((prev) => prev + 1);
   };
 
   const handlePrev = () => {
-    if (page > 1) setPage(page - 1);
+    if (page > 1) setPage((prev) => prev - 1);
   };
 
   return (
@@ -96,6 +105,7 @@ export default function BlogsListing() {
               </h2>
             </div>
 
+            {/* Blog Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8 w-full">
               {blogs.map((blog) => (
                 <article
@@ -126,13 +136,14 @@ export default function BlogsListing() {
               ))}
             </div>
 
+            {/* No Data Message */}
             {blogs.length === 0 && !loading && (
               <div className="text-center py-16">
                 <p className="text-gray-500 text-lg">No articles found.</p>
               </div>
             )}
 
-            {/* ✅ Simple Pagination (Page X of Y) */}
+            {/* ✅ Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-4 mt-16">
                 <button
