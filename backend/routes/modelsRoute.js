@@ -70,49 +70,87 @@ router.post(
   }
 );
 
+router.put(
+  "/edit/:id",
+  protect,
+  adminOnly,
+  upload.fields([{ name: "image" }, { name: "glbFile" }]),
+  async (req, res) => {
+    try {
+      const { category, ...data } = req.body;
+      const { id } = req.params;
 
-router.put("/edit/:id", protect, adminOnly, upload.fields([{ name: "image" }, { name: "glbFile" }]), async (req, res) => {
-  try {
-    const { category, ...data } = req.body;
-    const { id } = req.params;
-
-    const Model =
-      category === "interior"
-        ? InteriorModel
-        : category === "exterior"
+      // ✅ Select correct model
+      const Model =
+        category === "interior"
+          ? InteriorModel
+          : category === "exterior"
           ? ExteriorModel
           : category === "system"
-            ? SystemModel
-            : null;
+          ? SystemModel
+          : null;
 
-    if (!Model) return res.status(400).json({ success: false, message: "Invalid category" });
+      if (!Model)
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid category" });
 
-    const updateData = { ...data };
+      // ✅ Find existing record first
+      const existing = await Model.findById(id);
+      if (!existing)
+        return res
+          .status(404)
+          .json({ success: false, message: "Model not found" });
 
-    // Upload new files if provided
-    const imageFile = req.files["image"]?.[0];
-    const glbFile = req.files["glbFile"]?.[0];
+      const updateData = { ...data };
 
-    if (imageFile) {
-      const imageUrl = await uploadToS3(imageFile.buffer, "configurator/images", imageFile.originalname, imageFile.mimetype);
-      updateData.image = imageUrl;
+      // ✅ Check uploaded files
+      const imageFile = req.files["image"]?.[0];
+      const glbFile = req.files["glbFile"]?.[0];
+
+      // ✅ If new image uploaded
+      if (imageFile) {
+        // Delete old one if exists
+        if (existing.image) {
+          await deleteFromS3(existing.image);
+        }
+
+        const imageUrl = await uploadToS3(
+          imageFile.buffer,
+          "configurator/images",
+          imageFile.originalname,
+          imageFile.mimetype
+        );
+        updateData.image = imageUrl;
+      }
+
+      // ✅ If new model uploaded
+      if (glbFile) {
+        // Delete old one if exists
+        if (existing.glbFile) {
+          await deleteFromS3(existing.glbFile);
+        }
+
+        const modelUrl = await uploadToS3(
+          glbFile.buffer,
+          "configurator/models",
+          glbFile.originalname,
+          glbFile.mimetype
+        );
+        updateData.glbFile = modelUrl;
+      }
+
+      // ✅ Update record
+      const updated = await Model.findByIdAndUpdate(id, updateData, { new: true });
+
+      res.json({ success: true, data: updated });
+    } catch (err) {
+      console.error("Update error:", err);
+      res.status(500).json({ success: false, error: err.message });
     }
-
-    if (glbFile) {
-      const modelUrl = await uploadToS3(glbFile.buffer, "configurator/models", glbFile.originalname, glbFile.mimetype);
-      updateData.glbFile = modelUrl;
-    }
-
-    const updated = await Model.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!updated) return res.status(404).json({ success: false, message: "Model not found" });
-
-    res.json({ success: true, data: updated });
-  } catch (err) {
-    console.error("Update error:", err);
-    res.status(500).json({ success: false, error: err.message });
   }
-});
+);
+
 
 router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
   try {
