@@ -5,6 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearEditData } from "../../../../redux/slices/editData";
 import axios from "axios";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { handleInputChange } from "../../../CustomHooks/handlnput";
+import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
+import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
+import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
 
 const VansForm = () => {
   const editData = useSelector((state) => state.editData.editData);
@@ -132,53 +136,7 @@ const VansForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Generic input handler for nested paths
-  const handleInputChange = (e, path) => {
-    const { name, value, type, checked } = e.target;
-    const fieldValue = type === "checkbox" ? checked : value;
 
-    if (path) {
-      const pathParts = path.split(".");
-      setFormData((prev) => {
-        const newData = JSON.parse(JSON.stringify(prev));
-        let current = newData;
-        for (let i = 0; i < pathParts.length - 1; i++) {
-          current = current[pathParts[i]];
-        }
-        const lastKey = pathParts[pathParts.length - 1];
-        if (typeof current[lastKey] === "object" && current[lastKey] !== null && name) {
-          current[lastKey] = { ...(current[lastKey] || {}), [name]: fieldValue };
-        } else {
-          current[lastKey] = fieldValue;
-        }
-        return newData;
-      });
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: fieldValue }));
-    }
-  };
-
-  // Gallery Handlers
-  const handleGalleryChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const newPreviews = files.map((f) => URL.createObjectURL(f));
-    setGalleryFiles((prev) => [...prev, ...files]);
-    setGalleryPreviews((prev) => [...prev, ...newPreviews]);
-  };
-
-  const removeNewGalleryImage = (index) => {
-    try { URL.revokeObjectURL(galleryPreviews[index]); } catch (e) {}
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
-    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const removeExistingGalleryImage = (index) => {
-    const urlToRemove = existingGallery[index];
-    setRemovedExistingGallery((prev) => [...prev, urlToRemove]);
-    setExistingGallery((prev) => prev.filter((_, i) => i !== index));
-  };
 
   // ✅ CORRECTED: Media URL Handlers - No file upload
   const addMediaUrl = () => {
@@ -195,7 +153,7 @@ const VansForm = () => {
     if (mediaUrls.length > 1) {
       setMediaUrls(prev => prev.filter((_, i) => i !== index));
     } else {
-      // If only one URL left, clear it instead of removing
+  
       setMediaUrls([""]);
     }
   };
@@ -340,7 +298,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="title"
                   value={formData.van_listing.title}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.title ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter van title"
                 />
@@ -352,7 +310,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="model_name"
                   value={formData.van_listing.model_name}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter model name"
                 />
@@ -363,7 +321,7 @@ const handleSubmit = async (e) => {
                 <textarea
                   name="description"
                   value={formData.van_listing.description}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   rows={4}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.description ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter detailed description"
@@ -377,7 +335,7 @@ const handleSubmit = async (e) => {
                   name="price"
                   type="number"
                   value={formData.van_listing.price}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.price ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter price"
                 />
@@ -389,7 +347,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="subtitle"
                   value={formData.van_listing.subtitle}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter subtitle"
                 />
@@ -400,7 +358,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="tagline"
                   value={formData.van_listing.tagline}
-                  onChange={(e) => handleInputChange(e, "van_listing")}
+                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter tagline"
                 />
@@ -418,7 +376,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="make_model"
                   value={formData.van_listing.specifications.make_model}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.make_model ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.make_model && <p className="text-sm text-red-600 mt-1">{errors.make_model}</p>}
@@ -429,7 +387,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="wheelbase"
                   value={formData.van_listing.specifications.wheelbase}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.wheelbase ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.wheelbase && <p className="text-sm text-red-600 mt-1">{errors.wheelbase}</p>}
@@ -440,7 +398,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="drivetrain"
                   value={formData.van_listing.specifications.drivetrain}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.drivetrain ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.drivetrain && <p className="text-sm text-red-600 mt-1">{errors.drivetrain}</p>}
@@ -451,7 +409,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="engine"
                   value={formData.van_listing.specifications.engine}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
               </div>
@@ -461,7 +419,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="sits"
                   value={formData.van_listing.specifications.capacity.sits}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.sits ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.sits && <p className="text-sm text-red-600 mt-1">{errors.sits}</p>}
@@ -472,7 +430,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="sleeps"
                   value={formData.van_listing.specifications.capacity.sleeps}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity")}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity",setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.sleeps ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.sleeps && <p className="text-sm text-red-600 mt-1">{errors.sleeps}</p>}
@@ -557,7 +515,8 @@ const handleSubmit = async (e) => {
                 type="file"
                 multiple
                 accept="image/*"
-                onChange={handleGalleryChange}
+               onChange={(e) => handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)}
+
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
               />
             </div>
@@ -576,7 +535,7 @@ const handleSubmit = async (e) => {
                       />
                       <button
                         type="button"
-                        onClick={() => removeExistingGalleryImage(index)}
+                        onClick={() => removeExistingGalleryImage(index,setGalleryFiles,setGalleryPreviews,galleryPreviews)}
                         className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                       >
                         ×
@@ -601,7 +560,7 @@ const handleSubmit = async (e) => {
                       />
                       <button
                         type="button"
-                        onClick={() => removeNewGalleryImage(index)}
+                        onClick={() => removeNewGalleryImage(index,setGalleryFiles,setGalleryPreviews,galleryPreviews)}
                         className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                       >
                         ×
@@ -666,7 +625,7 @@ const handleSubmit = async (e) => {
                   name="sold"
                   type="checkbox"
                   checked={formData.sold}
-                  onChange={(e) => handleInputChange(e)}
+                  onChange={(e) => handleInputChange(e,"",setFormData)}
                   className="h-5 w-5"
                 />
                 <label htmlFor="sold" className="text-sm font-medium text-gray-700">

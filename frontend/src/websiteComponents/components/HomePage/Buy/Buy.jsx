@@ -211,12 +211,12 @@ export default function Buy() {
                         <p className="text-base font-normal mb-5">{slide?.van_listing?.description || "Ready to Go Van"}</p>
                         <div className="flex gap-4">
                           <Link to="/contact">
-                            <button className="bg-white text-black font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
                               Buy Now
                             </button>
                           </Link>
                           <Link to={`/van-detail/${slide.slug}`}>
-                            <button className="bg-[#2761FD] text-white font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <button className="bg-[#2761FD] cursor-pointer text-white font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
                               More Details
                             </button>
                           </Link>
