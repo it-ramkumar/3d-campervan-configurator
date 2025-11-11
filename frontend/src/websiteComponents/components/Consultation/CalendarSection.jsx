@@ -23,12 +23,12 @@ export default function BookingPage() {
 
   // Step 1: Get Google OAuth URL and login status
   useEffect(() => {
-    fetch("http://localhost:5000/calendar/auth/url")
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/auth/url`)
       .then((res) => res.json())
       .then((data) => setAuthUrl(data.url))
       .catch((err) => console.error(err));
 
-    fetch("http://localhost:5000/calendar/status")
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/status`)
       .then((res) => res.json())
       .then((data) => setIsLoggedIn(data.loggedIn))
       .catch((err) => console.error(err));
@@ -47,7 +47,7 @@ export default function BookingPage() {
   // Step 4: Fetch available slots for selected date
   useEffect(() => {
     if (isLoggedIn && selectedDate) {
-      fetch(`http://localhost:5000/calendar/slots?date=${selectedDate}`)
+      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}`)
         .then((res) => res.json())
         .then((data) => setSlots(data))
         .catch((err) => console.error(err));
@@ -69,7 +69,7 @@ export default function BookingPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/calendar/create-event", {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
