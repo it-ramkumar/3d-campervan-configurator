@@ -1,6 +1,7 @@
 "use client";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import WhiteButton from "../Common/Button/WhiteButton";
 
 export default function HeroV({
   title,
@@ -56,13 +57,11 @@ export default function HeroV({
                 clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
               }}
             >
-              <Link to={link}>
-                <button
-                  className="bg-[#2761FD] cursor-pointer text-white font-bold text-[14px] px-5 py-[10px] rounded-[5px] transition duration-300 hover:bg-[#1f50c0] shadow-lg"
-                >
-                  {buttonText}
-                </button>
-              </Link>
+
+                <WhiteButton label=  {buttonText} link={link}
+                />
+
+
             </div>
           )}
         </div>

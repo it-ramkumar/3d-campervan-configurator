@@ -138,10 +138,9 @@ const SvgExterior = ({ className }) => (
   </svg>
 );
 
-// =================== MAIN COMPONENT ===================
 const VanPage = ({ vanDetail }) => {
   const heroRef = useRef(null);
-  // console.log(vanDetail, "vanDetail");
+
 
   const van = {
     hero: {
@@ -195,7 +194,6 @@ const VanPage = ({ vanDetail }) => {
     gallery: vanDetail?.gallery || [],
   };
 console.log(vanDetail,"vanDetail")
-  // Background animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -265,16 +263,6 @@ console.log(vanDetail,"vanDetail")
     </p>
   </div>
 
-  {/* Engine */}
-  {/* <div className="group py-2 cursor-pointer">
-    <div className="relative pb-2">
-      <p className="text-xs md:text-sm opacity-80">Engine</p>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-    <p className="font-bold text-base md:text-lg mt-1">
-      {vanDetail?.van_listing.specifications?.engine || "N/A"}
-    </p>
-  </div> */}
 
   {/* Sit & Sleep */}
   <div className="group py-2 cursor-pointer">
@@ -372,6 +360,48 @@ console.log(vanDetail,"vanDetail")
           <p className="text-center text-gray-500">No gallery images available.</p>
         )}
       </div>
+      {/* ================= Video Section ================= */}
+{vanDetail.media && vanDetail.media.length > 0 && (
+  <div className="w-full bg-black py-16 px-4 md:px-16">
+    <h2 className="text-center font-bold text-white text-4xl mb-10">
+      Watch Video
+    </h2>
+
+    <div
+      className={`grid gap-8 ${
+        vanDetail.media.length === 1
+          ? "grid-cols-1"
+          : vanDetail.media.length === 2
+          ? "grid-cols-1 md:grid-cols-2"
+          : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+      }`}
+    >
+      {vanDetail.media.map((videoUrl, index) => {
+        const embedUrl = videoUrl
+          .replace("youtu.be/", "www.youtube.com/embed/")
+          .split("?")[0];
+
+        return (
+          <div
+            key={index}
+            className="relative w-full overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]"
+          >
+            <iframe
+              src={`${embedUrl}?rel=0&modestbranding=1`}
+              title={`video-${index}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="w-full h-auto min-h-[300px] md:min-h-[400px] lg:min-h-[500px] border-0"
+            ></iframe>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
+
     </div>
   );
 };

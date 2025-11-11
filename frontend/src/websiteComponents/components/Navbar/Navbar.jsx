@@ -151,6 +151,7 @@ export default function Navbar({ forceMobile }) {
                 src="/images/logoo.webp"
                 alt="BBV logo"
                 className="w-[170px] h-[30px] border-none object-contain"
+                click={true}
               />
             </Link>
           </div>}

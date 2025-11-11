@@ -20,21 +20,23 @@ router.post("/", async (req, res) => {
     const newContact = new Contact({ name, email, phone, message });
     await newContact.save();
 
-    // ✅ Nodemailer setup
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.zoho.com',
       port: 587,
-      secure: false,
+      secure: false, // use STARTTLS
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.ZOHO_USER, // Zoho email
+        pass: process.env.ZOHO_PASS  // Zoho app password
       },
+      tls: {
+        ciphers: 'TLSv1.2'
+      }
     });
 
-    // ✅ Send to Admin
+    // ✅ Send to Admin only
     await transporter.sendMail({
-      from: `"Website Contact" <${process.env.SMTP_USER}>`,
-      to: "zainikram704@gmail.com",
+      from: `"Big Bear Vans" <${process.env.ZOHO_USER}>`,
+to: process.env.ZOHO_USER,
       subject: "New Contact Message from Website",
       html: `
         <h2>New Contact Message</h2>
@@ -45,25 +47,9 @@ router.post("/", async (req, res) => {
       `,
     });
 
-    // ✅ Thank You email
-    await transporter.sendMail({
-      from: `"Big Bear Vans" <${process.env.SMTP_USER}>`,
-      to: email,
-      subject: "Thank you for contacting Big Bear Vans!",
-      html: `
-        <div style="font-family: Arial, sans-serif; background-color:#f5f5f5; padding:20px; border-radius:10px;">
-          <h2 style="color:#2761FD;">Hi ${name},</h2>
-          <p>Thank you for reaching out to <strong>Big Bear Vans</strong>!</p>
-          <p>We’ve received your message and our team will get back to you shortly.</p>
-          <blockquote style="background:white; padding:10px; border-left:4px solid #2761FD;">${message}</blockquote>
-          <p style="margin-top:20px;">Warm regards,<br><strong>Big Bear Vans Team</strong></p>
-        </div>
-      `,
-    });
-
     res.status(201).json({
       success: true,
-      message: "Message saved, admin notified, and thank-you email sent.",
+      message: "Message saved and admin notified.",
       data: newContact,
     });
   } catch (error) {
@@ -71,6 +57,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ success: false, error: "Server error", details: error.message });
   }
 });
+
 
 /* ===============================
    GET - Fetch all contacts

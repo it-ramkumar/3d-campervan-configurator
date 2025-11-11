@@ -384,7 +384,8 @@ export default function BlogDetail() {
 
             src={heroImage}
             alt={blog.title}
-            className="w-full h-full object-cover "
+            className="w-full h-full object-cover"
+            click={true}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/60 lg:from-black/40 lg:via-black/20 lg:to-black/60"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/30 lg:from-black/30 lg:via-transparent lg:to-black/20"></div>
@@ -603,6 +604,8 @@ export default function BlogDetail() {
                             src={img}
                             alt={`Thumbnail ${index + 1}`}
                             className="w-full h-12 lg:h-16 object-cover"
+                        click={true}
+
                           />
                         </button>
                       ))}

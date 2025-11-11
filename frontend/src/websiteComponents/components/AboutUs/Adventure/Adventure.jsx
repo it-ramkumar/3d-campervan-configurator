@@ -162,7 +162,7 @@ export default function AboutPage() {
                     animate={cardControls} // Still tied to the main section control for initial visibility
                     whileHover={{ x: 5, transition: { duration: 0.3 } }}
                   >
-                    Ambulance afterlife
+                    Ambulance Afterlife
                   </motion.h2>
                 </div>
                 <div className="p-8 flex-grow">
@@ -195,7 +195,7 @@ export default function AboutPage() {
                     animate={cardControls}
                     whileHover={{ x: 5, transition: { duration: 0.3 } }}
                   >
-                    Lift bed prototype
+                    Lift Bed Prototype
                   </motion.h2>
                 </div>
                 <div className="p-8 flex-grow">

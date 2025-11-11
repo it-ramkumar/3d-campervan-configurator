@@ -45,7 +45,9 @@ const data = blogs.length > 0 ? blogs : [];
         <ImageWithSkeleton
           src={post.gallery[0]}
           alt={post.title}
-          className="w-full h-full object-cover "
+          className="w-full h-full object-cover"
+                          click={true}
+
         />
       </div>
 

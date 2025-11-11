@@ -31,42 +31,27 @@ router.post("/", async (req, res) => {
         <p style="color: gray; font-size: 14px;">This message was generated automatically by your website.</p>
       </div>
     `;
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.zoho.com',
       port: 587,
-      secure: false,
+      secure: false, // use STARTTLS
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.ZOHO_USER, // Zoho email
+        pass: process.env.ZOHO_PASS  // Zoho app password
       },
+      tls: {
+        ciphers: 'TLSv1.2'
+      }
     });
 
-    // Admin email
+    // ✅ Send to Admin only
     await transporter.sendMail({
-      from: `"Big Bear Vans" <${process.env.SMTP_USER}>`,
-      to: "zainikram704@gmail.com",
-      subject: "New Van Inquiry Received",
-      html: htmlTable,
+      from: `"Big Bear Vans" <${process.env.ZOHO_USER}>`,
+      to: process.env.ZOHO_USER,
+      subject: "New Inqquiry Message from Website",
+      html: htmlTable
     });
 
-    // Confirmation email to client
-    if (formData.email) {
-      await transporter.sendMail({
-        from: `"Big Bear Vans" <${process.env.SMTP_USER}>`,
-        to: formData.email,
-        subject: "Thanks for your inquiry — Big Bear Vans",
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9;">
-            <h2 style="color: #2761FD;">Thank you for reaching out!</h2>
-            <p>We’ve received your inquiry and our team will get in touch with you soon.</p>
-            <p>If you have any urgent questions, feel free to call us at <strong> +1 (951) 441-9719</strong>.</p>
-            <br/>
-            <p style="font-size: 14px; color: gray;">Warm regards,<br/>Big Bear Vans Team</p>
-          </div>
-        `,
-      });
-    }
 
     res.status(201).json({
       success: true,

@@ -167,21 +167,19 @@ function ClassicImageGrid({ images, layout = "standard" }) {
           key={index}
           // Image 1: Full width on mobile, correct span on desktop
           // Other images: Half width on mobile
-          className={`${
-            index === 0
+          className={`${index === 0
               ? "col-span-2 md:col-span-2 md:row-span-2"
               : "col-span-1"
-          }`}
+            }`}
         >
           <ImageWithSkeleton
             src={image}
             alt={`Van image ${index + 1}`}
             // Fixed height for small images on mobile, full height/min-h on desktop
-            className={`w-full object-cover  ${
-              index === 0
+            className={`w-full object-cover  ${index === 0
                 ? "h-64 md:h-full md:min-h-[300px]"
                 : "h-48 md:h-full md:min-h-[300px]"
-            }`}
+              }`}
           />
         </div>
       ))}
@@ -1177,9 +1175,12 @@ export default function ClientStories() {
             Ready to customize your campervan? Let's talk about the van that
             fits your lifestyle
           </p>
-          <button className="bg-gray-900 text-white font-bold text-base md:text-lg py-4 px-8 md:py-5 md:px-12 rounded-xl hover:bg-gray-800 transition-colors duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl">
-            Start Your Custom Build
-          </button>
+          <Link to={"https://configurator.bigbearvans.com"} target="_blank"
+            rel="noopener noreferrer">
+            <button className="bg-gray-900 text-white font-bold text-base md:text-lg py-4 px-8 md:py-5 md:px-12 rounded-xl hover:bg-gray-800 transition-colors duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl">
+              Start Your Custom Build
+            </button>
+          </Link>
         </div>
       </section>
 
