@@ -49,10 +49,10 @@ console.log("User Timezone:", userTimeZone);
   // Step 4: Fetch available slots for selected date
   useEffect(() => {
     if (isLoggedIn && selectedDate) {
-  fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${userTimeZone}`)
-  .then((res) => res.json())
-  .then((data) => setSlots(data))
-  .catch(console.error);
+      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}`)
+        .then((res) => res.json())
+        .then((data) => setSlots(data))
+        .catch((err) => console.error(err));
     }
   }, [isLoggedIn, selectedDate]);
 

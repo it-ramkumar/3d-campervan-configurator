@@ -1,7 +1,6 @@
 const express = require("express");
 const { google } = require("googleapis");
 const router = express.Router();
-const moment = require("moment-timezone");
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.CALENDER_CLIENTID,
@@ -86,23 +85,12 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
     // Check if slot is available
- // Create event
-const events = {
-  summary: `${summary} - ${name}`,
-  description: `${description}\nName: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}`,
-  start: {
-    dateTime: startTime,
-    timeZone: "Asia/Karachi", // ✅ add this
-  },
-  end: {
-    dateTime: endTime,
-    timeZone: "Asia/Karachi", // ✅ add this
-  },
-  conferenceData: {
-    createRequest: { requestId: `id-${Date.now()}` },
-  },
-};
-
+    const events = await calendar.events.list({
+      calendarId: "primary",
+      timeMin: new Date(startTime).toISOString(),
+      timeMax: new Date(endTime).toISOString(),
+      singleEvents: true,
+    });
 
     if (events.data.items.length > 0) {
       return res.status(400).json({ message: "This time slot is already booked." });
@@ -138,49 +126,48 @@ const events = {
 router.get("/slots", async (req, res) => {
   try {
     const { date } = req.query;
-    const timeZone = "Asia/Karachi";
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
-    let start = moment.tz(`${date} ${startHour}:00`, timeZone);
-    const end = moment.tz(`${date} ${endHour}:00`, timeZone);
+    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
+    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
 
-    // Fetch booked events in same timezone
+    // Fetch booked events
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     const events = await calendar.events.list({
       calendarId: "primary",
-      timeMin: start.clone().startOf("day").toISOString(),
-      timeMax: end.clone().endOf("day").toISOString(),
+      timeMin: new Date(`${date}T00:00:00`).toISOString(),
+      timeMax: new Date(`${date}T23:59:59`).toISOString(),
       singleEvents: true,
     });
 
     const bookedTimes = events.data.items.map(ev => ({
-      start: moment.tz(ev.start.dateTime, timeZone),
-      end: moment.tz(ev.end.dateTime, timeZone),
+      start: new Date(ev.start.dateTime || ev.start.date),
+      end: new Date(ev.end.dateTime || ev.end.date),
     }));
 
-    while (start.isBefore(end)) {
-      const slotStart = start.clone();
-      const slotEnd = start.clone().add(durationMinutes, "minutes");
+    while (start < end) {
+      const slotStart = new Date(start);
+      const slotEnd = new Date(start.getTime() + durationMinutes * 60000);
 
+      const now = new Date();
       let available = true;
-      const now = moment.tz(timeZone);
 
       // Disable past times
-      if (slotStart.isBefore(now)) available = false;
+      if (slotStart < now) available = false;
 
       // Check if booked
-      if (bookedTimes.some(booked => slotStart.isBefore(booked.end) && slotEnd.isAfter(booked.start))) {
+      if (bookedTimes.some(booked => slotStart < booked.end && slotEnd > booked.start)) {
         available = false;
       }
 
+      // ✅ YAHAN CHANGE KAREN - Local time string bhejein
       slots.push({
-        start: slotStart.toISOString(),
-        end: slotEnd.toISOString(),
-        available,
+        start: slotStart.toLocaleString(), // Local time string
+        end: slotEnd.toLocaleString(),     // Local time string
+        available
       });
-
-      start.add(durationMinutes, "minutes");
+      start = slotEnd;
     }
 
     res.json(slots);
@@ -189,5 +176,4 @@ router.get("/slots", async (req, res) => {
     res.status(500).send("Error fetching slots");
   }
 });
-
 module.exports = router;
