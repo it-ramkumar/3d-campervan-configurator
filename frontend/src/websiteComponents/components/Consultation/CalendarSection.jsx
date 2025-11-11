@@ -20,6 +20,8 @@ export default function BookingPage() {
     summary: "",
     description: "",
   });
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+console.log("User Timezone:", userTimeZone);
 
   // Step 1: Get Google OAuth URL and login status
   useEffect(() => {
@@ -47,10 +49,10 @@ export default function BookingPage() {
   // Step 4: Fetch available slots for selected date
   useEffect(() => {
     if (isLoggedIn && selectedDate) {
-      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}`)
-        .then((res) => res.json())
-        .then((data) => setSlots(data))
-        .catch((err) => console.error(err));
+  fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${userTimeZone}`)
+  .then((res) => res.json())
+  .then((data) => setSlots(data))
+  .catch(console.error);
     }
   }, [isLoggedIn, selectedDate]);
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const { google } = require("googleapis");
 const router = express.Router();
+const moment = require("moment-timezone");
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.CALENDER_CLIENTID,
@@ -137,42 +138,49 @@ const events = {
 router.get("/slots", async (req, res) => {
   try {
     const { date } = req.query;
+    const timeZone = "Asia/Karachi";
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
-    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
-    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
+    let start = moment.tz(`${date} ${startHour}:00`, timeZone);
+    const end = moment.tz(`${date} ${endHour}:00`, timeZone);
 
-    // Fetch booked events
+    // Fetch booked events in same timezone
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     const events = await calendar.events.list({
       calendarId: "primary",
-      timeMin: new Date(`${date}T00:00:00`).toISOString(),
-      timeMax: new Date(`${date}T23:59:59`).toISOString(),
+      timeMin: start.clone().startOf("day").toISOString(),
+      timeMax: end.clone().endOf("day").toISOString(),
       singleEvents: true,
     });
+
     const bookedTimes = events.data.items.map(ev => ({
-      start: new Date(ev.start.dateTime),
-      end: new Date(ev.end.dateTime),
+      start: moment.tz(ev.start.dateTime, timeZone),
+      end: moment.tz(ev.end.dateTime, timeZone),
     }));
 
-    while (start < end) {
-      const slotStart = new Date(start);
-      const slotEnd = new Date(start.getTime() + durationMinutes * 60000);
+    while (start.isBefore(end)) {
+      const slotStart = start.clone();
+      const slotEnd = start.clone().add(durationMinutes, "minutes");
 
-      const now = new Date();
       let available = true;
+      const now = moment.tz(timeZone);
 
       // Disable past times
-      if (slotStart < now) available = false;
+      if (slotStart.isBefore(now)) available = false;
 
       // Check if booked
-      if (bookedTimes.some(booked => slotStart < booked.end && slotEnd > booked.start)) {
+      if (bookedTimes.some(booked => slotStart.isBefore(booked.end) && slotEnd.isAfter(booked.start))) {
         available = false;
       }
 
-      slots.push({ start: slotStart, end: slotEnd, available });
-      start = slotEnd;
+      slots.push({
+        start: slotStart.toISOString(),
+        end: slotEnd.toISOString(),
+        available,
+      });
+
+      start.add(durationMinutes, "minutes");
     }
 
     res.json(slots);
