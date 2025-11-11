@@ -85,12 +85,23 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
     // Check if slot is available
-    const events = await calendar.events.list({
-      calendarId: "primary",
-      timeMin: new Date(startTime).toISOString(),
-      timeMax: new Date(endTime).toISOString(),
-      singleEvents: true,
-    });
+ // Create event
+const events = {
+  summary: `${summary} - ${name}`,
+  description: `${description}\nName: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}`,
+  start: {
+    dateTime: startTime,
+    timeZone: "Asia/Karachi", // ✅ add this
+  },
+  end: {
+    dateTime: endTime,
+    timeZone: "Asia/Karachi", // ✅ add this
+  },
+  conferenceData: {
+    createRequest: { requestId: `id-${Date.now()}` },
+  },
+};
+
 
     if (events.data.items.length > 0) {
       return res.status(400).json({ message: "This time slot is already booked." });
