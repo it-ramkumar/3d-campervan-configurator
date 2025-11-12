@@ -194,10 +194,10 @@ export default function Navbar({ forceMobile }) {
           <div className="flex items-center gap-4">
 <Link
   to="/contact"
-  className="hidden md:flex bg-black text-white px-6 py-3 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
+  className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
 >
   <span className="relative z-10 flex items-center">
-    Book Appointment
+   Book Free Consultation
     <svg
       className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
       fill="none"
@@ -313,9 +313,9 @@ export default function Navbar({ forceMobile }) {
             <Link
               to="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
+              className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
             >
-              Book Appointment
+              Book Free Consultation
             </Link>
           </div>
 
