@@ -129,8 +129,20 @@ router.get("/slots", async (req, res) => {
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
-    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
-    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
+
+    // ✅ TIMEZONE FIX - Local timezone mein dates banayein
+    const timezone = 'America/Los_Angeles'; // Ya phir aapka timezone
+    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00${getTimezoneOffset()}`);
+    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00${getTimezoneOffset()}`);
+
+    // Helper function for timezone offset
+    function getTimezoneOffset() {
+      const offset = new Date().getTimezoneOffset();
+      const hours = Math.abs(Math.floor(offset / 60));
+      const minutes = Math.abs(offset % 60);
+      const sign = offset > 0 ? '-' : '+';
+      return `${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    }
 
     // Fetch booked events
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
@@ -161,10 +173,10 @@ router.get("/slots", async (req, res) => {
         available = false;
       }
 
-      // ✅ YAHAN CHANGE KAREN - Local time string bhejein
+      // ✅ ISO string bhejein takay frontend sahi parse kar sake
       slots.push({
-        start: slotStart.toLocaleString(), // Local time string
-        end: slotEnd.toLocaleString(),     // Local time string
+        start: slotStart.toISOString(), // ISO string for consistent parsing
+        end: slotEnd.toISOString(),     // ISO string for consistent parsing
         available
       });
       start = slotEnd;
