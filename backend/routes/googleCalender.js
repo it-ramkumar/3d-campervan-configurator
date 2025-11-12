@@ -8,23 +8,26 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.REDIRECT_URI
 );
 
-// ✅ ONE-TIME SETUP: Initialize with stored refresh token
+// ✅ SIMPLIFIED TOKEN SETUP
 oauth2Client.setCredentials({
   refresh_token: process.env.REFRESH_TOKEN
 });
 
-// ✅ Automatic token refresh
-oauth2Client.on('tokens', (tokens) => {
-  console.log('Token auto-refreshed');
-});
+// ✅ REMOVE THIS - Yeh problem create kar raha hai
+// oauth2Client.on('tokens', (tokens) => {
+//   console.log('Token auto-refreshed');
+// });
 
-// ✅ Token validation middleware
+// ✅ SIMPLIFIED AUTHENTICATION CHECK
 const ensureAuthenticated = async (req, res, next) => {
   try {
-    await oauth2Client.getAccessToken();
+    // Simple check if we have credentials
+    if (!oauth2Client.credentials.refresh_token) {
+      throw new Error('No refresh token');
+    }
     next();
   } catch (error) {
-    console.log('Token expired, need re-authentication');
+    console.log('Authentication error:', error.message);
     res.status(401).json({
       message: "Re-authentication required",
       authUrl: `/calendar/auth/url`
@@ -32,7 +35,7 @@ const ensureAuthenticated = async (req, res, next) => {
   }
 };
 
-// Step 1: Generate Auth URL (for one-time setup)
+// Step 1: Generate Auth URL
 router.get("/auth/url", (req, res) => {
   const scopes = ["https://www.googleapis.com/auth/calendar"];
   const url = oauth2Client.generateAuthUrl({
@@ -43,49 +46,53 @@ router.get("/auth/url", (req, res) => {
   res.send({ url });
 });
 
-// Step 2: OAuth callback (for one-time setup)
+// Step 2: OAuth callback
 router.get("/auth/callback", async (req, res) => {
   const code = req.query.code;
   try {
     const { tokens } = await oauth2Client.getToken(code);
 
-    // ✅ Save this refresh token in your .env file
-    console.log("=== SAVE THIS IN YOUR .env FILE ===");
+    console.log("=== SAVE THIS REFRESH TOKEN ===");
     console.log("REFRESH_TOKEN=" + tokens.refresh_token);
-    console.log("===================================");
+    console.log("===============================");
 
     oauth2Client.setCredentials(tokens);
     res.send(`
       <h1>Authentication Successful!</h1>
-      <p>Save the refresh token in your .env file as REFRESH_TOKEN</p>
-      <p>You can close this tab now.</p>
+      <p>Save the refresh token in your .env file</p>
     `);
   } catch (err) {
-  console.error(err);
-  res.status(500).json({ message: "Error during authentication", error: err.message });
-}
-
+    console.error("Callback error:", err);
+    res.status(500).json({
+      message: "Error during authentication",
+      error: err.message
+    });
+  }
 });
 
 // ✅ Status check
 router.get("/status", async (req, res) => {
   try {
-    await oauth2Client.getAccessToken();
-    res.json({ loggedIn: true });
+    // Simple check instead of token validation
+    const hasToken = !!oauth2Client.credentials.refresh_token;
+    res.json({ loggedIn: hasToken });
   } catch (error) {
     res.json({ loggedIn: false });
   }
 });
 
-// ✅ Protected routes - use middleware
+// ✅ CREATE EVENT - WITH BETTER ERROR HANDLING
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
-  // ... your existing create-event code
   try {
     const { name, email, phone, startTime, endTime, summary, description } = req.body;
 
+    console.log("Creating event with data:", {
+      name, email, startTime, endTime
+    });
+
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-    // Check if slot is available
+    // ✅ Check if slot is available
     const events = await calendar.events.list({
       calendarId: "primary",
       timeMin: new Date(startTime).toISOString(),
@@ -94,42 +101,71 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     });
 
     if (events.data.items.length > 0) {
-      return res.status(400).json({ message: "This time slot is already booked." });
+      return res.status(400).json({
+        message: "This time slot is already booked."
+      });
     }
 
-    // Create event
+    // ✅ Create event
     const event = {
-      summary: `${summary} - ${name}`,
-      description: `${description}\nName: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}`,
-      start: { dateTime: startTime },
-      end: { dateTime: endTime },
-      conferenceData: { createRequest: { requestId: `id-${Date.now()}` } },
+      summary: summary || `Meeting with ${name}`,
+      description: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}\n\n${description || ""}`,
+      start: {
+        dateTime: new Date(startTime).toISOString(),
+        timeZone: 'America/Los_Angeles' // ✅ Apna timezone daalein
+      },
+      end: {
+        dateTime: new Date(endTime).toISOString(),
+        timeZone: 'America/Los_Angeles' // ✅ Apna timezone daalein
+      },
+      attendees: [{ email: email }],
+      conferenceData: {
+        createRequest: {
+          requestId: `meet-${Date.now()}`,
+          conferenceSolutionKey: { type: "hangoutsMeet" }
+        }
+      },
     };
+
+    console.log("Event payload:", JSON.stringify(event, null, 2));
 
     const response = await calendar.events.insert({
       calendarId: "primary",
       resource: event,
       conferenceDataVersion: 1,
+      sendUpdates: 'all'
     });
+
+    console.log("Event created successfully:", response.data.id);
 
     res.json({
       message: "Booking successful",
-      meetLink: response.data.conferenceData.entryPoints[0].uri,
-      event: response.data,
+      meetLink: response.data.hangoutLink ||
+                (response.data.conferenceData?.entryPoints?.[0]?.uri || "No meet link"),
+      eventId: response.data.id
     });
 
   } catch (err) {
-  console.error(err);
-  res.status(500).json({ message: "Error creating event", error: err.message });
-}
+    console.error("❌ EVENT CREATION ERROR:", err);
+    console.error("Error details:", err.response?.data);
+
+    res.status(500).json({
+      message: "Error creating event",
+      error: err.message,
+      details: err.response?.data
+    });
+  }
 });
 
-router.get("/slots", async (req, res) => {
+// ✅ SLOTS ENDPOINT FIX
+router.get("/slots", ensureAuthenticated, async (req, res) => {
   try {
     const { date } = req.query;
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
+
+    // ✅ ISO STRINGS USE KAREIN - Local ki jagah
     let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
     const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
 
@@ -162,20 +198,25 @@ router.get("/slots", async (req, res) => {
         available = false;
       }
 
-      // ✅ YAHAN CHANGE KAREN - Local time string bhejein
+      // ✅ ISO STRINGS BHEJEIN - Frontend ke liye consistent
       slots.push({
-        start: slotStart.toLocaleString(), // Local time string
-        end: slotEnd.toLocaleString(),     // Local time string
+        start: slotStart.toISOString(), // ✅ ISO string
+        end: slotEnd.toISOString(),     // ✅ ISO string
         available
       });
       start = slotEnd;
     }
 
+    console.log(`Generated ${slots.length} slots for ${date}`);
     res.json(slots);
-  } catch (err) {
-  console.error(err);
-  res.status(500).json({ message: "Error fetching slots", error: err.message });
-}
 
+  } catch (err) {
+    console.error("Slots error:", err);
+    res.status(500).json({
+      message: "Error fetching slots",
+      error: err.message
+    });
+  }
 });
+
 module.exports = router;

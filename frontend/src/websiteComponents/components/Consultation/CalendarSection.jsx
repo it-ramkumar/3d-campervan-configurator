@@ -60,43 +60,47 @@ export default function BookingPage() {
   }, [isLoggedIn, selectedDate]);
 
   // Step 5: Submit booking
-  const handleBooking = async () => {
-    if (!selectedSlot) return alert("Please select a time slot.");
-    if (!formData.name || !formData.email)
-      return alert("Name and Email are required.");
+ // Step 5: Submit booking - Error handling improve karein
+const handleBooking = async () => {
+  if (!selectedSlot) return alert("Please select a time slot.");
+  if (!formData.name || !formData.email)
+    return alert("Name and Email are required.");
 
-    const bookingData = {
-      ...formData,
-      startTime: selectedSlot.start,
-      endTime: selectedSlot.end,
-      summary: formData.summary || "Meeting",
-      description: formData.description || "",
-    };
-
-    try {
-      const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
-
-      const data = await res.json();
-alert(data.message);
-
-      if (res.status !== 200) {
-        return alert(data.message || "Error creating booking");
-      }
-
-      setMeetLink(data.meetLink);
-      setBookingStep(5);
-
-      // Remove booked slot from list
-      setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
-    } catch (err) {
-      console.error(err);
-      alert("Error creating booking");
-    }
+  const bookingData = {
+    ...formData,
+    startTime: selectedSlot.start,  // ✅ Backend se ISO string aa rahi hai
+    endTime: selectedSlot.end,      // ✅ Backend se ISO string aa rahi hai
+    summary: formData.summary || "Meeting",
+    description: formData.description || "",
   };
+
+  try {
+    console.log("Sending booking data:", bookingData);
+
+    const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bookingData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Backend error:", data);
+      return alert(data.message || `Error: ${res.status}`);
+    }
+
+    setMeetLink(data.meetLink);
+    setBookingStep(5);
+
+    // Remove booked slot
+    setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+
+  } catch (err) {
+    console.error("Network error:", err);
+    alert("Network error - check console for details");
+  }
+};
 
   // Copy meeting link to clipboard
   const copyToClipboard = () => {
