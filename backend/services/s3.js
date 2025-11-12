@@ -93,16 +93,31 @@ const deleteFromS3 = async (fileUrl) => {
   if (!fileUrl) return;
 
   try {
-    const key = fileUrl.split(".amazonaws.com/")[1];
-    if (!key) return;
+    let key;
 
-    await s3.deleteObject({
-      Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
-      Key: key,
-    }).promise();
+    if (fileUrl.includes(".amazonaws.com/")) {
+      key = fileUrl.split(".amazonaws.com/")[1];
+    } else if (fileUrl.includes(process.env.CLOUDFRONT_URL)) {
+      key = fileUrl.split(`${process.env.CLOUDFRONT_URL}/`)[1];
+    }
+
+    if (!key) {
+      console.warn("⚠️ Could not extract S3 key from URL:", fileUrl);
+      return;
+    }
+
+    await s3
+      .deleteObject({
+        Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
+        Key: key,
+      })
+      .promise();
+
+    console.log("✅ Deleted from S3:", key);
   } catch (err) {
     console.error("❌ Failed to delete from S3:", err);
   }
 };
+
 
 module.exports = { uploadToS3, deleteFromS3 };

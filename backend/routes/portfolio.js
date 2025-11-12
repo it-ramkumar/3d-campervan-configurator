@@ -3,7 +3,7 @@ const router = express.Router();
 const PortfolioVan = require('../models/portfolio');
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { uploadToS3 } = require("../services/s3");
+const { uploadToS3,deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 // CREATE new portfolio van
@@ -267,16 +267,25 @@ router.put(
 // DELETE portfolio van by slug
 router.delete("/:slug", protect, adminOnly, async (req, res) => {
   try {
+    // 1️⃣ Find the portfolio first
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    if (!portfolio) {
+      return res.status(404).json({
+        success: false,
+        message: "Portfolio not found",
+      });
+    }
+
+    // 2️⃣ Delete gallery images from S3
+    if (portfolio.gallery && portfolio.gallery.length > 0) {
+      await Promise.all(portfolio.gallery.map((url) => deleteFromS3(url)));
+      console.log(`🧹 Deleted ${portfolio.gallery.length} gallery images from S3`);
+    }
+
+    // 3️⃣ Delete portfolio document from MongoDB
     const deletedPortfolio = await PortfolioVan.findOneAndDelete({
       slug: req.params.slug,
     });
-
-    if (!deletedPortfolio) {
-      return res.status(404).json({
-        success: false,
-        message: "Portfolio not found"
-      });
-    }
 
     res.json({
       success: true,

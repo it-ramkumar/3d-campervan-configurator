@@ -14,20 +14,6 @@ import {addProsOrCons} from "../../../CustomHooks/addProsOrCons";
 import {handleGalleryChange} from "../../../CustomHooks/handleGalleryChange";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
   // console.log(editData,"data")

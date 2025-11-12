@@ -9,6 +9,16 @@ import { handleInputChange } from "../../../CustomHooks/handlnput";
 import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
 import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
 import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
+import { addMediaUrl } from "../../../CustomHooks/addMediaUrl";
+import { handleMediaUrlChange } from "../../../CustomHooks/handleMediaUrlChange";
+import { removeMediaUrl } from "../../../CustomHooks/removeMediaUrl";
+import { addArrayItem } from "../../../CustomHooks/addArrayItem";
+import { handleArrayItemChange } from "../../../CustomHooks/handleArrayItemChange";
+import { addDetailedFeatureItem } from "../../../CustomHooks/addDetailFeatureItem";
+import { removeDetailedFeatureItem } from "../../../CustomHooks/removeDetailFeatureItem";
+import { handleDetailedFeatureItemChange } from "../../../CustomHooks/handleDetailFeatureItemChange";
+import { removeArrayItem } from "../../../CustomHooks/removeArrayItem";
+
 
 const VansForm = () => {
   const editData = useSelector((state) => state.editData.editData);
@@ -136,143 +146,67 @@ const VansForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
-
-  // ✅ CORRECTED: Media URL Handlers - No file upload
-  const addMediaUrl = () => {
-    setMediaUrls(prev => [...prev, ""]);
-  };
-
-  const handleMediaUrlChange = (index, value) => {
-    setMediaUrls(prev =>
-      prev.map((url, i) => (i === index ? value : url))
-    );
-  };
-
-  const removeMediaUrl = (index) => {
-    if (mediaUrls.length > 1) {
-      setMediaUrls(prev => prev.filter((_, i) => i !== index));
-    } else {
-  
-      setMediaUrls([""]);
-    }
-  };
-
-  // Array helpers for detailed features
-  const addArrayItem = (field, newItem) => {
-    setFormData((prev) => ({ ...prev, [field]: [...prev[field], newItem] }));
-  };
-
-  const removeArrayItem = (field, index) => {
-    setFormData((prev) => ({ ...prev, [field]: prev[field].filter((_, i) => i !== index) }));
-  };
-
-  const handleArrayItemChange = (field, index, key, value) => {
-    setFormData((prev) => {
-      const updatedArray = [...prev[field]];
-      if (key) {
-        updatedArray[index] = { ...updatedArray[index], [key]: value };
-      } else {
-        updatedArray[index] = value;
-      }
-      return { ...prev, [field]: updatedArray };
-    });
-  };
-
-  const addDetailedFeatureItem = (featureIndex) => {
-    setFormData((prev) => {
-      const updatedFeatures = [...prev.detailed_features];
-      updatedFeatures[featureIndex] = {
-        ...updatedFeatures[featureIndex],
-        items: [...updatedFeatures[featureIndex].items, ""],
-      };
-      return { ...prev, detailed_features: updatedFeatures };
-    });
-  };
-
-  const removeDetailedFeatureItem = (featureIndex, itemIndex) => {
-    setFormData((prev) => {
-      const updatedFeatures = [...prev.detailed_features];
-      updatedFeatures[featureIndex] = {
-        ...updatedFeatures[featureIndex],
-        items: updatedFeatures[featureIndex].items.filter((_, i) => i !== itemIndex),
-      };
-      return { ...prev, detailed_features: updatedFeatures };
-    });
-  };
-
-  const handleDetailedFeatureItemChange = (featureIndex, itemIndex, value) => {
-    setFormData((prev) => {
-      const updatedFeatures = [...prev.detailed_features];
-      updatedFeatures[featureIndex] = {
-        ...updatedFeatures[featureIndex],
-        items: updatedFeatures[featureIndex].items.map((item, i) => (i === itemIndex ? value : item)),
-      };
-      return { ...prev, detailed_features: updatedFeatures };
-    });
-  };
-
   // Cleanup object URLs on unmount
   useEffect(() => {
     return () => {
       galleryPreviews.forEach((url) => {
-        try { URL.revokeObjectURL(url); } catch (e) {}
+        try { URL.revokeObjectURL(url); } catch (e) { }
       });
     };
   }, [galleryPreviews]);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!validateForm()) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-  setLoading(true);
-  try {
-    // 1️⃣ Delete removed existing gallery images from backend/S3
-    if (removedExistingGallery.length > 0) {
-      await Promise.all(
-        removedExistingGallery.map(url =>
-          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
-        )
-      );
+    setLoading(true);
+    try {
+      // 1️⃣ Delete removed existing gallery images from backend/S3
+      if (removedExistingGallery.length > 0) {
+        await Promise.all(
+          removedExistingGallery.map(url =>
+            axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
+          )
+        );
+      }
+
+      // 2️⃣ Prepare FormData for submission
+      const formToSend = new FormData();
+
+      // Gallery files (new uploads)
+      galleryFiles.forEach((file) => formToSend.append("gallery", file));
+
+      // Remaining existing gallery URLs (after deletion)
+      const updatedExistingGallery = existingGallery.filter(url => !removedExistingGallery.includes(url));
+
+      formToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
+
+      // Media URLs
+      const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
+      formToSend.append("media", JSON.stringify(cleanedMediaUrls));
+
+      // Main van data
+      formToSend.append("van_listing", JSON.stringify(formData.van_listing));
+      formToSend.append("sold", formData.sold);
+      formToSend.append("detailed_features", JSON.stringify(formData.detailed_features));
+
+      // 3️⃣ Call backend to create or update van
+      if (editData?._id) {
+        await updateVan(editData, formToSend);
+        resetForm();
+      } else {
+        await createVan(formToSend);
+        resetForm();
+      }
+
+      // 4️⃣ Clear removed images state
+      setRemovedExistingGallery([]);
+    } catch (err) {
+      console.warn("Error submitting van:", err);
+    } finally {
+      setLoading(false);
     }
-
-    // 2️⃣ Prepare FormData for submission
-    const formToSend = new FormData();
-
-    // Gallery files (new uploads)
-    galleryFiles.forEach((file) => formToSend.append("gallery", file));
-
-    // Remaining existing gallery URLs (after deletion)
-    const updatedExistingGallery = existingGallery.filter(url => !removedExistingGallery.includes(url));
-
-    formToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
-
-    // Media URLs
-    const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
-    formToSend.append("media", JSON.stringify(cleanedMediaUrls));
-
-    // Main van data
-    formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-    formToSend.append("sold", formData.sold);
-    formToSend.append("detailed_features", JSON.stringify(formData.detailed_features));
-
-    // 3️⃣ Call backend to create or update van
-    if (editData?._id) {
-      await updateVan(editData, formToSend);
-      resetForm();
-    } else {
-      await createVan(formToSend);
-      resetForm();
-    }
-
-    // 4️⃣ Clear removed images state
-    setRemovedExistingGallery([]);
-  } catch (err) {
-    console.warn("Error submitting van:", err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
@@ -298,7 +232,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="title"
                   value={formData.van_listing.title}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.title ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter van title"
                 />
@@ -310,7 +244,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="model_name"
                   value={formData.van_listing.model_name}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter model name"
                 />
@@ -321,7 +255,7 @@ const handleSubmit = async (e) => {
                 <textarea
                   name="description"
                   value={formData.van_listing.description}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   rows={4}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.description ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter detailed description"
@@ -335,7 +269,7 @@ const handleSubmit = async (e) => {
                   name="price"
                   type="number"
                   value={formData.van_listing.price}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.price ? "border-red-500" : "border-gray-300"}`}
                   placeholder="Enter price"
                 />
@@ -347,7 +281,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="subtitle"
                   value={formData.van_listing.subtitle}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter subtitle"
                 />
@@ -358,7 +292,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="tagline"
                   value={formData.van_listing.tagline}
-                  onChange={(e) => handleInputChange(e, "van_listing",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter tagline"
                 />
@@ -376,7 +310,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="make_model"
                   value={formData.van_listing.specifications.make_model}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.make_model ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.make_model && <p className="text-sm text-red-600 mt-1">{errors.make_model}</p>}
@@ -387,7 +321,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="wheelbase"
                   value={formData.van_listing.specifications.wheelbase}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.wheelbase ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.wheelbase && <p className="text-sm text-red-600 mt-1">{errors.wheelbase}</p>}
@@ -398,7 +332,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="drivetrain"
                   value={formData.van_listing.specifications.drivetrain}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.drivetrain ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.drivetrain && <p className="text-sm text-red-600 mt-1">{errors.drivetrain}</p>}
@@ -409,7 +343,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="engine"
                   value={formData.van_listing.specifications.engine}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
               </div>
@@ -419,7 +353,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="sits"
                   value={formData.van_listing.specifications.capacity.sits}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.sits ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.sits && <p className="text-sm text-red-600 mt-1">{errors.sits}</p>}
@@ -430,7 +364,7 @@ const handleSubmit = async (e) => {
                 <input
                   name="sleeps"
                   value={formData.van_listing.specifications.capacity.sleeps}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity",setFormData)}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity", setFormData)}
                   className={`w-full px-4 py-2 border rounded-lg ${errors.sleeps ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.sleeps && <p className="text-sm text-red-600 mt-1">{errors.sleeps}</p>}
@@ -449,7 +383,7 @@ const handleSubmit = async (e) => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                       <input
                         value={feature.category}
-                        onChange={(e) => handleArrayItemChange("detailed_features", index, "category", e.target.value)}
+                        onChange={(e) => handleArrayItemChange("detailed_features", index, "category", e.target.value, setFormData)}
                         className={`w-full px-4 py-2 border rounded-lg ${errors[`detail_category_${index}`] ? "border-red-500" : "border-gray-300"}`}
                         placeholder="Enter category name"
                       />
@@ -458,7 +392,7 @@ const handleSubmit = async (e) => {
 
                     <button
                       type="button"
-                      onClick={() => removeArrayItem("detailed_features", index)}
+                      onClick={() => removeArrayItem("detailed_features", index, setFormData)}
                       className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                     >
                       Remove
@@ -471,13 +405,13 @@ const handleSubmit = async (e) => {
                       <div key={itemIndex} className="flex gap-3">
                         <input
                           value={item}
-                          onChange={(e) => handleDetailedFeatureItemChange(index, itemIndex, e.target.value)}
+                          onChange={(e) => handleDetailedFeatureItemChange(index, itemIndex, e.target.value, setFormData)}
                           className={`flex-1 px-4 py-2 border rounded-lg ${errors[`detail_item_${index}_${itemIndex}`] ? "border-red-500" : "border-gray-300"}`}
                           placeholder={`Feature item ${itemIndex + 1}`}
                         />
                         <button
                           type="button"
-                          onClick={() => removeDetailedFeatureItem(index, itemIndex)}
+                          onClick={() => removeDetailedFeatureItem(index, itemIndex, setFormData)}
                           className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                         >
                           ×
@@ -487,7 +421,7 @@ const handleSubmit = async (e) => {
 
                     <button
                       type="button"
-                      onClick={() => addDetailedFeatureItem(index)}
+                      onClick={() => addDetailedFeatureItem(index, setFormData)}
                       className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                     >
                       + Add Item
@@ -498,7 +432,7 @@ const handleSubmit = async (e) => {
 
               <button
                 type="button"
-                onClick={() => addArrayItem("detailed_features", { category: "", items: [""] })}
+                onClick={() => addArrayItem("detailed_features", { category: "", items: [""] }, setFormData)}
                 className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400"
               >
                 + Add Feature Category
@@ -515,7 +449,7 @@ const handleSubmit = async (e) => {
                 type="file"
                 multiple
                 accept="image/*"
-               onChange={(e) => handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)}
+                onChange={(e) => handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)}
 
                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
               />
@@ -535,11 +469,20 @@ const handleSubmit = async (e) => {
                       />
                       <button
                         type="button"
-                        onClick={() => removeExistingGalleryImage(index,setGalleryFiles,setGalleryPreviews,galleryPreviews)}
+                        onClick={() =>
+                          removeExistingGalleryImage(
+                            index,
+                            existingGallery,            // ✅ correct
+                            setRemovedExistingGallery,  // ✅ correct
+                            setExistingGallery          // ✅ correct
+                          )
+                        }
                         className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                       >
                         ×
                       </button>
+
+
                     </div>
                   ))}
                 </div>
@@ -560,7 +503,7 @@ const handleSubmit = async (e) => {
                       />
                       <button
                         type="button"
-                        onClick={() => removeNewGalleryImage(index,setGalleryFiles,setGalleryPreviews,galleryPreviews)}
+                        onClick={() => removeNewGalleryImage(index, setGalleryFiles, setGalleryPreviews, galleryPreviews)}
                         className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                       >
                         ×
@@ -589,12 +532,12 @@ const handleSubmit = async (e) => {
                     type="text"
                     placeholder="Enter media URL (YouTube, Vimeo, etc.)"
                     value={url}
-                    onChange={(e) => handleMediaUrlChange(index, e.target.value)}
+                    onChange={(e) => handleMediaUrlChange(index, e.target.value, setMediaUrls)}
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-500"
                   />
                   <button
                     type="button"
-                    onClick={() => removeMediaUrl(index)}
+                    onClick={() => removeMediaUrl(index, mediaUrls, setMediaUrls)}
                     className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                   >
                     ×
@@ -605,7 +548,7 @@ const handleSubmit = async (e) => {
 
             <button
               type="button"
-              onClick={addMediaUrl}
+              onClick={() => addMediaUrl(setMediaUrls)}
               className="mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
             >
               + Add Media URL
@@ -625,7 +568,7 @@ const handleSubmit = async (e) => {
                   name="sold"
                   type="checkbox"
                   checked={formData.sold}
-                  onChange={(e) => handleInputChange(e,"",setFormData)}
+                  onChange={(e) => handleInputChange(e, "", setFormData)}
                   className="h-5 w-5"
                 />
                 <label htmlFor="sold" className="text-sm font-medium text-gray-700">

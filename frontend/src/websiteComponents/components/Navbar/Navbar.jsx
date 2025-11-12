@@ -36,7 +36,6 @@ export default function Navbar({ forceMobile }) {
     }
   }, [activeMenu]);
 
-  // ✅ Mobile menu animation fix (auto height)
   // ✅ Mobile menu animation fix (only fade)
   useEffect(() => {
     if (!mobileMenuRef.current) return;
@@ -58,7 +57,6 @@ export default function Navbar({ forceMobile }) {
     }
   }, [isMobileMenuOpen]);
 
-
   // Handlers
   const handleMenuHover = (menu) => {
     clearTimeout(timeoutRef.current);
@@ -69,92 +67,86 @@ export default function Navbar({ forceMobile }) {
   };
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-
   const menuContent = {
-
-  CustomBuild: {
-    title: "Custom Builds",
-    sections: [
-      {
-        title: "Start Your Custom Build",
-        items: [
-          { label: "3D Van Builder", link: "https://configurator.bigbearvans.com" },
-          { label: "Send an Inquiry", link: "/inquiry" },
-        ],
-      },
-    ],
-  },
-
-  "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
-
-  layout: {
-    title: "Layouts by Big Bear Vans",
-    sections: [
-      {
-        title: "Our Flagship Models",
-        items: [
-          { label: "Flagship Short Van — Santa Monica", link: "/" },
-          { label: "Flagship Long Van — Montreal", link: "/" },
-        ],
-      },
-      {
-        title: "Explore Layout Options",
-        items: [
-          { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
-          { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
-          { label: "Portfolio of Custom Builds", link: "/" },
-        ],
-      },
-    ],
-  },
-
-  // "3d-van-builder": { title: "Build Your Dream Van", link: "https://www.vanbuild3d.com/van" },
-  "contact-us": { title: "Contact Us", link: "/contact" },
-
-  discover: {
-    title: "Discover Big Bear Vans",
-    sections: [
-      {
-        title: "Company Info",
-        items: [
-          { label: "Our Process", link: "/our-process" },
-          { label: "Showroom", link: "/showroom" },
-          { label: "About Us", link: "/about-us" },
-          { label: "Our Clients", link: "/our-clients" },
-
-
-        ],
-      },
+    CustomBuild: {
+      title: "Custom Builds",
+      sections: [
         {
-        title: "Insights",
-        items: [
-          { label: "Exterior Choice", link: "/innovation" },
-          { label: "Blog", link: "/blogs" },
+          title: "Start Your Custom Build",
+          items: [
+            { label: "3D Van Builder", link: "https://configurator.bigbearvans.com" },
+            { label: "Send an Inquiry", link: "/inquiry" },
+          ],
+        },
+      ],
+    },
 
+    "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
 
-        ],
-      },
-    ],
-  },
-};
+    layout: {
+      title: "Layouts by Big Bear Vans",
+      sections: [
+        {
+          title: "Our Flagship Models",
+          items: [
+            { label: "Flagship Short Van — Santa Monica", link: "/" },
+            { label: "Flagship Long Van — Montreal", link: "/" },
+          ],
+        },
+        {
+          title: "Explore Layout Options",
+          items: [
+            { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
+            { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
+            { label: "Portfolio of Custom Builds", link: "/" },
+          ],
+        },
+      ],
+    },
 
+    "contact-us": { title: "Contact Us", link: "/contact" },
+
+    discover: {
+      title: "Discover Big Bear Vans",
+      sections: [
+        {
+          title: "Company Info",
+          items: [
+            { label: "Our Process", link: "/our-process" },
+            { label: "Showroom", link: "/showroom" },
+            { label: "About Us", link: "/about-us" },
+            { label: "Our Clients", link: "/our-clients" },
+          ],
+        },
+        {
+          title: "Insights",
+          items: [
+            { label: "Exterior Choice", link: "/innovation" },
+            { label: "Blog", link: "/blogs" },
+          ],
+        },
+      ],
+    },
+  };
 
   return (
     <>
-
       <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 bg-white shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
 
-          {!forceMobile && <div className="flex items-center">
-            <Link to="/" className="block">
-              <ImageWithSkeleton
-                src="/images/logoo.webp"
-                alt="BBV logo"
-                className="w-[170px] h-[30px] border-none object-contain"
-                click={true}
-              />
-            </Link>
-          </div>}
+          {/* LEFT LOGO */}
+          {!forceMobile && (
+            <div className="flex items-center">
+              <Link to="/" className="block">
+                <ImageWithSkeleton
+                  src="/images/logoo.webp"
+                  alt="BBV logo"
+                  className="w-[170px] h-[30px] border-none object-contain"
+                  click={true}
+                />
+              </Link>
+            </div>
+          )}
 
           {/* CENTER MENU (Desktop) */}
           <div
@@ -182,13 +174,6 @@ export default function Navbar({ forceMobile }) {
             >
               Layouts
             </Link>
-            {/* <Link
-              to="/van"
-              onMouseEnter={() => handleMenuHover("3d-van-builder")}
-              onMouseLeave={handleMenuLeave}
-            >
-              3D Van Builder
-            </Link> */}
             <Link
               to="/contact"
               onMouseEnter={() => handleMenuHover("contact-us")}
@@ -205,28 +190,55 @@ export default function Navbar({ forceMobile }) {
             </Link>
           </div>
 
-          {/* RIGHT SPACER */}
-          <div className={`${forceMobile ? "hidden" : "hidden md:block"} w-[150px]`}></div>
+          {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
+          <div className="flex items-center gap-4">
+<Link
+  to="/contact"
+  className="hidden md:flex bg-black text-white px-6 py-3 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
+>
+  <span className="relative z-10 flex items-center">
+    Book Appointment
+    <svg
+      className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+  </span>
 
-          {/* MOBILE BUTTON */}
-          <button
-            className={`${forceMobile ? "" : "md:hidden"} text-gray-700 z-10`}
-            onClick={toggleMobileMenu}
-          >
-            <svg
-              className="w-8 h-8"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+  {/* Animated hover background */}
+  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+
+  {/* Pulse ring effect */}
+  <span className="absolute flex h-6 w-6 -top-2 -right-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
+    <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
+  </span>
+</Link>
+
+
+            {/* MOBILE MENU BUTTON */}
+            <button
+              className={`${forceMobile ? "" : "md:hidden"} text-gray-700 z-10`}
+              onClick={toggleMobileMenu}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -272,29 +284,41 @@ export default function Navbar({ forceMobile }) {
         </div>
       )}
 
-      {/* ✅ MOBILE MENU */}
-      {/* ✅ MOBILE MENU */}
       {/* ✅ MOBILE MENU FIXED VERSION */}
       <div
         ref={mobileMenuRef}
-        className={`fixed left-0 top-[62px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[100%] md:w-[40%] backdrop-blur bg-white/50"   : "w-full md:hidden"
+        className={`fixed left-0 top-[62px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[100%] md:w-[40%] backdrop-blur bg-white/50" : "w-full md:hidden"
           }`}
         style={{
-          height: "calc(100vh - 64px)", // full height below navbar
-          overflowY: "auto", // stable vertical scroll
-          WebkitOverflowScrolling: "touch", // smooth on mobile
+          height: "calc(100vh - 64px)",
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         <div className="flex flex-col py-8 px-4 min-h-full">
-          {forceMobile && <div className="flex items-center mb-5">
-            <Link to="/" className="block">
-              <ImageWithSkeleton
-                src="/images/logoo.webp"
-                alt="BBV logo"
-                className="w-[150px] h-[30px] object-contain"
-              />
+          {forceMobile && (
+            <div className="flex items-center mb-5">
+              <Link to="/" className="block">
+                <ImageWithSkeleton
+                  src="/images/logoo.webp"
+                  alt="BBV logo"
+                  className="w-[150px] h-[30px] object-contain"
+                />
+              </Link>
+            </div>
+          )}
+
+          {/* Book Appointment Button - Mobile Version */}
+          <div className="mb-6">
+            <Link
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
+            >
+              Book Appointment
             </Link>
-          </div>}
+          </div>
+
           {Object.keys(menuContent).map((key, idx) => {
             const menu = menuContent[key];
             const hasSubmenu = menu.sections && menu.sections.length > 0;
@@ -366,7 +390,6 @@ export default function Navbar({ forceMobile }) {
           })}
         </div>
       </div>
-
     </>
   );
 }

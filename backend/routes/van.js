@@ -3,9 +3,8 @@ const router = express.Router();
 const Van = require("../models/vanModel");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { uploadToS3 } = require("../services/s3");
+const { uploadToS3,deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
-
 
 router.post('/', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
@@ -242,22 +241,33 @@ router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {
     const { slug } = req.params;
 
+    // 🔹 Step 1: Find and delete van
     const van = await Van.findOneAndDelete({ slug });
     if (!van) {
       return res.status(404).json({ message: 'Van not found' });
     }
 
+    // 🔹 Step 2: Delete all gallery images from S3
+    if (Array.isArray(van.gallery) && van.gallery.length > 0) {
+      await Promise.all(van.gallery.map(url => deleteFromS3(url)));
+      console.log(`🧹 Deleted ${van.gallery.length} gallery images from S3`);
+    }
+
+    // 🔹 Step 3: Response
     res.status(200).json({
-      message: 'Van deleted successfully',
+      message: '✅ Van deleted successfully and all S3 images removed',
       van
     });
+
   } catch (error) {
-    console.error('Error deleting van:', error);
+    console.error('❌ Error deleting van:', error);
     res.status(500).json({
       message: 'Server error',
       error: error.message
     });
   }
 });
+
+
 
 module.exports = router;

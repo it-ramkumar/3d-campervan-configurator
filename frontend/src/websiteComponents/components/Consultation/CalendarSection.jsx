@@ -209,17 +209,22 @@ const generateCalendar = () => {
   // Past check: Calendar date string ko today string se compare karein
   const isPast = dateString < todayString;
 
+  // ✅ Sunday disable check
+  const isSunday = date.getDay() === 0;
+
   calendar.push({
    day,
    date: dateString,
    isToday,
    isSelected,
-   isPast
+   isPast,
+   isSunday // ✅ added property
   });
  }
 
  return calendar;
 };
+
 
  const navigateMonth = (direction) => {
   setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
@@ -252,7 +257,7 @@ const generateCalendar = () => {
  return (
   <div className="min-h-screen flex bg-white">
    {/* Sidebar - Left Side (no changes) */}
-   <div className="hidden lg:flex lg:w-2/5 bg-black text-white p-8 flex-col justify-between">
+   <div className="hidden lg:flex lg:w-2/5  text-black p-8 flex-col justify-between">
     <div>
      {/* Website Logo - Centered */}
      <div className="flex justify-center mb-8">
@@ -262,19 +267,19 @@ const generateCalendar = () => {
      </div>
 
      {/* Brand Name - Left aligned */}
-     <h1 className="text-2xl font-bold mb-12 text-left">Plan your Customvan Build!</h1>
+     <h1 className="text-2xl font-bold mb-12 text-left text-black">Plan your Customvan Build!</h1>
 
      {/* Contact Info - Left aligned */}
      <div className="space-y-6 text-left">
       <div>
-       <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
-       <p className="text-gray-300">Host: +1 (951) 441-9719</p>
+       <h3 className="text-lg font-semibold mb-2 text-black">Contact Us</h3>
+       <p className=" text-black">Host: +1 (951) 441-9719</p>
       </div>
 
       <div className="w-16 h-px bg-gray-600"></div>
 
       <div>
-       <p className="text-gray-300 leading-relaxed">
+       <p className=" leading-relaxed">
         If you have more queries, contact the host number below.
        </p>
       </div>
@@ -394,26 +399,26 @@ const generateCalendar = () => {
             ))}
 
            </div>
+<div className="grid grid-cols-7 gap-1">
+ {calendar.map((date, index) => (
+  <button
+   key={index}
+   onClick={() => date && handleDateSelect(date)}
+   disabled={!date || date.isPast || date.isSunday} // ✅ Sunday disabled
+   className={`
+    h-12 rounded-lg text-sm transition-all font-medium
+    ${!date ? 'invisible' : ''}
+    ${date?.isPast || date?.isSunday ? 'text-gray-300 cursor-not-allowed' : ''} // ✅ Sunday style same as past
+    ${date?.isToday && !date?.isSelected ? 'bg-gray-100 text-gray-900 border border-gray-300' : ''}
+    ${date?.isSelected ? 'bg-black text-white' : ''}
+    ${!date?.isPast && !date?.isSunday && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50' : ''}
+   `}
+  >
+   {date?.day}
+  </button>
+ ))}
+</div>
 
-           <div className="grid grid-cols-7 gap-1">
-            {calendar.map((date, index) => (
-             <button
-              key={index}
-              onClick={() => date && handleDateSelect(date)}
-              disabled={!date || date.isPast}
-              className={`
-               h-12 rounded-lg text-sm transition-all font-medium
-               ${!date ? 'invisible' : ''}
-               ${date?.isPast ? 'text-gray-300 cursor-not-allowed' : ''}
-               ${date?.isToday && !date?.isSelected ? 'bg-gray-100 text-gray-900 border border-gray-300' : ''}
-               ${date?.isSelected ? 'bg-black text-white' : ''}
-               ${!date?.isPast && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50' : ''}
-              `}
-             >
-              {date?.day}
-             </button>
-            ))}
-           </div>
           </div>
 
           {/* Selected Date Display */}

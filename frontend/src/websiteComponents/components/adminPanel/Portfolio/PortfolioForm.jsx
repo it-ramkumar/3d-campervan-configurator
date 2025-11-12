@@ -8,6 +8,13 @@ import {
 } from "../../../../api/portfolio/createPortfolio";
 import axios from "axios";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
+import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
+import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
+import { removeMediaUrl } from "../../../CustomHooks/removeMediaUrl";
+import { addMediaUrl } from "../../../CustomHooks/addMediaUrl";
+
+
 
 export default function PortfolioForm() {
   const editData = useSelector((state) => state.editData.editData);
@@ -102,34 +109,6 @@ export default function PortfolioForm() {
     }
   }, [editData]);
 
-  // Gallery Handlers
-  const handleGalleryChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setGalleryFiles((prev) => [...prev, ...files]);
-    setGalleryPreviews((prev) => [...prev, ...newPreviews]);
-  };
-
-  const removeGalleryImage = (index) => {
-    try {
-      URL.revokeObjectURL(galleryPreviews[index]);
-    } catch (e) {}
-
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
-    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
- const removeExistingGalleryImage = (index) => {
-  const urlToRemove = existingGallery[index];
-
-  // Track images to delete from S3
-  setRemovedExistingGallery(prev => [...prev, urlToRemove]);
-
-  // Remove from UI immediately
-  setExistingGallery(prev => prev.filter((_, i) => i !== index));
-};
 
   // ✅ IMPROVED: Feature Handlers - Proper state updates
   const addFeatureCategory = () => {
@@ -175,18 +154,18 @@ export default function PortfolioForm() {
       prev.map((feature, i) =>
         i === fIndex
           ? {
-              ...feature,
-              items: feature.items.filter((_, itemIdx) => itemIdx !== iIndex)
-            }
+            ...feature,
+            items: feature.items.filter((_, itemIdx) => itemIdx !== iIndex)
+          }
           : feature
       )
     );
   };
 
   // ✅ IMPROVED: Media URL Handlers - Proper state updates
-  const addMediaUrl = () => {
-    setMediaUrls(prev => [...prev, ""]);
-  };
+  // const addMediaUrl = () => {
+  //   setMediaUrls(prev => [...prev, ""]);
+  // };
 
   const handleMediaUrlChange = (index, value) => {
     setMediaUrls(prev =>
@@ -194,101 +173,94 @@ export default function PortfolioForm() {
     );
   };
 
-  const removeMediaUrl = (index) => {
-    if (mediaUrls.length > 1) {
-      setMediaUrls(prev => prev.filter((_, i) => i !== index));
-    } else {
-      // If only one URL left, clear it instead of removing
-      setMediaUrls([""]);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!title || !category) {
+      alert("Title and Category are required");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // 1️⃣ Delete removed existing images from S3
+      if (removedExistingGallery.length > 0) {
+        await Promise.all(
+          removedExistingGallery.map(url =>
+            axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
+          )
+        );
+      }
+
+      // 2️⃣ Prepare FormData
+      const formDataToSend = new FormData();
+
+      // Gallery files (new uploads)
+      galleryFiles.forEach(file => formDataToSend.append("gallery", file));
+
+      // Remaining existing gallery URLs
+      const updatedExistingGallery = existingGallery.filter(
+        url => !removedExistingGallery.includes(url)
+      );
+      formDataToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
+
+      // Portfolio / Van listing data
+      const van_listing = {
+        title,
+        subtitle,
+        description,
+        price,
+        specifications: {
+          make_model: makeModel,
+          wheelbase,
+          drivetrain,
+          capacity
+        }
+      };
+      formDataToSend.append("van_listing", JSON.stringify(van_listing));
+
+      // Other fields
+      formDataToSend.append("sold", sold.toString());
+      formDataToSend.append("category", category);
+
+      // Detailed features
+      const cleanedFeatures = features
+        .map(feature => ({ ...feature, items: feature.items.filter(item => item.trim() !== "") }))
+        .filter(feature => feature.category.trim() !== "" || feature.items.length > 0);
+      formDataToSend.append("detailed_features", JSON.stringify(cleanedFeatures));
+
+      // Media URLs
+      const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
+      formDataToSend.append("media", JSON.stringify(cleanedMediaUrls));
+
+      // 3️⃣ Submit form
+      if (editData?._id) {
+        await updatePortfolio(editData, formDataToSend);
+        clearForm();
+      } else {
+        await createPortfolio(formDataToSend);
+        clearForm();
+      }
+
+      // 4️⃣ Clear removed images state
+      setRemovedExistingGallery([]);
+    } catch (error) {
+      console.error("Error uploading:", error);
+      alert("Error submitting form. Check console for details.");
+    } finally {
+      setLoading(false);
     }
   };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  // Basic validation
-  if (!title || !category) {
-    alert("Title and Category are required");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    // 1️⃣ Delete removed existing images from S3
-    if (removedExistingGallery.length > 0) {
-      await Promise.all(
-        removedExistingGallery.map(url =>
-          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
-        )
-      );
-    }
-
-    // 2️⃣ Prepare FormData
-    const formDataToSend = new FormData();
-
-    // Gallery files (new uploads)
-    galleryFiles.forEach(file => formDataToSend.append("gallery", file));
-
-    // Remaining existing gallery URLs
-    const updatedExistingGallery = existingGallery.filter(
-      url => !removedExistingGallery.includes(url)
-    );
-    formDataToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
-
-    // Portfolio / Van listing data
-    const van_listing = {
-      title,
-      subtitle,
-      description,
-      price,
-      specifications: {
-        make_model: makeModel,
-        wheelbase,
-        drivetrain,
-        capacity
-      }
-    };
-    formDataToSend.append("van_listing", JSON.stringify(van_listing));
-
-    // Other fields
-    formDataToSend.append("sold", sold.toString());
-    formDataToSend.append("category", category);
-
-    // Detailed features
-    const cleanedFeatures = features
-      .map(feature => ({ ...feature, items: feature.items.filter(item => item.trim() !== "") }))
-      .filter(feature => feature.category.trim() !== "" || feature.items.length > 0);
-    formDataToSend.append("detailed_features", JSON.stringify(cleanedFeatures));
-
-    // Media URLs
-    const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
-    formDataToSend.append("media", JSON.stringify(cleanedMediaUrls));
-
-    // 3️⃣ Submit form
-    if (editData?._id) {
-      await updatePortfolio(editData, formDataToSend);
-      clearForm();
-    } else {
-      await createPortfolio(formDataToSend);
-      clearForm();
-    }
-
-    // 4️⃣ Clear removed images state
-    setRemovedExistingGallery([]);
-  } catch (error) {
-    console.error("Error uploading:", error);
-    alert("Error submitting form. Check console for details.");
-  } finally {
-    setLoading(false);
-  }
-};
 
   // Cleanup object URLs
   useEffect(() => {
     return () => {
       galleryPreviews.forEach((url) => {
-        try { URL.revokeObjectURL(url); } catch (e) {}
+        try { URL.revokeObjectURL(url); } catch (e) { }
       });
     };
   }, [galleryPreviews]);
@@ -536,7 +508,7 @@ const handleSubmit = async (e) => {
                 />
                 <button
                   type="button"
-                  onClick={() => removeMediaUrl(index)}
+                   onClick={() => removeMediaUrl(index, mediaUrls, setMediaUrls)}
                   className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                 >
                   ×
@@ -546,7 +518,7 @@ const handleSubmit = async (e) => {
           </div>
           <button
             type="button"
-            onClick={addMediaUrl}
+           onClick={() => addMediaUrl(setMediaUrls)}
             className="mt-3 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
           >
             + Add Media URL
@@ -571,7 +543,14 @@ const handleSubmit = async (e) => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeExistingGalleryImage(index)}
+                      onClick={() =>
+                        removeExistingGalleryImage(
+                          index,
+                          existingGallery,            // ✅ correct
+                          setRemovedExistingGallery,  // ✅ correct
+                          setExistingGallery          // ✅ correct
+                        )
+                      }
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
                       ×
@@ -586,7 +565,7 @@ const handleSubmit = async (e) => {
             type="file"
             multiple
             accept="image/*"
-            onChange={handleGalleryChange}
+            onChange={(e) => handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)}
             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
           />
 
@@ -604,7 +583,7 @@ const handleSubmit = async (e) => {
                     />
                     <button
                       type="button"
-                      onClick={() => removeGalleryImage(index)}
+                      onClick={() => removeNewGalleryImage(index, setGalleryFiles, setGalleryPreviews, galleryPreviews)}
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
                       ×
@@ -621,11 +600,10 @@ const handleSubmit = async (e) => {
           <button
             type="submit"
             disabled={loading}
-            className={`px-8 py-3 rounded-lg font-medium ${
-              loading
+            className={`px-8 py-3 rounded-lg font-medium ${loading
                 ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                 : "bg-gray-800 text-white hover:bg-gray-900"
-            }`}
+              }`}
           >
             {loading ? "Submitting..." : editData ? "Update Portfolio" : "Create Portfolio"}
           </button>
