@@ -160,22 +160,37 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
 // ✅ SLOTS ENDPOINT FIX
 router.get("/slots", ensureAuthenticated, async (req, res) => {
   try {
-    const { date } = req.query;
+    const { date, timezone = 'America/Los_Angeles' } = req.query; // ✅ Frontend se timezone lein
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
 
-    // ✅ ISO STRINGS USE KAREIN - Local ki jagah
-    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
-    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
+    // ✅ USER TIMEZONE MEIN DATES BANAYEIN
+    const userDate = new Date(`${date}T00:00:00`);
 
-    // Fetch booked events
+    // User timezone mein start aur end times
+    let start = new Date(userDate.toLocaleString("en-US", { timeZone: timezone }));
+    start.setHours(startHour, 0, 0, 0);
+
+    let end = new Date(userDate.toLocaleString("en-US", { timeZone: timezone }));
+    end.setHours(endHour, 0, 0, 0);
+
+    console.log(`Generating slots for date: ${date}, timezone: ${timezone}`);
+    console.log(`User local hours: ${startHour}:00 to ${endHour}:00`);
+
+    // Fetch booked events - UTC mein query karein
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+    // UTC time range for query
+    const timeMin = new Date(date + 'T00:00:00Z');
+    const timeMax = new Date(date + 'T23:59:59Z');
+
     const events = await calendar.events.list({
       calendarId: "primary",
-      timeMin: new Date(`${date}T00:00:00`).toISOString(),
-      timeMax: new Date(`${date}T23:59:59`).toISOString(),
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
       singleEvents: true,
+      timeZone: timezone // ✅ Timezone specify karein
     });
 
     const bookedTimes = events.data.items.map(ev => ({
@@ -183,31 +198,45 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
       end: new Date(ev.end.dateTime || ev.end.date),
     }));
 
+    // Generate slots in user's local time
     while (start < end) {
       const slotStart = new Date(start);
       const slotEnd = new Date(start.getTime() + durationMinutes * 60000);
 
+      // ✅ USER KE LOCAL TIME MEIN CHECK KAREIN
       const now = new Date();
+      const userNow = new Date(now.toLocaleString("en-US", { timeZone: timezone }));
+
       let available = true;
 
-      // Disable past times
-      if (slotStart < now) available = false;
+      // Disable past times - user local time mein
+      if (slotStart < userNow) available = false;
 
-      // Check if booked
-      if (bookedTimes.some(booked => slotStart < booked.end && slotEnd > booked.start)) {
+      // Check if booked - UTC comparison
+      const slotStartUTC = new Date(slotStart.toISOString());
+      const slotEndUTC = new Date(slotEnd.toISOString());
+
+      if (bookedTimes.some(booked =>
+        slotStartUTC < booked.end && slotEndUTC > booked.start
+      )) {
         available = false;
       }
 
-      // ✅ ISO STRINGS BHEJEIN - Frontend ke liye consistent
       slots.push({
-        start: slotStart.toISOString(), // ✅ ISO string
-        end: slotEnd.toISOString(),     // ✅ ISO string
-        available
+        start: slotStart.toISOString(), // ISO string for consistency
+        end: slotEnd.toISOString(),
+        available,
+        localTime: slotStart.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: timezone
+        })
       });
+
       start = slotEnd;
     }
 
-    console.log(`Generated ${slots.length} slots for ${date}`);
+    console.log(`Generated ${slots.length} slots for timezone: ${timezone}`);
     res.json(slots);
 
   } catch (err) {
