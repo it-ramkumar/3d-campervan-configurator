@@ -122,6 +122,12 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Error creating event");
   }
 });
+// Helper function for local ISO string
+function toLocalISOString(date) {
+  const tzOffset = date.getTimezoneOffset() * 60000;
+  const localISOTime = new Date(date - tzOffset).toISOString().slice(0, -1);
+  return localISOTime;
+}
 
 router.get("/slots", async (req, res) => {
   try {
@@ -129,56 +135,45 @@ router.get("/slots", async (req, res) => {
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
+    let start = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
+    const end = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
 
-    // ✅ TIMEZONE FIX - Local timezone mein dates banayein
-    const timezone = 'America/Los_Angeles'; // Ya phir aapka timezone
-    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00${getTimezoneOffset()}`);
-    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00${getTimezoneOffset()}`);
-
-    // Helper function for timezone offset
-    function getTimezoneOffset() {
-      const offset = new Date().getTimezoneOffset();
-      const hours = Math.abs(Math.floor(offset / 60));
-      const minutes = Math.abs(offset % 60);
-      const sign = offset > 0 ? '-' : '+';
-      return `${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-    }
-
-    // Fetch booked events
+    // ✅ Fetch booked events from Google Calendar
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     const events = await calendar.events.list({
       calendarId: "primary",
-      timeMin: new Date(`${date}T00:00:00`).toISOString(),
-      timeMax: new Date(`${date}T23:59:59`).toISOString(),
+      timeMin: toLocalISOString(new Date(`${date}T00:00:00`)),
+      timeMax: toLocalISOString(new Date(`${date}T23:59:59`)),
       singleEvents: true,
     });
 
+    // ✅ Extract booked time ranges
     const bookedTimes = events.data.items.map(ev => ({
       start: new Date(ev.start.dateTime || ev.start.date),
       end: new Date(ev.end.dateTime || ev.end.date),
     }));
 
+    // ✅ Generate available slots
     while (start < end) {
       const slotStart = new Date(start);
       const slotEnd = new Date(start.getTime() + durationMinutes * 60000);
-
       const now = new Date();
       let available = true;
 
       // Disable past times
       if (slotStart < now) available = false;
 
-      // Check if booked
+      // Check if slot overlaps with booked event
       if (bookedTimes.some(booked => slotStart < booked.end && slotEnd > booked.start)) {
         available = false;
       }
 
-      // ✅ ISO string bhejein takay frontend sahi parse kar sake
       slots.push({
-        start: slotStart.toISOString(), // ISO string for consistent parsing
-        end: slotEnd.toISOString(),     // ISO string for consistent parsing
+        start: toLocalISOString(slotStart),
+        end: toLocalISOString(slotEnd),
         available
       });
+
       start = slotEnd;
     }
 
@@ -188,4 +183,5 @@ router.get("/slots", async (req, res) => {
     res.status(500).send("Error fetching slots");
   }
 });
+
 module.exports = router;

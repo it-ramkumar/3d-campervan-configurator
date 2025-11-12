@@ -6,10 +6,9 @@ export default function BookingPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
- const [selectedDate, setSelectedDate] = useState(
-  new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
-);
-
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [bookingStep, setBookingStep] = useState(1); // 1: Date, 2: Time, 3: Details, 4: Summary, 5: Confirmation
   const [meetLink, setMeetLink] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -21,9 +20,6 @@ export default function BookingPage() {
     summary: "",
     description: "",
   });
-// const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-// console.log("User Timezone:", userTimeZone);
-
   // Step 1: Get Google OAuth URL and login status
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/auth/url`)
@@ -125,37 +121,35 @@ export default function BookingPage() {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
-const generateCalendar = () => {
-  const daysInMonth = getDaysInMonth(currentMonth);
-  const firstDay = getFirstDayOfMonth(currentMonth);
-  const calendar = [];
+  const generateCalendar = () => {
+    const daysInMonth = getDaysInMonth(currentMonth);
+    const firstDay = getFirstDayOfMonth(currentMonth);
+    const calendar = [];
 
-  // Add empty cells for days before the first day of month
-  for (let i = 0; i < firstDay; i++) {
-    calendar.push(null);
-  }
+    // Add empty cells for days before the first day of month
+    for (let i = 0; i < firstDay; i++) {
+      calendar.push(null);
+    }
 
-  // Add days of the month
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    const dateString = date.toISOString().split('T')[0];
-    const todayString = new Date().toISOString().split('T')[0];
+    // Add days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const dateString = date.toISOString().split('T')[0];
+      const isToday = dateString === new Date().toISOString().split('T')[0];
+      const isSelected = dateString === selectedDate;
+      const isPast = date < new Date().setHours(0, 0, 0, 0);
 
-    const isToday = dateString === todayString;
-    const isSelected = dateString === selectedDate;
-    const isPast = dateString < todayString; // Yeh sahi hai
+      calendar.push({
+        day,
+        date: dateString,
+        isToday,
+        isSelected,
+        isPast
+      });
+    }
 
-    calendar.push({
-      day,
-      date: dateString,
-      isToday,
-      isSelected,
-      isPast
-    });
-  }
-
-  return calendar;
-};
+    return calendar;
+  };
 
   const navigateMonth = (direction) => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
