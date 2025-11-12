@@ -5,11 +5,16 @@ export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [bookingStep, setBookingStep] = useState(1); // 1: Date, 2: Time, 3: Details, 4: Summary, 5: Confirmation
+  const [selectedSlot, setSelectedSlot] = useState()
+
+  // ✅ LOCAL DATE FIX - ISO ki jagah local date use karein
+  const getTodayDate = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(getTodayDate());
+  const [bookingStep, setBookingStep] = useState(1);
   const [meetLink, setMeetLink] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -20,6 +25,7 @@ export default function BookingPage() {
     summary: "",
     description: "",
   });
+
   // Step 1: Get Google OAuth URL and login status
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/auth/url`)
@@ -75,6 +81,8 @@ export default function BookingPage() {
       });
 
       const data = await res.json();
+alert(data.message);
+
       if (res.status !== 200) {
         return alert(data.message || "Error creating booking");
       }
@@ -100,7 +108,7 @@ export default function BookingPage() {
   // Reset booking process
   const resetBooking = () => {
     setSelectedSlot(null);
-    setSelectedDate(new Date().toISOString().split("T")[0]);
+    setSelectedDate(getTodayDate()); // ✅ Local date use karein
     setFormData({
       name: "",
       email: "",
@@ -121,10 +129,12 @@ export default function BookingPage() {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
+  // ✅ UPDATED CALENDAR FUNCTION - Local time fix
   const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth);
     const firstDay = getFirstDayOfMonth(currentMonth);
     const calendar = [];
+    const today = getTodayDate(); // Local today date
 
     // Add empty cells for days before the first day of month
     for (let i = 0; i < firstDay; i++) {
@@ -134,10 +144,11 @@ export default function BookingPage() {
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-      const dateString = date.toISOString().split('T')[0];
-      const isToday = dateString === new Date().toISOString().split('T')[0];
+      const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+      const isToday = dateString === today;
       const isSelected = dateString === selectedDate;
-      const isPast = date < new Date().setHours(0, 0, 0, 0);
+      const isPast = dateString < today; // ✅ Sahi comparison
 
       calendar.push({
         day,
@@ -171,6 +182,17 @@ export default function BookingPage() {
     });
   };
 
+  // ✅ LOCAL TIME SLOT DISPLAY FIX
+  const formatTimeSlot = (slotTime) => {
+    // Agar backend se ISO string aati hai toh local time mein convert karein
+    const date = new Date(slotTime);
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+  };
+
   const calendar = generateCalendar();
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -179,42 +201,40 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen flex bg-white">
       {/* Sidebar - Left Side */}
-     <div className="hidden lg:flex lg:w-2/5 bg-black text-white p-8 flex-col justify-between">
-  <div>
-    {/* Website Logo - Centered */}
-    <div className="flex justify-center mb-8">
-      <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center">
-        <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
+      <div className="hidden lg:flex lg:w-2/5 bg-black text-white p-8 flex-col justify-between">
+        <div>
+          {/* Website Logo - Centered */}
+          <div className="flex justify-center mb-8">
+            <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center">
+              <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          {/* Brand Name - Left aligned */}
+          <h1 className="text-2xl font-bold mb-12 text-left">Plan your Customvan Build!</h1>
+
+          {/* Contact Info - Left aligned */}
+          <div className="space-y-6 text-left">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
+              <p className="text-gray-300">Host: +1 (951) 441-9719</p>
+            </div>
+
+            <div className="w-16 h-px bg-gray-600"></div>
+
+            <div>
+              <p className="text-gray-300 leading-relaxed">
+                If you have more queries, contact the host number below.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-gray-400 text-sm text-left mt-12">
+          {/* <p>© 2024 Your Company. All rights reserved.</p> */}
+        </div>
       </div>
-    </div>
-
-    {/* Brand Name - Left aligned */}
-    <h1 className="text-2xl font-bold mb-12 text-left">Plan your Customvan Build!</h1>
-
-    {/* Contact Info - Left aligned */}
-    <div className="space-y-6 text-left">
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
-        <p className="text-gray-300">Host: +1 (951) 441-9719</p>
-      </div>
-
-      <div className="w-16 h-px bg-gray-600"></div>
-
-      <div>
-        <p className="text-gray-300 leading-relaxed">
-If you have more queries, contact the host number below.
-
-        </p>
-      </div>
-    </div>
-  </div>
-
-  {/* Footer */}
-  <div className="text-gray-400 text-sm text-left mt-12">
-    {/* <p>© 2024 Your Company. All rights reserved.</p> */}
-  </div>
-</div>
-
 
       {/* Main Content - Right Side */}
       <div className="flex-1 flex flex-col max-h-screen overflow-y-auto">
@@ -234,10 +254,10 @@ If you have more queries, contact the host number below.
                 className="bg-white text-gray-900 px-6 py-4 rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 w-full font-medium"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                 </svg>
                 Login with Google
               </button>
@@ -316,11 +336,12 @@ If you have more queries, contact the host number below.
 
                       {/* Calendar Grid */}
                       <div className="grid grid-cols-7 gap-1 mb-3">
-                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
-                          <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                          <div key={day + index} className="text-center text-sm font-medium py-2">
                             {day}
                           </div>
                         ))}
+
                       </div>
 
                       <div className="grid grid-cols-7 gap-1">
@@ -383,18 +404,15 @@ If you have more queries, contact the host number below.
                               }
                             }}
                             disabled={!slot.available}
-                            className={`p-4 border-2 rounded-lg text-center transition-all font-medium text-lg ${
-                              selectedSlot === slot
+                            className={`p-4 border-2 rounded-lg text-center transition-all font-medium text-lg ${selectedSlot === slot
                                 ? "bg-black text-white border-black"
                                 : slot.available
-                                ? "bg-white text-gray-900 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
-                                : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                            }`}
+                                  ? "bg-white text-gray-900 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+                                  : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                              }`}
                           >
-                            {new Date(slot.start).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {/* ✅ LOCAL TIME FORMAT USE KAREIN */}
+                            {formatTimeSlot(slot.start)}
                           </button>
                         ))}
                       </div>
@@ -416,7 +434,7 @@ If you have more queries, contact the host number below.
                   <div className="max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">Enter Your Details</h2>
                     <p className="text-gray-600 text-center mb-8">
-                      {formatDate(selectedDate)} at {selectedSlot && new Date(selectedSlot.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
                     </p>
 
                     <div className="space-y-6 mb-8">
@@ -512,7 +530,7 @@ If you have more queries, contact the host number below.
                           <span className="text-gray-600">Date & Time</span>
                           <span className="font-semibold text-lg text-right">
                             {formatDate(selectedDate)}<br />
-                            at {selectedSlot && new Date(selectedSlot.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            at {selectedSlot && formatTimeSlot(selectedSlot.start)}
                           </span>
                         </div>
 

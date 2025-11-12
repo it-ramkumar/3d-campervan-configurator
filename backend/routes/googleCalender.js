@@ -61,9 +61,10 @@ router.get("/auth/callback", async (req, res) => {
       <p>You can close this tab now.</p>
     `);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error during authentication");
-  }
+  console.error(err);
+  res.status(500).json({ message: "Error during authentication", error: err.message });
+}
+
 });
 
 // ✅ Status check
@@ -118,9 +119,9 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error creating event");
-  }
+  console.error(err);
+  res.status(500).json({ message: "Error creating event", error: err.message });
+}
 });
 
 router.get("/slots", async (req, res) => {
@@ -172,8 +173,9 @@ router.get("/slots", async (req, res) => {
 
     res.json(slots);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching slots");
-  }
+  console.error(err);
+  res.status(500).json({ message: "Error fetching slots", error: err.message });
+}
+
 });
 module.exports = router;
