@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function BookingPage() {
 const [authUrl, setAuthUrl] = useState("");
@@ -324,9 +325,13 @@ const generateCalendar = () => {
        <div className="lg:hidden mb-8">
         <div className="flex items-center gap-3 mb-4">
          <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-sm">LOGO</span>
+           <ImageWithSkeleton
+                          src="/logobbv.jpg"
+                          alt="BBV logo"
+                          className="w-[100px] h-[30px] object-contain"
+                        />
          </div>
-         <h1 className="text-xl font-bold">Your Brand</h1>
+       
         </div>
         <div className="w-12 h-px bg-gray-300"></div>
        </div>
