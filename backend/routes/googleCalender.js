@@ -122,12 +122,6 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     res.status(500).send("Error creating event");
   }
 });
-// Helper function for local ISO string
-function toLocalISOString(date) {
-  const tzOffset = date.getTimezoneOffset() * 60000;
-  const localISOTime = new Date(date - tzOffset).toISOString().slice(0, -1);
-  return localISOTime;
-}
 
 router.get("/slots", async (req, res) => {
   try {
@@ -135,45 +129,44 @@ router.get("/slots", async (req, res) => {
     const startHour = 9, endHour = 17, durationMinutes = 30;
 
     const slots = [];
-    let start = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
-    const end = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
+    let start = new Date(`${date}T${startHour.toString().padStart(2,'0')}:00:00`);
+    const end = new Date(`${date}T${endHour.toString().padStart(2,'0')}:00:00`);
 
-    // ✅ Fetch booked events from Google Calendar
+    // Fetch booked events
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     const events = await calendar.events.list({
       calendarId: "primary",
-      timeMin: toLocalISOString(new Date(`${date}T00:00:00`)),
-      timeMax: toLocalISOString(new Date(`${date}T23:59:59`)),
+      timeMin: new Date(`${date}T00:00:00`).toISOString(),
+      timeMax: new Date(`${date}T23:59:59`).toISOString(),
       singleEvents: true,
     });
 
-    // ✅ Extract booked time ranges
     const bookedTimes = events.data.items.map(ev => ({
       start: new Date(ev.start.dateTime || ev.start.date),
       end: new Date(ev.end.dateTime || ev.end.date),
     }));
 
-    // ✅ Generate available slots
     while (start < end) {
       const slotStart = new Date(start);
       const slotEnd = new Date(start.getTime() + durationMinutes * 60000);
+
       const now = new Date();
       let available = true;
 
       // Disable past times
       if (slotStart < now) available = false;
 
-      // Check if slot overlaps with booked event
+      // Check if booked
       if (bookedTimes.some(booked => slotStart < booked.end && slotEnd > booked.start)) {
         available = false;
       }
 
+      // ✅ YAHAN CHANGE KAREN - Local time string bhejein
       slots.push({
-        start: toLocalISOString(slotStart),
-        end: toLocalISOString(slotEnd),
+        start: slotStart.toLocaleString(), // Local time string
+        end: slotEnd.toLocaleString(),     // Local time string
         available
       });
-
       start = slotEnd;
     }
 
@@ -183,5 +176,4 @@ router.get("/slots", async (req, res) => {
     res.status(500).send("Error fetching slots");
   }
 });
-
 module.exports = router;
