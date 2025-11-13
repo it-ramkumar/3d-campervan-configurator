@@ -33,14 +33,14 @@ export default function BlackFridayCard() {
 
         {/* Offer text */}
         <p className="text-lg font-bold mb-1">
-         SAVE UP TO <span className="text-5xl font-extrabold">17%</span>
+          Flat <span className="text-5xl font-extrabold">17%</span>off
         </p>
         <p className="text-sm text-black/70 mb-6">
          on this Black Friday! 🎉
         </p>
 
         {/* Button */}
-       <Link to={"vans-for-sale"}>
+       <Link to={"/van-detail/4x4-santa-monica-v6-turbo"}>
         <button onClick={() => setShow(false)} className="bg-black text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-800 transition">
           SHOP NOW
         </button></Link>
