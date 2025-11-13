@@ -5,6 +5,7 @@ const {
   loginUser,
   logoutUser,
 } = require("../controllers/userController")
+const jwt = require("jsonwebtoken");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware")
 
@@ -27,5 +28,20 @@ router.post("/create-admin", protect, adminOnly, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
+
+router.get("/check-auth", (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.json({ loggedIn: false });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ loggedIn: true, user: decoded });
+  } catch (err) {
+    res.json({ loggedIn: false });
+  }
+});
+
 
 module.exports = router;

@@ -193,10 +193,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     );
     const updatedGallery = [...existingGallery, ...newGallery];
 
-    // ✅ Media is simple string array - no file processing
-    // Just use the URLs from req.body.media
-
-    // Update van fields
     van.van_listing = {
       ...van.van_listing,
       ...van_listing,

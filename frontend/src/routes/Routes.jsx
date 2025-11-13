@@ -29,6 +29,7 @@ import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
 import OurClients from "../websiteComponents/components/OurClients/Clienthero/Client"
 import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
 import BlackFridayLabel from "../websiteComponents/components/BlackFriday/BlackFriday";
+import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/PrivateComponent";
 const AppRoutes = () => {
 
   return (
@@ -58,7 +59,14 @@ const AppRoutes = () => {
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/van-form" element={<VanForm />} />
         <Route path="/portfolio-form" element={<PortfolioForm />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+         <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route path="/test" element={<Van />} />
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />

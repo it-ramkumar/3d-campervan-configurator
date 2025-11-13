@@ -5,26 +5,45 @@ import { updateBlog, createBlog } from "../../../../api/blog/createBlogs";
 import axios from "axios";
 import { addBlock } from "../../../CustomHooks/addBlock";
 import { removeBlock } from "../../../CustomHooks/removeBlock";
+// 👇 Custom Hooks from Portfolio Component (Logic reused)
 import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
 import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
-import {handleBlockChange} from "../../../CustomHooks/handleBlockChanges";
-import {handleImageChange} from "../../../CustomHooks/handleImageChange";
-import {addTableRow} from "../../../CustomHooks/addTableRow";
-import {addProsOrCons} from "../../../CustomHooks/addProsOrCons";
-import {handleGalleryChange} from "../../../CustomHooks/handleGalleryChange";
+import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
+// 👆
+import { handleBlockChange } from "../../../CustomHooks/handleBlockChanges";
+import { handleImageChange } from "../../../CustomHooks/handleImageChange";
+import { addTableRow } from "../../../CustomHooks/addTableRow";
+import { addProsOrCons } from "../../../CustomHooks/addProsOrCons";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function BlogForm() {
   const editData = useSelector((state) => state.editData.editData);
   // console.log(editData,"data")
+
+  // Blog Info
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [gallery, setGallery] = useState([]); // {file: File, preview: string, url: string}[]
-  const [galleryFiles, setGalleryFiles] = useState([]); // New files only
   const [blocks, setBlocks] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [removedGallery, setRemovedGallery] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // 🖼️ GALLERY STATES (Portfolio style)
+  const [galleryFiles, setGalleryFiles] = useState([]); // New file objects to upload
+  const [galleryPreviews, setGalleryPreviews] = useState([]); // Preview URLs for new files
+  const [existingGallery, setExistingGallery] = useState([]); // Existing URLs
+  const [removedExistingGallery, setRemovedExistingGallery] = useState([]); // Removed existing URLs
+
+  // Function to clear/reset all forms
+  const clearForm = () => {
+    setTitle("");
+    setDescription("");
+    setBlocks([]);
+    setIsEditMode(false);
+    setGalleryFiles([]);
+    setGalleryPreviews([]);
+    setExistingGallery([]);
+    setRemovedExistingGallery([]);
+  };
 
   // ✅ IMPROVED: Prefill edit data
   useEffect(() => {
@@ -33,28 +52,26 @@ export default function BlogForm() {
       setTitle(editData.title || "");
       setDescription(editData.description || "");
 
-      // ✅ FIXED: Gallery handling
-      const existingGallery = (editData.gallery || []).map((url) => ({
-        url,
-        preview: url,
-        file: null
-      }));
-      setGallery(existingGallery);
-      setGalleryFiles([]); // Reset new files
+      // 🖼️ GALLERY HANDLING: Existing URLs ko set karna
+      setExistingGallery(editData.gallery || []); // Assuming `editData.gallery` is an array of URLs
+      setGalleryFiles([]);
+      setGalleryPreviews([]);
+      setRemovedExistingGallery([]);
 
       try {
-        const parsed = typeof editData.content === "string"
-          ? JSON.parse(editData.content)
-          : editData.content;
+        const parsed =
+          typeof editData.content === "string"
+            ? JSON.parse(editData.content)
+            : editData.content;
 
-        const processedBlocks = (parsed || []).map(block => {
+        const processedBlocks = (parsed || []).map((block) => {
           if (block.type === "image") {
             const imageUrl = block.url || block.preview || block.image; // handle all
             return {
               ...block,
               url: imageUrl,
               preview: imageUrl,
-              file: null
+              file: null,
             };
           }
           return block;
@@ -65,142 +82,141 @@ export default function BlogForm() {
         console.error("Error parsing editData.content:", err);
         setBlocks([]);
       }
-
     } else {
       // Reset form when not editing
-      setIsEditMode(false);
-      setTitle("");
-      setDescription("");
-      setGallery([]);
-      setGalleryFiles([]);
-      setBlocks([]);
-      setRemovedGallery([]);
+      clearForm();
     }
   }, [editData]);
-
-
-// ✅ FIXED: Submit form - Better image handling
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  if (!title.trim()) {
-    alert("Title is required!");
-    return;
-  }
-
-  setLoading(true);
-  try {
-    // ✅ 1. Delete removed gallery images from backend/S3
-    if (removedGallery.length > 0) {
-      await Promise.all(
-        removedGallery.map((url) =>
-          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
-        )
-      );
+const handleRemoveBlock = async (index) => {
+  const block = blocks[index];
+  if (block.type === "image" && block.url) {
+    try {
+      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: block.url });
+      console.log("✅ Block image deleted from S3");
+    } catch (err) {
+      console.error("❌ Failed to delete block image:", err);
     }
-
-    // 2. Prepare FormData
-    const formDataToSend = new FormData();
-    formDataToSend.append("title", title);
-    formDataToSend.append("description", description);
-
-    // ✅ FIXED: Proper blocks handling for images
-    let imageIndex = 0;
-    const cleanedBlocks = blocks.map((block) => {
-      if (block.type === "image") {
-        if (block.file) {
-          // New image uploaded
-          const newBlock = {
-            type: "image",
-            imageField: `image_${imageIndex}`,
-            // ✅ IMPORTANT: Send existing image URL if available for reference
-            existingImage: block.url || null
-          };
-          imageIndex++;
-          return newBlock;
-        } else if (block.url) {
-          // Existing image - no changes
-          return {
-            type: "image",
-            image: block.url  // ✅ Backend expects 'image' field for existing images
-          };
-        } else {
-          // Image removed
-          return { type: "image", image: null };
-        }
-      }
-      return block;
-    });
-
-    formDataToSend.append("content", JSON.stringify(cleanedBlocks));
-
-    // ✅ FIXED: Attach block images with proper mapping
-    blocks.forEach((block) => {
-      if (block.type === "image" && block.file) {
-        formDataToSend.append("images", block.file);
-      }
-    });
-
-    // Attach new gallery files
-    galleryFiles.forEach((imgObj) => {
-      if (imgObj.file) formDataToSend.append("gallery", imgObj.file);
-    });
-
-    // ✅ FIXED: Send removed gallery URLs to backend
-    formDataToSend.append("deleteGallery", JSON.stringify(removedGallery));
-
-    // Attach remaining existing gallery URLs
-    const remainingGalleryUrls = gallery
-      .filter(img => img.url && !removedGallery.includes(img.url))
-      .map(img => img.url);
-    formDataToSend.append("existingGallery", JSON.stringify(remainingGalleryUrls));
-
-    console.log("Sending blocks:", cleanedBlocks); // Debug log
-
-    // 3. Create/update blog
-    if (isEditMode) {
-      await updateBlog(editData._id, formDataToSend);
-      alert("✅ Blog updated successfully!");
-    } else {
-      await createBlog(formDataToSend);
-      alert("✅ Blog created successfully!");
-    }
-
-    // Reset form
-    setTitle("");
-    setDescription("");
-    setGallery([]);
-    setGalleryFiles([]);
-    setBlocks([]);
-    setRemovedGallery([]);
-    setIsEditMode(false);
-
-  } catch (err) {
-    console.error("Upload error:", err);
-    alert("❌ Upload failed: " + (err.response?.data?.message || err.message));
-  } finally {
-    setLoading(false);
   }
+  removeBlock(index, setBlocks);
 };
 
-  // Cleanup object URLs
+  // ✅ FIXED: Submit form - Proper image handling for blocks and new gallery
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!title.trim()) {
+      alert("Title is required!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // 1. Delete removed gallery images from backend/S3 (Portfolio style)
+      if (removedExistingGallery.length > 0) {
+        await Promise.all(
+          removedExistingGallery.map((url) =>
+            axios.post(
+              `${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`,
+              { imageUrl: url }
+            )
+          )
+        );
+      }
+
+      // 2. Prepare FormData
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", title);
+      formDataToSend.append("description", description);
+
+      // Block images handling (existing logic maintained)
+      let imageIndex = 0;
+      const cleanedBlocks = blocks.map((block) => {
+        if (block.type === "image") {
+          if (block.file) {
+            // New image uploaded
+            const newBlock = {
+              type: "image",
+              imageField: `image_${imageIndex}`,
+              existingImage: block.url || null, // existing image to be deleted
+            };
+            imageIndex++;
+            return newBlock;
+          } else if (block.url) {
+            // Existing image - no changes
+            return {
+              type: "image",
+              image: block.url, // Backend expects 'image' field for existing images
+            };
+          } else {
+            // Image removed
+            return { type: "image", image: null };
+          }
+        }
+        return block;
+      });
+
+      formDataToSend.append("content", JSON.stringify(cleanedBlocks));
+
+      // Attach block images
+      blocks.forEach((block) => {
+        if (block.type === "image" && block.file) {
+          formDataToSend.append("images", block.file);
+        }
+      });
+
+      // 🖼️ ATTACH NEW GALLERY FILES (Portfolio style)
+      galleryFiles.forEach((file) => formDataToSend.append("gallery", file));
+
+      // 🖼️ ATTACH REMAINING EXISTING GALLERY URLS (Portfolio style)
+      const remainingGalleryUrls = existingGallery.filter(
+        (url) => !removedExistingGallery.includes(url)
+      );
+      formDataToSend.append(
+        "existingGallery",
+        JSON.stringify(remainingGalleryUrls)
+      );
+
+      // console.log("Sending blocks:", cleanedBlocks); // Debug log
+
+      // 3. Create/update blog
+      if (isEditMode) {
+        await updateBlog(editData._id, formDataToSend);
+        alert("✅ Blog updated successfully!");
+      } else {
+        await createBlog(formDataToSend);
+        alert("✅ Blog created successfully!");
+      }
+
+      // Reset form
+      clearForm();
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("❌ Upload failed: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cleanup object URLs (Updated to check galleryPreviews)
   useEffect(() => {
     return () => {
       // Cleanup block image previews
-      blocks.forEach(block => {
+      blocks.forEach((block) => {
         if (block.type === "image" && block.preview && block.file) {
-          URL.revokeObjectURL(block.preview);
+          try {
+            URL.revokeObjectURL(block.preview);
+          } catch (e) {}
         }
       });
 
-      // Cleanup gallery file previews
-      galleryFiles.forEach(img => {
-        if (img.preview) {
-          URL.revokeObjectURL(img.preview);
-        }
+      // Cleanup new gallery file previews
+      galleryPreviews.forEach((url) => {
+        try {
+          URL.revokeObjectURL(url);
+        } catch (e) {}
       });
     };
-  }, [blocks, galleryFiles]);
+  }, [blocks, galleryPreviews]);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -228,35 +244,46 @@ const handleSubmit = async (e) => {
           rows="3"
         />
 
-        {/* ✅ Gallery Section */}
-        <div className="border p-4 rounded">
-          <h3 className="font-semibold mb-3">Gallery Images</h3>
+        {/* 🖼️ GALLERY UPLOAD (Portfolio Style) */}
+        <div className="border border-gray-300 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Gallery Images
+          </h3>
 
           <input
             type="file"
             multiple
             accept="image/*"
-            onChange={(event) => handleGalleryChange(event, setGalleryFiles)}
-            className="w-full border p-2 rounded mb-3"
+            // 👇 Using Portfolio's custom hook for gallery image handling
+            onChange={(e) =>
+              handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)
+            }
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
           />
 
           {/* Existing Gallery Images */}
-          {gallery.length > 0 && (
-            <div className="mb-4">
-              <h4 className="font-medium mb-2">Existing Images:</h4>
-              <div className="flex flex-wrap gap-3">
-                {gallery.map((img, i) => (
-                  <div key={`existing-${i}`} className="relative">
+          {existingGallery.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                Existing Images:
+              </h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {existingGallery.map((url, index) => (
+                  <div key={index} className="relative group">
                     <ImageWithSkeleton
-
-                      src={img.preview || img.url}
-                      alt={`gallery-${i}`}
-                      className="w-24 h-24 object-cover"
+                      src={url}
+                      alt={`Existing ${index + 1}`}
+                      className="w-full h-24 object-cover"
                     />
                     <button
                       type="button"
                       onClick={() =>
-                        removeExistingGalleryImage(i, setGallery, setRemovedGallery, gallery)
+                        removeExistingGalleryImage(
+                          index,
+                          existingGallery,
+                          setRemovedExistingGallery,
+                          setExistingGallery
+                        )
                       }
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
@@ -268,22 +295,30 @@ const handleSubmit = async (e) => {
             </div>
           )}
 
-          {/* New Gallery Images */}
-          {galleryFiles.length > 0 && (
-            <div>
-              <h4 className="font-medium mb-2">New Images:</h4>
-              <div className="flex flex-wrap gap-3">
-                {galleryFiles.map((img, i) => (
-                  <div key={`new-${i}`} className="relative">
+          {/* New Gallery Previews */}
+          {galleryPreviews.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                New Selected Images:
+              </h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {galleryPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
                     <ImageWithSkeleton
-
-                      src={img.preview}
-                      alt={`new-gallery-${i}`}
-                      className="w-24 h-24 object-cover"
+                      src={preview}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-24 object-cover "
                     />
                     <button
                       type="button"
-                      onClick={() => removeNewGalleryImage(i, setGalleryFiles, galleryFiles)}
+                      onClick={() =>
+                        removeNewGalleryImage(
+                          index,
+                          setGalleryFiles,
+                          setGalleryPreviews,
+                          galleryPreviews
+                        )
+                      }
                       className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
                     >
                       ×
@@ -294,17 +329,19 @@ const handleSubmit = async (e) => {
             </div>
           )}
 
-          {gallery.length === 0 && galleryFiles.length === 0 && (
+           {existingGallery.length === 0 && galleryPreviews.length === 0 && (
             <p className="text-gray-500 text-center py-4">No gallery images added yet</p>
           )}
+
         </div>
+        {/* END GALLERY UPLOAD */}
 
         {/* Blocks */}
         {blocks.map((block, i) => (
           <div key={i} className="relative border p-4 rounded bg-gray-50 mb-6">
             <button
               type="button"
-              onClick={() => removeBlock(i, setBlocks)}
+              onClick={() => handleRemoveBlock(i)}
               className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm font-semibold"
             >
               ✕ Remove
@@ -361,7 +398,6 @@ const handleSubmit = async (e) => {
                 {(block.preview || block.url) && (
                   <div className="mt-2">
                     <ImageWithSkeleton
-
                       src={block.preview || block.url}
                       alt="preview"
                       className="w-48 "
@@ -369,7 +405,9 @@ const handleSubmit = async (e) => {
                     <p className="text-xs text-gray-500 mt-1">
                       {block.file ? "New image selected" : "Existing image"}
                       {block.url && !block.file && (
-                        <span className="block">URL: {block.url.substring(0, 50)}...</span>
+                        <span className="block">
+                          URL: {block.url.substring(0, 50)}...
+                        </span>
                       )}
                     </p>
                   </div>
@@ -471,24 +509,96 @@ const handleSubmit = async (e) => {
             {/* ✅ New Add Block Section (Between Blocks) */}
             <div className="mt-4 border-t pt-3 flex flex-wrap gap-2">
               <span className="text-sm text-gray-500">Add block below:</span>
-              <button onClick={() => addBlock("heading", setBlocks, i)} type="button" className="text-xs bg-blue-600 text-white px-2 py-1 rounded">+ Heading</button>
-              <button onClick={() => addBlock("subheading", setBlocks, i)} type="button" className="text-xs bg-sky-600 text-white px-2 py-1 rounded">+ Subheading</button>
-              <button onClick={() => addBlock("paragraph", setBlocks, i)} type="button" className="text-xs bg-green-600 text-white px-2 py-1 rounded">+ Paragraph</button>
-              <button onClick={() => addBlock("image", setBlocks, i)} type="button" className="text-xs bg-purple-600 text-white px-2 py-1 rounded">+ Image</button>
-              <button onClick={() => addBlock("table", setBlocks, i)} type="button" className="text-xs bg-orange-600 text-white px-2 py-1 rounded">+ Table</button>
-              <button onClick={() => addBlock("proscons", setBlocks, i)} type="button" className="text-xs bg-pink-600 text-white px-2 py-1 rounded">+ Pros & Cons</button>
+              <button
+                onClick={() => addBlock("heading", setBlocks, i)}
+                type="button"
+                className="text-xs bg-blue-600 text-white px-2 py-1 rounded"
+              >
+                + Heading
+              </button>
+              <button
+                onClick={() => addBlock("subheading", setBlocks, i)}
+                type="button"
+                className="text-xs bg-sky-600 text-white px-2 py-1 rounded"
+              >
+                + Subheading
+              </button>
+              <button
+                onClick={() => addBlock("paragraph", setBlocks, i)}
+                type="button"
+                className="text-xs bg-green-600 text-white px-2 py-1 rounded"
+              >
+                + Paragraph
+              </button>
+              <button
+                onClick={() => addBlock("image", setBlocks, i)}
+                type="button"
+                className="text-xs bg-purple-600 text-white px-2 py-1 rounded"
+              >
+                + Image
+              </button>
+              <button
+                onClick={() => addBlock("table", setBlocks, i)}
+                type="button"
+                className="text-xs bg-orange-600 text-white px-2 py-1 rounded"
+              >
+                + Table
+              </button>
+              <button
+                onClick={() => addBlock("proscons", setBlocks, i)}
+                type="button"
+                className="text-xs bg-pink-600 text-white px-2 py-1 rounded"
+              >
+                + Pros & Cons
+              </button>
             </div>
           </div>
         ))}
 
         {/* Add Blocks at End */}
         <div className="flex flex-wrap gap-3">
-          <button onClick={() => addBlock("heading", setBlocks)} type="button" className="px-3 py-2 bg-blue-600 text-white rounded">+ Heading</button>
-          <button onClick={() => addBlock("subheading", setBlocks)} type="button" className="px-3 py-2 bg-sky-600 text-white rounded">+ Sub Heading</button>
-          <button onClick={() => addBlock("paragraph", setBlocks)} type="button" className="px-3 py-2 bg-green-600 text-white rounded">+ Paragraph</button>
-          <button onClick={() => addBlock("image", setBlocks)} type="button" className="px-3 py-2 bg-purple-600 text-white rounded">+ Image</button>
-          <button onClick={() => addBlock("table", setBlocks)} type="button" className="px-3 py-2 bg-orange-600 text-white rounded">+ Table</button>
-          <button onClick={() => addBlock("proscons", setBlocks)} type="button" className="px-3 py-2 bg-pink-600 text-white rounded">+ Pros & Cons</button>
+          <button
+            onClick={() => addBlock("heading", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-blue-600 text-white rounded"
+          >
+            + Heading
+          </button>
+          <button
+            onClick={() => addBlock("subheading", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-sky-600 text-white rounded"
+          >
+            + Sub Heading
+          </button>
+          <button
+            onClick={() => addBlock("paragraph", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-green-600 text-white rounded"
+          >
+            + Paragraph
+          </button>
+          <button
+            onClick={() => addBlock("image", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-purple-600 text-white rounded"
+          >
+            + Image
+          </button>
+          <button
+            onClick={() => addBlock("table", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-orange-600 text-white rounded"
+          >
+            + Table
+          </button>
+          <button
+            onClick={() => addBlock("proscons", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-pink-600 text-white rounded"
+          >
+            + Pros & Cons
+          </button>
         </div>
 
         <button

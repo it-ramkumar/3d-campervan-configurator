@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const Contact = require("../models/contactUs");
 const nodemailer = require("nodemailer");
+const { protect, adminOnly } = require("../middleware/authMiddleware")
+
 
 /* ===============================
    POST - Create new contact
@@ -62,7 +64,7 @@ to: process.env.ZOHO_USER,
 /* ===============================
    GET - Fetch all contacts
 ================================ */
-router.get("/", async (req, res) => {
+router.get("/",protect, adminOnly, async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: contacts });
@@ -74,7 +76,7 @@ router.get("/", async (req, res) => {
 /* ===============================
    GET - Single contact by ID
 ================================ */
-router.get("/:id", async (req, res) => {
+router.get("/:id",protect, adminOnly, async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.id);
     if (!contact) return res.status(404).json({ success: false, error: "Contact not found" });
@@ -84,26 +86,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/* ===============================
-   PUT - Update contact by ID (full update)
-================================ */
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//       runValidators: true,
-//     });
-//     if (!updatedContact) return res.status(404).json({ success: false, error: "Contact not found" });
-//     res.status(200).json({ success: true, message: "Contact updated", data: updatedContact });
-//   } catch (error) {
-//     res.status(500).json({ success: false, error: error.message });
-//   }
-// });
-
-/* ===============================
-   PATCH - Update only status
-================================ */
-router.put("/:id/status", async (req, res) => {
+router.put("/:id/status",protect, adminOnly, async (req, res) => {
   try {
     const { status } = req.body;
     if (!["New", "In Progress", "Resolved"].includes(status)) {
@@ -129,10 +112,8 @@ router.put("/:id/status", async (req, res) => {
   }
 });
 
-/* ===============================
-   DELETE - Delete contact
-================================ */
-router.delete("/:id", async (req, res) => {
+
+router.delete("/:id",protect, adminOnly, async (req, res) => {
   try {
     const deleted = await Contact.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ success: false, error: "Contact not found" });

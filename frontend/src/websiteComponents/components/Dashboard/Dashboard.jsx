@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VansForm from "../adminPanel/Vans/VansForm";
 import VanListing from "../adminPanel/Vans/VansListing";
 import PortfolioForm from "../adminPanel/Portfolio/PortfolioForm";
@@ -16,32 +17,21 @@ import ContactListing from "../adminPanel/Contact/ContactListing";
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const menuItems = [
     {
       id: "Users",
       label: "Users",
-      icon: "🚐",
+      icon: "👥",
       description: "Listing Users"
     },
-    // {
-    //   id: "vans-form",
-    //   label: "Van Form",
-    //   icon: "🚐",
-    //   description: "Create new van listings"
-    // },
     {
       id: "Vans-listing",
       label: "Van Data",
       icon: "📊",
       description: "Manage existing vans"
     },
-    // {
-    //   id: "portfolio-form",
-    //   label: "Portfolio Form",
-    //   icon: "⭐",
-    //   description: "Create portfolio items"
-    // },
     {
       id: "portfolio-listing",
       label: "Portfolio Data",
@@ -54,62 +44,98 @@ export default function Dashboard() {
       icon: "📝",
       description: "Manage blog items"
     },
-    // {
-    //   id: "Blog-form",
-    //   label: "Blogs Form",
-    //   icon: "✏️",
-    //   description: "Create blog items"
-    // },
     {
       id: "Configurator-data",
       label: "Configurator Data",
-      icon: "✏️",
+      icon: "⚙️",
       description: "Configurator Data"
     },
     {
       id: "Inquiry-data",
       label: "Inquiry Data",
-      icon: "✏️",
+      icon: "📬",
       description: "Inquiry Data"
     },
     {
       id: "Contact-data",
       label: "Contact Data",
-      icon: "✏️",
+      icon: "📞",
       description: "Contact Data"
     }
   ];
 
-  const currentItem = menuItems.find(item => item.id === selected);
-const renderContent = () => {
-  switch (selected) {
-    case "vans-form":
-      return <VansForm />;
-    case "Vans-listing":
-      return <VanListing setSelected={setSelected} />;
-    case "portfolio-form":
-      return <PortfolioForm />;
-    case "portfolio-listing":
-      return <PortfolioListing setSelected={setSelected} />;
-    case "Blog-form":
-      return <BlogForm />;
-    case "Blogs-listing":
-      return <BlogsListing setSelected={setSelected} />;
-    case "Configurator-form":
-      return <ConfiguratorForm />;
-    case "Configurator-data":
-      return <ConfiguratorListing setSelected={setSelected} />;
-    case "Inquiry-data":
-      return <InqueryListing setSelected={setSelected} />;
-    case "Contact-data":
-      return <ContactListing setSelected={setSelected} />;
-    case "Users":
-      return <UsersData />;
-    default:
-      return <PortfolioListing />;
-  }
-};
+  const handleLogout = async () => {
+    try {
+      // Call logout API to clear server-side session
+      await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
+      // Clear all cookies client-side
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+      });
+
+      // Clear localStorage and sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Redirect to login page
+      navigate("/login");
+
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Even if API call fails, clear client-side storage and redirect
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+      });
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/login");
+    }
+  };
+
+  const confirmLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      handleLogout();
+    }
+  };
+
+  const currentItem = menuItems.find(item => item.id === selected);
+
+  const renderContent = () => {
+    switch (selected) {
+      case "vans-form":
+        return <VansForm />;
+      case "Vans-listing":
+        return <VanListing setSelected={setSelected} />;
+      case "portfolio-form":
+        return <PortfolioForm />;
+      case "portfolio-listing":
+        return <PortfolioListing setSelected={setSelected} />;
+      case "Blog-form":
+        return <BlogForm />;
+      case "Blogs-listing":
+        return <BlogsListing setSelected={setSelected} />;
+      case "Configurator-form":
+        return <ConfiguratorForm />;
+      case "Configurator-data":
+        return <ConfiguratorListing setSelected={setSelected} />;
+      case "Inquiry-data":
+        return <InqueryListing setSelected={setSelected} />;
+      case "Contact-data":
+        return <ContactListing setSelected={setSelected} />;
+      case "Users":
+        return <UsersData />;
+      default:
+        return <PortfolioListing />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -130,7 +156,15 @@ const renderContent = () => {
             </h1>
             <p className="text-sm text-gray-600">{currentItem?.label}</p>
           </div>
-          <div className="w-10"></div>
+          <button
+            onClick={confirmLogout}
+            className="p-2 rounded-lg bg-gray-100 hover:bg-red-100 hover:text-red-600 transition-colors"
+            title="Logout"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -156,7 +190,7 @@ const renderContent = () => {
           </div>
 
           {/* Navigation */}
-          <nav className="p-4 space-y-1">
+          <nav className="p-4 space-y-1 flex-1">
             {menuItems.map((item) => (
               <button
                 key={item.id}
@@ -185,6 +219,19 @@ const renderContent = () => {
               </button>
             ))}
           </nav>
+
+          {/* Logout Button in Sidebar */}
+          {/* <div className="p-4 border-t border-gray-200">
+            <button
+              onClick={confirmLogout}
+              className="w-full flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span className="font-medium">Logout</span>
+            </button>
+          </div> */}
         </div>
 
         {/* Overlay for mobile */}
@@ -213,6 +260,15 @@ const renderContent = () => {
                   <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-white font-medium text-sm">
                     A
                   </div>
+                  <button
+                    onClick={confirmLogout}
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all duration-200"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span className="font-medium">Logout</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -220,26 +276,6 @@ const renderContent = () => {
 
           {/* Content Area */}
           <div className="p-4 lg:p-6">
-            {/* Quick Stats Bar - Simplified */}
-            {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <div className="text-2xl font-semibold text-gray-900">24</div>
-                <div className="text-sm text-gray-600">Total Vans</div>
-              </div>
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <div className="text-2xl font-semibold text-gray-900">12</div>
-                <div className="text-sm text-gray-600">Portfolio Items</div>
-              </div>
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <div className="text-2xl font-semibold text-gray-900">8</div>
-                <div className="text-sm text-gray-600">Available</div>
-              </div>
-              <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <div className="text-2xl font-semibold text-gray-900">4</div>
-                <div className="text-sm text-gray-600">Sold</div>
-              </div>
-            </div> */}
-
             {/* Main Content */}
             <div className="bg-white rounded-lg border border-gray-200">
               {renderContent()}

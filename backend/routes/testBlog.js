@@ -7,7 +7,7 @@ const router = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
-  "/",
+  "/", protect, adminOnly,
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "gallery", maxCount: 10 }
@@ -153,7 +153,7 @@ router.get("/:id", async (req, res) => {
 
 
 router.put(
-  "/:id",
+  "/:id", protect, adminOnly,
   upload.fields([
     { name: "images", maxCount: 20 },
     { name: "gallery", maxCount: 10 }
