@@ -1,33 +1,50 @@
 "use client";
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import { X } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function BlackFridayLabel() {
-  const labelRef = useRef(null);
+export default function BlackFridayCard() {
+  const [show, setShow] = useState(true);
 
-  useEffect(() => {
-    gsap.fromTo(
-      labelRef.current,
-      { y: -30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "bounce.out",
-        repeat: -1,
-        yoyo: true,
-      }
-    );
-  }, []);
+  if (!show) return null;
 
   return (
-    <div
-      ref={labelRef}
-      className="fixed top-[70px] left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-yellow-500 text-white font-bold text-lg px-5 py-2 rounded-full shadow-md z-[9999]"
+    <motion.div
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0, opacity: 0 }}
+      transition={{ duration: 0.5, ease: "backOut" }}
+      className="fixed inset-0 flex items-center justify-center bg-black/50 z-[9999]"
     >
-     <Link to={"/vans-for-sale"}>
-      🎉 Black Friday Sale — Santa Monica Golden Brown 4x4 Sprinter!</Link>
-    </div>
+      <div className="relative bg-[#FFD700] text-black rounded-2xl shadow-2xl w-[320px] sm:w-[360px] p-6 text-center">
+        {/* Close button */}
+        <button
+          onClick={() => setShow(false)}
+          className="absolute top-3 right-3 text-black/60 hover:text-black transition"
+        >
+          <X size={22} />
+        </button>
+
+        {/* Heading */}
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">
+          BLACK <br /> FRIDAY
+        </h1>
+
+        {/* Offer text */}
+        <p className="text-lg font-bold mb-1">
+         SAVE UP TO <span className="text-5xl font-extrabold">17%</span>
+        </p>
+        <p className="text-sm text-black/70 mb-6">
+         on this Black Friday! 🎉
+        </p>
+
+        {/* Button */}
+       <Link to={"vans-for-sale"}>
+        <button onClick={() => setShow(false)} className="bg-black text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-800 transition">
+          SHOP NOW
+        </button></Link>
+      </div>
+    </motion.div>
   );
 }

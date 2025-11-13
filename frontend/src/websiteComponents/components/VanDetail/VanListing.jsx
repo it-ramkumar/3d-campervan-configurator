@@ -273,7 +273,40 @@ console.log(vanDetail,"vanDetail")
     <p className="font-bold text-base md:text-lg mt-1">
       {vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - {vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}
     </p>
+
   </div>
+    {/* price */}
+{vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
+  <div className="group py-3 px-4  rounded-xl shadow-lg border border-gray-800 hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
+
+    {/* Label */}
+    <div className="flex items-center justify-between mb-2">
+      <p className="text-xs md:text-sm text-gray-400 tracking-wide">Price</p>
+      <span className="bg-[#FFD700] text-black text-[10px] font-bold px-2 py-1 rounded-full">
+        🎉 Black Friday Offer
+      </span>
+    </div>
+
+    {/* Animated underline */}
+    <div className="relative pb-1">
+      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+    </div>
+
+    {/* Price area */}
+    <div className="flex items-end gap-2 mt-2">
+      <p className="text-gray-400 text-base md:text-lg line-through">
+        ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
+      </p>
+      <p className="font-bold text-2xl md:text-3xl text-[#FFD700] drop-shadow-sm">
+        ${"185,000"}
+      </p>
+    </div>
+
+    {/* Discount label */}
+    <p className="text-xs text-green-400 mt-1">Up to 17% off</p>
+  </div>
+)}
+
 
 </div>
 
