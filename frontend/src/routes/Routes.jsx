@@ -28,11 +28,13 @@ import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDet
 import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
 import OurClients from "../websiteComponents/components/OurClients/Clienthero/Client"
 import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
+import BlackFridayLabel from "../websiteComponents/components/BlackFriday/BlackFriday";
 const AppRoutes = () => {
 
   return (
     <Router>
       <ScrollFromTop />
+      <BlackFridayLabel/>
          <ChatWidget />
       <Routes>
         <Route path="/" element={<Home />} />

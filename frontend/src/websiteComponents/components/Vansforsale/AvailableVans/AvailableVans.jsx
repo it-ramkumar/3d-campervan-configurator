@@ -233,11 +233,25 @@ export default function AvailableVans({availableVans}) {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
-                  <div className="absolute top-0 left-0 bg-black text-white p-2.5 rounded-tl-[30px] z-20">
-                    <p className="font-noto-serif font-semibold text-[28px] leading-none tracking-tight px-2 py-1">
-                      $ {van.van_listing.price}
-                    </p>
-                  </div>
+                 <div className="absolute top-0 left-0 bg-black text-white p-2.5 rounded-tl-[30px] z-20">
+  <p className="font-noto-serif font-semibold leading-none tracking-tight px-2 py-1">
+    {/* Original Price (strikethrough) */}
+    <span className="text-gray-400 line-through mr-2">
+      ${van.van_listing.price.toLocaleString()}
+    </span>
+
+    {/* Discounted Black Friday Price */}
+  <span className="text-white text-2xl">
+  ${ (185000).toLocaleString() } {/* 20% off example */}
+</span>
+
+  </p>
+
+  <p className="text-xs text-red-400 font-semibold text-center mt-1">
+    Black Friday Sale 🎉
+  </p>
+</div>
+
                   <Link
                     to={`/van-detail/${van.slug}`}
                     className="details-button absolute top-4 right-4 bg-slate-900 text-white font-bold font-noto-sans text-[0.875rem] py-2 px-5 rounded-md transition-all duration-300 hover:bg-slate-700 z-20"

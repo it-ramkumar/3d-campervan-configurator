@@ -10,6 +10,7 @@ import Blog from "../websiteComponents/components/HomePage/Blog/Blog";
 import Consultation from "../websiteComponents/components/Consultation/Consultation";
 import FAQs from "../websiteComponents/components/Faqs/Faqs";
 import Footer from "../websiteComponents/components/Footer/Footer";
+
 import {
   CheckCircle2,
   Ruler,
@@ -79,6 +80,7 @@ const descriptionList = [
   ];
   return (
     <>
+
      <Navbar />
         <Hero />
     <div className="space-y-10 overflow-x-hidden">
