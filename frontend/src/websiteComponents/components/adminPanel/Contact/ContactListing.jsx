@@ -10,63 +10,66 @@ export default function ContactListing() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
 
-  // ✅ Fetch all contacts
-  const fetchContacts = async () => {
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/contact`
-      );
-      setContacts(res.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching contacts:", error);
-      setLoading(false);
-    }
-  };
+// ✅ Fetch all contacts
+const fetchContacts = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/contact`,
+      { withCredentials: true } // 👈 send cookies
+    );
+    setContacts(res.data.data);
+    setLoading(false);
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    setLoading(false);
+  }
+};
 
-  useEffect(() => {
+// ✅ Delete contact
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this contact?")) return;
+
+  try {
+    await axios.delete(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}`,
+      { withCredentials: true } // 👈 send cookies
+    );
+    setContacts(contacts.filter((c) => c._id !== id));
+    if (selectedContact && selectedContact._id === id) {
+      setSelectedContact(null);
+    }
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+  }
+};
+
+// ✅ Update status only
+const handleStatusChange = async (id, newStatus) => {
+  try {
+    await axios.put(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}/status`,
+      { status: newStatus },
+      { withCredentials: true } // 👈 send cookies
+    );
+
+    setContacts(
+      contacts.map((c) =>
+        c._id === id ? { ...c, status: newStatus } : c
+      )
+    );
+
+    // Update selected contact if it's the one being modified
+    if (selectedContact && selectedContact._id === id) {
+      setSelectedContact({ ...selectedContact, status: newStatus });
+    }
+  } catch (error) {
+    console.error("Error updating status:", error);
+  }
+};
+
+useEffect(() => {
     fetchContacts();
   }, []);
-
-  // ✅ Delete contact
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this contact?")) return;
-
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}`
-      );
-      setContacts(contacts.filter((c) => c._id !== id));
-      if (selectedContact && selectedContact._id === id) {
-        setSelectedContact(null);
-      }
-    } catch (error) {
-      console.error("Error deleting contact:", error);
-    }
-  };
-
-  // ✅ Update status only
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      await axios.put(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/contact/${id}/status`,
-        { status: newStatus }
-      );
-
-      setContacts(
-        contacts.map((c) =>
-          c._id === id ? { ...c, status: newStatus } : c
-        )
-      );
-
-      // Update selected contact if it's the one being modified
-      if (selectedContact && selectedContact._id === id) {
-        setSelectedContact({ ...selectedContact, status: newStatus });
-      }
-    } catch (error) {
-      console.error("Error updating status:", error);
-    }
-  };
 
   // ✅ Filter and sort contacts
   const filteredContacts = contacts

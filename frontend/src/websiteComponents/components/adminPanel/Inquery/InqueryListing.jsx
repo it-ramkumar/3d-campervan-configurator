@@ -12,97 +12,106 @@ export default function InqueryListing() {
   const [sortBy, setSortBy] = useState("newest");
   const [selectedInquiry, setSelectedInquiry] = useState(null);
 
-  // ✅ Fetch all inquiries
-  const fetchInquiries = async () => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`);
-      const data = res.data.data || res.data;
-      setInquiries(data);
-      setFiltered(data);
-    } catch (error) {
-      console.error("Error fetching inquiries:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to fetch inquiries',
-        timer: 3000,
-        showConfirmButton: false
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+// ✅ Fetch all inquiries
+const fetchInquiries = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/inquery`,
+      { withCredentials: true } // 👈 send cookies
+    );
 
-  // ✅ Update status
-  const updateStatus = async (id, newStatus) => {
+    const data = res.data.data || res.data;
+    setInquiries(data);
+    setFiltered(data);
+  } catch (error) {
+    console.error("Error fetching inquiries:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to fetch inquiries',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ✅ Update status
+const updateStatus = async (id, newStatus) => {
+  try {
+    await axios.put(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}/status`,
+      { status: newStatus },
+      { withCredentials: true } // 👈 send cookies
+    );
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Updated!',
+      text: 'Status updated successfully',
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+    fetchInquiries();
+  } catch (error) {
+    console.error("Error updating status:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Failed to update status',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  }
+};
+
+// ✅ Delete inquiry
+const deleteInquiry = async (id, email) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: `You are about to delete inquiry from ${email}. This action cannot be undone!`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true
+  });
+
+  if (result.isConfirmed) {
     try {
-      await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}/status`, {
-        status: newStatus,
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}`,
+        { withCredentials: true } // 👈 send cookies
+      );
 
       Swal.fire({
         icon: 'success',
-        title: 'Updated!',
-        text: 'Status updated successfully',
+        title: 'Deleted!',
+        text: 'Inquiry has been deleted successfully',
         timer: 2000,
         showConfirmButton: false
       });
 
       fetchInquiries();
+      if (selectedInquiry && selectedInquiry._id === id) {
+        setSelectedInquiry(null);
+      }
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("Error deleting inquiry:", error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Failed to update status',
+        text: 'Failed to delete inquiry',
         timer: 3000,
         showConfirmButton: false
       });
     }
-  };
-
-  // ✅ Delete inquiry
-  const deleteInquiry = async (id, email) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: `You are about to delete inquiry from ${email}. This action cannot be undone!`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      reverseButtons: true
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery/${id}`);
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: 'Inquiry has been deleted successfully',
-          timer: 2000,
-          showConfirmButton: false
-        });
-
-        fetchInquiries();
-        if (selectedInquiry && selectedInquiry._id === id) {
-          setSelectedInquiry(null);
-        }
-      } catch (error) {
-        console.error("Error deleting inquiry:", error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to delete inquiry',
-          timer: 3000,
-          showConfirmButton: false
-        });
-      }
-    }
-  };
+  }
+};
 
   // ✅ Filter and sort logic
   useEffect(() => {
