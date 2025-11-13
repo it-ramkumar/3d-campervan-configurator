@@ -37,12 +37,12 @@ export default function LayoutDetail() {
       );
     }
   }, [van]);
-
+console.log(van,"van")
   if (loading) return <Loader />;
   if (!van)
     return <div className="text-center py-20 text-red-500 text-xl">Layout not found</div>;
 
-  const { van_listing, gallery, category, detailed_features, formatted_price, media } = van;
+  const { van_listing, detailed_features,  } = van;
 // console.log(van_listing,gallery,category,detailed_features,formatted_price,media)
   return (
     <>
@@ -186,6 +186,68 @@ export default function LayoutDetail() {
           <p className="text-center text-gray-500">No gallery images available.</p>
         )}
       </div>
+       {/* ================= Video Section ================= */}
+      {van.media && van.media.length > 0 && (
+        <div className="w-full bg-black py-16 px-4 md:px-16">
+          <h2 className="text-center font-bold text-white text-4xl mb-10">
+            Watch Video
+          </h2>
+
+          <div
+            className={`grid gap-8 ${van.media.length === 1
+                ? "grid-cols-1"
+                : van.media.length === 2
+                  ? "grid-cols-1 md:grid-cols-2"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              }`}
+          >
+            {van.media.map((videoUrl, index) => {
+              let embedUrl = videoUrl.trim();
+
+              // ✅ Handle youtu.be format
+              if (embedUrl.includes("youtu.be/")) {
+                embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+              }
+              // ✅ Handle watch?v= format
+              else if (embedUrl.includes("watch?v=")) {
+                embedUrl = embedUrl.replace("watch?v=", "embed/");
+              }
+              // ✅ Handle shorts format
+              else if (embedUrl.includes("youtube.com/shorts/")) {
+                embedUrl = embedUrl.replace("youtube.com/shorts/", "youtube.com/embed/");
+              }
+
+              // Remove extra params like &t=5s
+              embedUrl = embedUrl.split("&")[0];
+
+              // ✅ Detect if it's a Shorts video
+              const isShorts = videoUrl.includes("/shorts/");
+
+              return (
+                <div
+                  key={index}
+                  className="relative w-full overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]"
+                >
+                  <div
+                    className={`relative w-full ${isShorts
+                        ? "aspect-[9/16] max-w-[400px] mx-auto" // 🎥 Tall for Shorts
+                        : "aspect-video" // 📺 Normal landscape video
+                      }`}
+                  >
+                    <iframe
+                      src={`${embedUrl}?rel=0&modestbranding=1`}
+                      title={`video-${index}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute top-0 left-0 w-full h-full border-0 rounded-2xl"
+                    ></iframe>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
 <Footer/>
     </>

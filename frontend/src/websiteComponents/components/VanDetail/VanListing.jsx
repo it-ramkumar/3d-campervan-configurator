@@ -421,7 +421,7 @@ const VanPage = ({ vanDetail }) => {
               }
               // ✅ Handle shorts format
               else if (embedUrl.includes("youtube.com/shorts/")) {
-                embedUrl = embedUrl.replace("youtube.com/shorts/", "www.youtube.com/embed/");
+                embedUrl = embedUrl.replace("youtube.com/shorts/", "youtube.com/embed/");
               }
 
               // Remove extra params like &t=5s
