@@ -193,7 +193,7 @@ const VanPage = ({ vanDetail }) => {
     },
     gallery: vanDetail?.gallery || [],
   };
-console.log(vanDetail,"vanDetail")
+  console.log(vanDetail, "vanDetail")
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -210,112 +210,112 @@ console.log(vanDetail,"vanDetail")
       {/* ================= Hero Section ================= */}
       <div
         ref={heroRef}
-        className="relative w-full h-[85vh] md:h-[485px] overflow-hidden text-white"
+        className="relative w-full h-[85vh] md:h-[500px] overflow-hidden text-white"
       >
         <ImageWithSkeleton
           src={vanDetail.gallery[0]}
           alt={`${vanDetail.van_listing.title} custom van`}
-          className="bg-image absolute inset-0 w-full h-full object-cover"
+          className="bg-image absolute inset-0 w-full h-full"
         />
         <div className="absolute inset-0 bg-[linear-gradient(270.39deg,rgba(0,0,0,0)_0.33%,#000000_106.96%)]"></div>
 
-        <div className="relative z-10 h-full flex flex-col justify-start md:justify-center items-start text-left px-4 pt-64 md:pt-0 sm:px-8 md:px-16">
-          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-[64px] leading-tight max-w-2xl">
-            <span>{vanDetail.van_listing.title}</span>{" "}
-            {/* {vanDetail.hero.titleSecondar} */}
+        <div className="relative z-10 h-full text-left px-4 sm:px-8">
+          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-[60px] leading-tight max-w-2xl">
+            <span className="pt-10">{vanDetail.van_listing.title}</span>
+
           </h1>
           <p className="text-lg md:text-2xl mt-4 max-w-2xl opacity-90">
             {vanDetail.van_listing.subtitle}
           </p>
 
-         <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
+          <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
 
-  {/* Make & Model */}
-  <div className="group py-2 cursor-pointer">
-    <div className="relative pb-2">
-      <p className="text-xs md:text-sm opacity-80">Make & Model</p>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-    <p className="font-bold text-base md:text-lg mt-1 w-60">
-      {vanDetail?.van_listing.specifications?.make_model || "N/A"}
-    </p>
-  </div>
+            {/* Make & Model */}
+            <div className="group py-2 cursor-pointer">
+              <div className="relative pb-2">
+                <p className="text-xs md:text-sm opacity-80">Make & Model</p>
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+              </div>
+              <p className="font-bold text-base md:text-lg mt-1 w-60">
+                {vanDetail?.van_listing.specifications?.make_model || "N/A"}
+              </p>
+            </div>
 
-  {/* Wheelbase */}
-  <div className="group py-2 cursor-pointer">
-    <div className="relative pb-2">
-      <p className="text-xs md:text-sm opacity-80">Wheelbase</p>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-    <p className="font-bold text-base md:text-lg mt-1">
-      {vanDetail?.van_listing.specifications?.wheelbase || "N/A"}
-    </p>
-  </div>
+            {/* Wheelbase */}
+            <div className="group py-2 cursor-pointer">
+              <div className="relative pb-2">
+                <p className="text-xs md:text-sm opacity-80">Wheelbase</p>
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+              </div>
+              <p className="font-bold text-base md:text-lg mt-1">
+                {vanDetail?.van_listing.specifications?.wheelbase || "N/A"}
+              </p>
+            </div>
 
-  {/* Drivetrain */}
-  <div className="group py-2 cursor-pointer">
-    <div className="relative pb-2">
-      <p className="text-xs md:text-sm opacity-80">Drivetrain</p>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-    <p className="font-bold text-base md:text-lg mt-1">
-      {vanDetail?.van_listing.specifications?.drivetrain || "N/A"}
-    </p>
-  </div>
-
-
-  {/* Sit & Sleep */}
-  <div className="group py-2 cursor-pointer">
-    <div className="relative pb-2">
-      <p className="text-xs md:text-sm opacity-80">Sit & Sleep</p>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-    <p className="font-bold text-base md:text-lg mt-1">
-      {vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - {vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}
-    </p>
-
-  </div>
-    {/* price */}
-{vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
-  <div className="group py-3 px-4  rounded-xl shadow-lg border border-gray-800 hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
-
-    {/* Label */}
-    <div className="flex items-center justify-between mb-2">
-      <p className="text-xs md:text-sm text-gray-400 tracking-wide">Price</p>
-      <span className="bg-[#FFD700] text-black text-[10px] font-bold px-2 py-1 rounded-full">
-        🎉 Black Friday Offer
-      </span>
-    </div>
-
-    {/* Animated underline */}
-    <div className="relative pb-1">
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-    </div>
-
-    {/* Price area */}
-    <div className="flex items-end gap-2 mt-2">
-      <p className="text-gray-400 text-base md:text-lg line-through">
-        ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
-      </p>
-      <p className="font-bold text-2xl md:text-3xl text-[#FFD700] drop-shadow-sm">
-        ${"185,000"}
-      </p>
-    </div>
-
-    {/* Discount label */}
-    <p className="text-xs text-green-400 mt-1"> Flat 17% Off</p>
-  </div>
-)}
+            {/* Drivetrain */}
+            <div className="group py-2 cursor-pointer">
+              <div className="relative pb-2">
+                <p className="text-xs md:text-sm opacity-80">Drivetrain</p>
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+              </div>
+              <p className="font-bold text-base md:text-lg mt-1">
+                {vanDetail?.van_listing.specifications?.drivetrain || "N/A"}
+              </p>
+            </div>
 
 
-</div>
+            {/* Sit & Sleep */}
+            <div className="group py-2 cursor-pointer">
+              <div className="relative pb-2">
+                <p className="text-xs md:text-sm opacity-80">Sit & Sleep</p>
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+              </div>
+              <p className="font-bold text-base md:text-lg mt-1">
+                {vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - {vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}
+              </p>
 
-<Link to={"/contact"}>
+            </div>
+            {/* price */}
+            {vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
+              <div className="group py-3 px-4  rounded-xl shadow-lg border border-gray-800 hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
 
-   <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
-            Book A Call Now
-          </button>
-</Link>
+                {/* Label */}
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs md:text-sm">Price</p>
+                  <span className="bg-[#FFD700] text-black text-[10px] font-bold px-2 py-1 rounded-full">
+                    🎉 Black Friday Offer
+                  </span>
+                </div>
+
+                {/* Animated underline */}
+                <div className="relative pb-1">
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
+                </div>
+
+                {/* Price area */}
+                <div className="flex items-end gap-2 mt-2">
+                  <p className="text-gray-400 text-base md:text-lg line-through">
+                    ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
+                  </p>
+                  <p className="font-bold text-2xl md:text-3xl text-[#FFD700] drop-shadow-sm">
+                    ${"185,000"}
+                  </p>
+                </div>
+
+                {/* Discount label */}
+                <p className="text-xs text-green-400 mt-1"> Flat 17% Off</p>
+              </div>
+            )}
+
+
+          </div>
+
+          <Link to={"/contact"}>
+
+            <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
+              Book A Call Now
+            </button>
+          </Link>
 
         </div>
       </div>
@@ -354,8 +354,8 @@ console.log(vanDetail,"vanDetail")
           <div className="text-center mt-16">
             <Link to={"/contact"}>
               <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-              Buy Now
-            </button>
+                Buy Now
+              </button>
             </Link>
 
           </div>
@@ -370,9 +370,9 @@ console.log(vanDetail,"vanDetail")
             {vanDetail.van_listing.description}
           </p>
           <Link to={"/contact"}>
-          <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-            Book a call now
-          </button></Link>
+            <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
+              Book a call now
+            </button></Link>
         </div>
       </div>
 
@@ -394,44 +394,69 @@ console.log(vanDetail,"vanDetail")
         )}
       </div>
       {/* ================= Video Section ================= */}
-{vanDetail.media && vanDetail.media.length > 0 && (
-  <div className="w-full bg-black py-16 px-4 md:px-16">
-    <h2 className="text-center font-bold text-white text-4xl mb-10">
-      Watch Video
-    </h2>
+      {vanDetail.media && vanDetail.media.length > 0 && (
+        <div className="w-full bg-black py-16 px-4 md:px-16">
+          <h2 className="text-center font-bold text-white text-4xl mb-10">
+            Watch Video
+          </h2>
 
-    <div
-      className={`grid gap-8 ${
-        vanDetail.media.length === 1
-          ? "grid-cols-1"
-          : vanDetail.media.length === 2
-          ? "grid-cols-1 md:grid-cols-2"
-          : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-      }`}
-    >
-      {vanDetail.media.map((videoUrl, index) => {
-        const embedUrl = videoUrl
-          .replace("youtu.be/", "www.youtube.com/embed/")
-          .split("?")[0];
-
-        return (
           <div
-            key={index}
-            className="relative w-full overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]"
+            className={`grid gap-8 ${vanDetail.media.length === 1
+                ? "grid-cols-1"
+                : vanDetail.media.length === 2
+                  ? "grid-cols-1 md:grid-cols-2"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              }`}
           >
-            <iframe
-              src={`${embedUrl}?rel=0&modestbranding=1`}
-              title={`video-${index}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-auto min-h-[300px] md:min-h-[400px] lg:min-h-[500px] border-0"
-            ></iframe>
+            {vanDetail.media.map((videoUrl, index) => {
+              let embedUrl = videoUrl.trim();
+
+              // ✅ Handle youtu.be format
+              if (embedUrl.includes("youtu.be/")) {
+                embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+              }
+              // ✅ Handle watch?v= format
+              else if (embedUrl.includes("watch?v=")) {
+                embedUrl = embedUrl.replace("watch?v=", "embed/");
+              }
+              // ✅ Handle shorts format
+              else if (embedUrl.includes("youtube.com/shorts/")) {
+                embedUrl = embedUrl.replace("youtube.com/shorts/", "www.youtube.com/embed/");
+              }
+
+              // Remove extra params like &t=5s
+              embedUrl = embedUrl.split("&")[0];
+
+              // ✅ Detect if it's a Shorts video
+              const isShorts = videoUrl.includes("/shorts/");
+
+              return (
+                <div
+                  key={index}
+                  className="relative w-full overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]"
+                >
+                  <div
+                    className={`relative w-full ${isShorts
+                        ? "aspect-[9/16] max-w-[400px] mx-auto" // 🎥 Tall for Shorts
+                        : "aspect-video" // 📺 Normal landscape video
+                      }`}
+                  >
+                    <iframe
+                      src={`${embedUrl}?rel=0&modestbranding=1`}
+                      title={`video-${index}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="absolute top-0 left-0 w-full h-full border-0 rounded-2xl"
+                    ></iframe>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-    </div>
-  </div>
-)}
+        </div>
+      )}
+
+
 
 
 

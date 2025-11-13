@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../Navbar/Navbar"
+import Footer from "../Footer/Footer"
 
 const NotFound = () => {
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 text-gray-800 p-4">
       <h1 className="text-6xl font-bold mb-4 text-red-600">404</h1>
       <h2 className="text-2xl md:text-3xl mb-4">Oops! Page Not Found</h2>
@@ -16,6 +20,8 @@ const NotFound = () => {
         Go Back Home
       </Link>
     </div>
+    <Footer/>
+    </>
   );
 };
 

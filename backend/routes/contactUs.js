@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     // ✅ Send to Admin only
     await transporter.sendMail({
       from: `"Big Bear Vans" <${process.env.ZOHO_USER}>`,
-to: process.env.ZOHO_USER,
+      to: process.env.ZOHO_USER,
       subject: "New Contact Message from Website",
       html: `
         <h2>New Contact Message</h2>
@@ -64,7 +64,7 @@ to: process.env.ZOHO_USER,
 /* ===============================
    GET - Fetch all contacts
 ================================ */
-router.get("/",protect, adminOnly, async (req, res) => {
+router.get("/", protect, adminOnly, async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: contacts });
@@ -76,7 +76,7 @@ router.get("/",protect, adminOnly, async (req, res) => {
 /* ===============================
    GET - Single contact by ID
 ================================ */
-router.get("/:id",protect, adminOnly, async (req, res) => {
+router.get("/:id", protect, adminOnly, async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.id);
     if (!contact) return res.status(404).json({ success: false, error: "Contact not found" });
@@ -86,7 +86,7 @@ router.get("/:id",protect, adminOnly, async (req, res) => {
   }
 });
 
-router.put("/:id/status",protect, adminOnly, async (req, res) => {
+router.put("/:id/status", protect, adminOnly, async (req, res) => {
   try {
     const { status } = req.body;
     if (!["New", "In Progress", "Resolved"].includes(status)) {
@@ -113,7 +113,7 @@ router.put("/:id/status",protect, adminOnly, async (req, res) => {
 });
 
 
-router.delete("/:id",protect, adminOnly, async (req, res) => {
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const deleted = await Contact.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ success: false, error: "Contact not found" });
