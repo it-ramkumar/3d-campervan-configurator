@@ -122,6 +122,8 @@ export default function Navbar({ forceMobile }) {
           title: "Insights",
           items: [
             { label: "Exterior Choice", link: "/innovation" },
+            { label: "Interior Choice", link: "/interior-choice" },
+
             { label: "Blog", link: "/blogs" },
           ],
         },

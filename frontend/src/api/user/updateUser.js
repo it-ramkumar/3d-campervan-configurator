@@ -12,7 +12,7 @@ export const updateUser = async (id, newStatus) => {
     Swal.fire({
           icon: "success",
           title: "Delete successfully!",
-          text: "Your User has been Deleted successfully.",
+          text: "Your User has been updated successfully.",
         });
 
     return res;

@@ -20,7 +20,7 @@ export const createBlog = async (formData) => {
     );
        Swal.fire({
       icon: "success",
-      title: "Blog Submmited!",
+      title: "Blog Submitted!",
       text: "Your blog has been submit successfully.",
     });
     return res.data;

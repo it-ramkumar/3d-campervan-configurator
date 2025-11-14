@@ -16,11 +16,11 @@ import { addTableRow } from "../../../CustomHooks/addTableRow";
 import { addProsOrCons } from "../../../CustomHooks/addProsOrCons";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
-export default function BlogForm() {
+export default function BlogForm({setSelected}) {
   const editData = useSelector((state) => state.editData.editData);
-  // console.log(editData,"data")
 
-  // Blog Info
+
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [blocks, setBlocks] = useState([]);
@@ -181,10 +181,11 @@ const handleRemoveBlock = async (index) => {
       // 3. Create/update blog
       if (isEditMode) {
         await updateBlog(editData._id, formDataToSend);
-        alert("✅ Blog updated successfully!");
+        setSelected("Blogs-listing")
       } else {
         await createBlog(formDataToSend);
-        alert("✅ Blog created successfully!");
+        setSelected("Blogs-listing")
+        
       }
 
       // Reset form

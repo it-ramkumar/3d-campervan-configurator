@@ -277,7 +277,7 @@ const VanPage = ({ vanDetail }) => {
             </div>
             {/* price */}
             {vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
-              <div className="group py-3 px-4  rounded-xl shadow-lg border border-gray-800 hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
+              <div className="group py-2 px-4  rounded-xl shadow-lg border hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
 
                 {/* Label */}
                 <div className="flex items-center justify-between mb-2">

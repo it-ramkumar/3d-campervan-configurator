@@ -125,70 +125,73 @@ export default function PortfolioListing({ setSelected }) {
         <p className="text-gray-500">No portfolios found.</p>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {portfolios.map((portfolio) => (
-              <div
-                key={portfolio._id}
-                className="border rounded-xl shadow-md p-4 bg-white"
-              >
-                {/* Gallery */}
-                {portfolio.gallery?.[0] ? (
-                  <ImageWithSkeleton
-                    src={
-                      typeof portfolio.gallery[0] === "string"
-                        ? portfolio.gallery[0]
-                        : portfolio.gallery[0]?.url
-                    }
-                    alt={portfolio.van_listing?.title || "Portfolio Image"}
-                    className="w-full h-48 object-cover "
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center mb-3">
-                    <span className="text-gray-500">No Image</span>
-                  </div>
-                )}
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {portfolios.map((portfolio) => (
+    <div
+      key={portfolio._id}
+      className="border rounded-xl shadow-md p-5 bg-white flex flex-col h-full"
+    >
+      {/* Gallery */}
+      {portfolio.gallery?.[0] ? (
+        <ImageWithSkeleton
+          src={
+            typeof portfolio.gallery[0] === "string"
+              ? portfolio.gallery[0]
+              : portfolio.gallery[0]?.url
+          }
+          alt={portfolio.van_listing?.title || "Portfolio Image"}
+          className="w-full h-48 object-cover rounded"
+        />
+      ) : (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center mb-3 rounded">
+          <span className="text-gray-500">No Image</span>
+        </div>
+      )}
 
-                {/* Title */}
-                <h2 className="text-xl font-semibold mb-1">
-                  {portfolio.van_listing?.title || "Untitled"}
-                </h2>
-                <p className="text-gray-600 mb-2">
-                  {portfolio.van_listing?.subtitle || "-"}
-                </p>
+      {/* Content */}
+      <div className="flex-1 flex flex-col justify-between mt-3">
+        <div>
+          <h2 className="text-xl font-semibold mb-1 line-clamp-2">
+            {portfolio.van_listing?.title || "Untitled"}
+          </h2>
+          <p className="text-gray-600 text-sm line-clamp-3 mb-2">
+            {portfolio.van_listing?.subtitle || "-"}
+          </p>
+          {portfolio.formatted_price && (
+            <p className="font-bold text-green-600 mb-3">
+              {portfolio.formatted_price}
+            </p>
+          )}
+        </div>
 
-                {/* Price */}
-                {portfolio.formatted_price && (
-                  <p className="font-bold text-green-600 mb-3">
-                    {portfolio.formatted_price}
-                  </p>
-                )}
+        {/* Buttons */}
+        <div className="flex gap-2 mt-auto">
+          <button
+            onClick={() => handleView(portfolio)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex-1 text-center"
+          >
+            View
+          </button>
+          <button
+            onClick={() => handleEdit(portfolio)}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex-1 text-center"
+          >
+            Edit
+          </button>
+          {portfolio.slug && (
+            <button
+              onClick={() => handleDelete(portfolio.slug)}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 flex-1 text-center"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
-                {/* Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleView(portfolio)}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleEdit(portfolio)}
-                    className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
-                  >
-                    Edit
-                  </button>
-                  {portfolio.slug && (
-                    <button
-                      onClick={() => handleDelete(portfolio.slug)}
-                      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
 
           {/* Pagination */}
           <div className="flex justify-center items-center gap-3 mt-10">

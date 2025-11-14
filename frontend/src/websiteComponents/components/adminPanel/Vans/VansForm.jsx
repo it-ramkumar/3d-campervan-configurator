@@ -18,9 +18,10 @@ import { addDetailedFeatureItem } from "../../../CustomHooks/addDetailFeatureIte
 import { removeDetailedFeatureItem } from "../../../CustomHooks/removeDetailFeatureItem";
 import { handleDetailedFeatureItemChange } from "../../../CustomHooks/handleDetailFeatureItemChange";
 import { removeArrayItem } from "../../../CustomHooks/removeArrayItem";
+import Swal from "sweetalert2";
 
 
-const VansForm = () => {
+const VansForm = ({setSelected}) => {
   const editData = useSelector((state) => state.editData.editData);
   const dispatch = useDispatch();
 
@@ -194,15 +195,23 @@ const VansForm = () => {
       if (editData?._id) {
         await updateVan(editData, formToSend);
         resetForm();
+        setSelected("Vans-listing")
+
       } else {
         await createVan(formToSend);
         resetForm();
+        setSelected("Vans-listing")
+
       }
 
       // 4️⃣ Clear removed images state
       setRemovedExistingGallery([]);
     } catch (err) {
-      console.warn("Error submitting van:", err);
+        Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.response.data.message,
+    });
     } finally {
       setLoading(false);
     }

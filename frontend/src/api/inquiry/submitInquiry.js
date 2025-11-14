@@ -21,16 +21,6 @@ export const submitInquiry = async (formData) => {
       title: "Error",
       text: error.response.data.message,
     });
-    // console.error("API Error:", error);
 
-    // Custom error message
-    // let message = "Something went wrong. Please try again.";
-    // if (error.response) {
-    //   message = error.response.data?.message || "Server error occurred.";
-    // } else if (error.request) {
-    //   message = "No response from server. Check your connection.";
-    // }
-
-    // return { success: false, message };
   }
 };

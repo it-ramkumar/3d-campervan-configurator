@@ -141,71 +141,73 @@ export default function BlogsListing({ setSelected }) {
       {blogs.length === 0 ? (
         <p className="text-gray-500 text-center">No blogs found.</p>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((blog) => (
-            <div
-              key={blog._id}
-              className="bg-white shadow-md rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col"
-            >
-              {/* Blog Image */}
-              {blog.gallery?.length > 0 ? (
-                <ImageWithSkeleton
-                  src={typeof blog.gallery[0] === "string" ? blog.gallery[0] : blog.gallery[0]?.url}
-                  alt={blog.title || "Blog Image"}
-                  className="w-full h-48 object-cover"
-                />
-              ) : (
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-                  No Image
-                </div>
-              )}
 
-              {/* Content */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                    {blog.title || "Untitled"}
-                  </h2>
-                  <p className="text-sm text-gray-500 mb-4">
-                    {blog.createdAt
-                      ? new Date(blog.createdAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "-"}
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex justify-between items-center gap-2 mt-auto">
-                  <button
-                    onClick={() => handleView(blog)}
-                    className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition"
-                  >
-                    View
-                  </button>
-
-                  <button
-                    onClick={() => handleEdit(blog)}
-                    className="px-3 py-1.5 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
-                  >
-                    Edit
-                  </button>
-
-                  {blog._id && (
-                    <button
-                      onClick={() => handleDelete(blog._id)}
-                      className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {blogs.map((blog) => (
+    <div
+      key={blog._id}
+      className="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 flex flex-col"
+    >
+      {/* Blog Image */}
+      {blog.gallery?.length > 0 ? (
+        <ImageWithSkeleton
+          src={typeof blog.gallery[0] === "string" ? blog.gallery[0] : blog.gallery[0]?.url}
+          alt={blog.title || "Blog Image"}
+          className="w-full h-48 object-cover"
+        />
+      ) : (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+          No Image
         </div>
+      )}
+
+      {/* Content */}
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+            {blog.title || "Untitled"}
+          </h2>
+          <p className="text-sm text-gray-500 mb-4">
+            {blog.createdAt
+              ? new Date(blog.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : "-"}
+          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-between items-center gap-2 mt-auto">
+          <button
+            onClick={() => handleView(blog)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex-1 text-center"
+
+          >
+            View
+          </button>
+
+          <button
+            onClick={() => handleEdit(blog)}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex-1 text-center"
+          >
+            Edit
+          </button>
+
+          {blog._id && (
+            <button
+              onClick={() => handleDelete(blog._id)}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 flex-1 text-center"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
       )}
 
       {/* ✅ Pagination Buttons */}

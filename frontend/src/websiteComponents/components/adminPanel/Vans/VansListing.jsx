@@ -141,55 +141,59 @@ export default function VanListing({ setSelected }) {
       ) : (
         <>
           {/* ✅ Vans Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {vans.map((van) => (
-              <div key={van._id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                {/* Thumbnail */}
-                {van.gallery?.length > 0 ? (
-                  <ImageWithSkeleton
-                    src={van.gallery[0]?.url || van.gallery[0]}
-                    alt={van.van_listing?.title || "Van Image"}
-                    className="w-full h-40 object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-40 bg-gray-200 flex items-center justify-center mb-3">
-                    <span className="text-gray-500">No Image</span>
-                  </div>
-                )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {vans.map((van) => (
+    <div key={van._id} className="border rounded-lg p-5 shadow hover:shadow-lg transition flex flex-col h-full">
+      {/* Thumbnail */}
+      {van.gallery?.length > 0 ? (
+        <ImageWithSkeleton
+          src={van.gallery[0]?.url || van.gallery[0]}
+          alt={van.van_listing?.title || "Van Image"}
+          className="w-full h-48 object-cover rounded"
+        />
+      ) : (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center mb-3 rounded">
+          <span className="text-gray-500">No Image</span>
+        </div>
+      )}
 
-                <h3 className="font-semibold text-lg">
-                  {van.van_listing?.title || "Untitled Van"}
-                </h3>
-                <p className="text-gray-600">{van.van_listing?.description || "-"}</p>
-                <p className="mt-1 font-medium">
-                  Price: ${van.van_listing?.price || "N/A"}
-                </p>
+      <div className="flex-1 flex flex-col justify-between mt-3">
+        <div>
+          <h3 className="font-semibold text-lg mb-1">{van.van_listing?.title || "Untitled Van"}</h3>
+          {/* Truncate description */}
+          <p className="text-gray-600 text-sm line-clamp-3">
+            {van.van_listing?.description || "-"}
+          </p>
+        </div>
 
-                <div className="mt-3 flex gap-2">
-                  <button
-                    onClick={() => handleView(van)}
-                    className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleEdit(van)}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                  >
-                    Edit
-                  </button>
-                  {van.slug && (
-                    <button
-                      onClick={() => handleDelete(van.slug)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+        <p className="mt-2 font-medium">Price: ${van.van_listing?.price || "N/A"}</p>
+
+        <div className="mt-3 flex gap-2">
+          <button
+            onClick={() => handleView(van)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex-1 text-center"
+          >
+            View
+          </button>
+          <button
+            onClick={() => handleEdit(van)}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex-1 text-center"
+          >
+            Edit
+          </button>
+          {van.slug && (
+            <button
+              onClick={() => handleDelete(van.slug)}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 flex-1 text-center"
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
           {/* ✅ Pagination Controls */}
           <div className="flex justify-center items-center mt-6 gap-4">

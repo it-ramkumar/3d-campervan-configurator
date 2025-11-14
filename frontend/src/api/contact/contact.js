@@ -9,7 +9,7 @@ export const contact = async (formData) => {
         Swal.fire({
           icon: "success",
           title: "successfully!",
-          text: "Your blog has been successfully.",
+          text: "Your contant has been submitted successfully.",
         });
     return res.data
   } catch (error) {

@@ -23,43 +23,43 @@ export default function Dashboard() {
     {
       id: "Users",
       label: "Users",
-      icon: "👥",
+      // icon: "👥",
       description: "Listing Users"
     },
     {
       id: "Vans-listing",
-      label: "Van Data",
-      icon: "📊",
+      label: "Van",
+      // icon: "📊",
       description: "Manage existing vans"
     },
     {
       id: "portfolio-listing",
-      label: "Portfolio Data",
-      icon: "📋",
+      label: "Portfolio",
+      // icon: "📋",
       description: "Manage portfolio items"
     },
     {
       id: "Blogs-listing",
-      label: "Blogs Data",
-      icon: "📝",
+      label: "Blog",
+      // icon: "📝",
       description: "Manage blog items"
     },
     {
       id: "Configurator-data",
-      label: "Configurator Data",
-      icon: "⚙️",
+      label: "Configurator",
+      // icon: "⚙️",
       description: "Configurator Data"
     },
     {
       id: "Inquiry-data",
-      label: "Inquiry Data",
-      icon: "📬",
+      label: "Inquiry",
+      // icon: "📬",
       description: "Inquiry Data"
     },
     {
       id: "Contact-data",
-      label: "Contact Data",
-      icon: "📞",
+      label: "Contact",
+      // icon: "📞",
       description: "Contact Data"
     }
   ];
@@ -111,19 +111,19 @@ export default function Dashboard() {
   const renderContent = () => {
     switch (selected) {
       case "vans-form":
-        return <VansForm />;
+        return <VansForm setSelected={setSelected}/>;
       case "Vans-listing":
         return <VanListing setSelected={setSelected} />;
       case "portfolio-form":
-        return <PortfolioForm />;
+        return <PortfolioForm setSelected={setSelected}/>;
       case "portfolio-listing":
         return <PortfolioListing setSelected={setSelected} />;
       case "Blog-form":
-        return <BlogForm />;
+        return <BlogForm setSelected={setSelected}/>;
       case "Blogs-listing":
         return <BlogsListing setSelected={setSelected} />;
       case "Configurator-form":
-        return <ConfiguratorForm />;
+        return <ConfiguratorForm setSelected={setSelected}/>;
       case "Configurator-data":
         return <ConfiguratorListing setSelected={setSelected} />;
       case "Inquiry-data":
@@ -131,9 +131,9 @@ export default function Dashboard() {
       case "Contact-data":
         return <ContactListing setSelected={setSelected} />;
       case "Users":
-        return <UsersData />;
+        return <UsersData setSelected={setSelected}/>;
       default:
-        return <PortfolioListing />;
+        return <PortfolioListing setSelected={setSelected}/>;
     }
   };
 

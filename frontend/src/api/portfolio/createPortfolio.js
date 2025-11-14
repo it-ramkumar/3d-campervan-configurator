@@ -11,7 +11,12 @@ const createPortfolio = async (formDataToSend) => {
             withCredentials: true,
 
         });
-        // alert("Portfolio created successfully!");
+
+            Swal.fire({
+              icon: "success",
+              title: "Successfully!",
+              text:res.data.message,
+            });
         return res.data;
     } catch (error) {
              Swal.fire({
@@ -34,8 +39,12 @@ const updatePortfolio = async (editData, formDataToSend) => {
             formDataToSend,
             { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
-        // alert("Portfolio updated successfully!");
-        // console.log("✅ Success (Update):", res.data);
+
+          Swal.fire({
+            icon: "success",
+            title: "Successfully!",
+            text:res.data.message,
+          });
         return res.data;
     } catch (error) {
              Swal.fire({

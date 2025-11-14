@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { createModel, updateModel } from "../../../../api/configurator/create";
+import Swal from "sweetalert2";
 
-export default function ConfiguratorForm() {
+export default function ConfiguratorForm({setSelected}) {
   const editData = useSelector((state) => state.editData.editData);
   const [form, setForm] = useState({
     category: "",
@@ -20,7 +21,7 @@ export default function ConfiguratorForm() {
   const [message, setMessage] = useState("");
   const [newExtension, setNewExtension] = useState("");
 
-  
+
   useEffect(() => {
     if (editData) {
       setForm({
@@ -82,12 +83,20 @@ export default function ConfiguratorForm() {
       let data;
       if (editData) {
         data = await updateModel(editData, formDataToSend);
+              setSelected("Contact-data")
+
       } else {
         data = await createModel(formDataToSend);
+              setSelected("Contact-data")
+
       }
 
       if (data.success) {
-        setMessage(editData ? "✅ Model updated successfully!" : "✅ Model uploaded successfully!");
+         Swal.fire({
+              icon: "success",
+              title: (editData ? "✅ Model updated successfully!" : "✅ Model uploaded successfully!"),
+              text: "Your data has been submit successfully.",
+            })
         setForm({
           category: "",
           label: "",
@@ -105,7 +114,11 @@ export default function ConfiguratorForm() {
         setMessage("❌ Error: " + data.message);
       }
     } catch (err) {
-      setMessage("⚠️ Upload failed. Please try again.");
+        Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.response.data.message,
+    });
     } finally {
       setLoading(false);
     }

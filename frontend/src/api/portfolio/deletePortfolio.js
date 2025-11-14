@@ -11,7 +11,7 @@ export const deletePortfolio = async (slug) => {
           title: "Delete successfully!",
           text: "Your Portfolio has been Deleted successfully.",
         });
-    // alert("Portfolio deleted successfully!");
+    
     return res.data;
   } catch (error) {
         Swal.fire({
@@ -19,8 +19,7 @@ export const deletePortfolio = async (slug) => {
       title: "Error",
       text: error.response.data.message,
     });
-    // console.error("Error deleting portfolio:", error);
-    // alert("Something went wrong while deleting portfolio!");
+
     throw error;
   }
 };

@@ -29,6 +29,8 @@ import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
 import OurClients from "../websiteComponents/components/OurClients/Clienthero/Client"
 import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
 import BlackFridayLabel from "../websiteComponents/components/BlackFriday/BlackFriday";
+import Interiorpage from "../websiteComponents/components/Interior/Interior";
+import Cushionpage from "../websiteComponents/components/Cushion/Cushion";
 import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/PrivateComponent";
 const AppRoutes = () => {
 
@@ -71,6 +73,11 @@ const AppRoutes = () => {
         <Route path="/preview" element={<Preview />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/our-clients" element={<OurClients />} />
+        <Route path="/interior-choice" element={<Interiorpage />} />
+        <Route path="/cushion" element={<Cushionpage />} />
+
+
+
 
       </Routes>
     </Router>

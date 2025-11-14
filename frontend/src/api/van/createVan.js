@@ -10,8 +10,12 @@ const createVan = async (formDataToSend) => {
       withCredentials: true,
 
     });
-    alert("Van created successfully!");
-    // console.log("✅ Create Response:", res.data);
+
+     Swal.fire({
+      icon: "success",
+      title: "Blog Submitted!",
+      text: "Your van has been submitted successfully.",
+    });
     return res.data;
   } catch (error) {
       Swal.fire({
@@ -20,19 +24,12 @@ const createVan = async (formDataToSend) => {
       text: error.response.data.message,
     });
 
-    // console.log("❌ Error creating van:", error.response.data.message);
-    // alert("Something went wrong while creating van!");
     throw error;
   }
 };
 
 const updateVan = async (editData, formDataToSend) => {
   try {
-    // if (!editData?._id) throw new Error("No van ID to update!");
-
-    // for (let pair of formDataToSend.entries()) {
-    //   console.log(pair[0] + ": ", pair[1]);
-    // }
 
     const res = await axios.put(
       `${import.meta.env.VITE_REACT_APP_API_URL}/van/${editData.slug}`,
@@ -53,8 +50,7 @@ const updateVan = async (editData, formDataToSend) => {
       title: "Error",
       text: error.response.data.message,
     });
-    // console.error("❌ Error updating van:", error);
-    // alert("Something went wrong while updating van!");
+  
     throw error;
   }
 };

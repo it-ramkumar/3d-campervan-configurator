@@ -18,8 +18,7 @@ export const deleteVan = async (slug) => {
       title: "Error",
       text: error.response.data.message,
     });
-    // console.error("Error deleting van:", error);
-    // alert("Something went wrong while deleting van!");
+
     throw error;
   }
 };

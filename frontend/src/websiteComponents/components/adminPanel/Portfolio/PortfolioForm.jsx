@@ -13,10 +13,11 @@ import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
 import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
 import { removeMediaUrl } from "../../../CustomHooks/removeMediaUrl";
 import { addMediaUrl } from "../../../CustomHooks/addMediaUrl";
+import Swal from "sweetalert2";
 
 
 
-export default function PortfolioForm() {
+export default function PortfolioForm({setSelected}) {
   const editData = useSelector((state) => state.editData.editData);
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreviews, setGalleryPreviews] = useState([]);
@@ -162,10 +163,6 @@ export default function PortfolioForm() {
     );
   };
 
-  // ✅ IMPROVED: Media URL Handlers - Proper state updates
-  // const addMediaUrl = () => {
-  //   setMediaUrls(prev => [...prev, ""]);
-  // };
 
   const handleMediaUrlChange = (index, value) => {
     setMediaUrls(prev =>
@@ -180,7 +177,11 @@ export default function PortfolioForm() {
 
     // Basic validation
     if (!title || !category) {
-      alert("Title and Category are required");
+        Swal.fire({
+      icon: "warning",
+      title: "warning",
+      text: "Title and Category are required",
+    })
       return;
     }
 
@@ -241,16 +242,24 @@ export default function PortfolioForm() {
       if (editData?._id) {
         await updatePortfolio(editData, formDataToSend);
         clearForm();
+        setSelected("portfolio-listing")
+
       } else {
         await createPortfolio(formDataToSend);
         clearForm();
+        setSelected("portfolio-listing")
+
       }
 
       // 4️⃣ Clear removed images state
       setRemovedExistingGallery([]);
     } catch (error) {
       console.error("Error uploading:", error);
-      alert("Error submitting form. Check console for details.");
+        Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: error.response.data.message,
+    })
     } finally {
       setLoading(false);
     }
