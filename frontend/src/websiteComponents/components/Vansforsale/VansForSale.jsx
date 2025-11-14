@@ -20,7 +20,7 @@ export default function VansForSale() {
     {
       question: "Do you offer a Warranty?",
       answer:
-        "Yes, all of our pre-built vans, including our Mercedes camper vans for sale, come with a <strong>1-year warranty</strong>. This warranty does not cover third-party products themselves.",
+        "Yes, all of our pre-built vans, including our Mercedes camper vans for sale, come with a 1-year warranty. This warranty does not cover third-party products themselves.",
     },
     {
       question: "Can I add additional features or upgrades after purchase?",

@@ -14,7 +14,8 @@ const TestblogSchema = new mongoose.Schema({
     {
       type: {
         type: String,
-        enum: ["heading", "subheading", "paragraph", "image", "table", "proscons"],
+       enum: ["heading", "subheading", "paragraph", "image", "table", "proscons", "mediaLink"],
+
       },
       text: String,
       image: String,

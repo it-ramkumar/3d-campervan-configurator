@@ -12,9 +12,10 @@ import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
 // 👆
 import { handleBlockChange } from "../../../CustomHooks/handleBlockChanges";
 import { handleImageChange } from "../../../CustomHooks/handleImageChange";
-import { addTableRow } from "../../../CustomHooks/addTableRow";
+import { addTableRow,addTableColumn } from "../../../CustomHooks/addTableRow";
 import { addProsOrCons } from "../../../CustomHooks/addProsOrCons";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { addMediaLinkBlock } from "../../../CustomHooks/mediaLinkInblock";
 
 export default function BlogForm({setSelected}) {
   const editData = useSelector((state) => state.editData.editData);
@@ -185,7 +186,7 @@ const handleRemoveBlock = async (index) => {
       } else {
         await createBlog(formDataToSend);
         setSelected("Blogs-listing")
-        
+
       }
 
       // Reset form
@@ -415,46 +416,71 @@ const handleRemoveBlock = async (index) => {
                 )}
               </div>
             )}
+{block.type === "table" && (
+  <div>
+    <table className="border w-full text-left">
+      <tbody>
+        {block.rows?.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map((cell, colIndex) => (
+              <td key={colIndex} className="border p-2">
+                <input
+                  type="text"
+                  value={cell}
+                  onChange={(e) =>
+                    handleBlockChange(
+                      i,
+                      "table",
+                      e.target.value,
+                      rowIndex,
+                      colIndex,
+                      setBlocks
+                    )
+                  }
+                  className="w-full border-none outline-none"
+                />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
 
-            {/* Table */}
-            {block.type === "table" && (
-              <div>
-                <table className="border w-full text-left">
-                  <tbody>
-                    {block.rows?.map((row, rowIndex) => (
-                      <tr key={rowIndex}>
-                        {row.map((cell, colIndex) => (
-                          <td key={colIndex} className="border p-2">
-                            <input
-                              type="text"
-                              value={cell}
-                              onChange={(e) =>
-                                handleBlockChange(
-                                  i,
-                                  "table",
-                                  e.target.value,
-                                  rowIndex,
-                                  colIndex,
-                                  setBlocks
-                                )
-                              }
-                              className="w-full border-none outline-none"
-                            />
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <button
-                  type="button"
-                  onClick={() => addTableRow(i, setBlocks)}
-                  className="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-sm"
-                >
-                  + Add Row
-                </button>
-              </div>
-            )}
+    <div className="flex gap-2 mt-2">
+      <button
+        type="button"
+        onClick={() => addTableRow(i, setBlocks)}
+        className="px-3 py-1 bg-blue-600 text-white rounded text-sm"
+      >
+        + Add Row
+      </button>
+      <button
+        type="button"
+        onClick={() => addTableColumn(i, setBlocks)}
+        className="px-3 py-1 bg-indigo-600 text-white rounded text-sm"
+      >
+        + Add Column
+      </button>
+    </div>
+  </div>
+)}
+
+{/* Media Link Block */}
+{block.type === "mediaLink" && (
+  <div className="border p-2 rounded bg-gray-50 mb-4">
+    <input
+      type="text"
+      placeholder="Enter media link"
+      value={block.url}
+      onChange={(e) =>
+        handleBlockChange(i, "url", e.target.value, null, null, setBlocks)
+      }
+      className="w-full border p-2 rounded"
+    />
+  </div>
+)}
+
+
 
             {/* Pros & Cons */}
             {block.type === "proscons" && (
@@ -552,6 +578,13 @@ const handleRemoveBlock = async (index) => {
               >
                 + Pros & Cons
               </button>
+              <button
+  onClick={() => addMediaLinkBlock(setBlocks, i)}
+  type="button"
+  className="text-xs bg-gray-600 text-white px-2 py-1 rounded"
+>
+  + Media Link
+</button>
             </div>
           </div>
         ))}
@@ -600,6 +633,13 @@ const handleRemoveBlock = async (index) => {
           >
             + Pros & Cons
           </button>
+          <button
+  onClick={() => addMediaLinkBlock(setBlocks)}
+  type="button"
+  className="text-xs bg-gray-600 text-white px-2 py-1 rounded"
+>
+  + Media Link
+</button>
         </div>
 
         <button

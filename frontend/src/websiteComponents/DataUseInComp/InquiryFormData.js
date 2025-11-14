@@ -145,7 +145,7 @@ export const formQuestions = [
   {
     step: 6,
     title: "Contact Info",
-    
+
     questions: [
       {
         id: "phone",

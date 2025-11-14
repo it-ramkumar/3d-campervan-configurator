@@ -17,7 +17,7 @@ export const submitInquiry = async (formData) => {
     return { success: true, data };
   } catch (error) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: error.response.data.message,
     });
