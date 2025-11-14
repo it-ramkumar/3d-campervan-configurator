@@ -256,444 +256,299 @@ const generateCalendar = () => {
  ];
 
  return (
-  <div className="min-h-screen flex bg-white">
-   {/* Sidebar - Left Side (no changes) */}
-   <div className="hidden lg:flex lg:w-2/5  text-black p-8 flex-col justify-between">
-    <div>
-     {/* Website Logo - Centered */}
-     <div className="flex justify-center mb-8">
-      <div className="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center">
-       <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
-      </div>
-     </div>
+<div className="flex bg-white justify-center">
+  {/* Outer Wrapper for Centering and Limiting Overall Width (Optional but recommended for Full Width + Center look) */}
+  <div className="flex w-full max-w-6xl">
 
-     {/* Brand Name - Left aligned */}
-     <h1 className="text-2xl font-bold mb-12 text-left text-black">Plan your Customvan Build!</h1>
-
-     {/* Contact Info - Left aligned */}
-     <div className="space-y-6 text-left">
+    {/* Sidebar - Left Side (Redesigned) - WIDTH SET TO 1/2 (50%) */}
+    {/* Height kam rakhne ke liye min-h-screen hataya gaya hai */}
+    <div className="hidden lg:flex lg:w-1/2 text-black p-8 flex-col justify-between bg-gray-50 border-r border-gray-200">
       <div>
-       <h3 className="text-lg font-semibold mb-2 text-black">Contact Us</h3>
-       <p className=" text-black">Host: +1 (951) 441-9719</p>
+        {/* Website Logo - Top Left */}
+        <div className="flex justify-start mb-8">
+          <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200">
+            <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        {/* Brand Name */}
+        <h1 className="text-2xl font-bold mb-4 text-left text-black leading-tight">
+          Plan your<br />Customvan Build!
+        </h1>
+
+        {/* Progress Steps - Vertical - Reduced Spacing */}
+        <div className="mb-8">
+          <div className="flex items-center mb-3">
+            <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 1 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
+              1
+            </div>
+            <span className={`font-medium ${bookingStep >= 1 ? 'text-black' : 'text-gray-500'}`}>Date</span>
+          </div>
+          <div className="flex items-center mb-3">
+            <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 2 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
+              2
+            </div>
+            <span className={`font-medium ${bookingStep >= 2 ? 'text-black' : 'text-gray-500'}`}>Time</span>
+          </div>
+          <div className="flex items-center mb-3">
+            <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 3 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
+              3
+            </div>
+            <span className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Details</span>
+          </div>
+          <div className="flex items-center">
+            <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 4 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
+              4
+            </div>
+            <span className={`font-medium ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Summary</span>
+          </div>
+        </div>
+
+        {/* Contact Info */}
+        <div className="space-y-4 text-left">
+          <div>
+            <h3 className="text-base font-semibold mb-1 text-black">Contact Us</h3>
+            <p className="text-sm text-black">Host: +1 (951) 441-9719</p>
+          </div>
+
+          <div className="w-16 h-px bg-gray-300"></div>
+
+          <div>
+            <p className="leading-relaxed text-sm text-gray-600">
+              If you have more queries, contact the host number below.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="w-16 h-px bg-gray-600"></div>
-
-      <div>
-       <p className=" leading-relaxed">
-        If you have more queries, contact the host number below.
-       </p>
+      {/* Footer */}
+      <div className="text-gray-400 text-xs text-left">
+        {/* <p>© 2024 Your Company. All rights reserved.</p> */}
       </div>
-     </div>
     </div>
 
-    {/* Footer */}
-    <div className="text-gray-400 text-sm text-left mt-12">
-     {/* <p>© 2024 Your Company. All rights reserved.</p> */}
-    </div>
-   </div>
+    {/* Main Content - Right Side - SCROLL FIXED - Takes remaining 50% */}
+    <div className="flex-1 flex flex-col lg:w-1/2">
+      {/* Reduced padding p-8 to p-6 */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        {!authUrl ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+          </div>
+        ) : !isLoggedIn ? (
+          <div className="max-w-sm mx-auto mt-8"> {/* max-w-sm for centering small content */}
+            <div className="text-center mb-8">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Booking System</h1>
+              <p className="text-gray-600">Please login with Google to continue</p>
+            </div>
+            <button
+              onClick={handleLogin}
+              className="bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 w-full font-medium text-sm"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+              Login with Google
+            </button>
+          </div>
+        ) : (
+          <div className="max-w-sm mx-auto"> {/* Main steps ko centered aur small rakha gaya hai */}
+            {/* Mobile Header (No changes needed) */}
+            <div className="lg:hidden mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                  <ImageWithSkeleton
+                    src="/logobbv.jpg"
+                    alt="BBV logo"
+                    className="w-[100px] h-[30px] object-contain"
+                  />
+                </div>
+              </div>
+              <div className="w-12 h-px bg-gray-300"></div>
+            </div>
 
-   {/* Main Content - Right Side */}
-   <div className="flex-1 flex flex-col max-h-screen overflow-y-auto">
-    <div className="flex-1 p-6 lg:p-8">
-     {!authUrl ? (
-      <div className="flex items-center justify-center h-64">
-       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+            {/* Content (Steps 1-5, already compact from previous revision) */}
+            <div>
+              {/* Step 1: Date Selection */}
+              {bookingStep === 1 && (
+                <div className="max-w-sm mx-auto">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Select a Date</h2>
+                  {/* Calendar component is here */}
+                  <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
+                    {/* Calendar Header */}
+                    <div className="flex items-center justify-between mb-3">
+                      <button onClick={() => navigateMonth(-1)} className="p-1 hover:bg-gray-100 rounded-md transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                      </button>
+                      <h3 className="text-sm font-semibold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
+                      <button onClick={() => navigateMonth(1)} className="p-1 hover:bg-gray-100 rounded-md transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      </button>
+                    </div>
+                    {/* Calendar Grid */}
+                    <div className="grid grid-cols-7 gap-1 mb-1">
+                      {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (<div key={day + index} className="text-center text-xs font-medium py-1 text-gray-500">{day}</div>))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1">
+                      {calendar.map((date, index) => (
+                        <button
+                          key={index}
+                          onClick={() => date && handleDateSelect(date)}
+                          disabled={!date || date.isPast || date.isSunday}
+                          className={`
+                            h-7 rounded-md text-xs transition-all font-medium
+                            ${!date ? 'invisible' : ''}
+                            ${date?.isPast || date?.isSunday ? 'text-gray-300 cursor-not-allowed' : ''}
+                            ${date?.isToday && !date?.isSelected ? 'bg-blue-50 text-blue-600 border border-blue-200' : ''}
+                            ${date?.isSelected ? 'bg-black text-white shadow-md' : ''}
+                            ${!date?.isPast && !date?.isSunday && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50 text-gray-700' : 'text-gray-600'}
+                          `}
+                        >
+                          {date?.day}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Selected Date Display */}
+                  {selectedDate && (
+                    <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
+                      <p className="text-gray-600 text-xs mb-1">Selected Date</p>
+                      <p className="font-semibold text-sm">{formatDate(selectedDate)}</p>
+                    </div>
+                  )}
+                  <div className="text-center">
+                    <button
+                      onClick={() => setBookingStep(2)}
+                      disabled={!selectedDate}
+                      className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium text-sm"
+                    >
+                      Continue to Time Selection
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Time Selection */}
+              {bookingStep === 2 && (
+                <div className="max-w-sm mx-auto">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Select a Time</h2>
+                  <p className="text-gray-600 text-center mb-4 text-sm">{formatDate(selectedDate)}</p>
+                  {slots.length === 0 ? (
+                    <div className="text-center py-6">
+                      <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      <p className="text-gray-500 mb-3 text-sm">No available slots for selected day.</p>
+                      <button onClick={() => setBookingStep(1)} className="text-black hover:text-gray-700 font-medium underline text-sm">Choose another date</button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-2 mb-4">
+                      {slots.map((slot, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => { if (slot.available) { setSelectedSlot(slot); setBookingStep(3); } }}
+                          disabled={!slot.available}
+                          className={`p-3 border-2 rounded-lg text-center transition-all font-medium text-sm ${
+                            selectedSlot === slot
+                              ? "bg-black text-white border-black shadow-md"
+                              : slot.available
+                              ? "bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm"
+                              : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                          }`}
+                        >
+                          {formatTimeSlot(slot.start)}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <div className="text-center">
+                    <button onClick={() => setBookingStep(1)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm">
+                      Back to Date Selection
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Details Form */}
+              {bookingStep === 3 && (
+                <div className="max-w-sm mx-auto">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Enter Your Details</h2>
+                  <p className="text-gray-600 text-center mb-4 text-sm">
+                    {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
+                  </p>
+                  <div className="space-y-3 mb-4">
+                    {/* Form fields here (with smaller p-2 and text-sm classes) */}
+                    <div><label className="block text-gray-700 mb-1 font-medium text-sm">Name *</label><input type="text" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
+                    <div><label className="block text-gray-700 mb-1 font-medium text-sm">Email *</label><input type="email" name="email" placeholder="Your email address" value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
+                    <div><label className="block text-gray-700 mb-1 font-medium text-sm">Phone (optional)</label><input type="tel" name="phone" placeholder="Your phone number" value={formData.phone} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
+                    <div><label className="block text-gray-700 mb-1 font-medium text-sm">Meeting Title</label><input type="text" name="summary" placeholder="What is this meeting about?" value={formData.summary} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
+                    <div><label className="block text-gray-700 mb-1 font-medium text-sm">Additional Details</label><textarea name="description" placeholder="Any additional information..." value={formData.description} onChange={handleChange} rows="3" className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => setBookingStep(2)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1 text-sm">Back</button>
+                    <button onClick={() => setBookingStep(4)} disabled={!formData.name || !formData.email} className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium flex-1 text-sm">Continue to Summary</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Summary */}
+              {bookingStep === 4 && (
+                <div className="max-w-sm mx-auto">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Meeting Summary</h2>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 text-sm">
+                    {/* Summary content is here (with smaller p-4 and text-sm classes) */}
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Date & Time</span><span className="font-semibold text-right">{formatDate(selectedDate)}<br />at {selectedSlot && formatTimeSlot(selectedSlot.start)}</span></div>
+                      <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Duration</span><span className="font-semibold">{selectedSlot && Math.round((new Date(selectedSlot.end) - new Date(selectedSlot.start)) / (1000 * 60))} min</span></div>
+                      <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Name</span><span className="font-semibold">{formData.name}</span></div>
+                      <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Email</span><span className="font-semibold">{formData.email}</span></div>
+                      {formData.phone && (<div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Phone</span><span className="font-semibold">{formData.phone}</span></div>)}
+                      {formData.summary && (<div className="flex justify-between items-start"><span className="text-gray-600">Title</span><span className="font-semibold text-right">{formData.summary}</span></div>)}
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => setBookingStep(3)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1 text-sm">Back</button>
+                    <button onClick={handleBooking} className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex-1 text-sm">Confirm Booking</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 5: Confirmation */}
+              {bookingStep === 5 && (
+                <div className="text-center max-w-sm mx-auto py-6">
+                  {/* Confirmation content is here (with smaller p-6) */}
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
+                  <p className="text-gray-600 mb-4 text-sm">Your meeting has been scheduled successfully.</p>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+                    <p className="text-xs text-gray-600 mb-2">Your Google Meet link:</p>
+                    <div className="flex items-center bg-white p-2 rounded border">
+                      <p className="text-gray-900 truncate flex-1 text-left text-xs font-medium">{meetLink}</p>
+                      <button onClick={copyToClipboard} className="ml-2 text-gray-600 hover:text-black p-1 rounded hover:bg-gray-100 transition-colors" title="Copy to clipboard">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <button onClick={resetBooking} className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm">Book Another Meeting</button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-     ) : !isLoggedIn ? (
-      <div className="max-w-md mx-auto mt-16">
-       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Booking System</h1>
-        <p className="text-gray-600">Please login with Google to continue</p>
-       </div>
-       <button
-        onClick={handleLogin}
-        className="bg-white text-gray-900 px-6 py-4 rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 w-full font-medium"
-       >
-        <svg className="w-5 h-5" viewBox="0 0 24 24">
-         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-        </svg>
-        Login with Google
-       </button>
+
+      {/* Mobile Footer - FIXED POSITION (No changes needed) */}
+      <div className="lg:hidden border-t border-gray-200 p-3 bg-white sticky bottom-0">
+        <div className="text-center">
+          <p className="text-gray-600 text-xs mb-1">Need help? Call us at</p>
+          <p className="font-semibold text-sm">+1 (951) 441-9719</p>
+        </div>
       </div>
-     ) : (
-      <div className="max-w-4xl mx-auto">
-       {/* Mobile Header */}
-       <div className="lg:hidden mb-8">
-        <div className="flex items-center gap-3 mb-4">
-         <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-           <ImageWithSkeleton
-                          src="/logobbv.jpg"
-                          alt="BBV logo"
-                          className="w-[100px] h-[30px] object-contain"
-                        />
-         </div>
-       
-        </div>
-        <div className="w-12 h-px bg-gray-300"></div>
-       </div>
-
-       {/* Progress Steps */}
-       <div className="flex justify-between max-w-2xl mx-auto mb-8">
-        <div className={`flex flex-col items-center ${bookingStep >= 1 ? 'text-black' : 'text-gray-400'}`}>
-         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${bookingStep >= 1 ? 'bg-black text-white' : 'bg-gray-200'}`}>
-          1
-         </div>
-         <span className="text-sm mt-1">Date</span>
-         </div>
-        <div className={`flex flex-col items-center ${bookingStep >= 2 ? 'text-black' : 'text-gray-400'}`}>
-         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${bookingStep >= 2 ? 'bg-black text-white' : 'bg-gray-200'}`}>
-          2
-         </div>
-         <span className="text-sm mt-1">Time</span>
-        </div>
-        <div className={`flex flex-col items-center ${bookingStep >= 3 ? 'text-black' : 'text-gray-400'}`}>
-         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${bookingStep >= 3 ? 'bg-black text-white' : 'bg-gray-200'}`}>
-          3
-         </div>
-         <span className="text-sm mt-1">Details</span>
-        </div>
-        <div className={`flex flex-col items-center ${bookingStep >= 4 ? 'text-black' : 'text-gray-400'}`}>
-         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${bookingStep >= 4 ? 'bg-black text-white' : 'bg-gray-200'}`}>
-          4
-         </div>
-         <span className="text-sm mt-1">Summary</span>
-        </div>
-       </div>
-
-       {/* Content */}
-       <div>
-        {/* Step 1: Date Selection */}
-        {bookingStep === 1 && (
-         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Select a Date</h2>
-
-          <div className="bg-white border border-gray-300 rounded-lg p-6 mb-6">
-           {/* Calendar Header */}
-           <div className="flex items-center justify-between mb-6">
-            <button
-             onClick={() => navigateMonth(-1)}
-             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-             </svg>
-            </button>
-            <h3 className="text-lg font-semibold">
-             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-            </h3>
-            <button
-             onClick={() => navigateMonth(1)}
-             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-             </svg>
-            </button>
-           </div>
-
-           {/* Calendar Grid */}
-           <div className="grid grid-cols-7 gap-1 mb-3">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-             <div key={day + index} className="text-center text-sm font-medium py-2">
-              {day}
-             </div>
-            ))}
-
-           </div>
-<div className="grid grid-cols-7 gap-1">
- {calendar.map((date, index) => (
-  <button
-   key={index}
-   onClick={() => date && handleDateSelect(date)}
-   disabled={!date || date.isPast || date.isSunday} // ✅ Sunday disabled
-   className={`
-    h-12 rounded-lg text-sm transition-all font-medium
-    ${!date ? 'invisible' : ''}
-    ${date?.isPast || date?.isSunday ? 'text-gray-300 cursor-not-allowed' : ''} // ✅ Sunday style same as past
-    ${date?.isToday && !date?.isSelected ? 'bg-gray-100 text-gray-900 border border-gray-300' : ''}
-    ${date?.isSelected ? 'bg-black text-white' : ''}
-    ${!date?.isPast && !date?.isSunday && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50' : ''}
-   `}
-  >
-   {date?.day}
-  </button>
- ))}
-</div>
-
-          </div>
-
-          {/* Selected Date Display */}
-          <div className="text-center p-6 bg-gray-50 rounded-lg">
-           <p className="text-gray-600 mb-2">Selected Date</p>
-           <p className="text-xl font-semibold">{formatDate(selectedDate)}</p>
-          </div>
-         </div>
-        )}
-
-        {/* Step 2: Time Selection */}
-        {bookingStep === 2 && (
-         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">Select a Time</h2>
-          <p className="text-gray-600 text-center mb-8">{formatDate(selectedDate)}</p>
-
-          {slots.length === 0 ? (
-           <div className="text-center py-12">
-            <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-gray-500 text-lg">No available slots for selected day.</p>
-            <button
-             onClick={() => setBookingStep(1)}
-             className="mt-4 text-black hover:text-gray-700 font-medium"
-            >
-             Choose another date
-            </button>
-           </div>
-          ) : (
-           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
-            {slots.map((slot, idx) => (
-             <button
-              key={idx}
-              onClick={() => {
-               if (slot.available) {
-                setSelectedSlot(slot);
-                setBookingStep(3);
-               }
-              }}
-              disabled={!slot.available}
-              className={`p-4 border-2 rounded-lg text-center transition-all font-medium text-lg ${selectedSlot === slot
-                ? "bg-black text-white border-black"
-                : slot.available
-                 ? "bg-white text-gray-900 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
-                 : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-               }`}
-             >
-              {/* ✅ LOCAL TIME FORMAT USE KAREIN */}
-              {formatTimeSlot(slot.start)}
-             </button>
-            ))}
-           </div>
-          )}
-
-          <div className="text-center">
-           <button
-            onClick={() => setBookingStep(1)}
-            className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
-           >
-            Back to Date Selection
-           </button>
-          </div>
-         </div>
-        )}
-
-        {/* Step 3: Details Form (no changes) */}
-        {bookingStep === 3 && (
-         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">Enter Your Details</h2>
-          <p className="text-gray-600 text-center mb-8">
-           {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
-          </p>
-
-          <div className="space-y-6 mb-8">
-           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Name *</label>
-            <input
-             type="text"
-             name="name"
-             placeholder="Your full name"
-             value={formData.name}
-             onChange={handleChange}
-             className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
-             required
-            />
-           </div>
-
-           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Email *</label>
-            <input
-             type="email"
-             name="email"
-             placeholder="Your email address"
-             value={formData.email}
-             onChange={handleChange}
-             className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
-             required
-            />
-           </div>
-
-           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Phone (optional)</label>
-            <input
-             type="tel"
-             name="phone"
-             placeholder="Your phone number"
-             value={formData.phone}
-             onChange={handleChange}
-             className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
-            />
-           </div>
-
-           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Meeting Title</label>
-            <input
-             type="text"
-             name="summary"
-             placeholder="What is this meeting about?"
-             value={formData.summary}
-             onChange={handleChange}
-             className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
-            />
-           </div>
-
-           <div>
-            <label className="block text-gray-700 mb-2 font-medium">Additional Details</label>
-            <textarea
-             name="description"
-             placeholder="Any additional information..."
-             value={formData.description}
-             onChange={handleChange}
-             rows="4"
-             className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors"
-            />
-           </div>
-          </div>
-
-          <div className="flex gap-3">
-           <button
-            onClick={() => setBookingStep(2)}
-            className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1"
-           >
-            Back
-           </button>
-           <button
-            onClick={() => setBookingStep(4)}
-            disabled={!formData.name || !formData.email}
-            className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium flex-1"
-           >
-            Continue to Summary
-           </button>
-          </div>
-         </div>
-        )}
-
-        {/* Step 4: Summary (no changes) */}
-        {bookingStep === 4 && (
-         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Meeting Summary</h2>
-
-          <div className="bg-gray-50 border border-gray-300 rounded-lg p-8 mb-8">
-           <div className="space-y-6">
-            <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-             <span className="text-gray-600">Date & Time</span>
-             <span className="font-semibold text-lg text-right">
-              {formatDate(selectedDate)}<br />
-              at {selectedSlot && formatTimeSlot(selectedSlot.start)}
-             </span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-             <span className="text-gray-600">Duration</span>
-             <span className="font-semibold">
-              {selectedSlot && Math.round((new Date(selectedSlot.end) - new Date(selectedSlot.start)) / (1000 * 60))} minutes
-             </span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-             <span className="text-gray-600">Name</span>
-             <span className="font-semibold">{formData.name}</span>
-            </div>
-
-            <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-             <span className="text-gray-600">Email</span>
-             <span className="font-semibold">{formData.email}</span>
-            </div>
-
-            {formData.phone && (
-             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-              <span className="text-gray-600">Phone</span>
-              <span className="font-semibold">{formData.phone}</span>
-             </div>
-            )}
-
-            {formData.summary && (
-             <div className="flex justify-between items-start">
-              <span className="text-gray-600">Meeting Title</span>
-              <span className="font-semibold text-right">{formData.summary}</span>
-             </div>
-            )}
-           </div>
-          </div>
-
-          <div className="flex gap-3">
-           <button
-            onClick={() => setBookingStep(3)}
-            className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1"
-           >
-            Back to Details
-           </button>
-           <button
-            onClick={handleBooking}
-            className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors font-medium flex-1"
-           >
-            Confirm Booking
-           </button>
-          </div>
-         </div>
-        )}
-
-        {/* Step 5: Confirmation (no changes) */}
-        {bookingStep === 5 && (
-         <div className="text-center max-w-2xl mx-auto py-8">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-           <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path>
-           </svg>
-          </div>
-
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">Booking Confirmed!</h2>
-          <p className="text-gray-600 mb-8 text-lg">Your meeting has been scheduled successfully.</p>
-
-          <div className="bg-gray-50 border border-gray-300 rounded-lg p-6 mb-8">
-           <p className="text-sm text-gray-600 mb-3">Your Google Meet link:</p>
-           <div className="flex items-center bg-white p-3 rounded border">
-            <p className="text-gray-900 truncate flex-1 text-left font-medium">{meetLink}</p>
-            <button
-             onClick={copyToClipboard}
-             className="ml-3 text-gray-600 hover:text-black p-2 rounded-lg hover:bg-gray-100 transition-colors"
-             title="Copy to clipboard"
-            >
-             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-             </svg>
-            </button>
-           </div>
-          </div>
-
-          <button
-           onClick={resetBooking}
-           className="bg-black text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition-colors font-medium"
-          >
-           Book Another Meeting
-          </button>
-         </div>
-        )}
-       </div>
-      </div>
-     )}
     </div>
-
-    {/* Mobile Footer (no changes) */}
-    <div className="lg:hidden border-t border-gray-200 p-6 bg-white">
-     <div className="text-center">
-      <p className="text-gray-600 mb-2">Need help? Call us at</p>
-      <p className="font-semibold">+1 (555) 123-4567</p>
-     </div>
-    </div>
-   </div>
   </div>
+</div>
  );
 }
