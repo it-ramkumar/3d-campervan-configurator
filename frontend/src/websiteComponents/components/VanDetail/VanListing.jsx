@@ -138,8 +138,9 @@ const SvgExterior = ({ className }) => (
   </svg>
 );
 
-const VanPage = ({ vanDetail }) => {
+const VanPage = ({ vanDetail, onConsultationClick }) => {
   const heroRef = useRef(null);
+
 
 
   const van = {
@@ -193,7 +194,7 @@ const VanPage = ({ vanDetail }) => {
     },
     gallery: vanDetail?.gallery || [],
   };
-  console.log(vanDetail, "vanDetail")
+  // console.log(vanDetail, "vanDetail")
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -310,12 +311,13 @@ const VanPage = ({ vanDetail }) => {
 
           </div>
 
-          <Link to={"/contact"}>
+          {/* <Link to={"/contact"}> */}
 
-            <button className="mt-8 md:mt-12 w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
-              Book A Call Now
-            </button>
-          </Link>
+          <button onClick={onConsultationClick}
+            className="mt-8 md:mt-12 cursor-pointer w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
+            Book A Call Now
+          </button>
+          {/* </Link> */}
 
         </div>
       </div>
@@ -351,14 +353,7 @@ const VanPage = ({ vanDetail }) => {
             ))}
           </div>
 
-          <div className="text-center mt-16">
-            <Link to={"/contact"}>
-              <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-                Buy Now
-              </button>
-            </Link>
 
-          </div>
         </div>
       </div>
 
@@ -369,10 +364,12 @@ const VanPage = ({ vanDetail }) => {
           <p className="text-xl font-normal leading-relaxed mb-8">
             {vanDetail.van_listing.description}
           </p>
-          <Link to={"/contact"}>
-            <button className="px-5 py-2.5 bg-[#2761FD] text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
-              Book a call now
-            </button></Link>
+          {/* <Link to={"/contact"}> */}
+          <button onClick={onConsultationClick}
+            className="px-5 py-2.5 bg-[#2761FD] cursor-pointer text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
+            Book a call now
+          </button>
+          {/* </Link> */}
         </div>
       </div>
 
@@ -402,10 +399,10 @@ const VanPage = ({ vanDetail }) => {
 
           <div
             className={`grid gap-8 ${vanDetail.media.length === 1
-                ? "grid-cols-1"
-                : vanDetail.media.length === 2
-                  ? "grid-cols-1 md:grid-cols-2"
-                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              ? "grid-cols-1"
+              : vanDetail.media.length === 2
+                ? "grid-cols-1 md:grid-cols-2"
+                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
               }`}
           >
             {vanDetail.media.map((videoUrl, index) => {
@@ -437,8 +434,8 @@ const VanPage = ({ vanDetail }) => {
                 >
                   <div
                     className={`relative w-full ${isShorts
-                        ? "aspect-[9/16] max-w-[400px] mx-auto" // 🎥 Tall for Shorts
-                        : "aspect-video" // 📺 Normal landscape video
+                      ? "aspect-[9/16] max-w-[400px] mx-auto" // 🎥 Tall for Shorts
+                      : "aspect-video" // 📺 Normal landscape video
                       }`}
                   >
                     <iframe

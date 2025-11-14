@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Search, ChevronDown, ChevronUp, Zap, Shield, Droplets, Sun, Grid, Palette, X, ArrowRight, Star, Sparkles, Download, Maximize2, Minus, Plus } from "lucide-react";
-
+import ScrollFromTop from "../../../../components/ScrollFromTop/ScrollFromTop";
 // Fabric data with colors and images (Data is unchanged, kept for completeness)
 const fabricData = {
   "Chenille Fleece": {
@@ -126,11 +126,12 @@ const fabricData = {
   }
 };
 
+
 // Color Detail Modal Component
 function ColorDetailModal({ color, fabricName, fabricDescription, isOpen, onClose, onNavigate }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [imageError, setImageError] = useState(false);
+
 
   useEffect(() => {
     if (isOpen) {
@@ -145,14 +146,6 @@ function ColorDetailModal({ color, fabricName, fabricDescription, isOpen, onClos
     };
   }, [isOpen]);
 
-  // const handleImageLoad = () => {
-  //   setImageLoaded(true);
-  // };
-
-  // const handleImageError = () => {
-  //   setImageError(true);
-  //   setImageLoaded(true);
-  // };
 
   const handleZoomIn = () => {
     setZoomLevel(prev => Math.min(prev + 0.25, 3));
@@ -272,30 +265,9 @@ function ColorDetailModal({ color, fabricName, fabricDescription, isOpen, onClos
                     alt={color.name}
                     className={`w-full h-full object-cover transition-all duration-500 `}
                     style={{ transform: `scale(${zoomLevel})` }}
-                    // onLoad={handleImageLoad}
-                    // onError={handleImageError}
-                  />
-                   {/* {!imageError ? (
-                <>
-                  {!imageLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-8 h-8 sm:w-12 sm:h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin" />
-                    </div>
-                  )}
 
-                </>
-              ) : (
-                <div
-                  className="w-full h-full flex items-center justify-center"
-                  style={{ backgroundColor: color.code }}
-                >
-                  <div className="text-center text-white bg-black/40 backdrop-blur-sm p-4 sm:p-6 rounded-xl sm:rounded-2xl">
-                    <Palette className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-2 sm:mb-3" />
-                    <p className="text-base sm:text-lg md:text-xl font-bold">{color.name}</p>
-                    <p className="text-xs sm:text-sm opacity-90 mt-1">{color.code}</p>
-                  </div>
-                </div>
-              )} */}
+                  />
+
 
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
@@ -480,7 +452,7 @@ function ColorSwatch({ color, index, isSelected, onClick, onViewDetails, fabricN
                 src={color.image}
                 alt={color.name}
                 className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                
+
 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -747,6 +719,7 @@ export default function CushionCatalog() {
 
   return (
     <div className="min-h-screen bg-white">
+      <ScrollFromTop/>
       {/* Enhanced Hero Section */}
       <section className="relative pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-6 sm:pb-8 md:pb-10 lg:pb-12 bg-white overflow-hidden">
         {/* Sophisticated Background Pattern */}

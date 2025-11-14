@@ -13,7 +13,7 @@ const createVan = async (formDataToSend) => {
 
      Swal.fire({
       icon: "success",
-      title: "Blog Submitted!",
+      title: "van Submitted!",
       text: "Your van has been submitted successfully.",
     });
     return res.data;
@@ -50,7 +50,7 @@ const updateVan = async (editData, formDataToSend) => {
       title: "Error",
       text: error.response.data.message,
     });
-  
+
     throw error;
   }
 };

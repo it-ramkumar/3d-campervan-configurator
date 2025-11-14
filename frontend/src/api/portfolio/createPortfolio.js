@@ -12,25 +12,23 @@ const createPortfolio = async (formDataToSend) => {
 
         });
 
-            Swal.fire({
-              icon: "success",
-              title: "Successfully!",
-              text:res.data.message,
-            });
+        Swal.fire({
+            icon: "success",
+            title: "Successfully!",
+            text: res.data.message,
+        });
         return res.data;
     } catch (error) {
-             Swal.fire({
-              icon: "Error",
-              title: "Error",
-              text: error.response.data.message,
-            });
-        // console.error("❌ Error creating portfolio:", error);
-        // alert("Something went wrong while creating!");
+        Swal.fire({
+            icon: "Error",
+            title: "Error",
+            text: error.response.data.message,
+        });
         throw error;
     }
 };
 
-// ✅ Update portfolio
+
 const updatePortfolio = async (editData, formDataToSend) => {
     try {
         if (!editData?._id) throw new Error("No portfolio ID to update!");
@@ -40,20 +38,18 @@ const updatePortfolio = async (editData, formDataToSend) => {
             { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
 
-          Swal.fire({
+        Swal.fire({
             icon: "success",
             title: "Successfully!",
-            text:res.data.message,
-          });
+            text: res.data.message,
+        });
         return res.data;
     } catch (error) {
-             Swal.fire({
-      icon: "Error",
-      title: "Error",
-      text: error.response.data.message,
-    });
-        // console.error("❌ Error updating portfolio:", error);
-        // alert("Something went wrong while updating!");
+        Swal.fire({
+            icon: "Error",
+            title: "Error",
+            text: error.response.data.message,
+        });
         throw error;
     }
 };
