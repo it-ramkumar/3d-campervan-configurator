@@ -44,7 +44,7 @@ return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
  // Step 1: Get Google OAuth URL and login status
  useEffect(() => {
  // Base API URL ko process.env se lene ka tareeqa fix karein agar ye React setup mein hai.
- const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000";
+ const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:5000";
 
  fetch(`${API_URL}/calendar/auth/url`)
 .then((res) => res.json())
