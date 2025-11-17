@@ -1,96 +1,110 @@
-
-import Home from "../pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { lazy, Suspense, useMemo, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
-import Van from "../pages/Van";
-import Preview from "../components/preview/Preview";
-import Contact from "../websiteComponents/components/Contact/Contact";
-import Inquiry from "../websiteComponents/components/InquiryForm/InqueryForm"
-import Dashboard from "../websiteComponents/components/Dashboard/Dashboard";
-import PortfolioForm from "../websiteComponents/components/adminPanel/Portfolio/PortfolioForm";
-import VanForm from "../websiteComponents/components/adminPanel/Vans/VansForm"
-import VansForSale from "../websiteComponents/components/Vansforsale/VansForSale";
-import Layouts from "../websiteComponents/components/Layouts/Layouts";
-import BlogForm from "../websiteComponents/components/adminPanel/Blog/Form";
-import Blogs from "../websiteComponents/components/Blogs/Blogs";
-import FamilyLayout from "../websiteComponents/components/CampervanLayoutforFamily/FamilyLayout";
-import Couples from "../websiteComponents/components/CampervanLayoutforCouples/CoupleLayout";
-import VanDetail from "../websiteComponents/components/VanDetail/VanDetail";
-import Signup from "../websiteComponents/components/Auth/Signup";
-import Login from "../websiteComponents/components/Auth/Login";
-import OurProcess from "../websiteComponents/components/OurProcess/OurProcess"
-import AboutUs from "../websiteComponents/components/AboutUs/Aboutus"
-import ShowRoom from "../websiteComponents/components/Showroom/showroom"
-import NotFound from "../websiteComponents/components/NotFound/NotFound";
-import ConfiguratorForm from "../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"
-import Exteriorpage from "../websiteComponents/components/Exteriorpage/Exterior";
-import LayoutDetail from "../websiteComponents/components/LayoutDetail/LayoutDetail";
-import BlogDetail from "../websiteComponents/components/BlogDetail/Blogdetail"
-import OurClients from "../websiteComponents/components/OurClients/Clienthero/Client"
-import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
-import BlackFridayLabel from "../websiteComponents/components/BlackFriday/BlackFriday";
-import Interiorpage from "../websiteComponents/components/Interior/Interior";
-import Cushionpage from "../websiteComponents/components/Cushion/Cushion";
-import ShortVan from "../websiteComponents/components/CampervanLayoutForShort/ShortVan"
-import LongVan from "../websiteComponents/components/CampervanLayoutForLong/LongVan"
-import CustomVan from "../websiteComponents/components/CampervanLayoutForCustom/CustomBuild"
-import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/PrivateComponent";
+import ChatWidgetComponent from "../websiteComponents/components/ChatMaxima/ChatMaxima";
+import BlackFridayLabelComponent from "../websiteComponents/components/BlackFriday/BlackFriday";
+
+// Lazy load pages for better performance
+const Home = lazy(() => import("../pages/Home"));
+const Van = lazy(() => import("../pages/Van"));
+const Preview = lazy(() => import("../components/preview/Preview"));
+const Contact = lazy(() => import("../websiteComponents/components/Contact/Contact"));
+const Inquiry = lazy(() => import("../websiteComponents/components/InquiryForm/InqueryForm"));
+const Dashboard = lazy(() => import("../websiteComponents/components/Dashboard/Dashboard"));
+const PortfolioForm = lazy(() => import("../websiteComponents/components/adminPanel/Portfolio/PortfolioForm"));
+const VanForm = lazy(() => import("../websiteComponents/components/adminPanel/Vans/VansForm"));
+const VansForSale = lazy(() => import("../websiteComponents/components/Vansforsale/VansForSale"));
+const Layouts = lazy(() => import("../websiteComponents/components/Layouts/Layouts"));
+const BlogForm = lazy(() => import("../websiteComponents/components/adminPanel/Blog/Form"));
+const Blogs = lazy(() => import("../websiteComponents/components/Blogs/Blogs"));
+const FamilyLayout = lazy(() => import("../websiteComponents/components/CampervanLayoutforFamily/FamilyLayout"));
+const Couples = lazy(() => import("../websiteComponents/components/CampervanLayoutforCouples/CoupleLayout"));
+const VanDetail = lazy(() => import("../websiteComponents/components/VanDetail/VanDetail"));
+const Signup = lazy(() => import("../websiteComponents/components/Auth/Signup"));
+const Login = lazy(() => import("../websiteComponents/components/Auth/Login"));
+const OurProcess = lazy(() => import("../websiteComponents/components/OurProcess/OurProcess"));
+const AboutUs = lazy(() => import("../websiteComponents/components/AboutUs/Aboutus"));
+const ShowRoom = lazy(() => import("../websiteComponents/components/Showroom/showroom"));
+const NotFound = lazy(() => import("../websiteComponents/components/NotFound/NotFound"));
+const ConfiguratorForm = lazy(() => import("../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"));
+const Exteriorpage = lazy(() => import("../websiteComponents/components/Exteriorpage/Exterior"));
+const LayoutDetail = lazy(() => import("../websiteComponents/components/LayoutDetail/LayoutDetail"));
+const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail/Blogdetail"));
+const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Clienthero/Client"));
+const Interiorpage = lazy(() => import("../websiteComponents/components/Interior/Interior"));
+const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
+const ShortVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForShort/ShortVan"));
+const LongVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForLong/LongVan"));
+const CustomVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForCustom/CustomBuild"));
+const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
+const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
+// const Marquee = lazy(() => import("../websiteComponents/components/Marquee/Marques"));
+
+// Memoized components to avoid unnecessary re-renders
+const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
+const ChatWidget = React.memo(ChatWidgetComponent);
+
 const AppRoutes = () => {
+  // const [isOpen,setIsOpen]=useState()
+  const location = useLocation();
+  const pathname = location.pathname;
+// console.log(isOpen,"aa")
+  // Show BlackFriday on all pages except login/dashboard
+  const showBlackFriday = useMemo(
+    () => !pathname.startsWith("/dashboard") && !pathname.startsWith("/login"),
+    [pathname]
+  );
 
   return (
-    <Router>
+    <>
+
+      {showBlackFriday && <BlackFridayLabel/>}
+    {/* {!isOpen && <Marquee/>} */}
+      <ChatWidget />
       <ScrollFromTop />
-      <BlackFridayLabel/>
-         <ChatWidget />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/configurator-form" element={<ConfiguratorForm />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/showroom" element={<ShowRoom/>}/>
-        <Route path="/*" element={<NotFound/>}/>
-        <Route path="/our-process" element={<OurProcess />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/van-detail/:slug" element={<VanDetail />} />
-        <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
-        <Route path="/blog-detail/:id" element={<BlogDetail />} />
-        <Route path="/innovation" element={<Exteriorpage />} />
-        <Route path="/family-layout" element={<FamilyLayout />} />
-        <Route path="/couples-layout" element={<Couples />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blog-form" element={<BlogForm />} />
-        <Route path="/layouts" element={<Layouts />} />
-        <Route path="/vans-for-sale" element={<VansForSale />} />
-        <Route path="/inquiry" element={<Inquiry />} />
-        <Route path="/van-form" element={<VanForm />} />
-        <Route path="/portfolio-form" element={<PortfolioForm />} />
-         <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/test" element={<Van />} />
-        <Route path="/preview" element={<Preview />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/our-clients" element={<OurClients />} />
-        <Route path="/interior-choice" element={<Interiorpage />} />
-        <Route path="/cushion" element={<Cushionpage />} />
-        <Route path="/short-van" element={<ShortVan />} />
-        <Route path="/long-van" element={<LongVan />} />
-        <Route path="/custom-van" element={<CustomVan />} />
-
-
-
-
-
-
-      </Routes>
-    </Router>
-
+      <Suspense fallback={<Loader/>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/configurator-form" element={<ConfiguratorForm />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/showroom" element={<ShowRoom />} />
+          <Route path="/*" element={<NotFound />} />
+          <Route path="/our-process" element={<OurProcess />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/van-detail/:slug" element={<VanDetail />} />
+          <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
+          <Route path="/blog-detail/:id" element={<BlogDetail />} />
+          <Route path="/innovation" element={<Exteriorpage />} />
+          <Route path="/family-layout" element={<FamilyLayout />} />
+          <Route path="/couples-layout" element={<Couples />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blog-form" element={<BlogForm />} />
+          <Route path="/layouts" element={<Layouts />} />
+          <Route path="/vans-for-sale" element={<VansForSale />} />
+          <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/van-form" element={<VanForm />} />
+          <Route path="/portfolio-form" element={<PortfolioForm />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/test" element={<Van />} />
+          <Route path="/preview" element={<Preview />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/our-clients" element={<OurClients />} />
+          <Route path="/interior-choice" element={<Interiorpage />} />
+          <Route path="/cushion" element={<Cushionpage />} />
+          <Route path="/short-van" element={<ShortVan />} />
+          <Route path="/long-van" element={<LongVan />} />
+          <Route path="/custom-van" element={<CustomVan />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 };
 
-export default AppRoutes;
+export default function AppWrapper() {
+  return (
+    <Router>
+      <AppRoutes />
+    </Router>
+  );
+}

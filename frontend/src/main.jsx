@@ -1,26 +1,28 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import AppRoutes from "./routes/Routes";
+import { StrictMode, lazy, Suspense } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
 import global from "global";
 
 import { Provider } from 'react-redux';
-import { store , persistor } from './redux/store/store';
+import { store, persistor } from './redux/store/store';
 import { PersistGate } from "redux-persist/integration/react";
-
+import Loader from "./websiteComponents/components/Loader/Loader"
 
 // Fix global for browser
 if (typeof global === "undefined") {
   window.global = window;
 }
+
+const AppRoutes = lazy(() => import('./routes/Routes')); // Lazy load routes
+
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-  <StrictMode>
-
+    <StrictMode>
       <PersistGate loading={null} persistor={persistor}>
-    <AppRoutes />
-        </PersistGate>
-
-  </StrictMode>
+        <Suspense fallback={<Loader/>}>
+          <AppRoutes />
+        </Suspense>
+      </PersistGate>
+    </StrictMode>
   </Provider>
-)
+);

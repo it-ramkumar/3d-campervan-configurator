@@ -162,13 +162,19 @@ export default function Navbar({ forceMobile }) {
             >
               Custom Build
             </Link>
-            <Link
-              to="/vans-for-sale"
-              onMouseEnter={() => handleMenuHover("vans-for-sale")}
-              onMouseLeave={handleMenuLeave}
-            >
-              Vans For Sale
-            </Link>
+        <Link
+  to="/vans-for-sale"
+  onMouseEnter={() => handleMenuHover("vans-for-sale")}
+  onMouseLeave={handleMenuLeave}
+  className="flex items-center gap-2"
+>
+  Vans For Sale
+
+  <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
+    SALE
+  </span>
+</Link>
+
             <Link
               to="/layouts"
               onMouseEnter={() => handleMenuHover("layout")}
