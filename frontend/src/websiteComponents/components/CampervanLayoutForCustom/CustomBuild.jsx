@@ -8,9 +8,9 @@ export default function FamilyLayout() {
 
 
 const heroImage = "/heroSlider/CampervansLayoutforFamilyhero.webp";
-const newTitleText = "Campervans Layouts for Family (For 2+)";
+const newTitleText = "Custom Campervan Builds";
 const newDescriptionText =
-  "Explore our exclusive campervan layouts designed for families. Perfect for 2 or more travelers.";
+  "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
 
   return (
     <>
