@@ -48,9 +48,23 @@ router.post(
         )
       );
 
-      // ✅ Media is simple string array - no file upload for media
-      // Media contains only URLs like:
-      // ["https://youtube.com/watch?v=abc123", "https://vimeo.com/123456"]
+      // ✅ Multi-category support
+      let category = req.body.category;
+      if (typeof category === "string") {
+        try {
+          category = JSON.parse(category); // Convert JSON string to array
+        } catch (e) {
+          category = [category]; // Single string fallback
+        }
+      }
+
+      // Validate category array
+      if (!Array.isArray(category) || category.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "At least one category is required"
+        });
+      }
 
       // Create new PortfolioVan document
       const newPortfolio = new PortfolioVan({
@@ -64,10 +78,10 @@ router.post(
           } : undefined,
         },
         sold,
-        category: req.body.category, // Required category
-        gallery, // Array of image URLs
+        category, // ✅ Multi-category array
+        gallery,
         detailed_features,
-        media, // ✅ Simple array of URL strings
+        media,
       });
 
       await newPortfolio.save();
@@ -83,6 +97,7 @@ router.post(
     }
   }
 );
+
 
 router.get("/", async (req, res) => {
   try {
@@ -108,8 +123,6 @@ router.get("/", async (req, res) => {
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    console.log("Filter used:", filter);
-    console.log("Matched documents:", vans.length);
 
     res.json({
       success: true,
@@ -125,10 +138,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET portfolios by category with pagination
 router.get("/category", async (req, res) => {
   try {
-    const { category, page = 1, limit = 10 } = req.query;
+    let { category, page = 1, limit = 10 } = req.query;
 
     if (!category) {
       return res.status(400).json({
@@ -141,11 +153,18 @@ router.get("/category", async (req, res) => {
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
+    // Make category an array (for multiple selections)
+    const categoryArray = Array.isArray(category) ? category : [category];
+
     // Get total count
-    const total = await PortfolioVan.countDocuments({ category });
+    const total = await PortfolioVan.countDocuments({
+      category: { $in: categoryArray }
+    });
 
     // Fetch paginated data
-    const portfolios = await PortfolioVan.find({ category })
+    const portfolios = await PortfolioVan.find({
+      category: { $in: categoryArray }
+    })
       .skip(skip)
       .limit(limitNum)
       .sort({ createdAt: -1 });
@@ -162,6 +181,7 @@ router.get("/category", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
 
 // GET by wheelbase filter
 router.get("/wheelbase", async (req, res) => {
@@ -210,7 +230,24 @@ router.put(
       const detailed_features = JSON.parse(req.body.detailed_features || JSON.stringify(portfolio.detailed_features));
       const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media)); // ✅ Simple URLs
       const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
-      const category = req.body.category || portfolio.category;
+
+      // ✅ Multi-category support
+      let category = req.body.category || portfolio.category;
+      if (typeof category === "string") {
+        try {
+          category = JSON.parse(category); // Convert JSON string to array
+        } catch (e) {
+          category = [category]; // Single string fallback
+        }
+      }
+
+      // Validate category array
+      if (!Array.isArray(category) || category.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "At least one category is required"
+        });
+      }
 
       // Handle gallery images (append to existing)
       const existingGallery = portfolio.gallery || [];
@@ -220,9 +257,6 @@ router.put(
         )
       );
       const updatedGallery = [...existingGallery, ...newGallery];
-
-      // ✅ Media is simple string array - no file processing needed
-      // Just use the URLs from req.body.media
 
       // Update portfolio
       portfolio.van_listing = {
@@ -239,7 +273,7 @@ router.put(
         } : portfolio.van_listing.specifications
       };
 
-      portfolio.category = category;
+      portfolio.category = category; // ✅ Updated for multi-category array
       portfolio.sold = sold;
       portfolio.gallery = updatedGallery;
       portfolio.detailed_features = detailed_features;

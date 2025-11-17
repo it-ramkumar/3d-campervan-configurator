@@ -43,7 +43,7 @@ export default function PortfolioForm({setSelected}) {
   const [mediaUrls, setMediaUrls] = useState([""]);
 
   // Category
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState([]);
   const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +63,7 @@ export default function PortfolioForm({setSelected}) {
     setCapacity({ sits: "", sleeps: "" });
     setFeatures([{ category: "", items: [""] }]);
     setMediaUrls([""]);
-    setCategory("");
+    setCategory([]);
   };
 
   // ✅ IMPROVED: Auto-fill if editData is available
@@ -226,7 +226,19 @@ export default function PortfolioForm({setSelected}) {
 
       // Other fields
       formDataToSend.append("sold", sold.toString());
-      formDataToSend.append("category", category);
+      // Validate at least one category
+if (!category || category.length === 0) {
+  Swal.fire({
+    icon: "warning",
+    title: "Warning",
+    text: "At least one category must be selected",
+  });
+  return;
+}
+
+// Append category array as JSON string
+formDataToSend.append("category", JSON.stringify(category));
+
 
       // Detailed features
       const cleanedFeatures = features
@@ -349,32 +361,40 @@ export default function PortfolioForm({setSelected}) {
         </div>
 
         {/* CATEGORY */}
-        <div className="border border-gray-300 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Category *</h3>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-            required
-          >
-            <option value="" disabled>Select Category</option>
-            <option value="Flagship Short Van — Santa Monica">
-              Flagship Short Van — Santa Monica
-            </option>
-            <option value="Flagship Long Van — Montreal">
-              Flagship Long Van — Montreal
-            </option>
-            <option value="Layouts for Solo & Couple Travelers">
-              Layouts for Solo & Couple Travelers
-            </option>
-            <option value="Layouts for Families (3–9 People)">
-              Layouts for Families (3–9 People)
-            </option>
-            <option value="Portfolio of Custom Builds">
-              Portfolio of Custom Builds
-            </option>
-          </select>
-        </div>
+
+{/* CATEGORY - Checkbox Version */}
+<div className="border border-gray-300 rounded-lg p-6">
+  <h3 className="text-lg font-semibold text-gray-800 mb-4">Category *</h3>
+  <div className="flex flex-col gap-2">
+    {[
+      "Flagship Short Van — Santa Monica",
+      "Flagship Long Van — Montreal",
+      "Layouts for Solo & Couple Travelers",
+      "Layouts for Families (3–9 People)",
+      "Portfolio of Custom Builds"
+    ].map((cat) => (
+      <label key={cat} className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          value={cat}
+          checked={category.includes(cat)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setCategory([...category, cat]);
+            } else {
+              setCategory(category.filter((c) => c !== cat));
+            }
+          }}
+          className="h-4 w-4 text-gray-600 border-gray-300 rounded"
+        />
+        <span className="text-gray-700">{cat}</span>
+      </label>
+    ))}
+  </div>
+  <p className="text-sm text-gray-500 mt-2">Select one or multiple categories.</p>
+</div>
+
+
 
         {/* SPECIFICATIONS */}
         <div className="border border-gray-300 rounded-lg p-6">

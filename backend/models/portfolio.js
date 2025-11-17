@@ -83,18 +83,18 @@ const portfolioVanSchema = new mongoose.Schema({
   },
 
   // ✅ Category field
-  category: {
-    type: String,
-    enum: [
-      "Flagship Short Van — Santa Monica",
-      "Flagship Long Van — Montreal",
-      "Layouts for Solo & Couple Travelers",
-      "Layouts for Families (3–9 People)",
-      "Portfolio of Custom Builds"
-    ],
-    required: true,
-    trim: true
-  },
+ category: [{
+  type: String,
+  enum: [
+    "Flagship Short Van — Santa Monica",
+    "Flagship Long Van — Montreal",
+    "Layouts for Solo & Couple Travelers",
+    "Layouts for Families (3–9 People)",
+    "Portfolio of Custom Builds"
+  ],
+  trim: true
+}],
+
 
   // ✅ Simple string array for gallery (image URLs)
   gallery: [{
@@ -165,8 +165,10 @@ portfolioVanSchema.statics.findSold = function() {
 };
 
 portfolioVanSchema.statics.findByCategory = function(category) {
-  return this.find({ category });
+  return this.find({ category: category });
+  // MongoDB automatically matches array elements
 };
+
 
 portfolioVanSchema.methods.markAsSold = function() {
   this.sold = true;

@@ -89,8 +89,8 @@ export default function Navbar({ forceMobile }) {
         {
           title: "Our Flagship Models",
           items: [
-            { label: "Flagship Short Van — Santa Monica", link: "/" },
-            { label: "Flagship Long Van — Montreal", link: "/" },
+            { label: "Flagship Short Van — Santa Monica", link: "/short-van" },
+            { label: "Flagship Long Van — Montreal", link: "/long-van" },
           ],
         },
         {
@@ -98,7 +98,7 @@ export default function Navbar({ forceMobile }) {
           items: [
             { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
             { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
-            { label: "Portfolio of Custom Builds", link: "/" },
+            { label: "Portfolio of Custom Builds", link: "/custom-van" },
           ],
         },
       ],

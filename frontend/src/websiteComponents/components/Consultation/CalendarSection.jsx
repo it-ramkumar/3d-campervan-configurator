@@ -43,14 +43,13 @@ return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
 
  // Step 1: Get Google OAuth URL and login status
  useEffect(() => {
- // Base API URL ko process.env se lene ka tareeqa fix karein agar ye React setup mein hai.
- const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:5000";
 
- fetch(`${API_URL}/calendar/auth/url`)
+
+ fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/auth/url`)
 .then((res) => res.json())
 .then((data) => setAuthUrl(data.url)) .catch((err) => console.error("Error fetching Auth URL:", err));
 
- fetch(`${API_URL}/calendar/status`)
+ fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/status`)
 .then((res) => res.json())
 .then((data) => setIsLoggedIn(data.loggedIn)) .catch((err) => console.error("Error fetching Status:", err));
  }, []);
@@ -83,10 +82,9 @@ const formatTimeSlot = (slotTime) => {
 useEffect(() => {
 if (isLoggedIn && selectedDate) {
  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000";
 
  // Backend ko date aur user ka time zone bhejein
- fetch(`${API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
+ fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
  .then((res) => res.json())
  .then((data) => {
  console.log("Slots received for timezone:", userTimeZone, data);
@@ -112,7 +110,6 @@ const handleBooking = async () => {
  if (!formData.name || !formData.email)
   return alert("Name and Email are required.");
 
- const API_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:3000";
 
  const bookingData = {
   ...formData,
@@ -125,7 +122,7 @@ const handleBooking = async () => {
  try {
   console.log("Sending booking data:", bookingData);
 
-  const res = await fetch(`${API_URL}/calendar/create-event`, {
+  const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify(bookingData),

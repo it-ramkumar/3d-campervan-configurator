@@ -31,6 +31,9 @@ import ChatWidget from "../websiteComponents/components/ChatMaxima/ChatMaxima";
 import BlackFridayLabel from "../websiteComponents/components/BlackFriday/BlackFriday";
 import Interiorpage from "../websiteComponents/components/Interior/Interior";
 import Cushionpage from "../websiteComponents/components/Cushion/Cushion";
+import ShortVan from "../websiteComponents/components/CampervanLayoutForShort/ShortVan"
+import LongVan from "../websiteComponents/components/CampervanLayoutForLong/LongVan"
+import CustomVan from "../websiteComponents/components/CampervanLayoutForCustom/CustomBuild"
 import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/PrivateComponent";
 const AppRoutes = () => {
 
@@ -75,6 +78,11 @@ const AppRoutes = () => {
         <Route path="/our-clients" element={<OurClients />} />
         <Route path="/interior-choice" element={<Interiorpage />} />
         <Route path="/cushion" element={<Cushionpage />} />
+        <Route path="/short-van" element={<ShortVan />} />
+        <Route path="/long-van" element={<LongVan />} />
+        <Route path="/custom-van" element={<CustomVan />} />
+
+
 
 
 
