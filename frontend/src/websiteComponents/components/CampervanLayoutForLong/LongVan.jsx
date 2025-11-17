@@ -6,7 +6,7 @@ import Footer from "../Footer/Footer";
 
 export default function FamilyLayout() {
 
-const heroImage = "/heroSlider/CampervansLayoutforFamilyhero.webp";
+const heroImage = "/heroSlider/long_van.jpg";
 const newTitleText = "Campervan Layouts — Long Van";
 const newDescriptionText =
   "Discover our spacious long van campervan layouts. Ideal for families and groups, offering comfort and flexibility for 2 or more travelers.";

@@ -254,26 +254,25 @@ const generateCalendar = () => {
 
  return (
 <div className="flex bg-white justify-center">
-  {/* Outer Wrapper for Centering and Limiting Overall Width (Optional but recommended for Full Width + Center look) */}
+
   <div className="flex w-full max-w-6xl">
 
-    {/* Sidebar - Left Side (Redesigned) - WIDTH SET TO 1/2 (50%) */}
-    {/* Height kam rakhne ke liye min-h-screen hataya gaya hai */}
+
     <div className="hidden lg:flex lg:w-1/2 text-black p-8 flex-col justify-between bg-gray-50 border-r border-gray-200">
       <div>
-        {/* Website Logo - Top Left */}
+
         <div className="flex justify-start mb-8">
           <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200">
             <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
         </div>
 
-        {/* Brand Name */}
+
         <h1 className="text-2xl font-bold mb-4 text-left text-black leading-tight">
           Plan your<br />Customvan Build!
         </h1>
 
-        {/* Progress Steps - Vertical - Reduced Spacing */}
+
         <div className="mb-8">
           <div className="flex items-center mb-3">
             <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 1 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
@@ -301,7 +300,6 @@ const generateCalendar = () => {
           </div>
         </div>
 
-        {/* Contact Info */}
         <div className="space-y-4 text-left">
           <div>
             <h3 className="text-base font-semibold mb-1 text-black">Contact Us</h3>
@@ -318,22 +316,22 @@ const generateCalendar = () => {
         </div>
       </div>
 
-      {/* Footer */}
+
       <div className="text-gray-400 text-xs text-left">
-        {/* <p>© 2024 Your Company. All rights reserved.</p> */}
+
       </div>
     </div>
 
-    {/* Main Content - Right Side - SCROLL FIXED - Takes remaining 50% */}
+
     <div className="flex-1 flex flex-col lg:w-1/2">
-      {/* Reduced padding p-8 to p-6 */}
+
       <div className="flex-1 p-6 overflow-y-auto">
         {!authUrl ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
           </div>
         ) : !isLoggedIn ? (
-          <div className="max-w-sm mx-auto mt-8"> {/* max-w-sm for centering small content */}
+          <div className="max-w-sm mx-auto mt-8">
             <div className="text-center mb-8">
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Booking System</h1>
               <p className="text-gray-600">Please login with Google to continue</p>
@@ -352,8 +350,8 @@ const generateCalendar = () => {
             </button>
           </div>
         ) : (
-          <div className="max-w-sm mx-auto"> {/* Main steps ko centered aur small rakha gaya hai */}
-            {/* Mobile Header (No changes needed) */}
+          <div className="max-w-sm mx-auto">
+
             <div className="lg:hidden mb-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
@@ -367,15 +365,15 @@ const generateCalendar = () => {
               <div className="w-12 h-px bg-gray-300"></div>
             </div>
 
-            {/* Content (Steps 1-5, already compact from previous revision) */}
+
             <div>
-              {/* Step 1: Date Selection */}
+
               {bookingStep === 1 && (
                 <div className="max-w-sm mx-auto">
                   <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Select a Date</h2>
-                  {/* Calendar component is here */}
+
                   <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
-                    {/* Calendar Header */}
+
                     <div className="flex items-center justify-between mb-3">
                       <button onClick={() => navigateMonth(-1)} className="p-1 hover:bg-gray-100 rounded-md transition-colors">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
@@ -385,7 +383,7 @@ const generateCalendar = () => {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                       </button>
                     </div>
-                    {/* Calendar Grid */}
+
                     <div className="grid grid-cols-7 gap-1 mb-1">
                       {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (<div key={day + index} className="text-center text-xs font-medium py-1 text-gray-500">{day}</div>))}
                     </div>
@@ -409,7 +407,7 @@ const generateCalendar = () => {
                       ))}
                     </div>
                   </div>
-                  {/* Selected Date Display */}
+
                   {selectedDate && (
                     <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
                       <p className="text-gray-600 text-xs mb-1">Selected Date</p>
@@ -428,7 +426,7 @@ const generateCalendar = () => {
                 </div>
               )}
 
-              {/* Step 2: Time Selection */}
+
               {bookingStep === 2 && (
                 <div className="max-w-sm mx-auto">
                   <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Select a Time</h2>
@@ -467,7 +465,7 @@ const generateCalendar = () => {
                 </div>
               )}
 
-              {/* Step 3: Details Form */}
+
               {bookingStep === 3 && (
                 <div className="max-w-sm mx-auto">
                   <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Enter Your Details</h2>
@@ -475,7 +473,7 @@ const generateCalendar = () => {
                     {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
                   </p>
                   <div className="space-y-3 mb-4">
-                    {/* Form fields here (with smaller p-2 and text-sm classes) */}
+
                     <div><label className="block text-gray-700 mb-1 font-medium text-sm">Name *</label><input type="text" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
                     <div><label className="block text-gray-700 mb-1 font-medium text-sm">Email *</label><input type="email" name="email" placeholder="Your email address" value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
                     <div><label className="block text-gray-700 mb-1 font-medium text-sm">Phone (optional)</label><input type="tel" name="phone" placeholder="Your phone number" value={formData.phone} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
@@ -489,12 +487,12 @@ const generateCalendar = () => {
                 </div>
               )}
 
-              {/* Step 4: Summary */}
+
               {bookingStep === 4 && (
                 <div className="max-w-sm mx-auto">
                   <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Meeting Summary</h2>
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 text-sm">
-                    {/* Summary content is here (with smaller p-4 and text-sm classes) */}
+
                     <div className="space-y-3">
                       <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Date & Time</span><span className="font-semibold text-right">{formatDate(selectedDate)}<br />at {selectedSlot && formatTimeSlot(selectedSlot.start)}</span></div>
                       <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Duration</span><span className="font-semibold">{selectedSlot && Math.round((new Date(selectedSlot.end) - new Date(selectedSlot.start)) / (1000 * 60))} min</span></div>
@@ -511,10 +509,10 @@ const generateCalendar = () => {
                 </div>
               )}
 
-              {/* Step 5: Confirmation */}
+
               {bookingStep === 5 && (
                 <div className="text-center max-w-sm mx-auto py-6">
-                  {/* Confirmation content is here (with smaller p-6) */}
+
                   <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
                   </div>
@@ -537,7 +535,7 @@ const generateCalendar = () => {
         )}
       </div>
 
-      {/* Mobile Footer - FIXED POSITION (No changes needed) */}
+
       <div className="lg:hidden border-t border-gray-200 p-3 bg-white sticky bottom-0">
         <div className="text-center">
           <p className="text-gray-600 text-xs mb-1">Need help? Call us at</p>

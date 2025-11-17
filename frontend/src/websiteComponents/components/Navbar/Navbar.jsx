@@ -89,8 +89,8 @@ export default function Navbar({ forceMobile }) {
         {
           title: "Our Flagship Models",
           items: [
-            { label: "Flagship Short Van — Santa Monica", link: "/short-van" },
-            { label: "Flagship Long Van — Montreal", link: "/long-van" },
+            { label: "Short Van — Santa Monica", link: "/short-van" },
+            { label: "Long Van — Montreal", link: "/long-van" },
           ],
         },
         {

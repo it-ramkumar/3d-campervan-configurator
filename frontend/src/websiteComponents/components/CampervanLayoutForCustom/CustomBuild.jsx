@@ -7,7 +7,7 @@ import Footer from "../Footer/Footer";
 export default function FamilyLayout() {
 
 
-const heroImage = "/heroSlider/CampervansLayoutforFamilyhero.webp";
+const heroImage = "/heroSlider/custom_build.jpg";
 const newTitleText = "Custom Campervan Builds";
 const newDescriptionText =
   "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
