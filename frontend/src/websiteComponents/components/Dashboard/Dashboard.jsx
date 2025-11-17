@@ -13,6 +13,9 @@ import ConfiguratorForm from "../adminPanel/Configurator/ConfiguratorForm"
 import UsersData from "../adminPanel/Users/User";
 import InqueryListing from "../adminPanel/Inquery/InqueryListing";
 import ContactListing from "../adminPanel/Contact/ContactListing";
+import InteriorForm from "../adminPanel/InteriorChoices/InteriorForm"
+import InteriorCategory from "../adminPanel/InteriorChoices/InteriorCategory"
+import InteriorList from "../adminPanel/InteriorChoices/InteriorListing";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -61,6 +64,17 @@ export default function Dashboard() {
       label: "Contact",
       // icon: "📞",
       description: "Contact Data"
+    },
+    {
+      id: "interior-choices",
+      label: "Intrior Choices",
+      // icon: "📞",
+      description: "Interior Choices Data"
+    },
+    {
+      id: "interior-catgory",
+      label: "Intrior Catgory",
+      description: "Interior Catgory Data"
     }
   ];
 
@@ -111,19 +125,19 @@ export default function Dashboard() {
   const renderContent = () => {
     switch (selected) {
       case "vans-form":
-        return <VansForm setSelected={setSelected}/>;
+        return <VansForm setSelected={setSelected} />;
       case "Vans-listing":
         return <VanListing setSelected={setSelected} />;
       case "portfolio-form":
-        return <PortfolioForm setSelected={setSelected}/>;
+        return <PortfolioForm setSelected={setSelected} />;
       case "portfolio-listing":
         return <PortfolioListing setSelected={setSelected} />;
       case "Blog-form":
-        return <BlogForm setSelected={setSelected}/>;
+        return <BlogForm setSelected={setSelected} />;
       case "Blogs-listing":
         return <BlogsListing setSelected={setSelected} />;
       case "Configurator-form":
-        return <ConfiguratorForm setSelected={setSelected}/>;
+        return <ConfiguratorForm setSelected={setSelected} />;
       case "Configurator-data":
         return <ConfiguratorListing setSelected={setSelected} />;
       case "Inquiry-data":
@@ -131,9 +145,15 @@ export default function Dashboard() {
       case "Contact-data":
         return <ContactListing setSelected={setSelected} />;
       case "Users":
-        return <UsersData setSelected={setSelected}/>;
+        return <UsersData setSelected={setSelected} />;
+      case "interior-catgory":
+        return <InteriorCategory setSelected={setSelected} />;
+      case "interior-choices":
+        return <InteriorList setSelected={setSelected} />;
+          case "interior-form":
+        return <InteriorForm setSelected={setSelected} />;
       default:
-        return <PortfolioListing setSelected={setSelected}/>;
+        return <PortfolioListing setSelected={setSelected} />;
     }
   };
 

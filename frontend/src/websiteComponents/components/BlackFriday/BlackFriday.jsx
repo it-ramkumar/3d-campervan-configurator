@@ -1,16 +1,12 @@
 "use client";
 import { X } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function BlackFridayCard() {
   const [show, setShow] = useState(true);
 
-  // Send state to parent safely
-  // useEffect(() => {
-  //   setIsOpen(show);
-  // }, [show, setIsOpen]);
 
   if (!show) return null;
 

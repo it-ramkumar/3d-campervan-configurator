@@ -1,23 +1,18 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function Navbar({ forceMobile }) {
-  const [darkMode, setDarkMode] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const megaMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const timeoutRef = useRef(null);
+  const location = useLocation();
 
-  // ✅ Dark mode toggle
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-  }, [darkMode]);
 
-  // ✅ Desktop mega menu animation
   useEffect(() => {
     if (!megaMenuRef.current) return;
     if (activeMenu) {
@@ -36,7 +31,8 @@ export default function Navbar({ forceMobile }) {
     }
   }, [activeMenu]);
 
-  // ✅ Mobile menu animation fix (only fade)
+
+
   useEffect(() => {
     if (!mobileMenuRef.current) return;
 
@@ -57,8 +53,7 @@ export default function Navbar({ forceMobile }) {
     }
   }, [isMobileMenuOpen]);
 
-  // Handlers
-  const handleMenuHover = (menu) => {
+ const handleMenuHover = (menu) => {
     clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
@@ -67,7 +62,7 @@ export default function Navbar({ forceMobile }) {
   };
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-  const menuContent = {
+   const menuContent = {
     CustomBuild: {
       title: "Custom Builds",
       sections: [
@@ -80,9 +75,7 @@ export default function Navbar({ forceMobile }) {
         },
       ],
     },
-
     "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
-
     layout: {
       title: "Layouts by Big Bear Vans",
       sections: [
@@ -103,9 +96,7 @@ export default function Navbar({ forceMobile }) {
         },
       ],
     },
-
     "contact-us": { title: "Contact Us", link: "/contact" },
-
     discover: {
       title: "Discover Big Bear Vans",
       sections: [
@@ -121,15 +112,40 @@ export default function Navbar({ forceMobile }) {
         {
           title: "Insights",
           items: [
-            { label: "Exterior Choice", link: "/innovation" },
-            { label: "Interior Choice", link: "/interior-choice" },
-
+            { label: "Exterior Choices", link: "/innovation" },
+            { label: "Interior Choices", link: "/interior-choice" },
             { label: "Blog", link: "/blogs" },
           ],
         },
       ],
     },
   };
+
+const routes = {
+    CustomBuild: ["#", "/inquiry"],
+    "vans-for-sale": ["/vans-for-sale"],
+    layout: [
+      "/layouts",
+      "/short-van",
+      "/long-van",
+      "/couples-layout",
+      "/family-layout",
+      "/custom-van",
+    ],
+    "contact-us": ["/contact"],
+    discover: [
+      "/our-process",
+      "/showroom",
+      "/about-us",
+      "/our-clients",
+      "/innovation",
+      "/interior-choice",
+      "/blogs",
+    ],
+  };
+
+  const isParentActive = (key) => routes[key]?.includes(location.pathname);
+  const isChildActive = (path) => location.pathname === path;
 
   return (
     <>
@@ -152,47 +168,52 @@ export default function Navbar({ forceMobile }) {
 
           {/* CENTER MENU (Desktop) */}
           <div
-            className={`${forceMobile ? "hidden" : "hidden md:flex"
-              } absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base`}
+            className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base`}
           >
             <Link
-              to="/"
+              to="#"
               onMouseEnter={() => handleMenuHover("CustomBuild")}
               onMouseLeave={handleMenuLeave}
+              className={`${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
             >
               Custom Build
             </Link>
-        <Link
-  to="/vans-for-sale"
-  onMouseEnter={() => handleMenuHover("vans-for-sale")}
-  onMouseLeave={handleMenuLeave}
-  className="flex items-center gap-2"
->
-  Vans For Sale
 
-  <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
-    SALE
-  </span>
-</Link>
+            <Link
+              to="/vans-for-sale"
+              onMouseEnter={() => handleMenuHover("vans-for-sale")}
+              onMouseLeave={handleMenuLeave}
+              className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Vans For Sale
+              <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
+                SALE
+              </span>
+            </Link>
 
             <Link
               to="/layouts"
               onMouseEnter={() => handleMenuHover("layout")}
               onMouseLeave={handleMenuLeave}
+              className={`${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
             >
               Layouts
             </Link>
+
             <Link
               to="/contact"
               onMouseEnter={() => handleMenuHover("contact-us")}
               onMouseLeave={handleMenuLeave}
+              className={`${isParentActive("contact-us") ? "text-indigo-600 font-semibold" : ""}`}
             >
               Contact
             </Link>
+
             <Link
               to="#"
               onMouseEnter={() => handleMenuHover("discover")}
               onMouseLeave={handleMenuLeave}
+              className={`${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
             >
               Discover
             </Link>
@@ -200,57 +221,43 @@ export default function Navbar({ forceMobile }) {
 
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
-<Link
-  to="/contact"
-  className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
->
-  <span className="relative z-10 flex items-center">
-   Book Free Consultation
-    <svg
-      className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-    </svg>
-  </span>
+            <Link
+              to="/contact"
+              className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
+            >
+              <span className="relative z-10 flex items-center">
+                Book Free Consultation
+                <svg
+                  className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+              </span>
 
-  {/* Animated hover background */}
-  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-
-  {/* Pulse ring effect */}
-  <span className="absolute flex h-6 w-6 -top-2 -right-2">
-    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
-    <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
-  </span>
-</Link>
-
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+              <span className="absolute flex h-6 w-6 -top-2 -right-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
+                <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
+              </span>
+            </Link>
 
             {/* MOBILE MENU BUTTON */}
             <button
               className={`${forceMobile ? "" : "md:hidden"} text-gray-700 z-10`}
               onClick={toggleMobileMenu}
             >
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
         </div>
       </nav>
 
-      {/* DESKTOP MEGA MENU (only Discover uses it) */}
+      {/* DESKTOP MEGA MENU */}
       {activeMenu && !forceMobile && menuContent[activeMenu]?.sections && (
         <div
           ref={megaMenuRef}
@@ -265,20 +272,14 @@ export default function Navbar({ forceMobile }) {
             </h2>
             <div className="flex h-auto">
               {menuContent[activeMenu]?.sections?.map((section, idx) => (
-                <div
-                  key={idx}
-                  className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"
-                    }`}
-                >
-                  <h3 className="text-xl font-semibold text-indigo-600 mb-4">
-                    {section.title}
-                  </h3>
+                <div key={idx} className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"}`}>
+                  <h3 className="text-xl font-semibold text-indigo-600 mb-4">{section.title}</h3>
                   <ul className="space-y-3">
                     {section.items.map((item, index) => (
                       <li key={index}>
                         <Link
                           to={item.link}
-                          className="text-gray-700 hover:text-indigo-600"
+                          className={`block py-1 ${isChildActive(item.link) ? "text-indigo-600 font-semibold" : "text-gray-700 hover:text-indigo-600"}`}
                         >
                           {item.label}
                         </Link>
@@ -292,31 +293,22 @@ export default function Navbar({ forceMobile }) {
         </div>
       )}
 
-      {/* ✅ MOBILE MENU FIXED VERSION */}
+      {/* MOBILE MENU */}
       <div
         ref={mobileMenuRef}
-        className={`fixed left-0 top-[62px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[100%] md:w-[40%] backdrop-blur bg-white/50" : "w-full md:hidden"
-          }`}
-        style={{
-          height: "calc(100vh - 64px)",
-          overflowY: "auto",
-          WebkitOverflowScrolling: "touch",
-        }}
+        className={`fixed left-0 top-[62px] bg-white shadow-lg z-40 transition-all duration-300 ${forceMobile ? "w-[100%] md:w-[40%] backdrop-blur bg-white/50" : "w-full md:hidden"}`}
+        style={{ height: "calc(100vh - 64px)", overflowY: "auto", WebkitOverflowScrolling: "touch" }}
       >
         <div className="flex flex-col py-8 px-4 min-h-full">
           {forceMobile && (
             <div className="flex items-center mb-5">
               <Link to="/" className="block">
-                <ImageWithSkeleton
-                  src="/images/logoo.webp"
-                  alt="BBV logo"
-                  className="w-[150px] h-[30px] object-contain"
-                />
+                <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[150px] h-[30px] object-contain" />
               </Link>
             </div>
           )}
 
-          {/* Book Appointment Button - Mobile Version */}
+          {/* Book Appointment Button - Mobile */}
           <div className="mb-6">
             <Link
               to="/contact"
@@ -336,26 +328,18 @@ export default function Navbar({ forceMobile }) {
                 {hasSubmenu ? (
                   <>
                     <button
-                      className="w-full text-xl font-semibold text-blackish py-3 flex justify-between"
-                      onClick={() =>
-                        setActiveMenu(activeMenu === key ? null : key)
-                      }
+                      className={`w-full text-xl font-semibold text-blackish py-3 flex justify-between ${isParentActive(key) ? "text-indigo-600" : ""}`}
+                      onClick={() => setActiveMenu(activeMenu === key ? null : key)}
                     >
                       {menu.title}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className={`w-5 h-5 transform transition-transform ${activeMenu === key ? "rotate-180" : ""
-                          }`}
+                        className={`w-5 h-5 transform transition-transform ${activeMenu === key ? "rotate-180" : ""}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
 
@@ -363,15 +347,13 @@ export default function Navbar({ forceMobile }) {
                       <div className="pl-4 transition-all duration-300">
                         {menu.sections.map((section, secIdx) => (
                           <div key={secIdx} className="mb-3">
-                            <h4 className="text-indigo-600 font-medium mb-2">
-                              {section.title}
-                            </h4>
+                            <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
                             <ul className="space-y-2">
                               {section.items.map((item, itemIdx) => (
                                 <li key={itemIdx}>
                                   <Link
                                     to={item.link}
-                                    className="text-gray-700 hover:text-indigo-600 block py-1"
+                                    className={`block py-1 ${isChildActive(item.link) ? "text-indigo-600 font-semibold" : "text-gray-700 hover:text-indigo-600"}`}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                   >
                                     {item.label}
@@ -388,7 +370,7 @@ export default function Navbar({ forceMobile }) {
                   <Link
                     to={menu.link}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full text-xl font-semibold text-blackish py-3 block"
+                    className={`w-full text-xl font-semibold text-blackish py-3 block ${isParentActive(key) ? "text-indigo-600 font-semibold" : ""}`}
                   >
                     {menu.title}
                   </Link>

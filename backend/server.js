@@ -18,6 +18,8 @@ const userRoute = require("./routes/authRoute");
 const TestBlog = require("./routes/testBlog")
 const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
 const ZohoToken = require("./routes/googleCalender")
+const InteriorCategory = require("./routes/interiorCategory")
+const InteriorChoices = require("./routes/interiorRoute")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,6 +52,9 @@ app.use("/api/contact", contactUs);
 app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 app.use("/api/calendar", ZohoToken)
+app.use("/api/category", InteriorCategory)
+app.use("/api/item", InteriorChoices)
+
 
 app.get("/auto", (req, res) => {
   res.send("auto deployment is working...remove limit ");
