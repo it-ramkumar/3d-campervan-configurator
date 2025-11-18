@@ -38,7 +38,7 @@ const LongVan = lazy(() => import("../websiteComponents/components/CampervanLayo
 const CustomVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForCustom/CustomBuild"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
-// const Marquee = lazy(() => import("../websiteComponents/components/Marquee/Marques"));
+const Testing = lazy(() => import("../websiteComponents/components/TestingChoicePage/TestInteriorChoices"));
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
@@ -86,7 +86,7 @@ const AppRoutes = () => {
           <Route path="/van-form" element={<VanForm />} />
           <Route path="/portfolio-form" element={<PortfolioForm />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/test" element={<Van />} />
+          <Route path="/test" element={<Testing />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />

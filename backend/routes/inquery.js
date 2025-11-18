@@ -6,23 +6,25 @@ const nodemailer = require("nodemailer");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
 
 
-// 🟢 CREATE NEW INQUIRY (same as before)
 router.post("/", async (req, res) => {
   try {
+    // 1️⃣ Save form data to database
     const newForm = new Inquery(req.body);
     await newForm.save();
 
-    const formData = req.body;
-    const tableRows = Object.entries(formData)
-      .map(([key, value]) => `
+    // 2️⃣ Prepare HTML table for admin
+    const tableRows = Object.entries(req.body)
+      .map(
+        ([key, value]) => `
         <tr style="border-bottom: 1px solid #ddd;">
           <td style="padding: 8px; font-weight: bold; text-transform: capitalize;">${key}</td>
           <td style="padding: 8px;">${value}</td>
         </tr>
-      `)
+      `
+      )
       .join("");
 
-    const htmlTable = `
+    const adminHtmlTable = `
       <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9;">
         <h2 style="color: #2761FD;">🚐 New Van Inquiry Received</h2>
         <p>You’ve received a new van inquiry with the following details:</p>
@@ -33,38 +35,63 @@ router.post("/", async (req, res) => {
         <p style="color: gray; font-size: 14px;">This message was generated automatically by your website.</p>
       </div>
     `;
-    let transporter = nodemailer.createTransport({
-      host: 'smtp.zoho.com',
-      port: 587,
-      secure: false, // use STARTTLS
+
+    // 3️⃣ Prepare HTML for user confirmation email
+    const userHtml = `
+      <div style="font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9;">
+        <h2 style="color: #2761FD;">Thank You for Your Inquiry!</h2>
+        <p>Hi ${req.body.name || "there"},</p>
+        <p>Thank you for contacting Big Bear Vans. We have received your inquiry and will get back to you shortly.</p>
+        <p>Here is a summary of your submission:</p>
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+          ${tableRows}
+        </table>
+        <br/>
+        <p style="color: gray; font-size: 14px;">This is an automated confirmation email.</p>
+      </div>
+    `;
+
+    // 4️⃣ Create transporter using Gmail SMTP
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.ZOHO_USER, // Zoho email
-        pass: process.env.ZOHO_PASS  // Zoho app password
+        user: process.env.GMAIL_USER,      // your Gmail address
+        pass: process.env.GMAIL_APP_PASS,  // Gmail App Password
       },
-      tls: {
-        ciphers: 'TLSv1.2'
-      }
     });
 
-    // ✅ Send to Admin only
+    // 5️⃣ Send email to admin
     await transporter.sendMail({
-      from: `"Big Bear Vans" <${process.env.ZOHO_USER}>`,
-      to: process.env.ZOHO_USER,
-      subject: "New Inqquiry Message from Website",
-      html: htmlTable
+      from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER,
+      subject: "New Inquiry Message from Website",
+      html: adminHtmlTable,
     });
 
+    // 6️⃣ Send confirmation email to user
+    if (req.body.email) { // only if user provided email
+      await transporter.sendMail({
+        from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
+        to: req.body.email,
+        subject: "Thank You for Your Inquiry!",
+        html: userHtml,
+      });
+    }
 
+    // 7️⃣ Send response
     res.status(201).json({
       success: true,
-      message: "Inquiry saved and emails sent successfully.",
+      message: "Inquiry saved, admin notified, and user confirmation sent.",
       data: newForm,
     });
   } catch (error) {
-    console.error("Error saving inquiry or sending email:", error);
-    res.status(400).json({ success: false, error: error.message });
+    console.error("Error saving inquiry or sending emails:", error);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 
 // 🟢 GET ALL INQUIRIES (for dashboard)

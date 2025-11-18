@@ -71,7 +71,7 @@ router.post(
 // 🟢 Get all Interiors
 router.get('/', async (req, res) => {
   try {
-    const Interiors = await Interior.find();
+    const Interiors = await Interior.find().populate("categoryId");;
     res.json(Interiors);
   } catch (err) {
     res.status(500).json({ error: err.message });
