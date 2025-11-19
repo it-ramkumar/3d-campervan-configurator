@@ -20,7 +20,7 @@ export const useAuth = () => {
         setLoading(false);
       });
   }, []);
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
 
   return { isAuthenticated, loading };
 };

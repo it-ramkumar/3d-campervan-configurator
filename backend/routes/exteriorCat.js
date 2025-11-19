@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const InteriorCategory = require("../models/InteriorCategory");
+const InteriorCategory = require("../models/ExteriorCategory");
 
 // POST: Create Category
-router.post("/interior/category", async (req, res) => {
+router.post("/category", async (req, res) => {
   try {
     const { title, description } = req.body;
 
@@ -22,7 +22,7 @@ router.post("/interior/category", async (req, res) => {
   }
 });
 // GET: Fetch all Categories
-router.get("/interior/category", async (req, res) => {
+router.get("/category", async (req, res) => {
   try {
     const categories = await InteriorCategory.find().sort({ createdAt: -1 });
     res.status(200).json({

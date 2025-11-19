@@ -120,7 +120,7 @@ const handleBooking = async () => {
  };
 
  try {
-  console.log("Sending booking data:", bookingData);
+  // console.log("Sending booking data:", bookingData);
 
   const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
    method: "POST",

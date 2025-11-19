@@ -70,12 +70,8 @@ export default function Dashboard() {
       label: "Intrior Choices",
       // icon: "📞",
       description: "Interior Choices Data"
-    },
-    {
-      id: "interior-catgory",
-      label: "Intrior Catgory",
-      description: "Interior Catgory Data"
     }
+
   ];
 
   const handleLogout = async () => {

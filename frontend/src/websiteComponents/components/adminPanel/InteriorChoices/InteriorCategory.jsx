@@ -13,7 +13,7 @@ export default function CategoryForm({ setSelected }) {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/category`, {
+      const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/category`, {
         title,
         description,
       });

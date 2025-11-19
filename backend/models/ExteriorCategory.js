@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
 
-const InteriorCategorySchema = new mongoose.Schema(
+const ExteriorCategorySchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     slug: { type: String, unique: true },
@@ -11,13 +11,13 @@ const InteriorCategorySchema = new mongoose.Schema(
 );
 
 // Auto-generate slug
-InteriorCategorySchema.pre("save", async function(next) {
+ExteriorCategorySchema.pre("save", async function(next) {
   if (!this.slug) {
     this.slug = slugify(this.title, { lower: true, strict: true });
-    const existing = await mongoose.models.InteriorCategory.findOne({ slug: this.slug });
+    const existing = await mongoose.models.ExteriorCategory.findOne({ slug: this.slug });
     if (existing) return next(new Error("Duplicate slug! Category exists."));
   }
   next();
 });
 
-module.exports = mongoose.models.InteriorCategory || mongoose.model("InteriorCategory", InteriorCategorySchema);
+module.exports = mongoose.models.ExteriorCategory || mongoose.model("ExteriorCategory", ExteriorCategorySchema);

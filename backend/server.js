@@ -20,6 +20,11 @@ const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
 const ZohoToken = require("./routes/googleCalender")
 const InteriorCategory = require("./routes/interiorCategory")
 const InteriorChoices = require("./routes/interiorRoute")
+const InteriorSubCategory = require("./routes/interiorSubCategory")
+const ExteriorCategory = require("./routes/exteriorCat");
+const ExteriorSubCategory = require("./routes/exteriorSubCat")
+const ExteriorRoute = require("./routes/exteriorR")
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -52,8 +57,14 @@ app.use("/api/contact", contactUs);
 app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
 app.use("/api/calendar", ZohoToken)
-app.use("/api/category", InteriorCategory)
-app.use("/api/item", InteriorChoices)
+app.use("/api", InteriorCategory)
+app.use("/api", InteriorChoices)
+app.use("/api", InteriorSubCategory)
+app.use("/api/exterior", ExteriorCategory)
+app.use("/api/exterior", ExteriorRoute)
+app.use("/api/exterior", ExteriorSubCategory)
+
+
 
 
 app.get("/auto", (req, res) => {
