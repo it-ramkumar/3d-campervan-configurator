@@ -43,5 +43,33 @@ router.get("/interior/subcategory", async (req, res) => {
     });
   }
 });
+// DELETE: Delete SubCategory by ID
+router.delete("/interior/subcategory/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedSubCategory = await InteriorSubCategory.findByIdAndDelete(id);
+
+    if (!deletedSubCategory) {
+      return res.status(404).json({
+        success: false,
+        message: "SubCategory not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "SubCategory deleted successfully"
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+});
 
 module.exports = router;

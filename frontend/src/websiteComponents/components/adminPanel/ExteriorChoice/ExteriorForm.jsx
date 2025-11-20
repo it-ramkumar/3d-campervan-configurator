@@ -12,7 +12,7 @@ export default function AdminForms() {
   // ================= Fetch Data =================
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/category`);
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior/category`);
       setCategories(res.data.data || []);
     } catch (err) {
       console.log("Category fetch error:", err);
@@ -21,7 +21,7 @@ export default function AdminForms() {
 
   const fetchSubCategories = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/subcategory`);
+      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior/subcategory`);
       setSubCategories(res.data.data || []);
     } catch (err) {
       console.log("SubCategory fetch error:", err);
@@ -40,7 +40,7 @@ export default function AdminForms() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/category`, {
+      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior/category`, {
         title: categoryForm.title,
         description: categoryForm.description
       });
@@ -62,7 +62,7 @@ export default function AdminForms() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/subcategory`, {
+      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior/subcategory`, {
         title: subCategoryForm.title,
         description: subCategoryForm.description,
         categoryId: subCategoryForm.categoryId
@@ -126,7 +126,7 @@ export default function AdminForms() {
       formData.append("description", JSON.stringify(interiorForm.descriptions));
       interiorForm.images.forEach((file) => formData.append("images", file));
 
-      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/interior`, formData, {
+      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
@@ -252,7 +252,6 @@ export default function AdminForms() {
           </div>
 
           <DropDownWithDelete
-           value={true}
             items={categories}
             setItems={setCategories}
             selectedItem={subCategoryForm.categoryId}
@@ -308,7 +307,6 @@ export default function AdminForms() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <DropDownWithDelete
-             value={true}
               items={categories}
               setItems={setCategories}
               selectedItem={interiorForm.categoryId}
@@ -318,7 +316,6 @@ export default function AdminForms() {
             />
 
             <DropDownWithDelete
-            value={true}
               items={filteredSubCategories}
               setItems={setSubCategories}
               selectedItem={interiorForm.subCategoryId}

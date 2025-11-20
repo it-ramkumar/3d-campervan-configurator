@@ -2,17 +2,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function InteriorList({ setSelected }) {
+export default function ExteriorList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(null);
 console.log(interiors,"data")
   const fetchInteriors = async (query = "") => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/interior`,
+        `${import.meta.env.VITE_REACT_APP_API_URL}/exterior`,
         { params: { search: query } }
       );
       setInteriors(res.data.data);
@@ -34,7 +33,7 @@ console.log(interiors,"data")
     try {
       setDeleteLoading(id);
       await axios.delete(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/interior/${id}`
+        `${import.meta.env.VITE_REACT_APP_API_URL}/exterior/${id}`
       );
       setInteriors(interiors.filter((item) => item._id !== id));
     } catch (err) {
@@ -62,7 +61,7 @@ Images: ${item.images?.length}
         <h2 className="text-3xl font-bold">Interior Items</h2>
 
         <button
-          onClick={() => setSelected("interior-form")}
+          onClick={() => setSelected("exterior-form")}
           className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg"
         >
           Add New Item

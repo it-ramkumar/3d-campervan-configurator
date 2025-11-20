@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const InteriorCategory = require("../models/ExteriorCategory");
+const ExteriorCategory = require("../models/ExteriorCategory");
 
 // POST: Create Category
-router.post("/category", async (req, res) => {
+router.post("/exterior/category", async (req, res) => {
   try {
     const { title, description } = req.body;
 
@@ -11,7 +11,7 @@ router.post("/category", async (req, res) => {
       return res.status(400).json({ success: false, message: "Title is required" });
     }
 
-    const newCategory = new InteriorCategory({ title, description });
+    const newCategory = new ExteriorCategory({ title, description });
     await newCategory.save();
 
     res.status(201).json({ success: true, message: "Category created", data: newCategory });
@@ -21,10 +21,11 @@ router.post("/category", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
+
 // GET: Fetch all Categories
-router.get("/category", async (req, res) => {
+router.get("/exterior/category", async (req, res) => {
   try {
-    const categories = await InteriorCategory.find().sort({ createdAt: -1 });
+    const categories = await ExteriorCategory.find().sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       message: "Categories fetched successfully",
@@ -37,6 +38,24 @@ router.get("/category", async (req, res) => {
       message: "Server error",
       error: err.message
     });
+  }
+});
+
+// DELETE: Delete a Category by ID
+router.delete("/exterior/category/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedCategory = await ExteriorCategory.findByIdAndDelete(id);
+
+    if (!deletedCategory) {
+      return res.status(404).json({ success: false, message: "Category not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Category deleted", data: deletedCategory });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
 

@@ -4,14 +4,14 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const slugify = require("slugify");
 
-const InteriorChoice = require("../models/ExteriorRoute");
-const InteriorCategory = require("../models/ExteriorCategory");
-const InteriorSubCategory = require("../models/ExteriorSubCategory");
+const ExteriorChoice = require("../models/ExteriorRoute");
+const ExteriorCategory = require("../models/ExteriorCategory");
+const ExteriorSubCategory = require("../models/ExteriorSubCategory");
 const { uploadToS3,deleteFromS3 } = require("../services/s3");
 
 
 // 🟢 Create a new InteriorChoice
-router.post("/item", upload.array("images"), async (req, res) => {
+router.post("/exterior", upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
     const description = JSON.parse(req.body.description || "[]");
@@ -23,7 +23,7 @@ router.post("/item", upload.array("images"), async (req, res) => {
 
     // ✅ Validate categoryId if provided
     if (data.categoryId) {
-      const categoryExists = await InteriorCategory.findById(data.categoryId);
+      const categoryExists = await ExteriorCategory.findById(data.categoryId);
       if (!categoryExists) {
         return res.status(400).json({ success: false, message: "Invalid categoryId" });
       }
@@ -31,7 +31,7 @@ router.post("/item", upload.array("images"), async (req, res) => {
 
     // ✅ Validate subCategoryId if provided
     if (data.subCategoryId) {
-      const subExists = await InteriorSubCategory.findById(data.subCategoryId);
+      const subExists = await ExteriorSubCategory.findById(data.subCategoryId);
       if (!subExists) {
         return res.status(400).json({ success: false, message: "Invalid subCategoryId" });
       }
@@ -52,7 +52,7 @@ router.post("/item", upload.array("images"), async (req, res) => {
     }
 
     // ✅ Create new InteriorChoice
-    const newItem = new InteriorChoice({
+    const newItem = new ExteriorChoice({
       title: data.title,
       categoryId: data.categoryId || null,
       subCategoryId: data.subCategoryId || null,
@@ -79,9 +79,9 @@ router.post("/item", upload.array("images"), async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/exterior", async (req, res) => {
   try {
-    const interiors = await InteriorChoice.find()
+    const interiors = await ExteriorChoice.find()
       .populate("categoryId", "title description")      // use field names from schema
       .populate("subCategoryId", "title description categoryId")
       .sort({ createdAt: -1 });
@@ -97,31 +97,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-
-
-// 🟢 Get a single InteriorChoice by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const interior = await InteriorChoice.findById(req.params.id)
-      .populate("categoryId", "title description")
-      .populate("subCategoryId", "title description");
-
-    if (!interior) return res.status(404).json({ success: false, message: "InteriorChoice not found" });
-
-    res.status(200).json({ success: true, data: interior });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error", error: err.message });
-  }
-});
-
 // 🟢 Update an InteriorChoice
-router.put('/:id', upload.array("images"), async (req, res) => {
+router.put('/exterior/:id', upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
     const description = JSON.parse(req.body.description || "[]");
 
-    const interior = await InteriorChoice.findById(req.params.id);
+    const interior = await ExteriorChoice.findById(req.params.id);
     if (!interior) return res.status(404).json({ success: false, message: "InteriorChoice not found" });
 
     // Upload new images if any
@@ -150,9 +132,9 @@ router.put('/:id', upload.array("images"), async (req, res) => {
 });
 
 // 🟢 Delete an InteriorChoice
-router.delete("/:id", async (req, res) => {
+router.delete("/exterior/:id", async (req, res) => {
   try {
-    const interior = await InteriorChoice.findById(req.params.id);
+    const interior = await ExteriorChoice.findById(req.params.id);
     if (!interior) return res.status(404).json({ success: false, message: "InteriorChoice not found" });
 
     // Delete all images from S3
@@ -163,7 +145,7 @@ router.delete("/:id", async (req, res) => {
       }
     }
 
-    await InteriorChoice.findByIdAndDelete(req.params.id);
+    await ExteriorChoice.findByIdAndDelete(req.params.id);
 
     res.status(200).json({ success: true, message: "InteriorChoice deleted successfully" });
   } catch (err) {

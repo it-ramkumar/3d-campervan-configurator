@@ -60,9 +60,9 @@ app.use("/api/calendar", ZohoToken)
 app.use("/api", InteriorCategory)
 app.use("/api", InteriorChoices)
 app.use("/api", InteriorSubCategory)
-app.use("/api/exterior", ExteriorCategory)
-app.use("/api/exterior", ExteriorRoute)
-app.use("/api/exterior", ExteriorSubCategory)
+app.use("/api", ExteriorCategory)
+app.use("/api", ExteriorRoute)
+app.use("/api", ExteriorSubCategory)
 
 
 

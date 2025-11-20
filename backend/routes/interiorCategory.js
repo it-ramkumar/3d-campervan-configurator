@@ -39,5 +39,33 @@ router.get("/interior/category", async (req, res) => {
     });
   }
 });
+// DELETE: Delete Category by ID
+router.delete("/interior/category/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedCategory = await InteriorCategory.findByIdAndDelete(id);
+
+    if (!deletedCategory) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Category deleted successfully"
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message
+    });
+  }
+});
 
 module.exports = router;

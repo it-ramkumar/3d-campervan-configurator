@@ -14,8 +14,9 @@ import UsersData from "../adminPanel/Users/User";
 import InqueryListing from "../adminPanel/Inquery/InqueryListing";
 import ContactListing from "../adminPanel/Contact/ContactListing";
 import InteriorForm from "../adminPanel/InteriorChoices/InteriorForm"
-import InteriorCategory from "../adminPanel/InteriorChoices/InteriorCategory"
 import InteriorList from "../adminPanel/InteriorChoices/InteriorListing";
+import ExteriorList from "../adminPanel/ExteriorChoice/ExteriorListing";
+import ExteriorForm from "../adminPanel/ExteriorChoice/ExteriorForm"
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -64,6 +65,12 @@ export default function Dashboard() {
       label: "Contact",
       // icon: "📞",
       description: "Contact Data"
+    },
+     {
+      id: "exterior-choices",
+      label: "Exterior Choices",
+      // icon: "📞",
+      description: "Exterior Choices Data"
     },
     {
       id: "interior-choices",
@@ -148,6 +155,10 @@ export default function Dashboard() {
         return <InteriorList setSelected={setSelected} />;
           case "interior-form":
         return <InteriorForm setSelected={setSelected} />;
+        case "exterior-choices":
+        return <ExteriorList setSelected={setSelected} />;
+          case "exterior-form":
+        return <ExteriorForm setSelected={setSelected} />;
       default:
         return <PortfolioListing setSelected={setSelected} />;
     }

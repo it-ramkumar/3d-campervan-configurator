@@ -3,7 +3,7 @@ const router = express.Router();
 const ExteriorSubCategory = require("../models/ExteriorSubCategory");
 
 // POST: Create SubCategory
-router.post("/subcategory", async (req, res) => {
+router.post("/exterior/subcategory", async (req, res) => {
   try {
     const { title, categoryId, description } = req.body;
 
@@ -21,7 +21,7 @@ router.post("/subcategory", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 });
-router.get("/subcategory", async (req, res) => {
+router.get("/exterior/subcategory", async (req, res) => {
   try {
     // Populate category details
     const subcategories = await ExteriorSubCategory.find()
@@ -43,5 +43,24 @@ router.get("/subcategory", async (req, res) => {
     });
   }
 });
+router.delete("/exterior/subcategory/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const subCategory = await ExteriorSubCategory.findById(id);
+    if (!subCategory) {
+      return res.status(404).json({ success: false, message: "SubCategory not found" });
+    }
+
+    await subCategory.deleteOne();
+
+    res.status(200).json({ success: true, message: "SubCategory deleted successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+});
+
 
 module.exports = router;
