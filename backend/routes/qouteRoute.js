@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     ];
 
     // Spreadsheet ID
-    const SPREADSHEET_ID = "1aRaoCJ3ttdkBw4e5nVHPReAOmC90yWPxpdOqxyKWlQY";
+    const SPREADSHEET_ID = "1JJjRam1j1_l_y_POvIYNDvQEa3ZQsq7SqJsVrc7XLfU";
 
     // Append to Google Sheet
     await appendToSheet(SPREADSHEET_ID, sheetData);
