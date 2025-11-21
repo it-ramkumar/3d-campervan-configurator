@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const { uploadToS3 } = require("../services/s3"); // make sure path is correct
+const path = require("path");
+
 
 const upload = multer();
 const router = express.Router();
