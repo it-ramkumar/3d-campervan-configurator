@@ -221,7 +221,7 @@ const routes = {
 
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
-            <Link
+           {!forceMobile && <Link
               to="/contact"
               className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
             >
@@ -242,7 +242,7 @@ const routes = {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
                 <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
               </span>
-            </Link>
+            </Link>}
 
             {/* MOBILE MENU BUTTON */}
             <button

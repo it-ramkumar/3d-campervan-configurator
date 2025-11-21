@@ -161,7 +161,7 @@ const { scene } = useGLTF(model.glbFile);
     <>
     <div className="">
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto bg-brand color-scroll">
+    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto md:overflow-y-hidden bg-brand color-scroll">
 
       {/* Canvas Section - 50% on mobile, 75% on desktop */}
       <div className="canvas-parent md:col-span-8" >
@@ -234,7 +234,7 @@ const { scene } = useGLTF(model.glbFile);
 
 
 
-        <div className="canvas bg-white relative h-[30vh] lg:h-[93vh] ">
+        <div className="canvas bg-white relative h-[45vh] lg:h-[90vh] ">
           <div className="w-fulll h-full">
             <Canvas className="h-screen">
               <CameraAssigner cameraRef={cameraRef} />
@@ -356,7 +356,7 @@ const { scene } = useGLTF(model.glbFile);
       </div>
 
       {/* Cards Section - 50% on mobile, 25% on desktop */}
-      <div className="card-section col-span-4 p-2 bg-white shadow-md ">
+      <div className="card-section col-span-4 p-2 bg-white shadow-md md:h-screen">
         <MultiStepForm
           addModelToScene={(m) =>
             addModelToScene(m, addedModels, dispatch, setActiveModelId, modelRefs, cameraRef, orbitControlsRef)

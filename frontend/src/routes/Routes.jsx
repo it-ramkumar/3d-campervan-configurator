@@ -51,7 +51,7 @@ const AppRoutes = () => {
 // console.log(isOpen,"aa")
   // Show BlackFriday on all pages except login/dashboard
   const showBlackFriday = useMemo(
-    () => !pathname.startsWith("/dashboard") && !pathname.startsWith("/login"),
+    () => !pathname.startsWith("/dashboard") && !pathname.startsWith("/login") && !pathname.startsWith("/test"),
     [pathname]
   );
 
@@ -86,7 +86,7 @@ const AppRoutes = () => {
           <Route path="/van-form" element={<VanForm />} />
           <Route path="/portfolio-form" element={<PortfolioForm />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/test" element={<Testing />} />
+          <Route path="/test" element={<Van />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />

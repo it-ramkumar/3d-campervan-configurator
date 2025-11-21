@@ -123,7 +123,7 @@ useEffect(() => {
     return <GIFVanLoader />
   }
   return (
- <div className=" rounded-xl">
+ <div className="  rounded-xl">
   {/* Top Section */}
   <div className=" flex flex-col  bg-white  ">
     <div className="">
@@ -159,7 +159,7 @@ useEffect(() => {
 
 
   {/* Cards Section */}
-  <div className="bg-brand p-2 rounded-md lg:h-[50vh] h-[33vh] overflow-y-auto color-scroll">
+  <div className="bg-brand p-2 rounded-md lg:h-[49vh]  overflow-y-auto color-scroll">
     <ModelsCard
       steps={steps}
       currentStep={currentStep}
@@ -247,7 +247,7 @@ useEffect(() => {
     $20,323,342
     </h1> */}
     </div>
-     <div className="mt-4">
+     <div className="mt-2">
       <button
         onClick={() =>
           handleGetQuote(
@@ -262,7 +262,7 @@ useEffect(() => {
             cancelSourceRef
           )
         }
-        className="px-3 py-2 text-sm rounded-full bg-white text-dark w-full shadow-sm"
+        className="px-3 py-1 text-sm rounded-full bg-white text-dark w-full shadow-sm"
         disabled={isUploading}
       >
         Save & Get a Quote
