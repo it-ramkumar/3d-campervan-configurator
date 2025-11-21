@@ -76,7 +76,7 @@ export default function ModelsCard({
       return (
         <div
           key={model.label}
-          className="mb-2 lg:min-w-full lg:w-full transition-all duration-300 ease-in-out"
+          className="mb-2 lg:min-w-full lg:w-full md:p-0 p-4 transition-all duration-300 ease-in-out"
         >
           {/* Main Model Card */}
           <div
