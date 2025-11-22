@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link, useLocation } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { Menu } from "lucide-react"
 
 export default function Navbar({ forceMobile }) {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -53,7 +54,7 @@ export default function Navbar({ forceMobile }) {
     }
   }, [isMobileMenuOpen]);
 
- const handleMenuHover = (menu) => {
+  const handleMenuHover = (menu) => {
     clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
@@ -62,7 +63,7 @@ export default function Navbar({ forceMobile }) {
   };
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-   const menuContent = {
+  const menuContent = {
     CustomBuild: {
       title: "Custom Builds",
       sections: [
@@ -121,7 +122,7 @@ export default function Navbar({ forceMobile }) {
     },
   };
 
-const routes = {
+  const routes = {
     CustomBuild: ["#", "/inquiry"],
     "vans-for-sale": ["/vans-for-sale"],
     layout: [
@@ -149,7 +150,7 @@ const routes = {
 
   return (
     <>
-      <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 bg-white shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
+      <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
 
           {/* LEFT LOGO */}
@@ -221,7 +222,7 @@ const routes = {
 
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
-           {!forceMobile && <Link
+            {!forceMobile && <Link
               to="/contact"
               className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
             >
@@ -244,15 +245,10 @@ const routes = {
               </span>
             </Link>}
 
-            {/* MOBILE MENU BUTTON */}
-            <button
-              className={`${forceMobile ? "" : "md:hidden"} text-gray-700 z-10`}
-              onClick={toggleMobileMenu}
-            >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+
+            <Menu className={`${forceMobile ? "" : "md:hidden"} z-10`}
+              onClick={toggleMobileMenu}></Menu>
+
           </div>
         </div>
       </nav>
@@ -309,15 +305,6 @@ const routes = {
           )}
 
           {/* Book Appointment Button - Mobile */}
-          <div className="mb-6">
-            <Link
-              to="/contact"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
-            >
-              Book Free Consultation
-            </Link>
-          </div>
 
           {Object.keys(menuContent).map((key, idx) => {
             const menu = menuContent[key];
@@ -378,6 +365,16 @@ const routes = {
               </div>
             );
           })}
+          <div className="mb-6">
+            <Link
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
+            >
+              Book Free Consultation
+            </Link>
+          </div>
+
         </div>
       </div>
     </>

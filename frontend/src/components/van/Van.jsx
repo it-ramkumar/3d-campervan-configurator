@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Html, Preload } from "@react-three/drei";
 import { useDispatch, useSelector } from "react-redux";
-// import Van_White from "../van-model-components/VanModel";
-// import { vans } from "../../ModelData";
 import MultiStepForm from "../multi-step-form/MultiStepForm";
 import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
@@ -11,6 +9,7 @@ import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
 import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
+import {ArrowBigDownDash, ArrowBigUpDash} from "lucide-react"
 
 import {
   addModelToScene,
@@ -176,7 +175,7 @@ const { scene } = useGLTF(model.glbFile);
             </h1>
 
             <span  onClick={() => setIsOpen(!isOpen)} className="text-dark">
-              {isOpen ? "▲" : "▼"}
+              {isOpen ? <ArrowBigUpDash/> : <ArrowBigDownDash/>}
             </span>
           </div>
 
