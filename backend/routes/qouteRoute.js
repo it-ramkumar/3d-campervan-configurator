@@ -26,26 +26,17 @@ router.post("/", async (req, res) => {
     });
 
     await newQuote.save();
-    const sheetData = [
-      name,
-      email,
-      phone,
-      model.id,
-      model.url,
-      JSON.stringify(parts)
-    ];
 
-    // Spreadsheet ID
-    const SPREADSHEET_ID = "1JJjRam1j1_l_y_POvIYNDvQEa3ZQsq7SqJsVrc7XLfU";
-
-    // Append to Google Sheet
-    await appendToSheet(SPREADSHEET_ID, sheetData);
-    res.status(201).json({ message: "Quote request saved successfully.", quote: newQuote });
+    res.status(201).json({
+      message: "Quote request saved successfully.",
+      quote: newQuote
+    });
   } catch (err) {
     console.error("❌ Error saving quote:", err);
     res.status(500).json({ message: "Server error while saving quote." });
   }
 });
+
 // GET - Fetch quotes by email or phone
 router.get("/search", protect, adminOnly, async (req, res) => {
 
