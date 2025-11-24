@@ -11,9 +11,9 @@ export const showQuoteForm = (onSubmit) => {
       <div style="display:flex; align-items:center; margin-top:15px;">
         <select id="swal-country"
                 style="width:95px; height:40px;">
-          <option value="+1">🇺🇸 +1</option>
+          <option value="+1" selected>🇺🇸 +1</option>
           <option value="+44">🇬🇧 +44</option>
-          <option value="+92" selected>🇵🇰 +92</option>
+          <option value="+92">🇵🇰 +92</option>
           <option value="+61">🇦🇺 +61</option>
           <option value="+971">🇦🇪 +971</option>
           <option value="+91">🇮🇳 +91</option>
