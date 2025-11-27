@@ -39,6 +39,8 @@ const CustomVan = lazy(() => import("../websiteComponents/components/CampervanLa
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
 const Testing = lazy(() => import("../websiteComponents/components/TestingChoicePage/TestInteriorChoices"));
+const Financing = lazy(()=> import("../websiteComponents/components/Financing/Fhero/Financing"))
+const SprinterPresentation = lazy(()=> import("../websiteComponents/components/SprinterPresentation/sphero/SprinterPresentation"))
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
@@ -95,6 +97,10 @@ const AppRoutes = () => {
           <Route path="/short-van" element={<ShortVan />} />
           <Route path="/long-van" element={<LongVan />} />
           <Route path="/custom-van" element={<CustomVan />} />
+          <Route path="/financing" element={<Financing />} />
+          <Route path="/sprinter-presentation" element={<SprinterPresentation />} />
+
+
         </Routes>
       </Suspense>
     </>

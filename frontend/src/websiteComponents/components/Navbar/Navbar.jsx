@@ -115,6 +115,8 @@ export default function Navbar({ forceMobile }) {
           items: [
             { label: "Exterior Choices", link: "/innovation" },
             { label: "Interior Choices", link: "/interior-choice" },
+            { label: "Financing", link: "/financing" },
+            { label: "Sprinter Presentation", link: "/sprinter-presentation" },
             { label: "Blog", link: "/blogs" },
           ],
         },

@@ -5,23 +5,17 @@ import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
-// --- SVG Icons (no design change) ---
+// --- SVG Icons (Slight modification to allow for background color) ---
 const SvgInsulation = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M9 16H15M9 8H15M12 5V19"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -30,20 +24,14 @@ const SvgInsulation = ({ className }) => (
 
 const SvgElectric = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -52,20 +40,14 @@ const SvgElectric = ({ className }) => (
 
 const SvgWater = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M6 14C6 17.3137 8.68629 20 12 20C15.3137 20 18 17.3137 18 14C18 10 12 4 12 4C12 4 6 10 6 14Z"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -74,20 +56,14 @@ const SvgWater = ({ className }) => (
 
 const SvgInterior = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M21 8H3M21 12H3M21 16H3M7 20H17C18.1046 20 19 19.1046 19 18V6C19 4.89543 18.1046 4 17 4H7C5.89543 4 5 4.89543 5 6V18C5 19.1046 5.89543 20 7 20Z"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -96,20 +72,14 @@ const SvgInterior = ({ className }) => (
 
 const SvgSeating = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M17 16H7C5.89543 16 5 15.1046 5 14V8C5 6.89543 5.89543 6 7 6H17C18.1046 6 19 6.89543 19 8V14C19 15.1046 18.1046 16 17 16ZM12 6V10M12 10H17M12 10H7"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -118,59 +88,43 @@ const SvgSeating = ({ className }) => (
 
 const SvgExterior = ({ className }) => (
   <svg
-    className={`w-[59px] h-[59px] transition-colors duration-300 ${className}`}
+    className={`w-8 h-8 transition-colors duration-300 ${className}`}
     viewBox="0 0 24 24"
     fill="none"
   >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      className="fill-black group-hover:fill-[#2761FD]"
-    />
     <path
       d="M3 12H21M12 3V21M7 7L17 17M7 17L17 7"
       stroke="white"
-      strokeWidth="2"
+      strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>
 );
 
+// --- Reusable Hero Spec Component (from previous iteration) ---
+const HeroSpecItem = ({ label, value }) => (
+  <div className="group py-2 cursor-pointer transition duration-300 hover:text-[#2761FD] border-b-2 border-transparent hover:border-[#2761FD]">
+    <p className="text-xs md:text-sm opacity-80 uppercase tracking-wider">{label}</p>
+    <p className="font-bold text-base md:text-lg mt-1 whitespace-nowrap">
+      {value || "N/A"}
+    </p>
+  </div>
+);
+
+// --- Custom Checkmark Icon for Feature List ---
+const SvgCheckmark = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#2761FD] flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+);
+
+
 const VanPage = ({ vanDetail, onConsultationClick }) => {
   const heroRef = useRef(null);
 
-
-
+  // --- Data Mapping (Updated icons to remove circle fill) ---
   const van = {
-    hero: {
-      titlePrimary: vanDetail?.van_listing?.title?.split(" ")[0] || "",
-      titleSecondary:
-        vanDetail?.van_listing?.title?.split(" ").slice(1).join(" ") || "",
-      tagline: vanDetail?.van_listing?.description || "",
-      backgroundImage: vanDetail?.gallery?.[0] || "/default-hero.jpg",
-    },
-    specifications: [
-      {
-        label: "MAKE & MODEL",
-        value: vanDetail?.van_listing?.specifications?.make_model || "-",
-      },
-      {
-        label: "WHEELBASE",
-        value: vanDetail?.van_listing?.specifications?.wheelbase || "-",
-      },
-      {
-        label: "DRIVETRAIN",
-        value: vanDetail?.van_listing?.specifications?.drivetrain || "-",
-      },
-      {
-        label: "SIT & SLEEP",
-        value: `${vanDetail?.van_listing?.specifications?.capacity?.sits || "-"
-          } – ${vanDetail?.van_listing?.specifications?.capacity?.sleeps || "-"}`,
-      },
-      { label: "PRICE", value: vanDetail?.formatted_price || "-" },
-    ],
     detailed_features:
       vanDetail?.detailed_features?.map((feature) => {
         const icons = {
@@ -187,14 +141,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           items: feature.items || [],
         };
       }) || [],
-    flagship: {
-      title: "Our Exclusive Flagship in Short Vans",
-      description:
-        "Our Santa Monica V6 turbo is expertly designed for families of 4-5. This is one of its kind off-grid-ready campervans equipped with lithium batteries, solar panels, gray & fresh water tanks, and a reliable heating system. Ready to buy? Book a call to schedule your test drive.",
-    },
     gallery: vanDetail?.gallery || [],
   };
-  // console.log(vanDetail, "vanDetail")
+
+  // --- GSAP Animation (Unchanged) ---
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -208,145 +158,138 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
 
   return (
     <div className="bg-gray-100 font-noto-serif">
-      {/* ================= Hero Section ================= */}
+      {/* ================= HERO SECTION (REDUCED HEIGHT AND FONT SIZE) ================= */}
       <div
         ref={heroRef}
-        className="relative w-full h-[85vh] md:h-[500px] overflow-hidden text-white"
+        className="relative w-full h-[70vh] md:h-[500px] overflow-hidden text-white"
       >
+        {/* Background Image with Zoom Effect */}
         <ImageWithSkeleton
           src={vanDetail.gallery[0]}
           alt={`${vanDetail.van_listing.title} custom van`}
-          className="bg-image absolute inset-0 w-full h-full"
+          className="bg-image absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(270.39deg,rgba(0,0,0,0)_0.33%,#000000_106.96%)]"></div>
 
-        <div className="relative z-10 h-full text-left px-4 sm:px-8">
-          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-[60px] leading-tight max-w-2xl">
-            <span className="pt-10">{vanDetail.van_listing.title}</span>
+        {/* Dark Overlay with Subtle Gradient */}
+        <div className="absolute inset-0 bg-black opacity-60"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(270.39deg,rgba(0,0,0,0.1)_0.33%,#000000_106.96%)]"></div>
 
-          </h1>
-          <p className="text-lg md:text-2xl mt-4 max-w-2xl opacity-90">
-            {vanDetail.van_listing.subtitle}
-          </p>
+        {/* Content Area */}
+        <div className="relative z-10 h-full flex flex-col justify-end pb-8 px-4 sm:px-8 lg:px-16">
+          <div className="max-w-4xl">
+            {/* Title Block - REDUCED FONT SIZE */}
+            <h1 className="font-extrabold text-3xl sm:text-4xl md:text-[52px] leading-tight mb-2 tracking-tight">
+              {vanDetail.van_listing.title}
+            </h1>
+            <p className="text-base md:text-xl mt-1 max-w-3xl font-light opacity-90">
+              {vanDetail.van_listing.subtitle}
+            </p>
 
-          <div className="flex flex-wrap justify-start gap-x-8 gap-y-6 mt-8 md:mt-12">
+            {/* Specifications Grid - REDUCED MARGINS/PADDING/FONT SIZE */}
+            <div className="flex flex-wrap justify-start gap-x-8 gap-y-2 mt-6 mb-4 border-t border-b border-gray-600 py-3">
 
-            {/* Make & Model */}
-            <div className="group py-2 cursor-pointer">
-              <div className="relative pb-2">
-                <p className="text-xs md:text-sm opacity-80">Make & Model</p>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-              </div>
-              <p className="font-bold text-base md:text-lg mt-1 w-60">
-                {vanDetail?.van_listing.specifications?.make_model || "N/A"}
-              </p>
+              <HeroSpecItem
+                label="Make & Model"
+                value={vanDetail?.van_listing.specifications?.make_model}
+              />
+
+              <HeroSpecItem
+                label="Wheelbase"
+                value={vanDetail?.van_listing.specifications?.wheelbase}
+              />
+
+              <HeroSpecItem
+                label="Drivetrain"
+                value={vanDetail?.van_listing.specifications?.drivetrain}
+              />
+
+              <HeroSpecItem
+                label="Sit & Sleep"
+                value={`${vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - ${vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}`}
+              />
             </div>
 
-            {/* Wheelbase */}
-            <div className="group py-2 cursor-pointer">
-              <div className="relative pb-2">
-                <p className="text-xs md:text-sm opacity-80">Wheelbase</p>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-              </div>
-              <p className="font-bold text-base md:text-lg mt-1">
-                {vanDetail?.van_listing.specifications?.wheelbase || "N/A"}
-              </p>
-            </div>
+            {/* Price & CTA Block - MOBILE OPTIMIZATION APPLIED HERE */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              {/* Black Friday Offer (Conditional) */}
+              {vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
+                // MODIFIED: Added max-w-xs (max-width: 320px) and mx-auto (center alignment) on mobile.
+                <div className="p-3 bg-white/10 backdrop-blur-sm rounded-lg shadow-xl border border-white/20 w-full max-w-xs mx-auto sm:w-auto sm:max-w-none sm:mx-0">
 
-            {/* Drivetrain */}
-            <div className="group py-2 cursor-pointer">
-              <div className="relative pb-2">
-                <p className="text-xs md:text-sm opacity-80">Drivetrain</p>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-              </div>
-              <p className="font-bold text-base md:text-lg mt-1">
-                {vanDetail?.van_listing.specifications?.drivetrain || "N/A"}
-              </p>
-            </div>
+                  {/* Label */}
+                  <div className="flex items-center justify-between mb-0.5">
+                    <p className="text-xs font-semibold text-gray-200 uppercase tracking-widest">
+                      Exclusive Price
+                    </p>
+                    <span className="bg-[#FFD700] text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full animate-pulse">
+                      🎉 BLACK FRIDAY DEAL
+                    </span>
+                  </div>
 
-
-            {/* Sit & Sleep */}
-            <div className="group py-2 cursor-pointer">
-              <div className="relative pb-2">
-                <p className="text-xs md:text-sm opacity-80">Sit & Sleep</p>
-                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-              </div>
-              <p className="font-bold text-base md:text-lg mt-1">
-                {vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - {vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}
-              </p>
-
-            </div>
-            {/* price */}
-            {vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
-              <div className="group py-2 px-4  rounded-xl shadow-lg border hover:border-[#2761FD] transition duration-300 cursor-pointer max-w-sm">
-
-                {/* Label */}
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs md:text-sm">Price</p>
-                  <span className="bg-[#FFD700] text-black text-[10px] font-bold px-2 py-1 rounded-full">
-                    🎉 Black Friday Offer
-                  </span>
-                </div>
-
-                {/* Animated underline */}
-                <div className="relative pb-1">
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#2761FD] scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-in-out"></div>
-                </div>
-
-                {/* Price area */}
-                <div className="flex items-end gap-2 mt-2">
-                  <p className="text-gray-400 text-base md:text-lg line-through">
-                    ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
-                  </p>
-                  <p className="font-bold text-2xl md:text-3xl text-[#FFD700] drop-shadow-sm">
-                    ${"185,000"}
+                  {/* Price area - Smaller text on mobile */}
+                  <div className="flex items-end gap-2 mt-0.5">
+                    <p className="text-gray-400 text-sm line-through font-medium">
+                      ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
+                    </p>
+                    <p className="font-extrabold text-2xl sm:text-3xl text-[#FFD700] drop-shadow-lg">
+                      ${"185,000"}
+                    </p>
+                  </div>
+                  <p className="text-xs text-green-300 mt-0.5 font-semibold">
+                    Flat 17% Off – Limited Time Offer
                   </p>
                 </div>
+              )}
 
-                {/* Discount label */}
-                <p className="text-xs text-green-400 mt-1"> Flat 17% Off</p>
-              </div>
-            )}
-
+              {/* Call To Action Button - Full width on mobile, auto on desktop, centered on mobile */}
+              <button
+                onClick={onConsultationClick}
+                className="cursor-pointer px-6 py-2.5 bg-[#2761FD] text-white font-bold text-base rounded-md transition-all duration-300 ease-in-out shadow-lg hover:bg-white hover:text-[#2761FD] hover:shadow-[0_0_30px_rgba(39,97,253,0.8)] w-full max-w-xs mx-auto sm:w-auto sm:max-w-none sm:mx-0"
+              >
+                Book A Call Now
+              </button>
+            </div>
 
           </div>
-
-          {/* <Link to={"/contact"}> */}
-
-          <button onClick={onConsultationClick}
-            className="mt-8 md:mt-12 cursor-pointer w-[154px] h-[39px] px-[20px] py-[10px] bg-white text-black font-noto-sans font-bold text-sm rounded-[5px] transition-all duration-300 ease-in-out hover:bg-[#2761FD] hover:text-white hover:shadow-lg hover:-translate-y-1">
-            Book A Call Now
-          </button>
-          {/* </Link> */}
-
         </div>
       </div>
 
-      {/* ================= Key Features ================= */}
-      <div className="py-24 px-8 bg-white">
+      {/* ================= KEY FEATURES SECTION (IMPROVED DESIGN) ================= */}
+      <div className="py-16 px-4 sm:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-center font-bold text-5xl text-black mb-16">
-            Key Features
+          <h2 className="text-center font-extrabold text-4xl text-black mb-12 tracking-tight">
+            Comprehensive Build Features
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {van.detailed_features.map((feature, index) => (
               <div
                 key={index}
-                className="group w-full max-w-[400px] min-h-[430px] mx-auto bg-white rounded-2xl p-8 flex flex-col items-center text-center shadow-[10px_10px_18.8px_0px_rgba(0,0,0,0.25),-10px_-10px_22.6px_0px_rgba(0,0,0,0.25)] transition-all duration-300 ease-in-out hover:shadow-[10px_10px_25px_0px_rgba(0,0,0,0.3),-10px_-10px_30px_0px_rgba(0,0,0,0.3)] hover:-translate-y-2"
+                className="group w-full max-w-[400px] min-h-[400px] mx-auto bg-white rounded-2xl p-6 flex flex-col items-center text-center shadow-lg border border-gray-100 transition-all duration-500 ease-in-out transform hover:shadow-xl hover:scale-[1.02] hover:border-[#2761FD]"
               >
-                {feature.icon}
-                <h3 className="font-black text-2xl mt-4 mb-6">
+                {/* Icon Container */}
+                <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-black transition-colors duration-300 group-hover:bg-[#2761FD] mb-4">
+                    {feature.icon}
+                </div>
+                
+                <h3 className="font-black text-xl mt-1 mb-4 text-black tracking-tight">
                   {feature.category}
                 </h3>
+                
+                {/* Feature List */}
                 <div className="w-full flex-grow text-left">
-                  <ul className="space-y-2 font-normal text-base text-black">
-                    {feature.items.map((item, i) => (
-                      <li key={`item-${i}`} className="flex items-start">
-                        <span className="flex-shrink-0 w-1.5 h-1.5 bg-black rounded-full mr-3 mt-[9px] group-hover:bg-[#2761FD] transition-colors duration-300"></span>
-                        <span>{item}</span>
+                  <ul className="space-y-2 font-medium text-sm text-gray-700">
+                    {feature.items.slice(0, 5).map((item, i) => ( // Display up to 5 items
+                      <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
+                        <SvgCheckmark />
+                        <span className="leading-snug">{item}</span>
                       </li>
                     ))}
+                    {feature.items.length > 5 && (
+                        <li className="text-xs text-gray-500 italic mt-1">
+                            + {feature.items.length - 5} more features...
+                        </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -358,15 +301,15 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       </div>
 
       {/* ================= Flagship ================= */}
-      <div className="px-8 md:pl-[132px] md:pr-16 bg-gray-50">
-        <div className="max-w-3xl text-left py-8">
-          <h2 className="font-bold text-4xl mb-6">{vanDetail.van_listing.title}</h2>
-          <p className="text-xl font-normal leading-relaxed mb-8">
+      <div className="px-6 md:pl-16 md:pr-16 bg-gray-50">
+        <div className="max-w-3xl text-left py-6">
+          <h2 className="font-bold text-3xl mb-4">{vanDetail.van_listing.title}</h2>
+          <p className="text-lg font-normal leading-relaxed mb-6">
             {vanDetail.van_listing.description}
           </p>
           {/* <Link to={"/contact"}> */}
           <button onClick={onConsultationClick}
-            className="px-5 py-2.5 bg-[#2761FD] cursor-pointer text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-1">
+            className="px-4 py-2 bg-[#2761FD] cursor-pointer text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5">
             Book a call now
           </button>
           {/* </Link> */}
@@ -374,15 +317,15 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       </div>
 
       {/* ================= Gallery ================= */}
-      <div className="p-8 md:p-16 bg-white">
+      <div className="p-6 md:p-12 bg-white">
         {van.gallery.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {van.gallery.map((img, i) => (
               <ImageWithSkeleton
                 key={i}
                 src={img}
                 alt={img}
-                className="w-full h-64 object-cover "
+                className="w-full h-56 object-cover rounded-lg shadow-md"
               />
             ))}
           </div>
@@ -392,13 +335,13 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       </div>
       {/* ================= Video Section ================= */}
       {vanDetail.media && vanDetail.media.length > 0 && (
-        <div className="w-full bg-black py-16 px-4 md:px-16">
-          <h2 className="text-center font-bold text-white text-4xl mb-10">
+        <div className="w-full bg-black py-12 px-4 md:px-12">
+          <h2 className="text-center font-bold text-white text-3xl mb-8">
             Watch Video
           </h2>
 
           <div
-            className={`grid gap-8 ${vanDetail.media.length === 1
+            className={`grid gap-6 ${vanDetail.media.length === 1
               ? "grid-cols-1"
               : vanDetail.media.length === 2
                 ? "grid-cols-1 md:grid-cols-2"
@@ -430,11 +373,11 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
               return (
                 <div
                   key={index}
-                  className="relative w-full overflow-hidden rounded-2xl shadow-2xl transform transition-all duration-500 hover:scale-[1.02]"
+                  className="relative w-full overflow-hidden rounded-xl shadow-xl transform transition-all duration-500 hover:scale-[1.01]"
                 >
                   <div
                     className={`relative w-full ${isShorts
-                      ? "aspect-[9/16] max-w-[400px] mx-auto" // 🎥 Tall for Shorts
+                      ? "aspect-[9/16] max-w-[300px] mx-auto" // 🎥 Tall for Shorts
                       : "aspect-video" // 📺 Normal landscape video
                       }`}
                   >
@@ -443,7 +386,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
                       title={`video-${index}`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
-                      className="absolute top-0 left-0 w-full h-full border-0 rounded-2xl"
+                      className="absolute top-0 left-0 w-full h-full border-0 rounded-xl"
                     ></iframe>
                   </div>
                 </div>
@@ -452,11 +395,6 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       )}
-
-
-
-
-
     </div>
   );
 };
