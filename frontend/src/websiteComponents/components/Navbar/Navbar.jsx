@@ -182,7 +182,7 @@ export default function Navbar({ forceMobile }) {
     className={`flex items-center gap-1 ${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
   >
     Custom Build
-    <ChevronDown className="w-4 h-4" />
+    <ChevronDown className="w-3 h-3" />
   </Link>
 
   <Link
@@ -204,7 +204,7 @@ export default function Navbar({ forceMobile }) {
     className={`flex items-center gap-1 ${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
   >
     Layouts
-    <ChevronDown className="w-4 h-4" />
+    <ChevronDown className="w-3 h-3" />
   </Link>
 
   <Link
@@ -223,7 +223,7 @@ export default function Navbar({ forceMobile }) {
     className={`flex items-center gap-1 ${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
   >
     Discover
-    <ChevronDown className="w-4 h-4" />
+    <ChevronDown className="w-3 h-3" />
   </Link>
 </div>
 
