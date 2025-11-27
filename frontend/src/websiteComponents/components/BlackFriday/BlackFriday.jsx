@@ -142,7 +142,7 @@ export default function BlackFridayCard() {
             setShowPopup(true);
             setShowBadge(false);
           }}
-          className="fixed bottom-4 right-4 bg-[#FFD700] text-black px-4 py-2 rounded-full cursor-pointer shadow-xl font-bold text-sm hover:scale-105 transition-all z-[9999]"
+          className="fixed bottom-4 right-4 bg-[#FFD700] text-black px-4 py-2 animate-bounce  rounded-full cursor-pointer shadow-xl font-bold text-sm hover:scale-105 transition-all z-[9999]"
         >
           BLACK FRIDAY SALE – {timeLeft.days}d {timeLeft.hours}h
         </motion.div>

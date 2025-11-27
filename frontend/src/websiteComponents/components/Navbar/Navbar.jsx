@@ -236,7 +236,7 @@ export default function Navbar({ forceMobile }) {
     hidden md:flex text-sm bg-black text-white p-1 rounded-xl font-bold
     shadow-5xl shadow-black hover:shadow-black/70 hover:shadow-2xl
     transition-all duration-500 transform hover:-translate-y-1 hover:scale-105
-     relative overflow-hidden group
+    hover:animate-none relative overflow-hidden group
   "
 >
   {/* GLOW BACKGROUND RING */}
@@ -254,7 +254,7 @@ export default function Navbar({ forceMobile }) {
   </div>
 
   {/* INNER BUTTON */}
-  <div className="relative z-10 bg-black rounded-xl px-4 py-2.5 flex items-center">
+  <div className="relative z-10 bg-white text-black rounded-xl px-4 py-2.5 flex items-center">
     Book Free Consultation
 
     <svg
