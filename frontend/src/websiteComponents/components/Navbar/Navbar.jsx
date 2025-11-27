@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { Link, useLocation } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Menu } from "lucide-react"
+import { ChevronDown } from 'lucide-react';
 
 export default function Navbar({ forceMobile }) {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -170,57 +171,62 @@ export default function Navbar({ forceMobile }) {
           )}
 
           {/* CENTER MENU (Desktop) */}
-          <div
-            className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-8 text-blackish tracking-wide font-medium font-serif text-base`}
-          >
-            <Link
-              to="#"
-              onMouseEnter={() => handleMenuHover("CustomBuild")}
-              onMouseLeave={handleMenuLeave}
-              className={`${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
-            >
-              Custom Build
-            </Link>
+     {/* CENTER MENU (Desktop) */}
+<div
+  className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
+>
+  <Link
+    to="#"
+    onMouseEnter={() => handleMenuHover("CustomBuild")}
+    onMouseLeave={handleMenuLeave}
+    className={`flex items-center gap-1 ${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
+  >
+    Custom Build
+    <ChevronDown className="w-4 h-4" />
+  </Link>
 
-            <Link
-              to="/vans-for-sale"
-              onMouseEnter={() => handleMenuHover("vans-for-sale")}
-              onMouseLeave={handleMenuLeave}
-              className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
-            >
-              Vans For Sale
-              <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
-                SALE
-              </span>
-            </Link>
+  <Link
+    to="/vans-for-sale"
+    onMouseEnter={() => handleMenuHover("vans-for-sale")}
+    onMouseLeave={handleMenuLeave}
+    className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
+  >
+    Vans For Sale
+    <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
+      SALE
+    </span>
+  </Link>
 
-            <Link
-              to="/layouts"
-              onMouseEnter={() => handleMenuHover("layout")}
-              onMouseLeave={handleMenuLeave}
-              className={`${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
-            >
-              Layouts
-            </Link>
+  <Link
+    to="/layouts"
+    onMouseEnter={() => handleMenuHover("layout")}
+    onMouseLeave={handleMenuLeave}
+    className={`flex items-center gap-1 ${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
+  >
+    Layouts
+    <ChevronDown className="w-4 h-4" />
+  </Link>
 
-            <Link
-              to="/contact"
-              onMouseEnter={() => handleMenuHover("contact-us")}
-              onMouseLeave={handleMenuLeave}
-              className={`${isParentActive("contact-us") ? "text-indigo-600 font-semibold" : ""}`}
-            >
-              Contact
-            </Link>
+  <Link
+    to="/contact"
+    onMouseEnter={() => handleMenuHover("contact-us")}
+    onMouseLeave={handleMenuLeave}
+    className={`${isParentActive("contact-us") ? "text-indigo-600 font-semibold" : ""}`}
+  >
+    Contact
+  </Link>
 
-            <Link
-              to="#"
-              onMouseEnter={() => handleMenuHover("discover")}
-              onMouseLeave={handleMenuLeave}
-              className={`${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
-            >
-              Discover
-            </Link>
-          </div>
+  <Link
+    to="#"
+    onMouseEnter={() => handleMenuHover("discover")}
+    onMouseLeave={handleMenuLeave}
+    className={`flex items-center gap-1 ${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
+  >
+    Discover
+    <ChevronDown className="w-4 h-4" />
+  </Link>
+</div>
+
 
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
