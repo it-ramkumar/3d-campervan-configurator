@@ -98,7 +98,7 @@ const AppRoutes = () => {
           <Route path="/long-van" element={<LongVan />} />
           <Route path="/custom-van" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />
-          <Route path="/sprinter-presentation" element={<SprinterPresentation />} />
+          <Route path="/sprinter-guide" element={<SprinterPresentation />} />
 
 
         </Routes>

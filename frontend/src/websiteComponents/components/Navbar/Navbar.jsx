@@ -107,6 +107,7 @@ export default function Navbar({ forceMobile }) {
           items: [
             { label: "Our Process", link: "/our-process" },
             { label: "Showroom", link: "/showroom" },
+            { label: "Financing", link: "/financing" },
             { label: "About Us", link: "/about-us" },
             { label: "Our Clients", link: "/our-clients" },
           ],
@@ -116,8 +117,7 @@ export default function Navbar({ forceMobile }) {
           items: [
             { label: "Exterior Choices", link: "/innovation" },
             { label: "Interior Choices", link: "/interior-choice" },
-            { label: "Financing", link: "/financing" },
-            { label: "Sprinter Presentation", link: "/sprinter-presentation" },
+            { label: "Sprinter Guide", link: "/sprinter-guide" },
             { label: "Blog", link: "/blogs" },
           ],
         },
