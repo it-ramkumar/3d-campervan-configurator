@@ -231,27 +231,51 @@ export default function Navbar({ forceMobile }) {
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
             {!forceMobile && <Link
-              to="/contact"
-              className="hidden md:flex text-sm bg-black text-white px-4 py-2.5 rounded-xl font-bold shadow-2xl hover:shadow-gray-500/30 transition-all duration-500 transform hover:-translate-y-1 hover:scale-105 animate-pulse hover:animate-none relative overflow-hidden group"
-            >
-              <span className="relative z-10 flex items-center">
-                Book Free Consultation
-                <svg
-                  className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-              </span>
+  to="/contact"
+  className="
+    hidden md:flex text-sm bg-black text-white p-1 rounded-xl font-bold
+    shadow-5xl shadow-black hover:shadow-black/70 hover:shadow-2xl
+    transition-all duration-500 transform hover:-translate-y-1 hover:scale-105
+     relative overflow-hidden group
+  "
+>
+  {/* GLOW BACKGROUND RING */}
+  <div
+    className="absolute inset-0 rounded-xl opacity-60 blur-lg
+              bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
+               group-hover:opacity-100 transition-all duration-500">
+  </div>
 
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-              <span className="absolute flex h-6 w-6 -top-2 -right-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
-                <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
-              </span>
-            </Link>}
+  {/* COLORFUL BORDER */}
+  <div
+    className="absolute inset-0 rounded-xl p-[2px]
+               bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
+               animate-[spin_6s_linear_infinite]">
+  </div>
+
+  {/* INNER BUTTON */}
+  <div className="relative z-10 bg-black rounded-xl px-4 py-2.5 flex items-center">
+    Book Free Consultation
+
+    <svg
+      className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+  </div>
+
+  {/* PING DOT */}
+  <span className="absolute flex h-6 w-6 -top-2 -right-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
+    <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
+  </span>
+</Link>
+
+
+}
 
 
             <Menu className={`${forceMobile ? "" : "md:hidden"} z-10`}

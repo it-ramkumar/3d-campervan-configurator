@@ -40,7 +40,7 @@ const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateC
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
 const Testing = lazy(() => import("../websiteComponents/components/TestingChoicePage/TestInteriorChoices"));
 const Financing = lazy(()=> import("../websiteComponents/components/Financing/Financing"))
-const SprinterPresentation = lazy(()=> import("../websiteComponents/components/SprinterPresentation/sphero/SprinterPresentation"))
+const SprinterPresentation = lazy(()=> import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);

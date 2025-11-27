@@ -271,3 +271,51 @@ html {
     transform: translateX(-120%);
   }
 }
+
+@keyframes shine {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes colorShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(180deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(180deg); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes comet {
+  0% { transform: translateX(-100px) scaleX(0); opacity: 0; }
+  50% { opacity: 1; transform: translateX(0px) scaleX(1); }
+  100% { transform: translateX(100px) scaleX(0); opacity: 0; }
+}
+
+@keyframes liquid {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.animate-liquid {
+  animation: liquid 2s ease-in-out infinite;
+}
+
+.animate-comet {
+  animation: comet 2s ease-in-out infinite;
+}
