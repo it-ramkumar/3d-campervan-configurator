@@ -4,8 +4,7 @@
 import React, { useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper modules
+import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 
 // Import Swiper styles
@@ -40,62 +39,62 @@ const CloseIcon = () => (
 
 // --- Color Data (Keeping for completeness) ---
 const colors = [
-  { 
-    name: 'Arctic White', 
+  {
+    name: 'Arctic White',
     img: '/sprinter/Arctic White.png',
     description: 'A pristine, brilliant white that reflects sunlight to keep the interior cooler. Perfect for hot climates and professional fleets.',
     features: ['Heat reflective', 'Easy maintenance', 'Professional appearance', 'High visibility']
   },
-  { 
-    name: 'Pebble Grey', 
+  {
+    name: 'Pebble Grey',
     img: '/sprinter/pebblegrey.png',
     description: 'A sophisticated light grey with subtle warm undertones. Hides minor scratches and dust exceptionally well.',
     features: ['Scratch masking', 'Elegant finish', 'Dust camouflage', 'Modern aesthetic']
   },
-  { 
-    name: 'Obsidian Black', 
+  {
+    name: 'Obsidian Black',
     img: '/sprinter/obsidianblack.png',
     description: 'Deep, luxurious black with a mirror-like finish. Creates a commanding presence on the road.',
     features: ['Premium gloss', 'Luxury appearance', 'Deep shine', 'Professional look']
   },
-  { 
-    name: 'Tenorite Grey', 
+  {
+    name: 'Tenorite Grey',
     img: '/sprinter/tenoritegrey.png',
     description: 'A medium grey with cool blue undertones. Offers excellent dirt and water spot concealment.',
     features: ['Water spot hiding', 'Urban sophisticated', 'Easy cleaning', 'Contemporary style']
   },
-  { 
-    name: 'Graphite Grey', 
+  {
+    name: 'Graphite Grey',
     img: '/sprinter/graphitegrey.png',
     description: 'Dark charcoal grey that combines elegance with practicality. Ideal for both commercial and personal use.',
     features: ['All-purpose', 'Stain resistant', 'Timeless appeal', 'Versatile application']
   },
-  { 
-    name: 'Jet Black', 
+  {
+    name: 'Jet Black',
     img: '/sprinter/jetblack.png',
     description: 'The deepest black available with intense pigmentation. Creates a sleek, monolithic appearance.',
     features: ['Maximum depth', 'Ultimate sleekness', 'Rich color', 'Bold statement']
   },
-  { 
-    name: 'Iridium Silver', 
+  {
+    name: 'Iridium Silver',
     img: '/sprinter/iridiumsilver.png',
     description: 'Metallic silver with high reflectivity. Maintains its showroom appearance for years.',
     features: ['Long-lasting shine', 'Scratch resistant', 'Value retention', 'Modern metallic']
   },
-  { 
-    name: 'Selenite Grey', 
+  {
+    name: 'Selenite Grey',
     img: '/sprinter/selenitegrey.png',
     description: 'A light metallic grey with pearlescent qualities. Changes appearance in different lighting conditions.',
     features: ['Pearlescent effect', 'Light responsive', 'Premium metallic', 'Dynamic appearance']
   },
-  { 
-    name: 'Black Blue', 
+  {
+    name: 'Black Blue',
     img: '/sprinter/blackblue.png',
     description: 'A sophisticated dark blue that appears almost black in low light. Reveals rich blue tones in sunlight.',
     features: ['Color shifting', 'Sophisticated tone', 'Sunlight reactive', 'Executive style']
   },
-  { 
-    name: 'Blue Grey', 
+  {
+    name: 'Blue Grey',
     img: '/sprinter/bluegrey.png',
     description: 'A unique blend of grey and blue that creates a calm, professional appearance suitable for any application.',
     features: ['Calming hue', 'Professional blend', 'Weather resistant', 'Universal appeal']
@@ -115,9 +114,9 @@ const ColorModal = ({ color, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-sm">
-      <div 
+      <div
         className="relative w-full max-w-xl md:max-w-4xl h-auto max-h-[95vh] sm:max-h-[90vh] rounded-2xl overflow-hidden transform transition-all duration-500 scale-95 hover:scale-100"
-        style={{ 
+        style={{
           backgroundColor: '#1a1d24',
           border: '2px solid #374151'
         }}
@@ -133,8 +132,8 @@ const ColorModal = ({ color, isOpen, onClose }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 h-full overflow-y-auto lg:overflow-y-hidden">
           {/* Image Section */}
-          <div className="relative h-52 sm:h-60 lg:h-full min-h-[200px] lg:min-h-[400px]"> 
-            <img
+          <div className="relative h-52 sm:h-60 lg:h-full min-h-[200px] lg:min-h-[400px]">
+            <ImageWithSkeleton click={true}
               src={color.img}
               alt={color.name}
               className="w-full h-full object-cover"
@@ -142,7 +141,7 @@ const ColorModal = ({ color, isOpen, onClose }) => {
             />
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent lg:bg-gradient-to-r lg:from-black/50 lg:to-transparent" />
-            
+
             {/* Color Name on Image - REDUCED LG FONT SIZE */}
             <div className="absolute bottom-3 left-3 lg:bottom-6 lg:left-6">
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-4xl font-bold text-white mb-1.5">
@@ -228,7 +227,7 @@ export default function SprinterFeatures() {
 
   return (
     <section className="w-full overflow-hidden" style={{ backgroundColor: sectionBgLight }}>
-      
+
       {/* --- SECTION 1: KEY FEATURES (Light Section) --- */}
       {/* REDUCED VERTICAL PADDING: md:py-16 (from md:py-24) */}
       <div className="container mx-auto px-4 py-10 md:py-16">
@@ -249,21 +248,21 @@ export default function SprinterFeatures() {
         {/* Features Card Grid - REDUCED VERTICAL GAP: gap-y-16 (from gap-y-28/gap-y-24) */}
         {/* MODIFIED: Increased vertical gap for mobile: gap-y-24 (was gap-y-16) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-24 md:gap-y-16 max-w-5xl mx-auto">
-          
+
           {/* Card 1: Rear Steps */}
-          <div 
+          <div
             // REDUCED TOP PADDING FOR CARD CONTENT: pt-24 (from pt-32) on mobile, md:pt-16 (from md:pt-20) on desktop
             className="relative rounded-[15px] p-5 pt-24 md:pt-16 text-center text-white flex flex-col shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl border-t-4"
-            style={{ 
-              backgroundColor: cardBgDark, 
+            style={{
+              backgroundColor: cardBgDark,
               borderColor: cardBorderAccent,
               boxShadow: '0 5px 20px rgba(0, 0, 0, 0.2)'
             }}
           >
             {/* REDUCED ICON CLIP SIZE/POSITIONING */}
-            <div 
+            <div
               className="absolute -top-16 md:-top-16 left-1/2 -translate-x-1/2 w-[90px] h-[95px] md:w-[100px] md:h-[105px] border-[4px] flex items-center justify-center shield-clip"
-              style={{ 
+              style={{
                 backgroundColor: iconBgLight,
                 borderColor: cardBgDark,      
               }}
@@ -288,20 +287,20 @@ export default function SprinterFeatures() {
           </div>
 
           {/* Card 2: Hitch Options */}
-          <div 
+          <div
             // REDUCED TOP PADDING FOR CARD CONTENT
             className="relative rounded-[15px] p-5 pt-24 md:pt-16 text-center text-white flex flex-col shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl border-t-4"
-            style={{ 
-              backgroundColor: cardBgDark, 
+            style={{
+              backgroundColor: cardBgDark,
               borderColor: cardBorderAccent,
               boxShadow: '0 5px 20px rgba(0, 0, 0, 0.2)'
             }}
           >
             {/* REDUCED ICON CLIP SIZE/POSITIONING */}
-            <div 
+            <div
               className="absolute -top-16 md:-top-16 left-1/2 -translate-x-1/2 w-[90px] h-[95px] md:w-[100px] md:h-[105px] border-[4px] flex items-center justify-center shield-clip"
-              style={{ 
-                backgroundColor: iconBgLight, 
+              style={{
+                backgroundColor: iconBgLight,
                 borderColor: cardBgDark,      
               }}
             >
@@ -328,20 +327,20 @@ export default function SprinterFeatures() {
           </div>
 
           {/* Card 3: Towing Capacity */}
-          <div 
+          <div
             // REDUCED TOP PADDING FOR CARD CONTENT
             className="relative rounded-[15px] p-5 pt-24 md:pt-16 text-center text-white flex flex-col shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl border-t-4"
-            style={{ 
-              backgroundColor: cardBgDark, 
+            style={{
+              backgroundColor: cardBgDark,
               borderColor: cardBorderAccent,
               boxShadow: '0 5px 20px rgba(0, 0, 0, 0.2)'
             }}
           >
             {/* REDUCED ICON CLIP SIZE/POSITIONING */}
-            <div 
+            <div
               className="absolute -top-16 md:-top-16 left-1/2 -translate-x-1/2 w-[90px] h-[95px] md:w-[100px] md:h-[105px] border-[4px] flex items-center justify-center shield-clip"
-              style={{ 
-                backgroundColor: iconBgLight, 
+              style={{
+                backgroundColor: iconBgLight,
                 borderColor: cardBgDark,      
               }}
             >
@@ -401,8 +400,8 @@ export default function SprinterFeatures() {
             speed={5000}
             modules={[EffectCoverflow, Autoplay]}
             className="w-full color-swiper-fixed"
-            style={{ 
-              paddingBottom: '2rem', 
+            style={{
+              paddingBottom: '2rem',
               paddingTop: '1rem',
             }}
           >
@@ -414,10 +413,10 @@ export default function SprinterFeatures() {
                 onClick={() => handleColorClick(color)}
               >
                 {/* Card Structure */}
-                <div 
+                <div
                   className="rounded-xl overflow-hidden transform transition-all duration-700 hover:scale-105 group"
-                  style={{ 
-                    backgroundColor: veryDarkCharcoal, 
+                  style={{
+                    backgroundColor: veryDarkCharcoal,
                     border: `2px solid ${veryDarkCharcoal}`, // Reduced border size
                     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.4)', // Reduced shadow
                     margin: '0 8px' // Reduced margin
@@ -453,10 +452,10 @@ export default function SprinterFeatures() {
         </div>
       </div>
       {/* Color Modal */}
-      <ColorModal 
-        color={selectedColor} 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
+      <ColorModal
+        color={selectedColor}
+        isOpen={isModalOpen}
+        onClose={closeModal}
       />
 
       {/* Custom CSS (Keeping for completeness) */}

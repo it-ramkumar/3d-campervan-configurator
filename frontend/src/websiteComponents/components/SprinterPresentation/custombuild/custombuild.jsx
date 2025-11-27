@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, ChevronRight, Calendar, CheckCircle, ArrowRight } from "lucide-react";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,15 +49,15 @@ const STEP_DATA = {
 
 export default function CustomBuildProcess() {
   const containerRef = useRef(null);
-  
+
   // --- STATE: Manage Interactive Modals ---
-  const [activeModal, setActiveModal] = useState(null); 
+  const [activeModal, setActiveModal] = useState(null);
   const [showInquiry, setShowInquiry] = useState(false);
 
   // --- GSAP ANIMATIONS ---
   useEffect(() => {
     const ctx = gsap.context(() => {
-      
+
       // 1. Header Animations
       gsap.from(".header-anim", {
         y: 40, opacity: 0, duration: 1.0, stagger: 0.1, ease: "power3.out",
@@ -73,7 +74,7 @@ export default function CustomBuildProcess() {
         });
 
         const q = gsap.utils.selector(row);
-        
+
         // Line Fills & Dots
         gsap.to(q(".line-fill-top"), {
           height: "100%", ease: "none",
@@ -126,14 +127,14 @@ export default function CustomBuildProcess() {
       {activeModal && STEP_DATA[activeModal] && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div 
-            onClick={() => setActiveModal(null)} 
+          <div
+            onClick={() => setActiveModal(null)}
             className="absolute inset-0 bg-[#1a1f2e]/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300"
           ></div>
-          
+
           {/* Modal Content - REDUCED MAX-WIDTH */}
           <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-            <button 
+            <button
               onClick={() => setActiveModal(null)}
               className="absolute top-3 right-3 z-10 p-1.5 bg-white/80 hover:bg-white rounded-full transition-colors"
             >
@@ -143,9 +144,9 @@ export default function CustomBuildProcess() {
             <div className="grid grid-cols-1 md:grid-cols-2">
               {/* Left: Image */}
               <div className="h-40 md:h-full bg-gray-100">
-                <img 
-                  src={STEP_DATA[activeModal].image} 
-                  alt={STEP_DATA[activeModal].title} 
+                <ImageWithSkeleton click={true}
+                  src={STEP_DATA[activeModal].image}
+                  alt={STEP_DATA[activeModal].title}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -156,11 +157,11 @@ export default function CustomBuildProcess() {
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{STEP_DATA[activeModal].duration}</span>
                 </div>
-                
+
                 <h3 className="text-2xl font-serif text-[#1a1f2e] mb-3">
                   {STEP_DATA[activeModal].title}
                 </h3>
-                
+
                 <p className="text-gray-600 leading-relaxed mb-4 text-xs md:text-sm">
                   {STEP_DATA[activeModal].description}
                 </p>
@@ -185,13 +186,13 @@ export default function CustomBuildProcess() {
       ========================= */}
       {showInquiry && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
-            onClick={() => setShowInquiry(false)} 
+          <div
+            onClick={() => setShowInquiry(false)}
             className="absolute inset-0 bg-[#1a1f2e]/80 backdrop-blur-sm animate-in fade-in duration-300"
           ></div>
-          
+
           <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 animate-in slide-in-from-bottom-8 duration-300">
-            <button 
+            <button
               onClick={() => setShowInquiry(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-[#1a1f2e]"
             >
@@ -222,7 +223,7 @@ export default function CustomBuildProcess() {
       {/* --- Header Section --- */}
       <div className="header-section flex flex-col items-center justify-center pt-20 pb-10 px-6 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-32 bg-gradient-to-b from-transparent to-[#1a1f2e]/10"></div>
-        
+
         <span className="header-anim mb-6 px-3 py-1 border border-[#1a1f2e]/10 rounded-full text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 bg-white">
           Bespoke Conversions
         </span>
@@ -240,17 +241,17 @@ export default function CustomBuildProcess() {
 
       {/* --- Timeline Section --- */}
       <div className="relative max-w-[1200px] mx-auto px-4 md:px-10">
-        
+
         {/* ROW 1: Vehicle Sourcing */}
         <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0">
           {/* MODIFIED: Changed alignment from md:text-right to md:text-left and md:self-end to md:self-start */}
           <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-1 py-8">
             <h3 className="text-2xl md:text-3xl font-serif text-[#1a1f2e] mb-4">Vehicle Sourcing</h3>
-            <p className="text-sm text-gray-700 font-normal leading-snug mb-3"> 
-              Bring your Sprinter for inspection, or let us source a discounted new van 
+            <p className="text-sm text-gray-700 font-normal leading-snug mb-3">
+              Bring your Sprinter for inspection, or let us source a discounted new van
               via our Mercedes dealership partnerships that perfectly matches your needs and requirements.
             </p>
-            <button 
+            <button
               onClick={() => setActiveModal('step1')}
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
             >
@@ -266,19 +267,19 @@ export default function CustomBuildProcess() {
             <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
               <div className="w-1 h-1 bg-white rounded-full"></div>
             </div>
-            
-            <div 
+
+            <div
               onClick={() => setActiveModal('step1')}
               className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
             >
               <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <img src={STEP_DATA.step1.image} alt="Vehicle Sourcing" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <ImageWithSkeleton click={true} src={STEP_DATA.step1.image} alt="Vehicle Sourcing" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#1a1f2e] text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
                 Immediate
               </div>
             </div>
-            
+
             <div className="relative w-[3px] flex-grow min-h-28 mt-4">
               <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
               <div className="line-fill-bottom absolute top-0 left-0 w-full bg-[#1a1f2e] h-0"></div>
@@ -298,19 +299,19 @@ export default function CustomBuildProcess() {
             <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
               <div className="w-1 h-1 bg-white rounded-full"></div>
             </div>
-            
-            <div 
+
+            <div
               onClick={() => setActiveModal('step2')}
               className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
             >
               <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <img src={STEP_DATA.step2.image} alt="Design Phase" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <ImageWithSkeleton click={true} src={STEP_DATA.step2.image} alt="Design Phase" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-white border border-[#1a1f2e] text-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
                 1 Month
               </div>
             </div>
-            
+
             <div className="relative w-[3px] flex-grow min-h-28 mt-4">
               <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
               <div className="line-fill-bottom absolute top-0 left-0 w-full bg-[#1a1f2e] h-0"></div>
@@ -320,10 +321,10 @@ export default function CustomBuildProcess() {
           <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8">
             <h3 className="text-2xl md:text-3xl font-serif text-[#1a1f2e] mb-4">Collaborative Design</h3>
             <p className="text-sm text-gray-700 font-normal leading-snug mb-3">
-              Define needs via Zoom, visualize with 3D renderings, and refine until 
+              Define needs via Zoom, visualize with 3D renderings, and refine until
               your vision is perfect.
             </p>
-            <button 
+            <button
               onClick={() => setActiveModal('step2')}
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
             >
@@ -338,10 +339,10 @@ export default function CustomBuildProcess() {
           <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-1 py-8">
             <h3 className="text-2xl md:text-3xl font-serif text-[#1a1f2e] mb-4">Engineering & Planning</h3>
             <p className="text-sm text-gray-700 font-normal leading-snug mb-3">
-              Optimize safety and functionality with engineers, then approve final blueprints 
+              Optimize safety and functionality with engineers, then approve final blueprints
               and premium materials.
             </p>
-            <button 
+            <button
               onClick={() => setActiveModal('step3')}
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
             >
@@ -357,19 +358,19 @@ export default function CustomBuildProcess() {
             <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
               <div className="w-1 h-1 bg-white rounded-full"></div>
             </div>
-            
-            <div 
+
+            <div
               onClick={() => setActiveModal('step3')}
               className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
             >
               <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <img src={STEP_DATA.step3.image} alt="Engineering" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <ImageWithSkeleton click={true} src={STEP_DATA.step3.image} alt="Engineering" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-white border border-[#1a1f2e] text-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
                 2 Months
               </div>
             </div>
-            
+
             <div className="relative w-[3px] flex-grow min-h-28 mt-4">
               <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
               <div className="line-fill-bottom absolute top-0 left-0 w-full bg-[#1a1f2e] h-0"></div>
@@ -400,19 +401,19 @@ export default function CustomBuildProcess() {
             <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
               <div className="w-1 h-1 bg-white rounded-full"></div>
             </div>
-            
-            <div 
+
+            <div
               onClick={() => setActiveModal('step4')}
               className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
             >
               <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <img src={STEP_DATA.step4.image} alt="Build Assembly" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <ImageWithSkeleton click={true} src={STEP_DATA.step4.image} alt="Build Assembly" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-white border border-[#1a1f2e] text-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
                 3-4 Months
               </div>
             </div>
-            
+
             <div className="relative w-[3px] flex-grow min-h-28 mt-4">
               <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
               <div className="line-fill-bottom absolute top-0 left-0 w-full bg-[#1a1f2e] h-0"></div>
@@ -424,7 +425,7 @@ export default function CustomBuildProcess() {
             <p className="text-sm text-gray-700 font-normal leading-snug mb-3">
               Craft interiors (2 months), upgrade exteriors (1 month), with weekly progress updates.
             </p>
-            <button 
+            <button
               onClick={() => setActiveModal('step4')}
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
             >
@@ -444,13 +445,13 @@ export default function CustomBuildProcess() {
             <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
               <div className="w-1 h-1 bg-white rounded-full"></div>
             </div>
-            
-            <div 
+
+            <div
               onClick={() => setActiveModal('step5')}
               className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
             >
               <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <img src={STEP_DATA.step5.image} alt="Delivery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <ImageWithSkeleton click={true} src={STEP_DATA.step5.image} alt="Delivery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
             </div>
             <div className="w-[3px] h-32 bg-gradient-to-b from-[#1a1f2e] to-transparent mt-4 opacity-20"></div>
@@ -459,10 +460,10 @@ export default function CustomBuildProcess() {
           <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8">
             <h3 className="text-2xl md:text-3xl font-serif text-[#1a1f2e] mb-4">Delivery & Beyond</h3>
             <p className="text-sm text-gray-700 font-normal leading-snug mb-3">
-              Master your van with a walkthrough and test drive, backed by comprehensive warranties 
+              Master your van with a walkthrough and test drive, backed by comprehensive warranties
               and 24/7 support.
             </p>
-            <button 
+            <button
               onClick={() => setActiveModal('step5')}
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
             >
@@ -475,7 +476,7 @@ export default function CustomBuildProcess() {
       {/* --- Pre-Build Vans Section (With Click Functionality) --- */}
       <div className="pre-build-section pt-6 pb-8 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto flex flex-col items-center border-t border-gray-100 pt-6">
-          
+
           <span className="pre-build-anim mb-4 text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400">
             Ready for Adventure
           </span>
@@ -487,19 +488,19 @@ export default function CustomBuildProcess() {
           <p className="pre-build-anim text-center text-sm text-gray-500 font-light max-w-[700px] mb-10 leading-relaxed">
             Click the van below to request a spec sheet and reserve your adventure vehicle today.
           </p>
-          
-          <div 
+
+          <div
             onClick={() => setShowInquiry(true)}
             className="pre-build-anim w-full max-w-4xl relative group cursor-pointer"
           >
             <div className="absolute -inset-1 bg-[#1a1f2e] rounded-[1.5rem] blur-lg opacity-5 group-hover:opacity-10 transition-opacity duration-1000"></div>
-            
+
             <div className="relative overflow-hidden rounded-[1rem] border border-gray-100 shadow-xl bg-white">
-              
-              <img 
-                src="/sprinter/image 12.png" 
-                alt="Pre-built Vans" 
-                className="w-full max-h-[400px] object-cover transform group-hover:scale-[1.01] transition-transform duration-[1.2s] ease-out" 
+
+              <ImageWithSkeleton click={true}
+                src="/sprinter/image 12.png"
+                alt="Pre-built Vans"
+                className="w-full max-h-[400px] object-cover transform group-hover:scale-[1.01] transition-transform duration-[1.2s] ease-out"
               />
             </div>
           </div>

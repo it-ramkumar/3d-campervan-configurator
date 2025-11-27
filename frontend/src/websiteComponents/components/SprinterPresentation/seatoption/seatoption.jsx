@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -269,7 +270,7 @@ const SafetyIcon = () => (
 // Icon mapping based on content keywords (No change needed)
 const getIconForContent = (content) => {
   const lowerContent = content.toLowerCase();
-  
+
   if (lowerContent.includes('seat') || lowerContent.includes('sitting')) return <SeatIcon />;
   if (lowerContent.includes('people') || lowerContent.includes('person') || lowerContent.includes('capacity')) return <PeopleIcon />;
   if (lowerContent.includes('cargo') || lowerContent.includes('space') || lowerContent.includes('storage')) return <CargoIcon />;
@@ -280,7 +281,7 @@ const getIconForContent = (content) => {
   if (lowerContent.includes('roof') || lowerContent.includes('rail') || lowerContent.includes('rack')) return <RoofIcon />;
   if (lowerContent.includes('hinge') || lowerContent.includes('door') || lowerContent.includes('install')) return <HingeIcon />;
   if (lowerContent.includes('safety') || lowerContent.includes('durable') || lowerContent.includes('secure')) return <SafetyIcon />;
-  
+
   return <ComfortIcon />; // Default icon
 };
 
@@ -326,16 +327,16 @@ const InfoCard = ({ image, title, items, largeText = false }) => {
   };
 
   return (
-    <div 
+    <div
       ref={cardRef}
-      className="group relative bg-gradient-to-br from-[#1a1f2e] to-[#2d3748] rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-gray-700" 
+      className="group relative bg-gradient-to-br from-[#1a1f2e] to-[#2d3748] rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 border border-gray-700"
     >
       <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
       <div className="absolute inset-0 bg-emerald-400/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
+
       <div className="p-1.5"> {/* Further reduced padding */}
-        <div className="relative overflow-hidden rounded-lg"> 
-          <img
+        <div className="relative overflow-hidden rounded-lg">
+          <ImageWithSkeleton
             src={image}
             alt={title}
             className="w-full h-32 sm:h-40 object-cover transition-transform duration-700 group-hover:scale-105" // Reduced image height (h-32 / sm:h-40)
@@ -348,18 +349,18 @@ const InfoCard = ({ image, title, items, largeText = false }) => {
         <h3 className="text-base font-bold text-center mb-2 sm:mb-3 text-white group-hover:text-emerald-50 transition-colors duration-300"> {/* Set title to base font size, removed desktop scaling */}
           {title}
         </h3>
-        
+
         <ul className="space-y-1 sm:space-y-2"> {/* Reduced space between items */}
           {items.map((item, index) => (
-            <li 
-              key={index} 
+            <li
+              key={index}
               ref={addToItemsRef}
               className="flex items-start gap-1.5 text-gray-200 group-hover:text-gray-100 transition-colors duration-300 group/item hover:bg-white/5 rounded-md p-1 -mx-1 transition-all duration-300" // Reduced gap and padding/margin
             >
               <div className="mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                 {getIconForContent(item)}
               </div>
-              <span 
+              <span
                 className="text-xs leading-relaxed flex-1 group-hover/item:translate-x-1.5 transition-transform duration-300" // Forced all list text to text-xs
                 dangerouslySetInnerHTML={{ __html: item }}
               />
@@ -423,7 +424,7 @@ const FeatureItem = ({ text, index }) => {
     };
 
     return (
-      <div 
+      <div
         ref={itemRef}
         className="flex items-start gap-3 text-gray-200 group-hover:text-gray-100 transition-colors duration-300 cursor-pointer group/item p-2 rounded-lg hover:bg-white/5 transition-all duration-300" // Reduced gap and padding
         onMouseEnter={handleMouseEnter}
@@ -488,26 +489,26 @@ export default function VanOptionsPage() {
   return (
     <main ref={mainRef} className="bg-white text-gray-900 font-serif min-h-screen overflow-hidden">
       {/* REDUCED VERTICAL PADDING */}
-      <div className="container mx-auto px-4 py-10 md:py-16"> 
-        
+      <div className="container mx-auto px-4 py-10 md:py-16">
+
         {/* ==================================== */}
         {/* SEAT OPTIONS SECTION (Further Reduced) */}
         {/* ==================================== */}
-        <section className="mb-12 md:mb-16"> 
+        <section className="mb-12 md:mb-16">
           {/* REDUCED TITLE FONT SIZE */}
-          <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#1a1f2e] mb-5 md:mb-6"> 
+          <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#1a1f2e] mb-5 md:mb-6">
             Seat Options
           </h1>
 
           {/* REDUCED MARGIN AND PILL SIZE */}
-          <div className="pill-item flex justify-center mb-6 md:mb-10"> 
-            <span className="inline-block bg-gradient-to-r from-[#1a1f2e] to-[#2d3748] text-white text-sm sm:text-base font-semibold rounded-full px-5 py-2.5 sm:px-6 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-default border border-gray-600 hover:border-emerald-400/50"> 
+          <div className="pill-item flex justify-center mb-6 md:mb-10">
+            <span className="inline-block bg-gradient-to-r from-[#1a1f2e] to-[#2d3748] text-white text-sm sm:text-base font-semibold rounded-full px-5 py-2.5 sm:px-6 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-default border border-gray-600 hover:border-emerald-400/50">
               Stocks Seats
             </span>
           </div>
 
           {/* REDUCED GAP AND MARGIN */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-16"> 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-16">
             <InfoCard
               image="/sprinter/Mask group-1.jpg"
               title="Cargo Van"
@@ -540,14 +541,14 @@ export default function VanOptionsPage() {
           </div>
 
           {/* REDUCED MARGIN AND PILL SIZE */}
-          <div className="pill-item flex justify-center mb-6 md:mb-10"> 
-            <span className="inline-block bg-gradient-to-r from-[#1a1f2e] to-[#2d3748] text-white text-sm sm:text-base font-semibold rounded-full px-5 py-2.5 sm:px-6 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-default border border-gray-600 hover:border-emerald-400/50"> 
+          <div className="pill-item flex justify-center mb-6 md:mb-10">
+            <span className="inline-block bg-gradient-to-r from-[#1a1f2e] to-[#2d3748] text-white text-sm sm:text-base font-semibold rounded-full px-5 py-2.5 sm:px-6 sm:py-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-default border border-gray-600 hover:border-emerald-400/50">
               After Market Seats
             </span>
           </div>
 
           {/* REDUCED GAP */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6"> 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
             <InfoCard
               image="/sprinter/Mask group-3.jpg"
               title="Comfort & Durability"
@@ -583,7 +584,7 @@ export default function VanOptionsPage() {
             />
           </div>
         </section>
-        
+
         {/* --- HR separator --- */}
         <hr className="my-8 md:my-12 border-gray-200" />
 
@@ -591,20 +592,20 @@ export default function VanOptionsPage() {
         {/* ==================================== */}
         {/* ROOF & HINGES SECTION (No change from last step, kept for completeness) */}
         {/* ==================================== */}
-        <section className="pt-10 md:pt-12"> 
+        <section className="pt-10 md:pt-12">
           {/* REDUCED TITLE FONT SIZE AND MARGIN */}
-          <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1a1f2e] mb-10 md:mb-12 max-w-4xl mx-auto leading-tight"> 
+          <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1a1f2e] mb-10 md:mb-12 max-w-4xl mx-auto leading-tight">
             Roof Tracks & 180-Degree Rear Door Hinges
           </h1>
 
           {/* FEATURE 1: Roof Tracks - REDUCED MARGIN */}
-          <div className="feature-section mb-10 md:mb-12"> 
+          <div className="feature-section mb-10 md:mb-12">
             <div className="group bg-gradient-to-br from-[#1a1f2e] to-[#2d3748] rounded-2xl overflow-hidden shadow-2xl hover:shadow-xl transition-all duration-500 border border-gray-700 hover:border-emerald-400/30">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {/* REDUCED PADDING */}
-                <div className="p-5 lg:p-8 flex flex-col justify-center order-2 lg:order-1"> 
+                <div className="p-5 lg:p-8 flex flex-col justify-center order-2 lg:order-1">
                   {/* REDUCED TITLE FONT SIZE */}
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300"> 
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
                     Roof Tracks
                   </h2>
                   <div className="space-y-3 sm:space-y-3">
@@ -619,8 +620,8 @@ export default function VanOptionsPage() {
                 </div>
                 {/* IMAGE SECTION - REDUCED HEIGHT */}
                 <div className="p-1.5 flex items-center justify-center order-1 lg:order-2">
-                  <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image"> 
-                    <img
+                  <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image">
+                    <ImageWithSkeleton
                       src="/sprinter/Rectangle 153.jpg"
                       alt="Van with roof tracks"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-105"
@@ -637,8 +638,8 @@ export default function VanOptionsPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {/* IMAGE SECTION - REDUCED HEIGHT */}
                 <div className="p-1.5 flex items-center justify-center">
-                  <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image"> 
-                    <img
+                  <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image">
+                    <ImageWithSkeleton
                       src="/sprinter/Rectangle 154.jpg"
                       alt="Van with 180-degree rear door hinges"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-105"
@@ -646,9 +647,9 @@ export default function VanOptionsPage() {
                   </div>
                 </div>
                 {/* REDUCED PADDING */}
-                <div className="p-5 lg:p-8 flex flex-col justify-center"> 
+                <div className="p-5 lg:p-8 flex flex-col justify-center">
                   {/* REDUCED TITLE FONT SIZE */}
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300"> 
+                  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
                     180-Degree Rear Door Hinges
                   </h2>
                   <div className="space-y-3 sm:space-y-3">

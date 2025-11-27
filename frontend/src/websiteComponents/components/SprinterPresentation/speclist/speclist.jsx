@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react"; 
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
@@ -507,10 +507,10 @@ const ToggleButton = ({ isCollapsed, onClick, sectionName }) => (
         className="w-full mt-3 flex items-center justify-center p-2.5 text-sm font-semibold rounded-xl text-gray-700 hover:bg-gray-200/50 transition-colors duration-300 border border-gray-200" // Reduced padding/margin
     >
         {isCollapsed ? `Show All ${sectionName}` : `Show Less ${sectionName}`}
-        <svg 
-            className={`w-4 h-4 ml-2 transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'}`} 
-            fill="none" 
-            stroke="currentColor" 
+        <svg
+            className={`w-4 h-4 ml-2 transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'}`}
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
         >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -523,7 +523,7 @@ const ToggleButton = ({ isCollapsed, onClick, sectionName }) => (
 
 export default function SprinterSpecs() {
   const containerRef = useRef(null);
-  
+
   // State to manage the collapsed status for each package and section
   const [collapsedState, setCollapsedState] = useState({});
 
@@ -557,7 +557,7 @@ export default function SprinterSpecs() {
         );
       });
 
-      gsap.fromTo(".feature-item", 
+      gsap.fromTo(".feature-item",
         { opacity: 0, x: -20 },
         {
           opacity: 1,
@@ -599,7 +599,7 @@ export default function SprinterSpecs() {
       <div className="flex flex-col gap-16"> {/* REDUCED GAP */}
         {packagesData.map((pkg, index) => {
           const isEven = index % 2 === 0;
-          
+
           // Determine collapsed state for each section
           const isFeaturesCollapsed = (pkg.features.length > collapsedItemCount) && !collapsedState[`${pkg.id}-features`];
           const isAvailabilityCollapsed = (pkg.availability.length > collapsedItemCount) && !collapsedState[`${pkg.id}-availability`];
@@ -638,7 +638,7 @@ export default function SprinterSpecs() {
                 <h3 className="text-xl md:text-2xl font-semibold mb-4 leading-tight text-gray-900">
                   {pkg.title}
                 </h3>
-                
+
                 {/* Package Description (REDUCED FONT SIZE AND MARGIN) */}
                 <div className="relative mb-8">
                   <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full"></div>
@@ -659,7 +659,7 @@ export default function SprinterSpecs() {
                       </div>
                       <h4 className="font-bold text-base md:text-lg text-gray-900">Key Features</h4> {/* Reduced font size */}
                     </div>
-                    
+
                     {/* Features List (REDUCED FONT SIZE) */}
                     <div className="space-y-3"> {/* Reduced space */}
                       {displayedFeatures.map((feature, i) => (
@@ -674,8 +674,8 @@ export default function SprinterSpecs() {
 
                     {/* Toggle Button for Features */}
                     {pkg.features.length > collapsedItemCount && (
-                        <ToggleButton 
-                            isCollapsed={isFeaturesCollapsed} 
+                        <ToggleButton
+                            isCollapsed={isFeaturesCollapsed}
                             onClick={() => toggleCollapse(pkg.id, 'features')}
                             sectionName="Features"
                         />
@@ -704,11 +704,11 @@ export default function SprinterSpecs() {
                         </div>
                       ))}
                     </div>
-                    
+
                     {/* Toggle Button for Availability */}
                     {pkg.availability.length > collapsedItemCount && (
-                        <ToggleButton 
-                            isCollapsed={isAvailabilityCollapsed} 
+                        <ToggleButton
+                            isCollapsed={isAvailabilityCollapsed}
                             onClick={() => toggleCollapse(pkg.id, 'availability')}
                             sectionName="Availability"
                         />
@@ -737,11 +737,11 @@ export default function SprinterSpecs() {
                         </div>
                       ))}
                     </div>
-                    
+
                     {/* Toggle Button for Benefits */}
                     {pkg.benefits.length > collapsedItemCount && (
-                        <ToggleButton 
-                            isCollapsed={isBenefitsCollapsed} 
+                        <ToggleButton
+                            isCollapsed={isBenefitsCollapsed}
                             onClick={() => toggleCollapse(pkg.id, 'benefits')}
                             sectionName="Benefits"
                         />
@@ -755,18 +755,18 @@ export default function SprinterSpecs() {
                 <div className="relative w-full max-w-[500px] group"> {/* REDUCED MAX-WIDTH */}
                   {/* Glow Effect (Reduced size/blur/opacity) */}
                   <div className={`absolute -inset-4 bg-gradient-to-r from-gray-700/15 via-gray-800/15 to-gray-700/15 rounded-[30px] opacity-30 blur-xl group-hover:opacity-50 transition-all duration-700 group-hover:scale-105`}></div>
-                  
+
                   {/* Main Image Container (Reduced roundedness/scale) */}
                   <div className="relative rounded-[20px] border border-white/30 overflow-hidden transform transition-all duration-700 group-hover:scale-[1.02] group-hover:shadow-xl backdrop-blur-sm">
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-gray-900/20 z-10"></div>
                     <div className="absolute inset-0 bg-gradient-to-r from-gray-800/10 to-gray-900/5 mix-blend-overlay z-10"></div>
-                    
-                    <img
+
+                    <ImageWithSkeleton
                       src={pkg.image}
                       alt={`${pkg.title} details`}
                       className="w-full h-full object-cover block transform transition-transform duration-1000 group-hover:scale-105"
                     />
-                    
+
                     {/* Shine Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 z-20"></div>
                   </div>

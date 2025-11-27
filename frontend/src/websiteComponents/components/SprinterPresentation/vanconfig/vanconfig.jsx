@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +16,7 @@ const CustomSelect = ({ label, options, value, onChange, placeholder }) => {
       <label className="text-xs font-bold text-gray-600 mb-1 block uppercase tracking-wide">
         {label}
       </label>
-      
+
       {/* The Selection Box */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -86,30 +87,30 @@ export default function SprinterGuidePage() {
 
   // DATA OPTIONS
   const wheelbaseOptions = [
-    { 
+    {
       id: "swb",
       title: "SWB (Short): 144\"",
-      shortLabel: "SWB (144\")", 
-      image: "/sprinter/11.png", 
+      shortLabel: "SWB (144\")",
+      image: "/sprinter/11.png",
       description: "SWB (Short wheelbase)\n144” wb (19.4 ft long)",
       features: ["Urban", "Easy Park", "Efficient"],
       dimensions: { length: "19.4 ft", cargoVolume: "319 cu ft" }
     },
-    { 
+    {
       id: "lwb",
-      title: "LWB (Long): 170\"", 
-      shortLabel: "LWB (170\")", 
-      image: "/sprinter/11.png", 
+      title: "LWB (Long): 170\"",
+      shortLabel: "LWB (170\")",
+      image: "/sprinter/11.png",
       description: "LWB (Long wheelbase)\n170” wb (22.5 ft long)",
       features: ["Balanced", "Family", "Spacious"],
       dimensions: { length: "22.5 ft", cargoVolume: "489 cu ft" }
     },
-    { 
+    {
       id: "elwb",
       // MODIFIED TITLE: Reduced font size for better fit
-      title: "ELWB (Extra-Long): 170\" Ext.", 
-      shortLabel: "ELWB (170\" Ext)", 
-      image: "/sprinter/11.png", 
+      title: "ELWB (Extra-Long): 170\" Ext.",
+      shortLabel: "ELWB (170\" Ext)",
+      image: "/sprinter/11.png",
       description: "ELWB (Extra Long Wheelbase) 170” wb with a longer rear tail part (24.2 ft long)",
       features: ["Max Space", "Full Build", "Large"],
       dimensions: { length: "24.2 ft", cargoVolume: "587 cu ft" }
@@ -117,29 +118,29 @@ export default function SprinterGuidePage() {
   ];
 
   const roofHeightOptions = [
-    { 
+    {
       id: "h1",
       title: "H1 (Standard)",
-      shortLabel: "H1 (Standard)", 
-      image: "/sprinter/Untitled design (17) 1.png", 
+      shortLabel: "H1 (Standard)",
+      image: "/sprinter/Untitled design (17) 1.png",
       description: "68.5” interior - Limited standing room",
       features: ["Budget", "Garage", "MPG"],
       dimensions: { interiorHeight: "68.5 inches" }
     },
-    { 
+    {
       id: "h2",
-      title: "H2 (High)", 
-      shortLabel: "H2 (High Roof)", 
-      image: "/sprinter/Untitled design (18) 1.png", 
+      title: "H2 (High)",
+      shortLabel: "H2 (High Roof)",
+      image: "/sprinter/Untitled design (18) 1.png",
       description: "79.9” interior - Comfortable for most users",
       features: ["Comfort", "Popular", "Balance"],
       dimensions: { interiorHeight: "79.9 inches" }
     },
-    { 
+    {
       id: "h3",
       title: "H3 (Super High)",
-      shortLabel: "H3 (Super High)", 
-      image: "/sprinter/image 5.png", 
+      shortLabel: "H3 (Super High)",
+      image: "/sprinter/image 5.png",
       description: "89\" Interior - Ample headroom for tall builds",
       features: ["Tall", "Luxury", "Max Room"],
       dimensions: { interiorHeight: "89 inches" }
@@ -151,7 +152,7 @@ export default function SprinterGuidePage() {
       id: "cargo",
       image: "/sprinter/image 13.jpg",
       title: "Cargo Van",
-      shortLabel: "Cargo Van", 
+      shortLabel: "Cargo Van",
       description: "The Cargo van prioritizes maximum cargo capacity with only a few seats.",
       features: ["Max Cargo", "Few Seats", "Custom"],
       dimensions: { seating: "2-3 seats" }
@@ -159,8 +160,8 @@ export default function SprinterGuidePage() {
     {
       id: "crew",
       image: "/sprinter/image 14.jpg",
-      title: "Crew Van", 
-      shortLabel: "Crew Van", 
+      title: "Crew Van",
+      shortLabel: "Crew Van",
       description: "The Crew Van strikes a balance, offering more passenger seating and slightly less cargo space.",
       features: ["More Seats", "Ready", "Versatile"],
       dimensions: { seating: "5+ seats" }
@@ -198,7 +199,7 @@ export default function SprinterGuidePage() {
         {calculatorOpen && (
           // Uses strict width constraints to prevent overflow
           <div className="absolute bottom-16 left-0 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border-2 border-gray-200 p-5 w-[85vw] max-w-[300px] max-h-[75vh] overflow-y-auto animate-in slide-in-from-bottom-4 fade-in duration-300 scrollbar-hide">
-            
+
             {/* Header */}
             <div className="flex justify-between items-center mb-6 border-b border-gray-200 pb-3">
               <h3 className="text-base font-black text-gray-800 flex items-center">
@@ -212,10 +213,10 @@ export default function SprinterGuidePage() {
                 ×
               </button>
             </div>
-            
+
             <div className="space-y-2">
               {/* Custom Wheelbase Dropdown */}
-              <CustomSelect 
+              <CustomSelect
                 label="Wheelbase"
                 placeholder="Select wheelbase..."
                 options={wheelbaseOptions}
@@ -224,7 +225,7 @@ export default function SprinterGuidePage() {
               />
 
               {/* Custom Roof Dropdown */}
-              <CustomSelect 
+              <CustomSelect
                 label="Roof Height"
                 placeholder="Select roof..."
                 options={roofHeightOptions}
@@ -233,7 +234,7 @@ export default function SprinterGuidePage() {
               />
 
               {/* Custom Type Dropdown */}
-              <CustomSelect 
+              <CustomSelect
                 label="Van Type"
                 placeholder="Select type..."
                 options={vanTypes}
@@ -291,23 +292,23 @@ export default function SprinterGuidePage() {
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-gray-50/80 to-gray-100/80 rounded-xl -z-10"></div>
             <div className="absolute -inset-3 bg-white/50 rounded-xl blur-lg -z-20 hidden md:block"></div>
-            
+
             {/* Adjusted max-width for content to max-w-3xl (increased width) */}
             <div className="space-y-3 md:space-y-4 relative z-10 py-7 md:py-8 px-3 max-w-3xl mx-auto">
               <div className="anim-content">
                 <div className="w-10 md:w-16 h-0.5 bg-gradient-to-r from-[#364153] to-gray-600 mx-auto mb-3 md:mb-4 rounded-full"></div>
                 {/* Increased text size on desktop (lg:text-xl) and wider content area */}
                 <p className="text-sm md:text-lg lg:text-xl leading-relaxed text-gray-800 font-light">
-                  The Mercedes-Benz Sprinter has a versatile family of vehicles, each 
-                  engineered to excel in a specific role. With multiple models, 
+                  The Mercedes-Benz Sprinter has a versatile family of vehicles, each
+                  engineered to excel in a specific role. With multiple models,
                   configurations, and capabilities, the selection can seem difficult.
                 </p>
               </div>
-              
+
               <div className="anim-content">
                 {/* Increased text size on desktop (lg:text-xl) */}
                 <p className="text-sm md:text-lg lg:text-xl leading-relaxed text-gray-800 font-light">
-                  In this guide, we'll simplify the options so you can choose 
+                  In this guide, we'll simplify the options so you can choose
                   the right Sprinter van for custom conversion.
                 </p>
                 <div className="w-10 md:w-16 h-0.5 bg-gradient-to-r from-gray-600 to-[#364153] mx-auto mt-3 md:mt-4 rounded-full"></div>
@@ -360,7 +361,7 @@ export default function SprinterGuidePage() {
                   <div className="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100 flex-grow flex items-center justify-center">
                     <div className="relative w-full">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-md"></div>
-                      <img src={option.image} alt={option.title} className="w-full h-28 md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]" />
+                      <ImageWithSkeleton src={option.image} alt={option.title} className="w-full h-28 md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]" />
                     </div>
                   </div>
                   {/* Reduced padding and text size: p-3 md:p-4 */}
@@ -399,8 +400,8 @@ export default function SprinterGuidePage() {
           {/* MODIFIED: Reverted to grid-cols-1 on mobile, added max-w-xs to card */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5">
             {roofHeightOptions.map((option) => (
-              <div 
-                key={option.id} 
+              <div
+                key={option.id}
                 // MODIFIED: Apply max-w-xs and center on mobile, revert on desktop
                 className="anim-content group max-w-xs mx-auto w-full lg:max-w-none lg:mx-0"
               >
@@ -415,7 +416,7 @@ export default function SprinterGuidePage() {
                   <div className="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100 flex-grow flex items-center justify-center">
                     <div className="relative w-full">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-md"></div>
-                      <img src={option.image} alt={option.title} className="w-full h-28 md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]" />
+                      <ImageWithSkeleton src={option.image} alt={option.title} className="w-full h-28 md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]" />
                     </div>
                   </div>
                   {/* Reduced padding and text size: p-3 md:p-4 */}
@@ -452,8 +453,8 @@ export default function SprinterGuidePage() {
           {/* MODIFIED: Reverted to grid-cols-1 on mobile, added max-w-xs to card */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
             {vanTypes.map((van) => (
-              <div 
-                key={van.id} 
+              <div
+                key={van.id}
                 // MODIFIED: Apply max-w-xs and center on mobile, revert on desktop
                 className="anim-content group max-w-xs mx-auto w-full lg:max-w-none lg:mx-0"
               >
@@ -461,7 +462,7 @@ export default function SprinterGuidePage() {
                 <div className="relative bg-gradient-to-br from-gray-900 to-[#364153] rounded-lg shadow-md border-2 border-gray-800 transform transition-all duration-300 overflow-hidden group-hover:scale-100 lg:group-hover:scale-[1.01] group-hover:shadow-lg">
                   {/* Reduced height: h-52 md:h-64 */}
                   <div className="relative h-52 md:h-64 overflow-hidden">
-                    <img src={van.image} alt={van.title} className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-[1.03]" />
+                    <ImageWithSkeleton src={van.image} alt={van.title} className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-[1.03]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
                     {/* Reduced padding and text size */}
                     <div className="absolute top-3 left-3 md:top-4 md:left-4">
