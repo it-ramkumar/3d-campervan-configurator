@@ -4,11 +4,14 @@ import { gsap } from "gsap";
 import { Link, useLocation } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Menu } from "lucide-react"
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import { getAllBlogs } from "../../../api/blog/getAllBlogs";
+
 
 export default function Navbar({ forceMobile }) {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [blogs, setBlogs] = useState([]);
   const megaMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -75,7 +78,16 @@ export default function Navbar({ forceMobile }) {
             { label: "Send an Inquiry", link: "/inquiry" },
           ],
         },
+        {
+          title: "Insights",
+          items: [
+            { label: "Exterior Choices", link: "/innovation" },
+            { label: "Interior Choices", link: "/interior-choice" },
+            { label: "Sprinter Guide", link: "/sprinter-guide" },
+          ],
+        },
       ],
+
     },
     "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
     layout: {
@@ -113,13 +125,8 @@ export default function Navbar({ forceMobile }) {
           ],
         },
         {
-          title: "Insights",
-          items: [
-            { label: "Exterior Choices", link: "/innovation" },
-            { label: "Interior Choices", link: "/interior-choice" },
-            { label: "Sprinter Guide", link: "/sprinter-guide" },
-            { label: "Blog", link: "/blogs" },
-          ],
+          title: "Blog",
+          items: [],
         },
       ],
     },
@@ -151,6 +158,18 @@ export default function Navbar({ forceMobile }) {
   const isParentActive = (key) => routes[key]?.includes(location.pathname);
   const isChildActive = (path) => location.pathname === path;
 
+useEffect(() => {
+  const fetchBlogs = async () => {
+    try {
+      const result = await getAllBlogs();
+      setBlogs(result.data || []);
+    } catch (err) {
+      console.log("Error loading blogs", err);
+    }
+  };
+  fetchBlogs();
+}, [location.pathname]);
+
   return (
     <>
       <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
@@ -171,111 +190,111 @@ export default function Navbar({ forceMobile }) {
           )}
 
           {/* CENTER MENU (Desktop) */}
-     {/* CENTER MENU (Desktop) */}
-<div
-  className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
->
-  <Link
-    to="#"
-    onMouseEnter={() => handleMenuHover("CustomBuild")}
-    onMouseLeave={handleMenuLeave}
-    className={`flex items-center gap-1 ${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
-  >
-    Custom Build
-    <ChevronDown className="w-3 h-3" />
-  </Link>
+          {/* CENTER MENU (Desktop) */}
+          <div
+            className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
+          >
+            <Link
+              to="#"
+              onMouseEnter={() => handleMenuHover("CustomBuild")}
+              onMouseLeave={handleMenuLeave}
+              className={`flex items-center gap-1 ${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Custom Build
+              <ChevronDown className="w-3 h-3" />
+            </Link>
 
-  <Link
-    to="/vans-for-sale"
-    onMouseEnter={() => handleMenuHover("vans-for-sale")}
-    onMouseLeave={handleMenuLeave}
-    className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
-  >
-    Vans For Sale
-    <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
-      SALE
-    </span>
-  </Link>
+            <Link
+              to="/vans-for-sale"
+              onMouseEnter={() => handleMenuHover("vans-for-sale")}
+              onMouseLeave={handleMenuLeave}
+              className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Vans For Sale
+              <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
+                SALE
+              </span>
+            </Link>
 
-  <Link
-    to="/layouts"
-    onMouseEnter={() => handleMenuHover("layout")}
-    onMouseLeave={handleMenuLeave}
-    className={`flex items-center gap-1 ${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
-  >
-    Layouts
-    <ChevronDown className="w-3 h-3" />
-  </Link>
+            <Link
+              to="/layouts"
+              onMouseEnter={() => handleMenuHover("layout")}
+              onMouseLeave={handleMenuLeave}
+              className={`flex items-center gap-1 ${isParentActive("layout") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Layouts
+              <ChevronDown className="w-3 h-3" />
+            </Link>
 
-  <Link
-    to="/contact"
-    onMouseEnter={() => handleMenuHover("contact-us")}
-    onMouseLeave={handleMenuLeave}
-    className={`${isParentActive("contact-us") ? "text-indigo-600 font-semibold" : ""}`}
-  >
-    Contact
-  </Link>
+            <Link
+              to="/contact"
+              onMouseEnter={() => handleMenuHover("contact-us")}
+              onMouseLeave={handleMenuLeave}
+              className={`${isParentActive("contact-us") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Contact
+            </Link>
 
-  <Link
-    to="#"
-    onMouseEnter={() => handleMenuHover("discover")}
-    onMouseLeave={handleMenuLeave}
-    className={`flex items-center gap-1 ${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
-  >
-    Discover
-    <ChevronDown className="w-3 h-3" />
-  </Link>
-</div>
+            <Link
+              to="#"
+              onMouseEnter={() => handleMenuHover("discover")}
+              onMouseLeave={handleMenuLeave}
+              className={`flex items-center gap-1 ${isParentActive("discover") ? "text-indigo-600 font-semibold" : ""}`}
+            >
+              Discover
+              <ChevronDown className="w-3 h-3" />
+            </Link>
+          </div>
 
 
           {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
           <div className="flex items-center gap-4">
             {!forceMobile && <Link
-  to="/contact"
-  className="
+              to="/contact"
+              className="
     hidden md:flex text-sm bg-black text-white p-1 rounded-xl font-bold
     shadow-5xl shadow-black hover:shadow-black/70 hover:shadow-2xl
     transition-all duration-500 transform hover:-translate-y-1 hover:scale-105
     hover:animate-none relative overflow-hidden group
   "
->
-  {/* GLOW BACKGROUND RING */}
-  <div
-    className="absolute inset-0 rounded-xl opacity-60 blur-lg
+            >
+              {/* GLOW BACKGROUND RING */}
+              <div
+                className="absolute inset-0 rounded-xl opacity-60 blur-lg
               bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
                group-hover:opacity-100 transition-all duration-500">
-  </div>
+              </div>
 
-  {/* COLORFUL BORDER */}
-  <div
-    className="absolute inset-0 rounded-xl p-[2px]
+              {/* COLORFUL BORDER */}
+              <div
+                className="absolute inset-0 rounded-xl p-[2px]
                bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
                animate-[spin_6s_linear_infinite]">
-  </div>
+              </div>
 
-  {/* INNER BUTTON */}
-  <div className="relative z-10 bg-white text-black rounded-xl px-4 py-2.5 flex items-center">
-    Book Free Consultation
+              {/* INNER BUTTON */}
+              <div className="relative z-10 bg-white text-black rounded-xl px-4 py-2.5 flex items-center">
+                Book Free Consultation
 
-    <svg
-      className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-    </svg>
-  </div>
+                <svg
+                  className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+              </div>
 
-  {/* PING DOT */}
-  <span className="absolute flex h-6 w-6 -top-2 -right-2">
-    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
-    <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
-  </span>
-</Link>
+              {/* PING DOT */}
+              <span className="absolute flex h-6 w-6 -top-2 -right-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
+                <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
+              </span>
+            </Link>
 
 
-}
+            }
 
 
             <Menu className={`${forceMobile ? "" : "md:hidden"} z-10`}
@@ -303,16 +322,33 @@ export default function Navbar({ forceMobile }) {
                 <div key={idx} className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"}`}>
                   <h3 className="text-xl font-semibold text-indigo-600 mb-4">{section.title}</h3>
                   <ul className="space-y-3">
-                    {section.items.map((item, index) => (
-                      <li key={index}>
-                        <Link
-                          to={item.link}
-                          className={`block py-1 ${isChildActive(item.link) ? "text-indigo-600 font-semibold" : "text-gray-700 hover:text-indigo-600"}`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {section.title === "Blog" ? (
+                      blogs?.slice(0, 4).map((blog) => (
+                        <li key={blog.id}>
+                          <Link
+                           to={`/blog-detail/${blog._id}`}
+                            className={`block py-1 text-gray-700 hover:text-indigo-600`}
+                          >
+                             <span>{blog.title}</span>
+          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">--→</span>
+        </Link>
+                        </li>
+                      ))
+                    ) : (
+                      section.items.map((item, index) => (
+                        <li key={index}>
+                          <Link
+                            to={item.link}
+                            className={`block py-1 ${isChildActive(item.link)
+                                ? "text-indigo-600 font-semibold"
+                                : "text-gray-700 hover:text-indigo-600"
+                              }`}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))
+                    )}
                   </ul>
                 </div>
               ))}
@@ -368,18 +404,37 @@ export default function Navbar({ forceMobile }) {
                           <div key={secIdx} className="mb-3">
                             <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
                             <ul className="space-y-2">
-                              {section.items.map((item, itemIdx) => (
-                                <li key={itemIdx}>
-                                  <Link
-                                    to={item.link}
-                                    className={`block py-1 ${isChildActive(item.link) ? "text-indigo-600 font-semibold" : "text-gray-700 hover:text-indigo-600"}`}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                  >
-                                    {item.label}
-                                  </Link>
-                                </li>
-                              ))}
+                              {section.title === "Blog" ? (
+                                blogs?.slice(0, 4).map((blog) => (
+                                  <li key={blog.id}>
+                                    <Link
+                                      to={`/blog-detail/${blog._id}`}
+                                      className="block py-1 text-gray-700 hover:text-indigo-600"
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                    <span>{blog.title}</span>
+          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">--→</span>
+                                    </Link>
+                                  </li>
+                                ))
+                              ) : (
+                                section.items.map((item, itemIdx) => (
+                                  <li key={itemIdx}>
+                                    <Link
+                                      to={item.link}
+                                      className={`block py-1 ${isChildActive(item.link)
+                                          ? "text-indigo-600 font-semibold"
+                                          : "text-gray-700 hover:text-indigo-600"
+                                        }`}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                      {item.label}
+                                    </Link>
+                                  </li>
+                                ))
+                              )}
                             </ul>
+
                           </div>
                         ))}
                       </div>
