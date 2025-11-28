@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { Link } from "react-router-dom";
 
 export default function BookingPage() {
 const [authUrl, setAuthUrl] = useState("");
@@ -262,8 +263,15 @@ const generateCalendar = () => {
       <div>
 
         <div className="flex justify-start mb-8">
-          <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200">
-            <img src="/logobbv.jpg" alt="Logo" className="w-full h-full object-cover" />
+          <div className="overflow-hidden flex items-center justify-center">
+         <Link to="/" className="block">
+                <ImageWithSkeleton
+                  src="/images/logoo.webp"
+                  alt="BBV logo"
+                  className="w-[170px] h-[30px] border-none object-contain"
+                  click={true}
+                />
+              </Link>
           </div>
         </div>
 

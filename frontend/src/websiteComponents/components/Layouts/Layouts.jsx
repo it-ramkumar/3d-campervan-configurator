@@ -1,6 +1,9 @@
 import HeroSection from "../HeroSection/HeroSection";
 import Family from "./Family/Family";
 import Couples from "./Couples/Couples";
+// import SantaMonica from "./SantaMonica/SantaMonica";
+// import CustomBuid from "./CustomBuild/CustomBuild";
+// import Montreal from "./Montreal/Montreal";
 import Consultation from "../Consultation/Consultation";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
@@ -25,9 +28,19 @@ const newDescriptionText =
        <div className="tour-couples">
         <Couples />
       </div>
+       <div className="tour-santa-monica">
+        {/* <SantaMonica /> */}
+      </div>
+      <div className="tour-montreal">
+        {/* <Montreal /> */}
+      </div>
+      <div className="tour-custom-build">
+        {/* <CustomBuid /> */}
+      </div>
        <div className="tour-consultation">
         <Consultation vanForSale={true} />
       </div>
+
       <Footer/>
     </>
   );

@@ -38,7 +38,7 @@ const LongVan = lazy(() => import("../websiteComponents/components/CampervanLayo
 const CustomVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForCustom/CustomBuild"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
-const Testing = lazy(() => import("../websiteComponents/components/TestingChoicePage/TestInteriorChoices"));
+const Testing = lazy(() => import("../websiteComponents/components/Layouts/SantaMonica/SantaMonica"));
 const Financing = lazy(()=> import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(()=> import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 

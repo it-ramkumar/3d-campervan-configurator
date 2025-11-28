@@ -4,9 +4,13 @@ import React,{useState} from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { FaTwitter, FaInstagram,  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin , FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+
+
+
+
 const handleCopy = (text) => {
   navigator.clipboard.writeText(text);
-  // Optional: Add a toast notification or some other feedback here
   alert(`Copied: ${text}`);
 };
 
@@ -53,9 +57,14 @@ export default function Footer() {
 
           {/* Company Info */}
           <div className="space-y-6">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold">
-              BIG BEAR VANS
-            </h2>
+            <Link to="/" className="block">
+                           <ImageWithSkeleton
+                             src="/images/logooFooter.webp"
+                             alt="BBV logo"
+                             className="w-[170px] h-[30px] border-none object-contain"
+                             click={true}
+                           />
+                         </Link>
             <p className="text-gray-300 leading-relaxed max-w-xs text-sm">
               Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
             </p>
