@@ -67,6 +67,8 @@ const AppRoutes = () => {
       <Suspense fallback={<Loader/>}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/zain" element={<Testing />} />
+
           <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/showroom" element={<ShowRoom />} />
