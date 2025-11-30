@@ -262,9 +262,10 @@ export default function AvailableVans({availableVans}) {
                     <h3 className="font-noto-serif font-semibold text-white text-[28px] leading-tight mb-3">
                       {van.van_listing.model_name}
                     </h3>
-                    <p className="font-noto-serif text-white/80 text-sm leading-normal">
-                      {van.van_listing.description}
-                    </p>
+                 <p className="font-noto-serif text-white/80 text-sm leading-normal line-clamp-3">
+  {van.van_listing.description}
+</p>
+
                   </div>
                 </div>
               </div>
