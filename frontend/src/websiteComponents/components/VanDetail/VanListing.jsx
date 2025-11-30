@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import SeeMore from "../Common/SeeMore/SeeMore";
 
 // --- SVG Icons (Slight modification to allow for background color) ---
 const SvgInsulation = ({ className }) => (
@@ -337,9 +338,7 @@ const featuresList = [
       <div className="px-6 md:pl-16 md:pr-16 bg-gray-50">
         <div className="max-w-3xl text-left py-6">
           <h2 className="font-bold text-3xl mb-4">{vanDetail.van_listing.title}</h2>
-          <p className="text-lg font-normal leading-relaxed mb-6">
-            {vanDetail.van_listing.description}
-          </p>
+          <SeeMore text={vanDetail.van_listing.description} />
           {/* <Link to={"/contact"}> */}
           <button onClick={onConsultationClick}
             className="px-4 py-2 bg-[#2761FD] cursor-pointer text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5">
