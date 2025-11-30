@@ -208,7 +208,7 @@ export default function Buy() {
                         {slide?.van_listing?.title || "Ready to Go Van"}
                       </h3>
                       <div className="w-full max-w-[650px]">
-                        <p className="text-base font-normal mb-5">{slide?.van_listing?.description || "Ready to Go Van"}</p>
+                        <p className="text-base font-normal mb-5 leading-normal line-clamp-3">{slide?.van_listing?.description || "Ready to Go Van"}</p>
                         <div className="flex gap-4">
                           <Link to="/contact">
                             <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
@@ -229,7 +229,7 @@ export default function Buy() {
                       <h3 className="text-sm font-semibold leading-snug mb-1">
                         {slide?.van_listing?.title || "Ready to Go Van"}
                       </h3>
-                      <p className="text-xs font-light mb-2 line-clamp-2">
+                      <p className="text-xs font-light mb-2 leading-normal line-clamp-3">
                         {slide.van_listing?.description || "Ready to Go Van"}
                       </p>
                       <div className="flex gap-2">
