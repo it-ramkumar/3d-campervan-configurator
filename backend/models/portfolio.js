@@ -35,6 +35,14 @@ const vanListingSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+    size: {
+    type: String,
+    trim: true
+  },
+    roof: {
+    type: String,
+    trim: true
+  },
   description: {
     type: String,
     trim: true

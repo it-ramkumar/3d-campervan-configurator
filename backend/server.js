@@ -24,6 +24,7 @@ const InteriorSubCategory = require("./routes/interiorSubCategory")
 const ExteriorCategory = require("./routes/exteriorCat");
 const ExteriorSubCategory = require("./routes/exteriorSubCat")
 const ExteriorRoute = require("./routes/exteriorR")
+const LeadEmailsRoute = require("./routes/leadsEmail");
 
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api", InteriorSubCategory)
 app.use("/api", ExteriorCategory)
 app.use("/api", ExteriorRoute)
 app.use("/api", ExteriorSubCategory)
+app.use("/api", LeadEmailsRoute)
 
 
 

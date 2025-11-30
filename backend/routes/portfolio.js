@@ -6,7 +6,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3,deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-// CREATE new portfolio van
 router.post(
   "/",
   protect,
@@ -18,6 +17,7 @@ router.post(
     try {
       // Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || "{}");
+      console.log("Parsed van_listing:", van_listing);
       const detailed_features = JSON.parse(req.body.detailed_features || "[]");
       const media = JSON.parse(req.body.media || "[]"); // ✅ Simple string array for URLs
       const sold = req.body.sold === "true";
@@ -66,7 +66,6 @@ router.post(
         });
       }
 
-      // Create new PortfolioVan document
       const newPortfolio = new PortfolioVan({
         slug,
         van_listing: {
@@ -78,7 +77,7 @@ router.post(
           } : undefined,
         },
         sold,
-        category, // ✅ Multi-category array
+        category,
         gallery,
         detailed_features,
         media,

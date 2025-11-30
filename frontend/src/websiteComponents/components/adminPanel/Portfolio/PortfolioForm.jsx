@@ -22,6 +22,8 @@ export default function PortfolioForm({setSelected}) {
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreviews, setGalleryPreviews] = useState([]);
   const [existingGallery, setExistingGallery] = useState([]);
+  const [size, setSize] = useState("");
+  const [roof, setRoof] = useState("");
 
   // Basic Info
   const [title, setTitle] = useState("");
@@ -215,6 +217,8 @@ export default function PortfolioForm({setSelected}) {
         subtitle,
         description,
         price,
+        size,
+        roof,
         specifications: {
           make_model: makeModel,
           wheelbase,
@@ -319,6 +323,29 @@ formDataToSend.append("category", JSON.stringify(category));
                 onChange={(e) => setSubtitle(e.target.value)}
                 className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
               />
+
+            </div>
+               <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Roof</label>
+              <input
+                type="text"
+                placeholder="Enter roof"
+                value={roof}
+                onChange={(e) => setRoof(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+
+            </div>
+               <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
+              <input
+                type="text"
+                placeholder="Enter size"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+
             </div>
           </div>
 

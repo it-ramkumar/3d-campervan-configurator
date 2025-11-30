@@ -1,3 +1,87 @@
+// require("dotenv").config();
+// const express = require("express");
+// const router = express.Router();
+// const crypto = require('crypto');
+// const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // 64 hex characters
+// const Contact = require("../models/contactUs");
+// const nodemailer = require("nodemailer");
+// const { protect, adminOnly } = require("../middleware/authMiddleware")
+// const { decrypt } = require("../services/encryption");
+// const EmailSettings = require("../models/leadsEmail");
+
+
+
+
+// router.post("/", async (req, res) => {
+//   try {
+//     const { name, email, phone, message } = req.body;
+
+//     if (!name || !email || !phone || !message) {
+//       return res.status(400).json({ success: false, error: "All fields are required" });
+//     }
+
+//     // Save contact
+//     const newContact = new Contact({ name, email, phone, message });
+//     await newContact.save();
+
+//     // Get email settings
+//     const settings = await EmailSettings.getSettings();
+//     if (!settings) return res.status(500).json({ success: false, error: "Email settings not found" });
+
+//     const decryptedPassword = decrypt(settings.encryptedPassword);
+
+//     // Create nodemailer transporter
+//     const transporter = nodemailer.createTransport({
+//       host: 'smtp.gmail.com',
+//       port: 465,
+//       secure: true,
+//       auth: {
+//         user: settings.senderEmail,
+//         pass: decryptedPassword,
+//       },
+//     });
+
+//     const tableHtml = `
+//       <table style="width: 100%; border-collapse: collapse;">
+//         <tr><td><strong>Name:</strong></td><td>${name}</td></tr>
+//         <tr><td><strong>Email:</strong></td><td>${email}</td></tr>
+//         <tr><td><strong>Phone:</strong></td><td>${phone}</td></tr>
+//         <tr><td><strong>Message:</strong></td><td>${message}</td></tr>
+//       </table>
+//     `;
+
+//     // Admin email
+//     await transporter.sendMail({
+//       from: `"Big Bear Vans" <${settings.senderEmail}>`,
+//       to: settings.recipients.join(','),
+//       subject: "New Contact Message from Website",
+//       html: `<h2>New Contact Message</h2>${tableHtml}`
+//     });
+
+//     // User confirmation
+//     await transporter.sendMail({
+//       from: `"Big Bear Vans" <${settings.senderEmail}>`,
+//       to: email,
+//       subject: "Thank You for Your Message",
+//       html: `<h2>Thank You for Contacting Big Bear Vans</h2>
+//              <p>Hi ${name},</p>
+//              <p>We received your message and will get back to you shortly.</p>
+//              <p>Here’s a copy of your message:</p>${tableHtml}
+//              <p>This is an automated email.</p>`
+//     });
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Message saved, admin notified, and user confirmation sent.",
+//       data: newContact,
+//     });
+
+//   } catch (err) {
+//     console.error("Error sending email:", err);
+//     res.status(500).json({ success: false, error: err.message });
+//   }
+// });
+
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();

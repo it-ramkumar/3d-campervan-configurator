@@ -1,13 +1,10 @@
-// models/Van.js
 const mongoose = require('mongoose');
 
-// Capacity Sub-Schema
 const capacitySchema = new mongoose.Schema({
   sits: { type: String, required: true },
   sleeps: { type: String, required: true }
 });
 
-// Specifications Sub-Schema
 const specificationsSchema = new mongoose.Schema({
   make_model: { type: String },
   wheelbase: { type: String },
@@ -16,7 +13,6 @@ const specificationsSchema = new mongoose.Schema({
   capacity: { type: capacitySchema }
 });
 
-// Van Listing Sub-Schema
 const vanListingSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
   description: { type: String, trim: true },
@@ -27,16 +23,11 @@ const vanListingSchema = new mongoose.Schema({
   specifications: { type: specificationsSchema }
 });
 
-
-
-// Detailed Feature Item Schema
 const detailedFeatureItemSchema = new mongoose.Schema({
   category: { type: String, required: true, trim: true },
   items: [{ type: String, trim: true }]
 });
 
-
-// ✅ Main Van Schema
 const vanSchema = new mongoose.Schema(
   {
     slug: { type: String, required: true, unique: true, trim: true },
@@ -60,13 +51,10 @@ const vanSchema = new mongoose.Schema(
   }
 );
 
-
-// Virtual for formatted price
 vanSchema.virtual('formatted_price').get(function () {
   if (!this.van_listing.price) return null;
   return `$${this.van_listing.price.toLocaleString()}`;
 });
-
 
 vanSchema.index({ sold: 1 });
 vanSchema.index({
@@ -74,7 +62,6 @@ vanSchema.index({
   'van_listing.description': 'text'
 });
 
-// Pre-save middleware
 vanSchema.pre('save', async function (next) {
   if (this.isModified('van_listing.title') && !this.slug) {
     this.slug = await this.constructor.generateSlug(this.van_listing.title);
@@ -82,7 +69,6 @@ vanSchema.pre('save', async function (next) {
   next();
 });
 
-// Slug generator
 vanSchema.statics.generateSlug = async function (title) {
   let baseSlug = title
     .toLowerCase()
@@ -101,15 +87,14 @@ vanSchema.statics.generateSlug = async function (title) {
   return slug;
 };
 
-// Static methods
 vanSchema.statics.findAvailable = function () {
   return this.find({ sold: false });
 };
+
 vanSchema.statics.findSold = function () {
   return this.find({ sold: true });
 };
 
-// Instance methods
 vanSchema.methods.markAsSold = function () {
   this.sold = true;
   return this.save();
