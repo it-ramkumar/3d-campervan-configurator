@@ -338,131 +338,6 @@ export default function ClientStories() {
         </div>
       </section>
 
-      {/* Retirees Section */}
-      <section className="py-16 md:py-20 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            title="Retirees"
-            subtitle="Creating lasting memories with comfort and freedom"
-            icon={Users}
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center mb-8 md:mb-12">
-            <div className="lg:col-span-2">
-              <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
-                At Big Bear Vans, we've built multiple campervans for retirees
-                who want to visit family across the country, create lasting
-                memories with their grandchildren, and travel in complete
-                comfort, entirely off the grid.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-                <GraphicFeature
-                  text="Extended off-grid capability with robust power and water systems"
-                  index={0}
-                  graphic={Zap}
-                />
-                <GraphicFeature
-                  text="All-Wheel Drive for any road condition"
-                  index={1}
-                  graphic={Car}
-                />
-                <GraphicFeature
-                  text="Spacious, premium interiors designed for multi-generational travel"
-                  index={2}
-                  graphic={Home}
-                />
-                <GraphicFeature
-                  text="Advanced safety and navigation systems"
-                  index={3}
-                  graphic={Shield}
-                />
-              </div>
-            </div>
-
-            <div className="lg:col-span-3">
-              <ClassicImageGrid images={imageData.vermont} layout="vermont" />
-            </div>
-          </div>
-
-          {/* Vermont Campervan */}
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-6 md:p-8 lg:p-12 border border-gray-200">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-start">
-              <div>
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Vermont Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
-                  Vermont is a 170 AWD Sprinter campervan that we designed for a
-                  couple who wanted to travel with their grandchildren.
-                </p>
-
-                <div className="mb-6 md:mb-8">
-                  <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
-                    Client Vision
-                  </h4>
-                  <div className="space-y-3 md:space-y-4">
-                    <IconFeature
-                      text="Off-grid ready campervan"
-                      index={0}
-                      icon={MapPin}
-                    />
-                    <IconFeature
-                      text="A van that accommodates more than 2 people."
-                      index={1}
-                      icon={Users}
-                    />
-                    <IconFeature
-                      text="A spacious kitchen to prepare family meals"
-                      index={2}
-                      icon={Coffee}
-                    />
-                    <IconFeature
-                      text="Upgraded exterior for bicycles and other gear"
-                      index={3}
-                      icon={Car}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
-                  Our Delivery
-                </h4>
-                <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-                  <IconFeature
-                    text="Fully off-grid ready van with a 400Ah Lithium battery, a 3000W inverter, a DC-DC charger, a 12V AC, 30-gal grey, and 20-gal freshwater tanks"
-                    index={0}
-                    icon={Zap}
-                  />
-                  <IconFeature
-                    text="Double swivel seats, elevator, and dinette bed system for  4-5 people"
-                    index={1}
-                    icon={Home}
-                  />
-                  <IconFeature
-                    text="Fully functional kitchen with double induction cooktop, deep sink, a microwave, a fridge, and a hidden storage pantry"
-                    index={2}
-                    icon={Coffee}
-                  />
-                  <IconFeature
-                    text="Two exterior storage boxes, a spacious roof deck,  and a powerlift bike rack"
-                    index={3}
-                    icon={Car}
-                  />
-                </div>
-
-                <TestimonialCard
-                  quote="We love it. It works great. We love the storage and how open everything is. And it just feels so homey. We did do a lot of looking around and searching, and Big Bear Vans just seemed to be the ones that really adapted to more than two travelers."
-                  author="Client from Vermont"
-                  van="Vermont Campervan"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Families With Kids */}
       <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-br from-gray-50 to-blue-50">
@@ -659,6 +534,7 @@ export default function ClientStories() {
         </div>
       </section>
 
+
       {/* Pet Owners */}
       <section className="py-16 md:py-20 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -808,7 +684,7 @@ export default function ClientStories() {
         </div>
       </section>
 
-      {/* Adventure Lovers */}
+ {/* Adventure Lovers */}
       <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-br from-green-50 to-emerald-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
@@ -919,6 +795,132 @@ export default function ClientStories() {
                     icon={Coffee}
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Retirees Section */}
+      <section className="py-16 md:py-20 lg:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            title="Retirees"
+            subtitle="Creating lasting memories with comfort and freedom"
+            icon={Users}
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center mb-8 md:mb-12">
+            <div className="lg:col-span-2">
+              <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                At Big Bear Vans, we've built multiple campervans for retirees
+                who want to visit family across the country, create lasting
+                memories with their grandchildren, and travel in complete
+                comfort, entirely off the grid.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+                <GraphicFeature
+                  text="Extended off-grid capability with robust power and water systems"
+                  index={0}
+                  graphic={Zap}
+                />
+                <GraphicFeature
+                  text="All-Wheel Drive for any road condition"
+                  index={1}
+                  graphic={Car}
+                />
+                <GraphicFeature
+                  text="Spacious, premium interiors designed for multi-generational travel"
+                  index={2}
+                  graphic={Home}
+                />
+                <GraphicFeature
+                  text="Advanced safety and navigation systems"
+                  index={3}
+                  graphic={Shield}
+                />
+              </div>
+            </div>
+
+            <div className="lg:col-span-3">
+              <ClassicImageGrid images={imageData.vermont} layout="vermont" />
+            </div>
+          </div>
+
+          {/* Vermont Campervan */}
+          <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-6 md:p-8 lg:p-12 border border-gray-200">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-start">
+              <div>
+                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
+                  Vermont Campervan
+                </h3>
+                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                  Vermont is a 170 AWD Sprinter campervan that we designed for a
+                  couple who wanted to travel with their grandchildren.
+                </p>
+
+                <div className="mb-6 md:mb-8">
+                  <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
+                    Client Vision
+                  </h4>
+                  <div className="space-y-3 md:space-y-4">
+                    <IconFeature
+                      text="Off-grid ready campervan"
+                      index={0}
+                      icon={MapPin}
+                    />
+                    <IconFeature
+                      text="A van that accommodates more than 2 people."
+                      index={1}
+                      icon={Users}
+                    />
+                    <IconFeature
+                      text="A spacious kitchen to prepare family meals"
+                      index={2}
+                      icon={Coffee}
+                    />
+                    <IconFeature
+                      text="Upgraded exterior for bicycles and other gear"
+                      index={3}
+                      icon={Car}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
+                  Our Delivery
+                </h4>
+                <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+                  <IconFeature
+                    text="Fully off-grid ready van with a 400Ah Lithium battery, a 3000W inverter, a DC-DC charger, a 12V AC, 30-gal grey, and 20-gal freshwater tanks"
+                    index={0}
+                    icon={Zap}
+                  />
+                  <IconFeature
+                    text="Double swivel seats, elevator, and dinette bed system for  4-5 people"
+                    index={1}
+                    icon={Home}
+                  />
+                  <IconFeature
+                    text="Fully functional kitchen with double induction cooktop, deep sink, a microwave, a fridge, and a hidden storage pantry"
+                    index={2}
+                    icon={Coffee}
+                  />
+                  <IconFeature
+                    text="Two exterior storage boxes, a spacious roof deck,  and a powerlift bike rack"
+                    index={3}
+                    icon={Car}
+                  />
+                </div>
+
+                <TestimonialCard
+                  quote="We love it. It works great. We love the storage and how open everything is. And it just feels so homey. We did do a lot of looking around and searching, and Big Bear Vans just seemed to be the ones that really adapted to more than two travelers."
+                  author="Client from Vermont"
+                  van="Vermont Campervan"
+                />
               </div>
             </div>
           </div>

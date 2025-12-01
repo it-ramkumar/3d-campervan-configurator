@@ -99,6 +99,7 @@ router.post(
 
 
 router.get("/", async (req, res) => {
+  console.log("Fetching portfolio vans with pagination and filters");
   try {
     let { page = 1, limit = 50, category, sold, search } = req.query;
     page = Number(page);
