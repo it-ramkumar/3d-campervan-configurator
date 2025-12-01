@@ -90,7 +90,6 @@ const portfolioVanSchema = new mongoose.Schema({
     default: false
   },
 
-  // ✅ Category field
  category: [{
   type: String,
   enum: [
@@ -104,7 +103,6 @@ const portfolioVanSchema = new mongoose.Schema({
 }],
 
 
-  // ✅ Simple string array for gallery (image URLs)
   gallery: [{
     type: String,
     trim: true

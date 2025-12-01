@@ -17,7 +17,7 @@ router.post(
     try {
       // Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || "{}");
-      console.log("Parsed van_listing:", van_listing);
+      // console.log("Parsed van_listing:", van_listing);
       const detailed_features = JSON.parse(req.body.detailed_features || "[]");
       const media = JSON.parse(req.body.media || "[]"); // ✅ Simple string array for URLs
       const sold = req.body.sold === "true";
@@ -97,9 +97,8 @@ router.post(
   }
 );
 
-
 router.get("/", async (req, res) => {
-  console.log("Fetching portfolio vans with pagination and filters");
+  // console.log("Fetching portfolio vans with pagination and filters");
   try {
     let { page = 1, limit = 50, category, sold, search } = req.query;
     page = Number(page);
@@ -141,6 +140,7 @@ router.get("/", async (req, res) => {
 router.get("/category", async (req, res) => {
   try {
     let { category, page = 1, limit = 10 } = req.query;
+    // console.log("Category:", category);
 
     if (!category) {
       return res.status(400).json({
@@ -182,8 +182,6 @@ router.get("/category", async (req, res) => {
   }
 });
 
-
-// GET by wheelbase filter
 router.get("/wheelbase", async (req, res) => {
   try {
     const { wheelbase } = req.query;
@@ -205,7 +203,6 @@ router.get("/wheelbase", async (req, res) => {
   }
 });
 
-// UPDATE portfolio van by slug
 router.put(
   "/:slug",
   protect,
@@ -298,7 +295,6 @@ router.put(
   }
 );
 
-// DELETE portfolio van by slug
 router.delete("/:slug", protect, adminOnly, async (req, res) => {
   try {
     // 1️⃣ Find the portfolio first
@@ -332,7 +328,6 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
   }
 });
 
-// GET single portfolio van by slug
 router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });

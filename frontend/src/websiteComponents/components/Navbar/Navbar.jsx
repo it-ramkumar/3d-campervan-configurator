@@ -16,6 +16,10 @@ export default function Navbar({ forceMobile }) {
   const mobileMenuRef = useRef(null);
   const timeoutRef = useRef(null);
   const location = useLocation();
+  const [selectedLayout, setSelectedLayout] = useState(null);
+const [layoutData, setLayoutData] = useState(null);
+const [loading, setLoading] = useState(false);
+
 
 
   useEffect(() => {
@@ -105,9 +109,20 @@ export default function Navbar({ forceMobile }) {
           items: [
             { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
             { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
-            { label: "Portfolio of Custom Builds", link: "/custom-van" },
+            { label: "Portfolio of Custom Builds", link: "/custom-builds" },
           ],
         },
+        // {
+        //   title: "Van Models Options",
+        //   items: [
+        //     { label: " Sprinter 144", link: "/sprinter-144" },
+        //     { label: " Transit 148", link: "/transit-148" },
+        //     { label: " Promaster 159", link: "/promaster-159" },
+        //     { label: " Promaster 136", link: "/promaster-136" },
+
+
+        //   ],
+        // },
       ],
     },
     "contact-us": { title: "Contact Us", link: "/contact" },
@@ -169,6 +184,26 @@ useEffect(() => {
   };
   fetchBlogs();
 }, [location.pathname]);
+
+
+const handleLayoutClick = async (link) => {
+  console.log(link,"link")
+  setSelectedLayout(link);
+  setLoading(true);
+
+  try {
+    // Adjust API endpoint according to link or key
+    const res = await fetch(`/api/layouts?type=${encodeURIComponent(link)}`);
+    const data = await res.json();
+    setLayoutData(data); // save API data to state
+  } catch (err) {
+    console.error("Error fetching layout data", err);
+    setLayoutData(null);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <>
@@ -337,15 +372,17 @@ useEffect(() => {
                     ) : (
                       section.items.map((item, index) => (
                         <li key={index}>
-                          <Link
-                            to={item.link}
-                            className={`block py-1 ${isChildActive(item.link)
-                                ? "text-indigo-600 font-semibold"
-                                : "text-gray-700 hover:text-indigo-600"
-                              }`}
-                          >
-                            {item.label}
-                          </Link>
+                        <Link
+  to={item.link}
+  className={`block py-1 ${isChildActive(item.link)
+      ? "text-indigo-600 font-semibold"
+      : "text-gray-700 hover:text-indigo-600"
+    }`}
+  onClick={section.title === "Layouts by Big Bear Vans" ? () => handleLayoutClick(item.link) : undefined}
+>
+  {item.label}
+</Link>
+
                         </li>
                       ))
                     )}
@@ -426,7 +463,14 @@ useEffect(() => {
                                           ? "text-indigo-600 font-semibold"
                                           : "text-gray-700 hover:text-indigo-600"
                                         }`}
-                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      onClick={section.title === "Layouts by Big Bear Vans"
+  ? () => {
+      setIsMobileMenuOpen(false); // first action
+      handleLayoutClick(item.link); // second action
+    }
+  : () => setIsMobileMenuOpen(false) // just close menu for other sections
+}
+
                                     >
                                       {item.label}
                                     </Link>

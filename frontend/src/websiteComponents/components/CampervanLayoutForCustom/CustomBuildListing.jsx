@@ -3,36 +3,55 @@ import { useState, useEffect } from "react";
 import { getByCategory } from "../../../api/portfolio/getByCategory";
 import BlackButton from "../Common/Button/BlackButton";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { useParams } from "react-router-dom";
+import HeroSection from "../HeroSection/HeroSection";
+import Navbar from "../Navbar/Navbar";
 
 export default function CamperProjectsPage() {
+  const { category } = useParams();
   const [layouts, setLayouts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const category =  "Portfolio of Custom Builds";
+const map = {
+  "custom-builds": "Portfolio of Custom Builds",
+  "couples-layout": "Layouts for Solo & Couple Travelers",
+  "family-layout": "Layouts for Families (3–9 People)",
+  "long-van": "Flagship Long Van — Montreal",
+  "short-van": "Flagship Short Van — Santa Monica",
+  "sprinter-144":"144",
+  "transit-148":"148",
+  "promaster-159":"159",
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        const data = await getByCategory(category, page); // pass page here
+};
 
-        if (data?.success) {
-          setLayouts(data?.data || []);
-          setTotalPages(data?.pages || 1);
-        } else {
-          console.error("Failed to fetch:", data?.message);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+const url = map[category] || "";
+// console.log(url, "url");
+
+useEffect(() => {
+  const fetch = async () => {
+    try {
+      setLoading(true);
+
+      const data = await getByCategory(url, page);
+
+      if (data?.success) {
+        setLayouts(data?.data || []);
+        setTotalPages(data?.pages || 1);
+      } else {
+        console.error("Failed to fetch:", data?.message);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetch();
-  }, [page]);
+  fetch();
+}, [category, url, page]);
+
 useEffect(() => {
   window.scrollTo({
     top: 0,
@@ -46,8 +65,18 @@ useEffect(() => {
   const handleNext = () => {
     if (page < totalPages) setPage(page + 1);
   };
+const heroImage = "/heroSlider/custom_build.jpg";
+const newTitleText = "Custom Campervan Builds";
+const newDescriptionText =
+  "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
 
   return (
+    <>
+ <Navbar />
+      <div className="tour-hero">
+        <HeroSection  title={newTitleText} description={newDescriptionText} image={heroImage} showButton={false} />
+
+      </div>
     <section className="bg-white font-serif py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
         {loading ? (
@@ -143,5 +172,6 @@ useEffect(() => {
         </div>
       </div>
     </section>
+    </>
   );
 }
