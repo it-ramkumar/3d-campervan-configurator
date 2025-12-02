@@ -214,64 +214,87 @@ export default function AvailableVans({availableVans}) {
           </p>
         </div>
 
-        <div className="relative pt-8 pb-12 md:pt-12 md:pb-16">
-          <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
-          <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
-            {availableVans.map((van, index) => (
-              <div
-                key={van.id}
-                ref={el => cardsRef.current[index] = el}
-                className="relative group transform-gpu w-full max-w-xl"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
-                <div className="card-glow absolute -inset-2.5 bg-slate-900 rounded-[30px] blur-2xl opacity-0 z-[-1] transition-opacity duration-300"></div>
-                <div className="relative w-full h-[400px] rounded-[30px] overflow-hidden shadow-xl">
-                  <ImageWithSkeleton
-                    src={van.gallery[0]}
-                    alt={van.model}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
-                 <div className="absolute top-0 left-0 bg-black text-white p-2.5 rounded-tl-[30px] z-20">
-  <p className="font-noto-serif font-semibold leading-none tracking-tight px-2 py-1">
-    {/* Original Price (strikethrough) */}
-    <span className="text-gray-400 line-through mr-2">
-      ${van.van_listing.price.toLocaleString()}
-    </span>
+       <div className="relative pt-8 pb-12 md:pt-12 md:pb-16">
+  {/* Background elements remain similar for context */}
+  <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
 
-    {/* Discounted Black Friday Price */}
-  <span className="text-white text-2xl">
-  ${ (185000).toLocaleString() } {/* 20% off example */}
-</span>
+  <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
+    {availableVans.map((van, index) => (
+      <div
+        key={van.id}
+        ref={el => cardsRef.current[index] = el}
+        // Increased max-width for a slightly larger card on desktop
+        className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        {/* Mobile background/glow - slightly cleaner */}
+        <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
+        {/* Subtle, softer glow effect */}
+        <div className="card-glow absolute -inset-2.5 bg-sky-500/30 rounded-[30px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[-1]"></div>
 
-  </p>
+        {/* --- Card Container --- */}
+        {/* Slightly more rounded edges (24px vs 30px) for a softer look */}
+        <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
 
-  <p className="text-xs text-red-400 font-semibold text-center mt-1">
-    Black Friday Sale 🎉
-  </p>
-</div>
-
-                  <Link
-                    to={`/van-detail/${van.slug}`}
-                    className="details-button absolute top-4 right-4 bg-slate-900 text-white font-bold font-noto-sans text-[0.875rem] py-2 px-5 rounded-md transition-all duration-300 hover:bg-slate-700 z-20"
-                  >
-                    More Details
-                  </Link>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
-                    <h3 className="font-noto-serif font-semibold text-white text-[28px] leading-tight mb-3">
-                      {van.van_listing.model_name}
-                    </h3>
-                 <p className="font-noto-serif text-white/80 text-sm leading-normal line-clamp-3">
-  {van.van_listing.description}
-</p>
-
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* --- Image Section --- */}
+          <div className="w-full h-2/3 relative">
+            <ImageWithSkeleton
+              src={van.gallery[0]}
+              alt={van.model}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* Darker overlay for better text contrast */}
+            <div className="absolute inset-0 bg-black/40 z-10"></div>
           </div>
+
+          {/* --- Price/Sale Banner (Top Right - Floating) --- */}
+          <div className="absolute top-4 right-4 bg-black/90 text-white px-3 py-1.5 rounded-lg shadow-lg z-20 transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
+            <p className="font-sans font-extrabold text-sm leading-none tracking-wider">
+              🎉 Black Friday Sale
+            </p>
+          </div>
+
+          {/* --- Details Section (Bottom 1/3) --- */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 bg-slate-900/95 border-t-2 border-white/60">
+
+            {/* Model Name */}
+            <h3 className="font-noto-serif font-bold text-white text-[24px] leading-tight mb-3 tracking-wide">
+              {van.van_listing.model_name}
+            </h3>
+
+            {/* Price Information */}
+            <div className="flex items-end justify-between mb-4">
+              {/* Discounted Price */}
+              <div className="flex flex-col">
+                <span className="font-sans font-extrabold text-4xl text-white leading-none">
+                  ${ (185000).toLocaleString() }
+                </span>
+                {/* Original Price (Strikethrough) */}
+                <span className="font-sans text-sm text-gray-400 line-through mt-1">
+                  ${van.van_listing.price.toLocaleString()}
+                </span>
+              </div>
+
+              {/* More Details Button (Prominent) */}
+              <Link
+                to={`/van-detail/${van.slug}`}
+                className="details-button bg-white text-black font-bold font-sans text-md py-3 px-6 rounded-lg shadow-xl transition-all duration-300  hover:shadow-2xl hover:scale-[1.03]"
+              >
+                View Details
+              </Link>
+            </div>
+
+            {/* Description */}
+            <p className="font-sans text-white/70 text-sm leading-snug line-clamp-2">
+              {van.van_listing.description}
+            </p>
+          </div>
+
         </div>
+      </div>
+    ))}
+  </div>
+</div>
       </section>
     </>
   );

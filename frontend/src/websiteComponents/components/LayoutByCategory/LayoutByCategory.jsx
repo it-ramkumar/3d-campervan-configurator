@@ -14,25 +14,12 @@ export default function CamperProjectsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-const map = {
-  "custom-builds": "Portfolio of Custom Builds",
-  "couples-layout": "Layouts for Solo & Couple Travelers",
-  "family-layout": "Layouts for Families (3–9 People)",
-  "long-van": "Flagship Long Van — Montreal",
-  "short-van": "Flagship Short Van — Santa Monica",
-
-
-};
-
-const url = map[category] || "";
-console.log(url, "url");
-
 useEffect(() => {
   const fetch = async () => {
     try {
       setLoading(true);
 
-      const data = await getByCategory(url, page);
+      const data = await getByCategory(category, page);
 
       if (data?.success) {
         setLayouts(data?.data || []);
@@ -48,7 +35,7 @@ useEffect(() => {
   };
 
   fetch();
-}, [category, url, page]);
+}, [category, page]);
 
 useEffect(() => {
   window.scrollTo({

@@ -98,7 +98,6 @@ router.post(
 );
 
 router.get("/", async (req, res) => {
-  // console.log("Fetching portfolio vans with pagination and filters");
   try {
     let { page = 1, limit = 50, category, sold, search } = req.query;
     page = Number(page);
@@ -181,11 +180,25 @@ router.get("/category", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+router.get("/navCat", async (req, res) => {
+  try {
+    const categories = await PortfolioVan.distinct("category");
+
+    res.json({
+      success: true,
+      count: categories.length,
+      data: categories
+    });
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 router.get("/wheel-base", async (req, res) => {
   try {
     const { wheelBase } = req.query;
-    console.log("wheelBase:", wheelBase);
+    // console.log("wheelBase:", wheelBase);
 
     const filter = {};
 
@@ -207,6 +220,23 @@ router.get("/wheel-base", async (req, res) => {
   } catch (err) {
     console.error("Error fetching vans by wheelbase:", err);
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
+  }
+});
+router.get("/navWheel-bases", async (req, res) => {
+  try {
+    // Extract unique wheelbase values from nested field
+    const wheelBases = await PortfolioVan.distinct(
+      "van_listing.specifications.wheelbase"
+    );
+
+    res.json({
+      success: true,
+      count: wheelBases.length,
+      data: wheelBases
+    });
+  } catch (err) {
+    console.error("Error fetching wheel bases:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 

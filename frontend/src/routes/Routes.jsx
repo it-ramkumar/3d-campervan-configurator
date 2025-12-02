@@ -29,7 +29,7 @@ const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail
 const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Clienthero/Client"));
 const Interiorpage = lazy(() => import("../websiteComponents/components/Interior/Interior"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
-const CustomVan = lazy(() => import("../websiteComponents/components/CampervanLayoutForCustom/CustomBuildListing"));
+const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
 const Testing = lazy(() => import("../websiteComponents/components/Layouts/SantaMonica/SantaMonica"));
@@ -86,7 +86,7 @@ const AppRoutes = () => {
           <Route path="/our-clients" element={<OurClients />} />
           <Route path="/interior-choice" element={<Interiorpage />} />
           <Route path="/cushion" element={<Cushionpage />} />
-          <Route path="/:category" element={<CustomVan />} />
+          <Route path="/layout-by-category/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />
           <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />

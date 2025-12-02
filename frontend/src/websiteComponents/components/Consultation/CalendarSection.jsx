@@ -88,7 +88,7 @@ if (isLoggedIn && selectedDate) {
  fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
  .then((res) => res.json())
  .then((data) => {
- console.log("Slots received for timezone:", userTimeZone, data);
+//  console.log("Slots received for timezone:", userTimeZone, data);
  // Agar data mein error message hai, to slots ko empty set karein aur alert dein
  if (data.error) {
  console.error("Backend Error fetching slots:", data.error);

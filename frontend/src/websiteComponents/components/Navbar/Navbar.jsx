@@ -1,11 +1,14 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { gsap } from "gsap";
 import { Link, useLocation } from "react-router-dom";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
-import { Menu } from "lucide-react"
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
+import {getNavCat} from "../../../api/portfolio/navBarCat";
+import {getnavWheel} from "../../../api/portfolio/navWheelBase";
+import { menuContent } from "../../DataUseInComp/MegaMenu";
+import { routes } from "../../DataUseInComp/NavbarRoutes";
 
 
 export default function Navbar({ forceMobile }) {
@@ -19,7 +22,8 @@ export default function Navbar({ forceMobile }) {
   const [selectedLayout, setSelectedLayout] = useState(null);
 const [layoutData, setLayoutData] = useState(null);
 const [loading, setLoading] = useState(false);
-
+  const [categories, setCategories] = useState([]);
+  const [wheelBases, setWheelBases] = useState([]);
 
 
   useEffect(() => {
@@ -39,8 +43,6 @@ const [loading, setLoading] = useState(false);
       });
     }
   }, [activeMenu]);
-
-
 
   useEffect(() => {
     if (!mobileMenuRef.current) return;
@@ -71,104 +73,6 @@ const [loading, setLoading] = useState(false);
   };
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
-  const menuContent = {
-    CustomBuild: {
-      title: "Custom Builds",
-      sections: [
-        {
-          title: "Start Your Custom Build",
-          items: [
-            { label: "3D Van Builder", link: "https://configurator.bigbearvans.com" },
-            { label: "Send an Inquiry", link: "/inquiry" },
-          ],
-        },
-        {
-          title: "Insights",
-          items: [
-            { label: "Exterior Choices", link: "/innovation" },
-            { label: "Interior Choices", link: "/interior-choice" },
-            { label: "Sprinter Guide", link: "/sprinter-guide" },
-          ],
-        },
-      ],
-
-    },
-    "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
-    layout: {
-      title: "Layouts by Big Bear Vans",
-      sections: [
-        {
-          title: "Our Flagship Models",
-          items: [
-            { label: "Short Van — Santa Monica", link: "/short-van" },
-            { label: "Long Van — Montreal", link: "/long-van" },
-          ],
-        },
-        {
-          title: "Explore Layout Options",
-          items: [
-            { label: "Layouts for Solo & Couple Travelers", link: "/couples-layout" },
-            { label: "Layouts for Families (3–9 People)", link: "/family-layout" },
-            { label: "Portfolio of Custom Builds", link: "/custom-builds" },
-          ],
-        },
-        {
-          title: "Van Models Options",
-          items: [
-            { label: " Sprinter 144", link: "/wheel-base/sprinter-144" },
-            { label: " Transit 148", link: "/wheel-base/transit-148" },
-            { label: " Promaster 159", link: "/wheel-base/promaster-159" },
-            { label: " Promaster 136", link: "/wheel-base/promaster-136" },
-
-
-          ],
-        },
-      ],
-    },
-    "contact-us": { title: "Contact Us", link: "/contact" },
-    discover: {
-      title: "Discover Big Bear Vans",
-      sections: [
-        {
-          title: "Company Info",
-          items: [
-            { label: "Our Process", link: "/our-process" },
-            { label: "Showroom", link: "/showroom" },
-            { label: "Financing", link: "/financing" },
-            { label: "About Us", link: "/about-us" },
-            { label: "Our Clients", link: "/our-clients" },
-          ],
-        },
-        {
-          title: "Blog",
-          items: [],
-        },
-      ],
-    },
-  };
-
-  const routes = {
-    CustomBuild: ["#", "/inquiry"],
-    "vans-for-sale": ["/vans-for-sale"],
-    layout: [
-      "/layouts",
-      "/short-van",
-      "/long-van",
-      "/couples-layout",
-      "/family-layout",
-      "/custom-van",
-    ],
-    "contact-us": ["/contact"],
-    discover: [
-      "/our-process",
-      "/showroom",
-      "/about-us",
-      "/our-clients",
-      "/innovation",
-      "/interior-choice",
-      "/blogs",
-    ],
-  };
 
   const isParentActive = (key) => routes[key]?.includes(location.pathname);
   const isChildActive = (path) => location.pathname === path;
@@ -203,7 +107,19 @@ const handleLayoutClick = async (link) => {
     setLoading(false);
   }
 };
+// console.log(categories,"category")
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const catRes = await getNavCat();
+    const wheelRes = await getnavWheel();
+
+    setCategories(catRes.data);
+    setWheelBases(wheelRes.data);
+  };
 
   return (
     <>
@@ -356,43 +272,114 @@ const handleLayoutClick = async (link) => {
               {menuContent[activeMenu]?.sections?.map((section, idx) => (
                 <div key={idx} className={`w-1/2 ${idx === 0 ? "pr-6 border-r border-gray-200" : "pl-6"}`}>
                   <h3 className="text-xl font-semibold text-indigo-600 mb-4">{section.title}</h3>
-                  <ul className="space-y-3">
-                    {section.title === "Blog" ? (
-                      blogs?.slice(0, 4).map((blog) => (
-                        <li key={blog.id}>
-                          <Link
-                           to={`/blog-detail/${blog._id}`}
-                            className={`block py-1 text-gray-700 hover:text-indigo-600`}
-                          >
-                             <span>{blog.title}</span>
-          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">--→</span>
+       <ul className="space-y-3">
+  {/* ▼ If section is Blog */}
+  {section.title === "Blog" ? (
+    <>
+      {blogs?.slice(0, 4).map((blog) => (
+        <li key={blog._id}>
+          <Link
+            to={`/blog-detail/${blog._id}`}
+            className="block py-1 text-gray-700 hover:text-indigo-600"
+          >
+            <span>{blog.title}</span>
+            <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+              --→
+            </span>
+          </Link>
+        </li>
+      ))}
+
+      {/* ⭐ All Blogs Button */}
+      <li>
+        <Link
+          to="/blogs"
+          className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+        >
+          View All Blogs →
         </Link>
-                        </li>
-                      ))
-                    ) : (
-                      section.items.map((item, index) => (
-                        <li key={index}>
-                        <Link
-  to={item.link}
-  className={`block py-1 ${isChildActive(item.link)
-      ? "text-indigo-600 font-semibold"
-      : "text-gray-700 hover:text-indigo-600"
-    }`}
-   onClick={() => {
-        setActiveMenu(null); // CLOSE MEGA MENU
+      </li>
+    </>
+  ) : section.title === "Explore Layout Options" ? (
+    <>
+      {/* ▼ Dynamic Categories */}
+      {categories?.map((category, i) => (
+        <li key={i}>
+          <Link
+            to={`/layout-by-category/${category}`}
+            className="block py-1 text-gray-700 hover:text-indigo-600"
+          >
+            <span>{category}</span>
+            <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+              --→
+            </span>
+          </Link>
+        </li>
+      ))}
 
-        if (section.title === "Layouts by Big Bear Vans") {
-          handleLayoutClick(item.link);
-        }
-      }}
->
-  {item.label}
-</Link>
+    </>
+  ) :section.title === "Van Models Options" ? (
+ <>
+  {wheelBases?.map((base, i) => {
 
-                        </li>
-                      ))
-                    )}
-                  </ul>
+
+    let label = "";
+
+    if (base === "144" || base === 144) {
+      label = "Sprinter 144";
+    }
+    else if (base === "170" || base === 170) {
+      label = "Sprinter 170";
+    }
+    else if (base === "148" || base === 148) {
+      label = "Transit 148";
+    }
+    else {
+      label = `Promaster ${base}`;
+    }
+
+    return (
+      <li key={i}>
+        <Link
+          to={`/wheel-base/${base}`}
+          className="block py-1 text-gray-700 hover:text-indigo-600"
+        >
+          <span>{label}</span>
+          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+            --→
+          </span>
+        </Link>
+      </li>
+    );
+  })}
+</>
+
+  ) : (
+    /* ▼ Normal items fallback */
+    section.items.map((item, index) => (
+      <li key={index}>
+        <Link
+          to={item.link}
+          className={`block py-1 ${
+            isChildActive(item.link)
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-700 hover:text-indigo-600"
+          }`}
+          onClick={() => {
+            setActiveMenu(null);
+            if (section.title === "Layouts by Big Bear Vans") {
+              handleLayoutClick(item.link);
+            }
+          }}
+        >
+          {item.label}
+        </Link>
+      </li>
+    ))
+  )}
+</ul>
+
+
                 </div>
               ))}
             </div>
@@ -446,44 +433,129 @@ const handleLayoutClick = async (link) => {
                         {menu.sections.map((section, secIdx) => (
                           <div key={secIdx} className="mb-3">
                             <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
-                            <ul className="space-y-2">
-                              {section.title === "Blog" ? (
-                                blogs?.slice(0, 4).map((blog) => (
-                                  <li key={blog.id}>
-                                    <Link
-                                      to={`/blog-detail/${blog._id}`}
-                                      className="block py-1 text-gray-700 hover:text-indigo-600"
-                                      onClick={() => setIsMobileMenuOpen(false)}
-                                    >
-                                    <span>{blog.title}</span>
-          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">--→</span>
-                                    </Link>
-                                  </li>
-                                ))
-                              ) : (
-                                section.items.map((item, itemIdx) => (
-                                  <li key={itemIdx}>
-                                    <Link
-                                      to={item.link}
-                                      className={`block py-1 ${isChildActive(item.link)
-                                          ? "text-indigo-600 font-semibold"
-                                          : "text-gray-700 hover:text-indigo-600"
-                                        }`}
-                                      onClick={section.title === "Layouts by Big Bear Vans"
-  ? () => {
-      setIsMobileMenuOpen(false); // first action
-      handleLayoutClick(item.link); // second action
-    }
-  : () => setIsMobileMenuOpen(false) // just close menu for other sections
-}
+   <ul className="space-y-2">
+  {/* ▼ BLOG SECTION (Mobile) */}
+  {section.title === "Blog" ? (
+    <>
+      {blogs?.slice(0, 4).map((blog) => (
+        <li key={blog._id}>
+          <Link
+            to={`/blog-detail/${blog._id}`}
+            className="block py-1 text-gray-700 hover:text-indigo-600"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <span>{blog.title}</span>
+            <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+              --→
+            </span>
+          </Link>
+        </li>
+      ))}
 
-                                    >
-                                      {item.label}
-                                    </Link>
-                                  </li>
-                                ))
-                              )}
-                            </ul>
+      {/* ⭐ All Blogs Button */}
+      <li>
+        <Link
+          to="/blogs"
+          className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          View All Blogs →
+        </Link>
+      </li>
+    </>
+  ) : section.title === "Layouts by Big Bear Vans" ? (
+    <>
+      {/* ▼ CATEGORY SECTION (Mobile) */}
+      {categories?.slice(0, 4).map((category, i) => (
+        <li key={i}>
+          <Link
+            to={`/portfolio?category=${category}`}
+            className="block py-1 text-gray-700 hover:text-indigo-600"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <span>{category}</span>
+            <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+              --→
+            </span>
+          </Link>
+        </li>
+      ))}
+
+      {/* ⭐ All Categories Button */}
+      <li>
+        <Link
+          to="/portfolio"
+          className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          View All Categories →
+        </Link>
+      </li>
+    </>
+  ) : section.title === "Wheelbase" ? (
+    <>
+      {/* ▼ WHEELBASE SECTION (Mobile) */}
+      {wheelBases?.slice(0, 4).map((base, i) => {
+
+        // Create the readable label
+        let label = "";
+        if (base == "144") label = "Sprinter 144";
+        else if (base == "170") label = "Sprinter 170";
+        else if (base == "148") label = "Transit 148";
+        else label = `Promaster ${base}`;
+
+        return (
+          <li key={i}>
+            <Link
+              to={`/wheel-base/${base}`}
+              className="block py-1 text-gray-700 hover:text-indigo-600"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <span>{label}</span>
+              <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+                --→
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+
+      {/* ⭐ View All Wheelbase */}
+      <li>
+        <Link
+          to="/wheel-base"
+          className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          View All Wheelbases →
+        </Link>
+      </li>
+    </>
+  ) : (
+    /* ▼ OTHER NORMAL SECTIONS */
+    section.items.map((item, itemIdx) => (
+      <li key={itemIdx}>
+        <Link
+          to={item.link}
+          className={`block py-1 ${
+            isChildActive(item.link)
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-700 hover:text-indigo-600"
+          }`}
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            if (section.title === "Layouts by Big Bear Vans") {
+              handleLayoutClick(item.link);
+            }
+          }}
+        >
+          {item.label}
+        </Link>
+      </li>
+    ))
+  )}
+</ul>
+
 
                           </div>
                         ))}
