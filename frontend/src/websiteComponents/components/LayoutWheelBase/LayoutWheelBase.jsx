@@ -23,7 +23,7 @@ const map = {
 };
 
 const url = map[wheelbase] || "";
-console.log(url, "url");
+// console.log(url, "url");
 
 useEffect(() => {
   const fetch = async () => {
@@ -62,8 +62,15 @@ useEffect(() => {
     if (page < totalPages) setPage(page + 1);
   };
 const heroImage = "/heroSlider/custom_build.jpg";
-const newTitleText = "Custom Campervan Builds";
-const newDescriptionText =
+const newTitleText = url === "144" ? "Sprinter 144 Wheelbase" :url === "148" ? "Transit 148 Wheelbase" : url === "159" ? "Promaster 159 Wheelbase" : url ==="136" ? "romaster 136 Wheelbase" : "";
+const newDescriptionText = url === "144" ?
+   "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures." : url === "148" ?
+   "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs." : url === "159" ?
+   "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle." : url ==="136" ?
+   "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility." : "";
+// const newTitleText = wheelbase === "custom-builds" ? "Custom Campervan Builds" :wheelbase === "couples-layout" ? "Layouts for Solo & Couple Travelers" : wheelbase === "family-layout" ? "Layouts for Families (3–9 People)" : wheelbase ==="long-van" ? "Flagship Long Van — Montreal" : wheelbase ==="short-van" ? "Flagship Short Van — Santa Monica" : "";
+// const newDescriptionText = wheelbase === "custom-builds" ?
+//    "Experience agile travel with our compact short van builds. Perfect for city drives, weekend getaways, and minimalist adventurers seeking flexibility and style." : wheelbase === "couples-layout" ?
   "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
 
   return (

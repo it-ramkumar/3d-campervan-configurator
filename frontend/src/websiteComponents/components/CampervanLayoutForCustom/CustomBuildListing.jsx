@@ -20,14 +20,12 @@ const map = {
   "family-layout": "Layouts for Families (3–9 People)",
   "long-van": "Flagship Long Van — Montreal",
   "short-van": "Flagship Short Van — Santa Monica",
-  // "sprinter-144":"144",
-  // "transit-148":"148",
-  // "promaster-159":"159",
+
 
 };
 
 const url = map[category] || "";
-// console.log(url, "url");
+console.log(url, "url");
 
 useEffect(() => {
   const fetch = async () => {
@@ -66,10 +64,11 @@ useEffect(() => {
     if (page < totalPages) setPage(page + 1);
   };
 const heroImage = "/heroSlider/custom_build.jpg";
-const newTitleText = "Custom Campervan Builds";
-const newDescriptionText =
-  "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
-
+const newTitleText = category === "custom-builds" ? "Custom Campervan Builds" :category === "couples-layout" ? "Layouts for Solo & Couple Travelers" : category === "family-layout" ? "Layouts for Families (3–9 People)" : category ==="long-van" ? "Flagship Long Van — Montreal" : category ==="short-van" ? "Flagship Short Van — Santa Monica" : "";
+const newDescriptionText = category === "custom-builds" ?
+   "Experience agile travel with our compact short van builds. Perfect for city drives, weekend getaways, and minimalist adventurers seeking flexibility and style." : category === "couples-layout" ?
+   "Discover the perfect layouts for solo travelers and couples. Our designs maximize space and comfort, ensuring memorable journeys for two." : category === "family-layout" ?
+   "Explore spacious and functional layouts designed for families of all sizes. Create unforgettable adventures with comfort and convenience for everyone." : category ==="long-van" ? "Flagship Long Van — Montreal" : category ==="short-van" ? "Flagship Short Van — Santa Monica" : "";
   return (
     <>
  <Navbar />

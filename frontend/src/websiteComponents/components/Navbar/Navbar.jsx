@@ -378,7 +378,13 @@ const handleLayoutClick = async (link) => {
       ? "text-indigo-600 font-semibold"
       : "text-gray-700 hover:text-indigo-600"
     }`}
-  onClick={section.title === "Layouts by Big Bear Vans" ? () => handleLayoutClick(item.link) : undefined}
+   onClick={() => {
+        setActiveMenu(null); // CLOSE MEGA MENU
+
+        if (section.title === "Layouts by Big Bear Vans") {
+          handleLayoutClick(item.link);
+        }
+      }}
 >
   {item.label}
 </Link>
