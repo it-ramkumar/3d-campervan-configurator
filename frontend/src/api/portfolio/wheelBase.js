@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export async function getByWheelBase(wheelBase, page = 1, limit = 10) {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/category`,
+      `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/wheel-base`,
       {
         params: {
           wheelBase, // wheelBase
@@ -14,7 +14,7 @@ export async function getByWheelBase(wheelBase, page = 1, limit = 10) {
         withCredentials: true,
       }
     );
-
+console.log(response.data)
     return {
       success: true,
       // return all the useful info your backend sends
@@ -25,7 +25,7 @@ export async function getByWheelBase(wheelBase, page = 1, limit = 10) {
     };
   } catch (err) {
     Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });

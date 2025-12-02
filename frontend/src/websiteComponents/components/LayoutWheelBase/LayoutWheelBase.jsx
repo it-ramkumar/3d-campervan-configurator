@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getByCategory } from "../../../api/portfolio/getByCategory";
+import {getByWheelBase} from "../../../api/portfolio/wheelBase";
 import BlackButton from "../Common/Button/BlackButton";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
@@ -8,33 +8,29 @@ import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 
 export default function CamperProjectsPage() {
-  const { category } = useParams();
+  const { wheelbase } = useParams();
   const [layouts, setLayouts] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
 const map = {
-  "custom-builds": "Portfolio of Custom Builds",
-  "couples-layout": "Layouts for Solo & Couple Travelers",
-  "family-layout": "Layouts for Families (3–9 People)",
-  "long-van": "Flagship Long Van — Montreal",
-  "short-van": "Flagship Short Van — Santa Monica",
-  // "sprinter-144":"144",
-  // "transit-148":"148",
-  // "promaster-159":"159",
+  "sprinter-144":"144",
+  "transit-148":"148",
+  "promaster-159":"159",
+  "promaster-136":"136",
 
 };
 
-const url = map[category] || "";
-// console.log(url, "url");
+const url = map[wheelbase] || "";
+console.log(url, "url");
 
 useEffect(() => {
   const fetch = async () => {
     try {
       setLoading(true);
 
-      const data = await getByCategory(url, page);
+      const data = await getByWheelBase(url, page);
 
       if (data?.success) {
         setLayouts(data?.data || []);
@@ -50,7 +46,7 @@ useEffect(() => {
   };
 
   fetch();
-}, [category, url, page]);
+}, [wheelbase, url, page]);
 
 useEffect(() => {
   window.scrollTo({

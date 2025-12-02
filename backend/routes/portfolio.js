@@ -182,13 +182,19 @@ router.get("/category", async (req, res) => {
   }
 });
 
-router.get("/wheelbase", async (req, res) => {
+router.get("/wheel-base", async (req, res) => {
   try {
-    const { wheelbase } = req.query;
+    const { wheelBase } = req.query;
+    console.log("wheelBase:", wheelBase);
+
     const filter = {};
 
-    if (wheelbase) {
-      filter["van_listing.specifications.wheelbase"] = wheelbase;
+    if (wheelBase) {
+      const wheelArray = Array.isArray(wheelBase)
+        ? wheelBase.map(String)
+        : [String(wheelBase)];
+
+      filter["van_listing.specifications.wheelbase"] = { $in: wheelArray };
     }
 
     const vans = await PortfolioVan.find(filter);
@@ -197,11 +203,13 @@ router.get("/wheelbase", async (req, res) => {
       success: true,
       data: vans,
     });
+
   } catch (err) {
     console.error("Error fetching vans by wheelbase:", err);
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
+
 
 router.put(
   "/:slug",

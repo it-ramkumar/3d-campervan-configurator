@@ -35,6 +35,7 @@ const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"
 const Testing = lazy(() => import("../websiteComponents/components/Layouts/SantaMonica/SantaMonica"));
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
+const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
@@ -88,6 +89,7 @@ const AppRoutes = () => {
           <Route path="/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />
           <Route path="/sprinter-guide" element={<SprinterPresentation />} />
+          <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />
 
 
         </Routes>
