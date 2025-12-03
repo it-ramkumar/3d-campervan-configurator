@@ -96,7 +96,6 @@ router.post(
     }
   }
 );
-
 router.get("/", async (req, res) => {
   try {
     let { page = 1, limit = 50, category, sold, search } = req.query;
@@ -135,12 +134,10 @@ router.get("/", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
-
 router.get("/category", async (req, res) => {
   try {
-    let { category, page = 1, limit = 10 } = req.query;
-    // console.log("Category:", category);
-
+    let { category, page = 1, limit = 10, search, model, sit, sleep } = req.query;
+console.log(req.query)
     if (!category) {
       return res.status(400).json({
         success: false,
@@ -152,34 +149,212 @@ router.get("/category", async (req, res) => {
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
 
-    // Make category an array (for multiple selections)
     const categoryArray = Array.isArray(category) ? category : [category];
 
-    // Get total count
-    const total = await PortfolioVan.countDocuments({
+    const filter = {
       category: { $in: categoryArray }
-    });
+    };
 
-    // Fetch paginated data
-    const portfolios = await PortfolioVan.find({
-      category: { $in: categoryArray }
-    })
+ // SIT filter (string)
+if (sit) {
+  const sitArray = Array.isArray(sit) ? sit : [sit.trim()];
+  filter["van_listing.specifications.capacity.sits"] = { $in: sitArray };
+}
+
+// SLEEP filter (string)
+if (sleep) {
+  const sleepArray = Array.isArray(sleep) ? sleep : [sleep.trim()];
+  filter["van_listing.specifications.capacity.sleeps"] = { $in: sleepArray };
+}
+
+// MODEL filter (string)
+if (model) {
+  const modelArray = Array.isArray(model) ? model : [model.trim()];
+  filter["van_listing.specifications.make_model"] = { $in: modelArray };
+}
+
+if (search) {
+  const regex = new RegExp(search.split(" ").join(".*"), "i");
+
+  filter.$or = [
+    { "van_listing.title": { $regex: regex } },
+    { "van_listing.description": { $regex: regex } }
+  ];
+}
+
+
+
+    // ---- STEP 1: Get filtered vans (pagination) ----
+    const total = await PortfolioVan.countDocuments(filter);
+
+    const portfolios = await PortfolioVan.find(filter)
       .skip(skip)
       .limit(limitNum)
       .sort({ createdAt: -1 });
 
+    // ---- STEP 2: Get ALL vans of this category (without sit/sleep filters) ----
+    // Because filters list should show all available options inside this category
+    const baseFilter = { category: { $in: categoryArray } };
+
+    const allCategoryVans = await PortfolioVan.find(baseFilter);
+
+    // ---- STEP 3: Extract available sits / sleeps / models ----
+    const availableSits = [
+      ...new Set(
+        allCategoryVans.map((v) => v?.van_listing?.specifications?.capacity?.sits)
+      ),
+    ].filter(Boolean).sort((a, b) => a - b);
+
+    const availableSleeps = [
+      ...new Set(
+        allCategoryVans.map((v) => v?.van_listing?.specifications?.capacity?.sleeps)
+      ),
+    ].filter(Boolean).sort((a, b) => a - b);
+
+    const availableModels = [
+      ...new Set(
+        allCategoryVans.map((v) => v?.van_listing?.specifications?.make_model)
+      ),
+    ].filter(Boolean).sort();
+
+    // ---- FINAL RESPONSE ----
     res.json({
       success: true,
       total,
       page: pageNum,
       pages: Math.ceil(total / limitNum),
       data: portfolios,
+
+      // Filters available for this category
+      filters: {
+        sits: availableSits,
+        sleeps: availableSleeps,
+        models: availableModels,
+      }
     });
+
   } catch (err) {
     console.error("Error fetching portfolios by category:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
+
+router.get("/wheel-base", async (req, res) => {
+  try {
+    let { wheelBase, search, size, sit, sleep, model, page = 1, limit = 10 } = req.query;
+
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+    const filter = {};
+
+    // -----------------------------------------
+    // Wheelbase Filter
+    // -----------------------------------------
+    if (wheelBase) {
+      const wheelArray = Array.isArray(wheelBase)
+        ? wheelBase.map((i) => i.trim())
+        : [wheelBase.trim()];
+
+      filter["van_listing.specifications.wheelbase"] = { $in: wheelArray };
+    }
+
+    // -----------------------------------------
+    // Size Filter
+    // -----------------------------------------
+    if (size) {
+      const sizeArray = Array.isArray(size)
+        ? size.map((i) => i.trim())
+        : [size.trim()];
+
+      filter["van_listing.specifications.size"] = { $in: sizeArray };
+    }
+
+    // -----------------------------------------
+    // Sit Filter (STRING version)
+    // -----------------------------------------
+    if (sit) {
+      const sitArray = Array.isArray(sit)
+        ? sit.map((i) => i.trim())
+        : [sit.trim()];
+
+      filter["van_listing.specifications.capacity.sits"] = { $in: sitArray };
+    }
+
+    // -----------------------------------------
+    // Sleep Filter (STRING version)
+    // -----------------------------------------
+    if (sleep) {
+      const sleepArray = Array.isArray(sleep)
+        ? sleep.map((i) => i.trim())
+        : [sleep.trim()];
+
+      filter["van_listing.specifications.capacity.sleeps"] = { $in: sleepArray };
+    }
+
+    // -----------------------------------------
+    // Model Filter (STRING version)
+    // -----------------------------------------
+    if (model) {
+      const modelArray = Array.isArray(model)
+        ? model.map((i) => i.trim())
+        : [model.trim()];
+
+      filter["van_listing.specifications.make_model"] = { $in: modelArray };
+    }
+
+    // -----------------------------------------
+    // Search Filter (title + description)
+    // -----------------------------------------
+    if (search) {
+      const regex = new RegExp(search.split(" ").join(".*"), "i");
+
+      filter.$or = [
+        { "van_listing.title": { $regex: regex } },
+        { "van_listing.description": { $regex: regex } }
+      ];
+    }
+
+    // -----------------------------------------
+    // Fetch Vans
+    // -----------------------------------------
+    const total = await PortfolioVan.countDocuments(filter);
+
+    const vans = await PortfolioVan.find(filter)
+      .skip(skip)
+      .limit(limitNum)
+      .sort({ createdAt: -1 });
+
+    // -----------------------------------------
+    // Prepare Dropdown Filters
+    // -----------------------------------------
+    const allVans = await PortfolioVan.find({});
+
+    const sits = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sits).filter(Boolean))];
+    const sleeps = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))];
+    const models = [...new Set(allVans.map(v => v?.van_listing?.specifications?.make_model).filter(Boolean))];
+
+    res.json({
+      success: true,
+      data: vans,
+      total,
+      page: pageNum,
+      pages: Math.ceil(total / limitNum),
+      filters: {
+        sits,
+        sleeps,
+        models
+      }
+    });
+
+  } catch (err) {
+    console.error("Error fetching vans by wheelbase:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch vans" });
+  }
+});
+
 router.get("/navCat", async (req, res) => {
   try {
     const categories = await PortfolioVan.distinct("category");
@@ -192,34 +367,6 @@ router.get("/navCat", async (req, res) => {
   } catch (err) {
     console.error("Error fetching categories:", err);
     res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/wheel-base", async (req, res) => {
-  try {
-    const { wheelBase } = req.query;
-    // console.log("wheelBase:", wheelBase);
-
-    const filter = {};
-
-    if (wheelBase) {
-      const wheelArray = Array.isArray(wheelBase)
-        ? wheelBase.map(String)
-        : [String(wheelBase)];
-
-      filter["van_listing.specifications.wheelbase"] = { $in: wheelArray };
-    }
-
-    const vans = await PortfolioVan.find(filter);
-
-    res.json({
-      success: true,
-      data: vans,
-    });
-
-  } catch (err) {
-    console.error("Error fetching vans by wheelbase:", err);
-    res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
 router.get("/navWheel-bases", async (req, res) => {
@@ -239,8 +386,6 @@ router.get("/navWheel-bases", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
-
 router.put(
   "/:slug",
   protect,
@@ -332,7 +477,6 @@ router.put(
     }
   }
 );
-
 router.delete("/:slug", protect, adminOnly, async (req, res) => {
   try {
     // 1️⃣ Find the portfolio first
@@ -365,7 +509,6 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, message: "Delete failed" });
   }
 });
-
 router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });

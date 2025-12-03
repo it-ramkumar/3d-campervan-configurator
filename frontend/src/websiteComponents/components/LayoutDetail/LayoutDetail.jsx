@@ -192,9 +192,7 @@ export default function LayoutDetail() {
     };
   }) || [];
 
-  // Dummy logic for conditional Black Friday offer (as seen in the reference)
-  const isBlackFridayDeal = slug === "4x4-santa-monica-v6-turbo"; // Replace with actual logic
-
+ console.log(van,"van")
   return (
     <>
       <Navbar />
@@ -255,6 +253,11 @@ export default function LayoutDetail() {
                   label="Drivetrain"
                   value={van_listing?.specifications?.drivetrain}
                 />
+                     <HeroSpecItem
+                  label="Van Size"
+                  value={van_listing?.size}
+                />
+
 
                 <HeroSpecItem
                   label="Sit & Sleep"
@@ -264,32 +267,6 @@ export default function LayoutDetail() {
 
               {/* Price & CTA Block */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-
-                {/* 🏷️ Price Tag (Modernized) */}
-                {/* <div className="flex flex-col justify-center items-start">
-                  {isBlackFridayDeal ? (
-                    <>
-                      <p className="text-gray-400 text-sm line-through font-medium">
-                        ${van_listing?.formatted_price?.originalPrice?.toLocaleString() || "224,543"}
-                      </p>
-                      <p className="font-extrabold text-3xl sm:text-4xl text-[#FFD700] drop-shadow-lg">
-                        ${van_listing?.formatted_price?.discountedPrice?.toLocaleString() || "185,000"}
-                      </p>
-                      <span className="bg-red-600 text-white text-xs font-extrabold px-2 py-0.5 rounded-full mt-1 animate-pulse shadow-md">
-                        LIMITED TIME OFFER
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium text-gray-300 uppercase tracking-widest">
-                        Pricing From
-                      </p>
-                      <p className="font-extrabold text-3xl sm:text-4xl text-white drop-shadow-md">
-                        ${van_listing?.formatted_price?.originalPrice?.toLocaleString() || "224,543"}
-                      </p>
-                    </>
-                  )}
-                </div> */}
 
                 {/* Call To Action Button */}
                 <Link to="/contact">

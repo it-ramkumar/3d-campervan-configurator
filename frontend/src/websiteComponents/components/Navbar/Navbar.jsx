@@ -326,16 +326,16 @@ const handleLayoutClick = async (link) => {
     let label = "";
 
     if (base === "144" || base === 144) {
-      label = "Sprinter 144";
+      label = "Mercedes Sprinter 144";
     }
     else if (base === "170" || base === 170) {
-      label = "Sprinter 170";
+      label = "Mercedes Sprinter 170";
     }
     else if (base === "148" || base === 148) {
-      label = "Transit 148";
+      label = "Ford Transit 148";
     }
     else {
-      label = `Promaster ${base}`;
+      label = `RAM Promaster ${base}`;
     }
 
     return (
