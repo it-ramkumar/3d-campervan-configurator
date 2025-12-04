@@ -4,8 +4,7 @@ const router = express.Router();
 const Inquery = require("../models/inquery");
 const nodemailer = require("nodemailer");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
-
-
+const Lead = require("../models/leadsEmail");
 router.post("/", async (req, res) => {
   try {
     // 1️⃣ Save form data to database
@@ -51,7 +50,14 @@ router.post("/", async (req, res) => {
       </div>
     `;
 
-    // 4️⃣ Create transporter using Gmail SMTP
+    // 4️⃣ Get all sub-admin emails from Lead collection
+    const leads = await Lead.find({}, { email: 1, _id: 0 });
+    const leadEmails = leads.map(l => l.email).filter(Boolean);
+
+    // 5️⃣ Prepare all admin recipients (primary + sub-admins) & remove duplicates
+    const allAdminEmails = [...new Set([process.env.GMAIL_USER, ...leadEmails])];
+
+    // 6️⃣ Create transporter using Gmail SMTP
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -62,30 +68,33 @@ router.post("/", async (req, res) => {
       },
     });
 
-    // 5️⃣ Send email to admin
+    // 7️⃣ Send email to all admins
     await transporter.sendMail({
       from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
-      to: process.env.GMAIL_USER,
+      to: allAdminEmails,
       subject: "New Inquiry Message from Website",
       html: adminHtmlTable,
     });
+    console.log("Admin email sent to:", allAdminEmails);
 
-    // 6️⃣ Send confirmation email to user
-    if (req.body.email) { // only if user provided email
+    // 8️⃣ Send confirmation email to user
+    if (req.body.email) {
       await transporter.sendMail({
         from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
         to: req.body.email,
         subject: "Thank You for Your Inquiry!",
         html: userHtml,
       });
+      console.log("User confirmation sent to:", req.body.email);
     }
 
-    // 7️⃣ Send response
+    // 9️⃣ Send response
     res.status(201).json({
       success: true,
-      message: "Inquiry saved, admin notified, and user confirmation sent.",
+      message: "Inquiry saved, admin(s) notified, and user confirmation sent.",
       data: newForm,
     });
+
   } catch (error) {
     console.error("Error saving inquiry or sending emails:", error);
     res.status(500).json({ success: false, error: error.message });

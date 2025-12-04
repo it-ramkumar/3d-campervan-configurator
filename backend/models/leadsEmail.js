@@ -1,52 +1,29 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const EmailSettingsSchema = new mongoose.Schema({
-  senderEmail: {
-    type: String,
-    required: true,
-    unique: true,
+const EmailSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
+    },
+    ipAddress: {
+      type: String,
+      default: null,
+    },
+    userAgent: {
+      type: String,
+      default: null,
+    },
   },
-  encryptedPassword: {
-    type: String,
-    required: true, // AES-256-GCM encrypted
-  },
-  recipients: {
-    type: [String],
-    default: [], // dashboard se add/remove honge
-    validate: {
-      validator: function(arr) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return arr.every(e => emailRegex.test(e));
-      },
-      message: 'All recipients must be valid emails'
-    }
+  {
+    timestamps: true,
   }
-}, { timestamps: true });
+);
 
-// Static helper: fetch first (or only) email settings doc
-EmailSettingsSchema.statics.getSettings = async function() {
-  let doc = await this.findOne();
-  return doc;
-};
+EmailSchema.index({ email: 1 }, { unique: true });
 
-// Static helper: add recipient
-EmailSettingsSchema.statics.addRecipient = async function(email) {
-  const doc = await this.getSettings();
-  if (!doc) return null;
-  if (!doc.recipients.includes(email)) {
-    doc.recipients.push(email);
-    await doc.save();
-  }
-  return doc;
-};
-
-// Static helper: remove recipient
-EmailSettingsSchema.statics.removeRecipient = async function(email) {
-  const doc = await this.getSettings();
-  if (!doc) return null;
-  doc.recipients = doc.recipients.filter(e => e !== email);
-  await doc.save();
-  return doc;
-};
-
-module.exports = mongoose.model('EmailSettings', EmailSettingsSchema);
+module.exports = mongoose.models.Email || mongoose.model("Email", EmailSchema);

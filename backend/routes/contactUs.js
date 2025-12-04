@@ -1,116 +1,27 @@
-// require("dotenv").config();
-// const express = require("express");
-// const router = express.Router();
-// const crypto = require('crypto');
-// const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // 64 hex characters
-// const Contact = require("../models/contactUs");
-// const nodemailer = require("nodemailer");
-// const { protect, adminOnly } = require("../middleware/authMiddleware")
-// const { decrypt } = require("../services/encryption");
-// const EmailSettings = require("../models/leadsEmail");
-
-
-
-
-// router.post("/", async (req, res) => {
-//   try {
-//     const { name, email, phone, message } = req.body;
-
-//     if (!name || !email || !phone || !message) {
-//       return res.status(400).json({ success: false, error: "All fields are required" });
-//     }
-
-//     // Save contact
-//     const newContact = new Contact({ name, email, phone, message });
-//     await newContact.save();
-
-//     // Get email settings
-//     const settings = await EmailSettings.getSettings();
-//     if (!settings) return res.status(500).json({ success: false, error: "Email settings not found" });
-
-//     const decryptedPassword = decrypt(settings.encryptedPassword);
-
-//     // Create nodemailer transporter
-//     const transporter = nodemailer.createTransport({
-//       host: 'smtp.gmail.com',
-//       port: 465,
-//       secure: true,
-//       auth: {
-//         user: settings.senderEmail,
-//         pass: decryptedPassword,
-//       },
-//     });
-
-//     const tableHtml = `
-//       <table style="width: 100%; border-collapse: collapse;">
-//         <tr><td><strong>Name:</strong></td><td>${name}</td></tr>
-//         <tr><td><strong>Email:</strong></td><td>${email}</td></tr>
-//         <tr><td><strong>Phone:</strong></td><td>${phone}</td></tr>
-//         <tr><td><strong>Message:</strong></td><td>${message}</td></tr>
-//       </table>
-//     `;
-
-//     // Admin email
-//     await transporter.sendMail({
-//       from: `"Big Bear Vans" <${settings.senderEmail}>`,
-//       to: settings.recipients.join(','),
-//       subject: "New Contact Message from Website",
-//       html: `<h2>New Contact Message</h2>${tableHtml}`
-//     });
-
-//     // User confirmation
-//     await transporter.sendMail({
-//       from: `"Big Bear Vans" <${settings.senderEmail}>`,
-//       to: email,
-//       subject: "Thank You for Your Message",
-//       html: `<h2>Thank You for Contacting Big Bear Vans</h2>
-//              <p>Hi ${name},</p>
-//              <p>We received your message and will get back to you shortly.</p>
-//              <p>Here’s a copy of your message:</p>${tableHtml}
-//              <p>This is an automated email.</p>`
-//     });
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Message saved, admin notified, and user confirmation sent.",
-//       data: newContact,
-//     });
-
-//   } catch (err) {
-//     console.error("Error sending email:", err);
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// });
-
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Contact = require("../models/contactUs");
 const nodemailer = require("nodemailer");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
+const Lead = require("../models/leadsEmail");
 
 
-/* ===============================
-   POST - Create new contact
-================================ */
 router.post("/", async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
 
-    // 1️⃣ Validate required fields
     if (!name || !email || !phone || !message) {
-      return res
-        .status(400)
-        .json({ success: false, error: "All fields are required" });
+      return res.status(400).json({ success: false, error: "All fields are required" });
     }
 
-    // 2️⃣ Save contact to database
+    // Save contact
     const newContact = new Contact({ name, email, phone, message });
     await newContact.save();
 
-    // 3️⃣ Prepare HTML content
+    // HTML content
     const tableHtml = `
-      <table style="width: 100%; border-collapse: collapse;">
+      <table style="width:100%;border-collapse:collapse;">
         <tr><td><strong>Name:</strong></td><td>${name}</td></tr>
         <tr><td><strong>Email:</strong></td><td>${email}</td></tr>
         <tr><td><strong>Phone:</strong></td><td>${phone}</td></tr>
@@ -118,11 +29,7 @@ router.post("/", async (req, res) => {
       </table>
     `;
 
-    const adminHtml = `
-      <h2>New Contact Message</h2>
-      ${tableHtml}
-    `;
-
+    const adminHtml = `<h2>New Contact Message</h2>${tableHtml}`;
     const userHtml = `
       <h2>Thank You for Contacting Big Bear Vans</h2>
       <p>Hi ${name},</p>
@@ -132,40 +39,49 @@ router.post("/", async (req, res) => {
       <p>This is an automated email.</p>
     `;
 
-    // 4️⃣ Create Gmail transporter
+    // Nodemailer transporter
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: "smtp.gmail.com",
       port: 465,
       secure: true,
       auth: {
-        user: process.env.GMAIL_USER,       // your Gmail
-        pass: process.env.GMAIL_APP_PASS,   // Gmail App Password
-      }
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASS,
+      },
     });
 
-    // 5️⃣ Send admin email
+    // 1️⃣ Get all sub-admin emails from Lead collection
+    const leads = await Lead.find({}, { email: 1, _id: 0 });
+    const leadEmails = leads.map(l => l.email).filter(Boolean);
+
+
+    // 2️⃣ Prepare all admin recipients (primary + sub-admins)
+    const allAdminEmails = [process.env.GMAIL_USER, ...leadEmails];
+    // console.log(allAdminEmails,"email")
+
+    // 3️⃣ Send email to all admins
     await transporter.sendMail({
       from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
-      to: process.env.GMAIL_USER,           // admin email
-      cc: process.env.BACKUP_EMAIL || "",   // optional backup
+      to: allAdminEmails, // array of emails
       subject: "New Contact Message from Website",
-      html: adminHtml
+      html: adminHtml,
     });
 
-    // 6️⃣ Send confirmation email to user
-    if (email) {
+
+    // 8️⃣ Send confirmation email to user
+    if (req.body.email) {
       await transporter.sendMail({
         from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
-        to: email,
-        subject: "Thank You for Your Message",
-        html: userHtml
+        to: req.body.email,
+        subject: "Thank You for Your Inquiry!",
+        html: userHtml,
       });
+      console.log("User confirmation sent to:", req.body.email);
     }
 
-    // 7️⃣ Send response
     res.status(201).json({
       success: true,
-      message: "Message saved, admin notified, and user confirmation sent.",
+      message: "Message saved, admin(s) notified, and user confirmation sent.",
       data: newContact,
     });
 
@@ -174,6 +90,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ success: false, error: "Server error", details: error.message });
   }
 });
+
 
 
 /* ===============================
