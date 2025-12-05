@@ -8,12 +8,13 @@ export const submitInquiry = async (formData) => {
       withCredentials: true,
     });
 
-    console.log(data)
+    // console.log(data)
         Swal.fire({
-          icon: "success",
-          title: "Successfully!",
-          text:data.message,
-        });
+  icon: "success",
+  title: "Success!",
+  text: `${data.message} Please check your email to view your booking details.`,
+});
+
     return { success: true, data };
   } catch (error) {
         Swal.fire({

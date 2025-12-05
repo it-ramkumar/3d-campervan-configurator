@@ -50,6 +50,9 @@ router.get("/auth/url", (req, res) => {
 
 // Step 2: OAuth callback
 router.get("/auth/callback", async (req, res) => {
+    console.log('Client ID:', process.env.CALENDER_CLIENTID);
+console.log('Client Secret:', process.env.CALENDER_CLIENT_SECRET);
+console.log('Redirect URI:', process.env.REDIRECT_URI);
   const code = req.query.code;
   try {
     const { tokens } = await oauth2Client.getToken(code);

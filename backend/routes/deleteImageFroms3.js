@@ -7,8 +7,6 @@ const { protect, adminOnly } = require("../middleware/authMiddleware")
 
 
 const router = express.Router();
-
-// 🧾 Route: Delete image from S3 + remove from all galleries
 router.post("/delete-image",protect, adminOnly, async (req, res) => {
   const { imageUrl } = req.body;
 
@@ -20,17 +18,15 @@ router.post("/delete-image",protect, adminOnly, async (req, res) => {
   }
 
   try {
-    // Step 1️⃣ Delete from S3
+
     await deleteFromS3(imageUrl);
 
-    // Step 2️⃣ Remove from all gallery arrays
     const galleryResults = await Promise.all([
       Portfolio.updateMany({}, { $pull: { gallery: imageUrl } }),
       Blog.updateMany({}, { $pull: { gallery: imageUrl } }),
       Van.updateMany({}, { $pull: { gallery: imageUrl } }),
     ]);
 
-    // Step 3️⃣ Remove from blog blocks
     const blogs = await Blog.find({ "content.image": imageUrl });
     const blockUpdates = await Promise.all(
       blogs.map(async (blog) => {

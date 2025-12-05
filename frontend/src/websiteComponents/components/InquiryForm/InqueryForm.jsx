@@ -150,14 +150,7 @@ export default function InquiryForm() {
       }
     }
 
-    // if (formData.phone) {
-    //   const phonePattern = /^[0-9]{10,}$/;
-    //   if (!phonePattern.test(formData.phone.replace(/\D/g, ''))) {
-    //     setValidationMessage("⚠️ Please enter a valid phone number (at least 10 digits).");
-    //     setIsLoading(false);
-    //     return;
-    //   }
-    // }
+  
 
     try {
       const result = await submitInquiry(formData);

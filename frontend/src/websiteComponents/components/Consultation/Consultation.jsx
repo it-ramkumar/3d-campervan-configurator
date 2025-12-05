@@ -69,13 +69,14 @@ export default function Consultation({ vanForSale }) {
       const result = await contact(formData);
 
       if (result.success) {
-        Swal.fire({
-          title: "Success!",
-          text: "Your consultation request has been submitted successfully!",
-          icon: "success",
-          timer: 2500,
-          showConfirmButton: false,
-        });
+     Swal.fire({
+  title: "Success!",
+  text: "Your consultation request has been submitted successfully! Please check your email to view your booking details.",
+  icon: "success",
+  timer: 3000,
+  // showConfirmButton: false,
+});
+
 
         // 🔹 Reset form
         setFormData({

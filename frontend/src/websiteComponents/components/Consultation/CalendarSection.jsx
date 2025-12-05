@@ -8,7 +8,7 @@ const [authUrl, setAuthUrl] = useState("");
  const [isLoggedIn, setIsLoggedIn] = useState(false);
  const [slots, setSlots] = useState([]);
  const [selectedSlot, setSelectedSlot] = useState();
-
+ const [submitting, setSubmitting] = useState(false);
  // ✅ FIX: Hamesha user ke local date ko YYYY-MM-DD format mein return karein.
  const getTodayDate = () => {
  const now = new Date();
@@ -120,6 +120,7 @@ const handleBooking = async () => {
   description: formData.description || "",
  };
 
+ setSubmitting(true);
  try {
   // console.log("Sending booking data:", bookingData);
 
@@ -141,6 +142,7 @@ const handleBooking = async () => {
 
   // Remove booked slot
   setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+  setSubmitting(false);
 
  } catch (err) {
   console.error("Network error:", err);
@@ -512,7 +514,7 @@ const generateCalendar = () => {
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => setBookingStep(3)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1 text-sm">Back</button>
-                    <button onClick={handleBooking} className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex-1 text-sm">Confirm Booking</button>
+                    <button disabled={submitting} onClick={handleBooking} className={`${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"} text-white px-4 py-2 rounded-lg transition-colors font-medium flex-1 text-sm`}>{submitting ? "Submitting..." : "Confirm Booking"}</button>
                   </div>
                 </div>
               )}
@@ -535,6 +537,10 @@ const generateCalendar = () => {
                       </button>
                     </div>
                   </div>
+<p className="text-white bg-black text-sm leading-relaxed my-4 p-2 rounded-lg">
+  Your meeting has been successfully scheduled! Please check your inbox to confirm the booking and find all the meeting details. We look forward to connecting with you.
+</p>
+
                   <button onClick={resetBooking} className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm">Book Another Meeting</button>
                 </div>
               )}

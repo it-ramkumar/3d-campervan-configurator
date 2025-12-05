@@ -32,12 +32,12 @@ router.post("/model", upload.single("file"), async (req, res) => {
 
     const folderName = "export-models";
     const uploadName = `${uuidv4()}-${Date.now()}${path.extname(fileName)}`;
-    console.log("🔑 Uploading as:", uploadName);
+    // console.log("🔑 Uploading as:", uploadName);
 
     // Upload to S3 (auto GLB compression included)
     const fileUrl = await uploadToS3(file.buffer, folderName, uploadName, mimetype);
 
-    console.log("✅ Upload successful:", fileUrl);
+    // console.log("✅ Upload successful:", fileUrl);
 
     res.json({
       success: true,
