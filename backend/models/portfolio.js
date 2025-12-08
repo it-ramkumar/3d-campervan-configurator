@@ -35,6 +35,14 @@ const vanListingSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+   bathroomType: {  
+    type: String,
+    trim: true
+  },
+   bedType: {
+    type: String,
+    trim: true
+  },
     size: {
     type: String,
     trim: true

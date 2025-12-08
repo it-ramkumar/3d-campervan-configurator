@@ -18,16 +18,24 @@ export default function CamperProjectsPage() {
   const [filters, setFilters] = useState({});
 
   // MAIN FILTER STATES (applied filters)
-  const [search, setSearch] = useState("");
-  const [model, setModel] = useState("");
-  const [sit, setSit] = useState("");
-  const [sleep, setSleep] = useState("");
+  const [appliedFilters, setAppliedFilters] = useState({
+    search: "",
+    model: "",
+    sit: "",
+    sleep: "",
+    bedType: "",
+    bathroomType: ""
+  });
 
   // TEMP STATES (before Apply Filters)
-  const [tempSearch, setTempSearch] = useState("");
-  const [tempModel, setTempModel] = useState("");
-  const [tempSit, setTempSit] = useState("");
-  const [tempSleep, setTempSleep] = useState("");
+  const [tempFilters, setTempFilters] = useState({
+    search: "",
+    model: "",
+    sit: "",
+    sleep: "",
+    bedType: "",
+    bathroomType: ""
+  });
 
   useEffect(() => {
     const fetch = async () => {
@@ -37,10 +45,12 @@ export default function CamperProjectsPage() {
         const data = await getByWheelBase(
           wheelbase,
           page,
-          search,
-          model,
-          sit,
-          sleep
+          appliedFilters.search,
+          appliedFilters.model,
+          appliedFilters.sit,
+          appliedFilters.sleep,
+          appliedFilters.bedType,
+          appliedFilters.bathroomType
         );
 
         if (data?.success) {
@@ -58,7 +68,7 @@ export default function CamperProjectsPage() {
     };
 
     fetch();
-  }, [wheelbase, page, search, model, sit, sleep]);
+  }, [wheelbase, page, appliedFilters]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -66,36 +76,56 @@ export default function CamperProjectsPage() {
 
   // APPLY FILTERS
   const handleApplyFilters = () => {
-    setSearch(tempSearch);
-    setModel(tempModel);
-    setSit(tempSit);
-    setSleep(tempSleep);
+    setAppliedFilters({ ...tempFilters });
     setPage(1);
   };
 
   // CLEAR FILTERS
   const handleClearFilters = () => {
-    setTempSearch("");
-    setTempModel("");
-    setTempSit("");
-    setTempSleep("");
-
-    setSearch("");
-    setModel("");
-    setSit("");
-    setSleep("");
-
+    const cleared = {
+      search: "",
+      model: "",
+      sit: "",
+      sleep: "",
+      bedType: "",
+      bathroomType: ""
+    };
+    setTempFilters(cleared);
+    setAppliedFilters(cleared);
     setPage(1);
   };
 
-const heroImage = "/heroSlider/custom_build.jpg";
-const newTitleText = wheelbase === "144" ? "Sprinter 144 Wheelbase" :wheelbase === "148" ? "Transit 148 Wheelbase" : wheelbase === "159" ? "Promaster 159 Wheelbase" : wheelbase ==="136" ? "romaster 136 Wheelbase" : "";
-const newDescriptionText = wheelbase === "144" ?
-   "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures." : wheelbase === "148" ?
-   "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs." : wheelbase === "159" ?
-   "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle." : wheelbase ==="136" ?
-   "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility." : "";
-  "Design your dream campervan with our custom build options. Tailored layouts, features, and finishes for every traveler.";
+  const heroImage = "/heroSlider/custom_build.jpg";
+  const newTitleText =
+    wheelbase === "144"
+      ? "Sprinter 144 Wheelbase"
+      : wheelbase === "148"
+      ? "Transit 148 Wheelbase"
+      : wheelbase === "159"
+      ? "Promaster 159 Wheelbase"
+      : wheelbase === "136"
+      ? "Promaster 136 Wheelbase"
+      : "";
+  const newDescriptionText =
+    wheelbase === "144"
+      ? "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures."
+      : wheelbase === "148"
+      ? "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs."
+      : wheelbase === "159"
+      ? "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle."
+      : wheelbase === "136"
+      ? "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
+      : "";
+
+  // Filter config to dynamically render
+  const filterConfig = [
+    { key: "search", label: "Search", type: "text" },
+    { key: "model", label: "Model", type: "select", options: filters?.models },
+    { key: "sit", label: "Sits", type: "select", options: filters?.sits },
+    { key: "sleep", label: "Sleeps", type: "select", options: filters?.sleeps },
+    { key: "bedType", label: "Bed Type", type: "select", options: filters?.bedType },
+    { key: "bathroomType", label: "Bathroom Type", type: "select", options: filters?.bathroomType }
+  ];
 
   return (
     <>
@@ -115,64 +145,41 @@ const newDescriptionText = wheelbase === "144" ?
           <div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
             <h3 className="text-xl font-bold mb-4 text-gray-800">Filter Vans</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${filterConfig.length} gap-4 mb-4`}>
+              {filterConfig.map((filter) => (
+                <div key={filter.key}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {filter.label}
+                  </label>
 
-              {/* SEARCH */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input
-                  type="text"
-                  placeholder="Search vans..."
-                  value={tempSearch}
-                  onChange={(e) => setTempSearch(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                />
-              </div>
-
-              {/* MODEL */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
-                <select
-                  value={tempModel}
-                  onChange={(e) => setTempModel(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Models</option>
-                  {filters?.models?.map((m, i) => (
-                    <option key={i} value={m}>{m}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* SIT */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sits</label>
-                <select
-                  value={tempSit}
-                  onChange={(e) => setTempSit(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Sits</option>
-                  {filters?.sits?.map((s, i) => (
-                    <option key={i} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* SLEEP */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sleeps</label>
-                <select
-                  value={tempSleep}
-                  onChange={(e) => setTempSleep(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Sleeps</option>
-                  {filters?.sleeps?.map((s, i) => (
-                    <option key={i} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
+                  {filter.type === "text" ? (
+                    <input
+                      type="text"
+                      placeholder={`Search ${filter.label.toLowerCase()}...`}
+                      value={tempFilters[filter.key]}
+                      onChange={(e) =>
+                        setTempFilters({ ...tempFilters, [filter.key]: e.target.value })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+                    />
+                  ) : (
+                    <select
+                      value={tempFilters[filter.key]}
+                      onChange={(e) =>
+                        setTempFilters({ ...tempFilters, [filter.key]: e.target.value })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+                    >
+                      <option value="">All {filter.label}</option>
+                      {filter.options?.map((option, i) => (
+                        <option key={i} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              ))}
             </div>
 
             {/* BUTTONS */}
@@ -195,13 +202,9 @@ const newDescriptionText = wheelbase === "144" ?
 
           {/* RESULTS */}
           {loading ? (
-            <div className="text-center py-20 text-lg text-gray-600">
-              Loading...
-            </div>
+            <div className="text-center py-20 text-lg text-gray-600">Loading...</div>
           ) : layouts.length === 0 ? (
-            <div className="text-center py-20 text-lg text-gray-600">
-              No vans found.
-            </div>
+            <div className="text-center py-20 text-lg text-gray-600">No vans found.</div>
           ) : (
             <div className="space-y-16">
               {layouts.map((project, index) => {
@@ -210,8 +213,9 @@ const newDescriptionText = wheelbase === "144" ?
                 return (
                   <div
                     key={project._id}
-                    className={`group max-w-[1250px] mx-auto flex flex-row ${isReversed ? "flex-row-reverse" : ""
-                      } items-center justify-between gap-4 lg:gap-12`}
+                    className={`group max-w-[1250px] mx-auto flex flex-row ${
+                      isReversed ? "flex-row-reverse" : ""
+                    } items-center justify-between gap-4 lg:gap-12`}
                   >
                     {/* TEXT */}
                     <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
@@ -233,12 +237,16 @@ const newDescriptionText = wheelbase === "144" ?
                     <div className="relative w-1/2 h-[350px] lg:h-[550px]">
                       <ImageWithSkeleton
                         src={project.gallery?.[0]}
-                        className={`absolute top-0 w-[70%] h-full object-cover ${isReversed ? "left-0" : "right-0"}`}
+                        className={`absolute top-0 w-[70%] h-full object-cover ${
+                          isReversed ? "left-0" : "right-0"
+                        }`}
                       />
 
                       <ImageWithSkeleton
                         src={project.gallery?.[0]}
-                        className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"}`}
+                        className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${
+                          isReversed ? "right-[5%]" : "left-[5%]"
+                        }`}
                       />
                     </div>
                   </div>
@@ -253,10 +261,11 @@ const newDescriptionText = wheelbase === "144" ?
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className={`px-4 py-2 rounded-md text-sm ${page === 1
+                className={`px-4 py-2 rounded-md text-sm ${
+                  page === 1
                     ? "bg-gray-200 text-gray-400"
                     : "bg-black text-white hover:bg-gray-800"
-                  }`}
+                }`}
               >
                 Previous
               </button>
@@ -268,10 +277,11 @@ const newDescriptionText = wheelbase === "144" ?
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className={`px-4 py-2 rounded-md text-sm ${page === totalPages
+                className={`px-4 py-2 rounded-md text-sm ${
+                  page === totalPages
                     ? "bg-gray-200 text-gray-400"
                     : "bg-black text-white hover:bg-gray-800"
-                  }`}
+                }`}
               >
                 Next
               </button>

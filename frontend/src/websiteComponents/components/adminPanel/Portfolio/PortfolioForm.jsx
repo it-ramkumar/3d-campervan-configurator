@@ -24,6 +24,8 @@ export default function PortfolioForm({setSelected}) {
   const [existingGallery, setExistingGallery] = useState([]);
   const [size, setSize] = useState("");
   const [roof, setRoof] = useState("");
+  const [bedType, setBedType] = useState("");
+  const [bathroomType, setBathroomType] = useState("");
 
   // Basic Info
   const [title, setTitle] = useState("");
@@ -71,9 +73,13 @@ export default function PortfolioForm({setSelected}) {
   // ✅ IMPROVED: Auto-fill if editData is available
   useEffect(() => {
     if (editData?._id) {
-      console.log("Editing data:", editData);
+      // console.log("Editing data:", editData);
 
       setTitle(editData.van_listing?.title || "");
+      setRoof(editData.van_listing?.roof || "");
+      setBedType(editData.van_listing?.bedType || "");
+      setBathroomType(editData.van_listing?.bathroomType || "");
+      setSize(editData.van_listing?.size || "");
       setSubtitle(editData.van_listing?.subtitle || "");
       setDescription(editData.van_listing?.description || "");
       setPrice(editData.van_listing?.price || "");
@@ -219,6 +225,8 @@ export default function PortfolioForm({setSelected}) {
         price,
         size,
         roof,
+        bedType,
+        bathroomType,
         specifications: {
           make_model: makeModel,
           wheelbase,
@@ -325,6 +333,8 @@ formDataToSend.append("category", JSON.stringify(category));
               />
 
             </div>
+
+
                <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Roof</label>
               <input
@@ -336,6 +346,32 @@ formDataToSend.append("category", JSON.stringify(category));
               />
 
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Bed Type</label>
+              <input
+                type="text"
+                placeholder="Enter bed"
+                value={bedType}
+                onChange={(e) => setBedType(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+
+            </div>
+
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Bathroom Type</label>
+              <input
+                type="text"
+                placeholder="Enter bathroom"
+                value={bathroomType}
+                onChange={(e) => setBathroomType(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+
+            </div>
+
                <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
               <input

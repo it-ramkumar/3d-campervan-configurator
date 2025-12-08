@@ -8,7 +8,7 @@ import axios from "axios";
  */
 export async function getAllPortfolio(page = 1, limit = 12, search = "") {
   try {
-    console.log("Fetching portfolios...", { search });
+    // console.log("Fetching portfolios...", { search });
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio`,
       {

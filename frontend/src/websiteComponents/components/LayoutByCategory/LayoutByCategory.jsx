@@ -22,12 +22,16 @@ export default function CamperProjectsPage() {
   const [model, setModel] = useState("");
   const [sit, setSit] = useState("");
   const [sleep, setSleep] = useState("");
+  const [bedType, setBedType] = useState("");
+  const [bathroomType, setBathroomType] = useState("");
 
   // TEMP STATES (before Apply Filters)
   const [tempSearch, setTempSearch] = useState("");
   const [tempModel, setTempModel] = useState("");
   const [tempSit, setTempSit] = useState("");
   const [tempSleep, setTempSleep] = useState("");
+  const [tempBedType, setTempBedType] = useState("");
+  const [tempBathroomType, setTempBathroomType] = useState("");
 
   useEffect(() => {
     const fetch = async () => {
@@ -40,7 +44,9 @@ export default function CamperProjectsPage() {
           search,
           model,
           sit,
-          sleep
+          sleep,
+          bedType,
+          bathroomType
         );
 
         if (data?.success) {
@@ -58,7 +64,7 @@ export default function CamperProjectsPage() {
     };
 
     fetch();
-  }, [category, page, search, model, sit, sleep]);
+  }, [category, page, search, model, sit, sleep, bedType, bathroomType]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -70,6 +76,8 @@ export default function CamperProjectsPage() {
     setModel(tempModel);
     setSit(tempSit);
     setSleep(tempSleep);
+    setBedType(tempBedType);
+    setBathroomType(tempBathroomType);
     setPage(1);
   };
 
@@ -79,11 +87,15 @@ export default function CamperProjectsPage() {
     setTempModel("");
     setTempSit("");
     setTempSleep("");
+    setTempBedType("");
+    setTempBathroomType("");
 
     setSearch("");
     setModel("");
     setSit("");
     setSleep("");
+    setBedType("");
+    setBathroomType("");
 
     setPage(1);
   };
@@ -110,7 +122,7 @@ export default function CamperProjectsPage() {
           <div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
             <h3 className="text-xl font-bold mb-4 text-gray-800">Filter Vans</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-4">
 
               {/* SEARCH */}
               <div>
@@ -168,6 +180,36 @@ export default function CamperProjectsPage() {
                   ))}
                 </select>
               </div>
+
+              {/* BED TYPE */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Bed Type</label>
+                <select
+                  value={tempBedType}
+                  onChange={(e) => setTempBedType(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+                >
+                  <option value="">All Bed Types</option>
+                  {[...new Set(filters?.bedType || [])].map((b, i) => (
+                    <option key={i} value={b}>{b}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* BATHROOM TYPE */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Bathroom Type</label>
+                <select
+                  value={tempBathroomType}
+                  onChange={(e) => setTempBathroomType(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+                >
+                  <option value="">All Bathroom Types</option>
+                  {[...new Set(filters?.bathroomType || [])].map((b, i) => (
+                    <option key={i} value={b}>{b}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* BUTTONS */}
@@ -205,8 +247,7 @@ export default function CamperProjectsPage() {
                 return (
                   <div
                     key={project._id}
-                    className={`group max-w-[1250px] mx-auto flex flex-row ${isReversed ? "flex-row-reverse" : ""
-                      } items-center justify-between gap-4 lg:gap-12`}
+                    className={`group max-w-[1250px] mx-auto flex flex-row ${isReversed ? "flex-row-reverse" : ""} items-center justify-between gap-4 lg:gap-12`}
                   >
                     {/* TEXT */}
                     <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
@@ -248,10 +289,7 @@ export default function CamperProjectsPage() {
               <button
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className={`px-4 py-2 rounded-md text-sm ${page === 1
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-black text-white hover:bg-gray-800"
-                  }`}
+                className={`px-4 py-2 rounded-md text-sm ${page === 1 ? "bg-gray-200 text-gray-400" : "bg-black text-white hover:bg-gray-800"}`}
               >
                 Previous
               </button>
@@ -263,10 +301,7 @@ export default function CamperProjectsPage() {
               <button
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className={`px-4 py-2 rounded-md text-sm ${page === totalPages
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-black text-white hover:bg-gray-800"
-                  }`}
+                className={`px-4 py-2 rounded-md text-sm ${page === totalPages ? "bg-gray-200 text-gray-400" : "bg-black text-white hover:bg-gray-800"}`}
               >
                 Next
               </button>

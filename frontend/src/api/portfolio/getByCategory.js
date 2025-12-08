@@ -5,7 +5,9 @@ export async function getByCategory(
   search = "",
   model = "",
   sit,
-  sleep
+  sleep,
+  bedType,
+  bathroomType
 ) {
   try {
     const response = await axios.get(
@@ -18,12 +20,14 @@ export async function getByCategory(
           search,
           model,
           sit: sit,  // backend expects sit
-          sleep: sleep // backend expects sleep
+          sleep: sleep ,// backend expects sleep
+          bedType,
+          bathroomType
         },
         withCredentials: true
       }
     );
-    // console.log("Response:", response.data,"filtered data");
+    console.log("Response:", response.data,"filtered data");
 
     return {
       success: true,

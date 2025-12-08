@@ -32,7 +32,7 @@ const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/C
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
-const Testing = lazy(() => import("../websiteComponents/components/Layouts/SantaMonica/SantaMonica"));
+// const Testing = lazy(() => import("../websiteComponents/components/Layouts/SantaMonica/SantaMonica"));
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
@@ -59,7 +59,7 @@ const AppRoutes = () => {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/zain" element={<Testing />} />
+          {/* <Route path="/zain" element={<Testing />} /> */}
 
           <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />

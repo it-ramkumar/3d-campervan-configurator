@@ -3,7 +3,7 @@ const router = express.Router();
 const PortfolioVan = require('../models/portfolio');
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { uploadToS3,deleteFromS3 } = require("../services/s3");
+const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.post(
@@ -136,100 +136,59 @@ router.get("/", async (req, res) => {
 });
 router.get("/category", async (req, res) => {
   try {
-    let { category, page = 1, limit = 10, search, model, sit, sleep } = req.query;
-console.log(req.query)
+    let { category, page = 1, limit = 10, search, model, sit, sleep,bedType, bathroomType } = req.query;
+
     if (!category) {
-      return res.status(400).json({
-        success: false,
-        message: "Category parameter is required"
-      });
+      return res.status(400).json({ success: false, message: "Category parameter is required" });
     }
 
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
-
     const categoryArray = Array.isArray(category) ? category : [category];
 
-    const filter = {
-      category: { $in: categoryArray }
-    };
+    // Filter for pagination
+    const filter = { category: { $in: categoryArray } };
 
- // SIT filter (string)
-if (sit) {
-  const sitArray = Array.isArray(sit) ? sit : [sit.trim()];
-  filter["van_listing.specifications.capacity.sits"] = { $in: sitArray };
-}
-
-// SLEEP filter (string)
-if (sleep) {
-  const sleepArray = Array.isArray(sleep) ? sleep : [sleep.trim()];
-  filter["van_listing.specifications.capacity.sleeps"] = { $in: sleepArray };
-}
-
-// MODEL filter (string)
-if (model) {
-  const modelArray = Array.isArray(model) ? model : [model.trim()];
-  filter["van_listing.specifications.make_model"] = { $in: modelArray };
-}
-
-if (search) {
-  const regex = new RegExp(search.split(" ").join(".*"), "i");
-
-  filter.$or = [
-    { "van_listing.title": { $regex: regex } },
-    { "van_listing.description": { $regex: regex } }
-  ];
-}
+    if (sit) filter["van_listing.specifications.capacity.sits"] = { $in: Array.isArray(sit) ? sit : [sit] };
+    if (sleep) filter["van_listing.specifications.capacity.sleeps"] = { $in: Array.isArray(sleep) ? sleep : [sleep] };
+    if (model) filter["van_listing.specifications.make_model"] = { $in: Array.isArray(model) ? model : [model] };
+    if (bedType) filter["van_listing.bedType"] = { $in: Array.isArray(bedType) ? bedType : [bedType] };
+    if (bathroomType) filter["van_listing.bathroomType"] = { $in: Array.isArray(bathroomType) ? bathroomType : [bathroomType] };
 
 
+    if (search) {
+      const regex = new RegExp(search.split(" ").join(".*"), "i");
+      filter.$or = [
+        { "van_listing.title": { $regex: regex } },
+        { "van_listing.description": { $regex: regex } }
+      ];
+    }
 
-    // ---- STEP 1: Get filtered vans (pagination) ----
+    // Get filtered vans with pagination
     const total = await PortfolioVan.countDocuments(filter);
+    const portfolios = await PortfolioVan.find(filter).skip(skip).limit(limitNum).sort({ createdAt: -1 });
 
-    const portfolios = await PortfolioVan.find(filter)
-      .skip(skip)
-      .limit(limitNum)
-      .sort({ createdAt: -1 });
+    // Get all vans in this category for filters
+    const allCategoryVans = await PortfolioVan.find({ category: { $in: categoryArray } });
 
-    // ---- STEP 2: Get ALL vans of this category (without sit/sleep filters) ----
-    // Because filters list should show all available options inside this category
-    const baseFilter = { category: { $in: categoryArray } };
-
-    const allCategoryVans = await PortfolioVan.find(baseFilter);
-
-    // ---- STEP 3: Extract available sits / sleeps / models ----
-    const availableSits = [
-      ...new Set(
-        allCategoryVans.map((v) => v?.van_listing?.specifications?.capacity?.sits)
-      ),
-    ].filter(Boolean).sort((a, b) => a - b);
-
-    const availableSleeps = [
-      ...new Set(
-        allCategoryVans.map((v) => v?.van_listing?.specifications?.capacity?.sleeps)
-      ),
-    ].filter(Boolean).sort((a, b) => a - b);
-
-    const availableModels = [
-      ...new Set(
-        allCategoryVans.map((v) => v?.van_listing?.specifications?.make_model)
-      ),
-    ].filter(Boolean).sort();
-
-    // ---- FINAL RESPONSE ----
+    const availableSits = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a,b) => parseInt(a)-parseInt(b));
+    const availableSleeps = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a,b) => parseInt(a)-parseInt(b));
+    const availableModels = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.make_model).filter(Boolean))].sort();
+    const availableBedTypes = [...new Set(allCategoryVans.map(v => v.van_listing?.bedType).filter(Boolean))].sort();
+    const availableBathroomTypes = [...new Set(allCategoryVans.map(v => v.van_listing?.bathroomType).filter(Boolean))].sort();
     res.json({
       success: true,
       total,
       page: pageNum,
       pages: Math.ceil(total / limitNum),
       data: portfolios,
-
-      // Filters available for this category
       filters: {
         sits: availableSits,
         sleeps: availableSleeps,
         models: availableModels,
+        bedType: availableBedTypes,
+        bathroomType: availableBathroomTypes
       }
     });
 
@@ -240,9 +199,10 @@ if (search) {
 });
 
 
+
 router.get("/wheel-base", async (req, res) => {
   try {
-    let { wheelBase, search, size, sit, sleep, model, page = 1, limit = 10 } = req.query;
+    let { wheelBase, search, size, sit, sleep, model, bedType, bathroomType, page = 1, limit = 10 } = req.query;
 
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
@@ -254,10 +214,7 @@ router.get("/wheel-base", async (req, res) => {
     // Wheelbase Filter
     // -----------------------------------------
     if (wheelBase) {
-      const wheelArray = Array.isArray(wheelBase)
-        ? wheelBase.map((i) => i.trim())
-        : [wheelBase.trim()];
-
+      const wheelArray = Array.isArray(wheelBase) ? wheelBase.map(i => i.trim()) : [wheelBase.trim()];
       filter["van_listing.specifications.wheelbase"] = { $in: wheelArray };
     }
 
@@ -265,44 +222,48 @@ router.get("/wheel-base", async (req, res) => {
     // Size Filter
     // -----------------------------------------
     if (size) {
-      const sizeArray = Array.isArray(size)
-        ? size.map((i) => i.trim())
-        : [size.trim()];
-
+      const sizeArray = Array.isArray(size) ? size.map(i => i.trim()) : [size.trim()];
       filter["van_listing.specifications.size"] = { $in: sizeArray };
     }
 
     // -----------------------------------------
-    // Sit Filter (STRING version)
+    // Sit Filter
     // -----------------------------------------
     if (sit) {
-      const sitArray = Array.isArray(sit)
-        ? sit.map((i) => i.trim())
-        : [sit.trim()];
-
+      const sitArray = Array.isArray(sit) ? sit.map(i => i.trim()) : [sit.trim()];
       filter["van_listing.specifications.capacity.sits"] = { $in: sitArray };
     }
 
     // -----------------------------------------
-    // Sleep Filter (STRING version)
+    // Sleep Filter
     // -----------------------------------------
     if (sleep) {
-      const sleepArray = Array.isArray(sleep)
-        ? sleep.map((i) => i.trim())
-        : [sleep.trim()];
-
+      const sleepArray = Array.isArray(sleep) ? sleep.map(i => i.trim()) : [sleep.trim()];
       filter["van_listing.specifications.capacity.sleeps"] = { $in: sleepArray };
     }
 
     // -----------------------------------------
-    // Model Filter (STRING version)
+    // Model Filter
     // -----------------------------------------
     if (model) {
-      const modelArray = Array.isArray(model)
-        ? model.map((i) => i.trim())
-        : [model.trim()];
-
+      const modelArray = Array.isArray(model) ? model.map(i => i.trim()) : [model.trim()];
       filter["van_listing.specifications.make_model"] = { $in: modelArray };
+    }
+
+    // -----------------------------------------
+    // Bed Type Filter
+    // -----------------------------------------
+    if (bedType) {
+      const bedArray = Array.isArray(bedType) ? bedType.map(i => i.trim()) : [bedType.trim()];
+      filter["van_listing.bedType"] = { $in: bedArray };
+    }
+
+    // -----------------------------------------
+    // Bathroom Type Filter
+    // -----------------------------------------
+    if (bathroomType) {
+      const bathArray = Array.isArray(bathroomType) ? bathroomType.map(i => i.trim()) : [bathroomType.trim()];
+      filter["van_listing.bathroomType"] = { $in: bathArray };
     }
 
     // -----------------------------------------
@@ -310,7 +271,6 @@ router.get("/wheel-base", async (req, res) => {
     // -----------------------------------------
     if (search) {
       const regex = new RegExp(search.split(" ").join(".*"), "i");
-
       filter.$or = [
         { "van_listing.title": { $regex: regex } },
         { "van_listing.description": { $regex: regex } }
@@ -318,7 +278,7 @@ router.get("/wheel-base", async (req, res) => {
     }
 
     // -----------------------------------------
-    // Fetch Vans
+    // Fetch Vans with Pagination
     // -----------------------------------------
     const total = await PortfolioVan.countDocuments(filter);
 
@@ -332,9 +292,11 @@ router.get("/wheel-base", async (req, res) => {
     // -----------------------------------------
     const allVans = await PortfolioVan.find({});
 
-    const sits = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sits).filter(Boolean))];
-    const sleeps = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))];
-    const models = [...new Set(allVans.map(v => v?.van_listing?.specifications?.make_model).filter(Boolean))];
+    const sits = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a,b)=>a-b);
+    const sleeps = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a,b)=>a-b);
+    const models = [...new Set(allVans.map(v => v?.van_listing?.specifications?.make_model).filter(Boolean))].sort();
+    const bedTypes = [...new Set(allVans.map(v => v?.van_listing?.bedType).filter(Boolean))].sort();
+    const bathroomTypes = [...new Set(allVans.map(v => v?.van_listing?.bathroomType).filter(Boolean))].sort();
 
     res.json({
       success: true,
@@ -345,7 +307,9 @@ router.get("/wheel-base", async (req, res) => {
       filters: {
         sits,
         sleeps,
-        models
+        models,
+        bedType: bedTypes,
+        bathroomType: bathroomTypes
       }
     });
 
@@ -354,6 +318,7 @@ router.get("/wheel-base", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
+
 
 router.get("/navCat", async (req, res) => {
   try {

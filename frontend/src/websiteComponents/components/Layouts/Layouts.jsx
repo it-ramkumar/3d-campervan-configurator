@@ -1,9 +1,5 @@
 import HeroSection from "../HeroSection/HeroSection";
 import Family from "./Family/Family";
-import Couples from "./Couples/Couples";
-// import SantaMonica from "./SantaMonica/SantaMonica";
-// import CustomBuid from "./CustomBuild/CustomBuild";
-// import Montreal from "./Montreal/Montreal";
 import Consultation from "../Consultation/Consultation";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
@@ -11,24 +7,48 @@ import Footer from "../Footer/Footer";
 
 export default function Layouts() {
 
-const heroImage = "heroSlider/layouthero.webp";
-const newTitleText = "Explore Layouts of Our Custom Vans";
-const newDescriptionText =
-  "Discover the various layouts we offer for our custom vans.";
+  const heroImage = "heroSlider/layouthero.webp";
+  const newTitleText = "Explore Layouts of Our Custom Vans";
+  const newDescriptionText =
+    "Discover the various layouts we offer for our custom vans.";
+
+
+
+  const FamilyLayout = {
+    title: "Campervans Layouts for Family (For 2+)",
+    image1: "/images/limage1.webp",
+    image2: "/images/limage2.webp",
+    image3: "/images/limage3.webp",
+    image4: "/images/limage4.webp",
+    link: "/family-layout",
+  }
+  const CoupleLayout = {
+    title: "Campervans Layouts for Couples (For 2)",
+    image1: "/images/image5l.webp",
+    image2: "/images/image6l.webp",
+    image3: "/images/image7l.webp",
+    image4: "/images/image8l.webp",
+    link: "/couple-layout",
+  }
+  const LayoutText = {
+    text: "Have a look at our completed projects. We're honoured to serve clients from different states in the USA. We've built custom vans for families, couples, pet- owners, remote workers, surfers, bikers, etc, all while considering their specific needs.You can check them all here.",
+    description: "Browse to find inspiration for your dream campervan and to see our craftsmanship in every detail.",
+  }
+
   return (
     <>
       {/* Page Sections */}
       <Navbar />
       <div className="tour-hero">
-        <HeroSection  title={newTitleText} description={newDescriptionText} image={heroImage}  showButton={false} />
+        <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} showButton={false} />
       </div>
       <div className="tour-family">
-        <Family />
+        <Family layout={FamilyLayout} LayoutText={LayoutText} text={true} />
       </div>
-       <div className="tour-couples">
-        <Couples />
+      <div className="tour-couples">
+        <Family layout={CoupleLayout} />
       </div>
-       <div className="tour-santa-monica">
+      <div className="tour-santa-monica">
         {/* <SantaMonica /> */}
       </div>
       <div className="tour-montreal">
@@ -37,11 +57,11 @@ const newDescriptionText =
       <div className="tour-custom-build">
         {/* <CustomBuid /> */}
       </div>
-       <div className="tour-consultation">
+      <div className="tour-consultation">
         <Consultation vanForSale={true} />
       </div>
 
-      <Footer/>
+      <Footer />
     </>
   );
 }
