@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { getAllVans } from "../../../../api/van/getAllVans";
-
+import Loader from "../../Loader/Loader";
 export default function SoldVans( ) {
   const [soldVans, setSoldVans] = useState([]);
   const [page, setPage] = useState(1);
@@ -49,7 +49,9 @@ export default function SoldVans( ) {
   const handleLoadMore = () => {
     if (hasMore && !loading) setPage((prev) => prev + 1);
   };
-
+if(loading){
+  return <Loader/>
+}
   return (
     <section className="bg-white pt-0 pb-12 px-4 md:px-8 overflow-hidden">
       <div className="max-w-screen-2xl mx-auto">

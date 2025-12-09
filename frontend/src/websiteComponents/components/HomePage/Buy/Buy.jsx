@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton"
 import { availableVans } from '../../../../api/van/availableVans';
+import Loader from '../../Loader/Loader';
 import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 
 // Custom Arrow Component for Slider Navigation
@@ -56,7 +57,9 @@ export default function Buy() {
   }
 
 
-
+if(!readyToGoVans){
+    return <Loader />;
+  }
   const data = readyToGoVans.length > 0 ? readyToGoVans : [];
   return (
     <section className="bg-white py-16 font-serif overflow-x-hidden">

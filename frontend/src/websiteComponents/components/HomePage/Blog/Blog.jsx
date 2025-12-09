@@ -3,21 +3,27 @@
 import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     const fetchBlogs = async () => {
       const result = await getAllBlogs();
       setBlogs(result.data);
+      setLoading(false);
     };
     fetchBlogs();
   }, []);
   // console.log(blogs,"blogs");
-
+if(loading){
+    return <Loader />;
+  }
 const data = blogs.length > 0 ? blogs : [];
   return (
     // MINIMAL TOP PADDING: pt-4 (1rem / 16px)

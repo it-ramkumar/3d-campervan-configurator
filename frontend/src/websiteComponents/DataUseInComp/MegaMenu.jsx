@@ -5,7 +5,7 @@ export const menuContent = {
         {
           title: "Start Your Custom Build",
           items: [
-            { label: "3D Van Builder", link: "https://configurator.bigbearvans.com" },
+            { label: "3D Van Builder", link: "/configurator" },
             { label: "Send an Inquiry", link: "/inquiry" },
           ],
         },

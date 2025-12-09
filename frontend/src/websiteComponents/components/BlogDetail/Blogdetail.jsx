@@ -6,6 +6,7 @@ import Navbar from "../Navbar/Navbar";
 import { motion } from "framer-motion";
 import { CalendarDays, Clock, Image as ImageIcon, FileText, Heading, Table, ThumbsUp, ThumbsDown, Share2, Eye, BookOpen } from "lucide-react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Loader from "../Loader/Loader";
 
 
 export default function BlogDetail() {
@@ -46,22 +47,7 @@ export default function BlogDetail() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900 mx-auto mb-4"
-        ></motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-gray-600"
-        >
-          Loading blog post...
-        </motion.p>
-      </div>
-    </div>
+    <Loader />
   );
 
   if (!blog) return (
@@ -593,18 +579,17 @@ export default function BlogDetail() {
                         <button
                           key={index}
                           onClick={() => setCurrentGalleryImage(index)}
-                          className={`rounded-lg overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${
-                            currentGalleryImage === index
+                          className={`rounded-lg overflow-hidden border-2 transition-all duration-300 transform hover:scale-105 ${currentGalleryImage === index
                               ? "border-gray-900 shadow-md bg-gray-100 scale-105"
                               : "border-gray-300 hover:border-gray-600"
-                          }`}
+                            }`}
                         >
                           <ImageWithSkeleton
 
                             src={img}
                             alt={`Thumbnail ${index + 1}`}
                             className="w-full h-12 lg:h-16 object-cover"
-                        click={true}
+                            click={true}
 
                           />
                         </button>

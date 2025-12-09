@@ -6,6 +6,7 @@ import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
+import Loader from "../Loader/Loader"
 
 export default function CamperProjectsPage() {
   const { wheelbase } = useParams();
@@ -202,7 +203,7 @@ export default function CamperProjectsPage() {
 
           {/* RESULTS */}
           {loading ? (
-            <div className="text-center py-20 text-lg text-gray-600">Loading...</div>
+            <Loader />
           ) : layouts.length === 0 ? (
             <div className="text-center py-20 text-lg text-gray-600">No vans found.</div>
           ) : (

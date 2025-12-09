@@ -9,7 +9,7 @@ import Footer from "../Footer/Footer";
 export default function Contact() {
   const heroImage = "/heroSlider/contact.webp";
   const newTitleText = "Contact Us | Custom Van Builders in Big Bear City,CA";
-  const newDescriptionText ="Contact Big Bear Vans today for your custom van conversion. Our team of expert van builders in Big Bear City, California, is ready to help you begin your dream van life.";
+  const newDescriptionText = "Contact Big Bear Vans today for your custom van conversion. Our team of expert van builders in Big Bear City, California, is ready to help you begin your dream van life.";
 
 
   const CalenderHeading = "Schedule a FREE Consultation Call";

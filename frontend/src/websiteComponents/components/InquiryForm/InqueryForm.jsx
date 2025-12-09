@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { submitInquiry } from "../../../api/inquiry/submitInquiry";
 import Navbar from "../Navbar/Navbar";
-import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check, Loader } from "lucide-react";
 import { formQuestions } from "../../DataUseInComp/InquiryFormData";
 
 // --------------------------- FORM COMPONENT --------------------------- //
@@ -150,7 +150,7 @@ export default function InquiryForm() {
       }
     }
 
-  
+
 
     try {
       const result = await submitInquiry(formData);
@@ -332,6 +332,7 @@ export default function InquiryForm() {
               <div className="flex items-center justify-between">
                 <span>{message.text}</span>
                 <button
+                disabled={isLoading}
                   onClick={() => setMessage(null)}
                   className="ml-3 hover:opacity-70 transition-opacity"
                 >

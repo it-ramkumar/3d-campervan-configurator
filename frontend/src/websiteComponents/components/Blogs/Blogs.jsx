@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import Loader from "../Loader/Loader";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -59,6 +60,11 @@ export default function BlogsListing() {
   const handlePrev = () => {
     if (page > 1) setPage((prev) => prev - 1);
   };
+  if(loading){
+    return (
+<Loader/>
+  );
+  }
 
   return (
     <>

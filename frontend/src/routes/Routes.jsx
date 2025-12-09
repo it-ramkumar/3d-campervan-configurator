@@ -80,7 +80,7 @@ const AppRoutes = () => {
           <Route path="/van-form" element={<VanForm />} />
           <Route path="/portfolio-form" element={<PortfolioForm />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/test" element={<Van />} />
+          <Route path="/configurator" element={<Van />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />

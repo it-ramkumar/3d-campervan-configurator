@@ -9,11 +9,13 @@ import {getNavCat} from "../../../api/portfolio/navBarCat";
 import {getnavWheel} from "../../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 import { routes } from "../../DataUseInComp/NavbarRoutes";
+import Loader from "../Loader/Loader";
 
 
 export default function Navbar({ forceMobile }) {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [Loader, setLoader] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const megaMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
@@ -78,10 +80,12 @@ const [loading, setLoading] = useState(false);
   const isChildActive = (path) => location.pathname === path;
 
 useEffect(() => {
+  setLoader(true);
   const fetchBlogs = async () => {
     try {
       const result = await getAllBlogs();
       setBlogs(result.data || []);
+      setLoader(false);
     } catch (err) {
       console.log("Error loading blogs", err);
     }
@@ -120,6 +124,9 @@ const handleLayoutClick = async (link) => {
     setCategories(catRes.data);
     setWheelBases(wheelRes.data);
   };
+  if(Loader){
+    return <></>
+  }
 
   return (
     <>
@@ -139,9 +146,6 @@ const handleLayoutClick = async (link) => {
               </Link>
             </div>
           )}
-
-          {/* CENTER MENU (Desktop) */}
-          {/* CENTER MENU (Desktop) */}
           <div
             className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
           >

@@ -192,7 +192,7 @@ export default function LayoutDetail() {
     };
   }) || [];
 
- console.log(van,"van")
+//  console.log(van,"van")
   return (
     <>
       <Navbar />
