@@ -20,7 +20,7 @@ export default function Layouts() {
     image2: "/images/limage2.webp",
     image3: "/images/limage3.webp",
     image4: "/images/limage4.webp",
-    link: "/family-layout",
+    link: "/layout-by-category/Layouts for Families (3–9 People)",
   }
   const CoupleLayout = {
     title: "Campervans Layouts for Couples (For 2)",
@@ -28,7 +28,31 @@ export default function Layouts() {
     image2: "/images/image6l.webp",
     image3: "/images/image7l.webp",
     image4: "/images/image8l.webp",
-    link: "/couple-layout",
+    link: "/layout-by-category/Layouts for Solo & Couple Travelers",
+  }
+   const ShortVans = {
+    title: "Campervans Layouts Short Vans",
+    image1: "/shortVans/image1.jpg",
+    image2: "/shortVans/image2.jpg",
+    image3: "/shortVans/image3.jpg",
+    image4: "/shortVans/image4.jpg",
+    link: "/layout-by-category/Flagship Short Van — Santa Monica",
+  }
+     const LongVans = {
+    title: "Campervans Layouts Long Vans",
+    image1: "/longVans/image1.jpg",
+    image2: "/longVans/image2.jpg",
+    image3: "/longVans/image3.jpg",
+    image4: "/longVans/image4.jpg",
+    link: "/layout-by-category/Flagship Long Van — Montreal",
+  }
+     const CustomVans = {
+    title: "Campervans Layouts Custom Vans",
+    image2: "/customBuild/image2.jpg",
+    image3: "/customBuild/image3.jpg",
+    image1: "/customBuild/image1.jpg",
+    image4: "/customBuild/image4.jpg",
+    link: "/layout-by-category/Portfolio of Custom Builds",
   }
   const LayoutText = {
     text: "Have a look at our completed projects. We're honoured to serve clients from different states in the USA. We've built custom vans for families, couples, pet- owners, remote workers, surfers, bikers, etc, all while considering their specific needs.You can check them all here.",
@@ -49,13 +73,13 @@ export default function Layouts() {
         <Family layout={CoupleLayout} />
       </div>
       <div className="tour-santa-monica">
-        {/* <SantaMonica /> */}
+         <Family layout={ShortVans} />
       </div>
       <div className="tour-montreal">
-        {/* <Montreal /> */}
+         <Family layout={LongVans} />
       </div>
       <div className="tour-custom-build">
-        {/* <CustomBuid /> */}
+           <Family layout={CustomVans} />
       </div>
       <div className="tour-consultation">
         <Consultation vanForSale={true} />

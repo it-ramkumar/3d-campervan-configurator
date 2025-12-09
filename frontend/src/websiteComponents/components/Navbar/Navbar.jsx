@@ -463,13 +463,13 @@ const handleLayoutClick = async (link) => {
         </Link>
       </li>
     </>
-  ) : section.title === "Layouts by Big Bear Vans" ? (
+  ) : section.title === "Explore Layout Options" ? (
     <>
       {/* ▼ CATEGORY SECTION (Mobile) */}
       {categories?.slice(0, 4).map((category, i) => (
         <li key={i}>
           <Link
-            to={`/portfolio?category=${category}`}
+            to={`/layout-by-category/${category}`}
             className="block py-1 text-gray-700 hover:text-indigo-600"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -492,7 +492,7 @@ const handleLayoutClick = async (link) => {
         </Link>
       </li>
     </>
-  ) : section.title === "Wheelbase" ? (
+  ) : section.title === "Van Models Options" ? (
     <>
       {/* ▼ WHEELBASE SECTION (Mobile) */}
       {wheelBases?.slice(0, 4).map((base, i) => {

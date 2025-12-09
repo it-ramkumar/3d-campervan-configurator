@@ -28,6 +28,7 @@
   "swiveltable":["cushion"],
   "light":["dinette"],
   "showerbox":["dinette"]
+  // "Roof Rack":["Electric awning"]
 
 
 
