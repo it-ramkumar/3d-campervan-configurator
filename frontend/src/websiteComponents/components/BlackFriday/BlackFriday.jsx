@@ -85,7 +85,7 @@ export default function BlackFridayCard() {
             </button>
 
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">
-              BLACK <br /> FRIDAY
+                SPECIAL <br /> OFFER
             </h1>
 
             <p className="text-lg font-bold mb-1">
@@ -144,7 +144,7 @@ export default function BlackFridayCard() {
           }}
           className="fixed bottom-4 right-4 bg-[#FFD700] text-black px-4 py-2 animate-bounce  rounded-full cursor-pointer shadow-xl font-bold text-sm hover:scale-105 transition-all z-[9999]"
         >
-          BLACK FRIDAY SALE – {timeLeft.days}d {timeLeft.hours}h
+           SPECIAL OFFER – {timeLeft.days}d {timeLeft.hours}h
         </motion.div>
       )}
     </>

@@ -10,6 +10,7 @@ import Loader from "../Loader/Loader"
 
 
 
+
 export default function Layouts() {
   const { slug } = useParams();
   const [van, setVan] = useState(null);

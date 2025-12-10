@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Link } from "react-router-dom";
+import BlackButton from "../Common/Button/BlackButton";
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -420,13 +421,14 @@ export default function BookingPage() {
                         </div>
                       )}
                       <div className="text-center">
-                        <button
+                        {/* <BlackButton label="Back to Date Selection" link={null} onClick={() => setBookingStep(1)} disabled={!selectedDate}/> */}
+                        {/* <button
                           onClick={() => setBookingStep(2)}
                           disabled={!selectedDate}
                           className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium text-sm"
                         >
                           Continue to Time Selection
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   )}

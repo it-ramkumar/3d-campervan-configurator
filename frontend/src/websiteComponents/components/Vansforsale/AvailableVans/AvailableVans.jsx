@@ -2,6 +2,7 @@
 import { useRef } from 'react';
 import { Link } from "react-router-dom"
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import BlackButton from '../../Common/Button/BlackButton';
 
 
 // --- SVG Icons for the feature list ---
@@ -276,12 +277,12 @@ export default function AvailableVans({availableVans}) {
               </div>
 
               {/* More Details Button (Prominent) */}
-              <Link
-                to={`/van-detail/${van.slug}`}
-                className="details-button bg-white text-black font-bold font-sans text-md py-3 px-6 rounded-lg shadow-xl transition-all duration-300  hover:shadow-2xl hover:scale-[1.03]"
-              >
-                View Details
-              </Link>
+              <BlackButton
+                label="View Details"
+                link={`/van-detail/${van.slug}`}
+                className="details-button"
+              />
+           
             </div>
 
             {/* Description */}

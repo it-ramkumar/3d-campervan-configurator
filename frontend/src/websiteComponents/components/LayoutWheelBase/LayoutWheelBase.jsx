@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getByWheelBase } from "../../../api/portfolio/wheelBase";
 import BlackButton from "../Common/Button/BlackButton";
+import WhiteButton from "../Common/Button/WhiteButton";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
@@ -101,22 +102,22 @@ export default function CamperProjectsPage() {
     wheelbase === "144"
       ? "Sprinter 144 Wheelbase"
       : wheelbase === "148"
-      ? "Transit 148 Wheelbase"
-      : wheelbase === "159"
-      ? "Promaster 159 Wheelbase"
-      : wheelbase === "136"
-      ? "Promaster 136 Wheelbase"
-      : "";
+        ? "Transit 148 Wheelbase"
+        : wheelbase === "159"
+          ? "Promaster 159 Wheelbase"
+          : wheelbase === "136"
+            ? "Promaster 136 Wheelbase"
+            : "";
   const newDescriptionText =
     wheelbase === "144"
       ? "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures."
       : wheelbase === "148"
-      ? "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs."
-      : wheelbase === "159"
-      ? "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle."
-      : wheelbase === "136"
-      ? "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
-      : "";
+        ? "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs."
+        : wheelbase === "159"
+          ? "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle."
+          : wheelbase === "136"
+            ? "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
+            : "";
 
   // Filter config to dynamically render
   const filterConfig = [
@@ -214,9 +215,8 @@ export default function CamperProjectsPage() {
                 return (
                   <div
                     key={project._id}
-                    className={`group max-w-[1250px] mx-auto flex flex-row ${
-                      isReversed ? "flex-row-reverse" : ""
-                    } items-center justify-between gap-4 lg:gap-12`}
+                    className={`group max-w-[1250px] mx-auto flex flex-row ${isReversed ? "flex-row-reverse" : ""
+                      } items-center justify-between gap-4 lg:gap-12`}
                   >
                     {/* TEXT */}
                     <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
@@ -238,16 +238,14 @@ export default function CamperProjectsPage() {
                     <div className="relative w-1/2 h-[350px] lg:h-[550px]">
                       <ImageWithSkeleton
                         src={project.gallery?.[0]}
-                        className={`absolute top-0 w-[70%] h-full object-cover ${
-                          isReversed ? "left-0" : "right-0"
-                        }`}
+                        className={`absolute top-0 w-[70%] h-full object-cover ${isReversed ? "left-0" : "right-0"
+                          }`}
                       />
 
                       <ImageWithSkeleton
                         src={project.gallery?.[0]}
-                        className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${
-                          isReversed ? "right-[5%]" : "left-[5%]"
-                        }`}
+                        className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"
+                          }`}
                       />
                     </div>
                   </div>
@@ -259,33 +257,22 @@ export default function CamperProjectsPage() {
           {/* PAGINATION */}
           {!loading && layouts.length > 0 && (
             <div className="flex justify-center items-center gap-4 mt-20">
-              <button
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-                className={`px-4 py-2 rounded-md text-sm ${
-                  page === 1
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-              >
-                Previous
-              </button>
+              <BlackButton label={"Previous"} onClick={() => setPage(page - 1)}
+
+                disabled={page === 1}/>
+
 
               <span className="text-lg font-semibold text-gray-700">
                 Page {page} of {totalPages}
               </span>
 
-              <button
+              <BlackButton
+                label={"Next"}
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className={`px-4 py-2 rounded-md text-sm ${
-                  page === totalPages
-                    ? "bg-gray-200 text-gray-400"
-                    : "bg-black text-white hover:bg-gray-800"
-                }`}
-              >
-                Next
-              </button>
+
+              />
+
             </div>
           )}
         </div>

@@ -138,7 +138,7 @@ const handleLayoutClick = async (link) => {
             <div className="flex items-center">
               <Link to="/" className="block">
                 <ImageWithSkeleton
-                  src="/images/logoo.webp"
+                  src="/images/chris-logo-black.png"
                   alt="BBV logo"
                   className="w-[170px] h-[30px] border-none object-contain"
                   click={true}

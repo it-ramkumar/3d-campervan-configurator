@@ -285,25 +285,23 @@ export default function CamperProjectsPage() {
           {/* PAGINATION */}
           {!loading && layouts.length > 0 && (
             <div className="flex justify-center items-center gap-4 mt-20">
-              <button
+              <BlackButton
+label={"Previous"}
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
-                className={`px-4 py-2 rounded-md text-sm ${page === 1 ? "bg-gray-200 text-gray-400" : "bg-black text-white hover:bg-gray-800"}`}
-              >
-                Previous
-              </button>
+
+              />
+
 
               <span className="text-lg font-semibold text-gray-700">
                 Page {page} of {totalPages}
               </span>
 
-              <button
+              <BlackButton
+                label={"Next"}
                 onClick={() => setPage(page + 1)}
                 disabled={page === totalPages}
-                className={`px-4 py-2 rounded-md text-sm ${page === totalPages ? "bg-gray-200 text-gray-400" : "bg-black text-white hover:bg-gray-800"}`}
-              >
-                Next
-              </button>
+              />
             </div>
           )}
         </div>

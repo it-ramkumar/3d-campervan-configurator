@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader";
+import BlackButton from "../Common/Button/BlackButton";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -94,12 +95,12 @@ export default function BlogsListing() {
                   onChange={(e) => setSearchInput(e.target.value)}
                 />
               </div>
-              <button
+              <BlackButton
+                label="Search"
                 onClick={handleSearch}
-                className="px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300"
-              >
-                Search
-              </button>
+             
+              />
+
             </div>
           </div>
 
@@ -130,13 +131,8 @@ export default function BlogsListing() {
                     <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                       {blog.description}
                     </p>
-                    <Link
-                      to={`/blog-detail/${blog._id}`}
-                      className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-800 transition-all"
-                    >
-                      Read More
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    <BlackButton label="Read More" link={`/blog-detail/${blog._id}`}/>
+
                   </div>
                 </article>
               ))}
@@ -152,33 +148,25 @@ export default function BlogsListing() {
             {/* ✅ Pagination */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-4 mt-16">
-                <button
+                <BlackButton
+                  label={"Previous"}
                   onClick={handlePrev}
                   disabled={page === 1}
-                  className={`px-4 py-2 rounded-md border text-sm md:text-base ${
-                    page === 1
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-black text-white hover:bg-gray-800 transition"
-                  }`}
-                >
-                  Previous
-                </button>
+
+               />
+
 
                 <span className="text-lg font-semibold text-gray-700">
                   Page {page} of {totalPages}
                 </span>
 
-                <button
+                <BlackButton
+                  label={"Next"}
                   onClick={handleNext}
                   disabled={page === totalPages}
-                  className={`px-4 py-2 rounded-md border text-sm md:text-base ${
-                    page === totalPages
-                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                      : "bg-black text-white hover:bg-gray-800 transition"
-                  }`}
-                >
-                  Next
-                </button>
+
+                />
+
               </div>
             )}
           </div>

@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import SeeMore from "../Common/SeeMore/SeeMore";
+import BlackButton from "../Common/Button/BlackButton";
 
 // --- SVG Icons (Slight modification to allow for background color) ---
 const SvgInsulation = ({ className }) => (
@@ -253,12 +254,13 @@ const featuresList = [
               )}
 
               {/* Call To Action Button - Full width on mobile, auto on desktop, centered on mobile */}
-              <button
+
+              <BlackButton
+                label="Book A Call Now"
                 onClick={onConsultationClick}
-                className="cursor-pointer px-6 py-2.5 bg-[#2761FD] text-white font-bold text-base rounded-md transition-all duration-300 ease-in-out shadow-lg hover:bg-white hover:text-[#2761FD] hover:shadow-[0_0_30px_rgba(39,97,253,0.8)] w-full max-w-xs mx-auto sm:w-auto sm:max-w-none sm:mx-0"
-              >
-                Book A Call Now
-              </button>
+
+             />
+
             </div>
 
           </div>
@@ -340,10 +342,11 @@ const featuresList = [
           <h2 className="font-bold text-3xl mb-4">{vanDetail.van_listing.title}</h2>
           <SeeMore text={vanDetail.van_listing.description} />
           {/* <Link to={"/contact"}> */}
-          <button onClick={onConsultationClick}
-            className="px-4 py-2 bg-[#2761FD] cursor-pointer text-white font-noto-sans font-bold text-sm rounded-md transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5">
-            Book a call now
-          </button>
+             <BlackButton
+                label="Book A Call Now"
+                onClick={onConsultationClick}
+
+             />
           {/* </Link> */}
         </div>
       </div>

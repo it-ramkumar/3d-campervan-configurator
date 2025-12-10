@@ -6,6 +6,7 @@ import { Navigation } from 'swiper/modules';
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton"
+import WhiteButton from '../../Common/Button/WhiteButton';
 import { availableVans } from '../../../../api/van/availableVans';
 import Loader from '../../Loader/Loader';
 import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
@@ -155,6 +156,10 @@ if(!readyToGoVans){
                           {custom.desc}
                         </p>
                         <div className="flex gap-4">
+                          <WhiteButton label="Start Your Custom Build" link="/inquiry" />
+                          <BlackButton label="Learn About Our Process" link="/our-process" />
+                        </div>
+                        {/* <div className="flex gap-4">
                           <Link to="/inquiry">
                             <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-6 py-2 rounded-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
                               Start Your Custom Build
@@ -165,7 +170,7 @@ if(!readyToGoVans){
                               Learn About Our Process
                             </button>
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 
@@ -212,8 +217,11 @@ if(!readyToGoVans){
                       </h3>
                       <div className="w-full max-w-[650px]">
                         <p className="text-base font-normal mb-5 leading-normal line-clamp-3">{slide?.van_listing?.description || "Ready to Go Van"}</p>
+
                         <div className="flex gap-4">
-                          <Link to="/contact">
+                          <BlackButton label="Buy Now" link="/contact" />
+                          <WhiteButton label="More Details" link={`/van-detail/${slide.slug}`} />
+                          {/* <Link to="/contact">
                             <button className="bg-white cursor-pointer text-black font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
                               Buy Now
                             </button>
@@ -222,7 +230,7 @@ if(!readyToGoVans){
                             <button className="bg-[#2761FD] cursor-pointer text-white font-serif font-bold text-sm px-6 py-2 rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg">
                               More Details
                             </button>
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>

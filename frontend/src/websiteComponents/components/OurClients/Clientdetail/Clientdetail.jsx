@@ -22,6 +22,7 @@ import {
 
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton.jsx";
 import { Link } from "react-router-dom";
+import BlackButton from "../../Common/Button/BlackButton.jsx";
 // Reusable Components
 function SectionHeader({ title, subtitle, icon: Icon }) {
   return (
@@ -1179,9 +1180,8 @@ export default function ClientStories() {
           </p>
           <Link to={"https://configurator.bigbearvans.com"} target="_blank"
             rel="noopener noreferrer">
-            <button className="bg-gray-900 text-white font-bold text-base md:text-lg py-4 px-8 md:py-5 md:px-12 rounded-xl hover:bg-gray-800 transition-colors duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl">
-              Start Your Custom Build
-            </button>
+            <BlackButton label="Start Your Custom Build" className="bg-gray-900 text-white font-bold text-base md:text-lg py-4 px-8 md:py-5 md:px-12 rounded-xl hover:bg-gray-800 transition-colors duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl" />
+
           </Link>
         </div>
       </section>

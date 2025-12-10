@@ -36,6 +36,7 @@ const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
+// const Christmis = lazy(() => import("../websiteComponents/components/Christmis/Christmis"))
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
@@ -53,7 +54,7 @@ const AppRoutes = () => {
     <>
 
       {showBlackFriday && <BlackFridayLabel />}
-      {/* {!isOpen && <Marquee/>} */}
+       {/* <Christmis/> */}
       <ChatWidget />
       <ScrollFromTop />
       <Suspense fallback={<Loader />}>
