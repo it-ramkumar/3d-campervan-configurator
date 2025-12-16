@@ -36,7 +36,7 @@ const Testing = lazy(() => import("../websiteComponents/components/ExteriorChoic
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
-// const Christmis = lazy(() => import("../websiteComponents/components/Christmis/Christmis"))
+const ExChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
@@ -60,7 +60,7 @@ const AppRoutes = () => {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/zain" element={<Testing />} /> */}
+          <Route path="/zain" element={<ExChoice />} />
           <Route path="/test" element={<Testing />} />
           <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />

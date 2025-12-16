@@ -67,18 +67,18 @@ export default function Dashboard() {
       // icon: "📞",
       description: "Contact Data"
     },
-    //  {
-    //   id: "exterior-choices",
-    //   label: "Exterior Choices",
-    //   // icon: "📞",
-    //   description: "Exterior Choices Data"
-    // },
-    // {
-    //   id: "interior-choices",
-    //   label: "Intrior Choices",
-    //   // icon: "📞",
-    //   description: "Interior Choices Data"
-    // },
+     {
+      id: "exterior-choices",
+      label: "Exterior Choices",
+      // icon: "📞",
+      description: "Exterior Choices Data"
+    },
+    {
+      id: "interior-choices",
+      label: "Intrior Choices",
+      // icon: "📞",
+      description: "Interior Choices Data"
+    },
      {
       id: "lead-emails",
       label: "Lead Email",
