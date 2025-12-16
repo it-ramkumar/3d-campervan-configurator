@@ -67,18 +67,18 @@ export default function Dashboard() {
       // icon: "📞",
       description: "Contact Data"
     },
-     {
-      id: "exterior-choices",
-      label: "Exterior Choices",
-      // icon: "📞",
-      description: "Exterior Choices Data"
-    },
-    {
-      id: "interior-choices",
-      label: "Intrior Choices",
-      // icon: "📞",
-      description: "Interior Choices Data"
-    },
+    //  {
+    //   id: "exterior-choices",
+    //   label: "Exterior Choices",
+    //   // icon: "📞",
+    //   description: "Exterior Choices Data"
+    // },
+    // {
+    //   id: "interior-choices",
+    //   label: "Intrior Choices",
+    //   // icon: "📞",
+    //   description: "Interior Choices Data"
+    // },
      {
       id: "lead-emails",
       label: "Lead Email",
@@ -167,7 +167,7 @@ export default function Dashboard() {
               case "exterior-form":
             return <ExteriorForm setSelected={setSelected} />;
       case "lead-emails":
-        return <LeadEmail setSelected={setSelected} />; 
+        return <LeadEmail setSelected={setSelected} />;
       default:
         return <PortfolioListing setSelected={setSelected} />;
     }
