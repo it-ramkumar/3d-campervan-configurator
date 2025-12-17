@@ -96,7 +96,6 @@ export default function BlackFridayCard() {
               Offer ends on 31 December 2025 🎉
             </p>
 
-            {/* COUNTDOWN TIMER */}
             <div className="flex justify-center gap-2 mb-6 font-bold text-black">
               <div className="bg-black/10 px-3 py-2 rounded-md text-center">
                 <div className="text-2xl">{timeLeft.days}</div>
