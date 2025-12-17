@@ -3,6 +3,8 @@ import ExteriorChoicesList from './ExteriorChoicesList'
 import HeroSection from '../HeroSection/HeroSection'
 import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
+import AdditionalAccessories from './AdditionalAccessories'
+import ExteriorCTR from './ExteriorCTR'
 
 export default function ExteriorChoicePage() {
 
@@ -18,6 +20,10 @@ export default function ExteriorChoicePage() {
             </div>
             <div className='list'>
                 <ExteriorChoicesList />
+            </div>
+            <ExteriorCTR/>
+            <div className='list'>
+                <AdditionalAccessories />
             </div>
             <Footer/>
         </div>

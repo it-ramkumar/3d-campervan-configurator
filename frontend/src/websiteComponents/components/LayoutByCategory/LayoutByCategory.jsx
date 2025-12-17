@@ -233,7 +233,7 @@ export default function CamperProjectsPage() {
 
           {/* RESULTS */}
           {loading ? (
-           <Loader />
+            <Loader />
           ) : layouts.length === 0 ? (
             <div className="text-center py-20 text-lg text-gray-600">
               No vans found.
@@ -272,7 +272,7 @@ export default function CamperProjectsPage() {
                       />
 
                       <ImageWithSkeleton
-                        src={project.gallery?.[0]}
+                        src={project.gallery?.[1]}
                         className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"}`}
                       />
                     </div>
@@ -286,7 +286,7 @@ export default function CamperProjectsPage() {
           {!loading && layouts.length > 0 && (
             <div className="flex justify-center items-center gap-4 mt-20">
               <BlackButton
-label={"Previous"}
+                label={"Previous"}
                 onClick={() => setPage(page - 1)}
                 disabled={page === 1}
 

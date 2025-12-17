@@ -7,7 +7,7 @@ const { protect, adminOnly } = require("../middleware/authMiddleware")
 
 
 const router = express.Router();
-router.post("/delete-image",protect, adminOnly, async (req, res) => {
+router.post("/delete-image", async (req, res) => {
   const { imageUrl } = req.body;
 
   if (!imageUrl) {

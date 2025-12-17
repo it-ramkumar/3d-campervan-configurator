@@ -243,7 +243,7 @@ export default function CamperProjectsPage() {
                       />
 
                       <ImageWithSkeleton
-                        src={project.gallery?.[0]}
+                        src={project.gallery?.[1]}
                         className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"
                           }`}
                       />

@@ -4,20 +4,12 @@ import { createVan, updateVan } from "../../../../api/van/createVan";
 import { useSelector, useDispatch } from "react-redux";
 import { clearEditData } from "../../../../redux/slices/editData";
 import axios from "axios";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { handleInputChange } from "../../../CustomHooks/handlnput";
-import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
-import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
-import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingGallery";
 import { addMediaUrl } from "../../../CustomHooks/addMediaUrl";
 import { handleMediaUrlChange } from "../../../CustomHooks/handleMediaUrlChange";
 import { removeMediaUrl } from "../../../CustomHooks/removeMediaUrl";
-import { addArrayItem } from "../../../CustomHooks/addArrayItem";
-import { handleArrayItemChange } from "../../../CustomHooks/handleArrayItemChange";
-import { addDetailedFeatureItem } from "../../../CustomHooks/addDetailFeatureItem";
-import { removeDetailedFeatureItem } from "../../../CustomHooks/removeDetailFeatureItem";
-import { handleDetailedFeatureItemChange } from "../../../CustomHooks/handleDetailFeatureItemChange";
-import { removeArrayItem } from "../../../CustomHooks/removeArrayItem";
+import DetailedFeatures from "../../Common/DetailFeature/DetailedFeatures";
+import GalleryUploader from "../../Common/GalleryUploader/GalleryUploader";
 import Swal from "sweetalert2";
 
 
@@ -43,50 +35,49 @@ const VansForm = ({setSelected}) => {
     },
     sold: false,
     gallery: [],
-    detailed_features: [{ category: "", items: [""] }],
-    media: [], // ✅ Simple string array for URLs only
+    media: [],
   });
+  const [features, setFeatures] = useState([{ category: "", items: [""] }]);
 
-  // Gallery handling
-  const [existingGallery, setExistingGallery] = useState([]); // URLs from editData
-  const [galleryFiles, setGalleryFiles] = useState([]); // New File objects
-  const [galleryPreviews, setGalleryPreviews] = useState([]); // Object URLs for new files
-  const [removedExistingGallery, setRemovedExistingGallery] = useState([]); // URLs to remove
-
-  // ✅ CORRECTED: Media handling - only URLs, no files
-  const [mediaUrls, setMediaUrls] = useState([""]); // Simple URL strings
+  const [existingGallery, setExistingGallery] = useState([]);
+  const [galleryFiles, setGalleryFiles] = useState([]);
+  const [galleryPreviews, setGalleryPreviews] = useState([]);
+  const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
+  const [mediaUrls, setMediaUrls] = useState([""]);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Prefill when editData exists
-  useEffect(() => {
-    if (editData) {
-      setFormData((prev) => ({
-        ...prev,
-        ...editData,
-        van_listing: {
-          ...prev.van_listing,
-          ...(editData.van_listing || {}),
-          specifications: {
-            ...(editData.van_listing?.specifications || prev.van_listing.specifications),
-            capacity: {
-              ...(editData.van_listing?.specifications?.capacity || prev.van_listing.specifications.capacity),
-            },
+useEffect(() => {
+  if (editData) {
+    setFormData((prev) => ({
+      ...prev,
+      ...editData,
+      van_listing: {
+        ...prev.van_listing,
+        ...(editData.van_listing || {}),
+        specifications: {
+          ...(editData.van_listing?.specifications || prev.van_listing.specifications),
+          capacity: {
+            ...(editData.van_listing?.specifications?.capacity || prev.van_listing.specifications.capacity),
           },
         },
-        detailed_features: editData.detailed_features || [{ category: "", items: [""] }],
-        media: editData.media || [], // ✅ Simple URLs
-        gallery: editData.gallery || [],
-      }));
+      },
+      media: editData.media || [],
+      gallery: editData.gallery || [],
+    }));
 
-      // Set existing gallery and media
-      setExistingGallery(editData.gallery ? [...editData.gallery] : []);
-      setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]); // ✅ Set media URLs
-    }
-  }, [editData]);
+    setExistingGallery(editData.gallery ? [...editData.gallery] : []);
+    setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
-  // Form reset function
+    // ✅ Initialize features correctly
+    setFeatures(editData.detailed_features?.length > 0
+      ? editData.detailed_features
+      : [{ category: "", items: [""] }]
+    );
+  }
+}, [editData]);
+
   const resetForm = () => {
     setFormData({
       van_listing: {
@@ -107,7 +98,7 @@ const VansForm = ({setSelected}) => {
       sold: false,
       gallery: [],
       detailed_features: [{ category: "", items: [""] }],
-      media: [], // ✅ Reset to empty array
+      media: [],
     });
 
     setGalleryFiles([]);
@@ -119,35 +110,29 @@ const VansForm = ({setSelected}) => {
     dispatch(clearEditData());
   };
 
-  // Validation
-  const validateForm = () => {
-    const newErrors = {};
+const validateForm = () => {
+  const newErrors = {};
 
-    // Basic Information Validation
-    if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
-    if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
-    if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
+  if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
+  if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
+  if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
+  if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
+  if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
+  if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
+  if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
+  if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
-    // Specifications Validation
-    if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
-    if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
-    if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
-    if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
-    if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
+  // ✅ Use features from state, not editData
+  if (features.length === 0) {
+    newErrors.features = "At least one feature category is required";
+  }
 
-    // Detailed Features Validation
-    formData.detailed_features.forEach((feature, index) => {
-      if (!feature.category?.trim()) newErrors[`detail_category_${index}`] = "Category is required";
-      feature.items.forEach((item, itemIndex) => {
-        if (!item?.trim()) newErrors[`detail_item_${index}_${itemIndex}`] = "Feature item is required";
-      });
-    });
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
-  // Cleanup object URLs on unmount
+
   useEffect(() => {
     return () => {
       galleryPreviews.forEach((url) => {
@@ -162,7 +147,6 @@ const VansForm = ({setSelected}) => {
 
     setLoading(true);
     try {
-      // 1️⃣ Delete removed existing gallery images from backend/S3
       if (removedExistingGallery.length > 0) {
         await Promise.all(
           removedExistingGallery.map(url =>
@@ -189,7 +173,7 @@ const VansForm = ({setSelected}) => {
       // Main van data
       formToSend.append("van_listing", JSON.stringify(formData.van_listing));
       formToSend.append("sold", formData.sold);
-      formToSend.append("detailed_features", JSON.stringify(formData.detailed_features));
+      formToSend.append("detailed_features", JSON.stringify(features));
 
       // 3️⃣ Call backend to create or update van
       if (editData?._id) {
@@ -382,153 +366,31 @@ const VansForm = ({setSelected}) => {
           </section>
 
           {/* Detailed Features */}
-          <section className="border border-gray-300 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">Detailed Features</h2>
-            <div className="space-y-6">
-              {formData.detailed_features.map((feature, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                      <input
-                        value={feature.category}
-                        onChange={(e) => handleArrayItemChange("detailed_features", index, "category", e.target.value, setFormData)}
-                        className={`w-full px-4 py-2 border rounded-lg ${errors[`detail_category_${index}`] ? "border-red-500" : "border-gray-300"}`}
-                        placeholder="Enter category name"
-                      />
-                      {errors[`detail_category_${index}`] && <p className="text-sm text-red-600 mt-1">{errors[`detail_category_${index}`]}</p>}
-                    </div>
+    {/* DETAILED FEATURES */}
+        <div className="border border-gray-300 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Detailed Features
+          </h3>
+          <DetailedFeatures
+            features={features}
+            setFeatures={setFeatures}
+          />
 
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem("detailed_features", index, setFormData)}
-                      className="ml-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                    >
-                      Remove
-                    </button>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="block text-sm font-medium text-gray-700">Items *</label>
-                    {feature.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex gap-3">
-                        <input
-                          value={item}
-                          onChange={(e) => handleDetailedFeatureItemChange(index, itemIndex, e.target.value, setFormData)}
-                          className={`flex-1 px-4 py-2 border rounded-lg ${errors[`detail_item_${index}_${itemIndex}`] ? "border-red-500" : "border-gray-300"}`}
-                          placeholder={`Feature item ${itemIndex + 1}`}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeDetailedFeatureItem(index, itemIndex, setFormData)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-
-                    <button
-                      type="button"
-                      onClick={() => addDetailedFeatureItem(index, setFormData)}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                    >
-                      + Add Item
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => addArrayItem("detailed_features", { category: "", items: [""] }, setFormData)}
-                className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400"
-              >
-                + Add Feature Category
-              </button>
-            </div>
-          </section>
-
-          {/* Gallery */}
-          <section className="border border-gray-300 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">Gallery Images</h2>
-
-            <div className="mb-6">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={(e) => handleGalleryChange(e, setGalleryFiles, setGalleryPreviews)}
-
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
-              />
-            </div>
-
-            {/* Existing gallery */}
-            {existingGallery.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-700 mb-4">Existing Images</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {existingGallery.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <ImageWithSkeleton
-                        src={url}
-                        alt={`existing-${index}`}
-                        className="w-full h-32 object-cover "
-                      />
-                      <button
-                        type="button"
-                        onClick={() =>
-                          removeExistingGalleryImage(
-                            index,
-                            existingGallery,            // ✅ correct
-                            setRemovedExistingGallery,  // ✅ correct
-                            setExistingGallery          // ✅ correct
-                          )
-                        }
-                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
-                      >
-                        ×
-                      </button>
+        </div>
 
 
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            {/* New gallery previews */}
-            {galleryPreviews.length > 0 && (
-              <div>
-                <h3 className="text-lg font-medium text-gray-700 mb-4">New Selected Images</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {galleryPreviews.map((previewUrl, index) => (
-                    <div key={index} className="relative group">
-                      <ImageWithSkeleton
-                        src={previewUrl}
-                        alt={`preview-${index}`}
-                        className="w-full h-32 object-cover "
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeNewGalleryImage(index, setGalleryFiles, setGalleryPreviews, galleryPreviews)}
-                        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-700"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
-            {existingGallery.length === 0 && galleryPreviews.length === 0 && (
-              <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                <p className="text-gray-500">No images added yet</p>
-              </div>
-            )}
-          </section>
+<GalleryUploader
+  galleryFiles={galleryFiles}
+  setGalleryFiles={setGalleryFiles}
+  galleryPreviews={galleryPreviews}
+  setGalleryPreviews={setGalleryPreviews}
+  existingGallery={existingGallery}
+  setExistingGallery={setExistingGallery}
+  removedExistingGallery={removedExistingGallery}
+  setRemovedExistingGallery={setRemovedExistingGallery}
+/>
 
           {/* ✅ CORRECTED: Media URLs Section */}
           <section className="border border-gray-300 rounded-lg p-6">

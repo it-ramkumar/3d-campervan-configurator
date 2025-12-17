@@ -52,7 +52,6 @@ const AppRoutes = () => {
 
   return (
     <>
-
       {showBlackFriday && <BlackFridayLabel />}
        {/* <Christmis/> */}
       <ChatWidget />
@@ -72,7 +71,7 @@ const AppRoutes = () => {
           <Route path="/van-detail/:slug" element={<VanDetail />} />
           <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
           <Route path="/blog-detail/:id" element={<BlogDetail />} />
-          <Route path="/innovation" element={<Exteriorpage />} />
+          <Route path="/innovation" element={<ExChoice />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog-form" element={<BlogForm />} />
           <Route path="/layouts" element={<Layouts />} />
@@ -85,14 +84,12 @@ const AppRoutes = () => {
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />
-          <Route path="/interior-choice" element={<Interiorpage />} />
+          <Route path="/interior-choice" element={<Testing />} />
           <Route path="/cushion" element={<Cushionpage />} />
           <Route path="/layout-by-category/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />
           <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />
-
-
         </Routes>
       </Suspense>
     </>
