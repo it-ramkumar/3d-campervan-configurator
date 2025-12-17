@@ -85,7 +85,7 @@ export default function BlackFridayCard() {
             </button>
 
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2">
-                SPECIAL <br /> OFFER
+                SPECIAL <br /> OFFER.....
             </h1>
 
             <p className="text-lg font-bold mb-1">
