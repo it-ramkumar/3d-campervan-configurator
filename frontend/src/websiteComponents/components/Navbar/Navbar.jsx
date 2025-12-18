@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { gsap } from "gsap";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ChevronDown, Menu } from 'lucide-react';
+import { Link, useLocation, useNavigation } from "react-router-dom";
+import { ChevronDown, Menu, X } from 'lucide-react';
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { getNavCat } from "../../../api/portfolio/navBarCat";
 import { getnavWheel } from "../../../api/portfolio/navWheelBase";
@@ -19,111 +19,155 @@ export default function Navbar({ forceMobile }) {
   const mobileMenuRef = useRef(null);
   const timeoutRef = useRef(null);
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigation = useNavigation();
   const [selectedLayout, setSelectedLayout] = useState(null);
   const [layoutData, setLayoutData] = useState(null);
   const [layoutLoading, setLayoutLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [wheelBases, setWheelBases] = useState([]);
+  const isNavigatingRef = useRef(false);
 
-  // Close mobile menu when route changes
+  // Immediately close mobile menu on any location change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveMenu(null);
   }, [location.pathname]);
 
-  // Close mobile menu when clicking outside (for mobile)
+  // Listen for navigation state changes
+  useEffect(() => {
+    if (navigation.state === "loading") {
+      setIsMobileMenuOpen(false);
+      setActiveMenu(null);
+    }
+  }, [navigation.state]);
+
+  // Close mobile menu immediately when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        !event.target.closest('button[aria-label="Toggle mobile menu"]')
-      ) {
-        setIsMobileMenuOpen(false);
-        setActiveMenu(null);
+      const isMenuButton = event.target.closest('button[aria-label="Toggle mobile menu"]');
+      const isMenuContent = event.target.closest('.mobile-menu-content');
+      
+      if (!isMenuButton && !isMenuContent && isMobileMenuOpen) {
+        closeMobileMenuImmediately();
       }
     };
 
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      // Prevent body scrolling when mobile menu is open
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'unset';
-    }
+    const handleEscape = (event) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        closeMobileMenuImmediately();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isMobileMenuOpen]);
 
   // Desktop mega menu animation
   useEffect(() => {
     if (!megaMenuRef.current) return;
+    
     if (activeMenu) {
+      gsap.killTweensOf(megaMenuRef.current);
       gsap.fromTo(
         megaMenuRef.current,
         { height: 0, opacity: 0 },
-        { height: "auto", opacity: 1, duration: 0.4, ease: "power3.out" }
+        { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" }
       );
     } else {
+      gsap.killTweensOf(megaMenuRef.current);
       gsap.to(megaMenuRef.current, {
         height: 0,
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.in",
-      });
-    }
-  }, [activeMenu]);
-
-  // Mobile menu animation
-  useEffect(() => {
-    if (!mobileMenuRef.current) return;
-
-    if (isMobileMenuOpen) {
-      gsap.fromTo(
-        mobileMenuRef.current,
-        { x: "-100%", opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
-      );
-    } else {
-      gsap.to(mobileMenuRef.current, {
-        x: "-100%",
         opacity: 0,
         duration: 0.2,
         ease: "power2.in",
       });
     }
-  }, [isMobileMenuOpen]);
+  }, [activeMenu]);
+
+  const closeMobileMenuImmediately = useCallback(() => {
+    gsap.killTweensOf(mobileMenuRef.current);
+    if (mobileMenuRef.current) {
+      mobileMenuRef.current.style.transform = 'translateX(-100%)';
+      mobileMenuRef.current.style.opacity = '0';
+    }
+    setIsMobileMenuOpen(false);
+    setActiveMenu(null);
+    document.body.style.overflow = 'unset';
+  }, []);
+
+  const toggleMobileMenu = useCallback(() => {
+    if (isNavigatingRef.current) return;
+    
+    if (isMobileMenuOpen) {
+      closeMobileMenuImmediately();
+    } else {
+      gsap.killTweensOf(mobileMenuRef.current);
+      setIsMobileMenuOpen(true);
+      setActiveMenu(null);
+      
+      // Small delay to ensure state update before animation
+      setTimeout(() => {
+        if (mobileMenuRef.current) {
+          gsap.fromTo(mobileMenuRef.current,
+            { x: "-100%", opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.25, ease: "power2.out" }
+          );
+        }
+      }, 10);
+      
+      document.body.style.overflow = 'hidden';
+    }
+  }, [isMobileMenuOpen, closeMobileMenuImmediately]);
 
   const handleMenuHover = (menu) => {
+    if (isMobileMenuOpen) return;
     clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
 
   const handleMenuLeave = () => {
+    if (isMobileMenuOpen) return;
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 300);
   };
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-    // Clear any open desktop menu when mobile menu opens
-    if (!isMobileMenuOpen) {
-      setActiveMenu(null);
-    }
-  };
+  const handleMobileLinkClick = useCallback((e) => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    
+    // Immediately close menu without animation
+    closeMobileMenuImmediately();
+    
+    // Small delay before navigation to ensure menu is closed
+    setTimeout(() => {
+      isNavigatingRef.current = true;
+      window.location.href = href;
+    }, 50);
+  }, [closeMobileMenuImmediately]);
 
-  const handleMobileMenuClose = () => {
-    setIsMobileMenuOpen(false);
-    setActiveMenu(null);
-  };
+  const handleMobileMenuLinkClick = useCallback((e) => {
+    const href = e.currentTarget.getAttribute('href');
+    
+    // Prevent default and use our custom navigation
+    e.preventDefault();
+    
+    // Close menu immediately
+    closeMobileMenuImmediately();
+    
+    // Navigate after menu is closed
+    setTimeout(() => {
+      window.location.href = href;
+    }, 50);
+  }, [closeMobileMenuImmediately]);
 
   const isParentActive = (key) => routes[key]?.includes(location.pathname);
   const isChildActive = (path) => location.pathname === path;
 
+  // Load data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -146,22 +190,10 @@ export default function Navbar({ forceMobile }) {
     fetchData();
   }, []);
 
-  const handleLayoutClick = async (link) => {
-    console.log(link, "link");
-    setSelectedLayout(link);
-    setLayoutLoading(true);
-
-    try {
-      const res = await fetch(`/api/layouts?type=${encodeURIComponent(link)}`);
-      const data = await res.json();
-      setLayoutData(data);
-    } catch (err) {
-      console.error("Error fetching layout data", err);
-      setLayoutData(null);
-    } finally {
-      setLayoutLoading(false);
-    }
-  };
+  // Reset navigating ref on location change
+  useEffect(() => {
+    isNavigatingRef.current = false;
+  }, [location.pathname]);
 
   if (loading) {
     return (
@@ -191,6 +223,7 @@ export default function Navbar({ forceMobile }) {
             </div>
           )}
           
+          {/* DESKTOP NAV LINKS */}
           <div
             className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
           >
@@ -246,7 +279,7 @@ export default function Navbar({ forceMobile }) {
             </Link>
           </div>
 
-          {/* RIGHT SECTION - Book Appointment Button & Mobile Menu */}
+          {/* RIGHT SECTION */}
           <div className="flex items-center gap-4">
             {!forceMobile && (
               <Link
@@ -258,34 +291,14 @@ export default function Navbar({ forceMobile }) {
                   hover:animate-none relative overflow-hidden group
                 "
               >
-                {/* GLOW BACKGROUND RING */}
-                <div
-                  className="absolute inset-0 rounded-xl opacity-60 blur-lg
-                    bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
-                    group-hover:opacity-100 transition-all duration-500">
-                </div>
-
-                {/* COLORFUL BORDER */}
-                <div
-                  className="absolute inset-0 rounded-xl p-[2px]
-                    bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500
-                    animate-[spin_6s_linear_infinite]">
-                </div>
-
-                {/* INNER BUTTON */}
+                <div className="absolute inset-0 rounded-xl opacity-60 blur-lg bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500 group-hover:opacity-100 transition-all duration-500" />
+                <div className="absolute inset-0 rounded-xl p-[2px] bg-gradient-to-r from-green-300 via-orange-400 to-cyan-500 animate-[spin_6s_linear_infinite]" />
                 <div className="relative z-10 bg-white text-black rounded-xl px-4 py-2.5 flex items-center">
                   Book Free Consultation
-                  <svg
-                    className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="ml-2 w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                   </svg>
                 </div>
-
-                {/* PING DOT */}
                 <span className="absolute flex h-6 w-6 -top-2 -right-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-50"></span>
                   <span className="relative inline-flex rounded-full h-6 w-6 bg-white"></span>
@@ -298,7 +311,7 @@ export default function Navbar({ forceMobile }) {
               onClick={toggleMobileMenu}
               className={`${forceMobile ? "" : "md:hidden"} z-50 focus:outline-none`}
             >
-              <Menu className="w-6 h-6" />
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -424,22 +437,29 @@ export default function Navbar({ forceMobile }) {
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-          onClick={handleMobileMenuClose}
+          onClick={closeMobileMenuImmediately}
         />
       )}
 
       {/* MOBILE MENU SIDEBAR */}
       <div
         ref={mobileMenuRef}
-        className={`fixed left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-lg z-50 md:hidden ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out`}
-        style={{ paddingTop: "64px", overflowY: "auto" }}
+        className="mobile-menu-content fixed left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-lg z-50 md:hidden"
+        style={{ 
+          paddingTop: "64px", 
+          overflowY: "auto",
+          transform: 'translateX(-100%)',
+          opacity: 0
+        }}
       >
         <div className="flex flex-col py-8 px-4 min-h-full">
           {forceMobile && (
             <div className="flex items-center mb-5">
-              <Link to="/" onClick={handleMobileMenuClose} className="block">
+              <Link 
+                to="/" 
+                onClick={handleMobileMenuLinkClick} 
+                className="block"
+              >
                 <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[150px] h-[30px] object-contain" />
               </Link>
             </div>
@@ -486,7 +506,7 @@ export default function Navbar({ forceMobile }) {
                                       <Link
                                         to={`/blog-detail/${blog._id}`}
                                         className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                        onClick={handleMobileMenuClose}
+                                        onClick={handleMobileMenuLinkClick}
                                       >
                                         <span className="truncate">{blog.title}</span>
                                         <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
@@ -499,7 +519,7 @@ export default function Navbar({ forceMobile }) {
                                     <Link
                                       to="/blogs"
                                       className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuClose}
+                                      onClick={handleMobileMenuLinkClick}
                                     >
                                       View All Blogs →
                                     </Link>
@@ -512,7 +532,7 @@ export default function Navbar({ forceMobile }) {
                                       <Link
                                         to={`/layout-by-category/${category}`}
                                         className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                        onClick={handleMobileMenuClose}
+                                        onClick={handleMobileMenuLinkClick}
                                       >
                                         <span>{category}</span>
                                         <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
@@ -525,7 +545,7 @@ export default function Navbar({ forceMobile }) {
                                     <Link
                                       to="/portfolio"
                                       className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuClose}
+                                      onClick={handleMobileMenuLinkClick}
                                     >
                                       View All Categories →
                                     </Link>
@@ -545,7 +565,7 @@ export default function Navbar({ forceMobile }) {
                                         <Link
                                           to={`/wheel-base/${base}`}
                                           className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                          onClick={handleMobileMenuClose}
+                                          onClick={handleMobileMenuLinkClick}
                                         >
                                           <span>{label}</span>
                                           <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
@@ -559,7 +579,7 @@ export default function Navbar({ forceMobile }) {
                                     <Link
                                       to="/wheel-base"
                                       className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuClose}
+                                      onClick={handleMobileMenuLinkClick}
                                     >
                                       View All Wheelbases →
                                     </Link>
@@ -575,7 +595,7 @@ export default function Navbar({ forceMobile }) {
                                           ? "text-indigo-600 font-semibold"
                                           : "text-gray-700 hover:text-indigo-600"
                                       }`}
-                                      onClick={handleMobileMenuClose}
+                                      onClick={handleMobileMenuLinkClick}
                                     >
                                       {item.label}
                                     </Link>
@@ -591,7 +611,7 @@ export default function Navbar({ forceMobile }) {
                 ) : (
                   <Link
                     to={menu.link}
-                    onClick={handleMobileMenuClose}
+                    onClick={handleMobileMenuLinkClick}
                     className={`w-full text-lg font-semibold text-blackish py-3 block ${
                       isParentActive(key) ? "text-indigo-600 font-semibold" : ""
                     }`}
@@ -606,7 +626,7 @@ export default function Navbar({ forceMobile }) {
           <div className="mt-6 mb-6">
             <Link
               to="/contact"
-              onClick={handleMobileMenuClose}
+              onClick={handleMobileMenuLinkClick}
               className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
             >
               Book Free Consultation
