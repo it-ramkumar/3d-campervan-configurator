@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { gsap } from "gsap";
-import { Link, useLocation, useNavigation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { getNavCat } from "../../../api/portfolio/navBarCat";
@@ -17,61 +17,46 @@ export default function Navbar({ forceMobile }) {
   const [blogs, setBlogs] = useState([]);
   const megaMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
+  const mobileMenuContainerRef = useRef(null);
   const timeoutRef = useRef(null);
   const location = useLocation();
-  const navigation = useNavigation();
   const [selectedLayout, setSelectedLayout] = useState(null);
   const [layoutData, setLayoutData] = useState(null);
   const [layoutLoading, setLayoutLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [wheelBases, setWheelBases] = useState([]);
-  const isNavigatingRef = useRef(false);
+  const isInitialMount = useRef(true);
 
-  // Immediately close mobile menu on any location change
+  // RESET EVERYTHING on location change
   useEffect(() => {
+    console.log("Location changed to:", location.pathname);
+    // Immediately close everything
     setIsMobileMenuOpen(false);
     setActiveMenu(null);
-  }, [location.pathname]);
-
-  // Listen for navigation state changes
-  useEffect(() => {
-    if (navigation.state === "loading") {
-      setIsMobileMenuOpen(false);
-      setActiveMenu(null);
+    
+    // Force remove any leftover classes
+    document.body.style.overflow = '';
+    document.body.classList.remove('mobile-menu-open');
+    
+    // Kill all GSAP animations
+    if (mobileMenuRef.current) {
+      gsap.killTweensOf(mobileMenuRef.current);
     }
-  }, [navigation.state]);
-
-  // Close mobile menu immediately when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const isMenuButton = event.target.closest('button[aria-label="Toggle mobile menu"]');
-      const isMenuContent = event.target.closest('.mobile-menu-content');
-      
-      if (!isMenuButton && !isMenuContent && isMobileMenuOpen) {
-        closeMobileMenuImmediately();
-      }
-    };
-
-    const handleEscape = (event) => {
-      if (event.key === 'Escape' && isMobileMenuOpen) {
-        closeMobileMenuImmediately();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isMobileMenuOpen]);
+    if (megaMenuRef.current) {
+      gsap.killTweensOf(megaMenuRef.current);
+    }
+    
+    // Reset inline styles
+    if (mobileMenuContainerRef.current) {
+      mobileMenuContainerRef.current.style.display = 'none';
+    }
+  }, [location.pathname]);
 
   // Desktop mega menu animation
   useEffect(() => {
     if (!megaMenuRef.current) return;
     
-    if (activeMenu) {
+    if (activeMenu && !forceMobile) {
       gsap.killTweensOf(megaMenuRef.current);
       gsap.fromTo(
         megaMenuRef.current,
@@ -85,84 +70,101 @@ export default function Navbar({ forceMobile }) {
         opacity: 0,
         duration: 0.2,
         ease: "power2.in",
+        onComplete: () => {
+          if (!activeMenu && megaMenuRef.current) {
+            megaMenuRef.current.style.display = 'none';
+          }
+        }
       });
     }
-  }, [activeMenu]);
+  }, [activeMenu, forceMobile]);
 
-  const closeMobileMenuImmediately = useCallback(() => {
-    gsap.killTweensOf(mobileMenuRef.current);
-    if (mobileMenuRef.current) {
-      mobileMenuRef.current.style.transform = 'translateX(-100%)';
-      mobileMenuRef.current.style.opacity = '0';
+  // Handle mobile menu with CSS transitions instead of GSAP
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
     }
-    setIsMobileMenuOpen(false);
-    setActiveMenu(null);
-    document.body.style.overflow = 'unset';
-  }, []);
 
-  const toggleMobileMenu = useCallback(() => {
-    if (isNavigatingRef.current) return;
-    
+    if (!mobileMenuRef.current || !mobileMenuContainerRef.current) return;
+
     if (isMobileMenuOpen) {
-      closeMobileMenuImmediately();
-    } else {
-      gsap.killTweensOf(mobileMenuRef.current);
-      setIsMobileMenuOpen(true);
-      setActiveMenu(null);
+      // Show and animate in
+      mobileMenuContainerRef.current.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('mobile-menu-open');
       
-      // Small delay to ensure state update before animation
+      // Small delay to ensure display block is applied
       setTimeout(() => {
         if (mobileMenuRef.current) {
-          gsap.fromTo(mobileMenuRef.current,
-            { x: "-100%", opacity: 0 },
-            { x: 0, opacity: 1, duration: 0.25, ease: "power2.out" }
-          );
+          mobileMenuRef.current.style.transform = 'translateX(0)';
+          mobileMenuRef.current.style.opacity = '1';
         }
       }, 10);
+    } else {
+      // Animate out and hide
+      if (mobileMenuRef.current) {
+        mobileMenuRef.current.style.transform = 'translateX(-100%)';
+        mobileMenuRef.current.style.opacity = '0';
+      }
       
-      document.body.style.overflow = 'hidden';
+      // Wait for transition then hide completely
+      setTimeout(() => {
+        if (mobileMenuContainerRef.current) {
+          mobileMenuContainerRef.current.style.display = 'none';
+        }
+        document.body.style.overflow = '';
+        document.body.classList.remove('mobile-menu-open');
+      }, 300);
     }
-  }, [isMobileMenuOpen, closeMobileMenuImmediately]);
+  }, [isMobileMenuOpen]);
+
+  // Close menu on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isMobileMenuOpen]);
 
   const handleMenuHover = (menu) => {
-    if (isMobileMenuOpen) return;
+    if (isMobileMenuOpen || forceMobile) return;
     clearTimeout(timeoutRef.current);
     setActiveMenu(menu);
   };
 
   const handleMenuLeave = () => {
-    if (isMobileMenuOpen) return;
+    if (isMobileMenuOpen || forceMobile) return;
     timeoutRef.current = setTimeout(() => setActiveMenu(null), 300);
   };
 
-  const handleMobileLinkClick = useCallback((e) => {
-    e.preventDefault();
-    const href = e.currentTarget.getAttribute('href');
-    
-    // Immediately close menu without animation
-    closeMobileMenuImmediately();
-    
-    // Small delay before navigation to ensure menu is closed
-    setTimeout(() => {
-      isNavigatingRef.current = true;
-      window.location.href = href;
-    }, 50);
-  }, [closeMobileMenuImmediately]);
+  const toggleMobileMenu = () => {
+    console.log("Toggle mobile menu, current state:", isMobileMenuOpen);
+    setIsMobileMenuOpen(prev => !prev);
+  };
 
-  const handleMobileMenuLinkClick = useCallback((e) => {
-    const href = e.currentTarget.getAttribute('href');
-    
-    // Prevent default and use our custom navigation
+  const closeMobileMenu = useCallback(() => {
+    console.log("Closing mobile menu");
+    setIsMobileMenuOpen(false);
+    setActiveMenu(null);
+  }, []);
+
+  const handleMobileLinkClick = useCallback((e, href) => {
     e.preventDefault();
+    console.log("Mobile link clicked, navigating to:", href);
     
-    // Close menu immediately
-    closeMobileMenuImmediately();
+    // Immediately close menu
+    closeMobileMenu();
     
-    // Navigate after menu is closed
+    // Force navigation after a tiny delay
     setTimeout(() => {
       window.location.href = href;
-    }, 50);
-  }, [closeMobileMenuImmediately]);
+    }, 10);
+  }, [closeMobileMenu]);
 
   const isParentActive = (key) => routes[key]?.includes(location.pathname);
   const isChildActive = (path) => location.pathname === path;
@@ -190,14 +192,24 @@ export default function Navbar({ forceMobile }) {
     fetchData();
   }, []);
 
-  // Reset navigating ref on location change
-  useEffect(() => {
-    isNavigatingRef.current = false;
-  }, [location.pathname]);
+  const handleLayoutClick = async (link) => {
+    setSelectedLayout(link);
+    setLayoutLoading(true);
+    try {
+      const res = await fetch(`/api/layouts?type=${encodeURIComponent(link)}`);
+      const data = await res.json();
+      setLayoutData(data);
+    } catch (err) {
+      console.error("Error fetching layout data", err);
+      setLayoutData(null);
+    } finally {
+      setLayoutLoading(false);
+    }
+  };
 
   if (loading) {
     return (
-      <nav className="sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000">
+      <nav className="sticky top-0 w-full px-6 py-4 bg-white shadow-md z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-center h-16">
           <div className="animate-pulse">Loading...</div>
         </div>
@@ -207,7 +219,7 @@ export default function Navbar({ forceMobile }) {
 
   return (
     <>
-      <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 shadow-md z-1000" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-1000"}`}>
+      <nav className={`${forceMobile ? "sticky top-0 w-full px-2 py-1 shadow-md z-50" : "sticky top-0 w-full px-6 py-4 bg-white shadow-md z-50"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
           {/* LEFT LOGO */}
           {!forceMobile && (
@@ -322,7 +334,7 @@ export default function Navbar({ forceMobile }) {
         <div
           ref={megaMenuRef}
           className="fixed left-0 w-full bg-white shadow-xl z-40 overflow-hidden"
-          style={{ top: "63px", height: "0" }}
+          style={{ top: "63px", height: "0", display: activeMenu ? 'block' : 'none' }}
           onMouseEnter={() => handleMenuHover(activeMenu)}
           onMouseLeave={handleMenuLeave}
         >
@@ -433,207 +445,221 @@ export default function Navbar({ forceMobile }) {
         </div>
       )}
 
-      {/* MOBILE MENU OVERLAY */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-          onClick={closeMobileMenuImmediately}
-        />
-      )}
-
-      {/* MOBILE MENU SIDEBAR */}
-      <div
-        ref={mobileMenuRef}
-        className="mobile-menu-content fixed left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-lg z-50 md:hidden"
-        style={{ 
-          paddingTop: "64px", 
-          overflowY: "auto",
-          transform: 'translateX(-100%)',
-          opacity: 0
-        }}
+      {/* MOBILE MENU - Using CSS transitions */}
+      <div 
+        ref={mobileMenuContainerRef}
+        className="fixed inset-0 z-40 md:hidden"
+        style={{ display: 'none' }}
       >
-        <div className="flex flex-col py-8 px-4 min-h-full">
-          {forceMobile && (
-            <div className="flex items-center mb-5">
-              <Link 
-                to="/" 
-                onClick={handleMobileMenuLinkClick} 
-                className="block"
-              >
-                <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[150px] h-[30px] object-contain" />
-              </Link>
-            </div>
-          )}
+        {/* Overlay */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+          onClick={closeMobileMenu}
+          style={{ opacity: isMobileMenuOpen ? 1 : 0 }}
+        />
+        
+        {/* Menu Sidebar */}
+        <div
+          ref={mobileMenuRef}
+          className="absolute left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-lg transition-all duration-300 ease-in-out"
+          style={{
+            transform: 'translateX(-100%)',
+            opacity: 0
+          }}
+        >
+          <div className="flex flex-col py-8 px-4 h-full overflow-y-auto" style={{ paddingTop: "64px" }}>
+            {forceMobile && (
+              <div className="flex items-center mb-5">
+                <Link 
+                  to="/" 
+                  onClick={(e) => handleMobileLinkClick(e, '/')}
+                  className="block"
+                >
+                  <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[150px] h-[30px] object-contain" />
+                </Link>
+              </div>
+            )}
 
-          {Object.keys(menuContent).map((key, idx) => {
-            const menu = menuContent[key];
-            const hasSubmenu = menu.sections && menu.sections.length > 0;
+            {Object.keys(menuContent).map((key, idx) => {
+              const menu = menuContent[key];
+              const hasSubmenu = menu.sections && menu.sections.length > 0;
 
-            return (
-              <div key={idx} className="w-full mb-3">
-                {hasSubmenu ? (
-                  <>
-                    <button
-                      className={`w-full text-lg font-semibold text-blackish py-3 flex justify-between items-center ${
-                        isParentActive(key) ? "text-indigo-600" : ""
-                      }`}
-                      onClick={() => setActiveMenu(activeMenu === key ? null : key)}
-                    >
-                      {menu.title}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={`w-5 h-5 transform transition-transform duration-200 ${
-                          activeMenu === key ? "rotate-180" : ""
+              return (
+                <div key={idx} className="w-full mb-3">
+                  {hasSubmenu ? (
+                    <>
+                      <button
+                        className={`w-full text-lg font-semibold text-blackish py-3 flex justify-between items-center ${
+                          isParentActive(key) ? "text-indigo-600" : ""
                         }`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                        onClick={() => setActiveMenu(activeMenu === key ? null : key)}
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
+                        {menu.title}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className={`w-5 h-5 transform transition-transform duration-200 ${
+                            activeMenu === key ? "rotate-180" : ""
+                          }`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
 
-                    {activeMenu === key && (
-                      <div className="pl-4 mb-4 border-l-2 border-gray-100">
-                        {menu.sections.map((section, secIdx) => (
-                          <div key={secIdx} className="mb-3">
-                            <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
-                            <ul className="space-y-2">
-                              {section.title === "Blog" ? (
-                                <>
-                                  {blogs?.slice(0, 4).map((blog) => (
-                                    <li key={blog._id}>
-                                      <Link
-                                        to={`/blog-detail/${blog._id}`}
-                                        className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                        onClick={handleMobileMenuLinkClick}
-                                      >
-                                        <span className="truncate">{blog.title}</span>
-                                        <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
-                                          --→
-                                        </span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                  <li>
-                                    <Link
-                                      to="/blogs"
-                                      className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuLinkClick}
-                                    >
-                                      View All Blogs →
-                                    </Link>
-                                  </li>
-                                </>
-                              ) : section.title === "Explore Layout Options" ? (
-                                <>
-                                  {categories?.slice(0, 4).map((category, i) => (
-                                    <li key={i}>
-                                      <Link
-                                        to={`/layout-by-category/${category}`}
-                                        className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                        onClick={handleMobileMenuLinkClick}
-                                      >
-                                        <span>{category}</span>
-                                        <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
-                                          --→
-                                        </span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                  <li>
-                                    <Link
-                                      to="/portfolio"
-                                      className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuLinkClick}
-                                    >
-                                      View All Categories →
-                                    </Link>
-                                  </li>
-                                </>
-                              ) : section.title === "Van Models Options" ? (
-                                <>
-                                  {wheelBases?.slice(0, 4).map((base, i) => {
-                                    let label = "";
-                                    if (base == "144") label = "Sprinter 144";
-                                    else if (base == "170") label = "Sprinter 170";
-                                    else if (base == "148") label = "Transit 148";
-                                    else label = `Promaster ${base}`;
-
-                                    return (
-                                      <li key={i}>
-                                        <Link
-                                          to={`/wheel-base/${base}`}
+                      {activeMenu === key && (
+                        <div className="pl-4 mb-4 border-l-2 border-gray-100">
+                          {menu.sections.map((section, secIdx) => (
+                            <div key={secIdx} className="mb-3">
+                              <h4 className="text-indigo-600 font-medium mb-2">{section.title}</h4>
+                              <ul className="space-y-2">
+                                {section.title === "Blog" ? (
+                                  <>
+                                    {blogs?.slice(0, 4).map((blog) => (
+                                      <li key={blog._id}>
+                                        <a
+                                          href={`/blog-detail/${blog._id}`}
                                           className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
-                                          onClick={handleMobileMenuLinkClick}
+                                          onClick={(e) => handleMobileLinkClick(e, `/blog-detail/${blog._id}`)}
                                         >
-                                          <span>{label}</span>
+                                          <span className="truncate">{blog.title}</span>
                                           <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
                                             --→
                                           </span>
-                                        </Link>
+                                        </a>
                                       </li>
-                                    );
-                                  })}
-                                  <li>
-                                    <Link
-                                      to="/wheel-base"
-                                      className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
-                                      onClick={handleMobileMenuLinkClick}
-                                    >
-                                      View All Wheelbases →
-                                    </Link>
-                                  </li>
-                                </>
-                              ) : (
-                                section.items.map((item, itemIdx) => (
-                                  <li key={itemIdx}>
-                                    <Link
-                                      to={item.link}
-                                      className={`block py-1 ${
-                                        isChildActive(item.link)
-                                          ? "text-indigo-600 font-semibold"
-                                          : "text-gray-700 hover:text-indigo-600"
-                                      }`}
-                                      onClick={handleMobileMenuLinkClick}
-                                    >
-                                      {item.label}
-                                    </Link>
-                                  </li>
-                                ))
-                              )}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <Link
-                    to={menu.link}
-                    onClick={handleMobileMenuLinkClick}
-                    className={`w-full text-lg font-semibold text-blackish py-3 block ${
-                      isParentActive(key) ? "text-indigo-600 font-semibold" : ""
-                    }`}
-                  >
-                    {menu.title}
-                  </Link>
-                )}
-              </div>
-            );
-          })}
-          
-          <div className="mt-6 mb-6">
-            <Link
-              to="/contact"
-              onClick={handleMobileMenuLinkClick}
-              className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
-            >
-              Book Free Consultation
-            </Link>
+                                    ))}
+                                    <li>
+                                      <a
+                                        href="/blogs"
+                                        className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+                                        onClick={(e) => handleMobileLinkClick(e, '/blogs')}
+                                      >
+                                        View All Blogs →
+                                      </a>
+                                    </li>
+                                  </>
+                                ) : section.title === "Explore Layout Options" ? (
+                                  <>
+                                    {categories?.slice(0, 4).map((category, i) => (
+                                      <li key={i}>
+                                        <a
+                                          href={`/layout-by-category/${category}`}
+                                          className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
+                                          onClick={(e) => handleMobileLinkClick(e, `/layout-by-category/${category}`)}
+                                        >
+                                          <span>{category}</span>
+                                          <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+                                            --→
+                                          </span>
+                                        </a>
+                                      </li>
+                                    ))}
+                                    <li>
+                                      <a
+                                        href="/portfolio"
+                                        className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+                                        onClick={(e) => handleMobileLinkClick(e, '/portfolio')}
+                                      >
+                                        View All Categories →
+                                      </a>
+                                    </li>
+                                  </>
+                                ) : section.title === "Van Models Options" ? (
+                                  <>
+                                    {wheelBases?.slice(0, 4).map((base, i) => {
+                                      let label = "";
+                                      if (base == "144") label = "Sprinter 144";
+                                      else if (base == "170") label = "Sprinter 170";
+                                      else if (base == "148") label = "Transit 148";
+                                      else label = `Promaster ${base}`;
+
+                                      return (
+                                        <li key={i}>
+                                          <a
+                                            href={`/wheel-base/${base}`}
+                                            className="group flex items-center justify-between py-1 text-gray-700 hover:text-indigo-600"
+                                            onClick={(e) => handleMobileLinkClick(e, `/wheel-base/${base}`)}
+                                          >
+                                            <span>{label}</span>
+                                            <span className="text-xl text-indigo-600 font-bold opacity-70 group-hover:translate-x-1 transition-all">
+                                              --→
+                                            </span>
+                                          </a>
+                                        </li>
+                                      );
+                                    })}
+                                    <li>
+                                      <a
+                                        href="/wheel-base"
+                                        className="block py-2 text-indigo-600 font-semibold hover:text-indigo-700"
+                                        onClick={(e) => handleMobileLinkClick(e, '/wheel-base')}
+                                      >
+                                        View All Wheelbases →
+                                      </a>
+                                    </li>
+                                  </>
+                                ) : (
+                                  section.items.map((item, itemIdx) => (
+                                    <li key={itemIdx}>
+                                      <a
+                                        href={item.link}
+                                        className={`block py-1 ${
+                                          isChildActive(item.link)
+                                            ? "text-indigo-600 font-semibold"
+                                            : "text-gray-700 hover:text-indigo-600"
+                                        }`}
+                                        onClick={(e) => handleMobileLinkClick(e, item.link)}
+                                      >
+                                        {item.label}
+                                      </a>
+                                    </li>
+                                  ))
+                                )}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <a
+                      href={menu.link}
+                      onClick={(e) => handleMobileLinkClick(e, menu.link)}
+                      className={`w-full text-lg font-semibold text-blackish py-3 block ${
+                        isParentActive(key) ? "text-indigo-600 font-semibold" : ""
+                      }`}
+                    >
+                      {menu.title}
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+            
+            <div className="mt-6 mb-6">
+              <a
+                href="/contact"
+                onClick={(e) => handleMobileLinkClick(e, '/contact')}
+                className="w-full bg-black text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium text-center block"
+              >
+                Book Free Consultation
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Add CSS for transitions */}
+      <style jsx global>{`
+        body.mobile-menu-open {
+          overflow: hidden !important;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
     </>
   );
 }
