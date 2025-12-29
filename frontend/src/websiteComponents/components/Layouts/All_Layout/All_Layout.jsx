@@ -4,7 +4,7 @@ import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton"
 
 
 
-export default function Family({ layout, LayoutText, text }) {
+export default function All_Layout({ layout, LayoutText, text }) {
   const { image1, image2, image3, image4, title, link } = layout;
   return (
     <section className="bg-white text-black font-serif pt-12 md:pt-20 pb-8 px-4 sm:px-6 lg:px-8 overflow-hidden">

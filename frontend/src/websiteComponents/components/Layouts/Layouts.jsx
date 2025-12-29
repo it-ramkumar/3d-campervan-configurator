@@ -1,8 +1,9 @@
 import HeroSection from "../HeroSection/HeroSection";
-import Family from "./Family/Family";
+import Family from "./All_Layout/All_Layout";
 import Consultation from "../Consultation/Consultation";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+import All_Titles from "./All_Titles/All_Titles";
 
 
 export default function Layouts() {
@@ -61,6 +62,9 @@ export default function Layouts() {
       <Navbar />
       <div className="tour-hero">
         <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} showButton={false} />
+      </div>
+      <div>
+        <All_Titles />
       </div>
       <div className="tour-family">
         <Family layout={FamilyLayout} LayoutText={LayoutText} text={true} />
