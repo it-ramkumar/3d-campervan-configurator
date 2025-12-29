@@ -11,9 +11,6 @@ export default function Layouts() {
   const newTitleText = "Explore Layouts of Our Custom Vans";
   const newDescriptionText =
     "Discover the various layouts we offer for our custom vans.";
-
-
-
   const FamilyLayout = {
     title: "Campervans Layouts for Family (For 2+)",
     image1: "/images/limage1.webp",
@@ -30,7 +27,7 @@ export default function Layouts() {
     image4: "/images/image8l.webp",
     link: "/layout-by-category/Layouts for Solo & Couple Travelers",
   }
-   const ShortVans = {
+  const ShortVans = {
     title: "Campervans Layouts Short Vans",
     image1: "/shortVans/image1.jpg",
     image2: "/shortVans/image2.jpg",
@@ -38,7 +35,7 @@ export default function Layouts() {
     image4: "/shortVans/image4.jpg",
     link: "/layout-by-category/Flagship Short Van — Santa Monica",
   }
-     const LongVans = {
+  const LongVans = {
     title: "Campervans Layouts Long Vans",
     image1: "/longVans/image1.jpg",
     image2: "/longVans/image2.jpg",
@@ -46,7 +43,7 @@ export default function Layouts() {
     image4: "/longVans/image4.jpg",
     link: "/layout-by-category/Flagship Long Van — Montreal",
   }
-     const CustomVans = {
+  const CustomVans = {
     title: "Campervans Layouts Custom Vans",
     image2: "/customBuild/image2.jpg",
     image3: "/customBuild/image3.jpg",
@@ -61,7 +58,6 @@ export default function Layouts() {
 
   return (
     <>
-      {/* Page Sections */}
       <Navbar />
       <div className="tour-hero">
         <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} showButton={false} />
@@ -73,18 +69,17 @@ export default function Layouts() {
         <Family layout={CoupleLayout} />
       </div>
       <div className="tour-santa-monica">
-         <Family layout={ShortVans} />
+        <Family layout={ShortVans} />
       </div>
       <div className="tour-montreal">
-         <Family layout={LongVans} />
+        <Family layout={LongVans} />
       </div>
       <div className="tour-custom-build">
-           <Family layout={CustomVans} />
+        <Family layout={CustomVans} />
       </div>
       <div className="tour-consultation">
         <Consultation vanForSale={true} />
       </div>
-
       <Footer />
     </>
   );

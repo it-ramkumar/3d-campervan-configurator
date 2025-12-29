@@ -2,106 +2,105 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
 
 // --- Premium Custom Icons for Interior Categories ---
 // (Icons remain unchanged)
 const WallIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M3 9H21M3 15H21M9 3V21M15 3V21" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M3 9H21M3 15H21M9 3V21M15 3V21" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const FloorIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M3 12H21M8 7V17M16 7V17" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M3 12H21M8 7V17M16 7V17" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const CeilingIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M3 9H21M3 15H21M12 3V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M6 6V6.01M18 6V6.01M6 18V18.01M18 18V18.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <path d="M3 9H21M3 15H21M12 3V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M6 6V6.01M18 6V6.01M6 18V18.01M18 18V18.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
   </svg>
 );
 
 const DoorIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M4 20H10C11.1046 20 12 19.1046 12 18V6C12 4.89543 11.1046 4 10 4H4V20Z" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M14 12H16M4 4H20M4 20H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M4 20H10C11.1046 20 12 19.1046 12 18V6C12 4.89543 11.1046 4 10 4H4V20Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M14 12H16M4 4H20M4 20H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 
 const BedIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M2 6V20M22 6V20M2 10H22M2 14H22M2 18H22" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M6 6V10M18 6V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M2 6V20M22 6V20M2 10H22M2 14H22M2 18H22" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M6 6V10M18 6V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 
 const CushionIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="4" y="8" width="16" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M8 8V6C8 4.89543 8.89543 4 10 4H14C15.1046 4 16 4.89543 16 6V8" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="4" y="8" width="16" height="10" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8 8V6C8 4.89543 8.89543 4 10 4H14C15.1046 4 16 4.89543 16 6V8" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const ShowerIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M17 17H7C7 14.2386 9.23858 12 12 12C14.7614 12 17 14.2386 17 17Z" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M17 17V21H7V17" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M12 12V7C12 5.34315 13.3431 4 15 4" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M12 8V4" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M17 17H7C7 14.2386 9.23858 12 12 12C14.7614 12 17 14.2386 17 17Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M17 17V21H7V17" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 12V7C12 5.34315 13.3431 4 15 4" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M12 8V4" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const ToiletIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M7 4H17C18.1046 4 19 4.89543 19 6V10C19 11.1046 18.1046 12 17 12H7C5.89543 12 5 11.1046 5 10V6C5 4.89543 5.89543 4 7 4Z" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M8 12V20M16 12V20M12 16V20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M7 4H17C18.1046 4 19 4.89543 19 6V10C19 11.1046 18.1046 12 17 12H7C5.89543 12 5 11.1046 5 10V6C5 4.89543 5.89543 4 7 4Z" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8 12V20M16 12V20M12 16V20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 
 const CabinetIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M8 3V21M16 3V21M3 8H21M3 16H21" stroke="currentColor" strokeWidth="1.5" />
+    <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8 3V21M16 3V21M3 8H21M3 16H21" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const KitchenIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="2" y="4" width="20" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M8 4V20M16 4V20M12 4V20" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="6" cy="9" r="1" fill="currentColor" />
-    <circle cx="18" cy="9" r="1" fill="currentColor" />
+    <rect x="2" y="4" width="20" height="16" rx="1" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M8 4V20M16 4V20M12 4V20" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="6" cy="9" r="1" fill="currentColor"/>
+    <circle cx="18" cy="9" r="1" fill="currentColor"/>
   </svg>
 );
 
 const SeatIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M4 8V6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6V8" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M4 16V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V16" stroke="currentColor" strokeWidth="1.5" />
-    <rect x="4" y="8" width="16" height="8" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M4 8V6C4 4.89543 4.89543 4 6 4H18C19.1046 4 20 4.89543 20 6V8" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M4 16V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V16" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="4" y="8" width="16" height="8" stroke="currentColor" strokeWidth="1.5"/>
   </svg>
 );
 
 const TableIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="4" y="4" width="16" height="2" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M6 6V20M18 6V20M12 6V20" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M4 20H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <rect x="4" y="4" width="16" height="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M6 6V20M18 6V20M12 6V20" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M4 20H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
 
 const PartitionIcon = ({ className = "w-6 h-6" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
-    <path d="M3 3V21M21 3V21M12 3V21" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="8" cy="8" r="1" fill="currentColor" />
-    <circle cx="16" cy="16" r="1" fill="currentColor" />
-    <circle cx="12" cy="12" r="1" fill="currentColor" />
+    <path d="M3 3V21M21 3V21M12 3V21" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="8" cy="8" r="1" fill="currentColor"/>
+    <circle cx="16" cy="16" r="1" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1" fill="currentColor"/>
   </svg>
 );
 
@@ -952,22 +951,19 @@ function CushionSection() {
                       transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
                       {/* Enhanced frame effects */}
-                      <div className="absolute -inset-1 sm:-inset-2 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg transform rotate-1 opacity-20 group-hover:rotate-0 transition-transform duration-500 blur-sm pointer-events-none"></div>
+                      <div className="absolute -inset-1 sm:-inset-2 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg transform rotate-1 opacity-20 group-hover:rotate-0 transition-transform duration-500 blur-sm"></div>
 
-                      {/* Image */}
-                      <ImageWithSkeleton
+                      <img
                         src={image}
                         alt={`Cushion fabric ${index + 1}`}
                         className="relative w-full h-48 sm:h-60 md:h-72 object-cover rounded-lg shadow-lg transform group-hover:scale-[1.02] transition-transform duration-500 border-2 border-gray-800/20"
-                        click={false} // ensure modal opens
                       />
 
                       {/* Enhanced overlay */}
-                      <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                      <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </motion.div>
                   ))}
                 </div>
-
               </motion.div>
             </div>
           </motion.div>
@@ -1121,22 +1117,19 @@ function InteractiveSection({
                   >
                     <div className="relative group">
                       {/* Enhanced frame effects */}
-                      <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm pointer-events-none"></div>
-                      <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500 pointer-events-none"></div>
+                      <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm"></div>
+                      <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500"></div>
 
-                      {/* Image */}
-                      <ImageWithSkeleton
+                      <img
                         src={selectedOptionData?.image}
                         alt={selectedOptionData?.title}
                         className="relative w-full h-auto object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl aspect-square transform group-hover:scale-[1.02] sm:group-hover:scale-[1.03] transition-transform duration-700 border-2 border-gray-800/20"
-                        click={false} // ensures modal opens on click
                       />
 
                       {/* Enhanced overlay */}
-                      <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                      <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </motion.div>
-
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -1161,9 +1154,9 @@ function InteractiveSection({
                                   font-sans font-semibold relative overflow-hidden group
                                   backdrop-blur-sm border-2
                                   ${activeOption === option.id
-                      ? 'text-white shadow-xl border-gray-900 bg-gradient-to-r from-gray-900 to-gray-800 shadow-gray-900/30'
-                      : 'text-gray-700 bg-white/90 border-gray-800 hover:bg-gray-900 hover:text-white hover:border-gray-900 hover:shadow-lg shadow-md'
-                    }`}
+                                    ? 'text-white shadow-xl border-gray-900 bg-gradient-to-r from-gray-900 to-gray-800 shadow-gray-900/30'
+                                    : 'text-gray-700 bg-white/90 border-gray-800 hover:bg-gray-900 hover:text-white hover:border-gray-900 hover:shadow-lg shadow-md'
+                                  }`}
                 >
                   <span className="relative z-10 whitespace-nowrap text-xs sm:text-sm">{option.title}</span>
 
@@ -1250,30 +1243,27 @@ function InteractiveSection({
                       )}
                     </motion.div>
 
-                <motion.div
-  className={`relative ${reverseLayout ? 'lg:col-start-1 lg:row-start-1' : ''}`}
-  initial={{ opacity: 0, x: reverseLayout ? -60 : 60 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.8, delay: 0.3 }}
->
-  <div className="relative group">
-    {/* Enhanced frame effects */}
-    <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm pointer-events-none"></div>
-    <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500 pointer-events-none"></div>
+                    <motion.div
+                      className={`relative ${reverseLayout ? 'lg:col-start-1 lg:row-start-1' : ''}`}
+                      initial={{ opacity: 0, x: reverseLayout ? -60 : 60 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                    >
+                      <div className="relative group">
+                        {/* Enhanced frame effects */}
+                        <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm"></div>
+                        <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500"></div>
 
-    {/* Image */}
-    <ImageWithSkeleton
-      src={selectedOptionData?.image}
-      alt={selectedOptionData?.title}
-      className="relative w-full h-auto object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl aspect-square transform group-hover:scale-[1.02] sm:group-hover:scale-[1.03] transition-transform duration-700 border-2 border-gray-800/20"
-      click={false} // ensures modal opens
-    />
+                        <img
+                          src={selectedOptionData?.image}
+                          alt={selectedOptionData?.title}
+                          className="relative w-full h-auto object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl aspect-square transform group-hover:scale-[1.02] sm:group-hover:scale-[1.03] transition-transform duration-700 border-2 border-gray-800/20"
+                        />
 
-    {/* Enhanced overlay */}
-    <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-  </div>
-</motion.div>
-
+                        {/* Enhanced overlay */}
+                        <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-t from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      </div>
+                    </motion.div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -1345,9 +1335,9 @@ function KitchenSection() {
                                   font-sans font-semibold relative overflow-hidden group
                                   backdrop-blur-sm border-2
                                   ${activeCategory === category.sectionTitle
-                  ? 'text-white shadow-xl border-gray-900 bg-gradient-to-r from-gray-900 to-gray-800 shadow-gray-900/30'
-                  : 'text-gray-700 bg-white/90 border-gray-800 hover:bg-gray-900 hover:text-white hover:border-gray-900 hover:shadow-lg shadow-md'
-                }`}
+                                    ? 'text-white shadow-xl border-gray-900 bg-gradient-to-r from-gray-900 to-gray-800 shadow-gray-900/30'
+                                    : 'text-gray-700 bg-white/90 border-gray-800 hover:bg-gray-900 hover:text-white hover:border-gray-900 hover:shadow-lg shadow-md'
+                                  }`}
             >
               <span className="relative z-10 whitespace-nowrap text-xs sm:text-sm">{category.sectionTitle}</span>
 
@@ -1384,9 +1374,9 @@ function KitchenSection() {
                                   font-sans font-semibold relative overflow-hidden group
                                   backdrop-blur-sm border
                                   ${activeOption === option.id
-                    ? 'text-white shadow-lg border-gray-800 bg-gradient-to-r from-gray-800 to-gray-700 shadow-gray-800/30'
-                    : 'text-gray-600 bg-white/80 border-gray-600 hover:bg-gray-800 hover:text-white hover:border-gray-800 hover:shadow-md shadow-sm'
-                  }`}
+                                    ? 'text-white shadow-lg border-gray-800 bg-gradient-to-r from-gray-800 to-gray-700 shadow-gray-800/30'
+                                    : 'text-gray-600 bg-white/80 border-gray-600 hover:bg-gray-800 hover:text-white hover:border-gray-800 hover:shadow-md shadow-sm'
+                                  }`}
               >
                 <span className="relative z-10 whitespace-nowrap text-xs">{option.title}</span>
 
@@ -1445,7 +1435,7 @@ function KitchenSection() {
                       <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg sm:rounded-2xl transform rotate-3 opacity-20 group-hover:rotate-2 transition-transform duration-700 blur-sm"></div>
                       <div className="absolute -inset-1 sm:-inset-3 bg-gradient-to-r from-gray-800 to-gray-700 rounded-md sm:rounded-xl transform rotate-2 opacity-10 group-hover:rotate-1 transition-transform duration-500"></div>
 
-                      <ImageWithSkeleton
+                      <img
                         src={selectedOptionData.image}
                         alt={selectedOptionData.title}
                         className="relative w-full h-auto object-cover rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl aspect-square transform group-hover:scale-[1.02] sm:group-hover:scale-[1.03] transition-transform duration-700 border-2 border-gray-800/20"

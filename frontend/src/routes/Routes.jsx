@@ -37,6 +37,8 @@ const Financing = lazy(() => import("../websiteComponents/components/Financing/F
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
 const ExChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
+const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
+
 
 // Memoized components to avoid unnecessary re-renders
 const BlackFridayLabel = React.memo(BlackFridayLabelComponent);

@@ -257,7 +257,7 @@ export default function ExteriorChoicesList() {
           <div className="inline-flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-black">
-exterior Design Choices
+Exterior Design Choices
             </h1>
           </div>
           <p className="text-gray-700 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg px-4">
@@ -643,9 +643,16 @@ Here are the exterior choices we offer:
                                         ))}
                                       </ul>
                                     )}
+                                         {
+                                                                          activeItem.link && <Link to={activeItem.link} target="blank">
+                                                                         <button  className="mt-4 px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                                                                           View Details
+                                                                         </button>
+                                    </Link>
+                                                                        }
 
                                     {/* META */}
-                                    {(activeItem.price || activeItem.dimensions) && (
+                                    {/* {(activeItem.price || activeItem.dimensions) && (
                                       <motion.div
                                         initial={{ opacity: 0, y: 8 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -670,7 +677,7 @@ Here are the exterior choices we offer:
                                           </div>
                                         )}
                                       </motion.div>
-                                    )}
+                                    )} */}
                                   </motion.div>
                                 </div>
                               </div>

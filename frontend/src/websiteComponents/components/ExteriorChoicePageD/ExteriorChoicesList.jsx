@@ -13,6 +13,7 @@ import {
   X,
   Filter,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // --- Configuration Constant ---
 const MAX_INITIAL_ITEMS = 3;
@@ -643,9 +644,16 @@ Here are the interior choices we offer:
                                         ))}
                                       </ul>
                                     )}
+                                    {
+                                      activeItem.link && <Link to={activeItem.link} target="blank">
+                                     <button  className="mt-4 px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                                       View Details
+                                     </button>
+</Link>
+                                    }
 
                                     {/* META */}
-                                    {(activeItem.price || activeItem.dimensions) && (
+                                    {/* {(activeItem.price || activeItem.dimensions) && (
                                       <motion.div
                                         initial={{ opacity: 0, y: 8 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -670,7 +678,7 @@ Here are the interior choices we offer:
                                           </div>
                                         )}
                                       </motion.div>
-                                    )}
+                                    )} */}
                                   </motion.div>
                                 </div>
                               </div>
