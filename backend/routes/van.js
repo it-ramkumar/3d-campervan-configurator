@@ -8,17 +8,24 @@ const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.post('/', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
-  // ✅ Media file upload removed - sirf gallery ke liye
 ]), async (req, res) => {
   try {
     // Parse JSON fields
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const detailed_features = JSON.parse(req.body.detailed_features || "[]");
-    const media = JSON.parse(req.body.media || "[]"); // ✅ Simple string array
-    const sold = req.body.sold === "true";
+    const media = JSON.parse(req.body.media || "[]");
+    const status = req.body.status || "sold"; // ✅ Changed from sold to status
 
     if (!van_listing || !van_listing.title) {
       return res.status(400).json({ message: 'Van listing with title is required' });
+    }
+
+    // Validate status enum
+    const validStatuses = ['available', 'sale_pending', 'sold', 'coming_soon'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: 'Invalid status. Must be one of: available, sale_pending, sold, coming_soon'
+      });
     }
 
     // Generate slug
@@ -37,9 +44,6 @@ router.post('/', protect, adminOnly, upload.fields([
       )
     );
 
-    // ✅ Media is simple string array - no file upload
-    // Media contains only URLs like: ["https://youtube.com/watch?v=abc123"]
-
     // Final van data object
     const vanData = {
       slug,
@@ -51,10 +55,10 @@ router.post('/', protect, adminOnly, upload.fields([
           capacity: van_listing.specifications.capacity || {}
         } : undefined
       },
-      sold,
+      status, // ✅ Changed from sold to status
       gallery,
       detailed_features,
-      media // ✅ Direct assignment of URL strings
+      media
     };
 
     const newVan = await Van.create(vanData);
@@ -72,10 +76,9 @@ router.post('/', protect, adminOnly, upload.fields([
   }
 });
 
-
 router.get('/available', async (req, res) => {
   try {
-    const vans = await Van.find({ sold: false })
+    const vans = await Van.find({ status: 'available' })
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -156,7 +159,6 @@ router.get('/:slug', async (req, res) => {
 
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
-  // ✅ Media file upload removed
 ]), async (req, res) => {
   try {
     const { slug } = req.params;
@@ -181,8 +183,18 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       req.body.detailed_features,
       van.detailed_features
     );
-    const media = parseJSONField(req.body.media, van.media); // ✅ Simple URLs
-    const sold = req.body.sold !== undefined ? req.body.sold === "true" : van.sold;
+    const media = parseJSONField(req.body.media, van.media);
+    const status = req.body.status !== undefined ? req.body.status : van.status; // ✅ Changed from sold to status
+
+    // Validate status if provided
+    if (req.body.status) {
+      const validStatuses = ['available', 'sale_pending', 'sold', 'coming_soon'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({
+          message: 'Invalid status. Must be one of: available, sale_pending, sold, coming_soon'
+        });
+      }
+    }
 
     // Handle gallery images (append to existing)
     const existingGallery = van.gallery || [];
@@ -208,8 +220,8 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     };
 
     van.detailed_features = detailed_features;
-    van.media = media; // ✅ Direct assignment of URL strings
-    van.sold = sold;
+    van.media = media;
+    van.status = status; // ✅ Changed from sold to status
     van.gallery = updatedGallery;
 
     // If title changed, generate new slug

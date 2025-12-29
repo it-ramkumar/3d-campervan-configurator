@@ -32,7 +32,11 @@ const vanSchema = new mongoose.Schema(
   {
     slug: { type: String, required: true, unique: true, trim: true },
     van_listing: { type: vanListingSchema, required: true },
-    sold: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ['available', 'sale_pending', 'sold', 'coming_soon'],
+      default: 'available'
+    },
 
     gallery: {
       type: [String],
@@ -56,7 +60,7 @@ vanSchema.virtual('formatted_price').get(function () {
   return `$${this.van_listing.price.toLocaleString()}`;
 });
 
-vanSchema.index({ sold: 1 });
+vanSchema.index({ status: 1 });
 vanSchema.index({
   'van_listing.title': 'text',
   'van_listing.description': 'text'
@@ -88,15 +92,15 @@ vanSchema.statics.generateSlug = async function (title) {
 };
 
 vanSchema.statics.findAvailable = function () {
-  return this.find({ sold: false });
+  return this.find({ status: 'available' });
 };
 
 vanSchema.statics.findSold = function () {
-  return this.find({ sold: true });
+  return this.find({ status: 'sold' });
 };
 
 vanSchema.methods.markAsSold = function () {
-  this.sold = true;
+  this.status = 'sold';
   return this.save();
 };
 

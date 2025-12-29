@@ -49,7 +49,7 @@ export default function VansForSale() {
     };
     fetchVans();
   }, []);
-  const availableVan = vans.filter(v => !v.sold);
+  const availableVan = vans.filter(v => v.status === "available");
 if(!availableVan){return <Loader/>}
 
   return (

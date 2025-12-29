@@ -22,7 +22,7 @@ export default function SoldVans( ) {
       try {
         const result = await getAllVans(page, limit);
         if (result.success) {
-          const newSoldVans = result.data.filter((v) => v.sold);
+          const newSoldVans = result.data.filter((v) => v.status === "sold");
 
           // ✅ Merge + remove duplicates
           setSoldVans((prev) => {

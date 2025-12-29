@@ -12,8 +12,7 @@ import DetailedFeatures from "../../Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "../../Common/GalleryUploader/GalleryUploader";
 import Swal from "sweetalert2";
 
-
-const VansForm = ({setSelected}) => {
+const VansForm = ({ setSelected }) => {
   const editData = useSelector((state) => state.editData.editData);
   const dispatch = useDispatch();
 
@@ -33,7 +32,7 @@ const VansForm = ({setSelected}) => {
         capacity: { sits: "", sleeps: "" },
       },
     },
-    sold: false,
+    status: "available", // Changed from 'sold' to 'status'
     gallery: [],
     media: [],
   });
@@ -48,35 +47,43 @@ const VansForm = ({setSelected}) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-useEffect(() => {
-  if (editData) {
-    setFormData((prev) => ({
-      ...prev,
-      ...editData,
-      van_listing: {
-        ...prev.van_listing,
-        ...(editData.van_listing || {}),
-        specifications: {
-          ...(editData.van_listing?.specifications || prev.van_listing.specifications),
-          capacity: {
-            ...(editData.van_listing?.specifications?.capacity || prev.van_listing.specifications.capacity),
+  // Status options
+  const statusOptions = [
+    { value: "available", label: "Available" },
+    { value: "sale_pending", label: "Sale Pending" },
+    { value: "sold", label: "Sold" },
+    { value: "coming_soon", label: "Coming Soon" },
+  ];
+
+  useEffect(() => {
+    if (editData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...editData,
+        van_listing: {
+          ...prev.van_listing,
+          ...(editData.van_listing || {}),
+          specifications: {
+            ...(editData.van_listing?.specifications || prev.van_listing.specifications),
+            capacity: {
+              ...(editData.van_listing?.specifications?.capacity || prev.van_listing.specifications.capacity),
+            },
           },
         },
-      },
-      media: editData.media || [],
-      gallery: editData.gallery || [],
-    }));
+        media: editData.media || [],
+        gallery: editData.gallery || [],
+        status: editData.status || "available", // Handle status from editData
+      }));
 
-    setExistingGallery(editData.gallery ? [...editData.gallery] : []);
-    setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
+      setExistingGallery(editData.gallery ? [...editData.gallery] : []);
+      setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
-    // ✅ Initialize features correctly
-    setFeatures(editData.detailed_features?.length > 0
-      ? editData.detailed_features
-      : [{ category: "", items: [""] }]
-    );
-  }
-}, [editData]);
+      setFeatures(editData.detailed_features?.length > 0
+        ? editData.detailed_features
+        : [{ category: "", items: [""] }]
+      );
+    }
+  }, [editData]);
 
   const resetForm = () => {
     setFormData({
@@ -95,7 +102,7 @@ useEffect(() => {
           capacity: { sits: "", sleeps: "" },
         },
       },
-      sold: false,
+      status: "available",
       gallery: [],
       detailed_features: [{ category: "", items: [""] }],
       media: [],
@@ -105,33 +112,30 @@ useEffect(() => {
     setGalleryPreviews([]);
     setExistingGallery([]);
     setRemovedExistingGallery([]);
-    setMediaUrls([""]); // ✅ Reset media URLs
+    setMediaUrls([""]);
 
     dispatch(clearEditData());
   };
 
-const validateForm = () => {
-  const newErrors = {};
+  const validateForm = () => {
+    const newErrors = {};
 
-  if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
-  if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
-  if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
-  if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
-  if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
-  if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
-  if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
-  if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
+    if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
+    if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
+    if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
+    if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
+    if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
+    if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
+    if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
+    if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
-  // ✅ Use features from state, not editData
-  if (features.length === 0) {
-    newErrors.features = "At least one feature category is required";
-  }
+    if (features.length === 0) {
+      newErrors.features = "At least one feature category is required";
+    }
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
-
-
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     return () => {
@@ -155,47 +159,38 @@ const validateForm = () => {
         );
       }
 
-      // 2️⃣ Prepare FormData for submission
       const formToSend = new FormData();
 
-      // Gallery files (new uploads)
       galleryFiles.forEach((file) => formToSend.append("gallery", file));
 
-      // Remaining existing gallery URLs (after deletion)
       const updatedExistingGallery = existingGallery.filter(url => !removedExistingGallery.includes(url));
 
       formToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
 
-      // Media URLs
       const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
       formToSend.append("media", JSON.stringify(cleanedMediaUrls));
 
-      // Main van data
       formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("sold", formData.sold);
+      formToSend.append("status", formData.status); // Changed from 'sold' to 'status'
       formToSend.append("detailed_features", JSON.stringify(features));
 
-      // 3️⃣ Call backend to create or update van
       if (editData?._id) {
         await updateVan(editData, formToSend);
         resetForm();
         setSelected("Vans-listing")
-
       } else {
         await createVan(formToSend);
         resetForm();
         setSelected("Vans-listing")
-
       }
 
-      // 4️⃣ Clear removed images state
       setRemovedExistingGallery([]);
     } catch (err) {
-        Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.response.data.message,
-    });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response.data.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -366,33 +361,28 @@ const validateForm = () => {
           </section>
 
           {/* Detailed Features */}
-    {/* DETAILED FEATURES */}
-        <div className="border border-gray-300 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Detailed Features
-          </h3>
-          <DetailedFeatures
-            features={features}
-            setFeatures={setFeatures}
+          <div className="border border-gray-300 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Detailed Features
+            </h3>
+            <DetailedFeatures
+              features={features}
+              setFeatures={setFeatures}
+            />
+          </div>
+
+          <GalleryUploader
+            galleryFiles={galleryFiles}
+            setGalleryFiles={setGalleryFiles}
+            galleryPreviews={galleryPreviews}
+            setGalleryPreviews={setGalleryPreviews}
+            existingGallery={existingGallery}
+            setExistingGallery={setExistingGallery}
+            removedExistingGallery={removedExistingGallery}
+            setRemovedExistingGallery={setRemovedExistingGallery}
           />
 
-        </div>
-
-
-
-
-<GalleryUploader
-  galleryFiles={galleryFiles}
-  setGalleryFiles={setGalleryFiles}
-  galleryPreviews={galleryPreviews}
-  setGalleryPreviews={setGalleryPreviews}
-  existingGallery={existingGallery}
-  setExistingGallery={setExistingGallery}
-  removedExistingGallery={removedExistingGallery}
-  setRemovedExistingGallery={setRemovedExistingGallery}
-/>
-
-          {/* ✅ CORRECTED: Media URLs Section */}
+          {/* Media URLs Section */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Media URLs</h2>
 
@@ -430,30 +420,50 @@ const validateForm = () => {
             </p>
           </section>
 
-          {/* Submit Section */}
+          {/* Status & Submit Section */}
           <section className="border border-gray-300 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <input
-                  id="sold"
-                  name="sold"
-                  type="checkbox"
-                  checked={formData.sold}
-                  onChange={(e) => handleInputChange(e, "", setFormData)}
-                  className="h-5 w-5"
-                />
-                <label htmlFor="sold" className="text-sm font-medium text-gray-700">
-                  Mark as sold
+            <div className="space-y-6">
+              {/* Status Radio Buttons */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Listing Status *
                 </label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {statusOptions.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.status === option.value
+                          ? "border-green-600 bg-green-50"
+                          : "border-gray-300 hover:border-gray-400"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="status"
+                        value={option.value}
+                        checked={formData.status === option.value}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                        className="h-4 w-4 text-green-600 focus:ring-green-500"
+                      />
+                      <span className="text-sm font-medium text-gray-700">
+                        {option.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-              >
-                {loading ? "Submitting..." : editData ? "Update Van Listing" : "Create Van Listing"}
-              </button>
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+                >
+                  {loading ? "Submitting..." : editData ? "Update Van Listing" : "Create Van Listing"}
+                </button>
+              </div>
             </div>
           </section>
         </form>

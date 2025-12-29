@@ -18,7 +18,7 @@ export default function VanListing({ setSelected }) {
   const [pages, setPages] = useState(1);
   const [search, setSearch] = useState("");
   const limit = 8; // per-page items
-
+console.log(vans,"vans")
   useEffect(() => {
     fetchVans(page, search);
   }, [page]);
