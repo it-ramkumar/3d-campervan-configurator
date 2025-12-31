@@ -13,6 +13,7 @@ import {
   X,
   Filter,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // --- Configuration Constant ---
 const MAX_INITIAL_ITEMS = 3;
@@ -58,7 +59,7 @@ export default function ExteriorChoicesList() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_REACT_APP_API_URL}/exterior`
+        `${import.meta.env.VITE_REACT_APP_API_URL}/interior`
       );
       const data = res.data.data || [];
 
@@ -257,11 +258,11 @@ export default function ExteriorChoicesList() {
           <div className="inline-flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-black">
-Exterior Design Choices
+Interior Design Choices
             </h1>
           </div>
           <p className="text-gray-700 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg px-4">
-Here are the exterior choices we offer:
+Here are the interior choices we offer:
 
           </p>
         </motion.div>

@@ -180,9 +180,9 @@ export default function Navbar({ forceMobile }) {
               className={`flex items-center gap-2 ${isParentActive("vans-for-sale") ? "text-indigo-600 font-semibold" : ""}`}
             >
               Vans For Sale
-              <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
+              {/* <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full animate-pulse">
                 SALE
-              </span>
+              </span> */}
             </Link>
 
             <Link
@@ -402,7 +402,7 @@ export default function Navbar({ forceMobile }) {
                     className={`flex items-center justify-between text-lg font-semibold py-3 ${isParentActive("vans-for-sale") ? "text-indigo-600" : "text-blackish"}`}
                   >
                     <span>Vans For Sale</span>
-                    <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full">SALE</span>
+                    {/* <span className="bg-red-600 text-white text-[10px] px-2 py-[2px] rounded-full">SALE</span> */}
                   </Link>
                 </div>
 

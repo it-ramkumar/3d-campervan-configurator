@@ -5,11 +5,12 @@ import Navbar from '../Navbar/Navbar'
 import Footer from '../Footer/Footer'
 
 export default function ExteriorChoicePage() {
+     const heroImage = "/heroSlider/interiorHero.png";
+      const newTitleText = "Interior Design Choices";
+      const newDescriptionText =
+        "At Big Bear Vans, our goal is to build a campervan that suits you the most. Your custom van’s style can be inspired by something from Instagram, reflect the color scheme of your home, or be something entirely new that you would like to have.";
 
-  const heroImage = "/heroSlider/exteriorhero.webp";
-  const newTitleText = "Campervan Exterior Upgrades";
-  const newDescriptionText =
-    "The exterior of your campervan is all about looks and functionality. At Big Bear Vans, we go beyond aesthetics to equip your van with the most practical exterior accessories that turn heads along the way.";
+
     return (
         <div>
             <Navbar />

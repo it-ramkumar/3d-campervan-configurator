@@ -23,21 +23,21 @@ const AboutUs = lazy(() => import("../websiteComponents/components/AboutUs/About
 const ShowRoom = lazy(() => import("../websiteComponents/components/Showroom/showroom"));
 const NotFound = lazy(() => import("../websiteComponents/components/NotFound/NotFound"));
 const ConfiguratorForm = lazy(() => import("../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"));
-const Exteriorpage = lazy(() => import("../websiteComponents/components/Exteriorpage/Exterior"));
+const Exteriorpage = lazy(() => import("../websiteComponents/components/ExteriorChoicePageD/ExteriorChoicePage"));
 const LayoutDetail = lazy(() => import("../websiteComponents/components/LayoutDetail/LayoutDetail"));
 const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail/Blogdetail"));
 const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Clienthero/Client"));
-const Interiorpage = lazy(() => import("../websiteComponents/components/Interior/Interior"));
+const Interiorpage = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
-const Testing = lazy(() => import("../websiteComponents/components/ExteriorChoicePageD/ExteriorChoicePage"));
+// const Testing = lazy(() => import("../websiteComponents/components/ExteriorChoicePageD/ExteriorChoicePage"));
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
-const ExChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
-const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
+// const InChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
+// const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
 
 
 // Memoized components to avoid unnecessary re-renders
@@ -54,15 +54,15 @@ const AppRoutes = () => {
 
   return (
     <>
-      {showBlackFriday && <BlackFridayLabel />}
+      {/* {showBlackFriday && <BlackFridayLabel />} */}
        {/* <Christmis/> */}
       <ChatWidget />
       <ScrollFromTop />
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/zain" element={<ExChoice />} />
-          <Route path="/test" element={<Testing />} />
+          {/* <Route path="/zain" element={<ExChoice />} /> */}
+          {/* <Route path="/test" element={<Testing />} /> */}
           <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/showroom" element={<ShowRoom />} />
@@ -73,7 +73,7 @@ const AppRoutes = () => {
           <Route path="/van-detail/:slug" element={<VanDetail />} />
           <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
           <Route path="/blog-detail/:id" element={<BlogDetail />} />
-          <Route path="/innovation" element={<ExChoice />} />
+          <Route path="/exterior-choice" element={<Exteriorpage />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog-form" element={<BlogForm />} />
           <Route path="/layouts" element={<Layouts />} />
@@ -86,7 +86,7 @@ const AppRoutes = () => {
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />
-          <Route path="/interior-choice" element={<Testing />} />
+          <Route path="/interior-choice" element={<Interiorpage />} />
           <Route path="/cushion" element={<Cushionpage />} />
           <Route path="/layout-by-category/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />

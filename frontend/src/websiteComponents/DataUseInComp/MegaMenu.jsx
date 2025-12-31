@@ -12,7 +12,7 @@ export const menuContent = {
         {
           title: "Insights",
           items: [
-            { label: "Exterior Choices", link: "/innovation" },
+            { label: "Exterior Choices", link: "/exterior-choice" },
             { label: "Interior Choices", link: "/interior-choice" },
             { label: "Sprinter Guide", link: "/sprinter-guide" },
           ],

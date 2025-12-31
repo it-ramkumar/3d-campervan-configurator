@@ -143,8 +143,7 @@ export default function AvailableVans({availableVans}) {
             <div
               ref={centralIconRef}
               className="central-icon floating absolute flex justify-center items-center w-20 h-20 md:w-24 md:h-24 bg-gray-800 rounded-full shadow-lg border border-gray-700 cursor-pointer"
-              // onMouseEnter={handleCentralCircleHover}
-              // onMouseLeave={handleCentralCircleLeave}
+
             >
               <VanIcon />
             </div>
@@ -153,8 +152,7 @@ export default function AvailableVans({availableVans}) {
             <div
               ref={el => featureItemsRef.current[0] = el}
               className="feature-item absolute -translate-x-28 -translate-y-20 md:-translate-x-32 md:-translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group"
-              // onMouseEnter={() => handleFeatureMouseEnter(0)}
-              // onMouseLeave={() => handleFeatureMouseLeave(0)}
+
             >
               <p className="feature-text font-noto-serif text-sm text-slate-700 leading-tight transition-all duration-300 mb-2">
                 {FEATURES[0].text}
@@ -220,80 +218,114 @@ export default function AvailableVans({availableVans}) {
   <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
 
   <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
-    {availableVans.map((van, index) => (
-      <div
-        key={van.id}
-        ref={el => cardsRef.current[index] = el}
-        // Increased max-width for a slightly larger card on desktop
-        className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl"
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        {/* Mobile background/glow - slightly cleaner */}
-        <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
-        {/* Subtle, softer glow effect */}
-        <div className="card-glow absolute -inset-2.5 bg-sky-500/30 rounded-[30px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[-1]"></div>
+    {availableVans && availableVans.length > 0 ? (
+      availableVans.map((van, index) => (
+        <div
+          key={van.id}
+          ref={el => cardsRef.current[index] = el}
+          // Increased max-width for a slightly larger card on desktop
+          className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {/* Mobile background/glow - slightly cleaner */}
+          <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
+          {/* Subtle, softer glow effect */}
+          <div className="card-glow absolute -inset-2.5 bg-sky-500/30 rounded-[30px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[-1]"></div>
 
-        {/* --- Card Container --- */}
-        {/* Slightly more rounded edges (24px vs 30px) for a softer look */}
-        <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+          {/* --- Card Container --- */}
+          {/* Slightly more rounded edges (24px vs 30px) for a softer look */}
+          <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
 
-          {/* --- Image Section --- */}
-          <div className="w-full h-2/3 relative">
-            <ImageWithSkeleton
-              src={van.gallery[0]}
-              alt={van.model}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            {/* Darker overlay for better text contrast */}
-            <div className="absolute inset-0 bg-black/40 z-10"></div>
-          </div>
-
-          {/* --- Price/Sale Banner (Top Right - Floating) --- */}
-          <div className="absolute top-4 right-4 bg-black/90 text-white px-3 py-1.5 rounded-lg shadow-lg z-20 transform -rotate-2 group-hover:rotate-0 transition-transform duration-300">
-            <p className="font-sans font-extrabold text-sm leading-none tracking-wider">
-              🎉 Black Friday Sale
-            </p>
-          </div>
-
-          {/* --- Details Section (Bottom 1/3) --- */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 bg-slate-900/95 border-t-2 border-white/60">
-
-            {/* Model Name */}
-            <h3 className="font-noto-serif font-bold text-white text-[24px] leading-tight mb-3 tracking-wide">
-              {van.van_listing.model_name}
-            </h3>
-
-            {/* Price Information */}
-            <div className="flex items-end justify-between mb-4">
-              {/* Discounted Price */}
-              <div className="flex flex-col">
-                <span className="font-sans font-extrabold text-4xl text-white leading-none">
-                  ${ (185000).toLocaleString() }
-                </span>
-                {/* Original Price (Strikethrough) */}
-                <span className="font-sans text-sm text-gray-400 line-through mt-1">
-                  ${van.van_listing.price.toLocaleString()}
-                </span>
-              </div>
-
-              {/* More Details Button (Prominent) */}
-              <BlackButton
-                label="View Details"
-                link={`/van-detail/${van.slug}`}
-                className="details-button"
+            {/* --- Image Section --- */}
+            <div className="w-full h-2/3 relative">
+              <ImageWithSkeleton
+                src={van.gallery[0]}
+                alt={van.model}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-           
+              {/* Darker overlay for better text contrast */}
+              <div className="absolute inset-0 bg-black/40 z-10"></div>
             </div>
 
+            {/* --- Details Section (Bottom 1/3) --- */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 bg-slate-900/95 border-t-2 border-white/60">
+
+              {/* Model Name */}
+              <h3 className="font-noto-serif font-bold text-white text-[24px] leading-tight mb-3 tracking-wide">
+                {van.van_listing.model_name}
+              </h3>
+
+              {/* Price Information */}
+              <div className="flex items-end justify-between mb-4">
+                {/* Discounted Price */}
+                <div className="flex flex-col">
+                  <span className="font-sans font-extrabold text-4xl text-white leading-none">
+                    ${ (185000).toLocaleString() }
+                  </span>
+                  {/* Original Price (Strikethrough) */}
+                  <span className="font-sans text-sm text-gray-400 line-through mt-1">
+                    ${van.van_listing.price.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* More Details Button (Prominent) */}
+                <BlackButton
+                  label="View Details"
+                  link={`/van-detail/${van.slug}`}
+                  className="details-button"
+                />
+
+              </div>
+
+              {/* Description */}
+              <p className="font-sans text-white/70 text-sm leading-snug line-clamp-2">
+                {van.van_listing.description}
+              </p>
+            </div>
+
+          </div>
+        </div>
+      ))
+    ) : (
+      // Coming Soon Card
+      <div className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl">
+        {/* Mobile background */}
+        <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
+
+        {/* Glow effect */}
+        <div className="absolute -inset-2.5 bg-gradient-to-r from-sky-500/20 via-purple-500/20 to-pink-500/20 rounded-[30px] blur-xl opacity-60 animate-pulse z-[-1]"></div>
+
+        {/* Card Container */}
+        <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900/95 backdrop-blur-sm border-2 border-white/20">
+
+          {/* Content */}
+          <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+            {/* Van Icon */}
+            <div className="mb-6 bg-gradient-to-br from-sky-500 to-purple-600 rounded-full p-6 shadow-2xl animate-bounce">
+              <VanIcon />
+            </div>
+
+            {/* Coming Soon Text */}
+            <h3 className="font-noto-serif font-bold text-white text-3xl md:text-4xl mb-4 tracking-wide">
+              Coming Soon
+            </h3>
+
             {/* Description */}
-            <p className="font-sans text-white/70 text-sm leading-snug line-clamp-2">
-              {van.van_listing.description}
+            <p className="font-sans text-white/70 text-base md:text-lg leading-relaxed max-w-md">
+              Exciting new vans are on their way! Check back soon to discover our latest premium conversions ready for adventure.
             </p>
+
+            {/* Decorative dots */}
+            <div className="flex gap-2 mt-8">
+              <div className="w-2 h-2 bg-sky-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div>
+              <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse delay-150"></div>
+            </div>
           </div>
 
         </div>
       </div>
-    ))}
+    )}
   </div>
 </div>
       </section>
