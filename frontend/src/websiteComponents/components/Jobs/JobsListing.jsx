@@ -78,7 +78,7 @@ const Careers = () => {
             Build the <span className="text-blue-500">Future</span>
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-            Join BigBearVans and help us redefine mobile living through precision engineering and design.
+            Join Big Bear Vans and help us redefine mobile living through precision engineering and design.
           </p>
           <a href="#opportunities" className="inline-flex items-center gap-2 bg-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all">
             Open Roles <ArrowRight className="w-5 h-5" />

@@ -40,7 +40,7 @@ const JobDetails = () => {
   const handleShare = () => {
     navigator.share?.({
       title: job?.title,
-      text: `Check out this ${job?.title} role at BigBearVans!`,
+      text: `Check out this ${job?.title} role at Big Bear Vans!`,
       url: window.location.href,
     }).catch(() => {
       navigator.clipboard.writeText(window.location.href);
