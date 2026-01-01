@@ -107,9 +107,9 @@ export default function Footer() {
               <li>
                 <Link to="/about-us" className="text-gray-300 hover:text-white transition-colors duration-300 underline">About Us</Link>
               </li>
-              {/* <li>
-                <Link to="https://bigbearvans.com/careers/" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Career</Link>
-              </li> */}
+              <li>
+                <Link to="/jobs" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Career</Link>
+              </li>
               <li>
                 <Link to="/blogs" className="text-gray-300 hover:text-white transition-colors duration-300 underline">Blog</Link>
               </li>

@@ -152,7 +152,7 @@ export default function Navbar({ forceMobile }) {
             <div className="flex items-center">
               <Link to="/" className="block">
                 <ImageWithSkeleton
-                  src="/images/chris-logo-black.png"
+                  src="/images/logoo.webp"
                   alt="BBV logo"
                   className="w-[170px] h-[30px] border-none object-contain"
                   click={true}

@@ -36,6 +36,9 @@ const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
+const JobDetail = lazy(() => import("../websiteComponents/components/Jobs/JobDetail"));
+const JoAppForm = lazy(() => import("../websiteComponents/components/JobApp/JobApp"));
+const Jobs = lazy(() => import("../websiteComponents/components/Jobs/JobsListing"));
 // const InChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 // const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
 
@@ -92,6 +95,9 @@ const AppRoutes = () => {
           <Route path="/financing" element={<Financing />} />
           <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />
+          <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/apply/:id" element={<JoAppForm />} />
+          <Route path="/jobs" element={<Jobs />} />
         </Routes>
       </Suspense>
     </>

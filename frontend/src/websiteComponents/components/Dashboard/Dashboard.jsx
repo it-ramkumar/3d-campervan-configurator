@@ -18,6 +18,10 @@ import InteriorList from "../adminPanel/InteriorChoices/InteriorListing";
 import ExteriorList from "../adminPanel/ExteriorChoice/ExteriorListing";
 import ExteriorForm from "../adminPanel/ExteriorChoice/ExteriorForm"
 import LeadEmail from "../adminPanel/LeadEmail/LeadEmail";
+import JobForm from "../adminPanel/Job/Form";
+import JobListing from "../adminPanel/Job/JobListing";
+import Applications from "../adminPanel/Applications/Applications";
+
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -84,8 +88,19 @@ export default function Dashboard() {
       label: "Lead Email",
       // icon: "📞",
       description: "Lead Email Data"
+    },
+      {
+      id: "career",
+      label: "Career",
+      // icon: "📞",
+      description: "Career Data"
     }
-
+,{
+      id: "applications",
+      label: "Applications",
+      // icon: "📞",
+      description: "Applications Data"
+    }
   ];
 
   const handleLogout = async () => {
@@ -168,6 +183,12 @@ export default function Dashboard() {
             return <ExteriorForm setSelected={setSelected} />;
       case "lead-emails":
         return <LeadEmail setSelected={setSelected} />;
+            case "career":
+        return <JobListing setSelected={setSelected} />;
+          case "career-form":
+        return <JobForm setSelected={setSelected} />;
+            case "applications":
+        return <Applications setSelected={setSelected} />;
       default:
         return <PortfolioListing setSelected={setSelected} />;
     }
