@@ -39,7 +39,7 @@ const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheel
 const JobDetail = lazy(() => import("../websiteComponents/components/Jobs/JobDetail"));
 const JoAppForm = lazy(() => import("../websiteComponents/components/JobApp/JobApp"));
 const Jobs = lazy(() => import("../websiteComponents/components/Jobs/JobsListing"));
-// const InChoice = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
+const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBuild/CustomBuild"));
 // const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
 
 
@@ -98,6 +98,7 @@ const AppRoutes = () => {
           <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="/apply/:id" element={<JoAppForm />} />
           <Route path="/jobs" element={<Jobs />} />
+          <Route path="/custom-build" element={<CustomBuild />} />
         </Routes>
       </Suspense>
     </>

@@ -166,7 +166,7 @@ export default function Navbar({ forceMobile }) {
             className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 gap-4 text-blackish tracking-wide font-medium font-serif text-base`}
           >
             <Link
-              to="/inquiry"
+              to="/"
               onMouseEnter={() => handleMenuHover("CustomBuild")}
               onMouseLeave={handleMenuLeave}
               className={`flex items-center gap-1 ${isParentActive("CustomBuild") ? "text-indigo-600 font-semibold" : ""}`}
