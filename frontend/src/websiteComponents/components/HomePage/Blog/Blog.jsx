@@ -1,96 +1,111 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-
-
+import BlackButton from "../../Common/Button/BlackButton";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    setLoading(true);
     const fetchBlogs = async () => {
-      const result = await getAllBlogs();
-      setBlogs(result.data);
-      setLoading(false);
+      try {
+        const result = await getAllBlogs();
+        setBlogs(result.data || []);
+      } catch (error) {
+        console.error("Failed to fetch blogs:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchBlogs();
   }, []);
-  // console.log(blogs,"blogs");
-if(loading){
-    return <Loader />;
-  }
-const data = blogs.length > 0 ? blogs : [];
+
+  if (loading) return <Loader />;
+
   return (
-    // MINIMAL TOP PADDING: pt-4 (1rem / 16px)
-    <section className="w-full pt-4 pb-16 bg-white">
+    <section className="w-full pt-8 pb-16 bg-white">
       <div className="container mx-auto px-4">
-        {/* Heading and Subheading */}
-        <div className="text-center mb-12">
-          <h2 className="font-serif text-5xl font-bold text-black mb-4">
+
+        {/* Header Section */}
+        <div className="text-center mb-10 lg:mb-14">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-black mb-4 tracking-tight">
             Explore Our Van Life Blog
           </h2>
-          <p className="font-serif text-xl text-black/70 max-w-3xl mx-auto">
-            Check our blog to learn everything about the vanlife, custom Sprinter vans, and other campervans.
+          <p className="font-serif text-base md:text-xl text-black/70 max-w-2xl mx-auto leading-relaxed">
+            Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.
           </p>
         </div>
 
-      {/* Blog Post Cards */}
-<div className="flex flex-col items-center md:flex-row md:justify-center flex-wrap gap-8 lg:gap-10 px-4">
-  {data?.slice(0, 4).map((post) => (
-    <Link
-      key={post._id}
-      to={`/blog-detail/${post._id}`}
-      className="group relative w-[300px] h-[370px] rounded-[28px] border-[3px] border-gray-700 overflow-hidden shadow-md hover:shadow-2xl hover:shadow-gray-800 transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-[1.02]"
-    >
-      <div className="relative w-full h-full overflow-hidden">
-        <ImageWithSkeleton
-          src={post.gallery[0]}
-          alt={post.title}
-          className="w-full h-full object-cover"
-                          click={true}
+        {/* Blog Post Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
+          {blogs.slice(0, 4).map((post) => (
+            <Link
+              key={post._id}
+              to={`/blog-detail/${post._id}`}
+              className="group relative h-[400px] w-full rounded-[24px] border-2 border-gray-800 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 ease-in-out hover:-translate-y-2"
+            >
+              {/* Image Container */}
+              <div className="absolute inset-0 z-0">
+                <ImageWithSkeleton
+                  src={post.gallery?.[0]}
+                  alt={post.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  click={true}
+                />
+                {/* Darker Overlay for better text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+              </div>
 
-        />
-      </div>
+              {/* Content Overlay */}
+              <div className="relative z-10 h-full flex flex-col justify-between p-6">
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                {/* Arrow Icon (Top Right) */}
+                <div className="self-end translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  <div className="p-2 bg-white rounded-full shadow-lg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="black"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </div>
+                </div>
 
-      <div className="absolute inset-0 flex flex-col justify-between p-6">
-        <div className="self-end p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:bg-black hover:shadow-lg hover:shadow-gray-600 transition-all duration-300 group-hover:translate-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="black"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="group-hover:stroke-white transition-colors duration-300"
-          >
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
+                {/* Text Bottom */}
+                <div>
+                  {/* Category or Date could go here */}
+                  <span className="text-[10px] uppercase tracking-[2px] text-white/60 font-bold mb-2 block">
+                    {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'Van Life'}
+                  </span>
+                  <h3 className="font-serif text-xl md:text-2xl font-bold text-white leading-[1.2] group-hover:text-indigo-300 transition-colors">
+                    {post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Hover Inner Border */}
+              <div className="absolute inset-0 border-[1px] border-white/0 group-hover:border-white/20 rounded-[24px] pointer-events-none transition-all duration-500 m-2"></div>
+            </Link>
+          ))}
         </div>
 
-        <div>
-          <h3 className="font-serif text-[26px] font-semibold text-white leading-tight drop-shadow-md">
-            {post.title.length > 45 ? post.title.slice(0, 45) + "..." : post.title}
-          </h3>
+        {/* View All Blogs Button (Optional) */}
+        <div className="mt-12 text-center">
+                     <BlackButton label="View All Posts" link="/blogs" />
+
         </div>
-      </div>
-
-      <div className="absolute inset-0 border-[3px] border-transparent group-hover:border-white/40 rounded-[28px] transition-all duration-500"></div>
-    </Link>
-  ))}
-</div>
-
-
 
       </div>
     </section>

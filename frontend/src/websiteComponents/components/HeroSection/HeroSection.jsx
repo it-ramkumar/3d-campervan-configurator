@@ -16,7 +16,7 @@ export default function HeroV({
       <ImageWithSkeleton
         src={image}
         alt="Camper Vans For Sale"
-        className="absolute inset-0 w-full h-full object-cover z-0 bg-image object-top md:object-center"
+        className="absolute inset-0 w-full h-full object-cover z-0  md:object-center"
       />
       <div className="absolute inset-0 bg-black/60 z-10"></div>
 

@@ -116,24 +116,24 @@ const HeroSpecItem = ({ label, value }) => (
 
 // --- Custom Checkmark Icon for Feature List ---
 const SvgCheckmark = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#2761FD] flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#2761FD] flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
 );
 
 
 const VanPage = ({ vanDetail, onConsultationClick }) => {
   const heroRef = useRef(null);
-const featuresList = [
-  "Elevator bed with dinette seating, swivel table & multi-use layout",
-  "Interior wet bath with aluminum shower & portable smart toilet",
-  "Roof-mounted 12V A/C & advanced diesel GLYCOL heater system",
-  "1200Ah electrical system with solar, shore power & alternator charging",
-  "Large insulated bump-out windows for maximum natural light",
-  "Full roof deck with hammock mounts, ladder, and rack system",
-  "Custom wrap, raptor-coated bumpers, grill & lighting package",
-  "Winter-ready insulation with heated flooring"
-];
+  const featuresList = [
+    "Elevator bed with dinette seating, swivel table & multi-use layout",
+    "Interior wet bath with aluminum shower & portable smart toilet",
+    "Roof-mounted 12V A/C & advanced diesel GLYCOL heater system",
+    "1200Ah electrical system with solar, shore power & alternator charging",
+    "Large insulated bump-out windows for maximum natural light",
+    "Full roof deck with hammock mounts, ladder, and rack system",
+    "Custom wrap, raptor-coated bumpers, grill & lighting package",
+    "Winter-ready insulation with heated flooring"
+  ];
 
   // --- Data Mapping (Updated icons to remove circle fill) ---
   const van = {
@@ -259,34 +259,34 @@ const featuresList = [
                 label="Book A Call Now"
                 onClick={onConsultationClick}
 
-             />
+              />
 
             </div>
 
           </div>
         </div>
       </div>
-{
-  vanDetail.slug === "4x4-santa-monica-v6-turbo" && (<div className="w-full flex justify-center px-4 sm:px-8 mt-10">
-  <div className="max-w-3xl text-center">
+      {
+        vanDetail.slug === "4x4-santa-monica-v6-turbo" && (<div className="w-full flex justify-center px-4 sm:px-8 mt-10">
+          <div className="max-w-3xl text-center">
 
-    <h2 className="text-center font-extrabold text-4xl text-black mb-12 tracking-tight">
-      Features
-    </h2>
+            <h2 className="text-center font-extrabold text-4xl text-black mb-12 tracking-tight">
+              Features
+            </h2>
 
-     <ul className="space-y-2 font-medium text-sm text-gray-700 py-4">
-                    {featuresList.map((item, i) => ( // Display up to 5 items
-                      <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
-                        <SvgCheckmark />
-                        <span className="leading-snug">{item}</span>
-                      </li>
-                    ))}
+            <ul className="space-y-2 font-medium text-sm text-gray-700 py-4">
+              {featuresList.map((item, i) => ( // Display up to 5 items
+                <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
+                  <SvgCheckmark />
+                  <span className="leading-snug">{item}</span>
+                </li>
+              ))}
 
-                  </ul>
+            </ul>
 
-  </div>
-</div>)
-}
+          </div>
+        </div>)
+      }
 
 
 
@@ -305,7 +305,7 @@ const featuresList = [
               >
                 {/* Icon Container */}
                 <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-black transition-colors duration-300 group-hover:bg-[#2761FD] mb-4">
-                    {feature.icon}
+                  {feature.icon}
                 </div>
 
                 <h3 className="font-black text-xl mt-1 mb-4 text-black tracking-tight">
@@ -315,17 +315,17 @@ const featuresList = [
                 {/* Feature List */}
                 <div className="w-full flex-grow text-left">
                   <ul className="space-y-2 font-medium text-sm text-gray-700">
-                    {feature.items.slice(0, 5).map((item, i) => ( // Display up to 5 items
+                    {feature.items.map((item, i) => ( // Display up to 5 items
                       <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
                         <SvgCheckmark />
                         <span className="leading-snug">{item}</span>
                       </li>
                     ))}
-                    {feature.items.length > 5 && (
+                    {/* {feature.items.length > 5 && (
                         <li className="text-xs text-gray-500 italic mt-1">
                             + {feature.items.length - 5} more features...
                         </li>
-                    )}
+                    )} */}
                   </ul>
                 </div>
               </div>
@@ -342,11 +342,11 @@ const featuresList = [
           <h2 className="font-bold text-3xl mb-4">{vanDetail.van_listing.title}</h2>
           <SeeMore text={vanDetail.van_listing.description} />
           {/* <Link to={"/contact"}> */}
-             <BlackButton
-                label="Book A Call Now"
-                onClick={onConsultationClick}
+          <BlackButton
+            label="Book A Call Now"
+            onClick={onConsultationClick}
 
-             />
+          />
           {/* </Link> */}
         </div>
       </div>

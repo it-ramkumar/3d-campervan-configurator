@@ -5,8 +5,8 @@ import BlackButton from "../Common/Button/BlackButton";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
 export default function Customize({
-  mainTitle ,
-  sectionTitle ,
+  mainTitle,
+  sectionTitle,
   description = "",
   descriptionList = [],
   image = "/images/custom4.webp",
@@ -76,19 +76,18 @@ export default function Customize({
                 <p>{description}</p>
                 {/* Description List */}
                 <div
-                  className={`space-y-4 text-sm md:text-xl font-normal text-white/90 overflow-hidden transition-all duration-500 ${
-                    !expanded ? "max-h-[130px]" : "max-h-[1000px]"
-                  }`}
+                  className={`space-y-4 text-sm md:text-xl font-normal text-white/90 overflow-hidden transition-all duration-500 ${!expanded ? "max-h-[130px]" : "max-h-[1000px]"
+                    }`}
                 >
-               {descriptionList.map((item, index) => {
-  const Icon = item.icon;
-  return (
-    <p key={index} className="flex items-start gap-2 leading-relaxed">
-      <Icon className="w-5 h-5 text-shadow-white flex-shrink-0 mt-2" />
-      {item.text}
-    </p>
-  );
-})}
+                  {descriptionList.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <p key={index} className="flex items-start gap-2 leading-relaxed">
+                        <Icon className="w-5 h-5 text-shadow-white flex-shrink-0 mt-2" />
+                        {item.text}
+                      </p>
+                    );
+                  })}
                   <div className="mt-4">{lastText}</div>
                 </div>
 
@@ -140,7 +139,7 @@ export default function Customize({
                   ref={imageRef}
                   src={image}
                   alt="Custom van interior"
-                  
+
                   className="object-cover w-full h-full"
                 />
               </div>
@@ -149,7 +148,7 @@ export default function Customize({
 
           {/* Order Button */}
           <div className="w-full text-center md:text-left mt-6 px-8 md:px-12">
-            {showButton &&  <BlackButton label={orderButtonLabel} link={orderButtonLink} />}
+            {showButton && <BlackButton label={orderButtonLabel} link={orderButtonLink} />}
           </div>
         </div>
       </div>
