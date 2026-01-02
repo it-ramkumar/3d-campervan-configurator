@@ -1,67 +1,56 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import { ArrowRight, Calendar, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import FAQs from "../Faqs/Faqs";
 import Cansultation from "../Consultation/Consultation";
+import HeroSection from "../HeroSection/HeroSection";
+
 const CustomBuild = () => {
   const imgPath = "/custom build/";
 
   const faqs = [
-  {
-    question: "Do you work with clients remotely?",
-    answer:
-      "Yes. We successfully collaborate with clients across the country via video calls, shared design boards, and regular photo/video updates during the build."
-  },
-  {
-    question: "What if I don’t have a clear design idea yet?",
-    answer:
-      "That’s perfectly normal. Our consultation is designed to help clarify your needs. We use your lifestyle, budget, and inspiration photos to create initial concepts."
-  },
-  {
-    question: "Can I see physical samples of materials (countertops, fabrics, wood)?",
-    answer:
-      "Yes. We offer sample kits and encourage you to visit our showroom to touch and feel all material options."
-  },
-  {
-    question: "Can you integrate specific appliances or technology I want?",
-    answer:
-      "Absolutely. If you have a favorite audio system or any exterior accessory, we can design the van to accommodate it."
-  },
-  {
-    question: "What kind of training do you provide at delivery?",
-    answer:
-      "We schedule a thorough walk-through, demonstrating every system (electrical, plumbing, heating, appliances) and provide you with a detailed manual for reference."
-  },
-  {
-    question: "What if something needs repair or service after I take delivery?",
-    answer:
-      "A strong warranty backs our workmanship. We can schedule service at our workshop and also provide remote assistance to our clients."
-  },
-  {
-    question: "How do I prepare for our first consultation?",
-    answer:
-      "Think about your must-haves, your budget, and how you plan to use the van. Browsing our portfolio and saving inspiration photos is a great start."
-  }
-];
+    {
+      question: "Do you work with clients remotely?",
+      answer: "Yes. We successfully collaborate with clients across the country via video calls, shared design boards, and regular photo/video updates during the build."
+    },
+    {
+      question: "What if I don’t have a clear design idea yet?",
+      answer: "That’s perfectly normal. Our consultation is designed to help clarify your needs. We use your lifestyle, budget, and inspiration photos to create initial concepts."
+    },
+    {
+      question: "Can I see physical samples of materials (countertops, fabrics, wood)?",
+      answer: "Yes. We offer sample kits and encourage you to visit our showroom to touch and feel all material options."
+    },
+    {
+      question: "Can you integrate specific appliances or technology I want?",
+      answer: "Absolutely. If you have a favorite audio system or any exterior accessory, we can design the van to accommodate it."
+    },
+    {
+      question: "What kind of training do you provide at delivery?",
+      answer: "We schedule a thorough walk-through, demonstrating every system (electrical, plumbing, heating, appliances) and provide you with a detailed manual for reference."
+    },
+    {
+      question: "What if something needs repair or service after I take delivery?",
+      answer: "A strong warranty backs our workmanship. We can schedule service at our workshop and also provide remote assistance to our clients."
+    },
+    {
+      question: "How do I prepare for our first consultation?",
+      answer: "Think about your must-haves, your budget, and how you plan to use the van. Browsing our portfolio and saving inspiration photos is a great start."
+    }
+  ];
 
+    const heroImage = "/images/s2.webp";
+  const newTitleText = "Custom Campervan Builders of Big Bear";
+  const newDescriptionText =
+    "At Big Bear Vans, we build custom campervans from the ground up. Unlike standard models or limited packages of other companies, we begin with a blank slate and build from the chassis up. You choose the layout, features, and finishes; we handle the design, build, and quality checks.";
 
   return (
     <>
       <Navbar />
       <div className="w-full bg-white text-black font-sans selection:bg-black selection:text-white">
 
-        {/* ================= HERO ================= */}
-        <section className="pt-32 pb-20 bg-black text-white px-6 border-b border-gray-100">
-          <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase leading-[0.9]">
-              Custom Campervan <br /> Builders of Big Bear
-            </h1>
-            <p className="text-xl text-gray-300 max-w-5xl mx-auto font-medium leading-relaxed">
-              At Big Bear Vans, we build custom campervans from the ground up. Unlike standard models or limited packages of other companies, we begin with a blank slate and build from the chassis up. You choose the layout, features, and finishes; we handle the design, build, and quality checks.
-            </p>
-          </div>
-        </section>
+              <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} link="/inquiry" buttonText="" showButton={false} />
 
         {/* ================= INTRO ================= */}
         <section className="py-24 border-b border-gray-100">
@@ -77,8 +66,8 @@ const CustomBuild = () => {
                 At Big Bear Vans, “Custom” means every detail of your campervan is decided by you and built by us. Custom isn’t just about selecting some fabric colors or faucet types; it's about co-creating a campervan that is a perfect mirror of your lifestyle and personality.
               </p>
             </div>
-            <div className="rounded-[40px] overflow-hidden shadow-2xl">
-              <img src={`${imgPath}IMG_4252.jpg`} alt="Big Bear Vans Exterior" className="w-full object-cover" />
+            <div className="rounded-xl overflow-hidden shadow-2xl">
+              <img src={`${imgPath}IMG_4252.jpg`} alt="Big Bear Vans Exterior" className="w-full h-90 object-cover" />
             </div>
           </div>
         </section>
@@ -88,21 +77,21 @@ const CustomBuild = () => {
           <div className="max-w-6xl mx-auto px-6">
             <h3 className="text-2xl font-black uppercase mb-12 tracking-widest text-center italic">This is exactly how we do it:</h3>
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-10 rounded-3xl border border-gray-100">
+              <div className="bg-white p-10 rounded-xl border border-gray-100">
                 <h4 className="font-black uppercase mb-4 text-xl tracking-tighter">Start with an Empty Van</h4>
                 <p className="text-gray-500">We begin with an empty van. There are no pre-built parts to work around.</p>
               </div>
-              <div className="bg-white p-10 rounded-3xl border border-gray-100">
+              <div className="bg-white p-10 rounded-xl border border-gray-100">
                 <h4 className="font-black uppercase mb-4 text-xl tracking-tighter">Zero Restrictions</h4>
                 <p className="text-gray-500">Instead of restricting you to a few preset floor plans or feature packages, we listen to your ideas, vision, and create a 3D render for you.</p>
               </div>
-              <div className="bg-white p-10 rounded-3xl border border-gray-100">
+              <div className="bg-white p-10 rounded-xl border border-gray-100">
                 <h4 className="font-black uppercase mb-4 text-xl tracking-tighter">You Control Every Detail</h4>
                 <p className="text-gray-500">You will see your van virtually and select every detail to your liking. From the components of your electrical system to the design for your cabinets, you make all the final choices.</p>
               </div>
             </div>
             <div className="text-center mt-16">
-              <Link to="/contact" className="inline-flex items-center gap-4 bg-black text-white px-12 py-5 rounded-full font-black uppercase tracking-widest text-xs">
+              <Link to="/contact" className="inline-flex items-center gap-4 bg-black text-white px-12 py-5 rounded-sm font-black uppercase tracking-widest text-xs">
                 Start a Custom Build <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -118,7 +107,7 @@ const CustomBuild = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
-              <div className="rounded-[40px] overflow-hidden">
+              <div className="rounded-xl overflow-hidden">
                 <img src={`${imgPath}interior-layout.JPG`} alt="Interior Layout" className="w-full object-cover" />
               </div>
               <div className="space-y-6">
@@ -139,14 +128,14 @@ const CustomBuild = () => {
             {/* Premium Materials & Tech */}
             <div className="grid md:grid-cols-2 gap-16 mb-24">
               <div className="space-y-6">
-                <img src={`${imgPath}IMG_9845.jpg`} alt="Materials" className="w-full h-[400px] object-cover rounded-3xl" />
+                <img src={`${imgPath}IMG_9845.jpg`} alt="Materials" className="w-full h-[400px] object-cover rounded-xl" />
                 <h3 className="text-2xl font-black uppercase tracking-tighter">Premium, Client-Selected Materials</h3>
                 <p className="text-gray-600">
                   At Big Bear Vans, each component of our campervans is premium. You can choose from our curated selection of sustainable hardwoods, custom cabinetry, multi-functional furniture, and high-end exterior accessories. Beneath the surface, we install only the best systems: reliable self-heating Lithium batteries, advanced Glycol or Diesel heating, high-performance insulation, and fully integrated water systems. Every choice is high-quality and built to last.
                 </p>
               </div>
               <div className="space-y-6">
-                <img src={`${imgPath}IMG_3408.jpg`} alt="CNC" className="w-full h-[400px] object-cover rounded-3xl" />
+                <img src={'/images/w5.webp'} alt="CNC" className="w-full h-[400px] object-cover rounded-xl" />
                 <h3 className="text-2xl font-black uppercase tracking-tighter">CNC Technology</h3>
                 <p className="text-gray-600">
                   At Big Bear Vans, we use high-tech equipment like CAD/CAM software, 3D Scanners, and CNC routers. Every cabinet in your campervan is designed in CAD and cut to the millimeter by our CNC machines, and measured with 3D scanners. You can expect a top level of precision in our craftsmanship.
@@ -161,9 +150,9 @@ const CustomBuild = () => {
                 <p className="text-gray-600 leading-relaxed">
                   A major concern for custom buyers is what happens after pickup. We offer a 1-Year Standard Warranty (and the 3-Year Extended Warranty) on our craftsmanship. We also provide remote assistance, future maintenance, and upgrades at our workshop.
                 </p>
-                <Link to="/contact" className="inline-block bg-black text-white px-10 py-4 rounded-full font-black uppercase tracking-widest text-xs">Start a Custom Build</Link>
+                <Link to="/contact" className="inline-block bg-black text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest text-xs">Start a Custom Build</Link>
               </div>
-              <img src={`${imgPath}IMG_8469.jpg`} alt="Support" className="rounded-[40px] w-full h-[350px] object-cover" />
+              <img src={'/images/w3.webp'} alt="Support" className="rounded-xl w-full" />
             </div>
           </div>
         </section>
@@ -181,11 +170,11 @@ const CustomBuild = () => {
                   <li>— Move things around, test different layouts, and see what feels right.</li>
                   <li>— Select accessories in our configurator and see how they’ll look virtually on your campervan.</li>
                 </ul>
-                <Link to="/configurator" className="inline-flex items-center gap-3 bg-white text-black px-10 py-5 rounded-full font-black uppercase tracking-widest text-xs">
+                <Link to="/configurator" className="inline-flex items-center gap-3 bg-white text-black px-10 py-5 rounded-sm font-black uppercase tracking-widest text-xs">
                   Try 3D Configurator <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
-              <img src={`${imgPath}configurator.png`} alt="Configurator" className="rounded-3xl w-full border border-white/10" />
+              <img src={`${imgPath}configurator.png`} alt="Configurator" className="rounded-xl w-full h-70 border border-white/10" />
             </div>
           </div>
         </section>
@@ -196,27 +185,35 @@ const CustomBuild = () => {
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-8">Our Portfolio</h2>
             <p className="text-xl text-gray-700 mb-12 max-w-3xl">At Big Bear Vans, we have successfully customized 105+ campervans with a consistent five-star rating. Each van is designed for a specific person with different requirements. Check our past custom builds:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-               <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-3xl h-[400px] w-full object-cover" />
-               <div className="bg-gray-50 rounded-3xl p-12 flex flex-col justify-center items-center text-center">
+               <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
+               <div className="bg-gray-50 rounded-xl p-12 flex flex-col justify-center items-center text-center">
                   <Link to="/layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
                </div>
             </div>
           </div>
         </section>
 
-        {/* ================= OUR CLIENTS ================= */}
-        <section className="py-24 bg-gray-50">
+        {/* ================= OUR CLIENTS (No Image Solution) ================= */}
+        <section className="py-24 bg-white border-y border-gray-100">
           <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-5xl font-black uppercase tracking-tighter mb-12">Our Clients</h2>
-            <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-20 items-start">
               <div className="space-y-8">
+                <div>
+                  <h2 className="text-5xl font-black uppercase tracking-tighter mb-6 leading-none">Our Clients</h2>
+                  <div className="w-20 h-1 bg-black"></div>
+                </div>
                 <p className="text-lg text-gray-700 leading-relaxed">
                   We’ve designed custom campervans for clients from various backgrounds with different preferences. And we cater to everyone’s needs and choices. So far, we’ve built campervans for families, couples, pet-owners, bikers, full-time van lifers, etc. Whatever specific layout you have in mind, you can always come to us to discuss, and we will turn your crazy idea into a spectacular reality.
                 </p>
-                <Link to="/our-clients" className="inline-block bg-black text-white px-10 py-4 rounded-full font-black uppercase tracking-widest text-xs">Our Client Stories</Link>
+                <Link to="/our-clients" className="inline-block bg-black text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest text-xs">Our Client Stories</Link>
               </div>
-              <div className="h-[400px] bg-white rounded-[40px] shadow-inner flex items-center justify-center p-8">
-                <p className="font-black text-4xl text-gray-200 text-center uppercase rotate-12">Turn your idea into reality</p>
+              {/* Typography Grid as Image Replacement */}
+              <div className="grid grid-cols-2 gap-4">
+                {["Families", "Couples", "Pet Owners", "Full-time Lifers"].map((label, index) => (
+                  <div key={index} className="p-8 border border-gray-100 rounded-xl bg-gray-50 flex items-center justify-center h-32 hover:border-black transition-colors group">
+                    <span className="text-xs font-bold text-gray-400 group-hover:text-black tracking-[0.2em] uppercase">{label}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -226,7 +223,7 @@ const CustomBuild = () => {
         <section className="py-24">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-12 text-center">Our Showroom</h2>
-            <img src={`${imgPath}40279.JPG`} alt="Showroom" className="w-full h-[500px] object-cover rounded-[50px] mb-12" />
+            <img src={`${imgPath}40279.JPG`} alt="Showroom" className="w-full h-[500px] object-cover rounded-xl mb-12" />
             <div className="grid md:grid-cols-2 gap-16">
               <p className="text-gray-700 leading-relaxed">
                 To witness the process firsthand, we invite you to visit our showroom in Big Bear City, California. Here, you can see our building process, meet our team, and explore our ongoing and completed projects.
@@ -244,8 +241,8 @@ const CustomBuild = () => {
         {/* ================= MEET THE BUILDERS ================= */}
         <section className="py-24 bg-black text-white">
           <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div className="rounded-3xl overflow-hidden border-8 border-white/5">
-               <img src={`${imgPath}builders.jpg`} alt="Artur and Anna" className="w-full" />
+            <div className="rounded-xl overflow-hidden border-8 border-white/5">
+               <img src={`/images/anna.webp`} alt="Artur and Anna" className="w-full" />
             </div>
             <div className="space-y-8">
               <h2 className="text-5xl font-black uppercase tracking-tighter">Meet the Builders</h2>
@@ -255,17 +252,13 @@ const CustomBuild = () => {
               <p className="text-gray-400">
                 Before founding Big Bear Vans, we lived on the road, traveling through Europe and the USA while converting our own RVs. That hands-on experience taught us what truly matters in a mobile home. Driven by that genuine passion, we’ve grown from building in our own backyard into operating a full-fledged workshop here in Big Bear. Every van we create is built with the travelers’ insights, for travelers.
               </p>
-              <Link to="/about-us" className="inline-block bg-white text-black px-10 py-4 rounded-full font-black uppercase tracking-widest text-xs">See Our Full Story</Link>
+              <Link to="/about-us" className="inline-block bg-white text-black px-10 py-4 rounded-sm font-black uppercase tracking-widest text-xs">See Our Full Story</Link>
             </div>
           </div>
         </section>
 
-    <Cansultation />
-
-        {/* ================= FAQS ================= */}
+        <Cansultation />
         <FAQs faqs={faqs} />
-
-
       </div>
       <Footer />
     </>
