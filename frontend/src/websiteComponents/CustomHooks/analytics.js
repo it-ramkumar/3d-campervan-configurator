@@ -100,7 +100,7 @@ const trackButtons = () => {
 
 // Initialize all automatic tracking
 export const initAnalytics = () => {
-  if (process.env.NODE_ENV !== "production") return;
+
 
   // First page view
   pageView(window.location.pathname + window.location.search);
