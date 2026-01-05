@@ -1,8 +1,16 @@
-import React, { lazy, Suspense, useMemo } from "react";
+import React, { lazy, Suspense, useMemo, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
+import { pageView } from "../websiteComponents/CustomHooks/analytics";
+  import {initAnalytics } from "../websiteComponents/CustomHooks/analytics";
+
+// Memoized Widgets
 import ChatWidgetComponent from "../websiteComponents/components/ChatMaxima/ChatMaxima";
 import BlackFridayLabelComponent from "../websiteComponents/components/BlackFriday/BlackFriday";
+const ChatWidget = React.memo(ChatWidgetComponent);
+const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
+
+// Lazy-loaded Pages & Components
 const Home = lazy(() => import("../pages/Home"));
 const Van = lazy(() => import("../pages/Van"));
 const Preview = lazy(() => import("../components/preview/Preview"));
@@ -32,40 +40,39 @@ const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/C
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
 const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
-// const Testing = lazy(() => import("../websiteComponents/components/ExteriorChoicePageD/ExteriorChoicePage"));
-const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"))
-const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"))
-const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"))
+const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"));
+const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"));
+const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"));
 const JobDetail = lazy(() => import("../websiteComponents/components/Jobs/JobDetail"));
 const JoAppForm = lazy(() => import("../websiteComponents/components/JobApp/JobApp"));
 const Jobs = lazy(() => import("../websiteComponents/components/Jobs/JobsListing"));
 const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBuild/CustomBuild"));
-// const Inter = lazy(() => import("../websiteComponents/components/Interior/Interior"));
-
-
-// Memoized components to avoid unnecessary re-renders
-const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
-const ChatWidget = React.memo(ChatWidgetComponent);
 
 const AppRoutes = () => {
   const location = useLocation();
-  const pathname = location.pathname;
+
+  // GA page view tracking (production only)
+  useEffect(() => {
+    pageView(location.pathname + location.search);
+  }, [location]);
+
+  // Show Black Friday label except on specific pages
   const showBlackFriday = useMemo(
-    () => !pathname.startsWith("/dashboard") && !pathname.startsWith("/login") && !pathname.startsWith("/test"),
-    [pathname]
+    () =>
+      !location.pathname.startsWith("/dashboard") &&
+      !location.pathname.startsWith("/login") &&
+      !location.pathname.startsWith("/test"),
+    [location.pathname]
   );
 
   return (
     <>
       {/* {showBlackFriday && <BlackFridayLabel />} */}
-       {/* <Christmis/> */}
       <ChatWidget />
       <ScrollFromTop />
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/zain" element={<ExChoice />} /> */}
-          {/* <Route path="/test" element={<Testing />} /> */}
           <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/showroom" element={<ShowRoom />} />
@@ -106,6 +113,12 @@ const AppRoutes = () => {
 };
 
 export default function AppWrapper() {
+
+  useEffect(() => {
+    if (`${import.meta.env.NODE_ENV === "production"}`) {
+      initAnalytics();
+    }
+  }, []);
   return (
     <Router>
       <AppRoutes />
