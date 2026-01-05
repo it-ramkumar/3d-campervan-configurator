@@ -95,7 +95,7 @@ export default function Hero() {
                   className="inline-block title-char"
                   style={{ whiteSpace: "pre" }}
                 >
-                  Custom Camper Vans
+                  Custom Camper Vans...
                 </span>
               </h1>
 

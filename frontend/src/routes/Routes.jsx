@@ -115,9 +115,8 @@ const AppRoutes = () => {
 export default function AppWrapper() {
 
   useEffect(() => {
-    if (`${import.meta.env.NODE_ENV === "production"}`) {
       initAnalytics();
-    }
+
   }, []);
   return (
     <Router>
