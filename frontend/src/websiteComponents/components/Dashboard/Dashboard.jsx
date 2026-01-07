@@ -21,6 +21,8 @@ import LeadEmail from "../adminPanel/LeadEmail/LeadEmail";
 import JobForm from "../adminPanel/Job/Form";
 import JobListing from "../adminPanel/Job/JobListing";
 import Applications from "../adminPanel/Applications/Applications";
+import QuickLinks from "../adminPanel/Linktree/QuickLinks";
+import AddQuickLink from "../adminPanel/Linktree/AddQuickLink";
 
 
 export default function Dashboard() {
@@ -100,6 +102,11 @@ export default function Dashboard() {
       label: "Applications",
       // icon: "📞",
       description: "Applications Data"
+    }
+    ,{
+      id: "quickLink",
+      label: "QuickLink",
+      description: "QuickLink Data"
     }
   ];
 
@@ -189,6 +196,10 @@ export default function Dashboard() {
         return <JobForm setSelected={setSelected} />;
             case "applications":
         return <Applications setSelected={setSelected} />;
+         case "quickLink":
+        return <QuickLinks setSelected={setSelected} />;
+         case "addQuickLink":
+        return <AddQuickLink setSelected={setSelected} />;
       default:
         return <PortfolioListing setSelected={setSelected} />;
     }

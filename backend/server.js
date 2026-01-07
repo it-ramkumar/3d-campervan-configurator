@@ -27,6 +27,7 @@ const ExteriorRoute = require("./routes/exteriorR")
 const LeadEmailsRoute = require("./routes/leadsEmail");
 const Job = require("./routes/job");
 const Application = require("./routes/application");
+const QuickLinks = require("./routes/quickLinks")
 
 
 const app = express();
@@ -69,6 +70,8 @@ app.use("/api", ExteriorSubCategory)
 app.use("/api", LeadEmailsRoute)
 app.use("/api/jobs", Job);
 app.use("/api/applications", Application);
+app.use("/api/quick-links", QuickLinks);
+
 
 
 
