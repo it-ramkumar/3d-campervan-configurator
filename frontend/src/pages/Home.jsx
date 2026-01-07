@@ -83,11 +83,11 @@ const descriptionList = [
 
      <Navbar />
         <Hero />
-    <div className="space-y-10 overflow-x-hidden">
+    <div className=" overflow-x-hidden">
       <div className="tour-buy">
         <Buy />
       </div>
-      <div className="tour-customizer">
+      <div className="tour-customizer ">
         <Customize
           mainTitle={maintitle}
           sectionTitle={sectiontitle}
@@ -97,6 +97,7 @@ const descriptionList = [
           orderButtonLabel={orderButtonLabel}
           orderButtonLink={orderButtonLink}
           lastText={lastText}
+          className={"bg-gray-100"}
         />
       </div>
   <div className="tour-portfolio">

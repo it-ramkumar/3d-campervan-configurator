@@ -13,7 +13,7 @@ export default function FAQs({ faqs }) {
   };
 
   return (
-    <div className="bg-white pt-2 pb-16 px-4 md:px-8">
+    <div className="bg-gray-100  py-12 mt-24 px-4 md:px-8">
       <div className="max-w-4xl mx-auto">
         {/* FAQ Section Heading */}
         <div className="text-center mb-8">

@@ -39,7 +39,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative text-white mt-24 pt-16 pb-8 bg-cover bg-center bg-no-repeat font-serif">
+    <footer className="relative text-white pt-16 pb-8 bg-cover bg-center bg-no-repeat font-serif">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center md:bg-no-repeat"

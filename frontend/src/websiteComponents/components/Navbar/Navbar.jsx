@@ -172,7 +172,7 @@ export default function Navbar({ forceMobile }) {
 
   return (
     <>
-      <nav className={`sticky top-0 w-full bg-white shadow-md z-[1000] ${forceMobile ? "px-1 py-1" : "px-6 py-4"}`}>
+      <nav className={`sticky top-0 w-full bg-white shadow-md z-[1000] ${forceMobile ? "px-1 py-1" : "px-6 py-2"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {!forceMobile && <Link to="/">
             <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className={`${forceMobile ? "w-[130px]" : "w-[170px]"} h-[30px] object-contain`} click={true} />
@@ -213,7 +213,7 @@ export default function Navbar({ forceMobile }) {
 
       {/* DESKTOP MEGA MENU */}
       {desktopMenu && !forceMobile && (
-        <div ref={megaMenuRef} className="fixed left-0 w-full bg-white shadow-2xl z-[999] overflow-hidden border-t" style={{ top: "63px" }}
+        <div ref={megaMenuRef} className="fixed left-0 w-full bg-white shadow-2xl z-[999] overflow-hidden border-t" style={{ top: "55px" }}
           onMouseEnter={() => handleHover(desktopMenu)} onMouseLeave={() => setDesktopMenu(null)}>
           <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 gap-10">
             {menuContent[desktopMenu]?.sections?.map((sec, idx) => (

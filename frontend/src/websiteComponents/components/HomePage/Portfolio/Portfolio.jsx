@@ -26,7 +26,7 @@ export default function Portfolio() {
   );
 
   return (
-    <section className="w-full mt-24  bg-white">
+    <section className="w-full mt-24 py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-6 lg:mb-16">
           <Heading2 text={"From Dream to Your Driveway"}/>
