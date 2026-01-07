@@ -27,6 +27,9 @@ import {
 } from 'lucide-react';
 import BlackButton from "../../Common/Button/BlackButton";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import Heading2 from "../../Common/Headings/Heading2";
+import Heading3 from "../../Common/Headings/Heading3";
 
 // --- Data with Enhanced Text and Icons ---
 const sections = [
@@ -127,16 +130,12 @@ const WhyChoose = () => {
   };
 
   return (
-    <div className="bg-white text-blackish font-serif overflow-hidden">
-      <header className="py-10 md:py-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold font-serif tracking-tight leading-tight">
-          Why Choose Big Bear Vans?
-        </h1>
-        <p className="text-lg md:text-xl text-slate-600 font-serif mt-4 max-w-4xl mx-auto px-4">
-          At Big Bear Vans, we have a full-fledged team of experienced campervan
+    <div className="bg-white text-blackish mt-24 font-serif overflow-hidden">
+      <header className=" text-center">
+        <Heading2 text={"Why Choose Big Bear Vans?"} />
+       <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4">At Big Bear Vans, we have a full-fledged team of experienced campervan
           builders and engineers in Big Bear, California. Let us show you what
-          nobody else does like we do.
-        </p>
+          nobody else does like we do.</RichParagraph>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 md:px-8">
@@ -153,10 +152,7 @@ const WhyChoose = () => {
             >
               {/* Text Section */}
               <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
-                <h2 className="text-3xl md:text-4xl font-bold font-serif tracking-tight">
-                  {section.title}
-                </h2>
-
+              <Heading3 textColor="black" text={section.title} />
                 {/* Content Wrapper for See More/Less */}
                 <div className="relative">
                   <div
@@ -166,25 +162,22 @@ const WhyChoose = () => {
                     }}
                   >
                     <div ref={contentRef} className="space-y-5">
-                      <p className="text-base md:text-lg text-slate-600 leading-relaxed text-left">
-                        {section.intro}
-                      </p>
-
+                      <RichParagraph> {section.intro}</RichParagraph>
                       <div className="space-y-3 text-left">
                         {section.features.map((feature, featureIndex) => (
                           <div key={featureIndex} className="flex items-start gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200/80 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
                             <div className="flex-shrink-0 mt-0.5 text-slate-700 bg-slate-200/70 rounded-full p-2">
                               {feature.icon}
                             </div>
-                            <p className="text-base text-slate-700 flex-1" dangerouslySetInnerHTML={{ __html: feature.text }} />
+                            <RichParagraph html={feature.text} />
                           </div>
                         ))}
                       </div>
 
                       {section.outro && (
-                        <p className="text-base md:text-lg text-slate-600 leading-relaxed text-left pt-2">
-                          {section.outro}
-                        </p>
+                        <RichParagraph html={section.outro} />
+
+
                       )}
                     </div>
                   </div>

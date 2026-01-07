@@ -8,6 +8,9 @@ import { Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading2 from "../Common/Headings/Heading2";
+import Heading4 from "../Common/Headings/Heading4";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function BlogsListing() {
   const [searchInput, setSearchInput] = useState("");
@@ -98,7 +101,7 @@ export default function BlogsListing() {
               <BlackButton
                 label="Search"
                 onClick={handleSearch}
-             
+
               />
 
             </div>
@@ -107,36 +110,42 @@ export default function BlogsListing() {
           {/* ✅ Latest Articles */}
           <div>
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Latest Articles
-              </h2>
+              <Heading2 text="  Latest Articles"/>
+
             </div>
 
-            {/* Blog Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8 w-full">
-              {blogs.map((blog) => (
-                <article
-                  key={blog._id}
-                  className="group bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
-                >
-                  <ImageWithSkeleton
-                    src={blog.gallery?.[0]}
-                    alt={blog.title}
-                    className="w-full h-56 object-cover"
-                  />
-                  <div className="p-5">
-                    <h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-gray-700">
-                      {blog.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                      {blog.description}
-                    </p>
-                    <BlackButton label="Read More" link={`/blog-detail/${blog._id}`}/>
+        {/* Blog Cards */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-8 w-full">
+  {blogs.map((blog) => (
+    <article
+      key={blog._id}
+      className="group bg-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+    >
+      <ImageWithSkeleton
+        src={blog.gallery?.[0]}
+        alt={blog.title}
+        className="w-full h-56 object-cover"
+      />
 
-                  </div>
-                </article>
-              ))}
-            </div>
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-grow">
+        <Heading4 text={blog.title} textColor="text-black" />
+
+        <RichParagraph className="my-4 flex-grow">
+          {blog.description}
+        </RichParagraph>
+
+        {/* Button at bottom */}
+        <div className="mt-auto">
+          <BlackButton
+            label="Read More"
+            link={`/blog-detail/${blog._id}`}
+          />
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
 
             {/* No Data Message */}
             {blogs.length === 0 && !loading && (

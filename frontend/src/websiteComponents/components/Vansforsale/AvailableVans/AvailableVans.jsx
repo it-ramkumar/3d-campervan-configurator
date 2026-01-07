@@ -3,6 +3,10 @@ import { useRef } from 'react';
 import { Link } from "react-router-dom"
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import BlackButton from '../../Common/Button/BlackButton';
+import Heading2 from '../../Common/Headings/Heading2';
+import Heading3 from '../../Common/Headings/Heading3';
+import RichParagraph from '../../Common/Paragraph/RichParagraph';
+import WhiteButton from "../../Common/Button/WhiteButton"
 
 
 // --- SVG Icons for the feature list ---
@@ -26,26 +30,28 @@ const BedIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
   </svg>
 );
-
-// --- NEW: Central Icon updated to a Campervan ---
 const VanIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 md:h-14 md:w-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zM17.625 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 17.25h17.25c.621 0 1.125-.504 1.125-1.125V9.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v6.375c0 .621.504 1.125 1.125 1.125zM9 8.625V6.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125v2.25" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 12h17.25" />
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 md:h-14 md:w-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zM17.625 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 17.25h17.25c.621 0 1.125-.504 1.125-1.125V9.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v6.375c0 .621.504 1.125 1.125 1.125zM9 8.625V6.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125v2.25" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 12h17.25" />
+  </svg>
 );
 
-
-// Data for the features list
 const FEATURES = [
-    { text: "Exceptional off-grid power", icon: <PowerIcon />, textFirst: true },
-    { text: "Fully-equipped bathroom with hot water", icon: <BathroomIcon />, textFirst: true },
-    { text: "Kitchen with microwave & refrigerator", icon: <KitchenIcon />, textFirst: false },
-    { text: "Space-saving elevator & dinette bed", icon: <BedIcon />, textFirst: false },
+  { text: "Exceptional off-grid power", icon: <PowerIcon />, textFirst: true },
+  { text: "Fully-equipped bathroom with hot water", icon: <BathroomIcon />, textFirst: true },
+  { text: "Kitchen with microwave & refrigerator", icon: <KitchenIcon />, textFirst: false },
+  { text: "Space-saving elevator & dinette bed", icon: <BedIcon />, textFirst: false },
 ];
 
-export default function AvailableVans({availableVans}) {
+const ComingSoonIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="w-20 h-20 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+export default function AvailableVans({ availableVans }) {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const contentRef = useRef(null);
@@ -58,18 +64,13 @@ export default function AvailableVans({availableVans}) {
 
   return (
     <>
-
-      <section ref={sectionRef} className="bg-white pt-0 pb-0 overflow-hidden mt-20">
-        <div ref={headerRef} className="max-w-7xl mx-auto text-center mb-12 md:mb-20 px-4 md:px-8 lg:px-16">
-          <h2 className="text-3xl md:text-4xl lg:text-[3rem] font-bold font-noto-serif text-black leading-tight">
-            In-Stock & Ready to Roll Vans For Sale
-          </h2>
+      <section ref={sectionRef} className="bg-white overflow-hidden mt-24">
+        <div ref={headerRef} className="max-w-7xl mx-auto text-center mb-6  px-4 md:px-8 lg:px-16">
+          <Heading2 text='In-Stock & Ready to Roll Vans For Sale' />
         </div>
 
-        <div ref={contentRef} className="max-w-4xl mx-auto text-black mb-16 md:mb-20 px-4 md:px-8 lg:px-16 space-y-8">
-          <p className="text-base md:text-xl font-normal font-noto-serif text-slate-700">
-            At Big Bear Vans, our Class BRVs for sale are truly turn-key solutions. Each van has premium features, including:
-          </p>
+        <div ref={contentRef} className="max-w-4xl mx-auto text-black md:mb-20 px-4 md:px-8 lg:px-16 ">
+          <RichParagraph>At Big Bear Vans, our Class BRVs for sale are truly turn-key solutions. Each van has premium features, including:</RichParagraph>
 
           {/* Increased bottom padding for the features section */}
           <div ref={featuresSectionRef} className="relative flex justify-center items-center my-8 md:my-12 h-60 md:h-72">
@@ -81,8 +82,6 @@ export default function AvailableVans({availableVans}) {
               ref={circularPathRef}
               className="circular-path absolute w-56 h-56 md:w-64 md:h-64 cursor-pointer"
               viewBox="0 0 100 100"
-              // onMouseEnter={handleCentralCircleHover}
-              // onMouseLeave={handleCentralCircleLeave}
             >
               <defs>
                 <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -105,229 +104,128 @@ export default function AvailableVans({availableVans}) {
 
             {/* Connection lines */}
             <svg className="absolute w-56 h-56 md:w-64 md:h-64" viewBox="0 0 100 100">
-              {/* Top-left connection */}
-              <line
-                x1="50" y1="50" x2="25" y2="25"
-                stroke="#4b5563"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-                className="connection-line connection-line-0"
-              />
-              {/* Top-right connection */}
-              <line
-                x1="50" y1="50" x2="75" y2="25"
-                stroke="#4b5563"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-                className="connection-line connection-line-1"
-              />
-              {/* Bottom-left connection */}
-              <line
-                x1="50" y1="50" x2="25" y2="75"
-                stroke="#4b5563"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-                className="connection-line connection-line-2"
-              />
-              {/* Bottom-right connection */}
-              <line
-                x1="50" y1="50" x2="75" y2="75"
-                stroke="#4b5563"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-                className="connection-line connection-line-3"
-              />
+              <line x1="50" y1="50" x2="25" y2="25" stroke="#4b5563" strokeWidth="1" strokeDasharray="2,2" className="connection-line connection-line-0" />
+              <line x1="50" y1="50" x2="75" y2="25" stroke="#4b5563" strokeWidth="1" strokeDasharray="2,2" className="connection-line connection-line-1" />
+              <line x1="50" y1="50" x2="25" y2="75" stroke="#4b5563" strokeWidth="1" strokeDasharray="2,2" className="connection-line connection-line-2" />
+              <line x1="50" y1="50" x2="75" y2="75" stroke="#4b5563" strokeWidth="1" strokeDasharray="2,2" className="connection-line connection-line-3" />
             </svg>
 
             {/* The central icon with reduced size */}
-            <div
-              ref={centralIconRef}
-              className="central-icon floating absolute flex justify-center items-center w-20 h-20 md:w-24 md:h-24 bg-gray-800 rounded-full shadow-lg border border-gray-700 cursor-pointer"
-
-            >
+            <div ref={centralIconRef} className="central-icon floating absolute flex justify-center items-center w-20 h-20 md:w-24 md:h-24 bg-gray-800 rounded-full shadow-lg border border-gray-700 cursor-pointer">
               <VanIcon />
             </div>
 
-            {/* Feature 1: Top-Left - TEXT ABOVE, ICON BELOW */}
-            <div
-              ref={el => featureItemsRef.current[0] = el}
-              className="feature-item absolute -translate-x-28 -translate-y-20 md:-translate-x-32 md:-translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group"
-
-            >
-              <p className="feature-text font-noto-serif text-sm text-slate-700 leading-tight transition-all duration-300 mb-2">
-                {FEATURES[0].text}
-              </p>
+            {/* Feature 1: Top-Left */}
+            <div ref={el => featureItemsRef.current[0] = el} className="feature-item absolute -translate-x-28 -translate-y-20 md:-translate-x-32 md:-translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group">
+              <RichParagraph>{FEATURES[0].text}</RichParagraph>
               <div className="feature-icon bg-gray-800 rounded-full p-2 shadow-lg border border-gray-700 transition-all duration-300">
                 {FEATURES[0].icon}
               </div>
             </div>
 
-            {/* Feature 2: Top-Right - TEXT ABOVE, ICON BELOW */}
-            <div
-              ref={el => featureItemsRef.current[1] = el}
-              className="feature-item absolute translate-x-28 -translate-y-20 md:translate-x-32 md:-translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group"
-              // onMouseEnter={() => handleFeatureMouseEnter(1)}
-              // onMouseLeave={() => handleFeatureMouseLeave(1)}
-            >
-              <p className="feature-text font-noto-serif text-sm text-slate-700 leading-tight transition-all duration-300 mb-2">
-                {FEATURES[1].text}
-              </p>
+            {/* Feature 2: Top-Right */}
+            <div ref={el => featureItemsRef.current[1] = el} className="feature-item absolute translate-x-28 -translate-y-20 md:translate-x-32 md:-translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group">
+              <RichParagraph>{FEATURES[1].text}</RichParagraph>
               <div className="feature-icon bg-gray-800 rounded-full p-2 shadow-lg border border-gray-700 transition-all duration-300">
                 {FEATURES[1].icon}
               </div>
             </div>
 
-            {/* Feature 3: Bottom-Left - ICON ABOVE, TEXT BELOW (original layout) */}
-            <div
-              ref={el => featureItemsRef.current[2] = el}
-              className="feature-item absolute -translate-x-28 translate-y-20 md:-translate-x-32 md:translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group"
-              // onMouseEnter={() => handleFeatureMouseEnter(2)}
-              // onMouseLeave={() => handleFeatureMouseLeave(2)}
-            >
+            {/* Feature 3: Bottom-Left */}
+            <div ref={el => featureItemsRef.current[2] = el} className="feature-item absolute -translate-x-28 translate-y-20 md:-translate-x-32 md:translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group">
               <div className="feature-icon bg-gray-800 rounded-full p-2 mb-2 shadow-lg border border-gray-700 transition-all duration-300">
                 {FEATURES[2].icon}
               </div>
-              <p className="feature-text font-noto-serif text-sm text-slate-700 leading-tight transition-all duration-300">
-                {FEATURES[2].text}
-              </p>
+              <RichParagraph>{FEATURES[2].text}</RichParagraph>
             </div>
 
-            {/* Feature 4: Bottom-Right - ICON ABOVE, TEXT BELOW (original layout) */}
-            <div
-              ref={el => featureItemsRef.current[3] = el}
-              className="feature-item absolute translate-x-28 translate-y-20 md:translate-x-32 md:translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group"
-              // onMouseEnter={() => handleFeatureMouseEnter(3)}
-              // onMouseLeave={() => handleFeatureMouseLeave(3)}
-            >
+            {/* Feature 4: Bottom-Right */}
+            <div ref={el => featureItemsRef.current[3] = el} className="feature-item absolute translate-x-28 translate-y-20 md:translate-x-32 md:translate-y-24 flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group">
               <div className="feature-icon bg-gray-800 rounded-full p-2 mb-2 shadow-lg border border-gray-700 transition-all duration-300">
                 {FEATURES[3].icon}
               </div>
-              <p className="feature-text font-noto-serif text-sm text-slate-700 leading-tight transition-all duration-300">
-                {FEATURES[3].text}
-              </p>
+              <RichParagraph>{FEATURES[3].text}</RichParagraph>
             </div>
           </div>
 
-          <p className="text-base md:text-xl font-normal font-noto-serif text-slate-700">
-            Everything is set up for you. Skip the stress of a long DIY build or waiting months for a custom conversion and check out our vans for sale.
-          </p>
+          <RichParagraph>Everything is set up for you. Skip the stress of a long DIY build or waiting months for a custom conversion and check out our vans for sale.</RichParagraph>
         </div>
 
-       <div className="relative pt-8 pb-12 md:pt-12 md:pb-16">
-  {/* Background elements remain similar for context */}
-  <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
+        <div className="relative pt-8 pb-12 md:pt-12 md:pb-16">
+          {/* Background elements */}
+          <div className="hidden lg:block absolute inset-x-0 top-0 h-72 bg-slate-900 z-0"></div>
 
-  <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
-    {availableVans && availableVans.length > 0 ? (
-      availableVans.map((van, index) => (
-        <div
-          key={van.id}
-          ref={el => cardsRef.current[index] = el}
-          // Increased max-width for a slightly larger card on desktop
-          className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl"
-          style={{ transformStyle: 'preserve-3d' }}
-        >
-          {/* Mobile background/glow - slightly cleaner */}
-          <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
-          {/* Subtle, softer glow effect */}
-          <div className="card-glow absolute -inset-2.5 bg-sky-500/30 rounded-[30px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[-1]"></div>
+          <div className="relative z-10 max-w-4xl mx-auto flex justify-center px-4 md:px-8 lg:px-16">
+            {availableVans && availableVans.length > 0 ? (
+              availableVans.map((van, index) => (
+                <div
+                  key={van.id}
+                  ref={el => cardsRef.current[index] = el}
+                  className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl"
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  {/* Mobile background/glow */}
+                  <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
+                  <div className="card-glow absolute -inset-2.5 bg-sky-500/30 rounded-[30px] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[-1]"></div>
 
-          {/* --- Card Container --- */}
-          {/* Slightly more rounded edges (24px vs 30px) for a softer look */}
-          <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+                  {/* Card Container */}
+                  <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+                    {/* Image Section */}
+                    <div className="w-full h-2/3 relative">
+                      <ImageWithSkeleton
+                        src={van.gallery[0]}
+                        alt={van.model}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/40 z-10"></div>
+                    </div>
 
-            {/* --- Image Section --- */}
-            <div className="w-full h-2/3 relative">
-              <ImageWithSkeleton
-                src={van.gallery[0]}
-                alt={van.model}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              {/* Darker overlay for better text contrast */}
-              <div className="absolute inset-0 bg-black/40 z-10"></div>
-            </div>
-
-            {/* --- Details Section (Bottom 1/3) --- */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 bg-slate-900/95 border-t-2 border-white/60">
-
-              {/* Model Name */}
-              <h3 className="font-noto-serif font-bold text-white text-[24px] leading-tight mb-3 tracking-wide">
-                {van.van_listing.model_name}
-              </h3>
-
-              {/* Price Information */}
-              <div className="flex items-end justify-between mb-4">
-                {/* Discounted Price */}
-                <div className="flex flex-col">
-                  <span className="font-sans font-extrabold text-4xl text-white leading-none">
-                    ${ (185000).toLocaleString() }
-                  </span>
-                  {/* Original Price (Strikethrough) */}
-                  <span className="font-sans text-sm text-gray-400 line-through mt-1">
-                    ${van.van_listing.price.toLocaleString()}
-                  </span>
+                    {/* Details Section */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 bg-slate-900/95 border-t-2 border-white/60">
+                      <Heading3 text={van.van_listing.model_name} />
+                      <div className="flex items-end justify-between mb-4">
+                        <div className="flex flex-col">
+                          <RichParagraph className="font-bold text-white">
+                            $ {van.van_listing.price}
+                          </RichParagraph>
+                        </div>
+                        <BlackButton
+                          label="View Details"
+                          link={`/van-detail/${van.slug}`}
+                          className="details-button"
+                        />
+                      </div>
+                      <RichParagraph className='text-white'>
+                        {van.van_listing.description}
+                      </RichParagraph>
+                    </div>
+                  </div>
                 </div>
+              ))
+            ) : (
+              // ✅ Coming Soon Card
+              <div className="w-full max-w-4xl">
+                <div className="relative w-full h-[450px] md:h-[500px] rounded-[30px] overflow-hidden shadow-lg bg-gradient-to-br from-gray-100 via-gray-50 to-white border-2 border-gray-200">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                    <ComingSoonIcon />
+                    <Heading2 text="Vans Coming Soon" className="text-gray-700 mb-4" />
+                    <RichParagraph className="text-gray-600 max-w-md mb-6">
+                      We're currently building amazing campervans! Check back soon or start your custom build today.
+                    </RichParagraph>
+                    <div className="flex gap-4 flex-wrap justify-center">
+                      <WhiteButton label="Start Custom Build" link="/inquiry" />
+                      <BlackButton label="Contact Us" link="/contact" />
+                    </div>
+                  </div>
 
-                {/* More Details Button (Prominent) */}
-                <BlackButton
-                  label="View Details"
-                  link={`/van-detail/${van.slug}`}
-                  className="details-button"
-                />
-
+                  {/* Decorative elements */}
+                  <div className="absolute top-10 left-10 w-20 h-20 bg-indigo-100 rounded-full opacity-50 blur-xl"></div>
+                  <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-100 rounded-full opacity-50 blur-xl"></div>
+                </div>
               </div>
-
-              {/* Description */}
-              <p className="font-sans text-white/70 text-sm leading-snug line-clamp-2">
-                {van.van_listing.description}
-              </p>
-            </div>
-
+            )}
           </div>
         </div>
-      ))
-    ) : (
-      // Coming Soon Card
-      <div className="relative group transform-gpu w-full max-w-sm sm:max-w-md lg:max-w-xl">
-        {/* Mobile background */}
-        <div className="lg:hidden absolute top-[-24px] h-40 bg-slate-900 z-[-1] w-screen left-1/2 -translate-x-1/2"></div>
-
-        {/* Glow effect */}
-        <div className="absolute -inset-2.5 bg-gradient-to-r from-sky-500/20 via-purple-500/20 to-pink-500/20 rounded-[30px] blur-xl opacity-60 animate-pulse z-[-1]"></div>
-
-        {/* Card Container */}
-        <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-slate-900/95 backdrop-blur-sm border-2 border-white/20">
-
-          {/* Content */}
-          <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-            {/* Van Icon */}
-            <div className="mb-6 bg-gradient-to-br from-sky-500 to-purple-600 rounded-full p-6 shadow-2xl animate-bounce">
-              <VanIcon />
-            </div>
-
-            {/* Coming Soon Text */}
-            <h3 className="font-noto-serif font-bold text-white text-3xl md:text-4xl mb-4 tracking-wide">
-              Coming Soon
-            </h3>
-
-            {/* Description */}
-            <p className="font-sans text-white/70 text-base md:text-lg leading-relaxed max-w-md">
-              Exciting new vans are on their way! Check back soon to discover our latest premium conversions ready for adventure.
-            </p>
-
-            {/* Decorative dots */}
-            <div className="flex gap-2 mt-8">
-              <div className="w-2 h-2 bg-sky-500 rounded-full animate-pulse"></div>
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div>
-              <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse delay-150"></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    )}
-  </div>
-</div>
       </section>
     </>
   );

@@ -9,6 +9,54 @@ import { getNavCat } from "../../../api/portfolio/navBarCat";
 import { getnavWheel } from "../../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 import { routes } from "../../DataUseInComp/NavbarRoutes";
+import { FooterListItem } from "../Common/Li/FooterLiItem"; // ✅ Import
+import Heading4 from "../Common/Headings/Heading4";
+
+// Reusable Components
+const NavListItem = ({ to, children, isActive, onClick }) => (
+  <FooterListItem
+    to={to}
+    onClick={onClick}
+    className={`block py-1 ${isActive
+        ? "text-indigo-600 font-bold"
+        : "text-gray-700 hover:text-indigo-600"
+      } transition-colors`}>
+
+    {children}
+
+  </FooterListItem>
+
+);
+
+const BlogListItem = ({ to, children, onClick }) => (
+  <FooterListItem
+    to={to}
+    onClick={onClick}
+    className="block py-2 text-gray-700 hover:text-indigo-600 transition-colors"
+    bullets="list-desc">
+    {children} →
+  </FooterListItem>
+
+);
+
+const ViewAllLink = ({ to, children, onClick }) => (
+  <FooterListItem
+    to={to}
+    onClick={onClick}
+    className="block py-2 text-gray-700 hover:text-indigo-600 transition-colors"
+  >
+    {children} →
+  </FooterListItem>
+);
+
+const SectionTitle = ({ children }) => (
+  <Heading4 text={children} textColor="text-indigo-600" />
+
+);
+
+const MobileSectionTitle = ({ children }) => (
+  <Heading4 text={children} textColor="text-indigo-600" />
+);
 
 export default function Navbar({ forceMobile }) {
   const [desktopMenu, setDesktopMenu] = useState(null);
@@ -20,8 +68,6 @@ export default function Navbar({ forceMobile }) {
   const timeoutRef = useRef(null);
   const location = useLocation();
 
-  // --- NAV LINKS CONFIGURATION ---
-  // Aap yahan asani se links change kar sakte hain
   const navLinks = [
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
     { name: 'vans-for-sale', label: 'Vans For Sale', path: '/vans-for-sale', hasDropdown: false },
@@ -61,6 +107,7 @@ export default function Navbar({ forceMobile }) {
   }, [desktopMenu, forceMobile]);
 
   const handleHover = (menu) => {
+    if (forceMobile) return;
     clearTimeout(timeoutRef.current);
     setDesktopMenu(menu);
   };
@@ -79,42 +126,59 @@ export default function Navbar({ forceMobile }) {
       return (
         <>
           {data.blogs.slice(0, 4).map(b => (
-            <li key={b._id}><Link to={`/blog-detail/${b._id}`} className="block py-1 text-gray-700 hover:text-indigo-600">{b.title} →</Link></li>
+            <BlogListItem key={b._id} to={`/blog-detail/${b._id}`}>
+              {b.title}
+            </BlogListItem>
           ))}
-          <li><Link to="/blogs" className="block py-2 text-indigo-600 font-bold">View All Blogs →</Link></li>
+          <ViewAllLink to="/blogs">View All Blogs</ViewAllLink>
         </>
       );
     }
+
     if (section.title === "Explore Layout Options") {
       const displayCats = isMobile ? data.categories.slice(0, 4) : data.categories;
       return (
         <>
           {displayCats.map((cat, i) => (
-            <li key={i}><Link to={`/layout-by-category/${cat}`} className="block py-1 text-gray-700 hover:text-indigo-600">{cat} →</Link></li>
+            <NavListItem key={i} to={`/layout-by-category/${cat}`}>
+              {cat} →
+            </NavListItem>
           ))}
           {isMobile && data.categories.length > 4 && (
-            <li><Link to="/layouts" className="text-indigo-600 font-bold text-sm">View All Categories →</Link></li>
+            <ViewAllLink to="/layouts">View All Categories</ViewAllLink>
           )}
         </>
       );
     }
+
     if (section.title === "Van Models Options") {
       return data.wheelBases.map((base, i) => (
-        <li key={i}><Link to={`/wheel-base/${base}`} className="block py-1 text-gray-700 hover:text-indigo-600">{getWheelbaseLabel(base)} →</Link></li>
+        <NavListItem key={i} to={`/wheel-base/${base}`}>
+          {getWheelbaseLabel(base)} →
+        </NavListItem>
       ));
     }
+
     return section.items?.map((item, i) => (
-      <li key={i}><Link to={item.link} className={`block py-1 ${location.pathname === item.link ? "text-indigo-600 font-bold" : "text-gray-700 hover:text-indigo-600"}`}>{item.label}</Link></li>
+      <NavListItem
+        key={i}
+        to={item.link}
+        isActive={location.pathname === item.link}
+      >
+        {item.label}
+      </NavListItem>
     ));
   };
 
   return (
     <>
-      <nav className={`sticky top-0 w-full bg-white shadow-md z-[1000] ${forceMobile ? "px-2 py-1" : "px-6 py-4"}`}>
+      <nav className={`sticky top-0 w-full bg-white shadow-md z-[1000] ${forceMobile ? "px-1 py-1" : "px-6 py-4"}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/"><ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[170px] h-[30px] object-contain" click={true} /></Link>
+          {!forceMobile && <Link to="/">
+            <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className={`${forceMobile ? "w-[130px]" : "w-[170px]"} h-[30px] object-contain`} click={true} />
+          </Link>}
 
-          {/* DESKTOP NAV (Using Variable) */}
+          {/* DESKTOP NAV */}
           <div className={`${forceMobile ? "hidden" : "hidden md:flex"} absolute left-1/2 -translate-x-1/2 gap-6 font-serif text-base`}>
             {navLinks.map((link) => (
               <Link key={link.name} to={link.path}
@@ -126,21 +190,20 @@ export default function Navbar({ forceMobile }) {
               </Link>
             ))}
           </div>
+
           <div className="flex items-center gap-4">
-            {/* Highlighted & Animated Consultation Button */}
-            <Link
-              to="/contact"
-              className="hidden sm:block px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-bold
-               uppercase tracking-widest text-white transition-all duration-300
-               hover:scale-110 hover:shadow-[0_0_20px_rgba(79,70,229,0.6)]
-               animate-gradient-flow border border-white/20"
-            >
-              Book Consultation
-            </Link>
+            {!forceMobile && (
+              <Link
+                to="/contact"
+                className="hidden sm:block px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-bold uppercase tracking-widest text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(79,70,229,0.6)] animate-gradient-flow border border-white/20"
+              >
+                Book Consultation
+              </Link>
+            )}
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 md:hidden text-black hover:bg-gray-100 rounded-full transition-colors"
+              className={`text-black hover:bg-gray-100 rounded-full transition-colors ${forceMobile ? "block" : "md:hidden"}`}
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -155,7 +218,7 @@ export default function Navbar({ forceMobile }) {
           <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 gap-10">
             {menuContent[desktopMenu]?.sections?.map((sec, idx) => (
               <div key={idx} className={idx === 0 ? "border-r pr-10" : ""}>
-                <h3 className="text-xl font-bold text-indigo-600 mb-4 uppercase text-sm tracking-widest">{sec.title}</h3>
+                <SectionTitle>{sec.title}</SectionTitle>
                 <ul className="space-y-2">{renderSectionItems(sec)}</ul>
               </div>
             ))}
@@ -168,8 +231,10 @@ export default function Navbar({ forceMobile }) {
         <div className="fixed inset-0 bg-black/50 z-[1001]" onClick={() => setIsMobileMenuOpen(false)}>
           <div className="fixed right-0 top-0 h-full w-[85%] bg-white p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-8 border-b pb-4">
-              <ImageWithSkeleton src="/images/logoo.webp" alt="Logo" className="w-32" />
-              <X className="w-6 h-6" onClick={() => setIsMobileMenuOpen(false)} />
+              <Link to={"/"}>
+                <ImageWithSkeleton src="/images/logoo.webp" alt="Logo" className="w-32" click={true} />
+              </Link>
+              <X className="w-6 h-6 cursor-pointer" onClick={() => setIsMobileMenuOpen(false)} />
             </div>
 
             <div className="space-y-2">
@@ -187,7 +252,7 @@ export default function Navbar({ forceMobile }) {
                         <div className="pl-4 pb-4 space-y-4">
                           {menuContent[link.name]?.sections?.map((sec, i) => (
                             <div key={i}>
-                              <h4 className="text-indigo-600 font-bold text-[10px] uppercase mb-2 tracking-widest">{sec.title}</h4>
+                              <MobileSectionTitle>{sec.title}</MobileSectionTitle>
                               <ul className="space-y-2">{renderSectionItems(sec, true)}</ul>
                             </div>
                           ))}

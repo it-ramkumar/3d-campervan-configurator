@@ -9,6 +9,8 @@ import "swiper/css/free-mode";
 import BlackButton from "../../Common/Button/BlackButton";
 import WhiteButton from "../../Common/Button/WhiteButton";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading1 from "../../Common/Headings/Heading1";
+import Paragraph from "../../Common/Paragraph/HeroParagraph";
 
 // Define the pure black color for buttons and primary accents
 
@@ -88,31 +90,19 @@ export default function Hero() {
 
         {/* --- Content (Fixed over all slides) --- */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
-            {/* REMOVED POSITIVE MARGINS AND ADDED A SMALL NEGATIVE MARGIN FOR UPWARD SHIFT */}
-            <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[64px] font-extrabold leading-tight tracking-normal font-serif">
-                <span
-                  className="inline-block title-char"
-                  style={{ whiteSpace: "pre" }}
-                >
-                  Custom Camper Vans...
-                </span>
-              </h1>
-
-              <p className="text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text">
-                Buy, customize, or try the 3D configurator from Big Bear Vans today.
-              </p>
-
-
-              <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
-
-                <BlackButton label="Order Custom Build" link="/inquiry" />
-
-                <WhiteButton label="View Van Inventory" link="/vans-for-sale"/>
-
-
-              </div>
+          {/* REMOVED POSITIVE MARGINS AND ADDED A SMALL NEGATIVE MARGIN FOR UPWARD SHIFT */}
+          <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0">
+            <Heading1
+              text="Custom Camper Vans..."
+            />
+            <Paragraph
+              text="Buy, customize, or try the 3D configurator from Big Bear Vans today."
+            />
+            <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
+              <BlackButton label="Order Custom Build" link="/inquiry" />
+              <WhiteButton label="View Van Inventory" link="/vans-for-sale" />
             </div>
+          </div>
         </div>
 
       </Swiper>

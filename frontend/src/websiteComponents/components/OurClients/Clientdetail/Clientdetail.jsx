@@ -23,6 +23,10 @@ import {
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton.jsx";
 import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton.jsx";
+import Heading2 from "../../Common/Headings/Heading2.jsx"
+import Heading3 from "../../Common/Headings/Heading3.jsx"
+import RichParagraph from "../../Common/Paragraph/RichParagraph.jsx"
+
 // Reusable Components
 function SectionHeader({ title, subtitle, icon: Icon }) {
   return (
@@ -32,13 +36,13 @@ function SectionHeader({ title, subtitle, icon: Icon }) {
           <Icon className="w-8 h-8 text-white" />
         </div>
       </div>
-      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-        {title}
-      </h2>
+      <Heading2 text={title} />
+
       {subtitle && (
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+        <RichParagraph>
           {subtitle}
-        </p>
+        </RichParagraph>
+
       )}
     </div>
   );
@@ -169,8 +173,8 @@ function ClassicImageGrid({ images, layout = "standard" }) {
           // Image 1: Full width on mobile, correct span on desktop
           // Other images: Half width on mobile
           className={`${index === 0
-              ? "col-span-2 md:col-span-2 md:row-span-2"
-              : "col-span-1"
+            ? "col-span-2 md:col-span-2 md:row-span-2"
+            : "col-span-1"
             }`}
         >
           <ImageWithSkeleton
@@ -178,8 +182,8 @@ function ClassicImageGrid({ images, layout = "standard" }) {
             alt={`Van image ${index + 1}`}
             // Fixed height for small images on mobile, full height/min-h on desktop
             className={`w-full object-cover  ${index === 0
-                ? "h-64 md:h-full md:min-h-[300px]"
-                : "h-48 md:h-full md:min-h-[300px]"
+              ? "h-64 md:h-full md:min-h-[300px]"
+              : "h-48 md:h-full md:min-h-[300px]"
               }`}
           />
         </div>
@@ -200,11 +204,11 @@ function FeatureCard({ icon: Icon, title, description, index }) {
         <div className="p-3 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
           <Icon className="w-6 h-6 text-white" />
         </div>
-        <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900">
-          {title}
-        </h4>
+        <Heading3 text={title} textColor="text-black" />
       </div>
-      <p className="text-gray-700 text-base leading-relaxed">{description}</p>
+      <RichParagraph>
+        {description}
+      </RichParagraph>
     </motion.div>
   );
 }
@@ -219,14 +223,17 @@ function TestimonialCard({ quote, author, van }) {
       <div className="absolute top-6 left-6 text-6xl text-gray-700 opacity-50">
         "
       </div>
-      <p className="text-base md:text-lg italic mb-6 relative z-10 leading-relaxed">
+      <RichParagraph textColor="text-white">
         "{quote}"
-      </p>
+      </RichParagraph>
+
       <div className="border-t border-gray-700 pt-4">
-        <p className="font-semibold text-white text-base md:text-lg">
+        <RichParagraph textColor="text-white">
           {author}
-        </p>
-        <p className="text-gray-400">Owner of {van}</p>
+        </RichParagraph>
+        <RichParagraph textColor="text-white">
+          Owner of {van}
+        </RichParagraph>
       </div>
     </motion.div>
   );
@@ -243,9 +250,10 @@ function IconFeature({ text, index, icon: Icon = CheckCircle }) {
       <div className="flex-shrink-0 w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
         <Icon className="w-5 h-5 text-white" />
       </div>
-      <span className="text-gray-700 font-medium text-base md:text-lg">
+      <RichParagraph>
         {text}
-      </span>
+      </RichParagraph>
+
     </motion.div>
   );
 }
@@ -261,9 +269,10 @@ function GraphicFeature({ text, index, graphic: Graphic }) {
       <div className="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
         <Graphic className="w-8 h-8 text-white" />
       </div>
-      <span className="text-gray-700 font-medium text-base md:text-lg">
+      <RichParagraph>
         {text}
-      </span>
+      </RichParagraph>
+
     </motion.div>
   );
 }
@@ -309,33 +318,20 @@ export default function ClientStories() {
       <section className="py-20 md:py-24 lg:py-28 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 md:mb-6"
-          >
-            Our Client Stories
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
-          >
+
+          <Heading2 text="Our Client Stories
+"/>
+          <RichParagraph className="max-w-3xl mx-auto my-4">
             At Big Bear Vans, we build premium custom campervans. These luxurious
             vans enable our clients to hit the road, explore, and live off the
             grid for as long as they want.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-base md:text-lg text-gray-600 max-w-4xl mx-auto mt-4 md:mt-6"
-          >
+          </RichParagraph>
+          <RichParagraph className="max-w-3xl mx-auto my-4">
             Our clients come from different backgrounds. That's why every Big
             Bear Van is a custom reflection of its owner's specific style and
             adventure goals.
-          </motion.p>
+          </RichParagraph>
+
         </div>
       </section>
 
@@ -358,14 +354,14 @@ export default function ClientStories() {
             </div>
 
             <div className="lg:col-span-2">
-              <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+              <RichParagraph className="mb-4">
                 Packing for a family, navigating flight timings, booking rooms,
                 and renting cars with kids can turn any trip into a hassle.
                 Therefore, parents like you choose Big Bear Vans. Our
                 family-friendly campervans eliminate all your concerns and
                 enable you to fully enjoy the family trips. Here's what our
                 family-friendly vans feature:
-              </p>
+              </RichParagraph>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
                 <motion.div
@@ -378,13 +374,14 @@ export default function ClientStories() {
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
                       <Home className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-serif text-base md:text-lg font-bold text-gray-900">
+                    <RichParagraph className="font-bold">
                       Complete Customization
-                    </h4>
+                    </RichParagraph>
                   </div>
-                  <p className="text-gray-700 text-l leading-relaxed">
+                  <RichParagraph textColor="text-black">
                     A fully customized campervan from scratch according to your choices
-                  </p>
+                  </RichParagraph>
+
                 </motion.div>
 
                 <motion.div
@@ -397,13 +394,14 @@ export default function ClientStories() {
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
                       <Users className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-serif text-base md:text-lg font-bold text-gray-900">
+                    <RichParagraph className="font-bold">
                       Smart Space Design
-                    </h4>
+                    </RichParagraph>
                   </div>
-                  <p className="text-gray-700 text-l leading-relaxed">
+                  <RichParagraph>
                     An elevator and a dinette bed system with double swivel seats to accommodate the family of 4-5
-                  </p>
+                  </RichParagraph>
+
                 </motion.div>
 
                 <motion.div
@@ -416,13 +414,16 @@ export default function ClientStories() {
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-serif text-base md:text-lg font-bold text-gray-900">
+                    <RichParagraph className="font-bold">
                       Off-Grid Ready
-                    </h4>
+                    </RichParagraph>
+
                   </div>
-                  <p className="text-gray-700 text-l leading-relaxed">
+                  <RichParagraph>
                     Off-grid-ready vans with lithium batteries, inverters, a DC-DC charger, solar panels, and a heater.
-                  </p>
+
+                  </RichParagraph>
+
                 </motion.div>
 
                 <motion.div
@@ -435,13 +436,16 @@ export default function ClientStories() {
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
                       <Shield className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-serif text-base md:text-lg font-bold text-gray-900">
+                    <RichParagraph className="font-bold">
                       Family Focused
-                    </h4>
+                    </RichParagraph>
+
                   </div>
-                  <p className="text-gray-700 text-l leading-relaxed">
+                  <RichParagraph>
                     Designs that prioritize safety, comfort, and convenience for travelers of all ages
-                  </p>
+
+                  </RichParagraph>
+
                 </motion.div>
               </div>
             </div>
@@ -451,13 +455,11 @@ export default function ClientStories() {
           <div className="bg-white rounded-3xl p-6 md:p-8 lg:p-12 mb-8 md:mb-12 border border-gray-200 shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-center">
               <div>
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Lake Tahoe Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                <Heading3 text="Lake Tahoe Campervan" textColor="text-black" className="my-4" />
+                <RichParagraph className="my-4">
                   We designed this 144 AWD Sprinter van for a family of four.
                   It's the perfect example of a family-first approach.
-                </p>
+                </RichParagraph>
 
                 <div className="space-y-3 md:space-y-4">
                   <IconFeature
@@ -499,14 +501,11 @@ export default function ClientStories() {
               </div>
 
               <div className="lg:col-span-2">
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Blue Whale Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                <Heading3 text="Blue Whale Campervan" textColor="text-black" className="my-4" />
+                <RichParagraph className="my-4">
                   Blue Whale is our one-of-a-kind short campervan that offers
                   seating and sleeping for six people. This short van:
-                </p>
-
+                </RichParagraph>
                 <div className="space-y-3 md:space-y-4">
                   <IconFeature
                     text="Has an elevator bed, dinette benches, a kids' bunk bed, and 4 seats with belts"
@@ -553,24 +552,22 @@ export default function ClientStories() {
                 whileInView={{ opacity: 1, y: 0 }}
                 className="lg:col-span-2 bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 md:p-8 border border-amber-200"
               >
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Travel With Your Pets
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6 leading-relaxed">
+                <Heading3 text="Travel With Your Pets" textColor="text-black" />
+                <RichParagraph className="my-2">
                   Traveling with pets means expensive boarding, stressful
                   logistics, and unwelcoming hotels. Moreover, pets often
                   struggle in different hotel rooms when being left behind by
                   their owners. That's why, at Big Bear Vans, we've built
                   various mobile sanctuaries for pet owners to give their pets a
                   home-like comfort on the road.
-                </p>
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+                </RichParagraph>
+                <RichParagraph className="my-2">
                   With our pet-specific campervans, you can comfortably go
                   shopping or hiking on a trail where pets are not allowed by
                   leaving them in the van with the A/C or heater on and the
                   engine off. Cusco, Sasha, Santa Barbara, Ventura, etc, are
                   our exclusive pet-friendly campervans.
-                </p>
+                </RichParagraph>
               </motion.div>
 
               <motion.div
@@ -583,13 +580,12 @@ export default function ClientStories() {
                   <div className="w-20 h-20 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <PawPrint className="w-10 h-10 text-white" />
                   </div>
-                  <h4 className="font-serif text-xl md:text-2xl font-bold text-gray-900 mb-4">
-                    Pet-First Design
-                  </h4>
-                  <p className="text-gray-700">
+                  <Heading3 text="Pet-First Design" textColor="text-black" />
+                  <RichParagraph>
                     Every detail considered for your pet's comfort and safety
                     during travel
-                  </p>
+                  </RichParagraph>
+
                 </div>
               </motion.div>
             </div>
@@ -627,14 +623,13 @@ export default function ClientStories() {
           <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 md:p-8 lg:p-12 border border-amber-200">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
               <div>
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Cusco Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                <Heading3 text="Cusco Campervan" textColor="text-black" />
+
+                <RichParagraph className="my-4">
                   Cusco is our pet-friendly campervan designed for clients
                   with two dogs, featuring dedicated pet areas and enhanced
                   ventilation systems.
-                </p>
+                </RichParagraph>
 
                 <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                   <IconFeature
@@ -685,7 +680,7 @@ export default function ClientStories() {
         </div>
       </section>
 
- {/* Adventure Lovers */}
+      {/* Adventure Lovers */}
       <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-br from-green-50 to-emerald-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
@@ -696,20 +691,20 @@ export default function ClientStories() {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center mb-8 md:mb-12">
             <div className="lg:col-span-2">
-              <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6 leading-relaxed">
+              <RichParagraph className="my-4">
                 At Big Bear Vans, we also build for those who live for the
                 outdoors. Whether you love skiing, surfing, biking, fishing,
                 dance competitions, or triathlons, our customized vans become
                 your mobile basecamp.
-              </p>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+              </RichParagraph>
+              <RichParagraph className="my-4">
                 Our campervans serve as a changing room, a base for gear, and a
                 comfortable place to rest before and after a competition for
                 you. Our customized vehicles get you to remote locations, serve
                 as a space for all their gear, including dirt bikes, skis,
                 wetsuits, etc, and provide a comfortable place to rest and
                 recharge after a long day.
-              </p>
+              </RichParagraph>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8 mt-6">
                 <GraphicFeature
@@ -742,20 +737,16 @@ export default function ClientStories() {
 
           {/* MotoVan */}
           <div className="bg-white rounded-3xl p-6 md:p-8 lg:p-12 border border-gray-200 shadow-lg">
-            <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">
-              MotoVan
-            </h3>
-            <p className="text-base md:text-lg text-gray-700 text-center mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed">
+            <Heading2 text="MotoVan" className="text-center my-4" />
+            <RichParagraph className="max-w-2xl my-4 mx-auto text-center" >
               Motovan is one of our exclusive campervans that is built for
               riders. The campervan has a living space and a garage for you and
               your crew.
-            </p>
-
+            </RichParagraph>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
               <div>
-                <h4 className="font-serif text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6 text-center">
-                  The Garage
-                </h4>
+                <Heading3 text="The Garage" textColor="text-black" className="my-4 text-center" />
+
                 <div className="space-y-3 md:space-y-4">
                   <IconFeature
                     text="Secure, separated garage for up to three motorcycles"
@@ -776,9 +767,7 @@ export default function ClientStories() {
               </div>
 
               <div>
-                <h4 className="font-serif text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6 text-center">
-                  The Living Space
-                </h4>
+                <Heading3 text=" The Living Space" textColor="text-black" className="my-4 text-center" />
                 <div className="space-y-3 md:space-y-4">
                   <IconFeature
                     text="Comfortable sleeping for five with loft bed system"
@@ -813,12 +802,12 @@ export default function ClientStories() {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12 items-center mb-8 md:mb-12">
             <div className="lg:col-span-2">
-              <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+              <RichParagraph className="my-4">
                 At Big Bear Vans, we've built multiple campervans for retirees
                 who want to visit family across the country, create lasting
                 memories with their grandchildren, and travel in complete
                 comfort, entirely off the grid.
-              </p>
+              </RichParagraph>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
                 <GraphicFeature
@@ -853,18 +842,16 @@ export default function ClientStories() {
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-6 md:p-8 lg:p-12 border border-gray-200">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-start">
               <div>
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  Vermont Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                <Heading3 text="Vermont Campervan" textColor="text-black" />
+                <RichParagraph className="my-4">
                   Vermont is a 170 AWD Sprinter campervan that we designed for a
                   couple who wanted to travel with their grandchildren.
-                </p>
+                </RichParagraph>
+
 
                 <div className="mb-6 md:mb-8">
-                  <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
-                    Client Vision
-                  </h4>
+                  <Heading3 text=" Client Vision" textColor="text-black" className="my-4" />
+
                   <div className="space-y-3 md:space-y-4">
                     <IconFeature
                       text="Off-grid ready campervan"
@@ -891,9 +878,9 @@ export default function ClientStories() {
               </div>
 
               <div>
-                <h4 className="font-serif text-lg md:text-xl font-bold text-gray-900 mb-4">
-                  Our Delivery
-                </h4>
+                <Heading3 text="Our Delivery" textColor="text-black" />
+
+
                 <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                   <IconFeature
                     text="Fully off-grid ready van with a 400Ah Lithium battery, a 3000W inverter, a DC-DC charger, a 12V AC, 30-gal grey, and 20-gal freshwater tanks"
@@ -946,23 +933,23 @@ export default function ClientStories() {
             </div>
 
             <div className="lg:col-span-2">
-              <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6 leading-relaxed">
+              <RichParagraph className="my-2">
                 Sometimes, we also build campervans for full-time van lifers who
                 actually plan to live on the road for a year or more. These
                 clients are remote workers, interior designers, and people who
                 decided to visit different places and create travel content for
                 social media.
-              </p>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+              </RichParagraph>
+              <RichParagraph className="my-2">
                 For full-time living, you need a ton of storage and home-like
                 power and water facilities. At Big Bear Vans, we go beyond the
                 standard conversion to fulfill the demanding requirements of
                 full-time living.
-              </p>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed mt-4">
+              </RichParagraph>
+              <RichParagraph className="my-2">
                 Our <b>Calabasas</b> and <b>San Diego</b> campervans were
                 customized for full-time living.
-              </p>
+              </RichParagraph>
 
               <TestimonialCard
                 quote="Big Bear Vans did a full conversion for my MB Sprinter, and I could not be happier! I had very specific requests, and they met all of my requests and are truly a completely customizable conversion company. I went to about three different conversion companies, and I was only given certain planned layouts and certain colors. Not at Big Bear Vans, they accommodated my every wish. They are also extremely knowledgeable. I came back for a couple of upgrades, and they gladly accommodated me. I highly suggest Big Bear Vans for your conversion!"
@@ -976,14 +963,12 @@ export default function ClientStories() {
           <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl p-6 md:p-8 lg:p-12 border border-purple-200">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
               <div>
-                <h3 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">
-                  San Diego Campervan
-                </h3>
-                <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+                <Heading3 text="San Diego Campervan" textColor="text-black" />
+                <RichParagraph className="my-4">
                   We built the San Diego campervan for an architect who worked
                   on two computers from his van and traveled. The van was
                   designed to be used both as a residence and a workspace.
-                </p>
+                </RichParagraph>
 
                 <div className="space-y-3 md:space-y-4">
                   <IconFeature
@@ -1031,17 +1016,18 @@ export default function ClientStories() {
           />
 
           <div className="text-center max-w-4xl mx-auto">
-            <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+            <RichParagraph >
               A campervan can be more than just a camper. It can be a smart
               business investment that doubles as a personal escape. At Big
               Bear Vans, we've designed campervans for those who want to
               optimize their tax benefits and allocate their profits to
               something that can serve as both a company asset and a personal
               item.
-            </p>
-            <p className="text-base md:text-lg text-gray-700 mb-6 md:mb-8 leading-relaxed">
+            </RichParagraph>
+            <RichParagraph className="my-4">
               So we've built mobile units that double as:
-            </p>
+            </RichParagraph>
+
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-12">
               {[
@@ -1062,20 +1048,19 @@ export default function ClientStories() {
                   <div className="w-16 h-16 bg-gray-900 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <item.icon className="w-8 h-8 text-white" />
                   </div>
-                  <p className="font-semibold text-gray-900 text-base md:text-lg">
+                  <RichParagraph>
                     {item.title}
-                  </p>
+                  </RichParagraph>
                 </motion.div>
               ))}
             </div>
-
-            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+            <RichParagraph>
               A Big Bear Van serves as both a personal luxury and a business
               asset for you. You can use these campervans as offices,
               showrooms, and workshops during the week, and as adventure
               vehicles on the weekends. It's a smart way to enjoy a camper
               while also investing in a versatile business tool.
-            </p>
+            </RichParagraph>
           </div>
         </div>
       </section>
@@ -1089,14 +1074,13 @@ export default function ClientStories() {
             <div className="flex justify-center mb-3">
               <Star className="w-7 h-7 text-white" />
             </div>
-            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
-              Why Our Clients Choose Us?
-            </h2>
-            <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto">
+            <Heading2 text="Why Our Clients Choose Us?" textColor="text-white" />
+            <RichParagraph textColor="text-white" className="my-4 max-w-3xl mx-auto text-center">
               With a consistent five-star rating from owners across the USA,
               we've built more than 105 campervans. Here's why these people
               trust us:
-            </p>
+            </RichParagraph>
+
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 justify-items-center">
             {[
@@ -1116,10 +1100,11 @@ export default function ClientStories() {
                 title: "Post-Build Support",
                 description: (
                   <>
-                    <p className="mb-2 text-white">
+                    <RichParagraph textColor="text-white">
                       When you buy a customized van from us, we also offer
                       post-build support. You gain:
-                    </p>
+                    </RichParagraph>
+
                     <ul className="list-disc list-inside space-y-1 text-gray-300 text-sm">
                       <li>
                         Ease of travel with no flights, luggage, or hotel
@@ -1152,13 +1137,13 @@ export default function ClientStories() {
                 <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-5 h-5 text-white" />
                 </div>
-                <h3 className="font-serif text-base md:text-lg font-bold text-white mb-3">
-                  {feature.title}
-                </h3>
+                <Heading3 text={feature.title} />
+
                 {typeof feature.description === "string" ? (
-                  <p className="text-gray-300 text-sm leading-relaxed">
+                  <RichParagraph textColor="text-white">
                     {feature.description}
-                  </p>
+                  </RichParagraph>
+
                 ) : (
                   feature.description
                 )}
@@ -1171,13 +1156,12 @@ export default function ClientStories() {
       {/* Final CTA */}
       <section className="py-20 md:py-24 lg:py-28 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Ready to Begin Your Journey?
-          </h2>
-          <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <Heading2 text="Ready to Begin Your Journey?" />
+          <RichParagraph className="my-4">
             Ready to customize your campervan? Let's talk about the van that
             fits your lifestyle
-          </p>
+          </RichParagraph>
+
           <Link to={"https://configurator.bigbearvans.com"} target="_blank"
             rel="noopener noreferrer">
             <BlackButton label="Start Your Custom Build" className="bg-gray-900 text-white font-bold text-base md:text-lg py-4 px-8 md:py-5 md:px-12 rounded-xl hover:bg-gray-800 transition-colors duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl" />
@@ -1190,9 +1174,8 @@ export default function ClientStories() {
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
-              See Our Vans in Action
-            </h2>
+            <Heading2 text="See Our Vans in Action"/>
+           
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[

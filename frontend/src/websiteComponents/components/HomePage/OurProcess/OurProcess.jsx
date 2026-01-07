@@ -5,12 +5,15 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import WhiteButton from "../../Common/Button/WhiteButton";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading2 from "../../Common/Headings/Heading2";
+import Heading3 from "../../Common/Headings/Heading3";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 // Data for the process steps
 const processSteps = [
-    {
+  {
     time: "Immediate",
     title: "Start Your Journey: Vehicle Sourcing",
     imageSrc: "/images/process1.webp",
@@ -214,17 +217,14 @@ export default function OurProcess() {
   }, []);
 
   return (
-    <div className="bg-black/75 text-white py-20 px-4 md:px-8 font-serif overflow-x-hidden">
+    <div className="bg-black/75 text-white pt-24 px-4 md:px-8 font-serif overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20" ref={headerRef}>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-            Big Bear Vans Custom Build Process
-          </h1>
-          <p className="text-base md:text-xl text-white/70 max-w-3xl mx-auto">
-            Our transparent, collaborative process ensures your vision comes to
-            life, from initial ideas to keys in your hand. Here's how it works.
-          </p>
+          <Heading2 text={"Big Bear Vans Custom Build Process"} className="text-white" />
+
+          <RichParagraph className="text-white max-w-2xl mx-auto"> Our transparent, collaborative process ensures your vision comes to
+            life, from initial ideas to keys in your hand. Here's how it works.</RichParagraph>
         </div>
 
         {/* Process Steps Container with Timeline Line */}
@@ -253,21 +253,20 @@ export default function OurProcess() {
                              ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500"
                 ></div>
                 <div className="flex flex-col justify-center">
-                  <span className="text-lg font-bold text-gray-300">
+                  <RichParagraph className="mt-4 text-white/80">
                     {step.time}
-                  </span>
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mt-2 mb-6">
-                    {step.title}
-                  </h2>
+                  </RichParagraph>
+                  <Heading3 text={step.title} className="text-white" />
+
+
                   <div className="space-y-4">
                     {step.details.map((item, idx) => (
                       <div key={idx}>
-                        <h3 className="text-xl font-bold text-white">
-                          {item.subtitle}
-                        </h3>
-                        <p className="text-white/80 mt-1">
+                        <Heading3 text={item.subtitle} className="text-white" />
+                        <RichParagraph textColor="text-white">
                           {item.description}
-                        </p>
+                        </RichParagraph>
+
                       </div>
                     ))}
                   </div>
@@ -283,8 +282,8 @@ export default function OurProcess() {
                 <ImageWithSkeleton
                   src={step.imageSrc}
                   alt={step.altText}
-                      className=" object-cover"
-                    />
+                  className=" object-cover"
+                />
               </div>
             );
 
@@ -324,7 +323,7 @@ export default function OurProcess() {
 
         {/* Call to action button */}
         <div className="mt-20 text-center" ref={buttonRef}>
-                  <WhiteButton label={"Get a Quote"} link="/contact"/>
+          <WhiteButton label={"Get a Quote"} link="/contact" />
 
 
         </div>

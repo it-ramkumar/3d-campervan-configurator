@@ -1,6 +1,9 @@
 "use client";
 
 import BlackButton from "../Common/Button/BlackButton";
+import Heading2 from "../Common/Headings/Heading2";
+import Heading3 from "../Common/Headings/Heading3";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function ContactForm({
   formData,
@@ -12,13 +15,11 @@ export default function ContactForm({
     <div className="flex flex-col items-center justify-center text-center py-12">
       {/* Heading Section */}
       <div className="max-w-2xl mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-          Let’s Connect
-        </h1>
-        <p className="text-gray-700 text-base md:text-lg">
+        <Heading2 text="Let’s Connect" />
+        <RichParagraph>
           Tell us what’s on your mind! Whether it’s a project idea or a quick question,
           we’re here to help.
-        </p>
+        </RichParagraph>
       </div>
 
       {/* Contact Form */}

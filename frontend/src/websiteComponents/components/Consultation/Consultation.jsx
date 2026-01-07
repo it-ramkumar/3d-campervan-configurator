@@ -5,6 +5,9 @@ import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 import Swal from "sweetalert2";
 import { contact } from "../../../api/contact/contact";
+import Heading2 from "../Common/Headings/Heading2";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading3 from "../Common/Headings/Heading3";
 
 export default function Consultation({ vanForSale }) {
   const [formData, setFormData] = useState({
@@ -69,13 +72,13 @@ export default function Consultation({ vanForSale }) {
       const result = await contact(formData);
 
       if (result.success) {
-     Swal.fire({
-  title: "Success!",
-  text: "Your consultation request has been submitted successfully! Please check your email to view your booking details.",
-  icon: "success",
-  timer: 3000,
-  // showConfirmButton: false,
-});
+        Swal.fire({
+          title: "Success!",
+          text: "Your consultation request has been submitted successfully! Please check your email to view your booking details.",
+          icon: "success",
+          timer: 3000,
+          // showConfirmButton: false,
+        });
 
 
         // 🔹 Reset form
@@ -109,11 +112,10 @@ export default function Consultation({ vanForSale }) {
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24 flex flex-col items-center space-y-12">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-6">
-        {vanForSale && (
+        {/* {vanForSale && (
           <>
-            <h2 className="text-3xl md:text-5xl font-bold font-serif text-black leading-tight">
-              Ready to Start Your Adventure?
-            </h2>
+            <Heading3 text="Ready to Start Your Adventure?" textColor="text-black"/>
+
             <div className="w-full max-w-3xl text-left font-serif text-base md:text-lg text-black/70 leading-relaxed space-y-4">
               <p>We're here to guide you through every step. Let's find the perfect path for you.</p>
               <ul className="space-y-2">
@@ -123,13 +125,10 @@ export default function Consultation({ vanForSale }) {
               </ul>
             </div>
           </>
-        )}
-        <h3 className="text-2xl md:text-[28px] font-semibold font-serif text-black">
-          Schedule a Free Consultation Call Today
-        </h3>
-        <p className="max-w-2xl text-black/70 font-serif text-lg md:text-xl">
-          Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
-        </p>
+        )} */}
+        <Heading2 text="Schedule Your Free Consultation Call" />
+        <RichParagraph className="max-w-2xl text-center">Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
+        </RichParagraph>
       </div>
 
       {/* ===== Calendar Section ===== */}

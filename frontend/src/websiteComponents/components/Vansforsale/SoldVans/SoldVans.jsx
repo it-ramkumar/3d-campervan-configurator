@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { getAllVans } from "../../../../api/van/getAllVans";
 import Loader from "../../Loader/Loader";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import Heading2 from "../../Common/Headings/Heading2";
+import Heading3 from "../../Common/Headings/Heading3";
 
 export default function SoldVans() {
   const [soldVans, setSoldVans] = useState([]);
@@ -63,14 +66,13 @@ export default function SoldVans() {
 
         {/* Heading Section */}
         <div className="text-center mb-10 md:mb-16">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-black leading-tight">
-            A Showcase of our Sold Camper Vans
-          </h2>
-          <p className="max-w-4xl mx-auto mt-4 font-serif text-base md:text-xl text-black/70 leading-relaxed">
+          <Heading2 text="A Showcase of our Sold Camper Vans" />
+          <RichParagraph className="max-w-2xl mx-auto">
             The camper vans below have already found their happy owners. We’ve
             proudly built over 105 camper vans with a reputation for quality.
             Check our past builds to get inspired for your custom van.
-          </p>
+          </RichParagraph>
+
         </div>
 
         {/* Vans Grid: 1 col on mobile, 2 on tablet, 3 on desktop */}
@@ -100,9 +102,11 @@ export default function SoldVans() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
 
                     <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
-                      <h3 className="font-serif text-xl md:text-2xl font-bold text-white leading-tight transition-all duration-500 md:translate-y-4 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-                        {van?.van_listing?.title || "Custom Build"}
-                      </h3>
+                      <Heading3 text={van?.van_listing?.title || "Custom Build"}/>
+
+                     <RichParagraph>
+
+                     </RichParagraph>
                       <p className="text-white/60 text-xs mt-2 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100 hidden md:block">
                         View Details →
                       </p>

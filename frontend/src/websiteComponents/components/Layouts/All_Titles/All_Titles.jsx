@@ -9,6 +9,8 @@ import {
   Loader2Icon,
   ChevronDownIcon,
 } from "lucide-react";
+import Heading2 from "../../Common/Headings/Heading2";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
 
 const LIMIT = 12;
 
@@ -127,10 +129,11 @@ export default function All_Titles() {
             </div>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">Quick Access Layouts</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              {portfolios.length} layouts loaded {hasMore ? `(more available)` : `(all loaded)`}
-            </p>
+            <Heading2 text="Quick Access Layouts"/>
+            <RichParagraph>
+                 {portfolios.length} layouts loaded {hasMore ? `(more available)` : `(all loaded)`}
+            </RichParagraph>
+          
           </div>
         </div>
         <SparklesIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />

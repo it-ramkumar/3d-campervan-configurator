@@ -6,7 +6,10 @@ import { Link } from "react-router-dom";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import SeeMore from "../Common/SeeMore/SeeMore";
 import BlackButton from "../Common/Button/BlackButton";
-
+import Heading2 from "../Common/Headings/Heading2"
+import Heading1 from "../Common/Headings/Heading1"
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading3 from "../Common/Headings/Heading3"
 // --- SVG Icons (Slight modification to allow for background color) ---
 const SvgInsulation = ({ className }) => (
   <svg
@@ -107,10 +110,12 @@ const SvgExterior = ({ className }) => (
 // --- Reusable Hero Spec Component (from previous iteration) ---
 const HeroSpecItem = ({ label, value }) => (
   <div className="group py-2 cursor-pointer transition duration-300 hover:text-[#2761FD] border-b-2 border-transparent hover:border-[#2761FD]">
-    <p className="text-xs md:text-sm opacity-80 uppercase tracking-wider">{label}</p>
-    <p className="font-bold text-base md:text-lg mt-1 whitespace-nowrap">
-      {value || "N/A"}
-    </p>
+    <RichParagraph textColor="text-white">
+      {label}
+    </RichParagraph>
+    <RichParagraph textColor="text-white">
+      {value}
+    </RichParagraph>
   </div>
 );
 
@@ -124,16 +129,16 @@ const SvgCheckmark = () => (
 
 const VanPage = ({ vanDetail, onConsultationClick }) => {
   const heroRef = useRef(null);
-  const featuresList = [
-    "Elevator bed with dinette seating, swivel table & multi-use layout",
-    "Interior wet bath with aluminum shower & portable smart toilet",
-    "Roof-mounted 12V A/C & advanced diesel GLYCOL heater system",
-    "1200Ah electrical system with solar, shore power & alternator charging",
-    "Large insulated bump-out windows for maximum natural light",
-    "Full roof deck with hammock mounts, ladder, and rack system",
-    "Custom wrap, raptor-coated bumpers, grill & lighting package",
-    "Winter-ready insulation with heated flooring"
-  ];
+  // const featuresList = [
+  //   "Elevator bed with dinette seating, swivel table & multi-use layout",
+  //   "Interior wet bath with aluminum shower & portable smart toilet",
+  //   "Roof-mounted 12V A/C & advanced diesel GLYCOL heater system",
+  //   "1200Ah electrical system with solar, shore power & alternator charging",
+  //   "Large insulated bump-out windows for maximum natural light",
+  //   "Full roof deck with hammock mounts, ladder, and rack system",
+  //   "Custom wrap, raptor-coated bumpers, grill & lighting package",
+  //   "Winter-ready insulation with heated flooring"
+  // ];
 
   // --- Data Mapping (Updated icons to remove circle fill) ---
   const van = {
@@ -190,13 +195,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         <div className="relative z-10 h-full flex flex-col justify-end pb-8 px-4 sm:px-8 lg:px-16">
           <div className="max-w-4xl">
             {/* Title Block - REDUCED FONT SIZE */}
-            <h1 className="font-extrabold text-3xl sm:text-4xl md:text-[52px] leading-tight mb-2 tracking-tight">
-              {vanDetail.van_listing.title}
-            </h1>
-            <p className="text-base md:text-xl mt-1 max-w-3xl font-light opacity-90">
+            <Heading1 text={vanDetail.van_listing.title} className="text-left" />
+            <RichParagraph textColor="text-white">
               {vanDetail.van_listing.subtitle}
-            </p>
-
+            </RichParagraph>
             {/* Specifications Grid - REDUCED MARGINS/PADDING/FONT SIZE */}
             <div className="flex flex-wrap justify-start gap-x-8 gap-y-2 mt-6 mb-4 border-t border-b border-gray-600 py-3">
 
@@ -223,36 +225,6 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
 
             {/* Price & CTA Block - MOBILE OPTIMIZATION APPLIED HERE */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-              {/* Black Friday Offer (Conditional) */}
-              {vanDetail.slug === "4x4-santa-monica-v6-turbo" && (
-                // MODIFIED: Added max-w-xs (max-width: 320px) and mx-auto (center alignment) on mobile.
-                <div className="p-3 bg-white/10 backdrop-blur-sm rounded-lg shadow-xl border border-white/20 w-full max-w-xs mx-auto sm:w-auto sm:max-w-none sm:mx-0">
-
-                  {/* Label */}
-                  <div className="flex items-center justify-between mb-0.5">
-                    <p className="text-xs font-semibold text-gray-200 uppercase tracking-widest">
-                      Exclusive Price
-                    </p>
-                    <span className="bg-[#FFD700] text-black text-[10px] font-extrabold px-2 py-0.5 rounded-full animate-pulse">
-                      🎉 BLACK FRIDAY DEAL
-                    </span>
-                  </div>
-
-                  {/* Price area - Smaller text on mobile */}
-                  <div className="flex items-end gap-2 mt-0.5">
-                    <p className="text-gray-400 text-sm line-through font-medium">
-                      ${vanDetail?.van_listing?.originalPrice?.toLocaleString() || "224,543"}
-                    </p>
-                    <p className="font-extrabold text-2xl sm:text-3xl text-[#FFD700] drop-shadow-lg">
-                      ${"185,000"}
-                    </p>
-                  </div>
-                  <p className="text-xs text-green-300 mt-0.5 font-semibold">
-                    Flat 17% Off – Limited Time Offer
-                  </p>
-                </div>
-              )}
-
               {/* Call To Action Button - Full width on mobile, auto on desktop, centered on mobile */}
 
               <BlackButton
@@ -266,36 +238,14 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       </div>
-      {
-        vanDetail.slug === "4x4-santa-monica-v6-turbo" && (<div className="w-full flex justify-center px-4 sm:px-8 mt-10">
-          <div className="max-w-3xl text-center">
 
-            <h2 className="text-center font-extrabold text-4xl text-black mb-12 tracking-tight">
-              Features
-            </h2>
-
-            <ul className="space-y-2 font-medium text-sm text-gray-700 py-4">
-              {featuresList.map((item, i) => ( // Display up to 5 items
-                <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
-                  <SvgCheckmark />
-                  <span className="leading-snug">{item}</span>
-                </li>
-              ))}
-
-            </ul>
-
-          </div>
-        </div>)
-      }
 
 
 
       {/* ================= KEY FEATURES SECTION (IMPROVED DESIGN) ================= */}
       <div className="py-16 px-4 sm:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-center font-extrabold text-4xl text-black mb-12 tracking-tight">
-            Comprehensive Build Features
-          </h2>
+          <Heading2 text="Comprehensive Build Features" className="text-center my-8" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {van.detailed_features.map((feature, index) => (
@@ -307,10 +257,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
                 <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-black transition-colors duration-300 group-hover:bg-[#2761FD] mb-4">
                   {feature.icon}
                 </div>
+                <Heading3 text={feature.category} textColor="text-black" className="my-4" />
 
-                <h3 className="font-black text-xl mt-1 mb-4 text-black tracking-tight">
-                  {feature.category}
-                </h3>
 
                 {/* Feature List */}
                 <div className="w-full flex-grow text-left">
@@ -318,14 +266,13 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
                     {feature.items.map((item, i) => ( // Display up to 5 items
                       <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
                         <SvgCheckmark />
-                        <span className="leading-snug">{item}</span>
+                        <RichParagraph>
+                          {item}
+                        </RichParagraph>
+
                       </li>
                     ))}
-                    {/* {feature.items.length > 5 && (
-                        <li className="text-xs text-gray-500 italic mt-1">
-                            + {feature.items.length - 5} more features...
-                        </li>
-                    )} */}
+
                   </ul>
                 </div>
               </div>
@@ -339,9 +286,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       {/* ================= Flagship ================= */}
       <div className="px-6 md:pl-16 md:pr-16 bg-gray-50">
         <div className="max-w-3xl text-left py-6">
-          <h2 className="font-bold text-3xl mb-4">{vanDetail.van_listing.title}</h2>
+          <Heading2 text={vanDetail.van_listing.title}/>
+          
           <SeeMore text={vanDetail.van_listing.description} />
-          {/* <Link to={"/contact"}> */}
+
           <BlackButton
             label="Book A Call Now"
             onClick={onConsultationClick}

@@ -2,6 +2,8 @@
 import React from "react";
 import BlackButton from "../../Common/Button/BlackButton";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading2 from "../../Common/Headings/Heading2"
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
 
 const images = [
   { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior" },
@@ -24,17 +26,15 @@ export default function Portfolio() {
   );
 
   return (
-    <section className="w-full pt-6 lg:pt-12 pb-16 bg-white">
+    <section className="w-full mt-24  bg-white">
       <div className="container mx-auto px-4">
-
-        {/* Header */}
         <div className="text-center mb-6 lg:mb-16">
-          <h2 className="font-serif font-bold text-3xl lg:text-5xl text-black">
-            From Dream to Your Driveway
-          </h2>
-          <p className="font-serif text-sm lg:text-xl text-black/70 mt-2">
+          <Heading2 text={"From Dream to Your Driveway"}/>
+         <RichParagraph>
             Take a look at some of our best custom vans.
-          </p>
+
+         </RichParagraph>
+
         </div>
 
         {/* --- DESKTOP VIEW (Same as before) --- */}
@@ -61,7 +61,7 @@ export default function Portfolio() {
 
         {/* Action Button */}
         <div className="flex justify-center mt-8 lg:mt-16">
-           <BlackButton label="View Our Portfolio" link="/layouts" />
+          <BlackButton label="View Our Portfolio" link="/layouts" />
         </div>
 
       </div>

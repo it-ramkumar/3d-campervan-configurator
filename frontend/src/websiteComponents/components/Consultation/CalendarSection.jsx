@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Link } from "react-router-dom";
 import BlackButton from "../Common/Button/BlackButton";
+import Heading3 from "../Common/Headings/Heading3";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading2 from "../Common/Headings/Heading2";
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -278,10 +281,8 @@ export default function BookingPage() {
               </div>
             </div>
 
+<Heading3 text="Book Your Consultation Call" textColor="text-black" className="my-2"/>
 
-            <h1 className="text-2xl font-bold mb-4 text-left text-black leading-tight">
-              Plan your<br />Customvan Build!
-            </h1>
 
 
             <div className="mb-8">
@@ -289,41 +290,42 @@ export default function BookingPage() {
                 <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 1 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
                   1
                 </div>
-                <span className={`font-medium ${bookingStep >= 1 ? 'text-black' : 'text-gray-500'}`}>Date</span>
+                <RichParagraph className={`font-medium ${bookingStep >= 1 ? 'text-black' : 'text-gray-500'}`}>Date</RichParagraph>
               </div>
               <div className="flex items-center mb-3">
                 <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 2 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
                   2
                 </div>
-                <span className={`font-medium ${bookingStep >= 2 ? 'text-black' : 'text-gray-500'}`}>Time</span>
+                <RichParagraph className={`font-medium ${bookingStep >= 2 ? 'text-black' : 'text-gray-500'}`}>Time</RichParagraph>
               </div>
               <div className="flex items-center mb-3">
                 <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 3 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
                   3
                 </div>
+                <RichParagraph className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Info</RichParagraph>
+              </div>
+              <div className="flex items-center mb-3">
                 <span className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Details</span>
               </div>
               <div className="flex items-center">
                 <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 4 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
                   4
                 </div>
+                <RichParagraph className={`font-medium ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Confirmation</RichParagraph>
+              </div>
+              <div className="flex items-center">
                 <span className={`font-medium ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Summary</span>
               </div>
             </div>
 
             <div className="space-y-4 text-left">
               <div>
-                <h3 className="text-base font-semibold mb-1 text-black">Contact Us</h3>
-                <p className="text-sm text-black">Host: +1 (951) 441-9719</p>
+                <RichParagraph className="text-sm text-gray-600 mb-1">
+                  Need assistance or have questions before booking?
+                </RichParagraph>
+                <RichParagraph className="text-black font-semibold">Host: +1 (951) 441-9719</RichParagraph>
               </div>
 
-              <div className="w-16 h-px bg-gray-300"></div>
-
-              <div>
-                <p className="leading-relaxed text-sm text-gray-600">
-                  If you have more queries, contact the host number below.
-                </p>
-              </div>
             </div>
           </div>
         </div>

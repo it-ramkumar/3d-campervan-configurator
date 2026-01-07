@@ -4,11 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading2 from '../../Common/Headings/Heading2';
+import RichParagraph from '../../Common/Paragraph/RichParagraph';
 
 // Import Swiper styles
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
+import Heading3 from '../../Common/Headings/Heading3';
 
 const reviews = [
   {
@@ -116,12 +119,13 @@ export default function Testimonials() {
   }, [modalOpen]);
 
   return (
-    <section className="w-full py-16 md:pt-16 md:pb-24 bg-white overflow-hidden">
+    <section className="w-full mt-24 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-5xl font-bold text-black">
+          <Heading2 text={"See Why Our Customers Love Us"}/>
+          {/* <h2 className="font-serif text-5xl font-bold text-black">
             See Why Our Customers Love Us
-          </h2>
+          </h2> */}
         </div>
 
         <Swiper
@@ -172,17 +176,19 @@ export default function Testimonials() {
 
                   {/* Content */}
                   <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
-                    <h3 className="font-serif font-semibold text-[28px] leading-tight">
+                  <Heading3 text={review.name} className="text-white"/>
+                    {/* <h3 className="font-serif font-semibold text-[28px] leading-tight">
                       {review.name}
-                    </h3>
+                    </h3> */}
                     <div className="flex gap-1 text-[#FFEF5E]">
                       {renderStars(review.rating)}
                     </div>
 
                     {/* Display Truncated Text */}
-                    <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
+                    <RichParagraph className='text-white'>{truncatedText}</RichParagraph>
+                    {/* <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
                       {truncatedText}
-                    </p>
+                    </p> */}
 
                     {/* Read More Link (Only show if text was truncated) */}
                     {isTruncated && (

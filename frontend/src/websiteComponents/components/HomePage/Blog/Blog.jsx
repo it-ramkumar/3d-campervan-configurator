@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import BlackButton from "../../Common/Button/BlackButton";
+import Heading2 from "../../Common/Headings/Heading2";
+import Heading3 from "../../Common/Headings/Heading3";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -27,17 +30,13 @@ export default function Blog() {
   if (loading) return <Loader />;
 
   return (
-    <section className="w-full pt-8 pb-16 bg-white">
+    <section className="w-full mt-24 bg-white">
       <div className="container mx-auto px-4">
 
         {/* Header Section */}
         <div className="text-center mb-10 lg:mb-14">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold text-black mb-4 tracking-tight">
-            Explore Our Van Life Blog
-          </h2>
-          <p className="font-serif text-base md:text-xl text-black/70 max-w-2xl mx-auto leading-relaxed">
-            Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.
-          </p>
+          <Heading2 text="Explore Our Van Life Blog"/>
+          <RichParagraph className="max-w-2xl mx-auto">Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.</RichParagraph>
         </div>
 
         {/* Blog Post Grid */}
@@ -89,9 +88,7 @@ export default function Blog() {
                   <span className="text-[10px] uppercase tracking-[2px] text-white/60 font-bold mb-2 block">
                     {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'Van Life'}
                   </span>
-                  <h3 className="font-serif text-xl md:text-2xl font-bold text-white leading-[1.2] group-hover:text-indigo-300 transition-colors">
-                    {post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title}
-                  </h3>
+                  <Heading3 text={post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title} className="text-white"/>
                 </div>
               </div>
 

@@ -2,6 +2,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { airportData } from "../../DataUseInComp/AirportData";
+import Heading2 from "../Common/Headings/Heading2";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading4 from "../Common/Headings/Heading4";
 const AirportCard = ({ airport, code, time, description, isPrivate = false, index }) => (
   <motion.div
     className="group relative bg-gradient-to-br from-gray-900 to-black p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-800 shadow-lg md:shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden w-full max-w-xs mx-auto md:max-w-none"
@@ -22,9 +25,8 @@ const AirportCard = ({ airport, code, time, description, isPrivate = false, inde
             <AirportIcon />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-serif font-bold text-base md:text-lg text-white leading-tight truncate">
-              {airport}
-            </h4>
+            <Heading4 text={airport} />
+
             {code && (
               <p className="font-serif text-gray-400 text-xs mt-0.5">{code}</p>
             )}
@@ -36,9 +38,10 @@ const AirportCard = ({ airport, code, time, description, isPrivate = false, inde
       </div>
 
       {/* Description */}
-      <p className="text-gray-300 leading-relaxed text-xs md:text-sm mb-3 font-serif line-clamp-3">
-        {description}
-      </p>
+      <RichParagraph textColor="text-white">
+ {description}
+      </RichParagraph>
+
 
       {/* Private Jet Badge */}
       {isPrivate && (
@@ -99,26 +102,11 @@ export default function AirService() {
             <LocationIcon />
             <div className="w-8 md:w-12 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent"></div>
           </div>
+<Heading2 text="How to Get Here?"/>
 
-          <motion.h2
-            className="font-serif font-bold text-3xl md:text-[56px] leading-tight mb-4 md:mb-6 bg-gradient-to-br from-gray-900 to-black bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            How to Get Here?
-          </motion.h2>
-
-          <motion.p
-            className="font-serif text-lg md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
+    <RichParagraph className="max-w-2xl mx-auto mt-4">
             We're easy to reach and can even pick you up
-          </motion.p>
+          </RichParagraph>
         </motion.div>
 
         {/* Airport Cards Grid */}
@@ -162,12 +150,10 @@ export default function AirService() {
                   <CarIcon />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-serif font-bold text-xl md:text-2xl mb-1 md:mb-2">
-                    Complimentary Pickup
-                  </h3>
-                  <p className="font-serif text-gray-300 text-sm md:text-base">
+                  <Heading4 text="Complimentary Pickup" />
+                  <RichParagraph textColor="text-white">
                     We'll greet you at the airport and bring you to our facility
-                  </p>
+                  </RichParagraph>
                 </div>
               </div>
 

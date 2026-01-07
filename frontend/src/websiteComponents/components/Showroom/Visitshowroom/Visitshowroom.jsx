@@ -13,6 +13,9 @@ import {
   Hammer
 } from "lucide-react";
 import Customize from "../../Customize/Cutomize";
+import Heading2 from "../../Common/Headings/Heading2";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import Heading3 from "../../Common/Headings/Heading3";
 
 export default function Showroom() {
 
@@ -57,18 +60,15 @@ export default function Showroom() {
     <section className="bg-white py-[4rem] font-serif overflow-hidden">
       <div className="container mx-auto px-4">
         <div  className="text-center mb-[5rem] lg:mb-[7rem]">
-          <p className="font-serif font-normal text-[1.5rem] text-black/90 max-w-[57.8125rem] mx-auto mb-16">
+          <RichParagraph className="max-w-3xl mx-auto">
             Browsing websites is a good start, but the real thing is seeing the materials and testing the layouts firsthand to make clear decisions. That’s why we invite you to visit our workshop to see and select things personally.
-          </p>
-          <h2
-            className="text-[3rem] font-bold font-serif text-black leading-none mb-4"
-            style={{ lineHeight: "100%", letterSpacing: "0%" }}
-          >
-            Why visit us?
-          </h2>
-          <p className="text-[1.5rem] font-normal text-black/90 max-w-[57.8125rem] mx-auto">
+
+          </RichParagraph>
+          <Heading2 text="Why visit us?" className="my-2"/>
+        <RichParagraph className="max-w-3xl mx-auto my-2">
             When you step into our workshop, you become part of the build process. Here’s why a visit to our showroom is valuable for you:
-          </p>
+        </RichParagraph>
+
         </div>
 
         {cardData.map((card, index) => (

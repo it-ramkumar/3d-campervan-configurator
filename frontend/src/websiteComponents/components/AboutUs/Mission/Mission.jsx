@@ -4,60 +4,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion'; // Import framer-motion
 import { FaCog, FaFeatherAlt, FaRulerCombined, FaBolt, FaBed, FaPalette } from 'react-icons/fa';
 import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
+import Heading2 from '../../Common/Headings/Heading2';
+import Heading3 from '../../Common/Headings/Heading3';
+import RichParagraph from '../../Common/Paragraph/RichParagraph';
 // NEW: Reusable component for the word-by-word heading animation
-const AnimatedHeading = ({ title }) => {
-  const words = title.split(" ");
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
-    }),
-  };
-
-  const child = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-  };
-
-  return (
-    <motion.h2
-      className="text-4xl md:text-5xl font-bold text-black text-center mb-12"
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.8 }}
-      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
-    >
-      {words.map((word, index) => (
-        <motion.span
-          variants={child}
-          style={{ marginRight: "0.5rem" }} // Adjust spacing between words
-          key={index}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.h2>
-  );
-};
 
 
 export default function Mission() {
@@ -129,7 +79,7 @@ const advantages = [
         viewport={{ once: true, amount: 0.3 }}
         variants={sectionVariants}
       >
-        <AnimatedHeading title="Mission and Purpose" />
+        <Heading2 text="Mission and Purpose" className='my-6'/>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 w-full max-w-7xl">
           {/* Image */}
           <motion.div
@@ -145,20 +95,21 @@ const advantages = [
             <ImageWithSkeleton
               src="/images/mission.webp"
               alt="Cozy interior of a custom campervan"
-              className="rounded-[15px] w-full h-auto object-cover max-w-[650px] mx-auto max-h-[550px]"
+              className="rounded-[15px] w-full h-auto object-cover "
             />
           </motion.div>
           {/* Text */}
           <motion.div
-            className="w-full lg:w-1/2 max-w-[562px]"
+
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <p className="text-xl md:text-2xl text-black leading-relaxed">
+            <RichParagraph>
               At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs. We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort. Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
-            </p>
+            </RichParagraph>
+
           </motion.div>
         </div>
       </motion.div>
@@ -171,7 +122,8 @@ const advantages = [
         viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
       >
-        <AnimatedHeading title="Our Advantages" />
+
+        <Heading2 text="Our Advantages" className='my-6'/>
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl"
           variants={cardContainerVariants}
@@ -202,9 +154,9 @@ const advantages = [
                   {advantage.icon}
                 </motion.div>
               </div>
-              <p className="text-lg leading-relaxed">
-                {advantage.text}
-              </p>
+              <RichParagraph textColor='text-white '>
+                      {advantage.text}
+              </RichParagraph>
             </motion.div>
           ))}
         </motion.div>

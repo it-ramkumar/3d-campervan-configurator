@@ -7,6 +7,11 @@ import { motion } from "framer-motion";
 import { CalendarDays, Clock, Image as ImageIcon, FileText, Heading, Table, ThumbsUp, ThumbsDown, Share2, Eye, BookOpen } from "lucide-react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Loader from "../Loader/Loader";
+import Heading1 from "../Common/Headings/Heading1"
+import Heading2 from "../Common/Headings/Heading2"
+import Heading3 from "../Common/Headings/Heading3"
+import RichParagraph from "../Common/Paragraph/RichParagraph"
+
 
 
 export default function BlogDetail() {
@@ -101,17 +106,17 @@ export default function BlogDetail() {
               <div className="lg:sticky lg:top-24">
                 <div className="flex items-start gap-3 lg:gap-4 group-hover:translate-x-2 transition-transform duration-300">
                   <div className="flex-shrink-0 w-1 bg-gradient-to-b from-black to-gray-800 h-16 lg:h-20 rounded-full"></div>
-                  <h2 className="text-xl lg:text-2xl font-bold text-gray-900 leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                    {block.text}
-                  </h2>
+                  <Heading3 text={block.text} textColor="text-black"/>
+
                 </div>
               </div>
             </div>
             <div className="lg:col-span-3">
               <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl lg:rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-                <p className="text-gray-700 leading-relaxed text-base lg:text-lg font-light">
-                  {nextBlock.text}
-                </p>
+<RichParagraph>
+{nextBlock.text}
+</RichParagraph>
+
               </div>
             </div>
           </div>
@@ -134,9 +139,8 @@ export default function BlogDetail() {
           <div className="bg-white rounded-xl lg:rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
             <div className="flex flex-col xl:grid xl:grid-cols-2 gap-6 lg:gap-8 items-center">
               <div>
-                <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6 leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  {block.text}
-                </h2>
+                <Heading3 text={block.text} textColor="text-black"/>
+
               </div>
               <div className="relative w-full group">
                 <div className="bg-white rounded-lg lg:rounded-xl p-3 lg:p-4 shadow-lg border border-gray-300 transform group-hover:scale-[1.02] transition-transform duration-300">
@@ -173,9 +177,12 @@ export default function BlogDetail() {
             transition={{ duration: 0.6 }}
           >
             <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl lg:rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-              <p className="text-gray-700 leading-relaxed text-base lg:text-lg font-light">
-                {block.text}
-              </p>
+             <RichParagraph>
+   {block.text}
+             </RichParagraph>
+              {/* <p className="text-gray-700 leading-relaxed text-base lg:text-lg font-light">
+
+              </p> */}
             </div>
           </motion.div>
         );
@@ -192,9 +199,8 @@ export default function BlogDetail() {
           >
             <div className="flex items-center gap-3 lg:gap-4 group-hover:translate-x-2 transition-transform duration-300">
               <div className="flex-shrink-0 w-1.5 lg:w-2 h-12 lg:h-16 bg-gradient-to-b from-black to-gray-800 rounded-full"></div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                {block.text}
-              </h2>
+<Heading3 text={block.text} textColor="text-black"/>
+
             </div>
           </motion.div>
         );
@@ -248,14 +254,18 @@ export default function BlogDetail() {
                     <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mr-3 lg:mr-4 shadow-lg">
                       <ThumbsUp className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                     </div>
-                    <h4 className="font-bold text-white text-lg lg:text-xl">Pros</h4>
+                    <Heading3 text="Pros"/>
+                    {/* <h4 className="font-bold text-white text-lg lg:text-xl">Pros</h4> */}
                   </div>
                   <ul className="space-y-3 lg:space-y-4">
                     {block.pros?.length > 0 ? (
+
                       block.pros.map((p, i) => (
                         <li key={i} className="flex items-start text-sm lg:text-base leading-relaxed group/item">
-                          <span className="text-green-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span>
-                          <span className="text-gray-200 flex-1 group-hover/item:text-white transition-colors">{p}</span>
+                          <RichParagraph textColor="text-white">
+                           <span className="text-green-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span> {p}
+                          </RichParagraph>
+
                         </li>
                       ))
                     ) : (
@@ -269,14 +279,15 @@ export default function BlogDetail() {
                     <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mr-3 lg:mr-4 shadow-lg">
                       <ThumbsDown className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                     </div>
-                    <h4 className="font-bold text-white text-lg lg:text-xl">Cons</h4>
+                    <Heading3 text="Cons"/>
                   </div>
                   <ul className="space-y-3 lg:space-y-4">
                     {block.cons?.length > 0 ? (
                       block.cons.map((c, i) => (
                         <li key={i} className="flex items-start text-sm lg:text-base leading-relaxed group/item">
-                          <span className="text-red-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span>
-                          <span className="text-gray-200 flex-1 group-hover/item:text-white transition-colors">{c}</span>
+                          <RichParagraph textColor="text-white">
+                           <span className="text-green-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span> {c}
+                          </RichParagraph>
                         </li>
                       ))
                     ) : (
@@ -392,28 +403,21 @@ export default function BlogDetail() {
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
                 <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                <span className="text-white text-xs lg:text-sm font-semibold uppercase tracking-wider">
-                  Featured Article
-                </span>
+<RichParagraph textColor="text-white">
+  Featured Article
+</RichParagraph>
+
               </motion.div>
 
-              <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 lg:mb-6 leading-tight bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-              >
-                {blog.title}
-              </motion.h1>
 
-              <motion.p
-                className="text-base sm:text-lg lg:text-xl text-gray-200 leading-relaxed mb-6 lg:mb-8 max-w-3xl font-light backdrop-blur-sm bg-white/10 rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-white/20"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-              >
+   <Heading1 text={blog.title}/>
+
+
+
+            <RichParagraph textColor="text-white" className="my-4">
                 {blog.description}
-              </motion.p>
+              </RichParagraph>
+
 
               {/* METADATA - MOBILE OPTIMIZED */}
               <motion.div

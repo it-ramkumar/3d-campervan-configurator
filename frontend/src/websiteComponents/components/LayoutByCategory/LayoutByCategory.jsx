@@ -7,6 +7,9 @@ import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Loader from "../Loader/Loader"
+import Heading2 from "../Common/Headings/Heading2";
+import Heading3 from "../Common/Headings/Heading3";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function CamperProjectsPage() {
   const { category } = useParams();
@@ -121,8 +124,7 @@ export default function CamperProjectsPage() {
         <div className="container mx-auto">
           {/* FILTER SECTION */}
           <div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Filter Vans</h3>
-
+            <Heading2 text="Filter Layouts" className="my-4" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-4">
 
               {/* SEARCH */}
@@ -250,13 +252,12 @@ export default function CamperProjectsPage() {
                   >
                     {/* TEXT */}
                     <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
-                      <h2 className="font-bold text-2xl lg:text-[40px] leading-tight mb-4">
-                        {project.van_listing?.title}
-                      </h2>
-
-                      <p className="text-sm lg:text-[18px] mb-6">
+                      <Heading2 text={project.van_listing?.title} />
+                      <RichParagraph className="my-2">
                         {project.van_listing?.description}
-                      </p>
+                      </RichParagraph>
+
+
 
                       <BlackButton
                         label="View Details"

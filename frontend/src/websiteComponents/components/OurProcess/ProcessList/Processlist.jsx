@@ -1,6 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
 import AirService from "../../AirService/AirService";
+import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import Heading2 from "../../Common/Headings/Heading2";
+import Heading3 from "../../Common/Headings/Heading3";
+
 
 // --- ICONS for the 'Fly in, Drive out' section ---
 const BuildIcon = () => (
@@ -19,17 +23,11 @@ const CampgroundIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
   </svg>
 );
-
-// --- NEW ICON for Pro Tip Box ---
 const ProTipIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.4-2.4l-1.178-.398 1.178-.398a3.375 3.375 0 002.4-2.4l.398-1.178.398 1.178a3.375 3.375 0 002.4 2.4l1.178.398-1.178.398a3.375 3.375 0 00-2.4 2.4z" />
   </svg>
 );
-
-
-
-// Animation Variants for re-use
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -39,7 +37,6 @@ const staggerContainer = {
     },
   },
 };
-
 const fadeInUp = {
   hidden: { y: 30, opacity: 0 },
   visible: {
@@ -51,7 +48,6 @@ const fadeInUp = {
     },
   },
 };
-
 const titleStagger = {
   hidden: { opacity: 0 },
   visible: {
@@ -62,7 +58,6 @@ const titleStagger = {
     },
   },
 };
-
 const titleLetter = {
   hidden: { opacity: 0, y: 20, x: -10 },
   visible: {
@@ -75,20 +70,15 @@ const titleLetter = {
     },
   },
 };
-
-// Helper component for the top three info cards
 const InfoCard = ({ title, description, className = "" }) => (
   <div className={`text-center flex flex-col items-center ${className}`}>
-    <h3 className="font-serif font-bold text-base md:text-[36px] leading-tight">
-      {title}
-    </h3>
-    <p className="font-serif font-normal text-xs md:text-xl leading-tight text-black opacity-70 mt-2 md:mt-4">
-      {description}
-    </p>
+    <Heading3 text={title} textColor="text-black"/>
+   <RichParagraph>
+    {description}
+   </RichParagraph>
+
   </div>
 );
-
-// Helper component for each item in the main process timeline
 const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirst = false }) => {
 
   const textVariants = {
@@ -115,9 +105,8 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
   return (
     <div className="grid grid-cols-[1fr_auto_2fr] md:grid-cols-[1fr_auto_3fr] gap-x-4 md:gap-x-6 items-start relative">
       <motion.div className="text-right" variants={textVariants}>
-        <h4 className="font-serif font-semibold text-xl md:text-[28px] leading-none pt-1">
-          {time}
-        </h4>
+        <RichParagraph>{time}</RichParagraph>
+
       </motion.div>
 
       <div className={`flex flex-col items-center h-full ${isFirst ? 'pt-2.5' : ''}`}>
@@ -137,23 +126,17 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
         className={!isLast ? "pb-16 md:pb-20" : "pb-0"}
         variants={textVariants}
       >
-        <h3 className="font-serif font-bold text-2xl md:text-[36px] leading-none mb-6">
-          {title}
-        </h3>
+        <Heading3 text={title} textColor="text-black"/>
+
         <div className="space-y-6">
           {details.map((item, index) => (
             <div key={index} className="text-left">
-              <h5 className="font-serif font-bold text-base md:text-xl leading-none">
-                {item.subtitle}
-                {item.duration && (
-                  <span className="font-normal text-black opacity-70 ml-2">
+              <RichParagraph className="font-bold">{item.subtitle} <span className="font-normal text-black opacity-70 ml-2">
                     {item.duration}
-                  </span>
-                )}
-              </h5>
-              <p className="font-serif font-normal text-base md:text-xl leading-normal mt-2">
-                {item.description}
-              </p>
+                  </span> </RichParagraph>
+
+              <RichParagraph> {item.description}</RichParagraph>
+
             </div>
           ))}
         </div>
@@ -161,7 +144,6 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
     </div>
   );
 };
-
 const FlyInStep = ({ icon, text, isLast = false }) => (
   <div className="flex items-start gap-x-4 group">
     <div className="flex flex-col items-center shrink-0">
@@ -170,9 +152,10 @@ const FlyInStep = ({ icon, text, isLast = false }) => (
       </div>
       {!isLast && <div className="w-px h-16 bg-gray-300 mt-2"></div>}
     </div>
-    <p className="font-serif font-normal text-base md:text-xl leading-relaxed pt-1">
+    <RichParagraph>
       {text}
-    </p>
+    </RichParagraph>
+
   </div>
 );
 
@@ -240,7 +223,6 @@ export default function ProcessPage() {
 
 
 
-  const mainTitle = "Big Bear Vans Custom Build Process";
 
   return (
     <section className="bg-white text-black font-serif pt-16 md:pt-24 pb-8 md:pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -259,32 +241,23 @@ export default function ProcessPage() {
               description="Up to $10,000 off MSRP through our LA/San Diego dealership partners."
             />
           </motion.div>
-          <motion.div variants={fadeInUp} whileHover={{ y: -12, scale: 1.05, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
-            <InfoCard
-              title="3D Renderings"
-              description="Visualize your van in lifelike detail before we build."
-              className="md:mt-8"
-            />
-          </motion.div>
+
           <motion.div variants={fadeInUp} whileHover={{ y: -12, scale: 1.05, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
             <InfoCard
               title="5-Month Average Timeline"
               description="Transparent stages from design to delivery."
             />
           </motion.div>
+             <motion.div variants={fadeInUp} whileHover={{ y: -12, scale: 1.05, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }}>
+            <InfoCard
+              title="3D Renderings"
+              description="Visualize your van in lifelike detail before we build."
+              className="md:mt-8"
+            />
+          </motion.div>
         </motion.div>
+<Heading2 text="Big Bear Vans Custom Build Process" className="text-center my-6"/>
 
-        <motion.h2
-          className="text-center font-bold text-3xl md:text-[48px] leading-tight md:leading-none mb-8 md:mb-12"
-          variants={titleStagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.8 }}
-        >
-          {mainTitle.split("").map((char, index) => (
-            <motion.span key={index} variants={titleLetter}>{char}</motion.span>
-          ))}
-        </motion.h2>
 
         <div className="max-w-4xl mx-auto">
           {processData.map((step, index) => (
@@ -309,9 +282,8 @@ export default function ProcessPage() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           whileHover={{ y: -10, scale: 1.01, boxShadow: "0px 20px 30px rgba(0, 0, 0, 0.1)" }}
         >
-          <h2 className="text-center font-serif font-bold text-3xl md:text-[48px] leading-tight md:leading-none mb-10">
-            Fly in, Drive out
-          </h2>
+          <Heading2 text="Fly in, Drive out" />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
             {/* Left Column: Timeline */}
             <div className="flex flex-col justify-center h-full">
@@ -329,29 +301,32 @@ export default function ProcessPage() {
 
             {/* Right Column: Text & Pro Tip */}
             <div className="font-serif text-base md:text-xl leading-relaxed space-y-6 text-left">
-              <p className="opacity-80">
+              <RichParagraph>
                 For most of our clients, the process is simple and seamless. We handle the logistics so you can focus on the adventure ahead.
-              </p>
-              <p className="opacity-80">
+              </RichParagraph>
+
+              <RichParagraph>
                 This initial stay allows you to test everything in a real-world setting and drive back to our shop for any final tweaks before your journey home.
-              </p>
+              </RichParagraph>
 
               {/* Pro Tip Box */}
               <div className="bg-gray-800 text-white rounded-xl p-6 space-y-3 shadow-lg">
                 <div className="flex items-center gap-x-3">
                   <ProTipIcon />
-                  <h4 className="font-bold text-xl">Pro Tip</h4>
+                  <Heading3 text="Pro Tip" />
+                  {/* <h4 className="font-bold text-xl">Pro Tip</h4> */}
                 </div>
-                <p className="text-gray-300 leading-relaxed">
+                <RichParagraph className="text-white">
                   You can ship personal gear directly to our shop before you arrive. We'll load it into your new van so you're ready to hit the road immediately.
-                </p>
+                </RichParagraph>
+
               </div>
             </div>
           </div>
         </motion.div>
 
         {/* --- PREMIUM HOW TO GET HERE SECTION --- */}
-       <AirService />
+        <AirService />
       </div>
     </section>
   );

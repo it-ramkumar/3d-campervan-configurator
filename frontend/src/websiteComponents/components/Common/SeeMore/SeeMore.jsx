@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RichParagraph from "../Paragraph/RichParagraph";
 
 export default function DescriptionToggle({ text }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -7,14 +8,9 @@ export default function DescriptionToggle({ text }) {
 
   return (
     <div>
-      <p
-        className={`text-lg font-normal leading-relaxed whitespace-pre-line transition-all duration-300 ${
+      <RichParagraph  className={`text-lg font-normal leading-relaxed whitespace-pre-line transition-all duration-300 ${
           isExpanded ? "line-clamp-none" : "line-clamp-3"
-        }`}
-      >
-        {text}
-      </p>
-
+        }`}>{text}</RichParagraph>
       {/* See More / See Less Button */}
       <button
         onClick={toggle}

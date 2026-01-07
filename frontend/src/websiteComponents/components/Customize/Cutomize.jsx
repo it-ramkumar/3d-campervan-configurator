@@ -3,9 +3,12 @@ import React, { useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import BlackButton from "../Common/Button/BlackButton";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import Heading2 from "../Common/Headings/Heading2";
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading3 from "../Common/Headings/Heading3";
 
 export default function Customize({
-  mainTitle,
+  mainTitle = "",
   sectionTitle,
   description = "",
   descriptionList = [],
@@ -16,7 +19,6 @@ export default function Customize({
   lastText = "",
   showButton = true,
 }) {
-  const mainTitleRef = useRef(null);
   const section1Ref = useRef(null);
   const imageCardRef = useRef(null);
   const imageRef = useRef(null);
@@ -26,14 +28,8 @@ export default function Customize({
   return (
     <section className="bg-white mt-24 font-serif overflow-hidden">
       <div className="container mx-auto px-4">
-        {/* Main Title */}
-        <h1
-          ref={mainTitleRef}
-          className="text-center text-4xl md:text-5xl font-bold font-serif text-blackish mb-10 md:mb-20"
-        >
-          {mainTitle}
-        </h1>
 
+        <Heading2 text={mainTitle} className="text-center mb-20" />
         {/* Section */}
         <div
           ref={section1Ref}
@@ -70,9 +66,7 @@ export default function Customize({
             {/* Text Section */}
             <div className="h-full flex flex-col md:flex-row items-center p-8 md:p-12 z-20">
               <div className="text-white w-full md:w-4/6 pr-0 md:pr-8 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold font-serif mb-6">
-                  {sectionTitle}
-                </h2>
+                <Heading3 text={sectionTitle} className="mb-4" />
                 <p>{description}</p>
                 {/* Description List */}
                 <div
@@ -82,13 +76,16 @@ export default function Customize({
                   {descriptionList.map((item, index) => {
                     const Icon = item.icon;
                     return (
-                      <p key={index} className="flex items-start gap-2 leading-relaxed">
-                        <Icon className="w-5 h-5 text-shadow-white flex-shrink-0 mt-2" />
-                        {item.text}
-                      </p>
+                      <div key={index} className="flex items-start gap-2 mt-4">
+                        <Icon className="w-5 h-5 text-shadow-white flex-shrink-0 mt-1" />
+                        <RichParagraph white={true}>
+                          {item.text}
+                        </RichParagraph>
+                      </div>
+
                     );
                   })}
-                  <div className="mt-4">{lastText}</div>
+                  <div className="mt-4"><RichParagraph white={true}>{lastText}</RichParagraph></div>
                 </div>
 
                 {/* Toggle Button */}
