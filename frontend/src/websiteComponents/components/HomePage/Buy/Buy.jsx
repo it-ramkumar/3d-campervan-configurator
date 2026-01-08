@@ -64,7 +64,7 @@ export default function Buy() {
   if (loading) return <Loader />;
 
   return (
-    <section className="bg-white mt-24 font-serif overflow-x-hidden">
+    <section className="bg-white mt-10 md:mt-24 py-12  font-serif overflow-x-hidden">
       <div className="container mx-auto px-4">
         {/* Main Heading Section */}
         <div className="text-center max-w-4xl mx-auto mb-12">
@@ -158,26 +158,34 @@ export default function Buy() {
             ))}
           </Swiper>
 
-          {/* Custom Navigation Arrows */}
-          <div className="absolute bottom-0 right-2 md:right-16 flex gap-4 z-20 translate-y-14">
-            <button
-              onClick={() => swiperRef.current?.swiper.slidePrev()}
-              className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
-            >
-              <span className="rotate-180"><ArrowIcon /></span>
-            </button>
-            <button
-              onClick={() => swiperRef.current?.swiper.slideNext()}
-              className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
-            >
-              <ArrowIcon />
-            </button>
-          </div>
+
+
         </div>
 
-        <div className="text-center mt-20">
-          <BlackButton label="Browse Full Inventory" link="/vans-for-sale" />
-        </div>
+        {/* ⬇️ NEW ACTION BAR: Isme "Browse" aur "Arrows" aamne-saamne hain */}
+    <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-12 px-2 md:px-16">
+
+      {/* Left side: Browse Button */}
+      <div className="order-2 md:order-1">
+        <BlackButton label="Browse Full Inventory" link="/vans-for-sale" />
+      </div>
+
+      {/* Right side: Navigation Arrows */}
+      <div className="flex gap-4 order-1 md:order-2">
+        <button
+          onClick={() => swiperRef.current?.swiper.slidePrev()}
+          className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
+        >
+          <span className="rotate-180"><ArrowIcon /></span>
+        </button>
+        <button
+          onClick={() => swiperRef.current?.swiper.slideNext()}
+          className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
+        >
+          <ArrowIcon />
+        </button>
+      </div>
+    </div>
       </div>
     </section>
   );

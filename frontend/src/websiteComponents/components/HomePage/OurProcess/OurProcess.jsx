@@ -217,7 +217,7 @@ export default function OurProcess() {
   }, []);
 
   return (
-    <div className="bg-black/75 text-white  py-24 px-4 md:px-8 font-serif overflow-x-hidden">
+    <div className="bg-black/75 text-white  py-10 md:py-24 px-4 md:px-8 font-serif overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20" ref={headerRef}>

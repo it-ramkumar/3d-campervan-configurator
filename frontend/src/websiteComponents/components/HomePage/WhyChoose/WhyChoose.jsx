@@ -130,7 +130,7 @@ const WhyChoose = () => {
   };
 
   return (
-    <div className="bg-gray-100 text-blackish py-12 mt-24 font-serif overflow-hidden">
+    <div className="bg-gray-100 text-blackish py-12 md:mt-24 mt-10 font-serif overflow-hidden">
       <header className=" text-center">
         <Heading2 text={"Why Choose Big Bear Vans?"} />
        <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4">At Big Bear Vans, we have a full-fledged team of experienced campervan

@@ -30,7 +30,7 @@ export default function Blog() {
   if (loading) return <Loader />;
 
   return (
-    <section className="w-full mt-24 py-12 bg-gray-100">
+    <section className="w-full mt-10 md:mt-24 py-12 bg-gray-100">
       <div className="container mx-auto px-4">
 
         {/* Header Section */}

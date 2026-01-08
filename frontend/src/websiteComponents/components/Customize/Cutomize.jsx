@@ -23,7 +23,7 @@ export default function Customize({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className={`pb-12 md:pb-24 pt-12 mt-12 md:mt-24 font-serif bg-gray-100 ${className}`}>
+    <section className={`pb-12 md:pb-24 pt-12 mt-10 md:mt-24 font-serif bg-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
         {/* Header Section */}
         <div className="max-w-3xl mx-auto text-center mb-10 md:mb-16">

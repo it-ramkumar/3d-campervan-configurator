@@ -119,7 +119,7 @@ export default function Testimonials() {
   }, [modalOpen]);
 
   return (
-    <section className="w-full mt-24 py-12 bg-white overflow-hidden">
+    <section className="w-full md:mt-24 mt-10 py-12 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <Heading2 text={"See Why Our Customers Love Us"}/>
