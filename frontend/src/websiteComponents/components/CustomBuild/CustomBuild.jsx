@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import FAQs from "../Faqs/Faqs";
 import Cansultation from "../Consultation/Consultation";
 import HeroSection from "../HeroSection/HeroSection";
+import OurProcess from "../HomePage/OurProcess/OurProcess"
 
 const CustomBuild = () => {
   const imgPath = "/custom build/";
@@ -40,7 +41,7 @@ const CustomBuild = () => {
     }
   ];
 
-    const heroImage = "/images/s2.webp";
+  const heroImage = "/images/s2.webp";
   const newTitleText = "Custom Campervan Builders of Big Bear";
   const newDescriptionText =
     "At Big Bear Vans, we build custom campervans from the ground up. Unlike standard models or limited packages of other companies, we begin with a blank slate and build from the chassis up. You choose the layout, features, and finishes; we handle the design, build, and quality checks.";
@@ -50,7 +51,7 @@ const CustomBuild = () => {
       <Navbar />
       <div className="w-full bg-white text-black font-sans selection:bg-black selection:text-white">
 
-              <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} link="/inquiry" buttonText="" showButton={false} />
+        <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} link="/inquiry" buttonText="" showButton={false} />
 
         {/* ================= INTRO ================= */}
         <section className="py-24 border-b border-gray-100">
@@ -156,17 +157,19 @@ const CustomBuild = () => {
             </div>
           </div>
         </section>
-
+        <section className="py-24">
+          <OurProcess />
+        </section>
         {/* ================= 3D CONFIGURATOR ================= */}
-        <section className="py-24 bg-black text-white">
+        <section className="py-24">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-12">Our 3D Configurator</h2>
             <div className="grid md:grid-cols-2 gap-16 items-start">
               <div className="space-y-8">
-                <p className="text-gray-300 text-lg">
+                <p className=" text-lg">
                   You can start designing your dream campervan right now. In our 3D configurator, you can try different layouts, finishes, and features. Jump into our configurator and start planning your campervan.
                 </p>
-                <ul className="space-y-4 text-gray-400 font-medium italic">
+                <ul className="space-y-4  font-medium italic">
                   <li>— Move things around, test different layouts, and see what feels right.</li>
                   <li>— Select accessories in our configurator and see how they’ll look virtually on your campervan.</li>
                 </ul>
@@ -185,16 +188,16 @@ const CustomBuild = () => {
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-8">Our Portfolio</h2>
             <p className="text-xl text-gray-700 mb-12 max-w-3xl">At Big Bear Vans, we have successfully customized 105+ campervans with a consistent five-star rating. Each van is designed for a specific person with different requirements. Check our past custom builds:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-               <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
-               <div className="bg-gray-50 rounded-xl p-12 flex flex-col justify-center items-center text-center">
-                  <Link to="/layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
-               </div>
+              <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
+              <div className="bg-gray-50 rounded-xl p-12 flex flex-col justify-center items-center text-center">
+                <Link to="/layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ================= OUR CLIENTS (No Image Solution) ================= */}
-        <section className="py-24 bg-white border-y border-gray-100">
+        <section className="py-24 bg-gray-50 border-y border-gray-100">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid lg:grid-cols-2 gap-20 items-start">
               <div className="space-y-8">
@@ -242,7 +245,7 @@ const CustomBuild = () => {
         <section className="py-24 bg-black text-white">
           <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div className="rounded-xl overflow-hidden border-8 border-white/5">
-               <img src={`/images/anna.webp`} alt="Artur and Anna" className="w-full" />
+              <img src={`/images/anna.webp`} alt="Artur and Anna" className="w-full" />
             </div>
             <div className="space-y-8">
               <h2 className="text-5xl font-black uppercase tracking-tighter">Meet the Builders</h2>

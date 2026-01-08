@@ -184,7 +184,10 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       van.detailed_features
     );
     const media = parseJSONField(req.body.media, van.media);
-    const status = req.body.status !== undefined ? req.body.status : van.status; // ✅ Changed from sold to status
+    const status = req.body.status !== undefined ? req.body.status : van.status;
+
+    // ✅ NEW: Parse gallery order (array of existing URLs in desired order)
+    const galleryOrder = parseJSONField(req.body.galleryOrder, null);
 
     // Validate status if provided
     if (req.body.status) {
@@ -196,14 +199,32 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       }
     }
 
-    // Handle gallery images (append to existing)
-    const existingGallery = van.gallery || [];
+    // ✅ Handle gallery reordering and new uploads
+    let updatedGallery = van.gallery || [];
+
+    // If galleryOrder is provided, reorder existing images
+    if (galleryOrder && Array.isArray(galleryOrder)) {
+      // Validate that all URLs in galleryOrder exist in current gallery
+      const validUrls = galleryOrder.filter(url => updatedGallery.includes(url));
+
+      // Keep only the ordered images (removes any not in galleryOrder)
+      updatedGallery = validUrls;
+    }
+
+    // Upload new gallery images
     const newGallery = await Promise.all(
       (req.files["gallery"] || []).map(async file =>
         await uploadToS3(file.buffer, "van/gallery", file.originalname)
       )
     );
-    const updatedGallery = [...existingGallery, ...newGallery];
+
+    // ✅ Parse insertAt index (where to insert new images)
+    const insertAt = req.body.insertAt !== undefined
+      ? parseInt(req.body.insertAt)
+      : updatedGallery.length; // Default: append at end
+
+    // Insert new images at specified index
+    updatedGallery.splice(insertAt, 0, ...newGallery);
 
     van.van_listing = {
       ...van.van_listing,
@@ -221,7 +242,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
 
     van.detailed_features = detailed_features;
     van.media = media;
-    van.status = status; // ✅ Changed from sold to status
+    van.status = status;
     van.gallery = updatedGallery;
 
     // If title changed, generate new slug

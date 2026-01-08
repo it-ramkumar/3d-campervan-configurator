@@ -1,13 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { Search, Trash2 } from "lucide-react";
 
 export default function InteriorList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(null);
-console.log(interiors,"data")
+
   const fetchInteriors = async (query = "") => {
     try {
       setLoading(true);
@@ -18,7 +20,7 @@ console.log(interiors,"data")
       setInteriors(res.data.data);
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch interiors");
+      Swal.fire("Error", "Failed to fetch interior items", "error");
     } finally {
       setLoading(false);
     }
@@ -28,8 +30,23 @@ console.log(interiors,"data")
     fetchInteriors();
   }, []);
 
+  const handleSearch = () => {
+    fetchInteriors(searchTerm);
+  };
+
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
+    const result = await Swal.fire({
+      title: "Delete Interior Item?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#64748b",
+      confirmButtonText: "Yes, delete",
+      customClass: { popup: 'rounded-[2rem]' }
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       setDeleteLoading(id);
@@ -37,116 +54,142 @@ console.log(interiors,"data")
         `${import.meta.env.VITE_REACT_APP_API_URL}/interior/${id}`
       );
       setInteriors(interiors.filter((item) => item._id !== id));
+      Swal.fire("Deleted", "Item removed successfully", "success");
     } catch (err) {
-      console.error(err);
-      alert("Failed to delete item");
+      Swal.fire("Error", "Failed to delete item", "error");
     } finally {
       setDeleteLoading(null);
     }
   };
 
   const handleView = (item) => {
-    alert(`
-Title: ${item.title}
-Category: ${item.subCategoryId?.categoryId?.title || "N/A"}
-SubCategory: ${item.subCategoryId?.title || "N/A"}
-Description: ${item.description?.join(", ") || "N/A"}
-Images: ${item.images?.length}
-    `);
+    Swal.fire({
+      title: `<span class="text-xl font-black">${item.title}</span>`,
+      html: `
+        <div class="text-left space-y-2 text-sm p-4 bg-slate-50 rounded-2xl border border-slate-100">
+          <p><strong>Category:</strong> ${item.subCategoryId?.categoryId?.title || "N/A"}</p>
+          <p><strong>Sub-Category:</strong> ${item.subCategoryId?.title || "N/A"}</p>
+          <p><strong>Description:</strong> ${item.description?.join(", ") || "No description"}</p>
+        </div>
+      `,
+      showConfirmButton: false,
+      customClass: { popup: 'rounded-[2rem]' }
+    });
   };
 
+  if (loading) return (
+    <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
+      <div className="animate-pulse">Loading interior items...</div>
+    </div>
+  );
+
   return (
-    <div className="max-w-7xl mx-auto p-4 lg:p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold">Interior Items</h2>
+    <div className="space-y-8 animate-in fade-in duration-500">
+
+      {/* --- Header Section (Matching BlogsListing) --- */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-black text-slate-800 tracking-tight">Interior Items</h2>
+          <p className="text-sm text-slate-500">Manage your interior customization choices</p>
+        </div>
 
         <button
           onClick={() => setSelected("interior-form")}
-          className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
         >
-          Add New Item
+          <span className="text-lg">+</span> Add New Item
         </button>
       </div>
 
-      {/* Loading */}
-      {loading && (
-        <div className="flex justify-center py-20">
-          <div className="animate-spin h-10 w-10 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+      {/* --- Search Bar (Matching BlogsListing) --- */}
+      <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+        <div className="relative flex-1 min-w-[280px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Search interior by title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-white border-none rounded-xl pl-11 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-100 placeholder:text-slate-400 outline-none"
+          />
         </div>
-      )}
+        <button
+          onClick={handleSearch}
+          className="bg-white border border-slate-200 text-slate-700 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all shadow-sm"
+        >
+          Search
+        </button>
+      </div>
 
-      {/* Items Grid */}
-      {!loading && interiors.length > 0 && (
+      {/* --- Items Grid --- */}
+      {interiors.length === 0 ? (
+        <div className="text-center py-20 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400 font-medium">
+          No interior items found.
+        </div>
+      ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {interiors.map((item) => (
             <div
               key={item._id}
-              className="bg-white rounded-xl shadow border overflow-hidden"
+              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col"
             >
-              {/* Image */}
-              <div className="relative h-48 bg-gray-100 overflow-hidden">
+              {/* Image Section */}
+              <div className="relative h-44 overflow-hidden bg-slate-50">
                 <img
                   src={item.images?.[0]}
                   alt={item.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
 
-                {/* Delete */}
+                {/* Quick Delete Overlay */}
                 <button
                   onClick={() => handleDelete(item._id)}
                   disabled={deleteLoading === item._id}
-                  className="absolute top-3 right-3 bg-red-600 text-white p-2 rounded-lg shadow"
+                  className="absolute top-3 right-3 bg-white/80 backdrop-blur-md text-red-500 p-2.5 rounded-xl shadow-sm hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"
                 >
                   {deleteLoading === item._id ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                   ) : (
-                    "X"
+                    <Trash2 className="w-4 h-4" />
                   )}
                 </button>
               </div>
 
-              {/* Content */}
-              <div className="p-4">
-                <h3 className="font-semibold text-lg">{item.title}</h3>
+              {/* Content Section */}
+              <div className="p-5 flex-1 flex flex-col">
+                <div className="mb-4">
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
+                        {item.subCategoryId?.categoryId?.title || "Interior"}
+                     </span>
+                   </div>
+                  <h3 className="font-bold text-slate-800 text-base line-clamp-1">{item.title}</h3>
+                  <p className="text-slate-400 text-xs mt-1 font-medium italic">
+                    {item.subCategoryId?.title || "No Subcategory"}
+                  </p>
+                </div>
 
-                {/* Category + SubCategory */}
-                <p className="text-sm text-gray-600 mt-1">
-                  Category:{" "}
-                  <span className="font-medium">
-                    {item.subCategoryId?.categoryId?.title}
-                  </span>
-                </p>
-
-                <p className="text-sm text-gray-600 mt-1">
-                  SubCategory:{" "}
-                  <span className="font-medium">
-                    {item.subCategoryId?.title}
-                  </span>
-                </p>
-
-                {/* Description */}
+                {/* Description Snippet */}
                 {item.description?.length > 0 && (
-                  <p className="text-gray-700 text-sm mt-2 line-clamp-2">
+                  <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-2 mb-4">
                     {item.description.join(", ")}
                   </p>
                 )}
 
                 {/* Actions */}
-                <div className="flex gap-2 mt-4">
+                <div className="mt-auto flex gap-2">
                   <button
                     onClick={() => handleView(item)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm"
+                    className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-[11px] hover:bg-slate-100 transition-all active:scale-95"
                   >
                     View
                   </button>
-
                   <button
                     onClick={() => {
                       setSelected("interior-form");
-                      console.log("edit ->", item);
+                      // If you use dispatch for edit data, add it here
                     }}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm"
+                    className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit
                   </button>
@@ -154,13 +197,6 @@ Images: ${item.images?.length}
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!loading && interiors.length === 0 && (
-        <div className="text-center py-20 text-gray-600">
-          No items found. Add your first item!
         </div>
       )}
     </div>

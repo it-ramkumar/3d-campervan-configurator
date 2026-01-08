@@ -85,7 +85,7 @@ const VansForm = ({ setSelected }) => {
     }
   }, [editData]);
 
-  const resetForm = () => {
+const resetForm = () => {
     setFormData({
       van_listing: {
         title: "",
@@ -151,6 +151,7 @@ const VansForm = ({ setSelected }) => {
 
     setLoading(true);
     try {
+      // Purani images jo delete ki gayi hain
       if (removedExistingGallery.length > 0) {
         await Promise.all(
           removedExistingGallery.map(url =>
@@ -161,35 +162,37 @@ const VansForm = ({ setSelected }) => {
 
       const formToSend = new FormData();
 
+      // Nayi files
       galleryFiles.forEach((file) => formToSend.append("gallery", file));
 
-      const updatedExistingGallery = existingGallery.filter(url => !removedExistingGallery.includes(url));
+      // ✅ IMPORTANT: Current sorted order of existing images
+      formToSend.append("galleryOrder", JSON.stringify(existingGallery));
 
-      formToSend.append("existingGallery", JSON.stringify(updatedExistingGallery));
-
+      // Media and other data
       const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
       formToSend.append("media", JSON.stringify(cleanedMediaUrls));
-
       formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("status", formData.status); // Changed from 'sold' to 'status'
+      formToSend.append("status", formData.status);
       formToSend.append("detailed_features", JSON.stringify(features));
+
+      // Agar nayi images ko gallery ke shuruat mein dalna hai toh insertAt: 0 bhej sakte hain
+      formToSend.append("insertAt", "0");
 
       if (editData?._id) {
         await updateVan(editData, formToSend);
-        resetForm();
-        setSelected("Vans-listing")
+        setSelected("Vans-listing");
       } else {
         await createVan(formToSend);
-        resetForm();
-        setSelected("Vans-listing")
+        setSelected("Vans-listing");
       }
 
-      setRemovedExistingGallery([]);
+      Swal.fire("Success", "Van details saved successfully!", "success");
+      resetForm();
     } catch (err) {
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: err.response.data.message,
+        title: "Submission Failed",
+        text: err.response?.data?.message || "Internal server error",
       });
     } finally {
       setLoading(false);
@@ -432,11 +435,10 @@ const VansForm = ({ setSelected }) => {
                   {statusOptions.map((option) => (
                     <label
                       key={option.value}
-                      className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        formData.status === option.value
+                      className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.status === option.value
                           ? "border-green-600 bg-green-50"
                           : "border-gray-300 hover:border-gray-400"
-                      }`}
+                        }`}
                     >
                       <input
                         type="radio"

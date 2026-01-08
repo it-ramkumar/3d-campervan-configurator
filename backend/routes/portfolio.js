@@ -197,9 +197,6 @@ router.get("/category", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
-
-
 router.get("/wheel-base", async (req, res) => {
   try {
     let { wheelBase, search, size, sit, sleep, model, bedType, bathroomType, page = 1, limit = 10 } = req.query;
@@ -318,8 +315,6 @@ router.get("/wheel-base", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
-
-
 router.get("/navCat", async (req, res) => {
   try {
     const categories = await PortfolioVan.distinct("category");
@@ -370,40 +365,43 @@ router.put(
         });
       }
 
-      // Parse JSON fields
+      // 1. Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || JSON.stringify(portfolio.van_listing));
       const detailed_features = JSON.parse(req.body.detailed_features || JSON.stringify(portfolio.detailed_features));
-      const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media)); // ✅ Simple URLs
+      const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media));
       const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
 
-      // ✅ Multi-category support
+      // 2. Multi-category support
       let category = req.body.category || portfolio.category;
       if (typeof category === "string") {
         try {
-          category = JSON.parse(category); // Convert JSON string to array
+          category = JSON.parse(category);
         } catch (e) {
-          category = [category]; // Single string fallback
+          category = [category];
         }
       }
 
-      // Validate category array
-      if (!Array.isArray(category) || category.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "At least one category is required"
-        });
+      // 3. ✅ GALLERY REORDERING & UPLOAD LOGIC
+      // Frontend se hume 'existingGallery' mein sorted URLs mil rahe hain
+      let finalGalleryOrder = [];
+      if (req.body.existingGallery) {
+        finalGalleryOrder = JSON.parse(req.body.existingGallery);
+      } else {
+        finalGalleryOrder = portfolio.gallery || [];
       }
 
-      // Handle gallery images (append to existing)
-      const existingGallery = portfolio.gallery || [];
-      const newGallery = await Promise.all(
+      // Nayi images upload karo
+      const newGalleryUploads = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-      const updatedGallery = [...existingGallery, ...newGallery];
 
-      // Update portfolio
+      // ✅ Nayi images ko last mein append karo ya logic ke hisaab se handle karo
+      // Final array = [Sorted Existing Images] + [New Uploaded Images]
+      const updatedGallery = [...finalGalleryOrder, ...newGalleryUploads];
+
+      // 4. Update portfolio fields
       portfolio.van_listing = {
         ...portfolio.van_listing,
         ...van_listing,
@@ -418,13 +416,13 @@ router.put(
         } : portfolio.van_listing.specifications
       };
 
-      portfolio.category = category; // ✅ Updated for multi-category array
+      portfolio.category = category;
       portfolio.sold = sold;
-      portfolio.gallery = updatedGallery;
+      portfolio.gallery = updatedGallery; // ✅ Ye ab ordered gallery hai
       portfolio.detailed_features = detailed_features;
-      portfolio.media = media; // ✅ Direct assignment of URL strings
+      portfolio.media = media;
 
-      // If title changed, generate new slug
+      // Title/Slug logic
       if (van_listing.title && van_listing.title !== portfolio.van_listing.title) {
         portfolio.slug = await PortfolioVan.generateSlug(van_listing.title);
       }

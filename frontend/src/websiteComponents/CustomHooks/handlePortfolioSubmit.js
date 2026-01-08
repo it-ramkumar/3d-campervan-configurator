@@ -11,7 +11,7 @@ export const handlePortfolioSubmit = async ({
   title,
   category,
   galleryFiles,
-  existingGallery,
+  existingGallery, // Ye ab hamara naya order hai
   removedExistingGallery,
   features,
   mediaUrls,
@@ -52,25 +52,27 @@ export const handlePortfolioSubmit = async ({
     // 2️⃣ Prepare FormData
     const formDataToSend = new FormData();
 
-    // New gallery uploads
+    // New gallery uploads (Files)
     galleryFiles.forEach((file) =>
       formDataToSend.append("gallery", file)
     );
 
-    // Remaining existing gallery
-    const updatedExistingGallery = existingGallery.filter(
+    // ✅ REORDER LOGIC:
+    // existingGallery mein images already waisi hain jaisi user ne drag ki hain.
+    // Hum bas ye ensure kar rahe hain ki deleted images isme na hon.
+    const finalOrderedGallery = existingGallery.filter(
       (url) => !removedExistingGallery.includes(url)
     );
+
+    // Hum ise "galleryOrder" ya "existingGallery" ke naam se bhej sakte hain
+    // Aapka backend jo bhi key expect kar raha ho (standard usually existingGallery hi rehta hai)
     formDataToSend.append(
       "existingGallery",
-      JSON.stringify(updatedExistingGallery)
+      JSON.stringify(finalOrderedGallery)
     );
 
     // Van listing
-    formDataToSend.append(
-      "van_listing",
-      JSON.stringify(van_listing)
-    );
+    formDataToSend.append("van_listing", JSON.stringify(van_listing));
 
     // Sold status
     formDataToSend.append("sold", sold.toString());
@@ -86,22 +88,14 @@ export const handlePortfolioSubmit = async ({
       }))
       .filter(
         (feature) =>
-          feature.category.trim() !== "" || feature.items.length > 0
+          feature.category.trim() !== "" || (feature.items && feature.items.length > 0)
       );
 
-    formDataToSend.append(
-      "detailed_features",
-      JSON.stringify(cleanedFeatures)
-    );
+    formDataToSend.append("detailed_features", JSON.stringify(cleanedFeatures));
 
     // Media URLs
-    const cleanedMediaUrls = mediaUrls.filter(
-      (url) => url.trim() !== ""
-    );
-    formDataToSend.append(
-      "media",
-      JSON.stringify(cleanedMediaUrls)
-    );
+    const cleanedMediaUrls = mediaUrls.filter((url) => url.trim() !== "");
+    formDataToSend.append("media", JSON.stringify(cleanedMediaUrls));
 
     // 3️⃣ Submit
     if (editData?._id) {
@@ -113,6 +107,15 @@ export const handlePortfolioSubmit = async ({
     clearForm();
     setSelected("portfolio-listing");
     setRemovedExistingGallery([]);
+
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: editData ? "Portfolio updated successfully!" : "Portfolio created successfully!",
+      timer: 2000,
+      showConfirmButton: false
+    });
+
   } catch (error) {
     console.error("Portfolio submit error:", error);
     Swal.fire({

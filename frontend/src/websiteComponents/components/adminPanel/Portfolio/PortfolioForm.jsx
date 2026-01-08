@@ -96,49 +96,50 @@ export default function PortfolioForm({ setSelected }) {
       });
     };
   }, [galleryPreviews]);
+  // Form Submit Handler
+  const onSubmit = (e) => {
+    // Hum handlePortfolioSubmit ko call kar rahe hain aur galleryOrder pass kar rahe hain
+    handlePortfolioSubmit({
+      e,
+      editData,
+      title,
+      category,
+      galleryFiles,
+      existingGallery, // Ye pass karna zaroori hai
+      galleryOrder: existingGallery, // Backend ko ordered array bhej raha hai
+      removedExistingGallery,
+      features,
+      mediaUrls,
+      sold,
+      van_listing: {
+        title,
+        subtitle,
+        description,
+        price,
+        size,
+        roof,
+        bedType,
+        bathroomType,
+        specifications: {
+          make_model: makeModel,
+          wheelbase,
+          drivetrain,
+          capacity,
+        },
+      },
+      setLoading,
+      setRemovedExistingGallery,
+      clearForm,
+      setSelected,
+    });
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg border border-gray-300">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">
         {editData ? "Edit Portfolio Van" : "Create Portfolio Van"}
       </h2>
-      <form
-        onSubmit={(e) =>
-          handlePortfolioSubmit({
-            e,
-            editData,
-            title,
-            category,
-            galleryFiles,
-            existingGallery,
-            removedExistingGallery,
-            features,
-            mediaUrls,
-            sold,
-            van_listing: {
-              title,
-              subtitle,
-              description,
-              price,
-              size,
-              roof,
-              bedType,
-              bathroomType,
-              specifications: {
-                make_model: makeModel,
-                wheelbase,
-                drivetrain,
-                capacity,
-              },
-            },
-            setLoading,
-            setRemovedExistingGallery,
-            clearForm,
-            setSelected,
-          })
-        }
-        className="space-y-8"
-      >
+   <form onSubmit={onSubmit} className="space-y-8">
 
         {/* BASIC INFO */}
         <div className="border border-gray-300 rounded-lg p-6">
