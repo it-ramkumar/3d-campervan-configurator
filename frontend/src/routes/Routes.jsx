@@ -47,6 +47,8 @@ const JobDetail = lazy(() => import("../websiteComponents/components/Jobs/JobDet
 const JoAppForm = lazy(() => import("../websiteComponents/components/JobApp/JobApp"));
 const Jobs = lazy(() => import("../websiteComponents/components/Jobs/JobsListing"));
 const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBuild/CustomBuild"));
+const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/QuickLinks"));
+
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -106,6 +108,8 @@ const AppRoutes = () => {
           <Route path="/apply/:id" element={<JoAppForm />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/custom-build" element={<CustomBuild />} />
+          <Route path="/quick-links" element={<QuickLiks />} />
+
         </Routes>
       </Suspense>
     </>

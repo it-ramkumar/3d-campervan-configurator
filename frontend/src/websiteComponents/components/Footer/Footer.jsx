@@ -98,6 +98,7 @@ export default function Footer() {
               <FooterListItem to="/about-us" className="sm:text-base md:text-lg lg:text-[16px]">About Us</FooterListItem>
               <FooterListItem to="/jobs" className="sm:text-base md:text-lg lg:text-[16px]">Career</FooterListItem>
               <FooterListItem to="/blogs" className="sm:text-base md:text-lg lg:text-[16px]">Blog</FooterListItem>
+              <FooterListItem to="/quick-links" className="sm:text-base md:text-lg lg:text-[16px]">Quick Links</FooterListItem>
             </ul>
           </div>
 

@@ -70,6 +70,39 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.put(
+  "/reorder",
+  async (req, res) => {
+    try {
+      const { links } = req.body;
+      // expected format:
+      // links: [{ _id: "...", order: 1 }, { _id: "...", order: 2 }]
+
+      if (!Array.isArray(links)) {
+        return res.status(400).json({ message: "Invalid payload" });
+      }
+
+      const bulkOps = links.map((item) => ({
+        updateOne: {
+          filter: { _id: item._id },
+          update: { order: item.order },
+        },
+      }));
+
+      await QuickLink.bulkWrite(bulkOps);
+
+      res.status(200).json({
+        message: "Quick links reordered successfully",
+      });
+    } catch (err) {
+      console.error("SERVER ERROR:", err);
+      res.status(500).json({
+        message: "Server error",
+        error: err.message,
+      });
+    }
+  }
+);
 // Edit a quick link
 router.put('/:id', upload.fields([
   { name: "icon", maxCount: 1 }
@@ -123,6 +156,7 @@ router.put('/:id', upload.fields([
   }
 });
 
+
 // Delete a quick link
 router.delete('/:id', async (req, res) => {
   try {
@@ -154,5 +188,7 @@ router.delete('/:id', async (req, res) => {
     });
   }
 });
+// 🔥 REORDER QUICK LINKS
+
 
 module.exports = router;
