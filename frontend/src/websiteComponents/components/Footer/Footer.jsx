@@ -67,10 +67,10 @@ export default function Footer() {
             </Link>
             <RichParagraph white={true}>
 
-<span className="text-sm text-white">
+              <span className="text-sm text-white">
 
-              Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
-</span>
+                Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
+              </span>
             </RichParagraph>
 
 
@@ -101,6 +101,7 @@ export default function Footer() {
               <FooterListItem to="/about-us" className="text-sm">About Us</FooterListItem>
               <FooterListItem to="/jobs" className="text-sm">Career</FooterListItem>
               <FooterListItem to="/blogs" className="text-sm">Blog</FooterListItem>
+              <FooterListItem to="/faq" className="text-sm">FAQs</FooterListItem>
               <FooterListItem to="/quick-links" className="text-sm">Quick Links</FooterListItem>
             </ul>
           </div>
@@ -117,11 +118,11 @@ export default function Footer() {
                   <span >
                     <RichParagraph white={true}>
                       <span className="text-sm text-white">
-                       320 W Big Bear Blvd, Big Bear City, California, 92314, USA
+                        320 W Big Bear Blvd, Big Bear City, California, 92314, USA
 
                       </span>
-                      </RichParagraph>
-                       </span>
+                    </RichParagraph>
+                  </span>
                   <FaCopy onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                 </div>
               </li>
@@ -132,9 +133,9 @@ export default function Footer() {
                     <Link to="tel:+19514419748" ><RichParagraph white={true}
                     >
                       <span className="text-sm text-white">
-+1 (951) 441-9748
+                        +1 (951) 441-9748
                       </span>
-                      </RichParagraph></Link>
+                    </RichParagraph></Link>
                     <FaCopy onClick={() => handleCopy("+19514419748")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                   </div>
                   <div className="flex items-center gap-2 text-sm">
@@ -148,7 +149,7 @@ export default function Footer() {
                 <FaEnvelope className="text-white mt-1 text-sm" />
                 <Link to="mailto:bigbearvans@gmail.com" ><RichParagraph white={true}>
                   <span className="text-sm text-white">bigbearvans@gmail.com</span>
-                  </RichParagraph></Link>
+                </RichParagraph></Link>
               </li>
             </ul>
           </div>
@@ -160,48 +161,48 @@ export default function Footer() {
 
             <ul className="space-y-2 mb-6 text-sm">
               <li className="flex justify-between text-gray-300">
-                  <RichParagraph white={true}>
-                <span className="text-sm text-white">
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
                     Mon - Fri:
                   </span>
-                    </RichParagraph>
-                  <RichParagraph white={true}>
-                <span className="text-sm text-white">
+                </RichParagraph>
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
                     9:00 AM - 6:00 PM
-                    </span>
-                    </RichParagraph>
+                  </span>
+                </RichParagraph>
               </li>
               <li className="flex justify-between text-gray-300">
-                    <RichParagraph white={true}>
-                   <span className="text-sm text-white">
-                      Saturday:
-                      </span>
-                      </RichParagraph>
-                  <RichParagraph white={true}>
-                <span className="text-sm text-white">
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
+                    Saturday:
+                  </span>
+                </RichParagraph>
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
                     10:00 AM - 4:00 PM
-                    </span>
-                    </RichParagraph>
+                  </span>
+                </RichParagraph>
 
               </li>
 
               <li className="flex justify-between text-gray-300">
-                    <RichParagraph white={true}>
-                   <span className="text-sm text-white">
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
                     Sunday:
-                    </span>
-                    </RichParagraph>
-                  <RichParagraph white={true}>
-                <span className="text-sm text-white">
+                  </span>
+                </RichParagraph>
+                <RichParagraph white={true}>
+                  <span className="text-sm text-white">
                     By Appointment
-                    </span>
-                    </RichParagraph>
+                  </span>
+                </RichParagraph>
               </li>
             </ul>
 
             {/* Newsletter Signup */}
             <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-            <Heading4 text="Stay Updated" white={true} className="my-2"/>
+              <Heading4 text="Stay Updated" white={true} className="my-2" />
 
               <div className="flex gap-2">
                 <input
@@ -227,12 +228,12 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center">
-<RichParagraph white={true}>
-  <span className="text-sm text-white">
+          <RichParagraph white={true}>
+            <span className="text-sm text-white">
 
-   © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
-  </span>
-</RichParagraph>
+              © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
+            </span>
+          </RichParagraph>
 
         </div>
       </div>
