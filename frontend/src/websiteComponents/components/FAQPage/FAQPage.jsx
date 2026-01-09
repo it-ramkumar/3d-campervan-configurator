@@ -73,7 +73,7 @@ const FAQPage = () => {
       {/* HERO SECTION - Full Width */}
       <section className="relative h-[500px] w-full flex items-center justify-center bg-black overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&q=80&w=1600"
+          src="/longVans/image1.jpg"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
           alt="Big Bear Van Adventure"
         />
