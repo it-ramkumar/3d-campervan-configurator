@@ -5,10 +5,10 @@ const RichParagraph = ({
   className = "",
   inlineStyle = {},
   white = false,
+  onClick,
 }) => {
-  const finalColorClass = white ? "text-white" : textColor;
+  const finalColorClass = white ? "text-white" : "text-black";
 
-  // Either render HTML or children
   if (html) {
     return (
       <p
@@ -21,7 +21,13 @@ const RichParagraph = ({
 
   return (
     <p
-      className={`text-sm sm:text-base md:text-lg lg:text-[16px] leading-relaxed font-serif ${finalColorClass} ${className}`}
+      onClick={onClick}
+      className={`
+        text-sm sm:text-base md:text-lg lg:text-[16px]
+        leading-relaxed font-serif
+        ${finalColorClass}
+        ${className}
+      `}
       style={inlineStyle}
     >
       {children}

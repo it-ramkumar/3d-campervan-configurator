@@ -65,25 +65,28 @@ export default function Footer() {
                 click={true}
               />
             </Link>
-            <RichParagraph textColor="text-white">
+            <RichParagraph white={true}>
+
+<span className="text-sm text-white">
 
               Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
+</span>
             </RichParagraph>
 
 
             {/* Social Icons */}
             <div className="flex gap-4">
               <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
-                <FaTwitter size={30} />
+                <FaTwitter size={20} />
               </Link>
               <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
-                <FaYoutube size={30} />
+                <FaYoutube size={20} />
               </Link>
               <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
-                <FaLinkedin size={30} />
+                <FaLinkedin size={20} />
               </Link>
               <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
-                <FaInstagram size={30} />
+                <FaInstagram size={20} />
               </Link>
             </div>
           </div>
@@ -91,14 +94,14 @@ export default function Footer() {
           {/* Quick Links - ✅ Using FooterListItem */}
           <div>
             <Heading4 text=" Quick Links" textColor="text-white my-4" />
-            <ul className="space-y-3">
-              <FooterListItem to="/" className="sm:text-base md:text-lg lg:text-[16px]">Home</FooterListItem>
-              <FooterListItem to="/vans-for-sale" className="sm:text-base md:text-lg lg:text-[16px]">Vans For Sale</FooterListItem>
-              <FooterListItem to="/layouts" className="sm:text-base md:text-lg lg:text-[16px]"> Layouts</FooterListItem>
-              <FooterListItem to="/about-us" className="sm:text-base md:text-lg lg:text-[16px]">About Us</FooterListItem>
-              <FooterListItem to="/jobs" className="sm:text-base md:text-lg lg:text-[16px]">Career</FooterListItem>
-              <FooterListItem to="/blogs" className="sm:text-base md:text-lg lg:text-[16px]">Blog</FooterListItem>
-              <FooterListItem to="/quick-links" className="sm:text-base md:text-lg lg:text-[16px]">Quick Links</FooterListItem>
+            <ul className="space-y-1">
+              <FooterListItem to="/" className="text-sm">Home</FooterListItem>
+              <FooterListItem to="/vans-for-sale" className="text-sm">Vans For Sale</FooterListItem>
+              <FooterListItem to="/layouts" className="text-sm"> Layouts</FooterListItem>
+              <FooterListItem to="/about-us" className="text-sm">About Us</FooterListItem>
+              <FooterListItem to="/jobs" className="text-sm">Career</FooterListItem>
+              <FooterListItem to="/blogs" className="text-sm">Blog</FooterListItem>
+              <FooterListItem to="/quick-links" className="text-sm">Quick Links</FooterListItem>
             </ul>
           </div>
 
@@ -112,8 +115,11 @@ export default function Footer() {
                 <div className="flex items-center gap-2">
 
                   <span >
-                    <RichParagraph textColor="text-white">
+                    <RichParagraph white={true}>
+                      <span className="text-sm text-white">
                        320 W Big Bear Blvd, Big Bear City, California, 92314, USA
+
+                      </span>
                       </RichParagraph>
                        </span>
                   <FaCopy onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
@@ -123,18 +129,26 @@ export default function Footer() {
                 <FaPhoneAlt className="text-white mt-1 text-sm" />
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2 text-sm">
-                    <Link to="tel:+19514419748" ><RichParagraph textColor="text-white">+1 (951) 441-9748</RichParagraph></Link>
+                    <Link to="tel:+19514419748" ><RichParagraph white={true}
+                    >
+                      <span className="text-sm text-white">
++1 (951) 441-9748
+                      </span>
+                      </RichParagraph></Link>
                     <FaCopy onClick={() => handleCopy("+19514419748")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                   </div>
                   <div className="flex items-center gap-2 text-sm">
-                    <Link to="tel:+19514419719" c><RichParagraph textColor="text-white">+1 (951) 441-9719</RichParagraph></Link>
+                    <Link to="tel:+19514419719" c><RichParagraph white={true}>
+                      <span className="text-sm text-white">+1 (951) 441-9719</span></RichParagraph></Link>
                     <FaCopy onClick={() => handleCopy("+19514419719")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
                   </div>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <FaEnvelope className="text-white mt-1 text-sm" />
-                <Link to="mailto:bigbearvans@gmail.com" ><RichParagraph textColor="text-white">bigbearvans@gmail.com</RichParagraph></Link>
+                <Link to="mailto:bigbearvans@gmail.com" ><RichParagraph white={true}>
+                  <span className="text-sm text-white">bigbearvans@gmail.com</span>
+                  </RichParagraph></Link>
               </li>
             </ul>
           </div>
@@ -146,24 +160,48 @@ export default function Footer() {
 
             <ul className="space-y-2 mb-6 text-sm">
               <li className="flex justify-between text-gray-300">
-                <span><RichParagraph textColor="text-white">Mon - Fri:</RichParagraph></span>
-                <span><RichParagraph textColor="text-white">9:00 AM - 6:00 PM</RichParagraph></span>
+                  <RichParagraph white={true}>
+                <span className="text-sm text-white">
+                    Mon - Fri:
+                  </span>
+                    </RichParagraph>
+                  <RichParagraph white={true}>
+                <span className="text-sm text-white">
+                    9:00 AM - 6:00 PM
+                    </span>
+                    </RichParagraph>
               </li>
               <li className="flex justify-between text-gray-300">
-                   <span><RichParagraph textColor="text-white">Saturday:</RichParagraph></span>
-                <span><RichParagraph textColor="text-white">10:00 AM - 4:00 PM</RichParagraph></span>
+                    <RichParagraph white={true}>
+                   <span className="text-sm text-white">
+                      Saturday:
+                      </span>
+                      </RichParagraph>
+                  <RichParagraph white={true}>
+                <span className="text-sm text-white">
+                    10:00 AM - 4:00 PM
+                    </span>
+                    </RichParagraph>
 
               </li>
 
               <li className="flex justify-between text-gray-300">
-                   <span><RichParagraph textColor="text-white">Sunday:</RichParagraph></span>
-                <span><RichParagraph textColor="text-white">By Appointment</RichParagraph></span>
+                    <RichParagraph white={true}>
+                   <span className="text-sm text-white">
+                    Sunday:
+                    </span>
+                    </RichParagraph>
+                  <RichParagraph white={true}>
+                <span className="text-sm text-white">
+                    By Appointment
+                    </span>
+                    </RichParagraph>
               </li>
             </ul>
 
             {/* Newsletter Signup */}
             <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-            <Heading4 text="Stay Updated" textColor="text-white" className="my-2"/>
+            <Heading4 text="Stay Updated" white={true} className="my-2"/>
 
               <div className="flex gap-2">
                 <input
@@ -171,7 +209,7 @@ export default function Footer() {
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 min-w-0 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="flex-1 min-w-0 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
                 />
                 <button
                   onClick={handleSubscribe}
@@ -189,8 +227,11 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center">
-<RichParagraph textColor="text-white">
+<RichParagraph white={true}>
+  <span className="text-sm text-white">
+
    © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
+  </span>
 </RichParagraph>
 
         </div>

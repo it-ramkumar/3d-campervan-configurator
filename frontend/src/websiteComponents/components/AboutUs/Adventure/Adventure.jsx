@@ -156,7 +156,7 @@ export default function AboutPage() {
 
                 </div>
                 <div className="p-8 flex-grow">
-                  <RichParagraph textColor='text-white'>
+                  <RichParagraph white={true}>
                     Our journey with campervans began with our first build in
                     2020—a 2011 Sprinter ambulance. We crafted this van with our
                     own hands for family use, giving it a second life after it
@@ -183,7 +183,7 @@ export default function AboutPage() {
 
                 </div>
                 <div className="p-8 flex-grow">
-                  <RichParagraph textColor='text-white'>
+                  <RichParagraph white={true}>
                     Our second personal van was also an ambulance and featured our
                     first attempt at building an elevator bed.
                   </RichParagraph>
@@ -208,7 +208,7 @@ export default function AboutPage() {
 
                 </div>
                 <div className="p-8 flex-grow">
-                  <RichParagraph textColor='text-white'>
+                  <RichParagraph white={true}>
                     Our third van, Blue Whale, was a standout. This pre-owned Ford
                     Transit 148 wheelbase high roof van, which could accommodate
                     six people, was showcased at expos. It included a bathroom, a
@@ -235,7 +235,7 @@ export default function AboutPage() {
 
                 </div>
                 <div className="p-8 flex-grow">
-                  <RichParagraph textColor='text-white'>
+                  <RichParagraph white={true}>
                     Our fourth van, the demo van Gray Wolf, is a 144 wheelbase
                     Sprinter that sits and sleeps five, reflecting our commitment
                     as van builders to innovation and comfort.
@@ -271,7 +271,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-black/70"></div>
         <div className="relative px-6 z-10 flex flex-col items-center">
           <Heading2 text="Join the Adventure" className='text-white' />
-          <RichParagraph textColor='text-white' className='max-w-2xl my-4'>
+          <RichParagraph white={true} className='max-w-2xl my-4'>
             Become a creator of your own home on wheels. Design your floor plan,
             select materials, and customize finishes as if building your dream
             vacation home. When you have a vision, we make it come true with

@@ -154,7 +154,7 @@ const advantages = [
                   {advantage.icon}
                 </motion.div>
               </div>
-              <RichParagraph textColor='text-white '>
+              <RichParagraph white={true}>
                       {advantage.text}
               </RichParagraph>
             </motion.div>

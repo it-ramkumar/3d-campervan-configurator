@@ -38,7 +38,7 @@ const AirportCard = ({ airport, code, time, description, isPrivate = false, inde
       </div>
 
       {/* Description */}
-      <RichParagraph textColor="text-white">
+      <RichParagraph white={true}>
  {description}
       </RichParagraph>
 
@@ -151,7 +151,7 @@ export default function AirService() {
                 </div>
                 <div className="text-left">
                   <Heading4 text="Complimentary Pickup" />
-                  <RichParagraph textColor="text-white">
+                  <RichParagraph white={true}>
                     We'll greet you at the airport and bring you to our facility
                   </RichParagraph>
                 </div>

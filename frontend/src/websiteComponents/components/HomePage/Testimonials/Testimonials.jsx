@@ -122,10 +122,8 @@ export default function Testimonials() {
     <section className="w-full md:mt-24 mt-10 py-12 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <Heading2 text={"See Why Our Customers Love Us"}/>
-
+          <Heading2 text={"See Why Our Customers Love Us"} />
         </div>
-
         <Swiper
           effect={'coverflow'}
           grabCursor={true}
@@ -152,7 +150,6 @@ export default function Testimonials() {
           {reviews.map((review) => {
             const truncatedText = truncateText(review.text, maxTextLength);
             const isTruncated = review.text.length > maxTextLength;
-
             return (
               <SwiperSlide
                 key={review.id}
@@ -174,25 +171,19 @@ export default function Testimonials() {
 
                   {/* Content */}
                   <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center p-8 space-y-4 transition-transform duration-300 group-hover:scale-105">
-                  <Heading3 text={review.name} className="text-white"/>
-                    {/* <h3 className="font-serif font-semibold text-[28px] leading-tight">
-                      {review.name}
-                    </h3> */}
+                    <Heading3 text={review.name} className="text-white" />
                     <div className="flex gap-1 text-[#FFEF5E]">
                       {renderStars(review.rating)}
                     </div>
-
                     {/* Display Truncated Text */}
-                    <RichParagraph className='text-white'>{truncatedText}</RichParagraph>
-                    {/* <p className="font-serif text-xs sm:text-base font-normal max-w-xl">
-                      {truncatedText}
-                    </p> */}
-
+                    <RichParagraph white={true}>{truncatedText}</RichParagraph>
                     {/* Read More Link (Only show if text was truncated) */}
                     {isTruncated && (
-                      <span className="text-sm font-semibold text-yellow-300 underline mt-2 hover:text-yellow-400">
+                      <RichParagraph className=" text-yellow-300 underline mt-2 hover:text-yellow-400">
                         Read More
-                      </span>
+                      </RichParagraph>
+
+
                     )}
                   </div>
                 </div>

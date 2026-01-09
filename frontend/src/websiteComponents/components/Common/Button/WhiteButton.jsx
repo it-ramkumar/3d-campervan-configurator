@@ -12,9 +12,10 @@ export default function BlackButton({
 }) {
   const baseClasses = `
     text-black font-semibold
+    font-serif
     rounded-sm sm:rounded-base md:rounded-lg
-    text-xs sm:text-sm md:text-base
-    py-1 px-2 sm:py-2.5 sm:px-5 md:py-3 md:px-6
+    text-xs sm:text-sm
+    py-1 px-2 sm:py-2.5 sm:px-5 md:py-2.5 md:px-6
   `;
 
   const enabledClasses = `

@@ -4,6 +4,7 @@ import AirService from "../../AirService/AirService";
 import RichParagraph from "../../Common/Paragraph/RichParagraph";
 import Heading2 from "../../Common/Headings/Heading2";
 import Heading3 from "../../Common/Headings/Heading3";
+import Heading4 from "../../Common/Headings/Heading4";
 
 
 // --- ICONS for the 'Fly in, Drive out' section ---
@@ -131,9 +132,7 @@ const ProcessStep = ({ time, title, details, circleColor, isLast = false, isFirs
         <div className="space-y-6">
           {details.map((item, index) => (
             <div key={index} className="text-left">
-              <RichParagraph className="font-bold">{item.subtitle} <span className="font-normal text-black opacity-70 ml-2">
-                    {item.duration}
-                  </span> </RichParagraph>
+              <Heading4 text={item.subtitle} textColor="text-black"/>
 
               <RichParagraph> {item.description}</RichParagraph>
 
@@ -313,10 +312,9 @@ export default function ProcessPage() {
               <div className="bg-gray-800 text-white rounded-xl p-6 space-y-3 shadow-lg">
                 <div className="flex items-center gap-x-3">
                   <ProTipIcon />
-                  <Heading3 text="Pro Tip" />
-                  {/* <h4 className="font-bold text-xl">Pro Tip</h4> */}
+                  <Heading4 text="Pro Tip" />
                 </div>
-                <RichParagraph className="text-white">
+                <RichParagraph white={true}>
                   You can ship personal gear directly to our shop before you arrive. We'll load it into your new van so you're ready to hit the road immediately.
                 </RichParagraph>
 

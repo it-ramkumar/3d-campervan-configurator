@@ -9,6 +9,8 @@ import RichParagraph from "../../Common/Paragraph/RichParagraph";
 import Heading2 from "../../Common/Headings/Heading2";
 import Heading3 from "../../Common/Headings/Heading3";
 import Heading4 from "../../Common/Headings/Heading4";
+import BlackButton from "../../Common/Button/BlackButton";
+import WhiteButton from "../../Common/Button/WhiteButton"
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Financing() {
@@ -114,7 +116,7 @@ export default function Financing() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
               <div className="relative z-10">
-                <RichParagraph textColor="text-white">
+                <RichParagraph white={true}>
                   Traditional auto loans often do not cover the conversion. However, we have several trusted options and partners to help you fund your dream van.
 
                 </RichParagraph>
@@ -135,17 +137,18 @@ export default function Financing() {
             {navigationItems.map((item) => {
               const Icon = item.icon;
               return (
-                <button
+                <WhiteButton
+                  label={item.label}
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
                   className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl ${activeSection === item.id
-                    ? "bg-gradient-to-r from-[#1e2a4a] to-[#111827] text-white transform -translate-y-1 shadow-xl"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-gradient-to-r from-[#1e2a4a] to-[#111827] text-white transform -translate-y-1 shadow-xl"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {item.label}
-                </button>
+                />
+
+
+
               );
             })}
           </motion.div>
@@ -181,7 +184,7 @@ export default function Financing() {
                     </div>
                     <div>
                       <Heading3 text="Finance the Van Only" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         (Most Common Method)
                       </RichParagraph>
 
@@ -191,7 +194,7 @@ export default function Financing() {
 
                 {/* Content */}
                 <div className="p-6 flex-grow flex flex-col gap-4">
-                  <RichParagraph textColor="text-white">
+                  <RichParagraph white={true}>
                     This is the most common route our clients take. The process is simple:
                   </RichParagraph>
 
@@ -203,7 +206,7 @@ export default function Financing() {
                       </div>
                       <div className="flex-grow">
                         <Heading4 text=" Finance the Van" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           <span className="text-xs text-gray-300">
                             You secure your own financing for the new Sprinter van chassis, often directly through Mercedes-Benz Financial Services.
                           </span>
@@ -217,7 +220,7 @@ export default function Financing() {
                       </div>
                       <div className="flex-grow">
                         <Heading4 text="Pay for Conversion" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           <span className="text-xs text-gray-300">
                             You pay for the custom conversion (typically $90,000 - $150,000) using cash or a separate line of credit.
                           </span>
@@ -238,7 +241,7 @@ export default function Financing() {
                     </div>
                     <div>
                       <Heading4 text="All-in-One Loan" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           (Mercedes Sprinter Van + Conversion)                          </span>
                       </RichParagraph>
@@ -256,7 +259,7 @@ export default function Financing() {
                       </div>
                       <div className="flex-grow">
                         <Heading4 text="Partner" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           <span className="text-xs text-gray-300">
                             We work directly with a partner Mercedes dealership.
                           </span>
@@ -271,7 +274,7 @@ export default function Financing() {
                       </div>
                       <div className="flex-grow">
                         <Heading4 text="Loan" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           <span className="text-xs text-gray-300">
                             They can include our estimate for the custom build into one extended 6-year car loan.
                           </span>
@@ -286,7 +289,7 @@ export default function Financing() {
                       </div>
                       <div className="flex-grow">
                         <Heading4 text="Requirements" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           <span className="text-xs text-gray-300">
                             This loan covers both the new Sprinter and the conversion, and typically requires a 30% down payment.
                           </span>
@@ -297,7 +300,7 @@ export default function Financing() {
                   </div>
 
                   <div className="bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm mt-auto">
-                    <RichParagraph textColor="text-white">
+                    <RichParagraph white={true}>
                       How to apply: please call us, we will go over the quote for a custom build, and then submit it together to the dealership.
 
                     </RichParagraph>
@@ -335,7 +338,7 @@ export default function Financing() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <Heading4 text="RV Loan Financing" />
-                    <RichParagraph textColor="text-white">
+                    <RichParagraph white={true}>
                       Through our trusted partner
                     </RichParagraph>
                   </div>
@@ -351,7 +354,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Provider" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Trident Funding - Specialized RV financing experts                          </span>
                       </RichParagraph>
@@ -364,7 +367,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Loan Type" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           RV Loan specifically designed for campervans                       </span>
                       </RichParagraph>
@@ -377,12 +380,10 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Requirements" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Good credit score and a 20% down payment. Minimum credit score typically 680+                        </span>
                       </RichParagraph>
-                      {/* <p className="text-white text-[11px] sm:text-xs font-semibold mb-0.5">Requirements</p>
-                      <p className="text-gray-400 text-[9px] sm:text-[10px] leading-relaxed break-words">Good credit score and a 20% down payment. Minimum credit score typically 680+</p> */}
                     </div>
                   </div>
 
@@ -392,12 +393,11 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Process" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Quick pre-approval with soft credit check that doesn't affect your credit score                        </span>
                       </RichParagraph>
-                      {/* <p className="text-white text-[11px] sm:text-xs font-semibold mb-0.5">Process</p>
-                      <p className="text-gray-400 text-[9px] sm:text-[10px] leading-relaxed break-words"></p> */}
+
                     </div>
                   </div>
 
@@ -407,7 +407,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Benefits" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Competitive interest rates, flexible terms (up to 15 years), quick approval process, specialized understanding of campervan values                       </span>
                       </RichParagraph>
@@ -420,7 +420,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <Heading4 text="Loan Amounts" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph>
                         <span className="text-xs text-gray-300">
                           Available for campervans ranging from $50,000 to $250,000+                         </span>
                       </RichParagraph>
@@ -474,7 +474,7 @@ export default function Financing() {
                   </div>
                   <div>
                     <Heading4 text="Real Estate Collateral" />
-                    <RichParagraph textColor="text-white">
+                    <RichParagraph white={true}>
                       <span className="text-xs text-gray-300">
                         Leverage your property for better terms</span>
                     </RichParagraph>
@@ -492,7 +492,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow">
                       <Heading4 text="Provider" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           ADU Loans Net (CrossCountry Mortgage)</span>
                       </RichParagraph>
@@ -505,7 +505,7 @@ export default function Financing() {
                     </div>
                     <div className="flex-grow">
                       <Heading4 text="Loan Type" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Uses your real estate as collateral</span>
                       </RichParagraph>
@@ -519,7 +519,7 @@ export default function Financing() {
                     <Star className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div className="flex-grow">
                       <Heading4 text="Benefit" />
-                      <RichParagraph textColor="text-white">
+                      <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
                           Often provides very good interest rates compared to traditional auto or RV loans.</span>
                       </RichParagraph>
@@ -545,21 +545,10 @@ export default function Financing() {
             </div>
 
             <Heading3 text="Have Questions?" className="my-4" />
-            <RichParagraph textColor="text-white" className="my-6">
+            <RichParagraph white={true} className="my-6">
               If you are unsure which option is best for you, please contact us. We will be happy to discuss your project and help you find the right path.
-
             </RichParagraph>
-
-
-            <motion.a
-              href="https://bigbearvans.com/contact/"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 bg-white text-[#1e2a4a] px-6 sm:px-8 py-4 rounded-xl font-semibold text-sm sm:text-base hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl"
-            >
-              Contact Us Today
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </motion.a>
+<WhiteButton label={"Contact Us Today"}/>
           </motion.div>
         </div>
       </section>

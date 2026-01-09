@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import BlackButton from "../../Common/Button/BlackButton.jsx";
 import Heading2 from "../../Common/Headings/Heading2.jsx"
 import Heading3 from "../../Common/Headings/Heading3.jsx"
+import Heading4 from "../../Common/Headings/Heading4.jsx";
 import RichParagraph from "../../Common/Paragraph/RichParagraph.jsx"
 
 // Reusable Components
@@ -204,7 +205,7 @@ function FeatureCard({ icon: Icon, title, description, index }) {
         <div className="p-3 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
           <Icon className="w-6 h-6 text-white" />
         </div>
-        <Heading3 text={title} textColor="text-black" />
+        <Heading4 text={title} textColor="text-black" />
       </div>
       <RichParagraph>
         {description}
@@ -223,15 +224,15 @@ function TestimonialCard({ quote, author, van }) {
       <div className="absolute top-6 left-6 text-6xl text-gray-700 opacity-50">
         "
       </div>
-      <RichParagraph textColor="text-white">
+      <RichParagraph white={true}>
         "{quote}"
       </RichParagraph>
 
       <div className="border-t border-gray-700 pt-4">
-        <RichParagraph textColor="text-white">
+        <RichParagraph white={true}>
           {author}
         </RichParagraph>
-        <RichParagraph textColor="text-white">
+        <RichParagraph white={true}>
           Owner of {van}
         </RichParagraph>
       </div>
@@ -370,13 +371,14 @@ export default function ClientStories() {
                   transition={{ delay: 0 * 0.1 }}
                   className="bg-white p-4 md:p-5 rounded-2xl shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 group hover:border-gray-300"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      <Home className="w-5 h-5 text-white" />
+                      <Home className="w-3 h-3 text-white" />
                     </div>
-                    <RichParagraph className="font-bold">
-                      Complete Customization
-                    </RichParagraph>
+
+                    <Heading4 text="Complete Customization" textColor="text-black" />
+
+
                   </div>
                   <RichParagraph textColor="text-black">
                     A fully customized campervan from scratch according to your choices
@@ -390,13 +392,12 @@ export default function ClientStories() {
                   transition={{ delay: 1 * 0.1 }}
                   className="bg-white p-4 md:p-5 rounded-2xl shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 group hover:border-gray-300"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      <Users className="w-5 h-5 text-white" />
+                      <Users className="w-3 h-3 text-white" />
                     </div>
-                    <RichParagraph className="font-bold">
-                      Smart Space Design
-                    </RichParagraph>
+                    <Heading4 text="Smart Space Design" textColor="text-black" />
+
                   </div>
                   <RichParagraph>
                     An elevator and a dinette bed system with double swivel seats to accommodate the family of 4-5
@@ -410,13 +411,12 @@ export default function ClientStories() {
                   transition={{ delay: 2 * 0.1 }}
                   className="bg-white p-4 md:p-5 rounded-2xl shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 group hover:border-gray-300"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      <Zap className="w-5 h-5 text-white" />
+                      <Zap className="w-3 h-3 text-white" />
                     </div>
-                    <RichParagraph className="font-bold">
-                      Off-Grid Ready
-                    </RichParagraph>
+                    <Heading4 text=" Off-Grid Ready" textColor="text-black" />
+
 
                   </div>
                   <RichParagraph>
@@ -432,14 +432,11 @@ export default function ClientStories() {
                   transition={{ delay: 3 * 0.1 }}
                   className="bg-white p-4 md:p-5 rounded-2xl shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 group hover:border-gray-300"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-gray-900 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      <Shield className="w-5 h-5 text-white" />
+                      <Shield className="w-3 h-3 text-white" />
                     </div>
-                    <RichParagraph className="font-bold">
-                      Family Focused
-                    </RichParagraph>
-
+                    <Heading4 text="Family Focused" textColor="text-black" />
                   </div>
                   <RichParagraph>
                     Designs that prioritize safety, comfort, and convenience for travelers of all ages
@@ -1074,8 +1071,8 @@ export default function ClientStories() {
             <div className="flex justify-center mb-3">
               <Star className="w-7 h-7 text-white" />
             </div>
-            <Heading2 text="Why Our Clients Choose Us?" textColor="text-white" />
-            <RichParagraph textColor="text-white" className="my-4 max-w-3xl mx-auto text-center">
+            <Heading2 text="Why Our Clients Choose Us?" white={true} />
+            <RichParagraph white={true} className="my-4 max-w-3xl mx-auto text-center">
               With a consistent five-star rating from owners across the USA,
               we've built more than 105 campervans. Here's why these people
               trust us:
@@ -1100,7 +1097,7 @@ export default function ClientStories() {
                 title: "Post-Build Support",
                 description: (
                   <>
-                    <RichParagraph textColor="text-white">
+                    <RichParagraph white={true}>
                       When you buy a customized van from us, we also offer
                       post-build support. You gain:
                     </RichParagraph>
@@ -1137,10 +1134,10 @@ export default function ClientStories() {
                 <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-5 h-5 text-white" />
                 </div>
-                <Heading3 text={feature.title} />
+                <Heading4 text={feature.title} />
 
                 {typeof feature.description === "string" ? (
-                  <RichParagraph textColor="text-white">
+                  <RichParagraph white={true}>
                     {feature.description}
                   </RichParagraph>
 
@@ -1174,8 +1171,8 @@ export default function ClientStories() {
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Heading2 text="See Our Vans in Action"/>
-           
+            <Heading2 text="See Our Vans in Action" />
+
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[

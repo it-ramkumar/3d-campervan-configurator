@@ -65,7 +65,7 @@ export default function AvailableVans({ availableVans }) {
 
   return (
     <>
-      <section ref={sectionRef} className="bg-white overflow-hidden mt-24">
+      <section ref={sectionRef} className="bg-white overflow-hidden mt-10 md:mt-24">
         <div ref={headerRef} className="max-w-7xl mx-auto text-center mb-6 px-4 md:px-8 lg:px-16">
           <Heading2 text='In-Stock & Ready to Roll Vans For Sale' />
         </div>

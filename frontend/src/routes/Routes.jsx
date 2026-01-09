@@ -59,13 +59,13 @@ const AppRoutes = () => {
   }, [location]);
 
   // Show Black Friday label except on specific pages
-  const showBlackFriday = useMemo(
-    () =>
-      !location.pathname.startsWith("/dashboard") &&
-      !location.pathname.startsWith("/login") &&
-      !location.pathname.startsWith("/test"),
-    [location.pathname]
-  );
+  // const showBlackFriday = useMemo(
+  //   () =>
+  //     !location.pathname.startsWith("/dashboard") &&
+  //     !location.pathname.startsWith("/login") &&
+  //     !location.pathname.startsWith("/test"),
+  //   [location.pathname]
+  // );
 
   return (
     <>

@@ -6,17 +6,16 @@ import {
   ChevronDown,
   Sparkles,
   Tag,
-  ArrowRight,
-  ChevronUp,
   Loader2,
   Search,
-  X,
-  Filter,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Heading2 from "../Common/Headings/Heading2";
 import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Loader from "../Loader/Loader"
+import BlackButton from "../Common/Button/WhiteButton";
+import Image from "../Common/ImageWithSkeleton/ImageWithSkeleton"
 
 // --- Configuration Constant ---
 const MAX_INITIAL_ITEMS = 3;
@@ -41,10 +40,6 @@ const contentVariants = {
   },
 };
 
-const itemCardVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1 },
-};
 
 export default function ExteriorChoicesList() {
   const [categories, setCategories] = useState([]);
@@ -128,17 +123,6 @@ export default function ExteriorChoicesList() {
     setExpandedCategories((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
 
-  const toggleAllCategories = () => {
-    const allExpanded = categories.length > 0 && Object.values(expandedCategories).every((v) => v);
-    const newState = {};
-    categories.forEach((cat) => { newState[cat._id] = !allExpanded; });
-    setExpandedCategories(newState);
-  };
-
-  const toggleFullItemList = (categoryId) => {
-    setShowFullItemListMap((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
-  };
-
   const getFilteredCategories = () => {
     let filtered = categories;
     if (selectedCategoryFilter !== "all") {
@@ -167,24 +151,15 @@ export default function ExteriorChoicesList() {
   };
 
   const filteredCategories = getFilteredCategories();
-  const clearFilters = () => { setSearchQuery(""); setSelectedCategoryFilter("all"); };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900/5 flex items-center justify-center p-4 sm:p-8">
-        <div className="text-center">
-          <Loader2 className="animate-spin h-12 w-12 text-gray-700 mx-auto" />
-          <p className="mt-4 text-gray-600 font-medium">Loading categories...</p>
-        </div>
-      </div>
+      <Loader />
     );
   }
 
-  const allExpanded = categories.length > 0 && Object.values(expandedCategories).every((v) => v);
-  const hasActiveFilters = searchQuery.trim() || selectedCategoryFilter !== "all";
-
   return (
-    <div className="min-h-screen bg-white py-6 sm:py-12">
+    <div className="min-h-screen bg-white py-6 sm:py-12 md:mt-24 mt-10">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
@@ -257,16 +232,16 @@ export default function ExteriorChoicesList() {
                         {cat.subCategories.length > 0 && (
                           <div className="flex flex-wrap justify-center gap-2 mb-6">
                             {cat.subCategories.map((sub) => (
-                              <button
-                                key={sub._id}
+                              <BlackButton key={sub._id}
                                 onClick={() => {
                                   setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
                                   setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
                                 }}
-                                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeSubId === sub._id ? "bg-black text-white" : "bg-gray-200 text-gray-800"}`}
-                              >
-                                {sub.title}
-                              </button>
+                                label={sub.title}
+                                className={`transition-all ${activeSubId === sub._id ? "bg-gray-900 text-white" : "text-black"}`}
+                              />
+
+
                             ))}
                           </div>
                         )}
@@ -274,14 +249,13 @@ export default function ExteriorChoicesList() {
                         {/* Items Selection */}
                         <div className="flex flex-wrap justify-center gap-2 mb-8">
                           {activeItems.map((item) => (
-                            <button
+                            <BlackButton
                               key={item._id}
                               onClick={() => setActiveItemMap({ ...activeItemMap, [cat._id]: item })}
-                              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeItem?._id === item._id ? "bg-black text-white" : "bg-gray-100 text-gray-800"}`}
-                            >
-                              {item.title}
-                              {activeItem?._id === item._id && <CheckCircle className="h-4 w-4" />}
-                            </button>
+                              label={item.title}
+                              className={`flex items-center transition-all ${activeItem?._id === item._id ? "bg-gray-900 text-white" : "text-black"}`}
+                            />
+
                           ))}
                         </div>
 
@@ -291,8 +265,11 @@ export default function ExteriorChoicesList() {
                             <motion.div key={activeItem._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white rounded-2xl p-5 sm:p-8 shadow-inner">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                                 <div className={`${alternateLayout ? "" : "md:order-2"}`}>
+
+
                                   {activeItem.images?.[0] && (
-                                    <img src={activeItem.images[0]} alt={activeItem.title} className="w-full h-64 object-cover rounded-2xl shadow-lg" />
+                                    <Image src={activeItem.images[0]} alt={activeItem.title}/>
+                                  
                                   )}
                                 </div>
                                 <div className={`space-y-4 ${alternateLayout ? "" : "md:order-1"}`}>

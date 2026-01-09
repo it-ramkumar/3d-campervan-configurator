@@ -35,7 +35,7 @@ export default function Blog() {
 
         {/* Header Section */}
         <div className="text-center mb-10 lg:mb-14">
-          <Heading2 text="Explore Our Van Life Blog"/>
+          <Heading2 text="Explore Our Van Life Blog" />
           <RichParagraph className="max-w-2xl mx-auto">Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.</RichParagraph>
         </div>
 
@@ -88,7 +88,7 @@ export default function Blog() {
                   <span className="text-[10px] uppercase tracking-[2px] text-white/60 font-bold mb-2 block">
                     {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'Van Life'}
                   </span>
-                  <Heading3 text={post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title} className="text-white"/>
+                  <Heading3 text={post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title} className="text-white" />
                 </div>
               </div>
 
@@ -100,7 +100,7 @@ export default function Blog() {
 
         {/* View All Blogs Button (Optional) */}
         <div className="mt-12 text-center">
-                     <BlackButton label="View All Posts" link="/blogs" />
+          <BlackButton label="View All Posts" link="/blogs" />
 
         </div>
 

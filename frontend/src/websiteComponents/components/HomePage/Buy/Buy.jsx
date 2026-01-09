@@ -147,9 +147,11 @@ export default function Buy() {
                   <div className="absolute top-0 right-0 p-10 opacity-10"><VanIcon /></div>
                   <div className="relative z-10">
                     <div className="mb-4 inline-block p-4 bg-white rounded-2xl shadow-sm"><VanIcon /></div>
-                    <span className="block text-indigo-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">Coming Soon • {van.status}</span>
-                    <h3 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 tracking-tight">{van.title}</h3>
-                    <p className="text-lg text-gray-600 max-w-lg mx-auto mb-8 font-serif italic">{van.desc}</p>
+                    <RichParagraph textColor='text-blue-500'>Coming Soon • {van.status}</RichParagraph>
+                    <Heading2 text={van.title} />
+                    <RichParagraph className='my-2'>
+                      {van.desc}
+                    </RichParagraph>
                     <div className="flex justify-center"><BlackButton label="Pre-Inquire Now" link="/contact" /></div>
                   </div>
                   <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-800 opacity-20"></div>
@@ -163,29 +165,29 @@ export default function Buy() {
         </div>
 
         {/* ⬇️ NEW ACTION BAR: Isme "Browse" aur "Arrows" aamne-saamne hain */}
-    <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-12 px-2 md:px-16">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-12 px-2 md:px-16">
 
-      {/* Left side: Browse Button */}
-      <div className="order-2 md:order-1">
-        <BlackButton label="Browse Full Inventory" link="/vans-for-sale" />
-      </div>
+          {/* Left side: Browse Button */}
+          <div className="order-2 md:order-1">
+            <BlackButton label="Browse Full Inventory" link="/vans-for-sale" />
+          </div>
 
-      {/* Right side: Navigation Arrows */}
-      <div className="flex gap-4 order-1 md:order-2">
-        <button
-          onClick={() => swiperRef.current?.swiper.slidePrev()}
-          className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
-        >
-          <span className="rotate-180"><ArrowIcon /></span>
-        </button>
-        <button
-          onClick={() => swiperRef.current?.swiper.slideNext()}
-          className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
-        >
-          <ArrowIcon />
-        </button>
-      </div>
-    </div>
+          {/* Right side: Navigation Arrows */}
+          <div className="flex gap-4 order-1 md:order-2">
+            <button
+              onClick={() => swiperRef.current?.swiper.slidePrev()}
+              className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
+            >
+              <span className="rotate-180"><ArrowIcon /></span>
+            </button>
+            <button
+              onClick={() => swiperRef.current?.swiper.slideNext()}
+              className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
+            >
+              <ArrowIcon />
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

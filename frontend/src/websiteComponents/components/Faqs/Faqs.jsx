@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
-
+import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading2 from "../Common/Headings/Heading2";
+import Heading4 from "../Common/Headings/Heading4";
 
 
 export default function FAQs({ faqs }) {
@@ -17,9 +19,8 @@ export default function FAQs({ faqs }) {
       <div className="max-w-4xl mx-auto">
         {/* FAQ Section Heading */}
         <div className="text-center mb-8">
-          <h2 className="text-4xl md:text-5xl font-bold font-serif text-black">
-            FAQs
-          </h2>
+          <Heading2 text="FAQs"/>
+
         </div>
 
         {/* FAQ Accordion */}
@@ -37,9 +38,9 @@ export default function FAQs({ faqs }) {
                 className="flex justify-between items-start cursor-pointer py-1"
                 onClick={() => handleToggle(index)}
               >
-                <h3 className="sm:text-base text-sm font-semibold font-serif leading-snug pr-4 text-white">
+                <RichParagraph white={true}>
                   {faq.question}
-                </h3>
+                </RichParagraph>
                 <div className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-black border border-[#2761FD]">
                   {openIndex === index ? (
                     <FaMinus className="text-[#2761FD] text-sm md:text-lg" />
@@ -57,9 +58,9 @@ export default function FAQs({ faqs }) {
                     : "max-h-0 opacity-0 mt-0"
                 }`}
               >
-                <p className="text-gray-300 pr-4 sm:text-base text-sm">
+                <RichParagraph white={true}>
                   {faq.answer}
-                </p>
+                </RichParagraph>
               </div>
             </div>
           ))}

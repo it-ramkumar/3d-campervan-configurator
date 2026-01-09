@@ -13,12 +13,12 @@ export default function BlackButton({
   const baseClasses = `
     text-white font-semibold
     rounded-sm sm:rounded-base md:rounded-lg
-    text-xs sm:text-sm md:text-base
-    py-2 px-3 sm:py-2.5 sm:px-5 md:py-3 md:px-6
+    text-xs sm:text-sm font-serif
+    py-2 px-3 sm:py-2.5 sm:px-5 md:py-2.5 md:px-6
   `;
 
   const enabledClasses = `
-    bg-gray-900 
+    bg-gray-900
     cursor-pointer transition-all duration-300 ease-in-out
     hover:scale-105 hover:shadow-lg active:scale-95
   `;

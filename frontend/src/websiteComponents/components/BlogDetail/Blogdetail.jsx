@@ -262,7 +262,7 @@ export default function BlogDetail() {
 
                       block.pros.map((p, i) => (
                         <li key={i} className="flex items-start text-sm lg:text-base leading-relaxed group/item">
-                          <RichParagraph textColor="text-white">
+                          <RichParagraph white={true}>
                            <span className="text-green-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span> {p}
                           </RichParagraph>
 
@@ -285,7 +285,7 @@ export default function BlogDetail() {
                     {block.cons?.length > 0 ? (
                       block.cons.map((c, i) => (
                         <li key={i} className="flex items-start text-sm lg:text-base leading-relaxed group/item">
-                          <RichParagraph textColor="text-white">
+                          <RichParagraph white={true}>
                            <span className="text-green-400 mr-2 lg:mr-3 mt-1 group-hover/item:scale-110 transition-transform">•</span> {c}
                           </RichParagraph>
                         </li>
@@ -403,7 +403,7 @@ export default function BlogDetail() {
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
                 <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-<RichParagraph textColor="text-white">
+<RichParagraph white={true}>
   Featured Article
 </RichParagraph>
 
@@ -414,7 +414,7 @@ export default function BlogDetail() {
 
 
 
-            <RichParagraph textColor="text-white" className="my-4">
+            <RichParagraph white={true} className="my-4">
                 {blog.description}
               </RichParagraph>
 

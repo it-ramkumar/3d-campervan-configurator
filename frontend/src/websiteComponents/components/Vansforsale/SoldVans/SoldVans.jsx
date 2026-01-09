@@ -7,6 +7,7 @@ import Loader from "../../Loader/Loader";
 import RichParagraph from "../../Common/Paragraph/RichParagraph";
 import Heading2 from "../../Common/Headings/Heading2";
 import Heading3 from "../../Common/Headings/Heading3";
+import BlackButton from "../../Common/Button/BlackButton";
 
 export default function SoldVans() {
   const [soldVans, setSoldVans] = useState([]);
@@ -61,7 +62,7 @@ export default function SoldVans() {
   if (initialLoading) return <Loader />;
 
   return (
-    <section className="bg-white pt-6 pb-16 px-4 md:px-8 overflow-hidden">
+    <section className="bg-white md:mt-24 mt-10 py-10 px-4 md:px-8 overflow-hidden">
       <div className="max-w-screen-2xl mx-auto">
 
         {/* Heading Section */}
@@ -125,15 +126,11 @@ export default function SoldVans() {
         {/* Load More Button */}
         {hasMore && (
           <div className="flex justify-center mt-12">
-            <button
-              onClick={handleLoadMore}
+            <BlackButton     onClick={handleLoadMore}
               disabled={btnLoading}
-              className="group relative px-10 py-4 bg-black text-white rounded-xl font-bold uppercase text-xs tracking-widest overflow-hidden transition-all hover:bg-indigo-700 disabled:opacity-50"
-            >
-              <span className="relative z-10">
-                {btnLoading ? "Fetching..." : "Load More Builds"}
-              </span>
-            </button>
+              label={btnLoading ? "Fetching..." : "Load More Builds"}
+              />
+
           </div>
         )}
       </div>

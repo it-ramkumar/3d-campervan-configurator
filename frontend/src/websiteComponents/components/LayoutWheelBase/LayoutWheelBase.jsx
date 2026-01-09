@@ -188,19 +188,9 @@ export default function CamperProjectsPage() {
 
             {/* BUTTONS */}
             <div className="flex gap-3">
-              <button
-                onClick={handleApplyFilters}
-                className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-              >
-                Apply Filters
-              </button>
+              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
+              <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
 
-              <button
-                onClick={handleClearFilters}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
-              >
-                Clear All
-              </button>
             </div>
           </div>
 
@@ -224,7 +214,7 @@ export default function CamperProjectsPage() {
                     <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
                       <Heading2 text={project.van_listing?.title} />
                       <RichParagraph className="my-2">
-                     
+
                         {project.van_listing?.description}
                       </RichParagraph>
 
@@ -259,7 +249,7 @@ export default function CamperProjectsPage() {
             <div className="flex justify-center items-center gap-4 mt-20">
               <BlackButton label={"Previous"} onClick={() => setPage(page - 1)}
 
-                disabled={page === 1}/>
+                disabled={page === 1} />
 
 
               <span className="text-lg font-semibold text-gray-700">

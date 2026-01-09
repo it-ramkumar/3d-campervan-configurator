@@ -223,7 +223,7 @@ export default function OurProcess() {
         <div className="text-center mb-20" ref={headerRef}>
           <Heading2 text={"Big Bear Vans Custom Build Process"} className="text-white" />
 
-          <RichParagraph className="text-white max-w-2xl mx-auto"> Our transparent, collaborative process ensures your vision comes to
+          <RichParagraph white={true} className="max-w-2xl mx-auto"> Our transparent, collaborative process ensures your vision comes to
             life, from initial ideas to keys in your hand. Here's how it works.</RichParagraph>
         </div>
 
@@ -253,7 +253,7 @@ export default function OurProcess() {
                              ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500"
                 ></div>
                 <div className="flex flex-col justify-center">
-                  <RichParagraph className="mt-4 text-white/80">
+                  <RichParagraph className="mt-4" white={true}>
                     {step.time}
                   </RichParagraph>
                   <Heading3 text={step.title} className="text-white" />
@@ -263,7 +263,7 @@ export default function OurProcess() {
                     {step.details.map((item, idx) => (
                       <div key={idx}>
                         <Heading3 text={item.subtitle} className="text-white" />
-                        <RichParagraph textColor="text-white">
+                        <RichParagraph white={true}>
                           {item.description}
                         </RichParagraph>
 

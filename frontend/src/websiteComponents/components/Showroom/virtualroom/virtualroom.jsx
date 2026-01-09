@@ -75,7 +75,7 @@ const ShowroomAndTours = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
         <div className="relative z-10 flex items-center justify-center h-full p-6 text-center">
-          <RichParagraph textColor="text-white max-w-3xl font-bold" >
+          <RichParagraph className=" max-w-3xl font-bold" white={true} >
             Visiting our showroom isn’t just about vans. Big Bear itself is a destination worth the trip. Surrounded by mountains, a beautiful lake, and two ski resorts, you’ll enjoy your time here as much as your visit with us.
           </RichParagraph>
         </div>

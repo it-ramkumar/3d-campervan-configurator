@@ -110,10 +110,10 @@ const SvgExterior = ({ className }) => (
 // --- Reusable Hero Spec Component (from previous iteration) ---
 const HeroSpecItem = ({ label, value }) => (
   <div className="group py-2 cursor-pointer transition duration-300 hover:text-[#2761FD] border-b-2 border-transparent hover:border-[#2761FD]">
-    <RichParagraph textColor="text-white">
+    <RichParagraph white={true}>
       {label}
     </RichParagraph>
-    <RichParagraph textColor="text-white">
+    <RichParagraph white={true}>
       {value}
     </RichParagraph>
   </div>
@@ -196,7 +196,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           <div className="max-w-4xl">
             {/* Title Block - REDUCED FONT SIZE */}
             <Heading1 text={vanDetail.van_listing.title} className="text-left" />
-            <RichParagraph textColor="text-white">
+            <RichParagraph white={true}>
               {vanDetail.van_listing.subtitle}
             </RichParagraph>
             {/* Specifications Grid - REDUCED MARGINS/PADDING/FONT SIZE */}
@@ -287,7 +287,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       <div className="px-6 md:pl-16 md:pr-16 bg-gray-50">
         <div className="max-w-3xl text-left py-6">
           <Heading2 text={vanDetail.van_listing.title}/>
-          
+
           <SeeMore text={vanDetail.van_listing.description} />
 
           <BlackButton

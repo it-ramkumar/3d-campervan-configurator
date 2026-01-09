@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Link } from "react-router-dom";
 import BlackButton from "../Common/Button/BlackButton";
+import WhiteButton from "../Common/Button/WhiteButton"
 import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
 import Heading2 from "../Common/Headings/Heading2";
+import Heading4 from "../Common/Headings/Heading4";
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -281,7 +283,7 @@ export default function BookingPage() {
               </div>
             </div>
 
-<Heading3 text="Book Your Consultation Call" textColor="text-black" className="my-2"/>
+            <Heading3 text="Book Your Consultation Call" textColor="text-black" className="my-2" />
 
 
 
@@ -305,16 +307,16 @@ export default function BookingPage() {
                 <RichParagraph className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Info</RichParagraph>
               </div>
               <div className="flex items-center mb-3">
-                <span className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Details</span>
+                <RichParagraph className={` ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Details</RichParagraph>
               </div>
               <div className="flex items-center">
                 <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 4 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
                   4
                 </div>
-                <RichParagraph className={`font-medium ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Confirmation</RichParagraph>
+                <RichParagraph className={` ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Confirmation</RichParagraph>
               </div>
               <div className="flex items-center">
-                <span className={`font-medium ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Summary</span>
+                <RichParagraph className={` ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Summary</RichParagraph>
               </div>
             </div>
 
@@ -342,7 +344,9 @@ export default function BookingPage() {
               <div className="max-w-sm mx-auto mt-8">
                 <div className="text-center mb-8">
                   <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Booking System</h1>
-                  <p className="text-gray-600">Please login with Google to continue</p>
+                  <RichParagraph>
+                    Please login with Google to continue
+                  </RichParagraph>
                 </div>
                 <button
                   onClick={handleLogin}
@@ -378,7 +382,7 @@ export default function BookingPage() {
 
                   {bookingStep === 1 && (
                     <div className="max-w-sm mx-auto">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Select a Date</h2>
+                      <Heading4 text="Select a Date" textColor="text-black" className="text-center my-4" />
 
                       <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
 
@@ -418,19 +422,15 @@ export default function BookingPage() {
 
                       {selectedDate && (
                         <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
-                          <p className="text-gray-600 text-xs mb-1">Selected Date</p>
-                          <p className="font-semibold text-sm">{formatDate(selectedDate)}</p>
+                          <Heading4 text="Selected Date" textColor="text-black" className="text-center my-4" />
+
+                          <RichParagraph>
+                            {formatDate(selectedDate)}
+                          </RichParagraph>
                         </div>
                       )}
                       <div className="text-center">
-                        {/* <BlackButton label="Back to Date Selection" link={null} onClick={() => setBookingStep(1)} disabled={!selectedDate}/> */}
-                        {/* <button
-                          onClick={() => setBookingStep(2)}
-                          disabled={!selectedDate}
-                          className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium text-sm"
-                        >
-                          Continue to Time Selection
-                        </button> */}
+
                       </div>
                     </div>
                   )}
@@ -438,12 +438,17 @@ export default function BookingPage() {
 
                   {bookingStep === 2 && (
                     <div className="max-w-sm mx-auto">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Select a Time</h2>
-                      <p className="text-gray-600 text-center mb-4 text-sm">{formatDate(selectedDate)}</p>
+                      <Heading4 text="Select a Time" textColor="text-black" className="text-center my-4" />
+
+                      <RichParagraph className="text-center my-2">
+                        {formatDate(selectedDate)}
+                      </RichParagraph>
                       {slots.length === 0 ? (
                         <div className="text-center py-6">
                           <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                          <p className="text-gray-500 mb-3 text-sm">No available slots for selected day.</p>
+                          <RichParagraph>
+                            No available slots for selected day.
+                          </RichParagraph>
                           <button onClick={() => setBookingStep(1)} className="text-black hover:text-gray-700 font-medium underline text-sm">Choose another date</button>
                         </div>
                       ) : (
@@ -454,10 +459,10 @@ export default function BookingPage() {
                               onClick={() => { if (slot.available) { setSelectedSlot(slot); setBookingStep(3); } }}
                               disabled={!slot.available}
                               className={`p-3 border-2 rounded-lg text-center transition-all font-medium text-sm ${selectedSlot === slot
-                                  ? "bg-black text-white border-black shadow-md"
-                                  : slot.available
-                                    ? "bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm"
-                                    : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                                ? "bg-black text-white border-black shadow-md"
+                                : slot.available
+                                  ? "bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm"
+                                  : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                                 }`}
                             >
                               {formatTimeSlot(slot.start)}
@@ -466,21 +471,21 @@ export default function BookingPage() {
                         </div>
                       )}
                       <div className="text-center">
-                        <button onClick={() => setBookingStep(1)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium text-sm">
-                          Back to Date Selection
-                        </button>
+                        <WhiteButton label={"Back to Date Selection"} onClick={() => setBookingStep(1)} />
                       </div>
                     </div>
                   )}
 
 
                   {bookingStep === 3 && (
-                    <div className="max-w-sm mx-auto">
-                      <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Enter Your Details</h2>
-                      <p className="text-gray-600 text-center mb-4 text-sm">
+                    <div className="max-w-sm mx-auto font-serif">
+                      <Heading4 text="Enter Your Details" textColor="text-black" className="text-center my-4" />
+                      <RichParagraph className="text-center my-2">
                         {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
-                      </p>
-                      <div className="space-y-3 mb-4">
+
+                      </RichParagraph>
+
+                      <div className="space-y-3 mb-4 font-serif">
 
                         <div><label className="block text-gray-700 mb-1 font-medium text-sm">Name *</label><input type="text" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
                         <div><label className="block text-gray-700 mb-1 font-medium text-sm">Email *</label><input type="email" name="email" placeholder="Your email address" value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
@@ -489,8 +494,8 @@ export default function BookingPage() {
                         <div><label className="block text-gray-700 mb-1 font-medium text-sm">Additional Details</label><textarea name="description" placeholder="Any additional information..." value={formData.description} onChange={handleChange} rows="3" className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => setBookingStep(2)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1 text-sm">Back</button>
-                        <button onClick={() => setBookingStep(4)} disabled={!formData.name || !formData.email} className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed font-medium flex-1 text-sm">Continue to Summary</button>
+                        <WhiteButton label={"back"} onClick={() => setBookingStep(2)} />
+                        <WhiteButton label={"Continue to Summary"} onClick={() => setBookingStep(4)} disabled={!formData.name || !formData.email} />
                       </div>
                     </div>
                   )}
@@ -498,10 +503,11 @@ export default function BookingPage() {
 
                   {bookingStep === 4 && (
                     <div className="max-w-sm mx-auto">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Meeting Summary</h2>
+                      <Heading4 text="Meeting Summary" textColor="text-black" className="text-center my-4" />
+
                       <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 text-sm">
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 font-serif">
                           <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Date & Time</span><span className="font-semibold text-right">{formatDate(selectedDate)}<br />at {selectedSlot && formatTimeSlot(selectedSlot.start)}</span></div>
                           <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Duration</span><span className="font-semibold">{selectedSlot && Math.round((new Date(selectedSlot.end) - new Date(selectedSlot.start)) / (1000 * 60))} min</span></div>
                           <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Name</span><span className="font-semibold">{formData.name}</span></div>
@@ -524,22 +530,30 @@ export default function BookingPage() {
                       <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                         <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
                       </div>
-                      <h2 className="text-xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
-                      <p className="text-gray-600 mb-4 text-sm">Your meeting has been scheduled successfully.</p>
+                      <Heading4 text="Booking Confirmed!" textColor="text-black" className="text-center my-4" />
+                      <RichParagraph className="my-2">
+                        Your meeting has been scheduled successfully.
+                      </RichParagraph>
                       <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <p className="text-xs text-gray-600 mb-2">Your Google Meet link:</p>
+                        <RichParagraph className="my-2">
+                          Your Google Meet link:
+                        </RichParagraph>
                         <div className="flex items-center bg-white p-2 rounded border">
-                          <p className="text-gray-900 truncate flex-1 text-left text-xs font-medium">{meetLink}</p>
+                          <RichParagraph className="my-2">
+                            {meetLink}
+                          </RichParagraph>
                           <button onClick={copyToClipboard} className="ml-2 text-gray-600 hover:text-black p-1 rounded hover:bg-gray-100 transition-colors" title="Copy to clipboard">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                           </button>
                         </div>
                       </div>
-                      <p className="text-white bg-black text-sm leading-relaxed my-4 p-2 rounded-lg">
+                      <RichParagraph className="my-2">
                         Your meeting has been successfully scheduled! Please check your inbox to confirm the booking and find all the meeting details. We look forward to connecting with you.
-                      </p>
 
-                      <button onClick={resetBooking} className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium text-sm">Book Another Meeting</button>
+                      </RichParagraph>
+
+                      <WhiteButton label={"Book Another Meeting"} onClick={resetBooking} />
+
                     </div>
                   )}
                 </div>
@@ -550,8 +564,12 @@ export default function BookingPage() {
 
           <div className="lg:hidden border-t border-gray-200 p-3 bg-white sticky bottom-0">
             <div className="text-center">
-              <p className="text-gray-600 text-xs mb-1">Need help? Call us at</p>
-              <p className="font-semibold text-sm">+1 (951) 441-9719</p>
+              <RichParagraph>
+                Need help? Call us at
+              </RichParagraph>
+              <RichParagraph>
+                +1 (951) 441-9719
+              </RichParagraph>
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@ import BlackButton from "../../Common/Button/BlackButton";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import RichParagraph from "../../Common/Paragraph/RichParagraph";
 import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
 
 
 
@@ -15,17 +14,17 @@ export default function All_Layout({ layout, LayoutText, text }) {
         {/* Top Text */}
         {text && <div className="max-w-4xl mx-auto text-center mb-8 md:mb-12 animate-fadeInUp">
           <RichParagraph>
- {LayoutText.text}
+            {LayoutText.text}
           </RichParagraph>
 
-    <RichParagraph className="mt-4">
-{LayoutText.description}
+          <RichParagraph className="mt-4">
+            {LayoutText.description}
           </RichParagraph>
 
         </div>
         }
         {/* Heading */}
-        <Heading2 text={title} className="text-center py-6"/>
+        <Heading2 text={title} className="text-center py-6" />
 
 
         <div className="grid grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">

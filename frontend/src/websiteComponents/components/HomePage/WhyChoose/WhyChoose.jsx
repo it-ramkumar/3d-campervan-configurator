@@ -133,7 +133,7 @@ const WhyChoose = () => {
     <div className="bg-gray-100 text-blackish py-12 md:mt-24 mt-10 font-serif overflow-hidden">
       <header className=" text-center">
         <Heading2 text={"Why Choose Big Bear Vans?"} />
-       <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4">At Big Bear Vans, we have a full-fledged team of experienced campervan
+        <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4">At Big Bear Vans, we have a full-fledged team of experienced campervan
           builders and engineers in Big Bear, California. Let us show you what
           nobody else does like we do.</RichParagraph>
       </header>
@@ -146,13 +146,12 @@ const WhyChoose = () => {
           return (
             <section
               key={index}
-              className={`py-8 flex flex-col md:flex-row items-center gap-10 md:gap-20 ${
-                section.isReverse ? "md:flex-row-reverse" : ""
-              }`}
+              className={`py-8 flex flex-col md:flex-row items-center gap-10 md:gap-20 ${section.isReverse ? "md:flex-row-reverse" : ""
+                }`}
             >
               {/* Text Section */}
               <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
-              <Heading3 textColor="black" text={section.title} />
+                <Heading3 textColor="black" text={section.title} />
                 {/* Content Wrapper for See More/Less */}
                 <div className="relative">
                   <div
@@ -185,21 +184,21 @@ const WhyChoose = () => {
 
                   {/* See More/Less Button */}
                   <div className="">
-                    <BlackButton
-                      onClick={() => toggleExpand(index)}
+                    <RichParagraph
+                      className="flex items-center gap-2 text-blue-500 my-4 cursor-pointer"
 
-
-                      label={isExpanded ? (
+                      onClick={() => toggleExpand(index)}>
+                      {isExpanded ? (
                         <>
-                          Show Less <ChevronUp className="inline w-4" />
+                         <ChevronUp className="inline w-4" /> Show Less
                         </>
                       ) : (
                         <>
-                          See More <ChevronDown className="inline w-4" />
+                         <ChevronDown className="inline w-4" /> See More
                         </>
                       )}
-                      className="mt-4 !text-xs !px-2 !py-1"
-                    />
+
+                    </RichParagraph>
                   </div>
                 </div>
               </div>
@@ -239,7 +238,7 @@ const WhyChoose = () => {
         })}
 
         <div className="py-12 flex justify-center">
-          <BlackButton label={"Order Custom Build"} link={"/inquiry"}/>
+          <BlackButton label={"Order Custom Build"} link={"/inquiry"} />
 
         </div>
       </main>

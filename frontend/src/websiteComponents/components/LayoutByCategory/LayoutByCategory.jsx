@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react";
 import { getByCategory } from "../../../api/portfolio/getByCategory";
 import BlackButton from "../Common/Button/BlackButton";
+import WhiteButton from "../Common/Button/WhiteButton"
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Loader from "../Loader/Loader"
 import Heading2 from "../Common/Headings/Heading2";
-import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function CamperProjectsPage() {
@@ -217,19 +217,10 @@ export default function CamperProjectsPage() {
 
             {/* BUTTONS */}
             <div className="flex gap-3">
-              <button
-                onClick={handleApplyFilters}
-                className="px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-              >
-                Apply Filters
-              </button>
+              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"}/>
+             <WhiteButton  onClick={handleClearFilters} label={"Clear All"}/>
 
-              <button
-                onClick={handleClearFilters}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
-              >
-                Clear All
-              </button>
+            
             </div>
           </div>
 

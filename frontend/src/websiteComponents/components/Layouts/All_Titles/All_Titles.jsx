@@ -6,11 +6,10 @@ import {
   SparklesIcon,
   LayoutTemplateIcon,
   ArrowRightIcon,
-  Loader2Icon,
-  ChevronDownIcon,
 } from "lucide-react";
 import Heading2 from "../../Common/Headings/Heading2";
 import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import BlackButton from "../../Common/Button/BlackButton";
 
 const LIMIT = 12;
 
@@ -133,7 +132,7 @@ export default function All_Titles() {
             <RichParagraph>
                  {portfolios.length} layouts loaded {hasMore ? `(more available)` : `(all loaded)`}
             </RichParagraph>
-          
+
           </div>
         </div>
         <SparklesIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
@@ -187,23 +186,17 @@ export default function All_Titles() {
           {/* Load More Button */}
           {hasMore && (
             <div className="mt-8 flex justify-center">
-              <button
-                onClick={handleLoadMore}
+              <BlackButton    onClick={handleLoadMore}
                 disabled={loading}
-                className="flex items-center gap-2 rounded-xl bg-gray-900 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
-              >
-                {loading ? (
+                label=   {loading ? (
                   <>
-                    <Loader2Icon className="h-4 w-4 animate-spin" />
                     Loading More...
                   </>
                 ) : (
                   <>
-                    Load More ({page})
-                    <ChevronDownIcon className="h-4 w-4" />
-                  </>
-                )}
-              </button>
+                    Load More ({page})                  </>
+                )}/>
+
             </div>
           )}
         </>

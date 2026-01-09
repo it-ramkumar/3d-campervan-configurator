@@ -83,9 +83,8 @@ export default function Customize({
 
               {/* Features List */}
               <div
-                className={`space-y-4 mb-6 transition-all duration-500 ease-in-out ${
-                  !expanded ? "max-h-[250px]" : "max-h-[1200px]"
-                } overflow-hidden relative`}
+                className={`space-y-4 mb-6 transition-all duration-500 ease-in-out ${!expanded ? "max-h-[250px]" : "max-h-[1200px]"
+                  } overflow-hidden relative`}
               >
                 {descriptionList.map((item, index) => {
                   const Icon = item.icon;
@@ -101,7 +100,7 @@ export default function Customize({
 
                 {/* Gradient Fade if collapsed */}
                 {!expanded && (
-                    <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-100 to-transparent pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-100 to-transparent pointer-events-none"></div>
                 )}
               </div>
 
@@ -116,16 +115,16 @@ export default function Customize({
 
               {/* Toggle Button */}
               {showToggle && (
-                <button
+                <RichParagraph
                   onClick={() => setExpanded(!expanded)}
-                  className="flex items-center gap-2 text-gray-600 hover:text-black font-medium transition-colors my-6"
+                  className="flex items-center gap-2 text-blue-500 my-4 cursor-pointer"
                 >
                   {expanded ? (
                     <><ChevronUp className="w-4 h-4" /> Show Less</>
                   ) : (
                     <><ChevronDown className="w-4 h-4" /> See More</>
                   )}
-                </button>
+                </RichParagraph>
               )}
 
               {/* CTA Section */}
@@ -136,9 +135,11 @@ export default function Customize({
                     link={orderButtonLink}
                     className="w-full py-4 text-lg shadow-lg"
                   />
-                  <p className="text-center text-gray-500 text-sm italic">
+                  <RichParagraph className="text-center my-2">
                     Get a free quote within 24 hours
-                  </p>
+
+                  </RichParagraph>
+
                 </div>
               )}
             </div>
