@@ -165,9 +165,9 @@ export default function ExteriorChoicesList() {
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
-            <Heading2 text="Exterior Design Choices" />
+            <Heading2 text="Interior Design Choices" />
           </div>
-          <RichParagraph>Here are the Exterior choices we offer:</RichParagraph>
+          <RichParagraph>Here are the Interioi choices we offer:</RichParagraph>
         </motion.div>
 
         {/* Search and Filters */}

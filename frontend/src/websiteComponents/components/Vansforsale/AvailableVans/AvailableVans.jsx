@@ -110,23 +110,52 @@ export default function AvailableVans({ availableVans }) {
 
             {availableVans && availableVans.length > 0 ? (
               // Case 1: Display Live Inventory
-              <div className="flex flex-wrap justify-center gap-8">
-                {availableVans.map((van, index) => (
-                  <div key={van.id} className="relative group w-full max-w-md lg:max-w-xl">
-                     {/* Your existing Card Template */}
-                     <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white border border-gray-100">
-                        <ImageWithSkeleton src={van.gallery[0]} alt={van.model} className="w-full h-2/3 object-cover" />
-                        <div className="p-6 bg-slate-900 text-white h-1/3">
-                            <Heading3 text={van.van_listing.model_name} />
-                            <div className="flex justify-between items-center">
-                                <span className="font-bold">$ {van.van_listing.price}</span>
-                                <BlackButton label="View Details" link={`/van-detail/${van.slug}`} />
-                            </div>
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {availableVans?.length > 0 ? (
+              availableVans.map((van) => (
+                <div
+                  key={van._id}
+                  className="group relative w-full aspect-[4/3] rounded-[24px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
+                >
+                  <Link to={`/van-detail/${van.slug}`}>
+                    <div className="relative w-full h-full">
+                      <ImageWithSkeleton
+                        src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
+                        alt={van?.van_listing?.title || "Sold camper van"}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+
+                      {/* SOLD Stamp (Modernized) */}
+                      {status === "sold" && <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                        <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
+                          SOLD
                         </div>
-                     </div>
-                  </div>
-                ))}
+                      </div>}
+
+                      {/* Gradient & Content Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
+
+                      <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
+                        <Heading3 text={van?.van_listing?.title || "Custom Build"} />
+
+                        <RichParagraph>
+
+                        </RichParagraph>
+                        <p className="text-white/60 text-xs mt-2 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100 hidden md:block">
+                          View Details →
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center">
+                <p className="text-gray-400 text-lg">No sold vans found.</p>
               </div>
+            )}
+          </div>
+
             ) : (
               // Case 2: Display Coming Soon Grid
               <div className="w-full">

@@ -50,14 +50,24 @@ export default function VansForSale() {
     fetchVans();
   }, []);
   const availableVan = vans.filter(v => v.status === "available");
-if(!availableVan){return <Loader/>}
+  if (!availableVan) { return <Loader /> }
 
+  const soldDesc = " The camper vans below have already found their happy owners. We’ve proudly built over 105 camper vans with a reputation for quality.Check our past builds to get inspired for your custom van."
+  const soldHeading = "A Showcase of our Sold Camper Vans"
+    const pendingDesc = "These camper vans have been reserved by customers and are currently in the final stages of the sales process. Availability is temporarily on hold until the sale is completed."
+  const pendingHeading = "Sale Pending Camper Vans"
+  const comingDesc = "These camper vans are planned and will be available soon. Builds have not started yet, but designs and specifications are being finalized. Check back soon to see these vans move into production."
+  const comingHeading = "Upcoming Camper Vans – Coming Soon"
   return (
     <div>
       <Navbar />
       <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} link="/inquiry" buttonText="Get a Quote" showButton={true} />
       <AvailableVans availableVans={availableVan} />
-      <SoldVans />
+      <SoldVans status={"sale_pending"} soldDesc={pendingDesc} soldHeading={pendingHeading}/>
+      <SoldVans status={"coming_soon"} soldDesc={comingDesc} soldHeading={comingHeading}/>
+
+      <SoldVans status={"sold"} soldDesc={soldDesc} soldHeading={soldHeading}/>
+
       <Consultation vanForSale={true} />
       <FaqV faqs={faqs} />
       <Footer />
