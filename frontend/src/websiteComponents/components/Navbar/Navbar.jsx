@@ -111,8 +111,12 @@ export default function Navbar({ forceMobile }) {
     clearTimeout(timeoutRef.current);
     setDesktopMenu(menu);
   };
+const isParentActive = (key) =>
+  routes[key]?.some(r =>
+    location.pathname === r ||
+    location.pathname.startsWith(r + "/")
+  );
 
-  const isParentActive = (key) => routes[key]?.some(r => location.pathname.startsWith(r));
 
   const getWheelbaseLabel = (base) => {
     if (base === "144" || base === 144) return "Mercedes Sprinter 144";
