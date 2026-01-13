@@ -1,0 +1,21 @@
+# Sab bots ke liye rules
+User-agent: *
+
+# In pages ko index mat karo (Private/Admin URLs)
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /register/
+
+# Internal Components ko block karein (Security)
+Disallow: /websiteComponents/components/adminPanel/
+Disallow: /websiteComponents/components/Dashboard/
+Disallow: /websiteComponents/customeHooks/
+
+
+# Baki puri site allow hai
+Allow: /
+
+# Sitemap ka link
+Sitemap: https://api.bigbearvans.com/sitemap.xml
