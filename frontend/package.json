@@ -28,7 +28,6 @@
     "react-calendar": "^6.0.0",
     "react-calendly": "^4.4.0",
     "react-dom": "^19.1.1",
-    "react-helmet-async": "^2.0.5",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
     "react-redux": "^9.2.0",
