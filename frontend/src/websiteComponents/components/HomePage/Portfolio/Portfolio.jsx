@@ -61,7 +61,7 @@ export default function Portfolio() {
 
         {/* Action Button */}
         <div className="flex justify-center mt-8 lg:mt-16">
-          <BlackButton label="View Our Portfolio" link="/layouts" />
+          <BlackButton label="View Our Portfolio" link="/van-layouts" />
         </div>
 
       </div>

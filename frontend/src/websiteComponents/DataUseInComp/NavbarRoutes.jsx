@@ -1,8 +1,8 @@
 export const routes = {
-  CustomBuild: ["#", "/inquiry", "/interior-choice", "/exterior-choice", "/configurator", "/custom-build", "/sprinter-guide"],
+  CustomBuild: ["#", "/inquiry", "/exterior-options", "/exterior-options", "/configurator", "/custom-build", "/sprinter-guide"],
   "vans-for-sale": ["/vans-for-sale"],
   layout: [
-    "/layouts",
+    "/van-layouts",
     "/custom-van",
     "/wheel-base",
     "/layout-by-category"
@@ -14,7 +14,7 @@ export const routes = {
     "/showroom",
     "/about-us",
     "/our-clients",
-    "/blogs",
+    "/blog",
     "/blog-detail",
   ],
   "contact": [

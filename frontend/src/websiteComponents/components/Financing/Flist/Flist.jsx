@@ -93,7 +93,7 @@ export default function Financing() {
             <RichParagraph>
               You've completed your research and decided to trust Big Bear Vans for your dream campervan. But, before starting the process of choosing the{" "}
               <a
-                href="https://bigbearvans.com/interior-choice/"
+                href="https://bigbearvans.com/interior-options/"
                 className="text-[#1e2a4a] font-semibold hover:underline underline-offset-4"
               >
                 interior

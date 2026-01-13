@@ -1,17 +1,20 @@
 const Vans = require('../models/vanModel');
 const Portfolio = require("../models/portfolio");
 const Blog = require("../models/testBlog");
+
 const router = require('express').Router();
 
 router.get('/', async (req, res) => {
     try {
-        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/exterior-choice', '/interior-choice', '/sprinter-guide', '/vans-for-sale', '/layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blogs', '/quick-links', '/faq', '/jobs'];
+        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/exterior-options', '/interior-options', '/sprinter-guide', '/vans-for-sale', '/van-layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers'];
 
         // Data fetch karein
         const [VansLink, PortfolioLink, BlogLink] = await Promise.all([
             Vans.find({}).select('slug updatedAt'),
             Portfolio.find({}).select('slug updatedAt'),
             Blog.find({}).select('slug updatedAt')
+
+
         ]);
 
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
@@ -34,6 +37,8 @@ router.get('/', async (req, res) => {
         addLinks(VansLink, 'van-detail');
         addLinks(PortfolioLink, 'layout-detail');
         addLinks(BlogLink, 'blog-detail');
+
+
 
         xml += `</urlset>`;
 

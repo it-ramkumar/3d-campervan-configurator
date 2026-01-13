@@ -190,7 +190,7 @@ const CustomBuild = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
               <div className="bg-gray-50 rounded-xl p-12 flex flex-col justify-center items-center text-center">
-                <Link to="/layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
+                <Link to="/van-layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
               </div>
             </div>
           </div>

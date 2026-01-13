@@ -97,10 +97,10 @@ export default function Footer() {
             <ul className="space-y-1">
               <FooterListItem to="/" className="text-sm">Home</FooterListItem>
               <FooterListItem to="/vans-for-sale" className="text-sm">Vans For Sale</FooterListItem>
-              <FooterListItem to="/layouts" className="text-sm"> Layouts</FooterListItem>
+              <FooterListItem to="/van-layouts" className="text-sm"> Layouts</FooterListItem>
               <FooterListItem to="/about-us" className="text-sm">About Us</FooterListItem>
-              <FooterListItem to="/jobs" className="text-sm">Career</FooterListItem>
-              <FooterListItem to="/blogs" className="text-sm">Blog</FooterListItem>
+              <FooterListItem to="/careers" className="text-sm">Career</FooterListItem>
+              <FooterListItem to="/blog" className="text-sm">Blog</FooterListItem>
               <FooterListItem to="/faq" className="text-sm">FAQs</FooterListItem>
               <FooterListItem to="/quick-links" className="text-sm">Quick Links</FooterListItem>
             </ul>

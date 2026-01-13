@@ -1,5 +1,4 @@
 
-// import ConsultationPage from "../../Layouts/Consultationlayout/Consultationlayout";
 import Consultation from "../Consultation/Consultation";
 // import Fhero from "./Fhero";
  import Flist from "./Flist/Flist";

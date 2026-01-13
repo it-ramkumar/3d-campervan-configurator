@@ -85,10 +85,10 @@ const AppRoutes = () => {
           <Route path="/van-detail/:slug" element={<VanDetail />} />
           <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
           <Route path="/blog-detail/:slug" element={<BlogDetail />} />
-          <Route path="/exterior-choice" element={<Exteriorpage />} />
-          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/exterior-options" element={<Exteriorpage />} />
+          <Route path="/blog" element={<Blogs />} />
           <Route path="/blog-form" element={<BlogForm />} />
-          <Route path="/layouts" element={<Layouts />} />
+          <Route path="/van-layouts" element={<Layouts />} />
           <Route path="/vans-for-sale" element={<VansForSale />} />
           <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/van-form" element={<VanForm />} />
@@ -98,15 +98,15 @@ const AppRoutes = () => {
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />
-          <Route path="/interior-choice" element={<Interiorpage />} />
+          <Route path="/interior-options" element={<Interiorpage />} />
           <Route path="/cushion" element={<Cushionpage />} />
           <Route path="/layout-by-category/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />
           <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />
-          <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/careers/:id" element={<JobDetail />} />
           <Route path="/apply/:id" element={<JoAppForm />} />
-          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/careers" element={<Jobs />} />
           <Route path="/custom-build" element={<CustomBuild />} />
           <Route path="/quick-links" element={<QuickLiks />} />
           <Route path="/faq" element={<FAQPage />} />

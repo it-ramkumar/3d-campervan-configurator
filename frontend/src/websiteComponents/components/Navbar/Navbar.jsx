@@ -71,7 +71,7 @@ export default function Navbar({ forceMobile }) {
   const navLinks = [
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
     { name: 'vans-for-sale', label: 'Vans For Sale', path: '/vans-for-sale', hasDropdown: false },
-    { name: 'layout', label: 'Layouts', path: '/layouts', hasDropdown: true },
+    { name: 'layout', label: 'Layouts', path: '/van-layouts', hasDropdown: true },
     { name: 'contact', label: 'Contact', path: '/contact', hasDropdown: false },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ];
@@ -145,7 +145,7 @@ const isParentActive = (key) =>
               {b.title}
             </BlogListItem>
           ))}
-          <ViewAllLink to="/blogs">View All Blogs</ViewAllLink>
+          <ViewAllLink to="/blog">View All Blogs</ViewAllLink>
         </>
       );
     }
@@ -160,7 +160,7 @@ const isParentActive = (key) =>
             </NavListItem>
           ))}
           {isMobile && data.categories.length > 4 && (
-            <ViewAllLink to="/layouts">View All Categories</ViewAllLink>
+            <ViewAllLink to="/van-layouts">View All Categories</ViewAllLink>
           )}
         </>
       );

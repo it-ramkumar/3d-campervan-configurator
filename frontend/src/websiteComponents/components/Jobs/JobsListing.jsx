@@ -187,7 +187,7 @@ const Careers = () => {
                           <Link to={`/apply/${job._id}`} className="bg-blue-600 text-white text-center py-2.5 px-6 rounded-xl font-bold hover:bg-blue-700 transition-all text-sm uppercase tracking-widest">
                             Apply
                           </Link>
-                          <Link to={`/jobs/${job._id}`} className="text-center text-gray-400 text-xs font-bold hover:text-blue-600 flex items-center justify-center gap-1 group/btn">
+                          <Link to={`/careers/${job._id}`} className="text-center text-gray-400 text-xs font-bold hover:text-blue-600 flex items-center justify-center gap-1 group/btn">
                             DETAILS <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
                           </Link>
                         </div>

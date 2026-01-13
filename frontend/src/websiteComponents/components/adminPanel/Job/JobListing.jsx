@@ -133,7 +133,7 @@ const Jobs = ({ setSelected }) => {
 
                 {/* Title linked to Preview */}
                 <Link
-                  to={`/jobs/${job._id}`}
+                  to={`/careers/${job._id}`}
                   className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors inline-block"
                 >
                   {job.title}

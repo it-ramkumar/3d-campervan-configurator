@@ -7,9 +7,9 @@ import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
 import Heading2 from "../Common/Headings/Heading2";
-import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function CamperProjectsPage() {
@@ -267,6 +267,7 @@ export default function CamperProjectsPage() {
           )}
         </div>
       </section>
+      <Footer/>
     </>
   );
 }

@@ -58,7 +58,7 @@ const ApplyJob = () => {
 
         {/* Navigation */}
         <Link
-          to={`/jobs/${id}`}
+          to={`/careers/${id}`}
           className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors mb-8 group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -76,7 +76,7 @@ const ApplyJob = () => {
               Thank you for applying. Our recruiting team will review your application and get back to you soon.
             </p>
             <Link
-              to="/jobs"
+              to="/careers"
               className="inline-flex items-center justify-center bg-gray-900 text-white px-8 py-3 rounded-full font-semibold hover:bg-black transition-all"
             >
               Explore More Roles

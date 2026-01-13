@@ -73,7 +73,7 @@ const JobDetails = () => {
       {/* Header Section */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <Link to="/jobs" className="inline-flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-6 transition-colors group text-sm font-medium">
+          <Link to="/careers" className="inline-flex items-center gap-2 text-gray-400 hover:text-blue-600 mb-6 transition-colors group text-sm font-medium">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             BACK TO CAREERS
           </Link>

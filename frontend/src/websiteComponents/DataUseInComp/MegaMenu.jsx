@@ -12,8 +12,8 @@ export const menuContent = {
         {
           title: "Insights",
           items: [
-            { label: "Exterior Choices", link: "/exterior-choice" },
-            { label: "Interior Choices", link: "/interior-choice" },
+            { label: "Exterior Choices", link: "/exterior-options" },
+            { label: "Interior Choices", link: "/interior-options" },
             { label: "Sprinter Guide", link: "/sprinter-guide" },
           ],
         },

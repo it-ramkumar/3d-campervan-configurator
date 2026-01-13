@@ -223,7 +223,7 @@ export default function LayoutDetail() {
                 <Link to="/" className="hover:text-[#2761FD]">Home</Link>
                 <span className="mx-2">/</span>
                 {/* Changed link from /portfolio to /layout */}
-                <Link to="/layouts" className="hover:text-[#2761FD]">Portfolio</Link>
+                <Link to="/van-layouts" className="hover:text-[#2761FD]">Portfolio</Link>
                 <span className="mx-2">/</span>
                 <span className="text-[#2761FD]">{van_listing.title.split(' ')[0]}</span>
               </div>
