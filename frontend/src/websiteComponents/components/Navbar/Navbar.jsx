@@ -141,7 +141,7 @@ const isParentActive = (key) =>
       return (
         <>
           {data.blogs.slice(0, 4).map(b => (
-            <BlogListItem key={b._id} to={`/blog-detail/${b._id}`}>
+            <BlogListItem key={b._id} to={`/blog-detail/${b.slug}`}>
               {b.title}
             </BlogListItem>
           ))}
