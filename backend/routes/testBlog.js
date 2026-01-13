@@ -14,7 +14,7 @@ router.post(
   ]),
   async (req, res) => {
     try {
-   
+
 
       const { title, description, content } = req.body;
       const blocksData = JSON.parse(content || "[]");
@@ -43,7 +43,7 @@ router.post(
       );
 
       // console.log("Image Mapping:", imageFieldToUrlMap);
-//
+      //
       // 🔹 Upload gallery images to S3
       const uploadedGalleryUrls = await Promise.all(
         (req.files["gallery"] || []).map(file =>
@@ -107,11 +107,11 @@ router.get("/", async (req, res) => {
 
     const query = search
       ? {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { description: { $regex: search, $options: "i" } },
-          ],
-        }
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      }
       : {};
 
     const blogs = await Blog.find(query)
@@ -137,9 +137,11 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/:id", async (req, res) => {
+router.get("/:slug", async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    const { slug } = req.params
+    const blog = await Blog.findOne({ slug });
+    // const blog = await Blog.findById(req.params.slug);
     if (!blog)
       return res.status(404).json({ success: false, message: "Blog not found" });
 

@@ -28,6 +28,7 @@ const LeadEmailsRoute = require("./routes/leadsEmail");
 const Job = require("./routes/job");
 const Application = require("./routes/application");
 const QuickLinks = require("./routes/quickLinks")
+const Sitemap = require("./routes/siteMap")
 
 
 const app = express();
@@ -71,6 +72,7 @@ app.use("/api", LeadEmailsRoute)
 app.use("/api/jobs", Job);
 app.use("/api/applications", Application);
 app.use("/api/quick-links", QuickLinks);
+app.use("/sitemap.xml", Sitemap);
 
 
 

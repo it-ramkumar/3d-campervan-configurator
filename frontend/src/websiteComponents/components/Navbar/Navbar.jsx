@@ -75,17 +75,28 @@ export default function Navbar({ forceMobile }) {
     { name: 'contact', label: 'Contact', path: '/contact', hasDropdown: false },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ];
+// 1. Jab URL change ho (Route change), toh sab reset aur scroll enable karein
+useEffect(() => {
+  setIsMobileMenuOpen(false);
+  setDesktopMenu(null);
+  setMobileMenu(null);
 
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setDesktopMenu(null);
-    setMobileMenu(null);
-    document.body.style.overflow = 'unset';
-  }, [location.pathname]);
+  // Inline style hatane ke liye aur scroll enable karne ke liye
+  document.body.style.overflow = '';
+  document.body.classList.remove('no-scroll');
+}, [location.pathname]);
 
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
-  }, [isMobileMenuOpen]);
+// 2. Mobile Menu khulne/band hone par scroll control karein
+useEffect(() => {
+  if (isMobileMenuOpen) {
+    document.body.classList.add('no-scroll');
+  } else {
+    document.body.classList.remove('no-scroll');
+  }
+
+  // Cleanup function (Best practice: agar component unmount ho jaye)
+  return () => document.body.classList.remove('no-scroll');
+}, [isMobileMenuOpen]);
 
   useEffect(() => {
     const loadData = async () => {

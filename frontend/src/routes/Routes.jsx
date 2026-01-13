@@ -84,7 +84,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/van-detail/:slug" element={<VanDetail />} />
           <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
-          <Route path="/blog-detail/:id" element={<BlogDetail />} />
+          <Route path="/blog-detail/:slug" element={<BlogDetail />} />
           <Route path="/exterior-choice" element={<Exteriorpage />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog-form" element={<BlogForm />} />

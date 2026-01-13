@@ -139,7 +139,7 @@ export default function BlogsListing() {
         <div className="mt-auto">
           <BlackButton
             label="Read More"
-            link={`/blog-detail/${blog._id}`}
+            link={`/blog-detail/${blog.slug}`}
           />
         </div>
       </div>

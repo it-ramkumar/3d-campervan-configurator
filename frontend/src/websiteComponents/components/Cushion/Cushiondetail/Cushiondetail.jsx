@@ -133,18 +133,21 @@ function ColorDetailModal({ color, fabricName, fabricDescription, isOpen, onClos
   const [zoomLevel, setZoomLevel] = useState(1);
 
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      setImageLoaded(false);
-      setZoomLevel(1);
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
+useEffect(() => {
+  if (isOpen) {
+    document.body.classList.add('no-scroll');
+    setImageLoaded(false);
+    setZoomLevel(1);
+  } else {
+    document.body.classList.remove('no-scroll');
+  }
+
+  // Cleanup function: Jab component unmount ho ya close ho,
+  // toh scroll lazmi wapas enable ho jaye
+  return () => {
+    document.body.classList.remove('no-scroll');
+  };
+}, [isOpen]);
 
 
   const handleZoomIn = () => {

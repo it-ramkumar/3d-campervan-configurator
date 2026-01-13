@@ -24,7 +24,7 @@ import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function BlogDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentGalleryImage, setCurrentGalleryImage] = useState(0);
@@ -32,7 +32,7 @@ export default function BlogDetail() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/test-blog/${slug}`);
         setBlog(res.data.data);
       } catch (err) {
         console.error("Error fetching blog:", err);
@@ -41,7 +41,7 @@ export default function BlogDetail() {
       }
     };
     fetchBlog();
-  }, [id]);
+  }, [slug]);
 
   const handleShare = async () => {
     if (navigator.share) {

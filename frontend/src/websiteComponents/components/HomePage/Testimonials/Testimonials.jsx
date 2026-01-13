@@ -110,13 +110,17 @@ export default function Testimonials() {
     }
   };
 
-  useEffect(() => {
-    if (modalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [modalOpen]);
+useEffect(() => {
+  if (modalOpen) {
+    document.body.classList.add('no-scroll');
+  } else {
+    document.body.classList.remove('no-scroll');
+  }
+
+  // Cleanup: Agar modal khula ho aur user page se chala jaye (unmount),
+  // toh scroll wapas enable ho jaye.
+  return () => document.body.classList.remove('no-scroll');
+}, [modalOpen]);
 
   return (
     <section className="w-full md:mt-24 mt-10 py-12 bg-white overflow-hidden">

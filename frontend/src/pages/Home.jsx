@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Navbar from "../websiteComponents/components/Navbar/Navbar";
 import Hero from "../websiteComponents/components/HomePage/Hero/Hero";
 import Buy from "../websiteComponents/components/HomePage/Buy/Buy";
@@ -80,7 +81,31 @@ const descriptionList = [
   ];
   return (
     <>
+<Helmet>
+        <title>Custom Camper Van Conversion | Big Bear Vans</title>
+        <meta name="description" content="Design and build your dream custom camper van from scratch. We specialize in Mercedes-Benz Sprinter, RAM ProMaster, and Ford Transit conversions with 3D renderings." />
+        <meta name="keywords" content="camper van conversion, custom vans, 3D van design, Sprinter conversion, off-grid van life" />
 
+        {/* Social Media (Open Graph) tags */}
+        <meta property="og:title" content="Custom Camper Van Conversion | Big Bear Vans" />
+        <meta property="og:description" content="Build your dream van in 4-5 months with our expert team." />
+        <meta property="og:image" content="/images/logoo.webp" />
+        <meta property="og:url" content="https://bigbearvans.com/" />
+        <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((faq) => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer,
+        },
+      })),
+    })}
+  </script>
+      </Helmet>
      <Navbar />
         <Hero />
     <div className=" overflow-x-hidden">
