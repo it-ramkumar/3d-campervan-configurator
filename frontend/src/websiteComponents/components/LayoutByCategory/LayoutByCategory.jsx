@@ -106,18 +106,38 @@ export default function CamperProjectsPage() {
     setPage(1);
   };
   const formattedCategory = category?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-  const jsonLd = LayoutByCategorySchema(category,layouts)
+  const currentUrl = `https://bigbearvans.com/layout-by-category/${category}`;
+  const pageTitle = `${formattedCategory} Layouts & Custom Builds | Big Bear Vans`;
+  const pageDescription = `Explore our professional ${formattedCategory} camper van layouts. Featuring custom ${model || ''} configurations with optimized sitting, sleeping, and bathroom setups.`;
+  const pageKeywords = `${formattedCategory} layouts, custom van builds, ${category} floor plans, big bear vans projects`;
+  const jsonLd = LayoutByCategorySchema(category, layouts)
   const heroImage = "/heroSlider/custom_build.jpg";
   const newTitleText = category;
   const newDescriptionText = category;
 
   return (
     <>
-    <title>{`${formattedCategory} Layouts & Custom Builds | Big Bear Vans`}</title>
-      <meta name="description" content={`Discover the best ${formattedCategory} camper van layouts. High-quality custom builds with professional sitting, sleeping, and bathroom configurations.`} />
-      <link rel="canonical" href={`https://bigbearvans.com/camper-projects/${category}`} />
+      {/* ✅ REACT 19 SEO METADATA */}
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDescription} />
+      <meta name="keywords" content={pageKeywords} />
+      <link rel="canonical" href={currentUrl} />
+      <meta name="robots" content="index, follow" />
 
+      {/* ✅ OPEN GRAPH (Social Media) */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:url" content={currentUrl} />
+      <meta property="og:image" content={layouts[0]?.gallery?.[0] || heroImage} />
+
+      {/* ✅ TWITTER CARDS */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDescription} />
+      <meta name="twitter:image" content={layouts[0]?.gallery?.[0] || heroImage} />
+
+      {/* ✅ JSON-LD SCHEMA */}
       <script type="application/ld+json">
         {JSON.stringify(jsonLd)}
       </script>
@@ -228,8 +248,8 @@ export default function CamperProjectsPage() {
 
             {/* BUTTONS */}
             <div className="flex gap-3">
-              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"}/>
-             <WhiteButton  onClick={handleClearFilters} label={"Clear All"}/>
+              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
+              <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
 
 
             </div>
@@ -309,7 +329,7 @@ export default function CamperProjectsPage() {
           )}
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }

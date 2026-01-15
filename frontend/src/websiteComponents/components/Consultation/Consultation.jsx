@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import { contact } from "../../../api/contact/contact";
 import Heading2 from "../Common/Headings/Heading2";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
-import { consultationSchema } from "../../schema/consultationSchema";
 
 export default function Consultation() {
   const [formData, setFormData] = useState({
@@ -108,15 +107,9 @@ export default function Consultation() {
     }
   };
 
-  const jsonld = consultationSchema()
   return (
     <>
-    <title>Schedule a Free Consultation | Custom Van Builder California</title>
-      <meta name="description" content="Ready to start your custom camper van journey? Book a free consultation call with Big Bear Vans. We discuss layouts, features, and financing." />
 
-      <script type="application/ld+json">
-        {JSON.stringify(jsonld)}
-      </script>
 
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24 flex flex-col items-center space-y-12">
       {/* ===== Header Text ===== */}

@@ -44,7 +44,7 @@ export default function Blog() {
           {blogs.slice(0, 4).map((post) => (
             <Link
               key={post._id}
-              to={`/blog-detail/${post._id}`}
+              to={`/blog-detail/${post.slug}`}
               className="group relative h-[400px] w-full rounded-[24px] border-2 border-gray-800 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 ease-in-out hover:-translate-y-2"
             >
               {/* Image Container */}

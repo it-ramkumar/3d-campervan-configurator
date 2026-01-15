@@ -4,6 +4,7 @@ import Consultation from "../Consultation/Consultation";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import All_Titles from "./All_Titles/All_Titles";
+import { generateLayoutsSchema } from "../../schema/layoutPage"
 
 
 export default function Layouts() {
@@ -57,8 +58,27 @@ export default function Layouts() {
     description: "Browse to find inspiration for your dream campervan and to see our craftsmanship in every detail.",
   }
 
+  const layoutsSchema = generateLayoutsSchema();
+  const pageTitle = "Custom Camper Van Layouts | 3D Designed Floor Plans | Big Bear Vans";
+  const pageDesc = "Browse our custom van conversion layouts. From family-sized 9-seaters to solo traveler setups, discover the perfect floor plan for your Mercedes Sprinter or Ford Transit.";
   return (
     <>
+    {/* React 19 Native Metadata */}
+      <title>{pageTitle}</title>
+      <meta name="keywords" content="camper van layouts, sprinter floor plans, family van conversion layouts, 3D van design" />
+      <meta name="description" content={pageDesc} />
+      <link rel="canonical" href="https://bigbearvans.com/layouts" />
+
+      {/* Social Media (OG & Twitter) */}
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDesc} />
+      <meta property="og:image" content="https://bigbearvans.com/images/limage1.webp" />
+      <meta name="twitter:card" content="summary_large_image" />
+
+      {/* JSON-LD Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify(layoutsSchema)}
+      </script>
       <Navbar />
       <div className="tour-hero">
         <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} showButton={false} />

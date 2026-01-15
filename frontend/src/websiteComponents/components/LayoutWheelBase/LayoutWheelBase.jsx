@@ -133,19 +133,38 @@ export default function CamperProjectsPage() {
     { key: "bathroomType", label: "Bathroom Type", type: "select", options: filters?.bathroomType }
   ];
   const pageTitle = newTitleText[wheelbase] || `${wheelbase} Wheelbase`;
+  const pageKeywords = `${wheelbase} wheelbase layout, custom ${wheelbase} van build, ${wheelbase} sprinter conversion, camper van floor plans ${wheelbase}, big bear vans ${wheelbase}`;
   const pageDescription = newDescriptionText[wheelbase] || `Custom camper van layouts for ${wheelbase} wheelbase.`;
   const jsonLd = layoutByWheelbaseSchema(wheelbase,layouts)
   return (
     <>
-    {/* ✅ SEO META TAGS */}
-      <title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
-      <meta name="description" content={pageDescription} />
-      <link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+   {/* ✅ SEO META TAGS */}
+<title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
+<meta name="keywords" content={pageKeywords} />
+<meta name="description" content={pageDescription} />
+<link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
 
-      {/* ✅ JSON-LD SCHEMA */}
-      <script type="application/ld+json">
-        {JSON.stringify(jsonLd)}
-      </script>
+{/* 🆕 ADDITIONAL IMPORTANT TAGS */}
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#f8fafc" /> {/* Aapke bigbear theme ke mutabiq */}
+
+{/* ✅ OPEN GRAPH (Facebook, WhatsApp, LinkedIn) */}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
+<meta property="og:description" content={pageDescription} />
+<meta property="og:url" content={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+<meta property="og:image" content="https://bigbearvans.com/images/blackLogo.png" /> {/* Ek generic achi image ka link */}
+
+{/* ✅ TWITTER CARDS */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content="https://bigbearvans.com/images/blackLogo.png" />
+
+{/* ✅ JSON-LD SCHEMA */}
+<script type="application/ld+json">
+  {JSON.stringify(jsonLd)}
+</script>
       <Navbar />
       <div className="tour-hero">
         <HeroSection

@@ -11,6 +11,7 @@ import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Heading2 from "../Common/Headings/Heading2";
 import Heading4 from "../Common/Headings/Heading4";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { generateBlogListingSchema } from "../../schema/blogPage"
 
 export default function BlogsListing() {
   const [searchInput, setSearchInput] = useState("");
@@ -69,9 +70,32 @@ export default function BlogsListing() {
 <Loader/>
   );
   }
+// SEO Dynamic Values
+  const pageTitle = searchTerm
+    ? `Search results for "${searchTerm}" | Big Bear Vans Blog`
+    : "Van Conversion Blog: Tips, Materials & Guides | Big Bear Vans";
 
+  const pageDesc = "Read our latest articles on custom van conversions. From bathroom toilet options to kitchen materials and layout tips, learn from the experts at Big Bear Vans.";
+
+  const blogSchema = generateBlogListingSchema(blogs);
   return (
     <>
+    {/* ✅ REACT 19 SEO METADATA */}
+      <title>{pageTitle}</title>
+      <meta name="description" content={pageDesc} />
+      <meta name="keywords" content="van life blog, camper van bathroom tips, van kitchen materials, sprinter conversion guide, big bear vans blog" />
+      <link rel="canonical" href="https://bigbearvans.com/blogs" />
+
+      {/* Social Media Tags */}
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDesc} />
+      <meta property="og:image" content="/heroSlider/bloghero.webp" />
+      <meta name="twitter:card" content="summary_large_image" />
+
+      {/* Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify(blogSchema)}
+      </script>
       <Navbar />
       <HeroSection
         title="Blogs"

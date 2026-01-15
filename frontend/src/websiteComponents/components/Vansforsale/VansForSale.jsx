@@ -98,12 +98,34 @@ export default function VansForSale() {
     createServiceSchema(),
   ].filter(Boolean);
 
+  const vanCount = availableVans.length;
+  const pageTitle = vanCount > 0
+    ? `(${vanCount}) Available Vans for Sale | Big Bear Vans`
+    : "Custom Camper Vans for Sale | Big Bear Vans";
+
+  const pageDesc = "Expert Custom Camper Van Builds. Browse our available inventory or let us build your dream van. Over 105+ high-quality custom builds completed.";
+  const pageImage = "https://bigbearvans.com/images/inventory-hero.jpg"; // Ek achi inventory ki image ka path
+  const currentUrl = "https://bigbearvans.com/vans-for-sale";
   return (
     <div>
-      {/* React 19 Native Metadata Hoisting */}
-      <title>{availableVans.length > 0 ? `(${availableVans.length}) Available Vans | Big Bear Vans | Custom Build` : "Camper Vans For Sale | Big Bear Vans"}</title>
-      <meta name="description" content="Expert Custom Camper Van Builds. Browse our available inventory or let us build your dream van. Over 105+ high-quality custom builds completed." />
+      {/* --- React 19 Native Metadata Hoisting --- */}
+      <title>{pageTitle}</title>
+      <meta name="keywords" content="buy custom camper van, used sprinter camper for sale, ready to go campervans, inventory big bear vans" />
+      <meta name="description" content={pageDesc} />
+      <link rel="canonical" href={currentUrl} />
+      <meta name="robots" content="index, follow" />
+      {/* Open Graph (Facebook, WhatsApp, LinkedIn) */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={pageTitle} />
+      <meta property="og:description" content={pageDesc} />
+      <meta property="og:image" content={pageImage} />
+      <meta property="og:url" content={currentUrl} />
 
+      {/* Twitter Cards */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={pageTitle} />
+      <meta name="twitter:description" content={pageDesc} />
+      <meta name="twitter:image" content={pageImage} />
       <script type="application/ld+json">
         {JSON.stringify(schemas)}
       </script>
