@@ -53,11 +53,10 @@ const UPCOMING_VANS = [
   { name: "Ford Transit Demo Van", desc: "Featuring our signature double bed layout." },
 ];
 
-export default function AvailableVans({ availableVans }) {
+export default function AvailableVans({ availableVans,hasMore, loading, onLoadMore }) {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const contentRef = useRef(null);
-  const cardsRef = useRef([]);
   const featuresSectionRef = useRef(null);
   const featureItemsRef = useRef([]);
   const centralIconRef = useRef(null);
@@ -126,7 +125,7 @@ export default function AvailableVans({ availableVans }) {
                       />
 
                       {/* SOLD Stamp (Modernized) */}
-                      {status === "sold" && <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                      {van.status === "sold" && <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
                         <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
                           SOLD
                         </div>
@@ -190,6 +189,23 @@ export default function AvailableVans({ availableVans }) {
                 </div>
               </div>
             )}
+             {/* Load More Button */}
+
+  <div className="flex justify-center mt-12">
+    <BlackButton
+      onClick={onLoadMore}
+      disabled={loading || !hasMore}
+      label={
+        loading
+          ? "Fetching..."
+          : !hasMore
+          ? "No More Builds"
+          : "Load More Builds"
+      }
+    />
+  </div>
+
+
           </div>
         </div>
       </section>

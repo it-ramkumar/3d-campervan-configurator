@@ -6,6 +6,7 @@ import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { generateLayoutSchema } from "../../schema/layoutDetail"; // Path check karlein
 
 // --- SVG Icons (Copied from reference for Key Features section) ---
 const SvgInsulation = () => (
@@ -192,9 +193,33 @@ export default function LayoutDetail() {
     };
   }) || [];
 
-//  console.log(van,"van")
+const schemaData = generateLayoutSchema(van);
+  const pageTitle = `${van_listing.title} | Custom Van Conversion Portfolio`;
+  const pageDesc = van_listing.description?.substring(0, 160) || van_listing.subtitle;
   return (
     <>
+    {/* Standard Meta Tags */}
+          <title>{pageTitle}</title>
+          <meta name="description" content={pageDesc} />
+          <link rel="canonical" href={window.location.href} />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDesc} />
+          <meta property="og:image" content={van.gallery?.[0]} />
+          <meta property="og:url" content={window.location.href} />
+
+          {/* Twitter Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDesc} />
+          <meta name="twitter:image" content={van.gallery?.[0]} />
+
+          {/* JSON-LD Structured Data */}
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
       <Navbar />
       <div className="bg-gray-100 font-noto-serif" ref={containerRef}>
 

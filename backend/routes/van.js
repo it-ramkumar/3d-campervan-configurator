@@ -86,13 +86,54 @@ router.get('/available', async (req, res) => {
       vans
     });
   } catch (err) {
-    console.error("SERVER ERROR:", err);
     res.status(500).json({
       message: 'Server error',
       error: err.message
     });
   }
 });
+router.get('/van-by-status', async (req, res) => {
+  try {
+    const {
+      status,
+      page = 1,
+      limit = 1
+    } = req.query;
+
+    if (!status) {
+      return res.status(400).json({
+        success: false,
+        message: 'status is required'
+      });
+    }
+
+    const skip = (page - 1) * limit;
+
+    const vans = await Van.find({ status })
+      .sort({ createdAt: -1 })
+      .skip(Number(skip))
+      .limit(Number(limit));
+
+    const total = await Van.countDocuments({ status });
+
+    res.status(200).json({
+      success: true,
+      page: Number(page),
+      limit: Number(limit),
+      total,
+      hasMore: skip + vans.length < total,
+      data: vans
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: err.message
+    });
+  }
+});
+
 
 router.get("/", async (req, res) => {
   try {

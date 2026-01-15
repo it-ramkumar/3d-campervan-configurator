@@ -10,6 +10,7 @@ import CameraAssigner from "../camara-assigner/CameraAssigner";
 import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
 import {ArrowBigDownDash, ArrowBigUpDash} from "lucide-react"
+import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
 
 import {
   addModelToScene,
@@ -154,10 +155,22 @@ const { scene } = useGLTF(model.glbFile);
     />
   );
 }
-
+const jsonLd = configuratorSchema();
 
   return (
     <>
+    {/* React 19 Native Metadata */}
+      <title>3D Camper Van Configurator | Design Your Own Van | Big Bear Vans</title>
+      <meta
+        name="description"
+        content="Use our professional 3D Van Configurator to design your dream Mercedes Sprinter build. Customize layouts, colors, and features in real-time. Start your custom build today!"
+      />
+      <meta name="keywords" content="3D van builder, custom camper van designer, interactive van layout, design my van, Mercedes Sprinter configurator" />
+
+      {/* JSON-LD Script */}
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLd)}
+      </script>
     <div className="">
     </div>
     <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto md:overflow-y-hidden bg-brand color-scroll">
@@ -188,20 +201,12 @@ const { scene } = useGLTF(model.glbFile);
                     {SantaMonica.layout}
                     <sub className="text-gray-500 text-xs">{SantaMonica.modelYear}</sub>
                   </h1>
-                  {/* <p className="text-sm">
-            Starting: <span>$20,323,342</span>
-          </p> */}
+
                 </div>
 
                 <div className="flex flex-col gap-2">
                   <div className="rounded-full flex bg-brand mt-3 md:mt-0">
-                    {/* <button onClick={() => {
 
-                      setIsSanta(0);
-                    }}
-                      className={`${isSanta === 0 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition " :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
-                      {vans[0].layout}
-                    </button> */}
                     <button onClick={() => setIsSanta(1)} className={`${isSanta === 1 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition" :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
                       {vans[1].layout}
                     </button>

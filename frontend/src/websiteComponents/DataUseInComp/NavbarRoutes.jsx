@@ -1,5 +1,5 @@
 export const routes = {
-  CustomBuild: ["#", "/inquiry", "/exterior-options", "/exterior-options", "/configurator", "/custom-build", "/sprinter-guide"],
+  CustomBuild: ["#", "/inquiry", "/van-options", "/configurator", "/custom-build", "/sprinter-guide"],
   "vans-for-sale": ["/vans-for-sale"],
   layout: [
     "/van-layouts",

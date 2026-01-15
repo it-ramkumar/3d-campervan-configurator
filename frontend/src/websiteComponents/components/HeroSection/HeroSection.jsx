@@ -26,9 +26,8 @@ export default function HeroV({
         <div className="max-w-4xl text-center text-white">
           <Heading1 text={title} className="mb-4 text-center" />
 
-          <HeroParagrah className="text-center">
-            {description}
-          </HeroParagrah>
+          <HeroParagrah className="text-center" text={description}/>
+
 
           {showButton && (
             <div className="mt-8 flex justify-center">

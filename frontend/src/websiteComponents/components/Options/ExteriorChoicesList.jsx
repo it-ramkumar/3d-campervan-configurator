@@ -1,26 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  CheckCircle,
-  ChevronDown,
-  Sparkles,
-  Tag,
-  Loader2,
-  Search,
-} from "lucide-react";
+import { CheckCircle, ChevronDown, Sparkles, Tag, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Heading2 from "../Common/Headings/Heading2";
 import Heading3 from "../Common/Headings/Heading3";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Loader from "../Loader/Loader"
 import BlackButton from "../Common/Button/WhiteButton";
-import Image from "../Common/ImageWithSkeleton/ImageWithSkeleton"
+import Image from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 
-// --- Configuration Constant ---
 const MAX_INITIAL_ITEMS = 3;
 
-// --- Framer Motion Variants ---
 const categoryVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -31,93 +20,21 @@ const contentVariants = {
   visible: {
     opacity: 1,
     height: "auto",
-    transition: {
-      type: "spring",
-      stiffness: 70,
-      damping: 10,
-      staggerChildren: 0.05,
-    },
+    transition: { type: "spring", stiffness: 70, damping: 10, staggerChildren: 0.05 },
   },
 };
 
-
-export default function ExteriorChoicesList() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activeSubCategoryMap, setActiveSubCategoryMap] = useState({});
-  const [activeItemMap, setActiveItemMap] = useState({});
-  const [expandedCategories, setExpandedCategories] = useState({});
-  const [showFullItemListMap, setShowFullItemListMap] = useState({});
+export default function ExteriorChoicesList({ initialData }) {
+  // UI States: Inka global data se koi talluq nahi, sirf dikhaane ke liye hain
+  const [activeSubCategoryMap, setActiveSubCategoryMap] = useState(initialData.activeSubCategoryMap);
+  const [activeItemMap, setActiveItemMap] = useState(initialData.activeItemMap);
+  const [expandedCategories, setExpandedCategories] = useState(initialData.expandedCategories);
+  const [showFullItemListMap] = useState(initialData.showFullItemListMap);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("all");
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/exterior`);
-      const data = res.data.data || [];
-
-      const categoryMap = {};
-      const initialExpanded = {};
-      const initialSubMap = {};
-      const initialItemMap = {};
-      const initialShowFullMap = {};
-
-      data.forEach((item) => {
-        const cat = item.categoryId;
-        if (!cat) return;
-
-        if (!categoryMap[cat._id]) {
-          categoryMap[cat._id] = {
-            ...cat,
-            subCategories: {},
-            items: [],
-          };
-          initialExpanded[cat._id] = true;
-          initialShowFullMap[cat._id] = false;
-        }
-
-        const sub = item.subCategoryId;
-        if (sub) {
-          if (!categoryMap[cat._id].subCategories[sub._id]) {
-            categoryMap[cat._id].subCategories[sub._id] = { ...sub, items: [] };
-          }
-          categoryMap[cat._id].subCategories[sub._id].items.push(item);
-        } else {
-          categoryMap[cat._id].items.push(item);
-        }
-      });
-
-      const categoriesArray = Object.values(categoryMap).map((cat) => ({
-        ...cat,
-        subCategories: Object.values(cat.subCategories),
-      }));
-
-      categoriesArray.forEach((cat) => {
-        if (cat.subCategories.length > 0) {
-          initialSubMap[cat._id] = cat.subCategories[0]._id;
-          initialItemMap[cat._id] = cat.subCategories[0].items[0] || null;
-        } else {
-          initialSubMap[cat._id] = null;
-          initialItemMap[cat._id] = cat.items[0] || null;
-        }
-      });
-
-      setCategories(categoriesArray);
-      setActiveSubCategoryMap(initialSubMap);
-      setActiveItemMap(initialItemMap);
-      setExpandedCategories(initialExpanded);
-      setShowFullItemListMap(initialShowFullMap);
-    } catch (e) {
-      console.error("Error fetching categories:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // Props se data extract karein
+  const categories = initialData.categories;
 
   const toggleCategory = (categoryId) => {
     setExpandedCategories((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
@@ -151,12 +68,6 @@ export default function ExteriorChoicesList() {
   };
 
   const filteredCategories = getFilteredCategories();
-
-  if (loading) {
-    return (
-      <Loader />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white py-6 sm:py-12 md:mt-24 mt-10">
@@ -232,7 +143,8 @@ export default function ExteriorChoicesList() {
                         {cat.subCategories.length > 0 && (
                           <div className="flex flex-wrap justify-center gap-2 mb-6">
                             {cat.subCategories.map((sub) => (
-                              <BlackButton key={sub._id}
+                              <BlackButton
+                                key={sub._id}
                                 onClick={() => {
                                   setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
                                   setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
@@ -240,8 +152,6 @@ export default function ExteriorChoicesList() {
                                 label={sub.title}
                                 className={`transition-all ${activeSubId === sub._id ? "bg-gray-900 text-white" : "text-black"}`}
                               />
-
-
                             ))}
                           </div>
                         )}
@@ -255,7 +165,6 @@ export default function ExteriorChoicesList() {
                               label={item.title}
                               className={`flex items-center transition-all ${activeItem?._id === item._id ? "bg-gray-900 text-white" : "text-black"}`}
                             />
-
                           ))}
                         </div>
 
@@ -265,11 +174,8 @@ export default function ExteriorChoicesList() {
                             <motion.div key={activeItem._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="bg-white rounded-2xl p-5 sm:p-8 shadow-inner">
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                                 <div className={`${alternateLayout ? "" : "md:order-2"}`}>
-
-
                                   {activeItem.images?.[0] && (
-                                    <Image src={activeItem.images[0]} alt={activeItem.title}/>
-                                  
+                                    <Image src={activeItem.images[0]} alt={activeItem.title} />
                                   )}
                                 </div>
                                 <div className={`space-y-4 ${alternateLayout ? "" : "md:order-1"}`}>

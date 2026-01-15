@@ -6,6 +6,7 @@ import {
   CalendarDays, Clock, Image as ImageIcon, FileText,
   Share2, BookOpen, ThumbsUp, ThumbsDown
 } from "lucide-react";
+import { generateBlogSchema } from "../../schema/blogDetail";
 
 // Swiper JS Imports
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -206,9 +207,35 @@ export default function BlogDetail() {
       default: return null;
     }
   };
-
+// SEO Data
+  const schemaData = generateBlogSchema(blog);
+  const pageTitle = `${blog.title} | Big Bear Vans Blog`;
+  const pageDescription = blog.description || `Read about ${blog.title} on Big Bear Vans. Insights and tips for your campervan journey.`;
   return (
     <div className="bg-[#f8fafc] min-h-screen">
+      {/* Standard Meta Tags */}
+          <title>{pageTitle}</title>
+          <meta name="description" content={pageDescription} />
+          <link rel="canonical" href={window.location.href} />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="article" />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDescription} />
+          <meta property="og:image" content={blog.gallery?.[0]} />
+          <meta property="og:url" content={window.location.href} />
+          <meta property="og:site_name" content="Big Bear Vans" />
+
+          {/* Twitter Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDescription} />
+          <meta name="twitter:image" content={blog.gallery?.[0]} />
+
+          {/* JSON-LD Structured Data */}
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
       <Navbar />
 
       {/* Hero Section */}

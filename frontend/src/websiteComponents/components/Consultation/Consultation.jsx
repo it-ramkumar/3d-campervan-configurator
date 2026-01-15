@@ -7,9 +7,9 @@ import Swal from "sweetalert2";
 import { contact } from "../../../api/contact/contact";
 import Heading2 from "../Common/Headings/Heading2";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading3 from "../Common/Headings/Heading3";
+import { consultationSchema } from "../../schema/consultationSchema";
 
-export default function Consultation({ vanForSale }) {
+export default function Consultation() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -108,24 +108,20 @@ export default function Consultation({ vanForSale }) {
     }
   };
 
+  const jsonld = consultationSchema()
   return (
+    <>
+    <title>Schedule a Free Consultation | Custom Van Builder California</title>
+      <meta name="description" content="Ready to start your custom camper van journey? Book a free consultation call with Big Bear Vans. We discuss layouts, features, and financing." />
+
+      <script type="application/ld+json">
+        {JSON.stringify(jsonld)}
+      </script>
+
     <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24 flex flex-col items-center space-y-12">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-6">
-        {/* {vanForSale && (
-          <>
-            <Heading3 text="Ready to Start Your Adventure?" textColor="text-black"/>
 
-            <div className="w-full max-w-3xl text-left font-serif text-base md:text-lg text-black/70 leading-relaxed space-y-4">
-              <p>We're here to guide you through every step. Let's find the perfect path for you.</p>
-              <ul className="space-y-2">
-                <li><strong>Discuss Your Vision:</strong> Schedule a personal consultation to explore financing, custom upgrades, and transparent pricing.</li>
-                <li><strong>Schedule a Test Drive:</strong> Get behind the wheel to experience the craftsmanship and performance firsthand.</li>
-                <li><strong>Ask Our Experts:</strong> Have a specific question? Send us an email for a prompt and detailed response.</li>
-              </ul>
-            </div>
-          </>
-        )} */}
         <Heading2 text="Schedule Your Free Consultation Call" />
         <RichParagraph className="max-w-2xl text-center">Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
         </RichParagraph>
@@ -151,5 +147,6 @@ export default function Consultation({ vanForSale }) {
         <MapSection />
       </div>
     </div>
+      </>
   );
 }

@@ -31,11 +31,11 @@ const AboutUs = lazy(() => import("../websiteComponents/components/AboutUs/About
 const ShowRoom = lazy(() => import("../websiteComponents/components/Showroom/showroom"));
 const NotFound = lazy(() => import("../websiteComponents/components/NotFound/NotFound"));
 const ConfiguratorForm = lazy(() => import("../websiteComponents/components/adminPanel/Configurator/ConfiguratorForm"));
-const Exteriorpage = lazy(() => import("../websiteComponents/components/ExteriorChoicePageD/ExteriorChoicePage"));
+const Exteriorpage = lazy(() => import("../websiteComponents/components/Options/Options"));
 const LayoutDetail = lazy(() => import("../websiteComponents/components/LayoutDetail/LayoutDetail"));
 const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail/Blogdetail"));
 const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Clienthero/Client"));
-const Interiorpage = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
+// const Interiorpage = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
 const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
@@ -85,7 +85,7 @@ const AppRoutes = () => {
           <Route path="/van-detail/:slug" element={<VanDetail />} />
           <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
           <Route path="/blog-detail/:slug" element={<BlogDetail />} />
-          <Route path="/exterior-options" element={<Exteriorpage />} />
+          <Route path="/van-options/:options" element={<Exteriorpage />} />
           <Route path="/blog" element={<Blogs />} />
           <Route path="/blog-form" element={<BlogForm />} />
           <Route path="/van-layouts" element={<Layouts />} />
@@ -98,7 +98,7 @@ const AppRoutes = () => {
           <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />
-          <Route path="/interior-options" element={<Interiorpage />} />
+          {/* <Route path="/interior-options" element={<Interiorpage />} /> */}
           <Route path="/cushion" element={<Cushionpage />} />
           <Route path="/layout-by-category/:category" element={<CustomVan />} />
           <Route path="/financing" element={<Financing />} />

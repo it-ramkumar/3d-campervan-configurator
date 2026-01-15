@@ -11,6 +11,7 @@ import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
 import Heading2 from "../Common/Headings/Heading2";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { LayoutByCategorySchema } from "../../schema/layoutByCategorySchema";
 
 export default function CamperProjectsPage() {
   const { category } = useParams();
@@ -104,13 +105,22 @@ export default function CamperProjectsPage() {
 
     setPage(1);
   };
+  const formattedCategory = category?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
+  const jsonLd = LayoutByCategorySchema(category,layouts)
   const heroImage = "/heroSlider/custom_build.jpg";
   const newTitleText = category;
   const newDescriptionText = category;
 
   return (
     <>
+    <title>{`${formattedCategory} Layouts & Custom Builds | Big Bear Vans`}</title>
+      <meta name="description" content={`Discover the best ${formattedCategory} camper van layouts. High-quality custom builds with professional sitting, sleeping, and bathroom configurations.`} />
+      <link rel="canonical" href={`https://bigbearvans.com/camper-projects/${category}`} />
+
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLd)}
+      </script>
       <Navbar />
       <div className="tour-hero">
         <HeroSection

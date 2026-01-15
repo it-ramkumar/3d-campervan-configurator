@@ -11,6 +11,7 @@ import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
 import Heading2 from "../Common/Headings/Heading2";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { layoutByWheelbaseSchema } from "../../schema/layoutByWheelBase"
 
 export default function CamperProjectsPage() {
   const { wheelbase } = useParams();
@@ -131,9 +132,20 @@ export default function CamperProjectsPage() {
     { key: "bedType", label: "Bed Type", type: "select", options: filters?.bedType },
     { key: "bathroomType", label: "Bathroom Type", type: "select", options: filters?.bathroomType }
   ];
-
+  const pageTitle = newTitleText[wheelbase] || `${wheelbase} Wheelbase`;
+  const pageDescription = newDescriptionText[wheelbase] || `Custom camper van layouts for ${wheelbase} wheelbase.`;
+  const jsonLd = layoutByWheelbaseSchema(wheelbase,layouts)
   return (
     <>
+    {/* ✅ SEO META TAGS */}
+      <title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
+      <meta name="description" content={pageDescription} />
+      <link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+
+      {/* ✅ JSON-LD SCHEMA */}
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLd)}
+      </script>
       <Navbar />
       <div className="tour-hero">
         <HeroSection

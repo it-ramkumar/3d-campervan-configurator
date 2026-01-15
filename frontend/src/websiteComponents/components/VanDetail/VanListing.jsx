@@ -129,18 +129,7 @@ const SvgCheckmark = () => (
 
 const VanPage = ({ vanDetail, onConsultationClick }) => {
   const heroRef = useRef(null);
-  // const featuresList = [
-  //   "Elevator bed with dinette seating, swivel table & multi-use layout",
-  //   "Interior wet bath with aluminum shower & portable smart toilet",
-  //   "Roof-mounted 12V A/C & advanced diesel GLYCOL heater system",
-  //   "1200Ah electrical system with solar, shore power & alternator charging",
-  //   "Large insulated bump-out windows for maximum natural light",
-  //   "Full roof deck with hammock mounts, ladder, and rack system",
-  //   "Custom wrap, raptor-coated bumpers, grill & lighting package",
-  //   "Winter-ready insulation with heated flooring"
-  // ];
 
-  // --- Data Mapping (Updated icons to remove circle fill) ---
   const van = {
     detailed_features:
       vanDetail?.detailed_features?.map((feature) => {
