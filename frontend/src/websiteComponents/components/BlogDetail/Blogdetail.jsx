@@ -22,6 +22,7 @@ import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Loader from "../Loader/Loader";
 import Heading1 from "../Common/Headings/Heading1";
 import Heading3 from "../Common/Headings/Heading3";
+import Heading4 from "../Common/Headings/Heading4";
 import RichParagraph from "../Common/Paragraph/RichParagraph";
 
 export default function BlogDetail() {
@@ -153,6 +154,13 @@ export default function BlogDetail() {
           <div key={index} className="mb-8 mt-12 flex items-center gap-4">
             <div className="w-1.5 h-12 bg-black rounded-full" />
             <Heading3 text={block.text} textColor="text-black" />
+          </div>
+        );
+         case "subheading":
+        return (
+          <div key={index} className="mb-8 mt-12 flex items-center gap-4">
+            <div className="w-1.5 h-12 bg-black rounded-full" />
+            <Heading4 text={block.text} textColor="text-black" />
           </div>
         );
       case "paragraph":

@@ -34,7 +34,7 @@ const ConfiguratorForm = lazy(() => import("../websiteComponents/components/admi
 const Exteriorpage = lazy(() => import("../websiteComponents/components/Options/Options"));
 const LayoutDetail = lazy(() => import("../websiteComponents/components/LayoutDetail/LayoutDetail"));
 const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail/Blogdetail"));
-const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Clienthero/Client"));
+const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Client"));
 // const Interiorpage = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
