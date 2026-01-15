@@ -3,7 +3,7 @@ const router = express.Router();
 const Van = require("../models/vanModel");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { uploadToS3,deleteFromS3 } = require("../services/s3");
+const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.post('/', protect, adminOnly, upload.fields([
@@ -92,6 +92,7 @@ router.get('/available', async (req, res) => {
     });
   }
 });
+
 router.get('/van-by-status', async (req, res) => {
   try {
     const {

@@ -9,12 +9,6 @@ export const generateHomeSchema = () => {
         "@id": "https://bigbearvans.com/#organization",
         "name": "Big Bear Vans",
         "url": "https://bigbearvans.com",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://bigbearvans.com/images/blackLogo.png",
-          "width": "512",
-          "height": "512"
-        },
         "description": "Premium custom camper van conversions featuring 3D design and automated CNC manufacturing for Sprinter, Transit, and ProMaster vans.",
         "sameAs": [
           "https://www.facebook.com/bigbearvans",

@@ -63,6 +63,7 @@ export default function Buy() {
 
   if (loading) return <Loader />;
 
+
   return (
     <section className="bg-white mt-10 md:mt-24 py-12  font-serif overflow-x-hidden">
       <div className="container mx-auto px-4">
@@ -141,7 +142,7 @@ export default function Buy() {
             ))}
 
             {/* 🔹 2. UPCOMING BUILDS SLIDES */}
-            {readyToGoVans.length < 0 && UPCOMING_VANS.map((van, idx) => (
+            {readyToGoVans.length === 0 && UPCOMING_VANS.map((van, idx) => (
               <SwiperSlide key={`upcoming-${idx}`} className="group w-full md:!w-[900px] md:!h-[500px]">
                 <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-md bg-gradient-to-br from-gray-50 to-gray-200 border border-gray-200 flex flex-col justify-center items-center text-center p-8 transition-all duration-500 group-hover:scale-[1.01]">
                   <div className="absolute top-0 right-0 p-10 opacity-10"><VanIcon /></div>

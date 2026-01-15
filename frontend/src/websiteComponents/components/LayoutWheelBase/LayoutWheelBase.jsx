@@ -153,13 +153,11 @@ export default function CamperProjectsPage() {
 <meta property="og:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
 <meta property="og:description" content={pageDescription} />
 <meta property="og:url" content={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
-<meta property="og:image" content="https://bigbearvans.com/images/blackLogo.png" /> {/* Ek generic achi image ka link */}
 
 {/* ✅ TWITTER CARDS */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
 <meta name="twitter:description" content={pageDescription} />
-<meta name="twitter:image" content="https://bigbearvans.com/images/blackLogo.png" />
 
 {/* ✅ JSON-LD SCHEMA */}
 <script type="application/ld+json">
