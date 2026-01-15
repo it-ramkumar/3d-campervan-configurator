@@ -32,19 +32,84 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: "Vans-listing", label: "Vans", icon: "🚐" },
-    { id: "portfolio-listing", label: "Portfolio", icon: "🖼️" },
-    { id: "Blogs-listing", label: "Blogs", icon: "✍️" },
-    { id: "Inquiry-data", label: "Inquiries", icon: "📬" },
-    { id: "Contact-data", label: "Contact", icon: "📞" },
-    { id: "Configurator-data", label: "Config", icon: "⚙️" },
-    { id: "exterior-choices", label: "Exterior", icon: "🎨" },
-    { id: "interior-choices", label: "Interior", icon: "🛋️" },
-    { id: "lead-emails", label: "Leads", icon: "📧" },
-    { id: "career", label: "Jobs", icon: "💼" },
-    { id: "applications", label: "Apps", icon: "📄" },
-    { id: "quickLink", label: "Links", icon: "🔗" },
-    { id: "Users", label: "Users", icon: "👥" },
+    {
+      id: "Vans-listing",
+      label: "Vans Inventory",
+      desc: "View and manage all vans and availability.",
+      icon: "🚐"
+    },
+    {
+      id: "portfolio-listing",
+      label: "Portfolio Inventory",
+      desc: "Manage completed and ongoing projects.",
+      icon: "🖼️"
+    },
+    {
+      id: "Blogs-listing",
+      label: "Blogs",
+      desc: "Create, edit, and manage blog posts.",
+      icon: "✍️"
+    },
+    {
+      id: "exterior-choices",
+      label: "Exterior Options",
+      desc: "Manage exterior materials and styles.",
+      icon: "🎨"
+    },
+    {
+      id: "interior-choices",
+      label: "Interior Options",
+      desc: "Manage interior designs and materials.",
+      icon: "🛋️"
+    },
+    {
+      id: "Inquiry-data",
+      label: "Client Inquiries",
+      desc: "View messages and customer inquiries.",
+      icon: "📬"
+    },
+    {
+      id: "Contact-data",
+      label: "Client Contact",
+      desc: "Manage contact form submissions.",
+      icon: "📞"
+    },
+    {
+      id: "career",
+      label: "Jobs Post",
+      desc: "Create and manage job listings.",
+      icon: "💼"
+    },
+    {
+      id: "applications",
+      label: "Candidate Applications",
+      desc: "Review job applications and resumes.",
+      icon: "📄"
+    },
+    {
+      id: "quickLink",
+      label: "Quick Links",
+      desc: "Manage quick access website links.",
+      icon: "🔗"
+    },
+    {
+      id: "lead-emails",
+      label: "Receive Leads",
+      desc: "Set up and manage admin emails to receive leads.",
+      icon: "📧"
+    },
+    {
+      id: "Configurator-data",
+      label: "3D Config",
+      desc: "Manage 3D configurator options.",
+      icon: "⚙️"
+    },
+    {
+      id: "Users",
+      label: "Config Clients",
+      desc: "Manage system users and access.",
+      icon: "👥"
+    }
   ];
 
   const handleLogout = async () => {
@@ -57,28 +122,28 @@ export default function Dashboard() {
 
   const renderContent = () => {
     switch (selected) {
-        case "vans-form": return <VansForm setSelected={setSelected} />;
-        case "Vans-listing": return <VanListing setSelected={setSelected} />;
-        case "portfolio-form": return <PortfolioForm setSelected={setSelected} />;
-        case "portfolio-listing": return <PortfolioListing setSelected={setSelected} />;
-        case "Blog-form": return <BlogForm setSelected={setSelected} />;
-        case "Blogs-listing": return <BlogsListing setSelected={setSelected} />;
-        case "Configurator-form": return <ConfiguratorForm setSelected={setSelected} />;
-        case "Configurator-data": return <ConfiguratorListing setSelected={setSelected} />;
-        case "Inquiry-data": return <InqueryListing setSelected={setSelected} />;
-        case "Contact-data": return <ContactListing setSelected={setSelected} />;
-        case "Users": return <UsersData setSelected={setSelected} />;
-        case "interior-choices": return <InteriorList setSelected={setSelected} />;
-        case "interior-form": return <InteriorForm setSelected={setSelected} />;
-        case "exterior-choices": return <ExteriorList setSelected={setSelected} />;
-        case "exterior-form": return <ExteriorForm setSelected={setSelected} />;
-        case "lead-emails": return <LeadEmail setSelected={setSelected} />;
-        case "career": return <JobListing setSelected={setSelected} />;
-        case "career-form": return <JobForm setSelected={setSelected} />;
-        case "applications": return <Applications setSelected={setSelected} />;
-        case "quickLink": return <QuickLinks setSelected={setSelected} />;
-        case "addQuickLink": return <AddQuickLink setSelected={setSelected} />;
-        default: return <PortfolioListing setSelected={setSelected} />;
+      case "vans-form": return <VansForm setSelected={setSelected} />;
+      case "Vans-listing": return <VanListing setSelected={setSelected} />;
+      case "portfolio-form": return <PortfolioForm setSelected={setSelected} />;
+      case "portfolio-listing": return <PortfolioListing setSelected={setSelected} />;
+      case "Blog-form": return <BlogForm setSelected={setSelected} />;
+      case "Blogs-listing": return <BlogsListing setSelected={setSelected} />;
+      case "Configurator-form": return <ConfiguratorForm setSelected={setSelected} />;
+      case "Configurator-data": return <ConfiguratorListing setSelected={setSelected} />;
+      case "Inquiry-data": return <InqueryListing setSelected={setSelected} />;
+      case "Contact-data": return <ContactListing setSelected={setSelected} />;
+      case "Users": return <UsersData setSelected={setSelected} />;
+      case "interior-choices": return <InteriorList setSelected={setSelected} />;
+      case "interior-form": return <InteriorForm setSelected={setSelected} />;
+      case "exterior-choices": return <ExteriorList setSelected={setSelected} />;
+      case "exterior-form": return <ExteriorForm setSelected={setSelected} />;
+      case "lead-emails": return <LeadEmail setSelected={setSelected} />;
+      case "career": return <JobListing setSelected={setSelected} />;
+      case "career-form": return <JobForm setSelected={setSelected} />;
+      case "applications": return <Applications setSelected={setSelected} />;
+      case "quickLink": return <QuickLinks setSelected={setSelected} />;
+      case "addQuickLink": return <AddQuickLink setSelected={setSelected} />;
+      default: return <PortfolioListing setSelected={setSelected} />;
     }
   };
 
@@ -103,19 +168,31 @@ export default function Dashboard() {
             <button
               key={item.id}
               onClick={() => setSelected(item.id)}
-              className={`w-full flex items-center px-6 py-4 transition-all
-                ${selected === item.id ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600" : "text-slate-500 hover:bg-slate-50"}
-              `}
+              className={`w-full flex items-start px-6 py-4 text-left transition-all
+        ${selected === item.id
+                  ? "bg-blue-50 text-blue-600 border-r-4 border-blue-600"
+                  : "text-slate-500 hover:bg-slate-50"
+                }
+      `}
             >
+              {/* Icon */}
               <span className="text-2xl min-w-[32px]">{item.icon}</span>
+
+              {/* Label + Description */}
               {!isCollapsed && (
-                <span className="ml-4 font-semibold whitespace-nowrap overflow-hidden transition-opacity duration-300">
-                  {item.label}
-                </span>
+                <div className="ml-4 flex flex-col leading-tight">
+                  <span className="font-semibold whitespace-nowrap">
+                    {item.label}
+                  </span>
+                  <span className="text-xs text-slate-400 mt-1">
+                    {item.desc}
+                  </span>
+                </div>
               )}
             </button>
           ))}
         </nav>
+
 
         {/* Logout at Bottom */}
         <button
@@ -143,9 +220,9 @@ export default function Dashboard() {
 
         {/* The Content Area is the ONLY part that scrolls */}
         <main className="flex-1 overflow-y-auto p-8 custom-scrollbar bg-[#f8fafc]">
-           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 min-h-full">
-              {renderContent()}
-           </div>
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 min-h-full">
+            {renderContent()}
+          </div>
         </main>
       </div>
 
