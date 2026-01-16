@@ -61,7 +61,7 @@ const QuickLinksPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-center"
           >
-            Directory
+            Quick Links
           </motion.h1>
 
           <motion.div
