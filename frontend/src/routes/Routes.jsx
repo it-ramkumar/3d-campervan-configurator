@@ -49,6 +49,9 @@ const Jobs = lazy(() => import("../websiteComponents/components/Jobs/JobsListing
 const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBuild/CustomBuild"));
 const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/QuickLinks"));
 const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPage"));
+const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
+
+
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -110,6 +113,9 @@ const AppRoutes = () => {
           <Route path="/custom-build" element={<CustomBuild />} />
           <Route path="/quick-links" element={<QuickLiks />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/where-to-camp" element={<WhereToCamp />} />
+
+
 
 
         </Routes>

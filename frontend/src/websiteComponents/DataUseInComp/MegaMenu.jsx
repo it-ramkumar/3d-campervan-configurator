@@ -45,6 +45,7 @@ export const menuContent = {
             { label: "Our Process", link: "/our-process" },
             { label: "Showroom", link: "/showroom" },
             { label: "Financing", link: "/financing" },
+            { label: "Where To Camp", link: "/where-to-camp" },
             { label: "About Us", link: "/about-us" },
             { label: "Our Clients", link: "/our-clients" },
           ],
