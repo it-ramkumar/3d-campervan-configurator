@@ -14,7 +14,11 @@ router.post('/', protect, adminOnly, upload.fields([
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const detailed_features = JSON.parse(req.body.detailed_features || "[]");
     const media = JSON.parse(req.body.media || "[]");
-    const status = req.body.status || "sold"; // ✅ Changed from sold to status
+
+    // --- Naya Block Section Parse karne ke liye ---
+    const blocks = JSON.parse(req.body.blocks || "[]");
+
+    const status = req.body.status || "sold";
 
     if (!van_listing || !van_listing.title) {
       return res.status(400).json({ message: 'Van listing with title is required' });
@@ -55,9 +59,13 @@ router.post('/', protect, adminOnly, upload.fields([
           capacity: van_listing.specifications.capacity || {}
         } : undefined
       },
-      status, // ✅ Changed from sold to status
+      status,
       gallery,
       detailed_features,
+
+      // --- Blocks ko yahan add kiya gaya hai ---
+      blocks,
+
       media
     };
 
@@ -226,6 +234,10 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       van.detailed_features
     );
     const media = parseJSONField(req.body.media, van.media);
+
+    // --- Naya: Dynamic Blocks parse karne ke liye ---
+    const blocks = parseJSONField(req.body.blocks, van.blocks);
+
     const status = req.body.status !== undefined ? req.body.status : van.status;
 
     // ✅ NEW: Parse gallery order (array of existing URLs in desired order)
@@ -246,10 +258,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
 
     // If galleryOrder is provided, reorder existing images
     if (galleryOrder && Array.isArray(galleryOrder)) {
-      // Validate that all URLs in galleryOrder exist in current gallery
       const validUrls = galleryOrder.filter(url => updatedGallery.includes(url));
-
-      // Keep only the ordered images (removes any not in galleryOrder)
       updatedGallery = validUrls;
     }
 
@@ -263,7 +272,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     // ✅ Parse insertAt index (where to insert new images)
     const insertAt = req.body.insertAt !== undefined
       ? parseInt(req.body.insertAt)
-      : updatedGallery.length; // Default: append at end
+      : updatedGallery.length;
 
     // Insert new images at specified index
     updatedGallery.splice(insertAt, 0, ...newGallery);
@@ -286,6 +295,9 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     van.media = media;
     van.status = status;
     van.gallery = updatedGallery;
+
+    // --- Naya: Blocks update logic ---
+    van.blocks = blocks;
 
     // If title changed, generate new slug
     if (van_listing.title && van_listing.title !== van.van_listing.title) {

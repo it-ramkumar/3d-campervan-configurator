@@ -10,6 +10,7 @@ import { handleMediaUrlChange } from "../../../CustomHooks/handleMediaUrlChange"
 import { removeMediaUrl } from "../../../CustomHooks/removeMediaUrl";
 import DetailedFeatures from "../../Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "../../Common/GalleryUploader/GalleryUploader";
+import DynamicBlocks from "../../Common/DynamicBlock/DynamicBlock"; // Naya Component
 import Swal from "sweetalert2";
 
 const VansForm = ({ setSelected }) => {
@@ -32,11 +33,14 @@ const VansForm = ({ setSelected }) => {
         capacity: { sits: "", sleeps: "" },
       },
     },
-    status: "available", // Changed from 'sold' to 'status'
+    status: "available",
     gallery: [],
     media: [],
   });
+
   const [features, setFeatures] = useState([{ category: "", items: [""] }]);
+  // --- Naya: Blocks State ---
+  const [blocks, setBlocks] = useState([]);
 
   const [existingGallery, setExistingGallery] = useState([]);
   const [galleryFiles, setGalleryFiles] = useState([]);
@@ -47,7 +51,6 @@ const VansForm = ({ setSelected }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Status options
   const statusOptions = [
     { value: "available", label: "Available" },
     { value: "sale_pending", label: "Sale Pending" },
@@ -72,11 +75,14 @@ const VansForm = ({ setSelected }) => {
         },
         media: editData.media || [],
         gallery: editData.gallery || [],
-        status: editData.status || "available", // Handle status from editData
+        status: editData.status || "available",
       }));
 
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);
       setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
+
+      // --- Naya: Blocks ko edit data se load karein ---
+      setBlocks(editData.blocks || []);
 
       setFeatures(editData.detailed_features?.length > 0
         ? editData.detailed_features
@@ -85,7 +91,7 @@ const VansForm = ({ setSelected }) => {
     }
   }, [editData]);
 
-const resetForm = () => {
+  const resetForm = () => {
     setFormData({
       van_listing: {
         title: "",
@@ -113,13 +119,13 @@ const resetForm = () => {
     setExistingGallery([]);
     setRemovedExistingGallery([]);
     setMediaUrls([""]);
+    setBlocks([]); // Blocks reset
 
     dispatch(clearEditData());
   };
 
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
     if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
     if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
@@ -151,7 +157,6 @@ const resetForm = () => {
 
     setLoading(true);
     try {
-      // Purani images jo delete ki gayi hain
       if (removedExistingGallery.length > 0) {
         await Promise.all(
           removedExistingGallery.map(url =>
@@ -161,21 +166,18 @@ const resetForm = () => {
       }
 
       const formToSend = new FormData();
-
-      // Nayi files
       galleryFiles.forEach((file) => formToSend.append("gallery", file));
-
-      // ✅ IMPORTANT: Current sorted order of existing images
       formToSend.append("galleryOrder", JSON.stringify(existingGallery));
 
-      // Media and other data
       const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
       formToSend.append("media", JSON.stringify(cleanedMediaUrls));
       formToSend.append("van_listing", JSON.stringify(formData.van_listing));
       formToSend.append("status", formData.status);
       formToSend.append("detailed_features", JSON.stringify(features));
 
-      // Agar nayi images ko gallery ke shuruat mein dalna hai toh insertAt: 0 bhej sakte hain
+      // --- Naya: Blocks ko FormData mein add karein ---
+      formToSend.append("blocks", JSON.stringify(blocks));
+
       formToSend.append("insertAt", "0");
 
       if (editData?._id) {
@@ -202,7 +204,6 @@ const resetForm = () => {
   return (
     <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             {editData ? "Edit Van Listing" : "Create Van Listing"}
@@ -216,7 +217,6 @@ const resetForm = () => {
           {/* Basic Info Card */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Basic Information</h2>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
@@ -294,7 +294,6 @@ const resetForm = () => {
           {/* Specifications Card */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Technical Specifications</h2>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Make & Model *</label>
@@ -365,14 +364,16 @@ const resetForm = () => {
 
           {/* Detailed Features */}
           <div className="border border-gray-300 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Detailed Features
-            </h3>
-            <DetailedFeatures
-              features={features}
-              setFeatures={setFeatures}
-            />
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Detailed Features</h3>
+            <DetailedFeatures features={features} setFeatures={setFeatures} />
           </div>
+
+          {/* --- Naya: Dynamic Content Blocks Section --- */}
+          <section className="border border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Content Blocks (Dynamic)</h2>
+            <p className="text-sm text-gray-500 mb-6">Add dynamic sections like Headings, Tables, Paragraphs, or Lists.</p>
+            <DynamicBlocks blocks={blocks} setBlocks={setBlocks} />
+          </section>
 
           <GalleryUploader
             galleryFiles={galleryFiles}
@@ -388,7 +389,6 @@ const resetForm = () => {
           {/* Media URLs Section */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Media URLs</h2>
-
             <div className="space-y-4">
               {mediaUrls.map((url, index) => (
                 <div key={index} className="flex gap-3">
@@ -409,7 +409,6 @@ const resetForm = () => {
                 </div>
               ))}
             </div>
-
             <button
               type="button"
               onClick={() => addMediaUrl(setMediaUrls)}
@@ -417,20 +416,13 @@ const resetForm = () => {
             >
               + Add Media URL
             </button>
-
-            <p className="mt-3 text-sm text-gray-500">
-              Add YouTube, Vimeo, or other media URLs (e.g., https://youtube.com/watch?v=abc123)
-            </p>
           </section>
 
           {/* Status & Submit Section */}
           <section className="border border-gray-300 rounded-lg p-6">
             <div className="space-y-6">
-              {/* Status Radio Buttons */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Listing Status *
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Listing Status *</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {statusOptions.map((option) => (
                     <label
@@ -448,15 +440,12 @@ const resetForm = () => {
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                         className="h-4 w-4 text-green-600 focus:ring-green-500"
                       />
-                      <span className="text-sm font-medium text-gray-700">
-                        {option.label}
-                      </span>
+                      <span className="text-sm font-medium text-gray-700">{option.label}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* Submit Button */}
               <div className="flex justify-end">
                 <button
                   type="submit"

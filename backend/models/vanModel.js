@@ -1,5 +1,22 @@
 const mongoose = require('mongoose');
 
+// --- Naya Dynamic Block Schema ---
+const contentBlockSchema = new mongoose.Schema({
+  block_type: {
+    type: String,
+    enum: ['heading', 'subheading', 'paragraph', 'list', 'table'],
+    required: true
+  },
+  title: { type: String, trim: true }, // Heading ya Table title ke liye
+  content: { type: String },           // Paragraph ya simple text ke liye
+  list_items: [{ type: String }],      // Agar block_type 'list' ho
+  table_data: {                        // Agar block_type 'table' ho
+    headers: [{ type: String }],
+    rows: [[{ type: String }]]
+  },
+  order: { type: Number, default: 0 }  // Blocks ki sequence manage karne ke liye
+});
+
 const capacitySchema = new mongoose.Schema({
   sits: { type: String, required: true },
   sleeps: { type: String, required: true }
@@ -37,12 +54,15 @@ const vanSchema = new mongoose.Schema(
       enum: ['available', 'sale_pending', 'sold', 'coming_soon'],
       default: 'available'
     },
-
     gallery: {
       type: [String],
       default: []
     },
     detailed_features: [detailedFeatureItemSchema],
+
+    // --- Dynamic Blocks ka Addition ---
+    blocks: [contentBlockSchema],
+
     media: {
       type: [String],
       default: []
