@@ -20,7 +20,7 @@ export async function vansByStatus(status, page = 1, limit = 9) {
 
  return {
   success: true,
-  data: response.data.data,   // this is array of vans
+  data: response.data.data,   
   hasMore: response.data.hasMore,
   total: response.data.total,
 };

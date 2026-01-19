@@ -86,8 +86,7 @@ export default function VansForSale() {
   useEffect(() => { fetchByStatus("coming_soon", comingPage, setComingVans, comingHasMore, setComingHasMore, setComingLoading); }, [comingPage, fetchByStatus]);
 
   /* ================= SEO & JSON-LD (React 19) ================= */
-  // Sab data ko merge karein Schema ke liye
-
+ 
   // Create schemas
   const schemas = [
     availableVans.length > 0 && createItemListSchema("Available Camper Vans", availableVans, "InStock"),
