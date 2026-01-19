@@ -70,6 +70,55 @@ export default function BlogDetail() {
     </div>
   );
 
+
+// 1. Helper function to format text (Bold #word and handle Lists)
+const formatRichText = (text) => {
+  if (!text) return null;
+
+  // Pehle check karte hain agar text me ":" hai aur uske baad items hain (List detection)
+  if (text.includes(":") && (text.includes("\n") || text.split(":").length > 1)) {
+    const parts = text.split(":");
+    const introText = parts[0];
+    const listItems = parts[1]
+      .split(/[,\n•]/) // Split by comma, newline or bullet
+      .map(item => item.trim())
+      .filter(item => item.length > 0);
+
+    if (listItems.length > 1) {
+      return (
+        <>
+          <p className="mb-3">{formatBoldTags(introText + ":")}</p>
+          <ul className="space-y-2 ml-4">
+            {listItems.map((item, idx) => (
+              <li key={idx} className="flex gap-2 items-start text-gray-700">
+                <span className="text-black font-bold">•</span>
+                <span>{formatBoldTags(item)}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      );
+    }
+  }
+
+  // Agar simple paragraph hai to sirf bold logic apply hogi
+  return formatBoldTags(text);
+};
+
+// 2. Helper function to make #word bold
+const formatBoldTags = (text) => {
+  if (!text) return text;
+  const parts = text.split(/(#[^\s#]+)/g); // Splits by #word (improved regex)
+  return parts.map((part, i) =>
+    part.startsWith("#") ? (
+      <strong key={i} className="font-bold text-black">{part.substring(1)}</strong>
+    ) : (
+      part
+    )
+  );
+};
+
+
   const heroImage = blog.gallery?.[0] || "https://via.placeholder.com/1200x600?text=Blog+Image";
 
   const renderContent = () => {
@@ -149,26 +198,28 @@ export default function BlogDetail() {
 
   const renderSingleBlock = (block, index) => {
     switch (block.type) {
-      case "heading":
-        return (
-          <div key={index} className="mb-8 mt-12 flex items-center gap-4">
-            <div className="w-1.5 h-12 bg-black rounded-full" />
-            <Heading3 text={block.text} textColor="text-black" />
-          </div>
-        );
-         case "subheading":
-        return (
-          <div key={index} className="mb-8 mt-12 flex items-center gap-4">
-            <div className="w-1.5 h-12 bg-black rounded-full" />
-            <Heading4 text={block.text} textColor="text-black" />
-          </div>
-        );
-      case "paragraph":
-        return (
-          <div key={index} className="mb-6 p-6 lg:p-8 bg-[#f8fafc] rounded-2xl border border-gray-100 shadow-sm">
-            <RichParagraph>{block.text}</RichParagraph>
-          </div>
-        );
+     case "heading":
+  return (
+    <div key={index} className="mb-8 mt-12 flex items-center gap-4">
+      <div className="w-1.5 h-12 bg-black rounded-full" />
+      <Heading3 text={formatBoldTags(block.text)} textColor="text-black" />
+    </div>
+  );
+
+case "subheading":
+  return (
+    <div key={index} className="mb-8 mt-12 flex items-center gap-4">
+      <div className="w-1.5 h-12 bg-black rounded-full" />
+      <Heading4 text={formatBoldTags(block.text)} textColor="text-black" />
+    </div>
+  );
+
+case "paragraph":
+  return (
+    <div key={index} className="mb-6 p-6 lg:p-8 bg-[#f8fafc] rounded-2xl border border-gray-100 shadow-sm">
+      <RichParagraph>{formatRichText(block.text)}</RichParagraph>
+    </div>
+  );
       case "image":
         return (
           <div key={index} className="my-10 w-full flex flex-col items-center">
@@ -195,23 +246,43 @@ export default function BlogDetail() {
              </div>
           </div>
         );
-      case "table":
-        return (
-          <div key={index} className="my-10 overflow-x-auto rounded-xl border border-gray-200 shadow-md">
-            <table className="w-full text-left text-sm lg:text-base">
-              <thead className="bg-black text-white">
-                <tr>{block.rows?.[0]?.map((h, idx) => <th key={idx} className="p-4 uppercase tracking-wider">{h}</th>)}</tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {block.rows?.slice(1).map((row, rIdx) => (
-                  <tr key={rIdx} className="hover:bg-gray-50 transition-colors">
-                    {row.map((cell, cIdx) => <td key={cIdx} className="p-4 text-gray-700">{cell}</td>)}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        );
+    case "table":
+  // Check if table has only 1 row (header only) - render as list
+ if (block.rows?.length === 2) {
+  const values = block.rows[1]; // Only second row values
+
+  return (
+    <div key={index} className="my-10 bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+      <h3 className="font-bold text-gray-900 mb-6 text-lg">Key Points:</h3>
+      <ul className="space-y-3">
+        {values?.map((item, idx) => (
+          <li key={idx} className="flex gap-3 items-start text-gray-700">
+            <span className="text-black font-bold text-xl">•</span>
+            <span className="text-base leading-relaxed">{formatBoldTags(item)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+  // Normal table rendering for multiple rows
+  return (
+    <div key={index} className="my-10 overflow-x-auto rounded-xl border border-gray-200 shadow-md">
+      <table className="w-full text-left text-sm lg:text-base">
+        <thead className="bg-black text-white">
+          <tr>{block.rows?.[0]?.map((h, idx) => <th key={idx} className="p-4 uppercase tracking-wider">{formatBoldTags(h)}</th>)}</tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {block.rows?.slice(1).map((row, rIdx) => (
+            <tr key={rIdx} className="hover:bg-gray-50 transition-colors">
+              {row.map((cell, cIdx) => <td key={cIdx} className="p-4 text-gray-700">{formatBoldTags(cell)}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
       default: return null;
     }
   };

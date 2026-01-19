@@ -50,6 +50,7 @@ const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBui
 const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/QuickLinks"));
 const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPage"));
 const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
+const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
 
 
 
@@ -114,6 +115,8 @@ const AppRoutes = () => {
           <Route path="/quick-links" element={<QuickLiks />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/where-to-camp" element={<WhereToCamp />} />
+          <Route path="/system-options" element={<SystemOptions />} />
+
 
 
 
