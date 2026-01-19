@@ -12,7 +12,7 @@ import { createFAQSchema } from "../../schema/faqSchema";
 import { createServiceSchema } from "../../schema/serviceSchema"
 
 export default function VansForSale() {
-  const limit = 1;
+  const limit = 9;
 
   /* ================= ALL STATES ================= */
   const [availableVans, setAvailableVans] = useState([]);

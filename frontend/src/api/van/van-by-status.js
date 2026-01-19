@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 /**
  * Fetch vans by status with pagination
  */
-export async function vansByStatus(status, page = 1, limit = 1) {
+export async function vansByStatus(status, page = 1, limit = 9) {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_REACT_APP_API_URL}/van/van-by-status`,

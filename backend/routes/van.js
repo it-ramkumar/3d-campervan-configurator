@@ -106,7 +106,7 @@ router.get('/van-by-status', async (req, res) => {
     const {
       status,
       page = 1,
-      limit = 1
+      limit = 9
     } = req.query;
 
     if (!status) {
