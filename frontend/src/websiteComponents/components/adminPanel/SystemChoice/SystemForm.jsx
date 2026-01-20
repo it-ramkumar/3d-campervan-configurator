@@ -309,6 +309,7 @@ export default function SystemForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <DropDownWithDelete
+           value="system"
               items={categories}
               setItems={setCategories}
               selectedItem={interiorForm.categoryId}
