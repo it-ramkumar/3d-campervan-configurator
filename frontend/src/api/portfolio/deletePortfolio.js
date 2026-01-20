@@ -11,11 +11,11 @@ export const deletePortfolio = async (slug) => {
           title: "Delete successfully!",
           text: "Your Portfolio has been Deleted successfully.",
         });
-    
+
     return res.data;
   } catch (error) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: error.response.data.message,
     });

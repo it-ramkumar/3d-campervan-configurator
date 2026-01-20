@@ -14,7 +14,7 @@ export const deleteUser = async (id) => {
     return res.data;
   } catch (err) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });

@@ -16,7 +16,7 @@ export async function availableVans() {
     };
   } catch (err) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });

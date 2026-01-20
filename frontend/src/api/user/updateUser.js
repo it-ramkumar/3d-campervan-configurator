@@ -18,7 +18,7 @@ export const updateUser = async (id, newStatus) => {
     return res;
   } catch (err) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: err.response.data.message,
     });

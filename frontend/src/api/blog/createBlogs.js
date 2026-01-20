@@ -27,7 +27,7 @@ export const createBlog = async (formData) => {
   } catch (err) {
        Swal.fire({
       icon: "error",
-      title: "Error",
+      title: "error",
       text: err.response.data.message,
     });
 

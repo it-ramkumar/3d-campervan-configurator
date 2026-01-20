@@ -12,7 +12,7 @@ export const getUser = async () => {
     return res.data;
   } catch (err) {
       Swal.fire({
-          icon: "Error",
+          icon: "error",
           title: "Error",
           text: err.response.data.message,
         });

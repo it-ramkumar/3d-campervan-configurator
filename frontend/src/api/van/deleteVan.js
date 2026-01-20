@@ -14,7 +14,7 @@ export const deleteVan = async (slug) => {
     return res.data;
   } catch (error) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: error.response.data.message,
     });

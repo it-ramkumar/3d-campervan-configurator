@@ -20,7 +20,7 @@ export const deleteBlog = async (id) => {
   } catch (error) {
     Swal.fire({
       icon: "error", // 🔹 should be lowercase "error"
-      title: "Error",
+      title: "error",
       text: error?.response?.data?.message || "Something went wrong!",
     });
     throw error;

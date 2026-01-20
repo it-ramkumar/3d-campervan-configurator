@@ -70,7 +70,7 @@ export default function BlogsListing({ setSelected }) {
           Swal.fire("Deleted!", "The blog has been deleted.", "success");
           setBlogs((prev) => prev.filter((b) => b._id !== blogId));
         } catch (err) {
-          Swal.fire("Error!", err.message || "Failed to delete", "error");
+          Swal.fire("error!", err.message || "Failed to delete", "error");
         }
       }
     });

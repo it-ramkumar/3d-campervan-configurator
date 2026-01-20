@@ -11,7 +11,7 @@ export const getBySlug = async (slug) => {
     };
   } catch (error) {
         Swal.fire({
-      icon: "Error",
+      icon: "error",
       title: "Error",
       text: error.response.data.message,
     });

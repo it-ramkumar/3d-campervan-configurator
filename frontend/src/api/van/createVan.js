@@ -46,8 +46,8 @@ const updateVan = async (editData, formDataToSend) => {
     return res.data;
   } catch (error) {
         Swal.fire({
-      icon: "Error",
-      title: "Error",
+      icon: "error",
+      title: "error",
       text: error.response.data.message,
     });
 
