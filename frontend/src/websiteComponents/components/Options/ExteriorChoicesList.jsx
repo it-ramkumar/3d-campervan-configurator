@@ -24,7 +24,7 @@ const contentVariants = {
   },
 };
 
-export default function ExteriorChoicesList({ initialData }) {
+export default function ExteriorChoicesList({ initialData , heading }) {
   // UI States: Inka global data se koi talluq nahi, sirf dikhaane ke liye hain
   const [activeSubCategoryMap, setActiveSubCategoryMap] = useState(initialData.activeSubCategoryMap);
   const [activeItemMap, setActiveItemMap] = useState(initialData.activeItemMap);
@@ -76,9 +76,9 @@ export default function ExteriorChoicesList({ initialData }) {
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
           <div className="inline-flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
             <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
-            <Heading2 text="Exterior Design Choices" />
+            <Heading2 text={`${heading} Design Choices`} />
           </div>
-          <RichParagraph>Here are the Exterior choices we offer:</RichParagraph>
+          <RichParagraph>Here are the {heading} choices we offer:</RichParagraph>
         </motion.div>
 
         {/* Search and Filters */}

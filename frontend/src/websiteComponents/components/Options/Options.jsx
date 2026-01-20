@@ -5,6 +5,7 @@ import Footer from '../Footer/Footer';
 import HeroSection from '../HeroSection/HeroSection';
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
+import SystemAccessories from "./SystemAccessories"
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
 import { useParams } from 'react-router-dom';
@@ -34,6 +35,12 @@ export default function ExteriorChoicePage() {
       api: "interior",
       title: "Premium Interior Finishes",
       desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
+      heroImage: "/heroSlider/interiorHero.png" // Ensure karein ye image path sahi ho
+    },
+    "system-options": {
+      api: "system",
+      title: "Premium System Finishes",
+      desc: "Luxury meets comfort. Explore our range of system linings, flooring, and bespoke cabinetry options.",
       heroImage: "/heroSlider/interiorHero.png" // Ensure karein ye image path sahi ho
     }
   };
@@ -152,11 +159,17 @@ export default function ExteriorChoicePage() {
       <div className='list'>
         {!dataState.loading ? (
           // key={options} dene se component fresh reset hoga jab page badlega
-          <ExteriorChoicesList key={options} initialData={dataState} />
+          <ExteriorChoicesList key={options} initialData={dataState} heading={current.api}/>
         ) : (
           <div className="py-20"><Loader /></div>
         )}
       </div>
+      {
+        current.api === "system" &&
+        <div className='list'>
+        <SystemAccessories />
+      </div>
+      }
 {
         current.api === "exterior" &&
         <div className='list'>
