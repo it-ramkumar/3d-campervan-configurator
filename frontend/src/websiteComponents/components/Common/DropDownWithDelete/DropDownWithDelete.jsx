@@ -25,18 +25,14 @@ export default function DropDownWithDelete({
     }, []);
 
   // Delete item
+// Delete item
 const deleteItem = async (id, title) => {
   if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
     try {
-      if (value) {
-        await axios.delete(
-          `${import.meta.env.VITE_REACT_APP_API_URL}/interior/${apiEndpoint}/${id}`
-        );
-      } else {
-        await axios.delete(
-          `${import.meta.env.VITE_REACT_APP_API_URL}/exterior/${apiEndpoint}/${id}`
-        );
-      }
+      // value = "interior" | "exterior" | "system"
+      const url = `${import.meta.env.VITE_REACT_APP_API_URL}/${value}/${apiEndpoint}/${id}`;
+
+      await axios.delete(url);
 
       alert(`${label} deleted successfully!`);
       setItems(items.filter((c) => c._id !== id));
@@ -48,6 +44,7 @@ const deleteItem = async (id, title) => {
     }
   }
 };
+
 
 
     return (

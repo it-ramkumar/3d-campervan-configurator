@@ -252,6 +252,7 @@ export default function AdminForms() {
           </div>
 
           <DropDownWithDelete
+          value="exterior"
             items={categories}
             setItems={setCategories}
             selectedItem={subCategoryForm.categoryId}

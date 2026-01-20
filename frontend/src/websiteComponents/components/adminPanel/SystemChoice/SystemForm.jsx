@@ -253,6 +253,7 @@ export default function SystemForm() {
           </div>
 
           <DropDownWithDelete
+          value="system"
             items={categories}
             setItems={setCategories}
             selectedItem={subCategoryForm.categoryId}
