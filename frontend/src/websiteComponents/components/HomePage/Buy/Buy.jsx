@@ -34,11 +34,11 @@ const VanIcon = () => (
 );
 
 const UPCOMING_VANS = [
-  { title: "Lowroof Poptop", desc: "Compact and versatile for quick escapes.", status: "In Production" },
-  { title: "Montreal AWD 170", desc: "Stone Gray powerhouse designed for all-terrain adventure.", status: "Chassis Arrived" },
-  { title: "Santa Monica (Matte Gray)", desc: "Luxury Ford Transit build with a sleek matte finish.", status: "Finishing Touches" },
-  { title: "Santa Monica Edition", desc: "Our signature Ford Transit floorplan, coming soon.", status: "Early Stages" },
-  { title: "Demo Van (Double Bed)", desc: "Ford Transit demo featuring our spacious double bed layout.", status: "Prototyping" },
+  // { title: "Lowroof Poptop", desc: "Compact and versatile for quick escapes.", status: "In Production" },
+  // { title: "Montreal AWD 170", desc: "Stone Gray powerhouse designed for all-terrain adventure.", status: "Chassis Arrived" },
+  // { title: "Santa Monica (Matte Gray)", desc: "Luxury Ford Transit build with a sleek matte finish.", status: "Finishing Touches" },
+  // { title: "Santa Monica Edition", desc: "Our signature Ford Transit floorplan, coming soon.", status: "Early Stages" },
+  // { title: "Demo Van (Double Bed)", desc: "Ford Transit demo featuring our spacious double bed layout.", status: "Prototyping" },
 ];
 
 export default function Buy() {
@@ -135,9 +135,9 @@ export default function Buy() {
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-            <span className="text-gray-500 text-sm uppercase tracking-widest">
+            <span className="text-gray-500 mt-20 text-sm uppercase tracking-widest">
               Image coming soon
             </span>
           </div>

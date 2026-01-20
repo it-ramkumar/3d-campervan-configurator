@@ -46,11 +46,11 @@ const FEATURES = [
 
 // --- New Upcoming Data ---
 const UPCOMING_VANS = [
-  { name: "Lowroof Poptop", desc: "Compact versatility meets rooftop comfort." },
-  { name: "Montreal AWD 170", desc: "Stone Gray powerhouse for rugged terrains." },
-  { name: "Santa Monica (Matte Gray)", desc: "Ford Transit build with premium sleek finish." },
-  { name: "Santa Monica Edition", desc: "Another Ford Transit masterpiece in production." },
-  { name: "Ford Transit Demo Van", desc: "Featuring our signature double bed layout." },
+  // { name: "Lowroof Poptop", desc: "Compact versatility meets rooftop comfort." },
+  // { name: "Montreal AWD 170", desc: "Stone Gray powerhouse for rugged terrains." },
+  // { name: "Santa Monica (Matte Gray)", desc: "Ford Transit build with premium sleek finish." },
+  // { name: "Santa Monica Edition", desc: "Another Ford Transit masterpiece in production." },
+  // { name: "Ford Transit Demo Van", desc: "Featuring our signature double bed layout." },
 ];
 
 export default function AvailableVans({ availableVans, hasMore, loading, onLoadMore }) {
@@ -128,10 +128,10 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                           ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
                               {/* Subtle pattern */}
-                              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-                              <span className="text-gray-500 text-xs uppercase tracking-widest">
+                              <div className="absolute  inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
+                              <span className="text-gray-500 text-xs mt-20 uppercase tracking-widest">
                                 Image coming soon
                               </span>
                             </div>
