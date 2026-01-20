@@ -28,7 +28,10 @@ const LeadEmailsRoute = require("./routes/leadsEmail");
 const Job = require("./routes/job");
 const Application = require("./routes/application");
 const QuickLinks = require("./routes/quickLinks")
-const Sitemap = require("./routes/siteMap")
+const Sitemap = require("./routes/siteMap");
+const SystemRoute = require("./routes/systemR");
+const SystemCategory =require("./routes/systemCat");
+const SystemSubCategory = require("./routes/systemSubCat")
 
 
 const app = express();
@@ -68,6 +71,9 @@ app.use("/api", InteriorSubCategory)
 app.use("/api", ExteriorCategory)
 app.use("/api", ExteriorRoute)
 app.use("/api", ExteriorSubCategory)
+app.use("/api", SystemCategory)
+app.use("/api", SystemRoute)
+app.use("/api", SystemSubCategory)
 app.use("/api", LeadEmailsRoute)
 app.use("/api/jobs", Job);
 app.use("/api/applications", Application);

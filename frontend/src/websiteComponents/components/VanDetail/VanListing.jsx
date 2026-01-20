@@ -121,104 +121,104 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       </div>
-{blocks.length > 0 && (
-  <div className="px-6 py-20 bg-[#f8fafc] border-t border-gray-100"> {/* bigbeartheme background */}
-    <div className="w-full max-w-5xl mx-auto space-y-16">
-      {blocks
-        .sort((a, b) => a.order - b.order)
-        .map((block, idx) => (
-          <div
-            key={block._id || idx}
-            className="animate-fade-in transition-all duration-300"
-          >
-            {/* --- HEADING BLOCK --- */}
-            {block.block_type === 'heading' && (
-              <div className="relative mb-10">
-                <Heading2 text={block.title} className="text-left" textColor="text-gray-900" />
-                <div className="absolute -bottom-2 left-0 w-20 h-1 bg-[#2761FD] rounded-full"></div>
-              </div>
-            )}
+      {blocks.length > 0 && (
+        <div className="px-6 py-20 bg-[#f8fafc] border-t border-gray-100"> {/* bigbeartheme background */}
+          <div className="w-full max-w-5xl mx-auto space-y-16">
+            {blocks
+              .sort((a, b) => a.order - b.order)
+              .map((block, idx) => (
+                <div
+                  key={block._id || idx}
+                  className="animate-fade-in transition-all duration-300"
+                >
+                  {/* --- HEADING BLOCK --- */}
+                  {block.block_type === 'heading' && (
+                    <div className="relative mb-10">
+                      <Heading2 text={block.title} className="text-left" textColor="text-gray-900" />
+                      <div className="absolute -bottom-2 left-0 w-20 h-1 bg-[#2761FD] rounded-full"></div>
+                    </div>
+                  )}
 
-            {/* --- SUBHEADING BLOCK --- */}
-            {block.block_type === 'subheading' && (
-              <Heading3
-                text={block.title}
-                className="mb-6 opacity-80 uppercase tracking-widest text-sm font-bold"
-                textColor="text-blue-600"
-              />
-            )}
+                  {/* --- SUBHEADING BLOCK --- */}
+                  {block.block_type === 'subheading' && (
+                    <Heading3
+                      text={block.title}
+                      className="mb-6 opacity-80 uppercase tracking-widest text-sm font-bold"
+                      textColor="text-blue-600"
+                    />
+                  )}
 
-            {/* --- PARAGRAPH BLOCK --- */}
-            {block.block_type === 'paragraph' && (
-              <div className="max-w-4xl bg-white p-8 rounded-2xl shadow-sm border border-gray-100 leading-relaxed">
-                <RichParagraph className="text-lg text-gray-700">{block.content}</RichParagraph>
-              </div>
-            )}
+                  {/* --- PARAGRAPH BLOCK --- */}
+                  {block.block_type === 'paragraph' && (
+                    <div className="max-w-4xl bg-white p-8 rounded-2xl shadow-sm border border-gray-100 leading-relaxed">
+                      <RichParagraph className="text-lg text-gray-700">{block.content}</RichParagraph>
+                    </div>
+                  )}
 
-            {/* --- LIST BLOCK (Feature Highlight Style) --- */}
-            {block.block_type === 'list' && (
-              <div className="mt-4 max-w-4xl bg-white p-8 rounded-3xl shadow-md border-l-4 border-l-[#2761FD]">
-                {block.title && (
-                  <h4 className="font-extrabold text-black text-2xl mb-6 flex items-center gap-2">
-                     <span className="w-2 h-8 bg-blue-500 rounded-full inline-block"></span>
-                    {block.title}
-                  </h4>
-                )}
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {block.list_items.map((item, i) => (
-                    <li
-                      key={i}
-                      className="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors group"
-                    >
-                      <div className="mr-4 text-blue-500 group-hover:scale-125 transition-transform">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* --- TABLE BLOCK (Modern Specs Table) --- */}
-            {block.block_type === 'table' && block.table_data && (
-              <div className="mt-8 max-w-5xl overflow-hidden rounded-3xl border border-gray-200 shadow-xl bg-white">
-                {block.title && (
-                  <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6">
-                    <h4 className="font-bold text-white text-xl tracking-wide">{block.title}</h4>
-                  </div>
-                )}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-200">
-                      <tr>
-                        {block.table_data.headers.map((h, i) => (
-                          <th key={i} className="px-8 py-5 text-xs uppercase tracking-widest">{h}</th>
+                  {/* --- LIST BLOCK (Feature Highlight Style) --- */}
+                  {block.block_type === 'list' && (
+                    <div className="mt-4 max-w-4xl bg-white p-8 rounded-3xl shadow-md border-l-4 border-l-[#2761FD]">
+                      {block.title && (
+                        <h4 className="font-extrabold text-black text-2xl mb-6 flex items-center gap-2">
+                          <span className="w-2 h-8 bg-blue-500 rounded-full inline-block"></span>
+                          {block.title}
+                        </h4>
+                      )}
+                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {block.list_items.map((item, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors group"
+                          >
+                            <div className="mr-4 text-blue-500 group-hover:scale-125 transition-transform">
+                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                            <span className="text-gray-700 font-medium">{item}</span>
+                          </li>
                         ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                      {block.table_data.rows.map((row, ri) => (
-                        <tr key={ri} className="hover:bg-blue-50/50 transition-colors group">
-                          {row.map((cell, ci) => (
-                            <td key={ci} className="px-8 py-5 text-sm text-gray-800 font-semibold group-hover:text-[#2761FD]">
-                              {cell}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* --- TABLE BLOCK (Modern Specs Table) --- */}
+                  {block.block_type === 'table' && block.table_data && (
+                    <div className="mt-8 max-w-5xl overflow-hidden rounded-3xl border border-gray-200 shadow-xl bg-white">
+                      {block.title && (
+                        <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6">
+                          <h4 className="font-bold text-white text-xl tracking-wide">{block.title}</h4>
+                        </div>
+                      )}
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                          <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-200">
+                            <tr>
+                              {block.table_data.headers.map((h, i) => (
+                                <th key={i} className="px-8 py-5 text-xs uppercase tracking-widest">{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {block.table_data.rows.map((row, ri) => (
+                              <tr key={ri} className="hover:bg-blue-50/50 transition-colors group">
+                                {row.map((cell, ci) => (
+                                  <td key={ci} className="px-8 py-5 text-sm text-gray-800 font-semibold group-hover:text-[#2761FD]">
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              ))}
           </div>
-        ))}
-    </div>
-  </div>
-)}
+        </div>
+      )}
 
       {/* ================= COMPREHENSIVE FEATURES ================= */}
       <div className="py-16 px-4 sm:px-8 bg-white">

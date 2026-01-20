@@ -19,6 +19,8 @@ import InteriorForm from "../adminPanel/InteriorChoices/InteriorForm";
 import InteriorList from "../adminPanel/InteriorChoices/InteriorListing";
 import ExteriorList from "../adminPanel/ExteriorChoice/ExteriorListing";
 import ExteriorForm from "../adminPanel/ExteriorChoice/ExteriorForm";
+import SystemForm from "../adminPanel/SystemChoice/SystemForm";
+import SystemListt from "../adminPanel/SystemChoice/SystemListing";
 import LeadEmail from "../adminPanel/LeadEmail/LeadEmail";
 import JobForm from "../adminPanel/Job/Form";
 import JobListing from "../adminPanel/Job/JobListing";
@@ -60,6 +62,12 @@ export default function Dashboard() {
       id: "interior-choices",
       label: "Interior Options",
       desc: "Manage interior designs and materials.",
+      icon: "🛋️"
+    },
+    {
+      id: "system-choices",
+      label: "System Options",
+      desc: "Manage system designs and materials.",
       icon: "🛋️"
     },
     {
@@ -137,6 +145,8 @@ export default function Dashboard() {
       case "interior-form": return <InteriorForm setSelected={setSelected} />;
       case "exterior-choices": return <ExteriorList setSelected={setSelected} />;
       case "exterior-form": return <ExteriorForm setSelected={setSelected} />;
+      case "system-choices": return <SystemListt setSelected={setSelected} />;
+      case "system-form": return <SystemForm setSelected={setSelected} />;
       case "lead-emails": return <LeadEmail setSelected={setSelected} />;
       case "career": return <JobListing setSelected={setSelected} />;
       case "career-form": return <JobForm setSelected={setSelected} />;
@@ -227,7 +237,7 @@ export default function Dashboard() {
       </div>
 
       <style>{`
-     
+
       `}</style>
     </div>
   );
