@@ -39,34 +39,48 @@ export default function SoldVans({ vans,
                   className="group relative w-full aspect-[4/3] rounded-[24px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
                 >
                   <Link to={`/van-detail/${van.slug}`}>
-                    <div className="relative w-full h-full">
-                      <ImageWithSkeleton
-                        src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
-                        alt={van?.van_listing?.title || "Sold camper van"}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
+                  <div className="relative w-full h-full">
+  {/* Image OR Designed Fallback */}
+  {van?.gallery?.[0] ? (
+    <ImageWithSkeleton
+      src={van.gallery[0]}
+      alt={van?.van_listing?.title}
+      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+    />
+  ) : (
+    <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+      {/* subtle pattern */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
 
-                      {/* SOLD Stamp (Modernized) */}
-                      {van.status === "sold" && <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                        <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
-                          SOLD
-                        </div>
-                      </div>}
+      {/* big model / year feel */}
+      <span className="text-gray-500 text-xs uppercase tracking-widest">
+        Image coming soon
+      </span>
+    </div>
+  )}
 
-                      {/* Gradient & Content Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
+  {/* SOLD Stamp */}
+  {van?.status === "sold" && (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+      <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
+        SOLD
+      </div>
+    </div>
+  )}
 
-                      <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
-                        <Heading3 text={van?.van_listing?.title || "Custom Build"} />
+  {/* Gradient overlay – always */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
 
-                        <RichParagraph>
-                          View Details →
-                        </RichParagraph>
-                        {/* <p className="text-white/60 text-xs mt-2 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100 hidden md:block">
+  {/* Content */}
+  <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
+    <Heading3 text={van?.van_listing?.title || "Custom Camper Build"} />
 
-                        </p> */}
-                      </div>
-                    </div>
+    <RichParagraph className="text-white/80 text-sm">
+      View Details →
+    </RichParagraph>
+  </div>
+</div>
+
                   </Link>
                 </div>
               ))

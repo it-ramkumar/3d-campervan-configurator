@@ -117,29 +117,61 @@ export default function Buy() {
             className="!pb-8"
           >
             {/* 🔹 1. REAL INVENTORY SLIDES */}
-            {readyToGoVans.map((slide, i) => (
-              <SwiperSlide key={slide._id || i} className="group w-full md:!w-[900px] md:!h-[500px]">
-                <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 group-hover:scale-[1.01]">
-                  <ImageWithSkeleton
-                    src={slide?.gallery?.[0]}
-                    alt={slide.van_listing?.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                  <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
-                    <span className="bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest">Available Now</span>
-                    <Heading2 text={slide?.van_listing?.title} className="text-white mb-2" />
-                    <RichParagraph className="text-gray-200 mb-6 line-clamp-2 max-w-2xl">
-                      {slide?.van_listing?.description}
-                    </RichParagraph>
-                    <div className="flex gap-4">
-                      <BlackButton label="Buy Now" link="/contact" />
-                      <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} />
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
+         {readyToGoVans.map((slide, i) => {
+  const hasImage = slide?.gallery?.[0];
+
+  return (
+    <SwiperSlide
+      key={slide._id || i}
+      className="group w-full md:!w-[900px] md:!h-[500px]"
+    >
+      <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 group-hover:scale-[1.01]">
+
+        {/* Background Image OR Fallback */}
+        {hasImage ? (
+          <ImageWithSkeleton
+            src={hasImage}
+            alt={slide.van_listing?.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
+            <span className="text-gray-500 text-sm uppercase tracking-widest">
+              Image coming soon
+            </span>
+          </div>
+        )}
+
+        {/* Overlay – always present */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
+          <span className="bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest">
+            Available Now
+          </span>
+
+          <Heading2
+            text={slide?.van_listing?.title || "Ready-To-Go Camper Van"}
+            className="text-white mb-2"
+          />
+
+          <RichParagraph className="text-gray-200 mb-6 line-clamp-2 max-w-2xl">
+            {slide?.van_listing?.description ||
+              "A premium camper conversion designed for comfort, performance, and adventure. Full specs coming soon."}
+          </RichParagraph>
+
+          <div className="flex gap-4">
+            <BlackButton label="Buy Now" link="/contact" />
+            <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} />
+          </div>
+        </div>
+      </div>
+    </SwiperSlide>
+  );
+})}
+
 
             {/* 🔹 2. UPCOMING BUILDS SLIDES */}
             {readyToGoVans.length === 0 && UPCOMING_VANS.map((van, idx) => (

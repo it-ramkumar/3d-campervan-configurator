@@ -109,42 +109,61 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
 
             {availableVans && availableVans.length > 0 ? (
               // Case 1: Display Live Inventory
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+
                 {availableVans?.length > 0 ? (
                   availableVans.map((van) => (
                     <div
-                      key={van._id}
-                      className="group relative w-full aspect-[4/3] rounded-[24px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
-                    >
+  key={van._id}
+  className="group relative w-full aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
+>
+
                       <Link to={`/van-detail/${van.slug}`}>
                         <div className="relative w-full h-full">
-                          <ImageWithSkeleton
-                            src={van?.gallery?.[0] || "/images/default-placeholder.jpg"}
-                            alt={van?.van_listing?.title || "Sold camper van"}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-
-                          {/* SOLD Stamp (Modernized) */}
-                          {van.status === "sold" && <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                            <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
-                              SOLD
+                          {/* Image OR Fallback */}
+                          {van?.gallery?.[0] ? (
+                            <ImageWithSkeleton
+                              src={van.gallery[0]}
+                              alt={van?.van_listing?.title}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+                              {/* Subtle pattern */}
+                              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
+                              <span className="text-gray-500 text-xs uppercase tracking-widest">
+                                Image coming soon
+                              </span>
                             </div>
-                          </div>}
+                          )}
 
-                          {/* Gradient & Content Overlay */}
+                          {/* SOLD Stamp */}
+                          {van?.status === "sold" && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                              <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
+                                SOLD
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Gradient Overlay – always */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
 
+                          {/* Content */}
                           <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
-                            <Heading3 text={van?.van_listing?.title || "Custom Build"} />
+                            <Heading3 text={van?.van_listing?.title || "Custom Camper Build"} />
 
-                            <RichParagraph>
-
+                            <RichParagraph className="text-white/80 line-clamp-2">
+                              {van?.van_listing?.subtitle ||
+                                "A premium camper conversion crafted for comfort, adventure, and everyday usability."}
                             </RichParagraph>
+
                             <p className="text-white/60 text-xs mt-2 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100 hidden md:block">
                               View Details →
                             </p>
                           </div>
                         </div>
+
                       </Link>
                     </div>
                   ))

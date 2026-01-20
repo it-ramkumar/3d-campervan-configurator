@@ -121,11 +121,107 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       </div>
+  {blocks.length > 0 && (
+  <div className="px-6 py-12 bg-gray-50 border-t border-gray-200 ">
+    <div className="w-full max-w-5xl space-y-12">
+      {blocks
+        .sort((a, b) => a.order - b.order)
+        .map((block, idx) => (
+          <div
+            key={block._id || idx}
+            className="animate-fade-in mx-auto"
+          >
+            {block.block_type === 'heading' && (
+              <Heading2 text={block.title} className="text-left mb-6" />
+            )}
+
+            {block.block_type === 'subheading' && (
+              <Heading3
+                text={block.title}
+                className="text-left mb-4 text-gray-800"
+              />
+            )}
+
+            {block.block_type === 'paragraph' && (
+              <div className="max-w-4xl mx-auto">
+                <RichParagraph>{block.content}</RichParagraph>
+              </div>
+            )}
+
+            {block.block_type === 'list' && (
+              <div className="mt-4 max-w-4xl mx-auto">
+                {block.title && (
+                  <h4 className="font-bold text-black text-xl mb-4">
+                    {block.title}
+                  </h4>
+                )}
+                <ul className="space-y-4">
+                  {block.list_items.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start text-gray-700"
+                    >
+                      <span className="mr-4 mt-2 w-2 h-2 bg-[#2761FD] rounded-full flex-shrink-0" />
+                      <RichParagraph>{item}</RichParagraph>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {block.block_type === 'table' &&
+              block.table_data && (
+                <div className="mt-8 max-w-5xl mx-auto overflow-hidden rounded-2xl border border-gray-200 shadow-md bg-white">
+                  {block.title && (
+                    <div className="bg-gray-900 p-4 font-bold text-white text-lg">
+                      {block.title}
+                    </div>
+                  )}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead className="bg-gray-50 text-black font-bold border-b border-gray-200">
+                        <tr>
+                          {block.table_data.headers.map((h, i) => (
+                            <th
+                              key={i}
+                              className="px-6 py-4 text-sm uppercase tracking-wider font-bold"
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {block.table_data.rows.map((row, ri) => (
+                          <tr
+                            key={ri}
+                            className="hover:bg-blue-50/30 transition-colors"
+                          >
+                            {row.map((cell, ci) => (
+                              <td
+                                key={ci}
+                                className="px-6 py-4 text-sm text-gray-600 font-medium italic"
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+          </div>
+        ))}
+    </div>
+  </div>
+)}
 
       {/* ================= COMPREHENSIVE FEATURES ================= */}
       <div className="py-16 px-4 sm:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          {detailedFeatures.length > 0 &&  <Heading2 text="Comprehensive Build Features" className="text-center my-8" />}
+          {detailedFeatures.length > 0 && <Heading2 text="Comprehensive Build Features" className="text-center my-8" />}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {detailedFeatures
@@ -165,6 +261,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         </div>
       </div>
 
+
+
+      {/* ================= DYNAMIC BLOCKS SECTION ================= */}
+
       {/* ================= FLAGSHIP DESCRIPTION ================= */}
       <div className="px-6 md:px-16 bg-gray-50">
         <div className="max-w-3xl text-left py-12">
@@ -175,81 +275,6 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           <BlackButton label="Book A Call Now" onClick={onConsultationClick} />
         </div>
       </div>
-
-      {/* ================= DYNAMIC BLOCKS SECTION ================= */}
-      {blocks.length > 0 && (
-        <div className="px-6 md:px-16 py-12 bg-gray-50 border-t border-gray-200">
-          <div className="max-w-5xl mx-auto space-y-12">
-            {blocks.sort((a, b) => a.order - b.order).map((block, idx) => (
-              <div key={block._id || idx} className="animate-fade-in">
-
-                {block.block_type === 'heading' && (
-                  <Heading2 text={block.title} className="text-left mb-6" />
-                )}
-
-                {block.block_type === 'subheading' && (
-                  <Heading3 text={block.title} className="text-left mb-4 text-gray-800" />
-                )}
-
-                {block.block_type === 'paragraph' && (
-                  <div className="max-w-4xl">
-                    <RichParagraph>{block.content}</RichParagraph>
-                  </div>
-                )}
-
-                {block.block_type === 'list' && (
-                  <div className="mt-4">
-                    {block.title && <h4 className="font-bold text-black text-xl mb-4">{block.title}</h4>}
-                    <ul className="space-y-4">
-                      {block.list_items.map((item, i) => (
-                        <li key={i} className="flex items-start text-gray-700">
-                          <span className="mr-4 mt-2 w-2 h-2 bg-[#2761FD] rounded-full flex-shrink-0" />
-                          <RichParagraph>{item}</RichParagraph>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {block.block_type === 'table' && block.table_data && (
-                  <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 shadow-md bg-white">
-                    {block.title && (
-                      <div className="bg-gray-900 p-4 font-bold text-white text-lg">
-                        {block.title}
-                      </div>
-                    )}
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left">
-                        <thead className="bg-gray-50 text-black font-bold border-b border-gray-200">
-                          <tr>
-                            {block.table_data.headers.map((h, i) => (
-                              <th key={i} className="px-6 py-4 text-sm uppercase tracking-wider font-bold">
-                                {h}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                          {block.table_data.rows.map((row, ri) => (
-                            <tr key={ri} className="hover:bg-blue-50/30 transition-colors">
-                              {row.map((cell, ci) => (
-                                <td key={ci} className="px-6 py-4 text-sm text-gray-600 font-medium italic">
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* ================= GALLERY ================= */}
       <div className="p-6 md:p-12 bg-white">
         <Heading2 text="Gallery" className="text-center mb-10" />
@@ -274,8 +299,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         <div className="w-full bg-black py-16 px-4 md:px-12">
           <h2 className="text-center font-bold text-white text-4xl mb-12">Experience The Build</h2>
           <div className={`grid gap-8 ${vanDetail.media.length === 1 ? "grid-cols-1 max-w-4xl mx-auto" :
-              vanDetail.media.length === 2 ? "grid-cols-1 md:grid-cols-2" :
-                "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            vanDetail.media.length === 2 ? "grid-cols-1 md:grid-cols-2" :
+              "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             }`}>
             {vanDetail.media.map((videoUrl, index) => {
               if (!videoUrl) return null;
