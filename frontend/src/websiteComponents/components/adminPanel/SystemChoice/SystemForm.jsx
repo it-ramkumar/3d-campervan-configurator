@@ -319,6 +319,7 @@ export default function SystemForm() {
             />
 
             <DropDownWithDelete
+            value="system"
               items={filteredSubCategories}
               setItems={setSubCategories}
               selectedItem={interiorForm.subCategoryId}

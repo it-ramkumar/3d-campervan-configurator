@@ -308,6 +308,7 @@ export default function AdminForms() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <DropDownWithDelete
+            value="exterior"
               items={categories}
               setItems={setCategories}
               selectedItem={interiorForm.categoryId}
@@ -317,6 +318,7 @@ export default function AdminForms() {
             />
 
             <DropDownWithDelete
+            value="exterior"
               items={filteredSubCategories}
               setItems={setSubCategories}
               selectedItem={interiorForm.subCategoryId}
