@@ -135,9 +135,9 @@ const VansForm = ({ setSelected }) => {
     if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
     if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
-    if (features.length === 0) {
-      newErrors.features = "At least one feature category is required";
-    }
+    // if (features.length === 0) {
+    //   newErrors.features = "At least one feature category is required";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
