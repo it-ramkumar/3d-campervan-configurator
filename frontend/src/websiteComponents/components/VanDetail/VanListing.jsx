@@ -125,27 +125,43 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       {/* ================= COMPREHENSIVE FEATURES ================= */}
       <div className="py-16 px-4 sm:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <Heading2 text="Comprehensive Build Features" className="text-center my-8" />
+          {detailedFeatures.length > 0 &&  <Heading2 text="Comprehensive Build Features" className="text-center my-8" />}
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {detailedFeatures.map((feature, index) => (
-              <div key={index} className="group w-full max-w-[400px] min-h-[400px] mx-auto bg-white rounded-2xl p-6 flex flex-col items-center text-center shadow-lg border border-gray-100 transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:border-[#2761FD]">
-                <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-black transition-colors duration-300 group-hover:bg-[#2761FD] mb-4">
-                  {feature.icon}
+            {detailedFeatures
+              ?.filter(feature => Array.isArray(feature?.items) && feature.items.length > 0)
+              .map((feature, index) => (
+                <div
+                  key={index}
+                  className="group w-full max-w-[400px] min-h-[400px] mx-auto bg-white rounded-2xl p-6 flex flex-col items-center text-center shadow-lg border border-gray-100 transition-all duration-500 hover:shadow-xl hover:scale-[1.02] hover:border-[#2761FD]"
+                >
+                  <div className="relative w-16 h-16 flex items-center justify-center rounded-full bg-black transition-colors duration-300 group-hover:bg-[#2761FD] mb-4">
+                    {feature.icon}
+                  </div>
+
+                  <Heading3
+                    text={feature.category}
+                    textColor="text-black"
+                    className="my-4"
+                  />
+
+                  <div className="w-full flex-grow text-left">
+                    <ul className="space-y-2 font-medium text-sm text-gray-700">
+                      {feature.items.map((item, i) => (
+                        <li
+                          key={`item-${i}`}
+                          className="flex items-start transition-colors duration-300 group-hover:text-black"
+                        >
+                          <SvgCheckmark />
+                          <RichParagraph>{item}</RichParagraph>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <Heading3 text={feature.category} textColor="text-black" className="my-4" />
-                <div className="w-full flex-grow text-left">
-                  <ul className="space-y-2 font-medium text-sm text-gray-700">
-                    {feature.items.map((item, i) => (
-                      <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
-                        <SvgCheckmark />
-                        <RichParagraph>{item}</RichParagraph>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
+
         </div>
       </div>
 
@@ -257,11 +273,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       {vanDetail.media && vanDetail.media.length > 0 && vanDetail.media[0] !== "" && (
         <div className="w-full bg-black py-16 px-4 md:px-12">
           <h2 className="text-center font-bold text-white text-4xl mb-12">Experience The Build</h2>
-          <div className={`grid gap-8 ${
-            vanDetail.media.length === 1 ? "grid-cols-1 max-w-4xl mx-auto" :
-            vanDetail.media.length === 2 ? "grid-cols-1 md:grid-cols-2" :
-            "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          }`}>
+          <div className={`grid gap-8 ${vanDetail.media.length === 1 ? "grid-cols-1 max-w-4xl mx-auto" :
+              vanDetail.media.length === 2 ? "grid-cols-1 md:grid-cols-2" :
+                "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            }`}>
             {vanDetail.media.map((videoUrl, index) => {
               if (!videoUrl) return null;
               let embedUrl = videoUrl.trim();

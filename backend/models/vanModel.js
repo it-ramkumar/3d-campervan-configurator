@@ -41,7 +41,7 @@ const vanListingSchema = new mongoose.Schema({
 });
 
 const detailedFeatureItemSchema = new mongoose.Schema({
-  category: { type: String, required: true, trim: true },
+  category: { type: String, trim: true },
   items: [{ type: String, trim: true }]
 });
 
