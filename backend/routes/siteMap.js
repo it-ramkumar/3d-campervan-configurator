@@ -33,22 +33,29 @@ router.get('/', async (req, res) => {
                 xml += `  <url><loc>https://bigbearvans.com/${path}/${item.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
             });
         };
-        const wheelBase = (links, path) => {
-            links.forEach(item => {
-                // 1. Safety Check for Date
-                const date = item.updatedAt ? new Date(item.updatedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+    const wheelBase = (links, path) => {
+    const uniqueWheelbases = new Set();
 
-                // 2. Safe Data Access (Optional Chaining)
-                const wbValue = item?.van_listing?.specifications?.wheelbase;
-                // 3. Check if wheelbase exists
-                if (wbValue) {
-                    xml += `  <url><loc>https://bigbearvans.com/${path}/${wbValue}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
-                } else {
-                    // Ye line aapko batayegi ke kis record mein issue hai
-                    console.warn(`Wheelbase missing for ID: ${item._id} in path: ${path}`);
-                }
-            });
-        };
+    links.forEach(item => {
+        const date = item.updatedAt
+            ? new Date(item.updatedAt).toISOString().split('T')[0]
+            : new Date().toISOString().split('T')[0];
+
+        const wbValue = item?.van_listing?.specifications?.wheelbase;
+
+        if (wbValue && !uniqueWheelbases.has(wbValue)) {
+            uniqueWheelbases.add(wbValue);
+
+            xml += `  <url>
+  <loc>https://bigbearvans.com/${path}/${wbValue}</loc>
+  <lastmod>${date}</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>\n`;
+        }
+    });
+};
+
 
         addLinks(VansLink, 'van-detail');
         addLinks(PortfolioLink, 'layout-detail');
