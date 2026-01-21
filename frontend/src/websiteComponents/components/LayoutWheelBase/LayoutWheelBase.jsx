@@ -101,7 +101,18 @@ export default function CamperProjectsPage() {
     setPage(1);
   };
 
-  const heroImage = "/heroSlider/custom_build.jpg";
+  const heroImage =
+    wheelbase === "144"
+      ? "/heroSlider/144.jpg"
+      : wheelbase === "148"
+        ? "/heroSlider/148.jpg"
+        : wheelbase === "159"
+          ? "/heroSlider/159.jpg"
+          : wheelbase === "136"
+            ? "/heroSlider/136.jpg"
+            : wheelbase === "170"
+              ? "/heroSlider/170.png"
+              : "/heroSlider/170";
   const newTitleText =
     wheelbase === "144"
       ? "Sprinter 144 Wheelbase"
@@ -111,7 +122,9 @@ export default function CamperProjectsPage() {
           ? "Promaster 159 Wheelbase"
           : wheelbase === "136"
             ? "Promaster 136 Wheelbase"
-            : "";
+            : wheelbase === "170"
+              ? "Mercedes Sprinter 170 Wheelbase"
+              : "";
   const newDescriptionText =
     wheelbase === "144"
       ? "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures."
@@ -121,9 +134,10 @@ export default function CamperProjectsPage() {
           ? "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle."
           : wheelbase === "136"
             ? "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
-            : "";
+            : wheelbase === "170"
+              ? "Experience ultimate freedom with the Mercedes Sprinter 170 wheelbase. Designed for full-time van life, offering maximum living space, expansive layouts, and unparalleled comfort for long-distance adventures."
+              : "";
 
-  // Filter config to dynamically render
   const filterConfig = [
     { key: "search", label: "Search", type: "text" },
     { key: "model", label: "Model", type: "select", options: filters?.models },
@@ -135,34 +149,34 @@ export default function CamperProjectsPage() {
   const pageTitle = newTitleText[wheelbase] || `${wheelbase} Wheelbase`;
   const pageKeywords = `${wheelbase} wheelbase layout, custom ${wheelbase} van build, ${wheelbase} sprinter conversion, camper van floor plans ${wheelbase}, big bear vans ${wheelbase}`;
   const pageDescription = newDescriptionText[wheelbase] || `Custom camper van layouts for ${wheelbase} wheelbase.`;
-  const jsonLd = layoutByWheelbaseSchema(wheelbase,layouts)
+  const jsonLd = layoutByWheelbaseSchema(wheelbase, layouts)
   return (
     <>
-   {/* ✅ SEO META TAGS */}
-<title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
-<meta name="keywords" content={pageKeywords} />
-<meta name="description" content={pageDescription} />
-<link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+      {/* ✅ SEO META TAGS */}
+      <title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
+      <meta name="keywords" content={pageKeywords} />
+      <meta name="description" content={pageDescription} />
+      <link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
 
-{/* 🆕 ADDITIONAL IMPORTANT TAGS */}
-<meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#f8fafc" /> {/* Aapke bigbear theme ke mutabiq */}
+      {/* 🆕 ADDITIONAL IMPORTANT TAGS */}
+      <meta name="robots" content="index, follow" />
+      <meta name="theme-color" content="#f8fafc" /> {/* Aapke bigbear theme ke mutabiq */}
 
-{/* ✅ OPEN GRAPH (Facebook, WhatsApp, LinkedIn) */}
-<meta property="og:type" content="website" />
-<meta property="og:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
-<meta property="og:description" content={pageDescription} />
-<meta property="og:url" content={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+      {/* ✅ OPEN GRAPH (Facebook, WhatsApp, LinkedIn) */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
+      <meta property="og:description" content={pageDescription} />
+      <meta property="og:url" content={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
 
-{/* ✅ TWITTER CARDS */}
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
-<meta name="twitter:description" content={pageDescription} />
+      {/* ✅ TWITTER CARDS */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
+      <meta name="twitter:description" content={pageDescription} />
 
-{/* ✅ JSON-LD SCHEMA */}
-<script type="application/ld+json">
-  {JSON.stringify(jsonLd)}
-</script>
+      {/* ✅ JSON-LD SCHEMA */}
+      <script type="application/ld+json">
+        {JSON.stringify(jsonLd)}
+      </script>
       <Navbar />
       <div className="tour-hero">
         <HeroSection
@@ -296,7 +310,7 @@ export default function CamperProjectsPage() {
           )}
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }
