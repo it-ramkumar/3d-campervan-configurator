@@ -576,42 +576,44 @@ At Big Bear Vans, we install customized plumbing in our campervans. Here's what 
                             </div>
                         </div>
 
-                        {/* Heaters */}
-                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-                            <div className="flex flex-col lg:flex-row items-start p-10 bg-gradient-to-r from-orange-50 to-gray-50">
-                                <div className="w-full lg:w-2/5 mb-8 lg:mb-0 lg:mr-10">
-                                    <ImageWithSkeleton
-                                        src="/systemChoice/camera.jpg"
-                                        alt="Heaters"
-                                        className="w-full h-96 object-contain rounded-2xl shadow-lg"
-                                    />
-                                </div>
-                                <div className="lg:w-3/5">
-                                <Heading3 textColor="text-black" text='Heaters'/>
-                                    {/* <h3 className="text-3xl font-bold text-gray-900 mb-6"></h3> */}
-                                    <RichParagraph className="my-3">
-To regulate the temperature of your campervan during winter, we install a heater. You can choose to have:
-                                    </RichParagraph>
-                                    {/* <p className="text-gray-700 text-lg mb-8">
+                     {/* Heaters */}
+<div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
+  <div className="p-10 bg-gradient-to-r from-orange-50 to-gray-50">
 
-                                    </p> */}
-                                    <ul className="space-y-6">
-                                        <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-                                            <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-                                            <span className="text-gray-700 text-lg">An advanced glycol combined water and air heater that is hooked up to your fuel tank, so you don't have to worry about draining your batteries.</span>
-                                        </li>
-                                        <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-                                            <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-                                            <span className="text-gray-700 text-lg">A diesel air heater under the passenger seat and a 110V water heater.</span>
-                                        </li>
-                                        <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-                                            <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-                                            <span className="text-gray-700 text-lg">A diesel air heater under the passenger seat and a 12V water heater.</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+    <Heading3 textColor="text-black" text="Heaters" />
+
+    <RichParagraph className="my-4 max-w-4xl">
+      To regulate the temperature of your campervan during winter, we install a heater.
+      You can choose from the following reliable heating options based on your needs.
+    </RichParagraph>
+
+    <ul className="space-y-6 mt-8 max-w-4xl">
+      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+        <span className="text-gray-700 text-lg">
+          An advanced glycol combined water and air heater connected to your fuel tank,
+          eliminating the need to drain your batteries.
+        </span>
+      </li>
+
+      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+        <span className="text-gray-700 text-lg">
+          A diesel air heater installed under the passenger seat paired with a 110V water heater.
+        </span>
+      </li>
+
+      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+        <span className="text-gray-700 text-lg">
+          A diesel air heater under the passenger seat combined with a 12V water heater.
+        </span>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
                     </section>
                 </div>
             </div>
