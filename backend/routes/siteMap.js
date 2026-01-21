@@ -6,7 +6,7 @@ const router = require('express').Router();
 
 router.get('/', async (req, res) => {
     try {
-        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/van-options/system-options', '/sprinter-guide', '/vans-for-sale', '/van-layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/where-to-camp'];
+        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/system-options', '/sprinter-guide', '/vans-for-sale', '/van-layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/where-to-camp'];
 
         // Data fetch karein
         const [VansLink, PortfolioLink, BlogLink] = await Promise.all([

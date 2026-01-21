@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const path = require("path");
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const helmetMiddleware = require("./middleware/helmetMiddleware");
@@ -53,6 +54,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("trust proxy", 1);
 // app.use(globalLimiter);
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", DelelteImageFromS3);
 app.use("/api/test-blog", TestBlog)
