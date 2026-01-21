@@ -41,7 +41,7 @@ export default function ExteriorChoicePage() {
       api: "system",
       title: "Premium System Finishes",
       desc: "Luxury meets comfort. Explore our range of system linings, flooring, and bespoke cabinetry options.",
-      heroImage: "/heroSlider/interiorHero.png" // Ensure karein ye image path sahi ho
+      heroImage: "/heroSlider/system.jpg" // Ensure karein ye image path sahi ho
     }
   };
   const current = config[options];

@@ -6,12 +6,12 @@ const router = require('express').Router();
 
 router.get('/', async (req, res) => {
     try {
-        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/sprinter-guide', '/vans-for-sale', '/van-layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers'];
+        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/van-options/system-options', '/sprinter-guide', '/vans-for-sale', '/van-layouts', '/layout-by-category', '/wheel-base', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/where-to-camp'];
 
         // Data fetch karein
         const [VansLink, PortfolioLink, BlogLink] = await Promise.all([
             Vans.find({}).select('slug updatedAt'),
-            Portfolio.find({}).select('slug updatedAt'),
+            Portfolio.find({}).select('slug updatedAt van_listing.specifications.wheelbase').lean(),
             Blog.find({}).select('slug updatedAt')
 
 
@@ -33,10 +33,27 @@ router.get('/', async (req, res) => {
                 xml += `  <url><loc>https://bigbearvans.com/${path}/${item.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
             });
         };
+        const wheelBase = (links, path) => {
+            links.forEach(item => {
+                // 1. Safety Check for Date
+                const date = item.updatedAt ? new Date(item.updatedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+
+                // 2. Safe Data Access (Optional Chaining)
+                const wbValue = item?.van_listing?.specifications?.wheelbase;
+                // 3. Check if wheelbase exists
+                if (wbValue) {
+                    xml += `  <url><loc>https://bigbearvans.com/${path}/${wbValue}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+                } else {
+                    // Ye line aapko batayegi ke kis record mein issue hai
+                    console.warn(`Wheelbase missing for ID: ${item._id} in path: ${path}`);
+                }
+            });
+        };
 
         addLinks(VansLink, 'van-detail');
         addLinks(PortfolioLink, 'layout-detail');
         addLinks(BlogLink, 'blog-detail');
+        wheelBase(PortfolioLink, 'wheel-base');
 
 
 
