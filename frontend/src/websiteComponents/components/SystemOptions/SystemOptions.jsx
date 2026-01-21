@@ -33,7 +33,7 @@ const VanSystemsPage = () => {
                 </h2> */}
                                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div>
                             </div>
-                            <RichParagraph className="my-3">                The electrical system of campervans consists of batteries, shore power, an alternator, and solar panels that run your AC and other appliances. Here are the electrical components we install in your campervans:
+                            <RichParagraph className="my-3">The electrical system of campervans consists of batteries, shore power, an alternator, and solar panels that run your AC and other appliances. Here are the electrical components we install in your campervans:
                             </RichParagraph>
                             {/* <p className="mt-8 text-xl text-gray-600 max-w-4xl mx-auto">
               </p> */}
@@ -175,15 +175,15 @@ const VanSystemsPage = () => {
                                         />
                                     </div>
                                     <div className="lg:w-3/5">
-                                    <Heading3 textColor="text-black" text='Inverter'/>
+                                        <Heading3 textColor="text-black" text='Inverter' />
                                         {/* <h3 className="text-3xl font-bold text-gray-900 mb-6"></h3> */}
                                         <RichParagraph className="my-3">
-An inverter converts direct current (DC) from batteries to alternating current (AC) to power electrical devices. At Big Bear Vans, you can choose to install a 2000W or 3000W inverter in your campervans.
+                                            An inverter converts direct current (DC) from batteries to alternating current (AC) to power electrical devices. At Big Bear Vans, you can choose to install a 2000W or 3000W inverter in your campervans.
                                         </RichParagraph>
                                         <div className="space-y-4 text-gray-700 text-lg">
                                             {/* <p></p> */}
                                             <RichParagraph className="my-3">
-The inverter drains a little bit of battery power, so it's better to turn it off when you are driving or sleeping. You've to turn it on when using a microwave or stove, or when you plug something into the 110V outlet, like an induction stove or slow cooker.
+                                                The inverter drains a little bit of battery power, so it's better to turn it off when you are driving or sleeping. You've to turn it on when using a microwave or stove, or when you plug something into the 110V outlet, like an induction stove or slow cooker.
                                             </RichParagraph>
                                             {/* <p></p> */}
                                         </div>
@@ -197,14 +197,14 @@ The inverter drains a little bit of battery power, so it's better to turn it off
                     <section className="mb-24">
                         <div className="text-center mb-16">
                             <div className="inline-block relative">
-                                <Heading2 className="my-4" textColor="text-black" text='Electrical Appliances in Your Campervan'/>
+                                <Heading2 className="my-4" textColor="text-black" text='Electrical Appliances in Your Campervan' />
                                 {/* <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
 
                                 </h2> */}
                                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div>
                             </div>
                             <RichParagraph className="my-3">
- To give you a homelike comfort on the road, our campervans are equipped with all the necessary electrical devices. Electrical appliances of our campervans are the following:
+                                To give you a homelike comfort on the road, our campervans are equipped with all the necessary electrical devices. Electrical appliances of our campervans are the following:
                             </RichParagraph>
                             {/* <p className="mt-8 text-xl text-gray-600 max-w-4xl mx-auto">
 
@@ -213,10 +213,10 @@ The inverter drains a little bit of battery power, so it's better to turn it off
 
                         {/* Lighting Section */}
                         <div className="mb-20">
-                            <Heading3 textColor="text-black" text='Lighting'/>
+                            <Heading3 textColor="text-black" text='Lighting' />
                             {/* <h3 className="text-3xl font-bold text-gray-900 mb-10 text-center"></h3> */}
                             <RichParagraph className="my-3">
-  In the campervan, you have two types of lighting: Ceiling lights and Reading lights
+                                In the campervan, you have two types of lighting: Ceiling lights and Reading lights
                             </RichParagraph>
                             {/* <p className="text-gray-700 text-lg mb-12 text-center max-w-3xl mx-auto">
 
@@ -229,9 +229,9 @@ The inverter drains a little bit of battery power, so it's better to turn it off
                                         <ImageWithSkeleton
                                             src="/systemChoice/ceiling lights.jpg"
                                             alt="Ceiling Lights"
-                                            className="w-full h-80 object-cover rounded-2xl mb-8 shadow-lg"
+                                            className="w-full  object-cover rounded-2xl mb-8 shadow-lg"
                                         />
-                                        <Heading4 textColor="text-black" text="Ceiling Lights"/>
+                                        <Heading4 textColor="text-black" text="Ceiling Lights" />
                                         {/* <h4 className="text-2xl font-bold text-gray-900"></h4> */}
                                     </div>
                                     <div className="space-y-6 text-gray-700 text-lg">
@@ -248,7 +248,7 @@ The inverter drains a little bit of battery power, so it's better to turn it off
                                             </li>
                                         </ul>
                                         <RichParagraph className="my-3">
-The ceiling light trims also come in different colors. You can choose to have:
+                                            The ceiling light trims also come in different colors. You can choose to have:
                                         </RichParagraph>
                                         {/* <p></p> */}
                                         <div className="flex flex-wrap gap-4 mt-4">
@@ -265,14 +265,14 @@ The ceiling light trims also come in different colors. You can choose to have:
                                         <ImageWithSkeleton
                                             src="/systemChoice/Reading lights.jpg"
                                             alt="Reading Lights"
-                                            className="w-full h-80 object-cover rounded-2xl mb-8 shadow-lg"
+                                            className="w-full object-cover rounded-2xl mb-8 shadow-lg"
                                         />
-                                        <Heading4 textColor="text-black" text="Reading Lights"/>
+                                        <Heading4 textColor="text-black" text="Reading Lights" />
                                         {/* <h4 className="text-2xl font-bold text-gray-900"></h4> */}
                                     </div>
                                     <div className="space-y-6 text-gray-700 text-lg">
                                         <RichParagraph className="my-3">
-We also install 12V reading lights for the elevator and dinette bed system. These lights go directly into the batteries, so you can use them without turning on the inverter. You can choose the colour from:
+                                            We also install 12V reading lights for the elevator and dinette bed system. These lights go directly into the batteries, so you can use them without turning on the inverter. You can choose the colour from:
                                         </RichParagraph>
                                         {/* <p></p> */}
                                         <ul className="space-y-4">
@@ -290,7 +290,7 @@ We also install 12V reading lights for the elevator and dinette bed system. Thes
                                             </li>
                                         </ul>
                                         <RichParagraph className="my-3">
-These lights are extremely low power, typically drawing around 3-5W per fixture.
+                                            These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         </RichParagraph>
                                         {/* <p className="text-gray-600 mt-6 text-lg"></p> */}
                                     </div>
@@ -308,11 +308,11 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="Outlets"
                                         className="w-full h-64 object-contain mb-6 rounded-xl"
                                     />
-                                    <Heading4 textColor="text-black" text='Outlets'/>
+                                    <Heading4 textColor="text-black" text='Outlets' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center">Outlets</h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
-      In our campervans, we put outlets at various places. We install 12V outlets with USB-A & USB-C ports for charging devices near the swivel seats and at the upper and lower beds, so you can charge your phones when the inverter is off. We also install 110V outlets in the kitchen area for appliances such as a slow cooker and an induction cooktop.
+                                    In our campervans, we put outlets at various places. We install 12V outlets with USB-A & USB-C ports for charging devices near the swivel seats and at the upper and lower beds, so you can charge your phones when the inverter is off. We also install 110V outlets in the kitchen area for appliances such as a slow cooker and an induction cooktop.
                                 </RichParagraph>
                                 {/* <p className="text-gray-700 text-lg">
 
@@ -327,11 +327,11 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="Ventilation Fan"
                                         className="w-full h-64 object-contain mb-6 rounded-xl"
                                     />
-                                    <Heading4 textColor="text-black" text='Ventilation Fan'/>
+                                    <Heading4 textColor="text-black" text='Ventilation Fan' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center"></h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
-  We use Vankea's 12V roof ventilation fan in our campervans. The fan circulates air, removes moisture & food smell, and cools the interior, especially during warm weather. The fan has 14" x 14" dimensions, a blackout curtain for privacy, and comes with a remote control for adjustable speed settings.
+                                    We use Vankea's 12V roof ventilation fan in our campervans. The fan circulates air, removes moisture & food smell, and cools the interior, especially during warm weather. The fan has 14" x 14" dimensions, a blackout curtain for privacy, and comes with a remote control for adjustable speed settings.
                                 </RichParagraph>
                                 {/* <p className="text-gray-700 text-lg">
 
@@ -346,11 +346,11 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="Air Conditioner"
                                         className="w-full h-64 object-contain mb-6 rounded-xl"
                                     />
-                                    <Heading4 textColor="text-black" text='Air Conditioner'/>
+                                    <Heading4 textColor="text-black" text='Air Conditioner' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center"></h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
- Air conditioners provide cooling in hot climates. They are high-energy devices that often require solar panels, shore power, or a proper battery system for operation. At Big Bear Vans, we use a 12V slim A/C unit that runs for up to 20 hours on the batteries.
+                                    Air conditioners provide cooling in hot climates. They are high-energy devices that often require solar panels, shore power, or a proper battery system for operation. At Big Bear Vans, we use a 12V slim A/C unit that runs for up to 20 hours on the batteries.
                                 </RichParagraph>
                                 {/* <p className="text-gray-700 text-lg">
 
@@ -363,7 +363,7 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                     <section className="mb-24">
                         <div className="text-center mb-16">
                             <div className="inline-block relative">
-                                <Heading2 className="my-4" textColor="text-black" text='Kitchen Appliances'/>
+                                <Heading2 className="my-4" textColor="text-black" text='Kitchen Appliances' />
                                 {/* <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
 
                                 </h2> */}
@@ -380,11 +380,11 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="12V Refrigerator"
                                         className="w-full h-72 object-cover rounded-2xl mb-8"
                                     />
-                                    <Heading4 textColor="text-black" text='12V Refrigerator'/>
+                                    <Heading4 textColor="text-black" text='12V Refrigerator' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center"></h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
-  In our campervans, we use Vankea's compressor-based 12V fridge with a separate freezer. You can choose to have a fridge with 3.3 cu ft or 4.4 cu ft capacity. You can easily place a small refrigerator under the kitchen countertop and a tall one beside the bathroom of your campervan.
+                                    In our campervans, we use Vankea's compressor-based 12V fridge with a separate freezer. You can choose to have a fridge with 3.3 cu ft or 4.4 cu ft capacity. You can easily place a small refrigerator under the kitchen countertop and a tall one beside the bathroom of your campervan.
                                 </RichParagraph>
                                 {/* <p className="text-gray-700 text-lg">
 
@@ -399,7 +399,7 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="Induction Cooktop"
                                         className="w-full h-72 object-cover rounded-2xl mb-8"
                                     />
-                                    <Heading4 textColor="text-black" text='Induction Cooktop'/>
+                                    <Heading4 textColor="text-black" text='Induction Cooktop' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center"></h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
@@ -418,11 +418,11 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                         alt="Microwave or Oven"
                                         className="w-full h-72 object-cover rounded-2xl mb-8"
                                     />
-                                    <Heading4 textColor="text-black" text='Microwave or Oven'/>
+                                    <Heading4 textColor="text-black" text='Microwave or Oven' />
                                     {/* <h4 className="text-2xl font-bold text-gray-900 text-center"></h4> */}
                                 </div>
                                 <RichParagraph className="my-3">
-  Microwave requires a powerful inverter, while an oven can be propane- or electric-powered (the latter being more power-intensive). A microwave is usually built-in in a wall-mounted cabinet behind the driver's side and sometimes over the countertop cabinet. The Ninja oven is placed under the countertop.
+                                    Microwave requires a powerful inverter, while an oven can be propane- or electric-powered (the latter being more power-intensive). A microwave is usually built-in in a wall-mounted cabinet behind the driver's side and sometimes over the countertop cabinet. The Ninja oven is placed under the countertop.
                                 </RichParagraph>
                                 {/* <p className="text-gray-700 text-lg">
 
@@ -435,14 +435,14 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                     <section className="mb-24">
                         <div className="text-center mb-16">
                             <div className="inline-block relative">
-                                <Heading2 className="my-4" textColor="text-black" text='Other Electrical Appliances'/>
+                                <Heading2 className="my-4" textColor="text-black" text='Other Electrical Appliances' />
                                 {/* <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
 
                                 </h2> */}
                                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div>
                             </div>
                             <RichParagraph className="my-3">
-   Besides the most commonly used electrical appliances, we can also install some other devices in the campervan, like:
+                                Besides the most commonly used electrical appliances, we can also install some other devices in the campervan, like:
                             </RichParagraph>
                             {/* <p className="mt-8 text-xl text-gray-600 max-w-4xl mx-auto">
 
@@ -484,10 +484,10 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                                             alt={item.title}
                                             className="w-full h-72 object-contain mb-8 rounded-2xl"
                                         />
-                                        <Heading4 textColor="text-black" text={item.title}/>
+                                        <Heading4 textColor="text-black" text={item.title} />
                                         {/* <h4 className="text-2xl font-bold text-gray-900 text-center mb-6"></h4> */}
                                         <RichParagraph className="my-3">
-{item.desc}
+                                            {item.desc}
                                         </RichParagraph>
                                         {/* <p className="text-gray-700 text-lg text-center flex-grow"></p> */}
                                     </div>
@@ -500,14 +500,14 @@ These lights are extremely low power, typically drawing around 3-5W per fixture.
                     <section>
                         <div className="text-center mb-16">
                             <div className="inline-block relative">
-                                <Heading2 className="my-4" textColor="text-black" text='Water System'/>
+                                <Heading2 className="my-4" textColor="text-black" text='Water System' />
                                 {/* <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
 
                                 </h2> */}
                                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div>
                             </div>
                             <RichParagraph className="my-3">
-At Big Bear Vans, we install customized plumbing in our campervans. Here's what we install in our vans:
+                                At Big Bear Vans, we install customized plumbing in our campervans. Here's what we install in our vans:
                             </RichParagraph>
                             {/* <p className="mt-8 text-xl text-gray-600 max-w-4xl mx-auto">
 
@@ -576,43 +576,43 @@ At Big Bear Vans, we install customized plumbing in our campervans. Here's what 
                             </div>
                         </div>
 
-                     {/* Heaters */}
-<div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-  <div className="p-10 bg-gradient-to-r from-orange-50 to-gray-50">
+                        {/* Heaters */}
+                        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
+                            <div className="p-10 bg-gradient-to-r from-orange-50 to-gray-50">
 
-    <Heading3 textColor="text-black" text="Heaters" />
+                                <Heading3 textColor="text-black" text="Heaters" />
 
-    <RichParagraph className="my-4 max-w-4xl">
-      To regulate the temperature of your campervan during winter, we install a heater.
-      You can choose from the following reliable heating options based on your needs.
-    </RichParagraph>
+                                <RichParagraph className="my-4 max-w-4xl">
+                                    To regulate the temperature of your campervan during winter, we install a heater.
+                                    You can choose from the following reliable heating options based on your needs.
+                                </RichParagraph>
 
-    <ul className="space-y-6 mt-8 max-w-4xl">
-      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-        <span className="text-gray-700 text-lg">
-          An advanced glycol combined water and air heater connected to your fuel tank,
-          eliminating the need to drain your batteries.
-        </span>
-      </li>
+                                <ul className="space-y-6 mt-8 max-w-4xl">
+                                    <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+                                        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+                                        <span className="text-gray-700 text-lg">
+                                            An advanced glycol combined water and air heater connected to your fuel tank,
+                                            eliminating the need to drain your batteries.
+                                        </span>
+                                    </li>
 
-      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-        <span className="text-gray-700 text-lg">
-          A diesel air heater installed under the passenger seat paired with a 110V water heater.
-        </span>
-      </li>
+                                    <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+                                        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+                                        <span className="text-gray-700 text-lg">
+                                            A diesel air heater installed under the passenger seat paired with a 110V water heater.
+                                        </span>
+                                    </li>
 
-      <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
-        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
-        <span className="text-gray-700 text-lg">
-          A diesel air heater under the passenger seat combined with a 12V water heater.
-        </span>
-      </li>
-    </ul>
+                                    <li className="flex items-start bg-orange-50 p-6 rounded-2xl">
+                                        <span className="w-3 h-3 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0"></span>
+                                        <span className="text-gray-700 text-lg">
+                                            A diesel air heater under the passenger seat combined with a 12V water heater.
+                                        </span>
+                                    </li>
+                                </ul>
 
-  </div>
-</div>
+                            </div>
+                        </div>
 
                     </section>
                 </div>
