@@ -333,17 +333,17 @@ const schemaData = generateLayoutSchema(van);
                   {/* Feature List */}
                   <div className="w-full flex-grow text-left">
                     <ul className="space-y-2 font-medium text-sm text-gray-700">
-                      {feature.items.slice(0, 5).map((item, i) => ( // Display up to 5 items
+                      {feature.items.map((item, i) => ( // Display up to 5 items
                         <li key={`item-${i}`} className="flex items-start transition-colors duration-300 group-hover:text-black">
                           <SvgCheckmark />
                           <span className="leading-snug">{item}</span>
                         </li>
                       ))}
-                      {feature.items.length > 5 && (
+                      {/* {feature.items.length > 5 && (
                         <li className="text-xs text-gray-500 italic mt-1">
                           + {feature.items.length - 5} more features...
                         </li>
-                      )}
+                      )} */}
                     </ul>
                   </div>
                 </div>
