@@ -7,15 +7,30 @@ const contentBlockSchema = new mongoose.Schema({
     enum: ['heading', 'subheading', 'paragraph', 'list', 'table'],
     required: true
   },
-  title: { type: String, trim: true }, // Heading ya Table title ke liye
-  content: { type: String },           // Paragraph ya simple text ke liye
-  list_items: [{ type: String }],      // Agar block_type 'list' ho
-  table_data: {                        // Agar block_type 'table' ho
-    headers: [{ type: String }],
-    rows: [[{ type: String }]]
+  // Khali strings ko save hone se rokne ke liye default: undefined
+  title: {
+    type: String,
+    trim: true,
+    default: undefined
   },
-  order: { type: Number, default: 0 }  // Blocks ki sequence manage karne ke liye
-});
+  content: {
+    type: String,
+    default: undefined
+  },
+  // Arrays ke liye default: undefined use karein taaki [] save na ho
+  list_items: {
+    type: [String],
+    default: undefined
+  },
+  // Nested Object ke liye pure object ko undefined set karein
+  table_data: {
+    type: {
+      headers: [String],
+      rows: [[String]]
+    },
+    default: undefined
+  },
+}, { _id: false }); // Individual blocks ki ID remove kar di taki space bache
 
 const capacitySchema = new mongoose.Schema({
   sits: { type: String, required: true },

@@ -151,55 +151,106 @@ const VansForm = ({ setSelected }) => {
     };
   }, [galleryPreviews]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    setLoading(true);
-    try {
-      if (removedExistingGallery.length > 0) {
-        await Promise.all(
-          removedExistingGallery.map(url =>
-            axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
-          )
-        );
-      }
-
-      const formToSend = new FormData();
-      galleryFiles.forEach((file) => formToSend.append("gallery", file));
-      formToSend.append("galleryOrder", JSON.stringify(existingGallery));
-
-      const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
-      formToSend.append("media", JSON.stringify(cleanedMediaUrls));
-      formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("status", formData.status);
-      formToSend.append("detailed_features", JSON.stringify(features));
-
-      // --- Naya: Blocks ko FormData mein add karein ---
-      formToSend.append("blocks", JSON.stringify(blocks));
-
-      formToSend.append("insertAt", "0");
-
-      if (editData?._id) {
-        await updateVan(editData, formToSend);
-        setSelected("Vans-listing");
-      } else {
-        await createVan(formToSend);
-        setSelected("Vans-listing");
-      }
-
-      Swal.fire("Success", "Van details saved successfully!", "success");
-      resetForm();
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Submission Failed",
-        text: err.response?.data?.message || "Internal server error",
-      });
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    if (removedExistingGallery.length > 0) {
+      await Promise.all(
+        removedExistingGallery.map(url =>
+          axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
+        )
+      );
     }
-  };
+
+    const formToSend = new FormData();
+    galleryFiles.forEach((file) => formToSend.append("gallery", file));
+    formToSend.append("galleryOrder", JSON.stringify(existingGallery));
+
+    const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
+    formToSend.append("media", JSON.stringify(cleanedMediaUrls));
+    formToSend.append("van_listing", JSON.stringify(formData.van_listing));
+    formToSend.append("status", formData.status);
+    formToSend.append("detailed_features", JSON.stringify(features));
+
+    // ============================================================
+    // ✅ Naya: Blocks Cleanup aur Filtering Logic
+    // ============================================================
+    const cleanedBlocks = blocks
+      .map((block) => {
+        let b = { ...block };
+
+        // Frontend ki temporary _id delete karein taaki DB space bache
+        delete b._id;
+
+        // Block type ke hisaab se unwanted keys delete karein
+        if (b.block_type === "heading" || b.block_type === "subheading") {
+          delete b.content;
+          delete b.list_items;
+          delete b.table_data;
+        }
+        else if (b.block_type === "paragraph") {
+          delete b.title;
+          delete b.list_items;
+          delete b.table_data;
+        }
+        else if (b.block_type === "list") {
+          delete b.content;
+          delete b.table_data;
+          // Sirf wo items rakhein jo khali nahi hain
+          b.list_items = b.list_items?.filter(item => item && item.trim() !== "");
+        }
+        else if (b.block_type === "table") {
+          delete b.content;
+          delete b.list_items;
+          // Khali rows ko filter karein
+          if (b.table_data?.rows) {
+            b.table_data.rows = b.table_data.rows.filter(row =>
+              row.some(cell => cell && cell.trim() !== "")
+            );
+          }
+        }
+        return b;
+      })
+      .filter((block) => {
+        // Sirf wo block bhejien jisme asli data ho
+        const hasTitle = block.title && block.title.trim() !== "";
+        const hasContent = block.content && block.content.trim() !== "";
+        const hasListItems = block.list_items && block.list_items.length > 0;
+        const hasTableData = block.block_type === "table" &&
+                             block.table_data?.rows?.length > 0;
+
+        return hasTitle || hasContent || hasListItems || hasTableData;
+      });
+
+    // Cleaned blocks ko FormData mein add karein
+    formToSend.append("blocks", JSON.stringify(cleanedBlocks));
+    // ============================================================
+
+    formToSend.append("insertAt", "0");
+
+    if (editData?._id) {
+      await updateVan(editData, formToSend);
+      setSelected("Vans-listing");
+    } else {
+      await createVan(formToSend);
+      setSelected("Vans-listing");
+    }
+
+    Swal.fire("Success", "Van details saved successfully!", "success");
+    resetForm();
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      title: "Submission Failed",
+      text: err.response?.data?.message || "Internal server error",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">

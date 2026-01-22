@@ -93,7 +93,7 @@ export default function BlogForm({ setSelected }) {
   };
 
   // ✅ FIXED: Submit form - Proper image handling for blocks and new gallery
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim()) {
@@ -103,7 +103,7 @@ export default function BlogForm({ setSelected }) {
 
     setLoading(true);
     try {
-      // 1. Delete removed gallery images from backend/S3 (Portfolio style)
+      // 1. Delete removed gallery images
       if (removedExistingGallery.length > 0) {
         await Promise.all(
           removedExistingGallery.map((url) =>
@@ -120,65 +120,100 @@ export default function BlogForm({ setSelected }) {
       formDataToSend.append("title", title);
       formDataToSend.append("description", description);
 
-      // Block images handling (existing logic maintained)
+      // ============================================================
+      // ✅ Blocks Cleanup aur Filtering Logic
+      // ============================================================
       let imageIndex = 0;
-      const cleanedBlocks = blocks.map((block) => {
-        if (block.type === "image") {
-          if (block.file) {
-            // New image uploaded
-            const newBlock = {
-              type: "image",
-              imageField: `image_${imageIndex}`,
-              existingImage: block.url || null, // existing image to be deleted
-            };
-            imageIndex++;
-            return newBlock;
-          } else if (block.url) {
-            // Existing image - no changes
-            return {
-              type: "image",
-              image: block.url, // Backend expects 'image' field for existing images
-            };
-          } else {
-            // Image removed
-            return { type: "image", image: null };
+      const cleanedBlocks = blocks
+        .map((block) => {
+          let b = { ...block };
+
+          // Temporary ID delete karein
+          delete b._id;
+
+          if (b.type === "image") {
+            // Sirf image-related fields rakhein, baqi uda dein
+            const imgBlock = { type: "image" };
+            if (b.file) {
+              imgBlock.imageField = `image_${imageIndex}`;
+              imgBlock.existingImage = b.url || null;
+              imageIndex++;
+              return imgBlock;
+            } else if (b.url) {
+              imgBlock.image = b.url;
+              return imgBlock;
+            }
+            return null; // Image removed case
           }
-        }
-        return block;
-      });
+
+          if (b.type === "heading" || b.type === "subheading" || b.type === "paragraph") {
+            // Unwanted keys delete karein
+            delete b.image;
+            delete b.url;
+            delete b.rows;
+            delete b.pros;
+            delete b.cons;
+            delete b.file;
+            return b.text?.trim() ? b : null;
+          }
+
+          if (b.type === "table") {
+            delete b.text;
+            delete b.image;
+            delete b.pros;
+            delete b.cons;
+            // Empty rows filter karein
+            if (b.rows) {
+              b.rows = b.rows.filter(row => row.some(cell => cell && cell.trim() !== ""));
+            }
+            return b.rows?.length > 0 ? b : null;
+          }
+
+          if (b.type === "proscons") {
+            delete b.text;
+            delete b.image;
+            delete b.rows;
+            // Khali pros/cons nikaal dein
+            b.pros = b.pros?.filter(p => p.trim() !== "");
+            b.cons = b.cons?.filter(c => c.trim() !== "");
+            return (b.pros?.length > 0 || b.cons?.length > 0) ? b : null;
+          }
+
+          if (b.type === "mediaLink") {
+            return b.url?.trim() ? b : null;
+          }
+
+          return b;
+        })
+        .filter((block) => block !== null); // Sirf valid blocks rakhein
 
       formDataToSend.append("content", JSON.stringify(cleanedBlocks));
 
-      // Attach block images
+      // Attach block files (Original block array se file uthayein)
       blocks.forEach((block) => {
         if (block.type === "image" && block.file) {
           formDataToSend.append("images", block.file);
         }
       });
 
-      // 🖼️ ATTACH NEW GALLERY FILES (Portfolio style)
+      // 🖼️ Gallery Files
       galleryFiles.forEach((file) => formDataToSend.append("gallery", file));
 
-      // 🖼️ ATTACH REMAINING EXISTING GALLERY URLS (Portfolio style)
+      // 🖼️ Existing Gallery URLs
       const remainingGalleryUrls = existingGallery.filter(
         (url) => !removedExistingGallery.includes(url)
       );
-      formDataToSend.append(
-        "existingGallery",
-        JSON.stringify(remainingGalleryUrls)
-      );
+      formDataToSend.append("existingGallery", JSON.stringify(remainingGalleryUrls));
 
       // 3. Create/update blog
       if (isEditMode) {
         await updateBlog(editData._id, formDataToSend);
-        setSelected("Blogs-listing")
+        setSelected("Blogs-listing");
       } else {
         await createBlog(formDataToSend);
-        setSelected("Blogs-listing")
-
+        setSelected("Blogs-listing");
       }
 
-      // Reset form
       clearForm();
     } catch (err) {
       console.error("Upload error:", err);

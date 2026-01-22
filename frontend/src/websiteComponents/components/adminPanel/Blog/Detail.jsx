@@ -14,7 +14,6 @@ export default function Detail({ setIsopen, detail }) {
         setIsMounted(false);
         setTimeout(() => setIsopen(false), 300);
     };
-
     return (
         <div className="fixed inset-0 z-[100] flex justify-end overflow-hidden">
             {/* Overlay */}

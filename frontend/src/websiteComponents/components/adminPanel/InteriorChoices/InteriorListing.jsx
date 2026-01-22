@@ -63,6 +63,7 @@ export default function InteriorList({ setSelected }) {
   };
 
   const handleView = (item) => {
+    console.log(item)
     Swal.fire({
       title: `<span class="text-xl font-black">${item.title}</span>`,
       html: `
