@@ -12,13 +12,13 @@ import RichParagraph from '../Common/Paragraph/RichParagraph';
 const VanSystemsPage = () => {
     return (
         <>
-           
+
 
             <div className="bg-gradient-to-b from-gray-50 to-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
 
 
-          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div>
+          {/* <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1.5 bg-gradient-to-r from-blue-600 to-green-500 rounded-full"></div> */}
 
 
                     {/* Water System Section */}

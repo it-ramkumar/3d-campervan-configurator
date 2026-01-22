@@ -274,7 +274,7 @@ export default function BookingPage() {
               <div className="overflow-hidden flex items-center justify-center">
                 <Link to="/" className="block">
                   <ImageWithSkeleton
-                    src="/images/logoo.webp"
+                    src="/images/blackLogo.jpg"
                     alt="BBV logo"
                     className="w-[170px] h-[30px] border-none object-contain"
                     click={true}
@@ -368,7 +368,7 @@ export default function BookingPage() {
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
                       <ImageWithSkeleton
-                        src="/logobbv.jpg"
+                        src="/images/blackLogo.jpg"
                         alt="BBV logo"
                         className="w-[100px] h-[30px] object-contain"
                       />
