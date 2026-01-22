@@ -260,22 +260,39 @@ const getFilteredCategories = () => {
                       <motion.div variants={contentVariants} initial="hidden" animate="visible" exit="hidden" className="border-t border-gray-100 p-5 sm:p-8">
 
                         {/* Subcategory Buttons */}
-                        {cat.subCategories.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-8">
-                            {cat.subCategories.map((sub) => (
-                              <button
-                                key={sub._id}
-                                onClick={() => {
-                                  setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
-                                  setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
-                                }}
-                                className={`px-5 py-2.5 rounded-full border transition-all ${activeSubId === sub._id ? "bg-black text-white" : "bg-white text-gray-700"}`}
-                              >
-                                {sub.title}
-                              </button>
-                            ))}
-                          </div>
-                        )}
+                   {cat.subCategories.length > 0 && (
+  <div className="flex flex-col gap-6 mb-8"> {/* Main vertical gap */}
+    {cat.subCategories.map((sub) => (
+      <div key={sub._id} className="space-y-2"> {/* Button aur Desc ka personal container */}
+
+        {/* Button - Active state logic wahi hai */}
+        <button
+          onClick={() => {
+            setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
+            setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
+          }}
+          className={`px-5 py-2.5 rounded-full border transition-all inline-block w-fit ${
+            activeSubId === sub._id
+            ? "bg-black text-white shadow-md"
+            : "bg-white text-gray-700 hover:border-gray-400"
+          }`}
+        >
+          {sub.title}
+        </button>
+
+        {/* Description - Hamesha niche aayegi */}
+        {sub.description && (
+          <div className="pl-1"> {/* Thodi si padding for alignment */}
+             <RichParagraph className="text-sm text-gray-500 leading-relaxed max-w-2xl">
+                {sub.description}
+             </RichParagraph>
+          </div>
+        )}
+
+      </div>
+    ))}
+  </div>
+)}
 
                         {/* Items Selection */}
                         <div className="flex flex-wrap gap-3 mb-10">
