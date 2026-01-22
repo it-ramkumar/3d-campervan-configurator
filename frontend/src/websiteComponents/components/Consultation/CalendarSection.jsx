@@ -276,7 +276,7 @@ export default function BookingPage() {
                   <ImageWithSkeleton
                     src="/images/blackLogo.jpg"
                     alt="BBV logo"
-                    className="w-[170px] h-[30px] border-none object-contain"
+                    className="w-[70px] border-none object-contain"
                     click={true}
                   />
                 </Link>
