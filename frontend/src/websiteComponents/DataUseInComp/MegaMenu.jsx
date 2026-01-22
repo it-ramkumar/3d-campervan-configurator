@@ -14,7 +14,7 @@ export const menuContent = {
         items: [
           { label: "Exterior Choices", link: "/van-options/exterior-options" },
           { label: "Interior Choices", link: "/van-options/interior-options" },
-          { label: "System Choices", link: "/system-options" },
+          { label: "System Choices", link: "/van-options/system-options" },
           { label: "Sprinter Guide", link: "/sprinter-guide" },
         ],
       },

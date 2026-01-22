@@ -6,6 +6,7 @@ import HeroSection from '../HeroSection/HeroSection';
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
 import SystemAccessories from "./SystemAccessories"
+import SystemOptions from "./SystemOptions"
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
 import { useParams } from 'react-router-dom';
@@ -39,8 +40,8 @@ export default function ExteriorChoicePage() {
     },
     "system-options": {
       api: "system",
-      title: "Premium System Finishes",
-      desc: "Luxury meets comfort. Explore our range of system linings, flooring, and bespoke cabinetry options.",
+      title: "Electrical and Water System in Big Bear Vans",
+      desc: "Electrical and water systems keep your campervan running smoothly, powering lights, heating water, and charging your devices. At Big Bear Vans, we install reliable, high-performance electrical and water systems designed for off-grid travel. Let us walk you through every component we offer, so you know exactly what goes into your van and why it matters..",
       heroImage: "/heroSlider/system.jpg" // Ensure karein ye image path sahi ho
     }
   };
@@ -125,23 +126,23 @@ export default function ExteriorChoicePage() {
 
   return (
     <div>
-        <title>{current.title}</title>
-          <meta name="description" content={current.desc} />
-          <meta name="keywords" content={current.keywords} />
+      <title>{current.title}</title>
+      <meta name="description" content={current.desc} />
+      <meta name="keywords" content={current.keywords} />
 
-          {/* Open Graph (Facebook/LinkedIn share) */}
-          <meta property="og:title" content={current.title} />
-          <meta property="og:description" content={current.desc} />
-          <meta property="og:image" content={current.heroImage} />
-          <meta property="og:url" content={current.pageUrl} />
-          <meta property="og:type" content="website" />
+      {/* Open Graph (Facebook/LinkedIn share) */}
+      <meta property="og:title" content={current.title} />
+      <meta property="og:description" content={current.desc} />
+      <meta property="og:image" content={current.heroImage} />
+      <meta property="og:url" content={current.pageUrl} />
+      <meta property="og:type" content="website" />
 
-          {/* Twitter Meta Tags */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={current.title} />
-          <meta name="twitter:description" content={current.desc} />
-          <meta name="twitter:image" content={current.heroImage} />
-        <script type="application/ld+json">
+      {/* Twitter Meta Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={current.title} />
+      <meta name="twitter:description" content={current.desc} />
+      <meta name="twitter:image" content={current.heroImage} />
+      <script type="application/ld+json">
         {JSON.stringify(generateDynamicSchema(options, current, dataState.categories))}
       </script>
       <Navbar />
@@ -159,7 +160,7 @@ export default function ExteriorChoicePage() {
       <div className='list'>
         {!dataState.loading ? (
           // key={options} dene se component fresh reset hoga jab page badlega
-          <ExteriorChoicesList key={options} initialData={dataState} heading={current.api}/>
+          <ExteriorChoicesList key={options} initialData={dataState} heading={current.api} />
         ) : (
           <div className="py-20"><Loader /></div>
         )}
@@ -167,15 +168,15 @@ export default function ExteriorChoicePage() {
       {
         current.api === "system" &&
         <div className='list'>
-        <SystemAccessories />
-      </div>
+          <SystemOptions />
+        </div>
       }
-{
+      {
         current.api === "exterior" &&
         <div className='list'>
           <ExteriorCTR />
-        <AdditionalAccessories />
-      </div>
+          <AdditionalAccessories />
+        </div>
       }
 
       <Footer />
