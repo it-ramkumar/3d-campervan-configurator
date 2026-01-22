@@ -189,7 +189,7 @@ const getFilteredCategories = () => {
             <div className="p-3 bg-black/5 rounded-2xl">
               <Sparkles className="h-7 w-7 sm:h-9 sm:w-9 text-black" />
             </div>
-            <Heading2 text={`${heading} Design Choices`} />
+            <Heading2 text={`${heading} Choices`} className="capitalize"/>
           </div>
           <div className="max-w-2xl mx-auto">
             <RichParagraph className="text-gray-600 text-lg">
