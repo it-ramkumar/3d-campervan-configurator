@@ -42,7 +42,10 @@ const specificationsSchema = new mongoose.Schema({
   wheelbase: { type: String },
   drivetrain: { type: String },
   engine: { type: String },
-  capacity: { type: capacitySchema }
+  capacity: { type: capacitySchema },
+  transmission: { type: String },
+  exterior_color: { type: String },
+  interior_color: { type: String },
 });
 
 const vanListingSchema = new mongoose.Schema({

@@ -55,7 +55,7 @@ export default function ContactForm({
           <BlackButton
             type="submit"
             disabled={loading}
-            label={loading ? "Submitting..." : "Submit"}
+            label={loading ? "Submitting..." : "Send Message"}
           />
         </div>
       </form>

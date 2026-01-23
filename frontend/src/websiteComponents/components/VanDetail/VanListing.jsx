@@ -117,6 +117,17 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <BlackButton label="Book A Call Now" onClick={onConsultationClick} />
+            {vanDetail.status === "available" &&
+  Number(vanDetail.van_listing.price) >= 100 && (
+    <Heading3
+      text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+    />
+  )
+}
+
+
+
+
             </div>
           </div>
         </div>

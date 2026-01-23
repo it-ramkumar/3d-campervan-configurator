@@ -51,7 +51,7 @@ export default function Layouts() {
     image3: "/customBuild/image3.jpg",
     image1: "/customBuild/image1.jpg",
     image4: "/customBuild/image4.jpg",
-    link: "/layout-by-category/Portfolio of Custom Builds",
+    link: "/layout-by-category/Portfolio of Custom Builds"
   }
   const LayoutText = {
     text: "Have a look at our completed projects. We're honoured to serve clients from different states in the USA. We've built custom vans for families, couples, pet- owners, remote workers, surfers, bikers, etc, all while considering their specific needs.You can check them all here.",

@@ -238,7 +238,7 @@ const WhyChoose = () => {
         })}
 
         <div className="py-12 flex justify-center">
-          <BlackButton label={"Order Custom Build"} link={"/inquiry"} />
+          <BlackButton label={"Request a Custom Build"} link={"/inquiry"} />
 
         </div>
       </main>

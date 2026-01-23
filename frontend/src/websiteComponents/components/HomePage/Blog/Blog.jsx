@@ -100,7 +100,7 @@ export default function Blog() {
 
         {/* View All Blogs Button (Optional) */}
         <div className="mt-12 text-center">
-          <BlackButton label="View All Posts" link="/blog" />
+          <BlackButton label="View All Blog Posts" link="/blog" />
 
         </div>
 
