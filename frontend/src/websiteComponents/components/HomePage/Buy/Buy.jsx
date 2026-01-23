@@ -117,60 +117,61 @@ export default function Buy() {
             className="!pb-8"
           >
             {/* 🔹 1. REAL INVENTORY SLIDES */}
-         {readyToGoVans.map((slide, i) => {
-  const hasImage = slide?.gallery?.[0];
+            {readyToGoVans.map((slide, i) => {
+              const hasImage = slide?.gallery?.[0];
 
-  return (
-    <SwiperSlide
-      key={slide._id || i}
-      className="group w-full md:!w-[900px] md:!h-[500px]"
-    >
-      <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 group-hover:scale-[1.01]">
+              return (
+                <SwiperSlide
+                  key={slide._id || i}
+                  className="group w-full md:!w-[900px] md:!h-[500px]"
+                >
+                  <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 group-hover:scale-[1.01]">
 
-        {/* Background Image OR Fallback */}
-        {hasImage ? (
-          <ImageWithSkeleton
-            src={hasImage}
-            alt={slide.van_listing?.title}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-            <span className="text-gray-500 mt-20 text-sm uppercase tracking-widest">
-              Image coming soon
-            </span>
-          </div>
-        )}
+                    {/* Background Image OR Fallback */}
+                    {hasImage ? (
+                      <ImageWithSkeleton
+                        src={hasImage}
+                        alt={slide.van_listing?.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
+                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
+                        <span className="text-gray-500 mt-20 text-sm uppercase tracking-widest">
+                          Image coming soon
+                        </span>
+                      </div>
+                    )}
 
-        {/* Overlay – always present */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                    {/* Overlay – always present */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
-          <span className="bg-green-600 text-white text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest">
-            Available Now
-          </span>
+                    {/* Content */}
+                    <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
+                      {/* 🟢 FIXED: Green color dark kiya aur text size thoda barhaya */}
+                      <span className="bg-green-700 text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest shadow-sm">
+                        Available Now
+                      </span>
 
-          <Heading2
-            text={slide?.van_listing?.title || "Ready-To-Go Camper Van"}
-            className="text-white mb-2"
-          />
+                      <Heading2
+                        text={slide?.van_listing?.title || "Ready-To-Go Camper Van"}
+                        className="text-white mb-2"
+                      />
 
-          <RichParagraph className="text-gray-200 mb-6 line-clamp-2 max-w-2xl">
-            {slide?.van_listing?.description ||
-              "A premium camper conversion designed for comfort, performance, and adventure. Full specs coming soon."}
-          </RichParagraph>
-
-          <div className="flex gap-4">
-            <BlackButton label="Buy Now" link="/contact" />
-            <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} />
-          </div>
-        </div>
-      </div>
-    </SwiperSlide>
-  );
-})}
+                    {/* ⚪ FIXED: text-gray-200 ko text-white ya text-gray-100 kar dein behtar contrast ke liye */}
+  <RichParagraph className="text-gray-100 mb-6 line-clamp-2 max-w-2xl">
+    {slide?.van_listing?.description ||
+      "A premium camper conversion designed for comfort, performance, and adventure."}
+  </RichParagraph>
+                      <div className="flex gap-4">
+                        <BlackButton label="Buy Now" link="/contact" />
+                        <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} />
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
 
 
             {/* 🔹 2. UPCOMING BUILDS SLIDES */}
@@ -207,13 +208,13 @@ export default function Buy() {
 
           {/* Right side: Navigation Arrows */}
           <div className="flex gap-4 order-1 md:order-2">
-            <button
+            <button aria-label="Previous Slide"
               onClick={() => swiperRef.current?.swiper.slidePrev()}
               className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
             >
               <span className="rotate-180"><ArrowIcon /></span>
             </button>
-            <button
+            <button aria-label="Next Slide"
               onClick={() => swiperRef.current?.swiper.slideNext()}
               className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all shadow-lg active:scale-95"
             >

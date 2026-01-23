@@ -22,8 +22,8 @@
                     images: [
                         "/whereToCamp/pine tree rv park 2.png",
                         "/whereToCamp/pine tree rv park 3.png",
-                        "/whereToCamp/Pineknot campground 2.png",
-                        "/whereToCamp/Pineknot campground.png"
+                        // "/whereToCamp/Pineknot campground 2.png",
+                        // "/whereToCamp/Pineknot campground.png"
 
 
                     ],
@@ -57,9 +57,9 @@
                     desc: "Holcomb Valley Campground is located about 5 miles north of Big Bear Lake, off a Forest Service road. The campground features 19 family sites, and each site can accommodate up to 8 people, making it a quiet and spacious camping option.",
                     images: [
                         "/whereToCamp/Holocomb valley campground 2.png",
-                        "/whereToCamp/Holocomb valley campground.png",
-                        "/whereToCamp/holocomb valley ranch 2.png",
-                        "/whereToCamp/holocomb valley ranch 3.png",
+                        // "/whereToCamp/Holocomb valley campground.png",
+                        // "/whereToCamp/holocomb valley ranch 2.png",
+                        // "/whereToCamp/holocomb valley ranch 3.png",
                         "/whereToCamp/holocomb valley ranch 4.png"
 
 
@@ -125,7 +125,7 @@
                     desc: "Keller Peak Yellow Sites (9 sites) are located near Running Springs. These sites are the best FREE options for those who want to enjoy scenic views without any hassle of reservations. Each campsite can accommodate up to 8 people and is available on a first-come, first-served basis.",
                     images: [
                         "/whereToCamp/keller peak yellow campsites 2.png",
-                        "/whereToCamp/keller peak yellow campsites 3.png",
+                        // "/whereToCamp/keller peak yellow campsites 3.png",
                         "/whereToCamp/keller peak yellow campsites.png"
                     ],
                     stats: [
@@ -148,7 +148,7 @@
                     images: [
                         "/whereToCamp/barton flats campground 2.png",
                         "/whereToCamp/barton flats campground 3.png",
-                        "/whereToCamp/barton flats campground.png"
+                        // "/whereToCamp/barton flats campground.png"
                     ],
                   table: [
                         { seasonDates: "April 3, 2026 - October 24, 2026", siteType: "Standard non-electric",dailyRates:"$36 nightly", maximumStay:"14 days" },
@@ -177,8 +177,8 @@
                     desc: "Situated near Arrowbear in the San Bernardino National Forest, Green Valley Campground is nestled between Lake Arrowhead and Big Bear Lake. Visitors can enjoy trout fishing in Green Valley Lake, which is only a mile away.",
                     images: [
                         "/whereToCamp/green valley campground 4.png",
-                        "/whereToCamp/green valley campground 3.png",
-                        "/whereToCamp/green valley campground 2.png",
+                        // "/whereToCamp/green valley campground 3.png",
+                        // "/whereToCamp/green valley campground 2.png",
                         "/whereToCamp/green valley campground.png"
                     ],
                  table: [

@@ -7,7 +7,9 @@ import { FaTwitter, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinke
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { FooterListItem } from "../Common/Li/FooterLiItem"; // ✅ Import
 import RichParagraph from "../Common/Paragraph/RichParagraph";
+import Heading3 from "../Common/Headings/Heading3";
 import Heading4 from "../Common/Headings/Heading4";
+
 
 const handleCopy = (text) => {
   navigator.clipboard.writeText(text);
@@ -76,16 +78,35 @@ export default function Footer() {
 
             {/* Social Icons */}
             <div className="flex gap-4">
-              <Link to="https://x.com/bigbearvans_" className="p-2 transition-all duration-300 transform hover:scale-125">
+              <Link
+                to="https://x.com/bigbearvans_"
+                aria-label="Follow us on X (Twitter)"
+                className="p-2 transition-all duration-300 transform hover:scale-125"
+              >
                 <FaTwitter size={20} />
               </Link>
-              <Link to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w" className="p-2 transition-all duration-300 transform hover:scale-125">
+
+              <Link
+                to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w"
+                aria-label="Visit our YouTube channel"
+                className="p-2 transition-all duration-300 transform hover:scale-125"
+              >
                 <FaYoutube size={20} />
               </Link>
-              <Link to="https://www.linkedin.com/company/big-bear-vans" className="p-2 transition-all duration-300 transform hover:scale-125">
+
+              <Link
+                to="https://www.linkedin.com/company/big-bear-vans"
+                aria-label="Connect with us on LinkedIn"
+                className="p-2 transition-all duration-300 transform hover:scale-125"
+              >
                 <FaLinkedin size={20} />
               </Link>
-              <Link to="https://www.instagram.com/bigbearvans/?hl=en" className="p-2 transition-all duration-300 transform hover:scale-125">
+
+              <Link
+                to="https://www.instagram.com/bigbearvans/?hl=en"
+                aria-label="Follow us on Instagram"
+                className="p-2 transition-all duration-300 transform hover:scale-125"
+              >
                 <FaInstagram size={20} />
               </Link>
             </div>
@@ -93,8 +114,9 @@ export default function Footer() {
 
           {/* Quick Links - ✅ Using FooterListItem */}
           <div>
-            <Heading4 text=" Quick Links" textColor="text-white my-4" />
-            <ul className="space-y-1">
+            {/* H4 ki jagah H3 use karein */}
+            <Heading3 text="Quick Links" textColor="text-white my-4 text-lg lg:text-xl" />
+             <ul className="space-y-1">
               <FooterListItem to="/" className="text-sm">Home</FooterListItem>
               <FooterListItem to="/vans-for-sale" className="text-sm">Vans For Sale</FooterListItem>
               <FooterListItem to="/van-layouts" className="text-sm"> Layouts</FooterListItem>
@@ -214,9 +236,10 @@ export default function Footer() {
                 />
                 <button
                   onClick={handleSubscribe}
+                  aria-label="Subscribe to newsletter" // Ye label screen reader ko batayega ke ye button kya karta hai
                   className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
                 >
-                  <FaArrowRight />
+                  <FaArrowRight aria-hidden="true" /> {/* Icon ko screen reader se hide kar diya */}
                 </button>
               </div>
             </div>

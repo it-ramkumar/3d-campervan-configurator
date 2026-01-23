@@ -443,7 +443,7 @@ const schemaData = generateLayoutSchema(van);
                     >
                       <iframe
                         src={`${embedUrl}?rel=0&modestbranding=1`}
-                        title={`video-${index}`}
+                        title="Product Showcase Video" // descriptive title dein
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                         className="absolute top-0 left-0 w-full h-full border-0 rounded-xl"

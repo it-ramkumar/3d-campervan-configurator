@@ -20,7 +20,7 @@ export default function HeroV({
         alt="Camper Vans For Sale"
         className="absolute inset-0 w-full h-full object-cover z-0 md:object-center"
       />
-      <div className="absolute inset-0 bg-black/60 z-10"></div>
+      <div className="absolute inset-0 bg-black/70 z-10"></div>
 
       <div className="relative z-20 flex items-center justify-center h-full px-4 md:px-8">
         <div className="max-w-4xl text-center text-white">
