@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Settings2, Paintbrush, Armchair } from "lucide-react"; // Icons install karlein: npm install lucide-react
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import SeeMore from "../Common/SeeMore/SeeMore";
 import BlackButton from "../Common/Button/BlackButton";
@@ -117,13 +118,13 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <BlackButton label="Book A Call Now" onClick={onConsultationClick} />
-            {vanDetail.status === "available" &&
-  Number(vanDetail.van_listing.price) >= 100 && (
-    <Heading3
-      text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-    />
-  )
-}
+              {vanDetail.status === "available" &&
+                Number(vanDetail.van_listing.price) >= 100 && (
+                  <Heading3
+                    text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+                  />
+                )
+              }
 
 
 
@@ -132,6 +133,44 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 px-4 bg-slate-50 rounded-2xl border border-gray-100">
+
+  {/* Transmission Block */}
+  <div className="flex flex-col items-center gap-2 group">
+    <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-blue-50 transition-colors">
+      <Settings2 className="w-6 h-6 text-blue-600" />
+    </div>
+    <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">Transmission</span>
+    <p className="text-sm font-semibold text-gray-800">
+      {vanDetail.van_listing.specifications.transmission || "Manual"}
+    </p>
+  </div>
+
+  {/* Exterior Color Block */}
+  <div className="flex flex-col items-center gap-2 group">
+    <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-green-50 transition-colors">
+      <div
+        className="w-6 h-6 rounded-full border border-gray-200 shadow-inner"
+        style={{ backgroundColor: vanDetail.van_listing.specifications.exterior_color || '#ccc' }}
+      />
+    </div>
+    <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">Exterior</span>
+
+  </div>
+
+  {/* Interior Color Block */}
+  <div className="flex flex-col items-center gap-2 group">
+    <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-amber-50 transition-colors">
+      <div
+        className="w-6 h-6 rounded-full border border-gray-200 shadow-inner"
+        style={{ backgroundColor: vanDetail.van_listing.specifications.interior_color || '#333' }}
+      />
+    </div>
+    <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">Interior</span>
+
+  </div>
+
+</div>
       {blocks.length > 0 && (
         <div className="px-6 py-20 bg-[#f8fafc] border-t border-gray-100"> {/* bigbeartheme background */}
           <div className="w-full max-w-5xl mx-auto space-y-16">
