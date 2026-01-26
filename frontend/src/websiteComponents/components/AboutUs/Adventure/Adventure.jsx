@@ -262,9 +262,7 @@ export default function AboutPage() {
         <motion.img
           src={ctaBgImage}
           alt="Scenic view from inside a custom camper van"
-          {/* 🟢 1. loading="eager" add karein taaki browser intezar na kare */}
           loading="eager"
-          {/* 🟢 2. fetchpriority="high" add karein taaki network priority milay */}
           fetchpriority="high"
           className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
           initial={{ scale: 1.15 }}
