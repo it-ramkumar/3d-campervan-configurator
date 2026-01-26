@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
-import Swal from "sweetalert2";
+const Swal = () => import('sweetalert2');
 import { contact } from "../../../api/contact/contact";
 import Heading2 from "../Common/Headings/Heading2";
 import RichParagraph from "../Common/Paragraph/RichParagraph";

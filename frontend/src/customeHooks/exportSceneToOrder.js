@@ -79,7 +79,7 @@ export const ExportScene = async (
             setUploadSuccess(true);
             setModelUrl(data.url);
             resolve(data)
-            router("/preview");
+            // router("/preview");
           } else {
             reject(new Error("No URL returned"));
           }

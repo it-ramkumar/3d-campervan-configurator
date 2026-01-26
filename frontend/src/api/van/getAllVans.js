@@ -1,6 +1,4 @@
 import axios from "axios";
-import Swal from "sweetalert2";
-
 /**
  * Fetch vans with pagination
  * @param {number} [page=1] - Page number

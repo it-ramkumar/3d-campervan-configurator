@@ -11,14 +11,15 @@ const createVan = async (formDataToSend) => {
 
     });
 
-     Swal.fire({
+    Swal.fire({
       icon: "success",
       title: "van Submitted!",
       text: "Your van has been submitted successfully.",
+      showConfirmButton: false
     });
     return res.data;
   } catch (error) {
-      Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "error",
       text: error.response.data.message,
@@ -37,15 +38,15 @@ const updateVan = async (editData, formDataToSend) => {
       { withCredentials: true } // keep cookie session
     );
     Swal.fire({
-          icon: "success",
-          title: "Successfully!",
-          text: "Your Data has been successfully Submitted.",
-        });
-    alert("Van updated successfully!");
-    // console.log("✅ Update Response:", res.data);
+      icon: "success",
+      title: "Successfully!",
+      text: "Updated.",
+      showConfirmButton: false
+    });
+
     return res.data;
   } catch (error) {
-        Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "error",
       text: error.response.data.message,

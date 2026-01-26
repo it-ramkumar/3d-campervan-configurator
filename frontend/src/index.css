@@ -1,26 +1,14 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
-
 @theme {
   --color-brand: #EEEEEE;
   --color-dark: black;
-
-  /* Fonts */
   --font-heading: "Merriweather", serif;
   --font-body: "Open Sans", sans-serif;
   --font-serif: "Noto Serif", serif;
   --font-haas: "Neue Haas Grotesk Display Pro", sans-serif;
 }
 
-/* ✅ Local font (Haas) */
-@font-face {
-  font-family: "Neue Haas Grotesk Display Pro";
-  src: url("/fonts/NeueHaasDisplayLight.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
+
 
 html {
   scroll-behavior: smooth;

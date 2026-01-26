@@ -244,8 +244,6 @@ const VansForm = ({ setSelected }) => {
         await createVan(formToSend);
         setSelected("Vans-listing");
       }
-
-      Swal.fire("Success", "Van details saved successfully!", "success");
       resetForm();
     } catch (err) {
       Swal.fire({
@@ -420,38 +418,38 @@ const VansForm = ({ setSelected }) => {
 
 
               {/* Exterior Color Picker */}
-<div className="flex flex-col gap-2">
-  <label className="block text-sm font-medium text-gray-700">Exterior Color</label>
-  <div className="flex items-center gap-3">
-    <input
-      type="color"
-      name="exterior_color"
-      value={formData.van_listing.specifications.exterior_color || "#ffffff"} // Default white
-      onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
-      className="h-10 w-20 cursor-pointer rounded border border-gray-300"
-    />
-    <span className="text-xs font-mono text-gray-500 uppercase">
-      {formData.van_listing.specifications.exterior_color || "#ffffff"}
-    </span>
-  </div>
-</div>
+              <div className="flex flex-col gap-2">
+                <label className="block text-sm font-medium text-gray-700">Exterior Color</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    name="exterior_color"
+                    value={formData.van_listing.specifications.exterior_color || "#ffffff"} // Default white
+                    onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
+                    className="h-10 w-20 cursor-pointer rounded border border-gray-300"
+                  />
+                  <span className="text-xs font-mono text-gray-500 uppercase">
+                    {formData.van_listing.specifications.exterior_color || "#ffffff"}
+                  </span>
+                </div>
+              </div>
 
-{/* Interior Color Picker */}
-<div className="flex flex-col gap-2">
-  <label className="block text-sm font-medium text-gray-700">Interior Color</label>
-  <div className="flex items-center gap-3">
-    <input
-      type="color"
-      name="interior_color"
-      value={formData.van_listing.specifications.interior_color || "#000000"} // Default black
-      onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
-      className="h-10 w-20 cursor-pointer rounded border border-gray-300"
-    />
-    <span className="text-xs font-mono text-gray-500 uppercase">
-      {formData.van_listing.specifications.interior_color || "#000000"}
-    </span>
-  </div>
-</div>
+              {/* Interior Color Picker */}
+              <div className="flex flex-col gap-2">
+                <label className="block text-sm font-medium text-gray-700">Interior Color</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    name="interior_color"
+                    value={formData.van_listing.specifications.interior_color || "#000000"} // Default black
+                    onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
+                    className="h-10 w-20 cursor-pointer rounded border border-gray-300"
+                  />
+                  <span className="text-xs font-mono text-gray-500 uppercase">
+                    {formData.van_listing.specifications.interior_color || "#000000"}
+                  </span>
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
                 <input

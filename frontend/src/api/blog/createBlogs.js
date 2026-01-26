@@ -18,14 +18,15 @@ export const createBlog = async (formData) => {
       formData,
       config
     );
-       Swal.fire({
+    Swal.fire({
       icon: "success",
       title: "Blog Submitted!",
       text: "Your blog has been submit successfully.",
+      showConfirmButton: false
     });
     return res.data;
   } catch (err) {
-       Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "error",
       text: err.response.data.message,
@@ -52,10 +53,11 @@ export const updateBlog = async (blogId, formData) => {
       icon: "success",
       title: "Blog Updated!",
       text: "Your blog has been updated successfully.",
+      showConfirmButton: false
     });
     return res.data;
   } catch (err) {
-      Swal.fire({
+    Swal.fire({
       icon: "warning",
       title: "warning",
       text: err.response.data.message,

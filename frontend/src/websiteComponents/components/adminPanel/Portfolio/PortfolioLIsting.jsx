@@ -61,7 +61,6 @@ export default function PortfolioListing({ setSelected }) {
       if (result.isConfirmed) {
         try {
           await deletePortfolio(slug);
-          Swal.fire("Deleted!", "Project has been removed.", "success");
           fetchData(page, search);
         } catch (err) {
           Swal.fire("Error!", err.message, "error");

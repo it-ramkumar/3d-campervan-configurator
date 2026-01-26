@@ -16,6 +16,7 @@ const createPortfolio = async (formDataToSend) => {
             icon: "success",
             title: "Successfully!",
             text: res.data.message,
+            showConfirmButton: false
         });
         return res.data;
     } catch (error) {
@@ -42,6 +43,7 @@ const updatePortfolio = async (editData, formDataToSend) => {
             icon: "success",
             title: "Successfully!",
             text: res.data.message,
+            showConfirmButton: false
         });
         return res.data;
     } catch (error) {

@@ -102,16 +102,21 @@ export default function Buy() {
         <div className="relative mb-12">
           <Swiper
             ref={swiperRef}
-            modules={[Navigation, Autoplay]} // ✅ Autoplay module add kiya
-            loop={true} // ✅ Auto slide ke liye loop true behtar rehta hai
+            modules={[Navigation, Autoplay]}
+            loop={true}
+            /* 🟢 Optimization: Resize par Swiper ko destroy hone se bachata hai */
+            updateOnWindowResize={true}
+            observer={true}
+            observeParents={true}
             autoplay={{
-              delay: 3500, // 3.5 seconds ke baad slide change hogi
-              disableOnInteraction: false, // User swipe karega tab bhi autoplay band nahi hogi
-              pauseOnMouseEnter: true, // Mouse card par aane se slide ruk jayegi
+              delay: 3500,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }}
             spaceBetween={30}
             breakpoints={{
               0: { slidesPerView: 1, centeredSlides: false },
+              /* 🟢 Performance Tip: Agar mumkin ho toh "auto" ki jagah fix number dein jaise 1.2 ya 1.5 */
               768: { slidesPerView: "auto", centeredSlides: true },
             }}
             className="!pb-8"
@@ -158,11 +163,11 @@ export default function Buy() {
                         className="text-white mb-2"
                       />
 
-                    {/* ⚪ FIXED: text-gray-200 ko text-white ya text-gray-100 kar dein behtar contrast ke liye */}
-  <RichParagraph className="text-gray-100 mb-6 line-clamp-2 max-w-2xl">
-    {slide?.van_listing?.description ||
-      "A premium camper conversion designed for comfort, performance, and adventure."}
-  </RichParagraph>
+                      {/* ⚪ FIXED: text-gray-200 ko text-white ya text-gray-100 kar dein behtar contrast ke liye */}
+                      <RichParagraph className="text-gray-100 mb-6 line-clamp-2 max-w-2xl">
+                        {slide?.van_listing?.description ||
+                          "A premium camper conversion designed for comfort, performance, and adventure."}
+                      </RichParagraph>
                       <div className="flex gap-4">
                         <BlackButton label="Buy Now" link="/contact" />
                         <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} ariaLabel={`View details for ${slide.van_listing?.title || "this camper van"}`} />

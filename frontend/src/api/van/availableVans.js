@@ -20,10 +20,6 @@ export async function availableVans() {
       title: "Error",
       text: err.response.data.message,
     });
-    // console.error("Error fetching available vans:", err);
-    // return {
-    //   success: false,
-    //   error: err.response?.data?.message || "Something went wrong",
-    // };
+  
   }
 }

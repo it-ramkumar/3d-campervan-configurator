@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Swal from "sweetalert2";
+const Swal = () => import('sweetalert2');
 import { Link } from "react-router-dom";
 import { FaTwitter, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin, FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";

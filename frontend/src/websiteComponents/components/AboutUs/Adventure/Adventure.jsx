@@ -43,27 +43,27 @@ export default function AboutPage() {
     }
   }, [cardControls, cardInView]);
 
-  const sentenceVariants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delay: 0.3,
-        staggerChildren: 0.06, // Controls the delay between each letter
-      },
-    },
-  };
-  const letterVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-      },
-    },
-  };
+  // const sentenceVariants = {
+  //   hidden: { opacity: 1 },
+  //   visible: {
+  //     opacity: 1,
+  //     transition: {
+  //       delay: 0.3,
+  //       staggerChildren: 0.06, // Controls the delay between each letter
+  //     },
+  //   },
+  // };
+  // const letterVariants = {
+  //   hidden: { opacity: 0, y: 20 },
+  //   visible: {
+  //     opacity: 1,
+  //     y: 0,
+  //     transition: {
+  //       type: "spring",
+  //       stiffness: 100,
+  //     },
+  //   },
+  // };
   const cardContainerVariants = {
     hidden: {},
     visible: {
@@ -262,6 +262,10 @@ export default function AboutPage() {
         <motion.img
           src={ctaBgImage}
           alt="Scenic view from inside a custom camper van"
+          {/* 🟢 1. loading="eager" add karein taaki browser intezar na kare */}
+          loading="eager"
+          {/* 🟢 2. fetchpriority="high" add karein taaki network priority milay */}
+          fetchpriority="high"
           className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
           initial={{ scale: 1.15 }}
           variants={{

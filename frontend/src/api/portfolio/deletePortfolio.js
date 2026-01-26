@@ -6,15 +6,16 @@ export const deletePortfolio = async (slug) => {
     const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/${slug}`, {
       withCredentials: true,
     });
-        Swal.fire({
-          icon: "success",
-          title: "Delete successfully!",
-          text: "Your Portfolio has been Deleted successfully.",
-        });
+    Swal.fire({
+      icon: "success",
+      title: "Delete successfully!",
+      text: "Your Portfolio has been Deleted successfully.",
+      showConfirmButton: false
+    });
 
     return res.data;
   } catch (error) {
-        Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Error",
       text: error.response.data.message,

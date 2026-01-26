@@ -15,7 +15,8 @@ export default function ImageWithSkeleton({ src, alt, className = "", click = fa
       <img
         src={finalSrc}
         alt={alt}
-        loading="lazy"
+        fetchpriority="high" // 🟢 Add this
+        loading="eager"
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         onClick={() => !click && setIsModalOpen(true)}

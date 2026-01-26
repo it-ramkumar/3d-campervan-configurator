@@ -61,7 +61,13 @@ export default function VanListing({ setSelected }) {
       if (result.isConfirmed) {
         try {
           await deleteVan(slug);
-          Swal.fire("Deleted!", "Van removed successfully.", "success");
+          Swal.fire({
+            icon: "success",
+            title: "Delete successfully!",
+            text: "Your data has been deleted successfully.",
+            showConfirmButton: false
+          });
+
           fetchVans(page, search);
         } catch (err) {
           Swal.fire("Error!", err.message, "error");

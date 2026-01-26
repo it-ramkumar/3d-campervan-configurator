@@ -67,7 +67,6 @@ export default function BlogsListing({ setSelected }) {
       if (result.isConfirmed) {
         try {
           await deleteBlog(blogId);
-          Swal.fire("Deleted!", "The blog has been deleted.", "success");
           setBlogs((prev) => prev.filter((b) => b._id !== blogId));
         } catch (err) {
           Swal.fire("error!", err.message || "Failed to delete", "error");
