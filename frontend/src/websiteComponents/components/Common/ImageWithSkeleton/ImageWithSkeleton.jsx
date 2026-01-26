@@ -1,8 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-
-export default function ImageWithSkeleton({ src, alt, className = "", click = false }) {
+// Props mein 'priority' add karein (default false rakhein)
+export default function ImageWithSkeleton({
+  src,
+  alt,
+  className = "",
+  click = false,
+  priority = false // 🟢 New Prop
+})
+{
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,10 +20,11 @@ export default function ImageWithSkeleton({ src, alt, className = "", click = fa
     <>
       {/* ======= Thumbnail Image ======= */}
       <img
-        src={finalSrc}
+      src={finalSrc}
         alt={alt}
-        fetchpriority="high" // 🟢 Add this
-        loading="eager"
+        fetchpriority={priority ? "high" : "low"}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         onClick={() => !click && setIsModalOpen(true)}

@@ -222,6 +222,7 @@ const WhyChoose = () => {
               <ImageWithSkeleton
                 src={section.images[0].src}
                 alt={section.images[0].alt}
+                
                 className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
               />
             </div>
@@ -232,6 +233,7 @@ const WhyChoose = () => {
               `}
             >
               <ImageWithSkeleton
+
                 src={section.images[1].src}
                 alt={section.images[1].alt}
                 className="rounded-xl object-cover w-full h-full"

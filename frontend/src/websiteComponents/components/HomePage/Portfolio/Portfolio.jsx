@@ -29,11 +29,11 @@ export default function Portfolio() {
     <section className="w-full mt-10 md:mt-24 py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-6 lg:mb-16">
-          <Heading2 text={"From Dream to Your Driveway"}/>
-         <RichParagraph>
+          <Heading2 text={"From Dream to Your Driveway"} />
+          <RichParagraph>
             Take a look at some of our best custom vans.
 
-         </RichParagraph>
+          </RichParagraph>
 
         </div>
 
@@ -43,8 +43,9 @@ export default function Portfolio() {
           <div className="grid grid-rows-[402px_1fr] gap-4">
             <PortfolioImage img={images[1]} className="w-full" />
             <div className="grid grid-cols-3 gap-4">
-              {images.slice(2).map((img) => (
-                <PortfolioImage key={img.id} img={img} className="h-full" />
+              {images.slice(2).map((img, index) => (
+                <PortfolioImage key={img.id} img={img} className="h-full"      // ✅ Best for below the fold
+                  priority={index < 2} />
               ))}
             </div>
           </div>
