@@ -86,7 +86,7 @@ export default function Hero() {
           {/* REMOVED POSITIVE MARGINS AND ADDED A SMALL NEGATIVE MARGIN FOR UPWARD SHIFT */}
           <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0">
             <Heading1
-              text="Custom Camper Vans."
+              text="Custom Camper Vans..."
             />
             <Paragraph
               text="Buy, customize, or try the 3D configurator from Big Bear Vans today."
