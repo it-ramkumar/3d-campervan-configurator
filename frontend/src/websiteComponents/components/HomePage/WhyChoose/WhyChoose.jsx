@@ -130,119 +130,123 @@ const WhyChoose = () => {
   };
 
   return (
-    <div className="bg-gray-100 text-blackish py-12 md:mt-24 mt-10 font-serif overflow-hidden">
-      <header className=" text-center">
-        <Heading2 text={"Why Choose Big Bear Vans?"} />
-        <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4">At Big Bear Vans, we have a full-fledged team of experienced campervan
-          builders and engineers in Big Bear, California. Let us show you what
-          nobody else does like we do.</RichParagraph>
-      </header>
+<div className="bg-gray-100 text-gray-900 py-12 md:mt-24 mt-10 font-serif overflow-hidden">
+  <header className=" text-center">
+    <Heading2 text={"Why Choose Big Bear Vans?"} />
+    <RichParagraph className="text-center mt-4 max-w-4xl mx-auto px-4 text-gray-800">
+      At Big Bear Vans, we have a full-fledged team of experienced campervan
+      builders and engineers in Big Bear, California. Let us show you what
+      nobody else does like we do.
+    </RichParagraph>
+  </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8">
-        {sections.map((section, index) => {
-          const isExpanded = !!expandedSections[index];
-          const contentRef = useRef(null);
+  <main className="max-w-7xl mx-auto px-4 md:px-8">
+    {sections.map((section, index) => {
+      const isExpanded = !!expandedSections[index];
+      const contentRef = useRef(null);
 
-          return (
-            <section
-              key={index}
-              className={`py-8 flex flex-col md:flex-row items-center gap-10 md:gap-20 ${section.isReverse ? "md:flex-row-reverse" : ""
-                }`}
-            >
-              {/* Text Section */}
-              <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
-                <Heading3 textColor="black" text={section.title} />
-                {/* Content Wrapper for See More/Less */}
-                <div className="relative">
-                  <div
-                    className="transition-all duration-700 ease-in-out overflow-hidden"
-                    style={{
-                      maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : section.initialHeight,
-                    }}
-                  >
-                    <div ref={contentRef} className="space-y-5">
-                      <RichParagraph> {section.intro}</RichParagraph>
-                      <div className="space-y-3 text-left">
-                        {section.features.map((feature, featureIndex) => (
-                          <div key={featureIndex} className="flex items-start gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200/80 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
-                            <div className="flex-shrink-0 mt-0.5 text-slate-700 bg-slate-200/70 rounded-full p-2">
-                              {feature.icon}
-                            </div>
-                            <RichParagraph html={feature.text} />
-                          </div>
-                        ))}
-                      </div>
-
-                      {section.outro && (
-                        <RichParagraph html={section.outro} />
-
-
-                      )}
-                    </div>
-                  </div>
-
-
-                  {/* See More/Less Button */}
-                  <div className="">
-                    <RichParagraph
-                      className="flex items-center gap-2 text-blue-500 my-4 cursor-pointer"
-
-                      onClick={() => toggleExpand(index)}>
-                      {isExpanded ? (
-                        <>
-                         <ChevronUp className="inline w-4" /> Show Less
-                        </>
-                      ) : (
-                        <>
-                         <ChevronDown className="inline w-4" /> See More
-                        </>
-                      )}
-
-                    </RichParagraph>
-                  </div>
-                </div>
-              </div>
-
-              {/* Image Section */}
+      return (
+        <section
+          key={index}
+          className={`py-8 flex flex-col md:flex-row items-center gap-10 md:gap-20 ${
+            section.isReverse ? "md:flex-row-reverse" : ""
+          }`}
+        >
+          {/* Text Section */}
+          <div className={`md:w-1/2 space-y-4 md:space-y-6 text-center md:text-left ${section.isReverse ? "ml-auto" : ""}`}>
+            <Heading3 textColor="black" text={section.title} />
+            <div className="relative">
               <div
-                className={`w-full md:w-1/2 relative flex items-center justify-center md:justify-start min-h-[350px] md:min-h-[450px] ${section.isReverse ? "md:justify-end" : ""}`}
+                className="transition-all duration-700 ease-in-out overflow-hidden"
+                style={{
+                  maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : section.initialHeight,
+                }}
               >
-                <div
-                  className={`w-11/12 max-w-[400px] h-[300px] md:h-[400px] relative rounded-3xl shadow-lg transform rotate-[-4.68deg] overflow-hidden
-                    transition-transform duration-300 hover:scale-105 hover:z-10
-                    md:w-[400px]
-                    ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-4 border-blackish
-                  `}
-                >
-                  <ImageWithSkeleton
-                    src={section.images[0].src}
-                    alt={section.images[0].alt}
-                    className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
-                  />
-                </div>
-                <div
-                  className={`w-2/3 max-w-[200px] h-[200px] md:max-w-[300px] md:h-[300px] absolute transform rotate-[-4.68deg] border-4 border-white rounded-2xl shadow-xl overflow-hidden
-                    transition-transform duration-300 hover:scale-105 hover:z-20
-                    ${section.isReverse ? "bottom-[-20px] right-[-20px] md:left-[-20px]" : "bottom-[-20px] right-[-20px] md:right-[-20px]"}
-                  `}
-                >
-                  <ImageWithSkeleton
-                    src={section.images[1].src}
-                    alt={section.images[1].alt}
-                    className="rounded-xl object-cover w-full h-full"
-                  />
+                <div ref={contentRef} className="space-y-5">
+                  <RichParagraph> {section.intro}</RichParagraph>
+                  <div className="space-y-3 text-left">
+                    {section.features.map((feature, featureIndex) => (
+                      /* 🟢 FIXED: bg-slate-50/70 ko bg-white kiya taaki contrast pass ho */
+                      <div key={featureIndex} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-200 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
+                        <div className="flex-shrink-0 mt-0.5 text-slate-700 bg-slate-200/70 rounded-full p-2">
+                          {feature.icon}
+                        </div>
+                        <RichParagraph html={feature.text} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {section.outro && (
+                    <RichParagraph html={section.outro} />
+                  )}
                 </div>
               </div>
-            </section>
-          );
-        })}
 
-        <div className="py-12 flex justify-center">
-          <BlackButton label={"Request a Custom Build"} link={"/inquiry"} />
+              {/* See More/Less Button */}
+              <div className="">
+                {/* 🟢 FIXED: text-blue-700 kiya contrast ke liye aur aria-label add kiya */}
+                <button
+                  onClick={() => toggleExpand(index)}
+                  aria-expanded={isExpanded}
+                  aria-label={`${isExpanded ? 'Show less' : 'See more'} about ${section.title}`}
+                  className="flex items-center gap-2 text-blue-700 hover:text-blue-900 my-4 cursor-pointer font-bold focus:outline-none"
+                >
+                  {isExpanded ? (
+                    <>
+                      <ChevronUp aria-hidden="true" className="w-4 h-4 inline" />
+                      <span>Show Less</span>
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown aria-hidden="true" className="w-4 h-4 inline" />
+                      <span>See More</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
 
-        </div>
-      </main>
+          {/* Image Section */}
+          <div
+            className={`w-full md:w-1/2 relative flex items-center justify-center md:justify-start min-h-[350px] md:min-h-[450px] ${section.isReverse ? "md:justify-end" : ""}`}
+          >
+            {/* 🟢 FIXED: border-blackish ko border-gray-900 kiya */}
+            <div
+              className={`w-11/12 max-w-[400px] h-[300px] md:h-[400px] relative rounded-3xl shadow-lg transform rotate-[-4.68deg] overflow-hidden
+                transition-transform duration-300 hover:scale-105 hover:z-10
+                md:w-[400px]
+                ${section.isReverse ? "md:ml-auto" : "md:mr-auto"} border-4 border-gray-900
+              `}
+            >
+              <ImageWithSkeleton
+                src={section.images[0].src}
+                alt={section.images[0].alt}
+                className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
+              />
+            </div>
+            <div
+              className={`w-2/3 max-w-[200px] h-[200px] md:max-w-[300px] md:h-[300px] absolute transform rotate-[-4.68deg] border-4 border-white rounded-2xl shadow-xl overflow-hidden
+                transition-transform duration-300 hover:scale-105 hover:z-20
+                ${section.isReverse ? "bottom-[-20px] right-[-20px] md:left-[-20px]" : "bottom-[-20px] right-[-20px] md:right-[-20px]"}
+              `}
+            >
+              <ImageWithSkeleton
+                src={section.images[1].src}
+                alt={section.images[1].alt}
+                className="rounded-xl object-cover w-full h-full"
+              />
+            </div>
+          </div>
+        </section>
+      );
+    })}
+
+    <div className="py-12 flex justify-center">
+      <BlackButton label={"Request a Custom Build"} link={"/inquiry"} />
     </div>
+  </main>
+</div>
   );
 };
 

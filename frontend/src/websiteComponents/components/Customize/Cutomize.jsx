@@ -113,19 +113,27 @@ export default function Customize({
                 </div>
               )}
 
-              {/* Toggle Button */}
-              {showToggle && (
-                <RichParagraph
-                  onClick={() => setExpanded(!expanded)}
-                  className="flex items-center gap-2 text-blue-500 my-4 cursor-pointer"
-                >
-                  {expanded ? (
-                    <><ChevronUp className="w-4 h-4" /> Show Less</>
-                  ) : (
-                    <><ChevronDown className="w-4 h-4" /> See More</>
-                  )}
-                </RichParagraph>
-              )}
+           {/* Toggle Button */}
+{showToggle && (
+  <button
+    onClick={() => setExpanded(!expanded)}
+    // 🟢 FIXED: text-blue-700 (better contrast) aur focus outline add ki
+    className="flex items-center gap-2 text-blue-700 hover:text-blue-800 my-4 cursor-pointer font-semibold focus:outline-none"
+    aria-expanded={expanded} // 🟢 Screen reader ko batayega ke content khula hai ya band
+  >
+    {expanded ? (
+      <>
+        <ChevronUp aria-hidden="true" className="w-4 h-4" />
+        <span>Show Less</span>
+      </>
+    ) : (
+      <>
+        <ChevronDown aria-hidden="true" className="w-4 h-4" />
+        <span>See More</span>
+      </>
+    )}
+  </button>
+)}
 
               {/* CTA Section */}
               {showButton && (

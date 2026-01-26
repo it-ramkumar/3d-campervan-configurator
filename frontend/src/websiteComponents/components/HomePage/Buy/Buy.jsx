@@ -165,7 +165,7 @@ export default function Buy() {
   </RichParagraph>
                       <div className="flex gap-4">
                         <BlackButton label="Buy Now" link="/contact" />
-                        <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} />
+                        <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} ariaLabel={`View details for ${slide.van_listing?.title || "this camper van"}`} />
                       </div>
                     </div>
                   </div>

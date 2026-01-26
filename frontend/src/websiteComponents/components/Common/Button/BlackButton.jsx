@@ -8,7 +8,8 @@ export default function BlackButton({
   className = "",
   onClick,
   disabled,
-  type
+  type,
+  ariaLabel
 }) {
   const baseClasses = `
     text-white font-semibold
@@ -38,7 +39,8 @@ export default function BlackButton({
   // If link exists → wrap button inside <Link>
   if (link) {
     return (
-      <Link to={link}>
+      <Link to={link}
+      aria-label={ariaLabel || label}>
         <button
           onClick={disabled ? undefined : onClick}
           className={finalClass}

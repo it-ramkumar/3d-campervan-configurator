@@ -382,7 +382,7 @@ export default function BookingPage() {
 
                {bookingStep === 1 && (
   <div className="max-w-sm mx-auto">
-    <Heading4 text="Select a Date" textColor="text-black" className="text-center my-4" />
+    <Heading3 text="Select a Date" textColor="text-black" className="text-center my-4" />
 
     <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">

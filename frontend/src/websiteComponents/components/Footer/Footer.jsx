@@ -129,52 +129,79 @@ export default function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div>
-            <Heading4 text="Contact Info" textColor="text-white my-4" />
+         <div>
+  {/* 🟢 FIXED: Heading4 ko Heading3 kiya hierarchy theek karne ke liye */}
+  <Heading3 text="Contact Info" textColor="text-white my-4" />
 
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <FaMapMarkerAlt className="text-white mt-1 text-sm" />
-                <div className="flex items-center gap-2">
+  <ul className="space-y-4">
+    <li className="flex items-start gap-3">
+      <FaMapMarkerAlt className="text-white mt-1 text-sm" aria-hidden="true" />
+      <div className="flex items-center gap-2">
+        <span>
+          <RichParagraph white={true}>
+            <span className="text-sm text-white">
+              320 W Big Bear Blvd, Big Bear City, California, 92314, USA
+            </span>
+          </RichParagraph>
+        </span>
+        {/* 🟢 FIXED: Copy button ko aria-label diya */}
+        <FaCopy
+          role="button"
+          aria-label="Copy address to clipboard"
+          onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")}
+          className="cursor-pointer text-gray-400 hover:text-white transition-colors"
+        />
+      </div>
+    </li>
 
-                  <span >
-                    <RichParagraph white={true}>
-                      <span className="text-sm text-white">
-                        320 W Big Bear Blvd, Big Bear City, California, 92314, USA
+    <li className="flex items-start gap-3">
+      <FaPhoneAlt className="text-white mt-1 text-sm" aria-hidden="true" />
+      <div className="flex flex-col">
+        {/* Phone 1 */}
+        <div className="flex items-center gap-2 text-sm">
+          {/* 🟢 FIXED: Link ko aria-label diya */}
+          <Link to="tel:+19514419748" aria-label="Call us at +1 951 441 9748">
+            <RichParagraph white={true}>
+              <span className="text-sm text-white">+1 (951) 441-9748</span>
+            </RichParagraph>
+          </Link>
+          <FaCopy
+            role="button"
+            aria-label="Copy phone number +1 951 441 9748"
+            onClick={() => handleCopy("+19514419748")}
+            className="cursor-pointer text-gray-400 hover:text-white transition-colors"
+          />
+        </div>
 
-                      </span>
-                    </RichParagraph>
-                  </span>
-                  <FaCopy onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <FaPhoneAlt className="text-white mt-1 text-sm" />
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2 text-sm">
-                    <Link to="tel:+19514419748" ><RichParagraph white={true}
-                    >
-                      <span className="text-sm text-white">
-                        +1 (951) 441-9748
-                      </span>
-                    </RichParagraph></Link>
-                    <FaCopy onClick={() => handleCopy("+19514419748")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Link to="tel:+19514419719" c><RichParagraph white={true}>
-                      <span className="text-sm text-white">+1 (951) 441-9719</span></RichParagraph></Link>
-                    <FaCopy onClick={() => handleCopy("+19514419719")} className="cursor-pointer text-gray-400 hover:text-white transition-colors" />
-                  </div>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <FaEnvelope className="text-white mt-1 text-sm" />
-                <Link to="mailto:bigbearvans@gmail.com" ><RichParagraph white={true}>
-                  <span className="text-sm text-white">bigbearvans@gmail.com</span>
-                </RichParagraph></Link>
-              </li>
-            </ul>
-          </div>
+        {/* Phone 2 */}
+        <div className="flex items-center gap-2 text-sm">
+          {/* 🟢 FIXED: Link ko aria-label diya */}
+          <Link to="tel:+19514419719" aria-label="Call us at +1 951 441 9719">
+            <RichParagraph white={true}>
+              <span className="text-sm text-white">+1 (951) 441-9719</span>
+            </RichParagraph>
+          </Link>
+          <FaCopy
+            role="button"
+            aria-label="Copy phone number +1 951 441 9719"
+            onClick={() => handleCopy("+19514419719")}
+            className="cursor-pointer text-gray-400 hover:text-white transition-colors"
+          />
+        </div>
+      </div>
+    </li>
+
+    <li className="flex items-start gap-3">
+      <FaEnvelope className="text-white mt-1 text-sm" aria-hidden="true" />
+      {/* 🟢 FIXED: Email link ko aria-label diya */}
+      <Link to="mailto:bigbearvans@gmail.com" aria-label="Send us an email">
+        <RichParagraph white={true}>
+          <span className="text-sm text-white">bigbearvans@gmail.com</span>
+        </RichParagraph>
+      </Link>
+    </li>
+  </ul>
+</div>
 
           {/* Business Hours & Newsletter */}
           <div>

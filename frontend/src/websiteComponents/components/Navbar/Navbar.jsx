@@ -217,6 +217,7 @@ const isParentActive = (key) =>
             )}
 
             <button
+            aria-label="Open main menu"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`text-black hover:bg-gray-100 rounded-full transition-colors ${forceMobile ? "block" : "md:hidden"}`}
             >
