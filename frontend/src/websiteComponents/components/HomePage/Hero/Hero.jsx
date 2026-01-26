@@ -57,47 +57,50 @@ export default function Hero() {
         onSwiper={setSwiper}
         modules={[Navigation, Pagination, Autoplay]}
         slidesPerView={1}
-        /* 🟢 Reflow Fix: Swiper ko baar baar layout recalculate karne se rokay ga */
         observer={true}
         observeParents={true}
+        /* 🟢 Performance: GPU Acceleration enable ki hai */
+        watchSlidesProgress={true}
         autoplay={{
           delay: 7000,
           disableOnInteraction: false,
         }}
         speed={1500}
         loop={true}
-        className="w-full h-full"
+        className="w-full h-full will-change-transform" // 🟢 GPU help
       >
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
+        {slides.map((slide, index) => (
+          <SwiperSlide key={slide.id} className="relative overflow-hidden">
             {/* Background Image */}
             <ImageWithSkeleton
               src={slide.image}
               alt={slide.title}
-              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''}`}
+              // 🟢 LCP Fix: Hero section ki pehli slide hamesha priority true hogi
+              priority={index === 0}
+              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''
+                }`}
+              style={{ contentVisibility: 'auto' }} // 🟢 Rendering optimization
             />
-            {/* Dark Overlay (Moved to apply over each slide) */}
-            <div className="absolute inset-0 md:bg-black/50 z-10"></div>
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 md:bg-black/50 z-10 pointer-events-none"></div>
           </SwiperSlide>
         ))}
 
         {/* --- Content (Fixed over all slides) --- */}
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8">
-          {/* REMOVED POSITIVE MARGINS AND ADDED A SMALL NEGATIVE MARGIN FOR UPWARD SHIFT */}
-          <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0">
-            <Heading1
-              text="Custom Camper Vans..."
-            />
-            <Paragraph
-              text="Buy, customize, or try the 3D configurator from Big Bear Vans today."
-            />
+        {/* 🟢 Reflow Fix: 'contain-layout' use kiya hai taake text animation se slides disturb na hon */}
+        <div
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8 pointer-events-none"
+          style={{ contain: 'layout style' }}
+        >
+          <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0 pointer-events-auto">
+            <Heading1 text="Custom Camper Vans..." />
+            <Paragraph text="Buy, customize, or try the 3D configurator from Big Bear Vans today." />
             <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
               <BlackButton label="Order Custom Build" link="/inquiry" />
               <WhiteButton label="View Van Inventory" link="/vans-for-sale" />
             </div>
           </div>
         </div>
-
       </Swiper>
       {/* Custom Navigation (Prev Button) */}
       <div className="absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2">

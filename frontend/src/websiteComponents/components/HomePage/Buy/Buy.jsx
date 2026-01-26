@@ -97,112 +97,108 @@ export default function Buy() {
             </ul>
           </div>
         </div>
-
         {/* Slider Section */}
-        <div className="relative mb-12">
-          <Swiper
-            ref={swiperRef}
-            modules={[Navigation, Autoplay]}
-            loop={true}
-            /* 🟢 Optimization: Resize par Swiper ko destroy hone se bachata hai */
-            updateOnWindowResize={true}
-            observer={true}
-            observeParents={true}
-            autoplay={{
-              delay: 3500,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            spaceBetween={30}
-            breakpoints={{
-              0: { slidesPerView: 1, centeredSlides: false },
-              /* 🟢 Performance Tip: Agar mumkin ho toh "auto" ki jagah fix number dein jaise 1.2 ya 1.5 */
-              768: { slidesPerView: "auto", centeredSlides: true },
-            }}
-            className="!pb-8"
-          >
-            {/* 🔹 1. REAL INVENTORY SLIDES */}
-            {readyToGoVans.map((slide, i) => {
-              const hasImage = slide?.gallery?.[0];
+     <div className="relative mb-12">
+  <Swiper
+    ref={swiperRef}
+    modules={[Navigation, Autoplay]}
+    loop={true}
+    updateOnWindowResize={true}
+    observer={true}
+    observeParents={true}
+    autoplay={{
+      delay: 3500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    }}
+    spaceBetween={30}
+    /* 🟢 Original Design: "auto" wapas add kar diya */
+    breakpoints={{
+      0: { slidesPerView: 1, centeredSlides: false },
+      768: { slidesPerView: "auto", centeredSlides: true },
+    }}
+    className="!pb-8"
+  >
+    {/* 🔹 1. REAL INVENTORY SLIDES */}
+    {readyToGoVans.map((slide, i) => {
+      const hasImage = slide?.gallery?.[0];
 
-              return (
-                <SwiperSlide
-                  key={slide._id || i}
-                  className="group w-full md:!w-[900px] md:!h-[500px]"
-                >
-                  <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-all duration-500 group-hover:scale-[1.01]">
+      return (
+        <SwiperSlide
+          key={slide._id || i}
+          /* 🟢 Original Design: Aapki 900px width wapas restore kar di */
+          className="group w-full md:!w-[900px] md:!h-[500px]"
+        >
+          {/* 🟢 Reflow Fix: Sirf transform aur opacity par transition rakhi hai */}
+          <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-lg transition-[transform,shadow] duration-500 will-change-transform group-hover:scale-[1.01]">
 
-                    {/* Background Image OR Fallback */}
-                    {hasImage ? (
-                      <ImageWithSkeleton
-                        src={hasImage}
-                        alt={slide.van_listing?.title}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
-                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-                        <span className="text-gray-500 mt-20 text-sm uppercase tracking-widest">
-                          Image coming soon
-                        </span>
-                      </div>
-                    )}
+            {/* Background Image OR Fallback */}
+            {hasImage ? (
+              <ImageWithSkeleton
+                src={hasImage}
+                alt={slide.van_listing?.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                /* 🟢 LCP Fix: Sirf pehli image eager hogi */
+                priority={i === 0}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
+                <span className="text-gray-500 mt-20 text-sm uppercase tracking-widest">
+                  Image coming soon
+                </span>
+              </div>
+            )}
 
-                    {/* Overlay – always present */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
-                    {/* Content */}
-                    <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
-                      {/* 🟢 FIXED: Green color dark kiya aur text size thoda barhaya */}
-                      <span className="bg-green-700 text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest shadow-sm">
-                        Available Now
-                      </span>
+            <div className="relative z-10 flex flex-col justify-end h-full p-8 md:p-12 text-white text-left">
+              <span className="bg-green-700 text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit mb-3 uppercase tracking-widest shadow-sm">
+                Available Now
+              </span>
 
-                      <Heading2
-                        text={slide?.van_listing?.title || "Ready-To-Go Camper Van"}
-                        className="text-white mb-2"
-                      />
+              <Heading2
+                text={slide?.van_listing?.title || "Ready-To-Go Camper Van"}
+                className="text-white mb-2"
+              />
 
-                      {/* ⚪ FIXED: text-gray-200 ko text-white ya text-gray-100 kar dein behtar contrast ke liye */}
-                      <RichParagraph className="text-gray-100 mb-6 line-clamp-2 max-w-2xl">
-                        {slide?.van_listing?.description ||
-                          "A premium camper conversion designed for comfort, performance, and adventure."}
-                      </RichParagraph>
-                      <div className="flex gap-4">
-                        <BlackButton label="Buy Now" link="/contact" />
-                        <WhiteButton label="Details" link={`/van-detail/${slide.slug}`} ariaLabel={`View details for ${slide.van_listing?.title || "this camper van"}`} />
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              );
-            })}
+              <RichParagraph className="text-gray-100 mb-6 line-clamp-2 max-w-2xl">
+                {slide?.van_listing?.description ||
+                  "A premium camper conversion designed for comfort, performance, and adventure."}
+              </RichParagraph>
 
+              <div className="flex gap-4">
+                <BlackButton label="Buy Now" link="/contact" />
+                <WhiteButton
+                  label="Details"
+                  link={`/van-detail/${slide.slug}`}
+                  ariaLabel={`View details for ${slide.van_listing?.title || "this camper van"}`}
+                />
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+      );
+    })}
 
-            {/* 🔹 2. UPCOMING BUILDS SLIDES */}
-            {readyToGoVans.length === 0 && UPCOMING_VANS.map((van, idx) => (
-              <SwiperSlide key={`upcoming-${idx}`} className="group w-full md:!w-[900px] md:!h-[500px]">
-                <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-md bg-gradient-to-br from-gray-50 to-gray-200 border border-gray-200 flex flex-col justify-center items-center text-center p-8 transition-all duration-500 group-hover:scale-[1.01]">
-                  <div className="absolute top-0 right-0 p-10 opacity-10"><VanIcon /></div>
-                  <div className="relative z-10">
-                    <div className="mb-4 inline-block p-4 bg-white rounded-2xl shadow-sm"><VanIcon /></div>
-                    <RichParagraph textColor='text-blue-500'>Coming Soon • {van.status}</RichParagraph>
-                    <Heading2 text={van.title} />
-                    <RichParagraph className='my-2'>
-                      {van.desc}
-                    </RichParagraph>
-                    <div className="flex justify-center"><BlackButton label="Pre-Inquire Now" link="/contact" /></div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-800 opacity-20"></div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-
-
+    {/* 🔹 2. UPCOMING BUILDS SLIDES */}
+    {readyToGoVans.length === 0 && UPCOMING_VANS.map((van, idx) => (
+      <SwiperSlide key={`upcoming-${idx}`} className="group w-full md:!w-[900px] md:!h-[500px]">
+        <div className="relative w-full h-[450px] md:h-full rounded-[30px] overflow-hidden shadow-md bg-gradient-to-br from-gray-50 to-gray-200 border border-gray-200 flex flex-col justify-center items-center text-center p-8 transition-transform duration-500 will-change-transform group-hover:scale-[1.01]">
+          <div className="absolute top-0 right-0 p-10 opacity-10"><VanIcon /></div>
+          <div className="relative z-10">
+            <div className="mb-4 inline-block p-4 bg-white rounded-2xl shadow-sm"><VanIcon /></div>
+            <RichParagraph textColor='text-blue-500'>Coming Soon • {van.status}</RichParagraph>
+            <Heading2 text={van.title} />
+            <RichParagraph className='my-2'>{van.desc}</RichParagraph>
+            <div className="flex justify-center"><BlackButton label="Pre-Inquire Now" link="/contact" /></div>
+          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-800 opacity-20"></div>
         </div>
-
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
         {/* ⬇️ NEW ACTION BAR: Isme "Browse" aur "Arrows" aamne-saamne hain */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mt-12 px-2 md:px-16">
 
