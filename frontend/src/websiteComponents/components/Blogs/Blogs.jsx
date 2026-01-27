@@ -2,15 +2,11 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader";
-import BlackButton from "../Common/Button/BlackButton";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
-import { Search, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search } from "lucide-react";
 import HeroSection from "../HeroSection/HeroSection";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from "../Common/Headings/Heading2";
-import Heading4 from "../Common/Headings/Heading4";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { Heading2, Heading4, RichParagraph, ImageWithSkeleton, BlackButton } from '../Common/Common'
+
 import { generateBlogListingSchema } from "../../schema/blogPage"
 
 export default function BlogsListing() {

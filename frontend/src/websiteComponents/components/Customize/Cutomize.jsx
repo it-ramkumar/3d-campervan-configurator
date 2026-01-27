@@ -1,11 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import BlackButton from "../Common/Button/BlackButton";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from "../Common/Headings/Heading2";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading3 from "../Common/Headings/Heading3";
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, BlackButton } from '../Common/Common'
+
 
 export default function Customize({
   mainTitle = "",

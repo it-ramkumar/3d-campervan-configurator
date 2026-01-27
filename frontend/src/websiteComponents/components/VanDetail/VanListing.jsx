@@ -2,14 +2,11 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Settings2, Paintbrush, Armchair } from "lucide-react"; // Icons install karlein: npm install lucide-react
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { Settings2 } from "lucide-react"; // Icons install karlein: npm install lucide-react
 import SeeMore from "../Common/SeeMore/SeeMore";
-import BlackButton from "../Common/Button/BlackButton";
-import Heading2 from "../Common/Headings/Heading2";
 import Heading1 from "../Common/Headings/Heading1";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading3 from "../Common/Headings/Heading3";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, BlackButton } from '../Common/Common'
+
 
 // --- SVG Icons ---
 const SvgInsulation = ({ className }) => (

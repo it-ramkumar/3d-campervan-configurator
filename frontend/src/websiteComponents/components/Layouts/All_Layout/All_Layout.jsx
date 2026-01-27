@@ -1,8 +1,6 @@
-"use client";
-import BlackButton from "../../Common/Button/BlackButton";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading2 from "../../Common/Headings/Heading2";
+"use client"
+import { Heading2, RichParagraph, ImageWithSkeleton, BlackButton } from '../../Common/Common'
+
 
 
 

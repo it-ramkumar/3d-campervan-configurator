@@ -3,15 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from '../../Common/Headings/Heading2';
-import RichParagraph from '../../Common/Paragraph/RichParagraph';
-
-// Import Swiper styles
-
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton } from '../../Common/Common'
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import Heading3 from '../../Common/Headings/Heading3';
 
 const reviews = [
   {

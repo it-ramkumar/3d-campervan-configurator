@@ -1,9 +1,7 @@
 "use client";
-import { Link } from "react-router-dom";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
-import WhiteButton from "../Common/Button/WhiteButton";
-import Heading1 from "../Common/Headings/Heading1";
 import HeroParagrah from "../Common/Paragraph/HeroParagraph";
+import { Heading1, WhiteButton, ImageWithSkeleton } from '../Common/Common'
+
 
 export default function HeroV({
   title,

@@ -1,14 +1,13 @@
-import React, { lazy, Suspense, useMemo, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
-import { pageView } from "../websiteComponents/CustomHooks/analytics";
-  import {initAnalytics } from "../websiteComponents/CustomHooks/analytics";
+import { pageView, initAnalytics } from '../websiteComponents/CustomHooks/analytics';
 
-// Memoized Widgets
-import ChatWidgetComponent from "../websiteComponents/components/ChatMaxima/ChatMaxima";
-import BlackFridayLabelComponent from "../websiteComponents/components/BlackFriday/BlackFriday";
-const ChatWidget = React.memo(ChatWidgetComponent);
-const BlackFridayLabel = React.memo(BlackFridayLabelComponent);
+// Direct imports (needed immediately, small size)
+import Loader from "../websiteComponents/components/Loader/Loader";
+import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
+
+// Lazy-loaded Widgets
+const ChatWidget = lazy(() => import("../websiteComponents/components/ChatMaxima/ChatMaxima"));
 
 // Lazy-loaded Pages & Components
 const Home = lazy(() => import("../pages/Home"));
@@ -35,11 +34,9 @@ const Exteriorpage = lazy(() => import("../websiteComponents/components/Options/
 const LayoutDetail = lazy(() => import("../websiteComponents/components/LayoutDetail/LayoutDetail"));
 const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail/Blogdetail"));
 const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Client"));
-// const Interiorpage = lazy(() => import("../websiteComponents/components/InteriorChoiceD/InteriorChoicePage"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
-const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent").then(mod => ({ default: mod.PrivateRoute })));
-const Loader = lazy(() => import("../websiteComponents/components/Loader/Loader"));
+const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent"));
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"));
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"));
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"));
@@ -50,77 +47,105 @@ const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBui
 const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/QuickLinks"));
 const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPage"));
 const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
-const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
-
-
+// const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
 
 const AppRoutes = () => {
   const location = useLocation();
+  const [showChat, setShowChat] = useState(false);
 
-  // GA page view tracking (production only)
+  // Delay chat widget load
+  useEffect(() => {
+    const timer = setTimeout(() => setShowChat(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // GA page view tracking
   useEffect(() => {
     pageView(location.pathname + location.search);
   }, [location]);
 
-  // Show Black Friday label except on specific pages
-  // const showBlackFriday = useMemo(
-  //   () =>
-  //     !location.pathname.startsWith("/dashboard") &&
-  //     !location.pathname.startsWith("/login") &&
-  //     !location.pathname.startsWith("/test"),
-  //   [location.pathname]
-  // );
+  // Check if admin route
+  const isAdminRoute = location.pathname.startsWith('/dashboard') ||
+                       location.pathname.startsWith('/login');
 
   return (
     <>
-      {/* {showBlackFriday && <BlackFridayLabel />} */}
-      <ChatWidget />
+      {/* Only show chat on non-admin pages */}
+      {!isAdminRoute && showChat && (
+        <Suspense fallback={null}>
+          <ChatWidget />
+        </Suspense>
+      )}
+
       <ScrollFromTop />
+
       <Suspense fallback={<Loader />}>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/configurator-form" element={<ConfiguratorForm />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/showroom" element={<ShowRoom />} />
-          <Route path="/*" element={<NotFound />} />
           <Route path="/our-process" element={<OurProcess />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/van-detail/:slug" element={<VanDetail />} />
-          <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
-          <Route path="/blog-detail/:slug" element={<BlogDetail />} />
-          <Route path="/van-options/:options" element={<Exteriorpage />} />
-          <Route path="/blog" element={<Blogs />} />
-          <Route path="/blog-form" element={<BlogForm />} />
-          <Route path="/van-layouts" element={<Layouts />} />
-          <Route path="/vans-for-sale" element={<VansForSale />} />
-          <Route path="/inquiry" element={<Inquiry />} />
-          <Route path="/van-form" element={<VanForm />} />
-          <Route path="/portfolio-form" element={<PortfolioForm />} />
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/configurator" element={<Van />} />
-          <Route path="/preview" element={<Preview />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/our-clients" element={<OurClients />} />
-          {/* <Route path="/interior-options" element={<Interiorpage />} /> */}
+
+          {/* Van Routes */}
+          <Route path="/configurator" element={<Van />} />
+          <Route path="/preview" element={<Preview />} />
+          <Route path="/van-detail/:slug" element={<VanDetail />} />
+          <Route path="/vans-for-sale" element={<VansForSale />} />
+          <Route path="/van-options/:options" element={<Exteriorpage />} />
           <Route path="/cushion" element={<Cushionpage />} />
+          <Route path="/custom-build" element={<CustomBuild />} />
+
+          {/* Layout Routes */}
+          <Route path="/van-layouts" element={<Layouts />} />
+          <Route path="/layout-detail/:slug" element={<LayoutDetail />} />
           <Route path="/layout-by-category/:category" element={<CustomVan />} />
-          <Route path="/financing" element={<Financing />} />
-          <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/wheel-base/:wheelbase" element={<Wheelbase />} />
+
+          {/* Blog Routes */}
+          <Route path="/blog" element={<Blogs />} />
+          <Route path="/blog-detail/:slug" element={<BlogDetail />} />
+          <Route path="/blog-form" element={<BlogForm />} />
+
+          {/* Career Routes */}
+          <Route path="/careers" element={<Jobs />} />
           <Route path="/careers/:id" element={<JobDetail />} />
           <Route path="/apply/:id" element={<JoAppForm />} />
-          <Route path="/careers" element={<Jobs />} />
-          <Route path="/custom-build" element={<CustomBuild />} />
+
+          {/* Info Pages */}
+          <Route path="/financing" element={<Financing />} />
+          <Route path="/sprinter-guide" element={<SprinterPresentation />} />
           <Route path="/quick-links" element={<QuickLiks />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/where-to-camp" element={<WhereToCamp />} />
-          <Route path="/system-options" element={<SystemOptions />} />
+          {/* <Route path="/system-options" element={<SystemOptions />} /> */}
 
+          {/* Forms */}
+          <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/configurator-form" element={<ConfiguratorForm />} />
 
+          {/* Auth Routes */}
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
 
+          {/* Admin Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <Suspense fallback={<Loader />}>
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              </Suspense>
+            }
+          />
+          <Route path="/van-form" element={<VanForm />} />
+          <Route path="/portfolio-form" element={<PortfolioForm />} />
 
-
+          {/* 404 */}
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </>
@@ -128,11 +153,11 @@ const AppRoutes = () => {
 };
 
 export default function AppWrapper() {
-
+  // Initialize analytics only once on mount
   useEffect(() => {
-      initAnalytics();
-
+    initAnalytics();
   }, []);
+
   return (
     <Router>
       <AppRoutes />

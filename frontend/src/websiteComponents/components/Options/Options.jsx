@@ -5,7 +5,6 @@ import Footer from '../Footer/Footer';
 import HeroSection from '../HeroSection/HeroSection';
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
-import SystemAccessories from "./SystemAccessories"
 import SystemOptions from "./SystemOptions"
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";

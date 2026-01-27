@@ -1,14 +1,12 @@
 import React from "react";
-import Heading2 from "../Common/Headings/Heading2";
 import Heading4 from "../Common/Headings/Heading4";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import { campgrounds } from "../../DataUseInComp/WhereToCamp";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Cosultation from "../Consultation/Consultation"
-import BlackButton from "../Common/Button/BlackButton";
+import { Heading2, RichParagraph,ImageWithSkeleton, BlackButton } from '../Common/Common'
+
 
 const WhereToCamp = () => {
  const LocationCard = ({ loc, categoryTitle, tableData }) => {

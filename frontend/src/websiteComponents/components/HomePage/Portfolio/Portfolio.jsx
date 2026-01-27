@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import BlackButton from "../../Common/Button/BlackButton";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from "../../Common/Headings/Heading2"
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import  { Heading2, RichParagraph,ImageWithSkeleton, BlackButton } from '../../Common/Common'
+
 
 const images = [
   { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior" },

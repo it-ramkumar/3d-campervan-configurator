@@ -2,15 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Car, Home, CreditCard, Phone, CheckCircle, Star, ArrowUpRight, Building, FileText, DollarSign, Users, HomeIcon } from "lucide-react";
+import {Shield, Car, Home, CreditCard, Phone, CheckCircle, Star, ArrowUpRight, Building, FileText, DollarSign, Users, HomeIcon } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
-import Heading4 from "../../Common/Headings/Heading4";
-import BlackButton from "../../Common/Button/BlackButton";
-import WhiteButton from "../../Common/Button/WhiteButton"
+import { Heading2, Heading3, RichParagraph, Heading4, WhiteButton } from '../../Common/Common'
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Financing() {

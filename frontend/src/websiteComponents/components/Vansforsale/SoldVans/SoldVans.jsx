@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
 import { Link } from "react-router-dom";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
-import BlackButton from "../../Common/Button/BlackButton";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, BlackButton } from '../../Common/Common'
+
 
 export default function SoldVans({ vans,
   soldHeading,

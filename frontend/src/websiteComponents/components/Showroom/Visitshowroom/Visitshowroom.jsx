@@ -13,9 +13,8 @@ import {
   Hammer
 } from "lucide-react";
 import Customize from "../../Customize/Cutomize";
-import Heading2 from "../../Common/Headings/Heading2";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading3 from "../../Common/Headings/Heading3";
+import { Heading2, RichParagraph} from '../../Common/Common'
+
 
 export default function Showroom() {
 

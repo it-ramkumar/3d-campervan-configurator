@@ -1,0 +1,10 @@
+// Common/index.js
+export { default as Heading2 } from './Headings/Heading2'
+export { default as Heading3 } from './Headings/Heading3'
+export { default as Heading1 } from './Headings/Heading1'
+export { default as Heading4 } from './Headings/Heading3'
+export { default as BlackButton } from './Button/BlackButton'
+export { default as WhiteButton } from './Button/WhiteButton'
+export { default as RichParagraph } from './Paragraph/RichParagraph'
+export { default as ImageWithSkeleton } from './ImageWithSkeleton/ImageWithSkeleton'
+// export { default as Loader } from './Loader/Loader'

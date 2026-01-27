@@ -2,9 +2,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { airportData } from "../../DataUseInComp/AirportData";
-import Heading2 from "../Common/Headings/Heading2";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading2, Heading4, RichParagraph } from '../Common/Common'
+
+
 const AirportCard = ({ airport, code, time, description, isPrivate = false, index }) => (
   <motion.div
     className="group relative bg-gradient-to-br from-gray-900 to-black p-4 md:p-5 rounded-xl md:rounded-2xl border border-gray-800 shadow-lg md:shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden w-full max-w-xs mx-auto md:max-w-none"

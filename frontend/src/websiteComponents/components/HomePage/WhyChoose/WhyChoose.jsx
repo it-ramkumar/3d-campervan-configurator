@@ -25,11 +25,8 @@ import {
   AirVent,
   Sun,
 } from 'lucide-react';
-import BlackButton from "../../Common/Button/BlackButton";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, BlackButton } from '../../Common/Common'
+
 
 // --- Data with Enhanced Text and Icons ---
 const sections = [
@@ -222,7 +219,7 @@ const WhyChoose = () => {
               <ImageWithSkeleton
                 src={section.images[0].src}
                 alt={section.images[0].alt}
-                
+
                 className={`rounded-2xl object-cover w-full h-full ${index === 3 ? "scale-x-[-1]" : ""}`}
               />
             </div>

@@ -1,13 +1,7 @@
-import React from 'react';
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
-import HeroSection from "../HeroSection/HeroSection";
-import ImageWithSkeleton from '../Common/ImageWithSkeleton/ImageWithSkeleton';
 import Consultation from "../Consultation/Consultation"
-import Heading2 from '../Common/Headings/Heading2';
-import Heading3 from '../Common/Headings/Heading3';
-import Heading4 from '../Common/Headings/Heading4';
-import RichParagraph from '../Common/Paragraph/RichParagraph';
+import { Heading2, RichParagraph,Heading3 } from '../Common/Common'
+
 
 const VanSystemsPage = () => {
     return (

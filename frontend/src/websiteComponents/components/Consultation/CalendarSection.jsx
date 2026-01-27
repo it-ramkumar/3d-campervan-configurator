@@ -2,12 +2,9 @@
 import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Link } from "react-router-dom";
-import BlackButton from "../Common/Button/BlackButton";
 import WhiteButton from "../Common/Button/WhiteButton"
-import Heading3 from "../Common/Headings/Heading3";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading2 from "../Common/Headings/Heading2";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading4, Heading3, RichParagraph } from '../Common/Common'
+
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -380,52 +377,52 @@ export default function BookingPage() {
 
                 <div>
 
-               {bookingStep === 1 && (
-  <div className="max-w-sm mx-auto">
-    <Heading3 text="Select a Date" textColor="text-black" className="text-center my-4" />
+                  {bookingStep === 1 && (
+                    <div className="max-w-sm mx-auto">
+                      <Heading3 text="Select a Date" textColor="text-black" className="text-center my-4" />
 
-    <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
-      <div className="flex items-center justify-between mb-3">
-        {/* Previous Month Button */}
-        <button
-          onClick={() => navigateMonth(-1)}
-          aria-label="Go to previous month"
-          className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-        >
-          <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+                      <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                          {/* Previous Month Button */}
+                          <button
+                            onClick={() => navigateMonth(-1)}
+                            aria-label="Go to previous month"
+                            className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                          >
+                            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                          </button>
 
-        <h3 className="text-sm font-semibold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
+                          <h3 className="text-sm font-semibold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
 
-        {/* Next Month Button */}
-        <button
-          onClick={() => navigateMonth(1)}
-          aria-label="Go to next month"
-          className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-        >
-          <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+                          {/* Next Month Button */}
+                          <button
+                            onClick={() => navigateMonth(1)}
+                            aria-label="Go to next month"
+                            className="p-1 hover:bg-gray-100 rounded-md transition-colors"
+                          >
+                            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                        </div>
 
-      <div className="grid grid-cols-7 gap-1 mb-1">
-        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-          <div key={day + index} className="text-center text-xs font-medium py-1 text-gray-500">{day}</div>
-        ))}
-      </div>
+                        <div className="grid grid-cols-7 gap-1 mb-1">
+                          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                            <div key={day + index} className="text-center text-xs font-medium py-1 text-gray-500">{day}</div>
+                          ))}
+                        </div>
 
-      <div className="grid grid-cols-7 gap-1">
-        {calendar.map((date, index) => (
-          <button
-            key={index}
-            onClick={() => date && handleDateSelect(date)}
-            // Date ke liye label: maslan "Select October 24 2026"
-            aria-label={date ? `Select ${date.day} ${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}` : ""}
-            disabled={!date || date.isPast || date.isSunday}
-            className={`
+                        <div className="grid grid-cols-7 gap-1">
+                          {calendar.map((date, index) => (
+                            <button
+                              key={index}
+                              onClick={() => date && handleDateSelect(date)}
+                              // Date ke liye label: maslan "Select October 24 2026"
+                              aria-label={date ? `Select ${date.day} ${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}` : ""}
+                              disabled={!date || date.isPast || date.isSunday}
+                              className={`
               h-7 rounded-md text-xs transition-all font-medium
               ${!date ? 'invisible' : ''}
               ${date?.isPast || date?.isSunday ? 'text-gray-300 cursor-not-allowed' : ''}
@@ -433,23 +430,23 @@ export default function BookingPage() {
               ${date?.isSelected ? 'bg-black text-white shadow-md' : ''}
               ${!date?.isPast && !date?.isSunday && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50 text-gray-700' : 'text-gray-600'}
             `}
-          >
-            {date?.day}
-          </button>
-        ))}
-      </div>
-    </div>
+                            >
+                              {date?.day}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-    {selectedDate && (
-      <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
-        <Heading4 text="Selected Date" textColor="text-black" className="text-center my-4" />
-        <RichParagraph>
-          {formatDate(selectedDate)}
-        </RichParagraph>
-      </div>
-    )}
-  </div>
-)}
+                      {selectedDate && (
+                        <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
+                          <Heading4 text="Selected Date" textColor="text-black" className="text-center my-4" />
+                          <RichParagraph>
+                            {formatDate(selectedDate)}
+                          </RichParagraph>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
 
                   {bookingStep === 2 && (

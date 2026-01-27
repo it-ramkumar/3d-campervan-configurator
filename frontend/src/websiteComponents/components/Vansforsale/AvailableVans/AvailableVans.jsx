@@ -1,12 +1,8 @@
 "use client";
 import { useRef } from 'react';
 import { Link } from "react-router-dom"
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import BlackButton from '../../Common/Button/BlackButton';
-import Heading2 from '../../Common/Headings/Heading2';
-import Heading3 from '../../Common/Headings/Heading3';
-import RichParagraph from '../../Common/Paragraph/RichParagraph';
-import WhiteButton from "../../Common/Button/WhiteButton"
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton, BlackButton } from '../../Common/Common'
+
 
 // --- Icons remain same ---
 const PowerIcon = () => (

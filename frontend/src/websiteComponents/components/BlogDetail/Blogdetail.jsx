@@ -18,12 +18,9 @@ import 'swiper/css/navigation';
 // Custom Components
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Loader from "../Loader/Loader";
-import Heading1 from "../Common/Headings/Heading1";
-import Heading3 from "../Common/Headings/Heading3";
-import Heading4 from "../Common/Headings/Heading4";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
+import {Heading1, Heading4, Heading3, RichParagraph, ImageWithSkeleton } from '../Common/Common'
+
 
 export default function BlogDetail() {
   const { slug } = useParams();

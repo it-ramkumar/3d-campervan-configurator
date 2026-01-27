@@ -1,12 +1,9 @@
-// analytics.js
-// Full production-ready GA helper for React SPA
-// Tracks page views, links, forms, buttons, downloads, mailto
+// Track karo ke already initialized hai ya nahi
+let isInitialized = false;
 
 export const pageView = (url) => {
   if (typeof window.gtag === "function") {
     window.gtag("event", "page_view", { page_path: url });
-  } else {
-    console.warn("gtag not loaded yet, pageView skipped:", url);
   }
 };
 
@@ -17,98 +14,95 @@ export const event = ({ action, category, label, value }) => {
       event_label: label,
       value: value,
     });
-  } else {
-    console.warn("gtag not loaded yet, event skipped:", action);
   }
 };
 
-// Track external links
-const trackExternalLinks = () => {
-  document.querySelectorAll("a[href]").forEach((link) => {
-    const href = link.getAttribute("href");
-    if (!href) return;
-    if (href.startsWith("#") || href.startsWith("/")) return; // internal links
+// Event delegation use karo - better performance
+const setupEventDelegation = () => {
+  // Single click listener for entire document
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('a, button');
+    if (!target) return;
 
-    link.addEventListener("click", () => {
-      event({
-        action: "click",
-        category: "External Link",
-        label: href,
-        value: 1,
-      });
-    });
-  });
-};
+    // External links
+    if (target.tagName === 'A') {
+      const href = target.getAttribute('href');
+      if (!href) return;
 
-// Track mailto links
-const trackMailtoLinks = () => {
-  document.querySelectorAll('a[href^="mailto:"]').forEach((link) => {
-    link.addEventListener("click", () => {
-      event({
-        action: "click",
-        category: "Email Link",
-        label: link.getAttribute("href"),
-        value: 1,
-      });
-    });
-  });
-};
+      // External link
+      if (href.startsWith('http') && !href.includes(window.location.hostname)) {
+        event({
+          action: 'click',
+          category: 'External Link',
+          label: href,
+          value: 1,
+        });
+      }
+      // Mailto
+      else if (href.startsWith('mailto:')) {
+        event({
+          action: 'click',
+          category: 'Email Link',
+          label: href,
+          value: 1,
+        });
+      }
+      // Downloads
+      else if (/\.(pdf|zip|jpg|png|doc|docx)$/i.test(href)) {
+        event({
+          action: 'download',
+          category: 'File Download',
+          label: href,
+          value: 1,
+        });
+      }
+    }
 
-// Track downloads
-const trackDownloads = () => {
-  document.querySelectorAll('a[href$=".pdf"], a[href$=".zip"], a[href$=".jpg"], a[href$=".png"]').forEach((link) => {
-    link.addEventListener("click", () => {
+    // Buttons
+    if (target.tagName === 'BUTTON') {
+      const label = target.innerText || target.getAttribute('aria-label') || 'Unnamed Button';
       event({
-        action: "download",
-        category: "File Download",
-        label: link.getAttribute("href"),
-        value: 1,
-      });
-    });
-  });
-};
-
-// Track forms
-const trackForms = () => {
-  document.querySelectorAll("form").forEach((form) => {
-    form.addEventListener("submit", () => {
-      const name = form.getAttribute("name") || "Unnamed Form";
-      event({
-        action: "submit",
-        category: "Form",
-        label: name,
-        value: 1,
-      });
-    });
-  });
-};
-
-// Track all buttons
-const trackButtons = () => {
-  document.querySelectorAll("button").forEach((btn) => {
-    const label = btn.innerText || btn.getAttribute("aria-label") || "Unnamed Button";
-    btn.addEventListener("click", () => {
-      event({
-        action: "click",
-        category: "Button",
+        action: 'click',
+        category: 'Button',
         label: label,
         value: 1,
       });
-    });
-  });
+    }
+  }, true); // Use capture phase
+
+  // Form submissions
+  document.addEventListener('submit', (e) => {
+    if (e.target.tagName === 'FORM') {
+      const name = e.target.getAttribute('name') || 'Unnamed Form';
+      event({
+        action: 'submit',
+        category: 'Form',
+        label: name,
+        value: 1,
+      });
+    }
+  }, true);
 };
 
-// Initialize all automatic tracking
+// Initialize only once
 export const initAnalytics = () => {
+  // Prevent multiple initializations
+  if (isInitialized) {
+    console.warn('Analytics already initialized');
+    return;
+  }
 
+  // Check if gtag is loaded
+  if (typeof window.gtag !== 'function') {
+    console.warn('gtag not loaded, analytics disabled');
+    return;
+  }
+
+  isInitialized = true;
 
   // First page view
   pageView(window.location.pathname + window.location.search);
 
-  // Auto tracking
-  trackExternalLinks();
-  trackMailtoLinks();
-  trackDownloads();
-  trackForms();
-  trackButtons();
+  // Setup event delegation (single listener instead of multiple)
+  setupEventDelegation();
 };

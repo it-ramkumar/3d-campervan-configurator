@@ -7,9 +7,8 @@ import {
   LayoutTemplateIcon,
   ArrowRightIcon,
 } from "lucide-react";
-import Heading2 from "../../Common/Headings/Heading2";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import BlackButton from "../../Common/Button/BlackButton";
+import { Heading2, RichParagraph, BlackButton } from '../../Common/Common'
+
 
 const LIMIT = 12;
 

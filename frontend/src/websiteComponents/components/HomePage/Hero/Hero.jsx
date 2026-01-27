@@ -6,11 +6,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
-import BlackButton from "../../Common/Button/BlackButton";
-import WhiteButton from "../../Common/Button/WhiteButton";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading1 from "../../Common/Headings/Heading1";
 import Paragraph from "../../Common/Paragraph/HeroParagraph";
+import { BlackButton, WhiteButton,ImageWithSkeleton, Heading1 } from '../../Common/Common'
+
 
 // Define the pure black color for buttons and primary accents
 

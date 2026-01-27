@@ -2,10 +2,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import AirService from "../../AirService/AirService";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading4 from "../../Common/Headings/Heading4";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import { Heading2, RichParagraph,Heading4,ImageWithSkeleton } from '../../Common/Common'
+
 
 // --- Framer Motion Animation Variants ---
 const containerVariants = {

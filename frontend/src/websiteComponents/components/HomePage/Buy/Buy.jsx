@@ -3,14 +3,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules'; // ✅ Autoplay import kiya
-import { Link } from "react-router-dom";
-import BlackButton from "../../Common/Button/BlackButton";
-import WhiteButton from '../../Common/Button/WhiteButton';
 import { availableVans } from '../../../../api/van/availableVans';
 import Loader from '../../Loader/Loader';
-import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
-import Heading2 from '../../Common/Headings/Heading2';
-import RichParagraph from '../../Common/Paragraph/RichParagraph';
+import { Heading2, RichParagraph, ImageWithSkeleton, WhiteButton, BlackButton } from '../../Common/Common'
+
 // Top mein add karo
 import 'swiper/css';
 import 'swiper/css/navigation';

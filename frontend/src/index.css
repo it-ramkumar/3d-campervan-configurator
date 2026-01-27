@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @theme {
   --color-brand: #EEEEEE;
   --color-dark: black;

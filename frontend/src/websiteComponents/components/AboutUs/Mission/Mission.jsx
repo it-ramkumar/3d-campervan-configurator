@@ -3,11 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion'; // Import framer-motion
 import { FaCog, FaFeatherAlt, FaRulerCombined, FaBolt, FaBed, FaPalette } from 'react-icons/fa';
-import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
-import Heading2 from '../../Common/Headings/Heading2';
-import Heading3 from '../../Common/Headings/Heading3';
-import RichParagraph from '../../Common/Paragraph/RichParagraph';
-// NEW: Reusable component for the word-by-word heading animation
+import { Heading2, RichParagraph,ImageWithSkeleton } from '../../Common/Common'
 
 
 export default function Mission() {

@@ -2,9 +2,8 @@
 
 import React, { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading2 from "../Common/Headings/Heading2";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading2, RichParagraph } from '../Common/Common'
+
 
 
 export default function FAQs({ faqs }) {

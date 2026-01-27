@@ -3,11 +3,8 @@
 import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import WhiteButton from '../../Common/Button/WhiteButton';
-import ImageWithSkeleton from '../../Common/ImageWithSkeleton/ImageWithSkeleton';
-import Heading2 from '../../Common/Headings/Heading2';
-import Heading3 from '../../Common/Headings/Heading3';
-import RichParagraph from '../../Common/Paragraph/RichParagraph';
+import { Heading2, RichParagraph, ImageWithSkeleton,WhiteButton } from '../../Common/Common'
+
 
 // Placeholder images - replace with your actual image paths
 const ownersImage = "/images/anna.webp";
@@ -263,7 +260,7 @@ export default function AboutPage() {
           src={ctaBgImage}
           alt="Scenic view from inside a custom camper van"
           loading="eager"
-          fetchpriority="high"
+          fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
           initial={{ scale: 1.15 }}
           variants={{

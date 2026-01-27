@@ -3,11 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import BlackButton from "../../Common/Button/BlackButton";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import { Heading2, RichParagraph, Heading3, BlackButton, ImageWithSkeleton } from '../../Common/Common'
+
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);

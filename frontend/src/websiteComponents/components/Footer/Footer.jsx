@@ -4,11 +4,9 @@ import React, { useState } from "react";
 const Swal = () => import('sweetalert2');
 import { Link } from "react-router-dom";
 import { FaTwitter, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin, FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { FooterListItem } from "../Common/Li/FooterLiItem"; // ✅ Import
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading3 from "../Common/Headings/Heading3";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading3, RichParagraph,Heading4, ImageWithSkeleton } from '../Common/Common'
+
 
 
 const handleCopy = (text) => {

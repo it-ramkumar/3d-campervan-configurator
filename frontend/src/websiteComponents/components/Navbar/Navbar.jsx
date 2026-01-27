@@ -3,14 +3,13 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { gsap } from "gsap";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { getAllBlogs } from "../../../api/blog/getAllBlogs";
 import { getNavCat } from "../../../api/portfolio/navBarCat";
 import { getnavWheel } from "../../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading4,ImageWithSkeleton } from '../Common/Common'
 
 // --- Sub Components ---
 const NavListItem = ({ to, children, isActive, onClick }) => (

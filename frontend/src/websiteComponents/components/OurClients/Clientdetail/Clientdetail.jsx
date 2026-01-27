@@ -20,13 +20,9 @@ import {
   Heart,
 } from "lucide-react";
 
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton.jsx";
 import { Link } from "react-router-dom";
-import BlackButton from "../../Common/Button/BlackButton.jsx";
-import Heading2 from "../../Common/Headings/Heading2.jsx"
-import Heading3 from "../../Common/Headings/Heading3.jsx"
-import Heading4 from "../../Common/Headings/Heading4.jsx";
-import RichParagraph from "../../Common/Paragraph/RichParagraph.jsx"
+import { Heading2, RichParagraph, Heading3, Heading4, ImageWithSkeleton, BlackButton } from '../../Common/Common'
+
 
 // Reusable Components
 function SectionHeader({ title, subtitle, icon: Icon }) {

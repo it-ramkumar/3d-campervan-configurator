@@ -1,16 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getByCategory } from "../../../api/portfolio/getByCategory";
-import BlackButton from "../Common/Button/BlackButton";
-import WhiteButton from "../Common/Button/WhiteButton"
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { useParams } from "react-router-dom";
 import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
-import Heading2 from "../Common/Headings/Heading2";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton,BlackButton } from '../Common/Common'
+
 import { LayoutByCategorySchema } from "../../schema/layoutByCategorySchema";
 
 export default function CamperProjectsPage() {

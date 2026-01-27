@@ -3,11 +3,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronDown, Sparkles, Tag, Search, Truck, Filter, X, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import Heading2 from "../Common/Headings/Heading2";
-import Heading3 from "../Common/Headings/Heading3";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import BlackButton from "../Common/Button/WhiteButton";
-import Image from "../Common/ImageWithSkeleton/ImageWithSkeleton";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton } from '../Common/Common'
+
 
 const MAX_INITIAL_ITEMS = 50;
 
@@ -325,7 +322,7 @@ const getFilteredCategories = () => {
                             <motion.div key={activeItem._id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 sm:p-10 border border-gray-100">
                               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
                                 <div className={`${alternateLayout ? "" : "lg:order-2"}`}>
-                                  <Image src={activeItem.images?.[0]} alt={activeItem.title} className="rounded-xl shadow-lg" />
+                                  <ImageWithSkeleton  src={activeItem.images?.[0]} alt={activeItem.title} className="rounded-xl shadow-lg" />
                                 </div>
                                 <div className={`space-y-6 ${alternateLayout ? "" : "lg:order-1"}`}>
                                   <div>

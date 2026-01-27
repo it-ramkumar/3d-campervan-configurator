@@ -1,9 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import RichParagraph from '../Common/Paragraph/RichParagraph';
-import BlackButton from '../Common/Button/WhiteButton';
-import Heading3 from '../Common/Headings/Heading3';
+import { RichParagraph, Heading3, BlackButton } from '../Common/Common'
+
 export default function ExteriorCTR() {
     return (
         <section className="relative py-8 sm:py-10 md:py-12 bg-gradient-to-br from-gray-50 to-white text-white overflow-hidden">
@@ -19,8 +17,8 @@ export default function ExteriorCTR() {
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
                 >
-                    <Heading3 text=' Ready to Build Your Dream Van?' textColor='text-white'/>
-                 
+                    <Heading3 text=' Ready to Build Your Dream Van?' textColor='text-white' />
+
                     <motion.div
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.98 }}
@@ -28,7 +26,7 @@ export default function ExteriorCTR() {
                         className="inline-block my-4"
 
                     >
-                        <BlackButton label={" Start Your Build Journey"} link={"/contact"}/>
+                        <BlackButton label={" Start Your Build Journey"} link={"/contact"} />
 
                     </motion.div>
                     <RichParagraph white={true}>

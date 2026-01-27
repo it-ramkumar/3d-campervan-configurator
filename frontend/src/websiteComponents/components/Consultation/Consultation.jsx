@@ -5,8 +5,8 @@ import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 const Swal = () => import('sweetalert2');
 import { contact } from "../../../api/contact/contact";
-import Heading2 from "../Common/Headings/Heading2";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
+import { Heading2, RichParagraph } from '../Common/Common'
+
 
 export default function Consultation() {
   const [formData, setFormData] = useState({

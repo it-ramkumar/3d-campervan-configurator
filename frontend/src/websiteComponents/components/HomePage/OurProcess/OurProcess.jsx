@@ -3,11 +3,8 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import WhiteButton from "../../Common/Button/WhiteButton";
-import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
+import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton } from '../../Common/Common'
+
 // Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 

@@ -1,10 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import AirService from "../../AirService/AirService";
-import RichParagraph from "../../Common/Paragraph/RichParagraph";
-import Heading2 from "../../Common/Headings/Heading2";
-import Heading3 from "../../Common/Headings/Heading3";
-import Heading4 from "../../Common/Headings/Heading4";
+import { Heading2, RichParagraph,Heading3,Heading4 } from '../../Common/Common'
+
 
 
 // --- ICONS for the 'Fly in, Drive out' section ---

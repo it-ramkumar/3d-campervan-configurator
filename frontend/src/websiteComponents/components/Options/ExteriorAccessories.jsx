@@ -1,9 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
-import RichParagraph from "../Common/Paragraph/RichParagraph";
-import Heading2 from "../Common/Headings/Heading2";
-import Heading4 from "../Common/Headings/Heading4";
+import { Heading2, RichParagraph,Heading4,ImageWithSkeleton } from '../Common/Common'
+
 
 
 
