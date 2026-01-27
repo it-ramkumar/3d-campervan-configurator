@@ -7,11 +7,10 @@ export default function ImageWithSkeleton({
   alt,
   className = "",
   click = false,
-  priority = false ,// 🟢 New Prop
+  priority = false,// 🟢 New Prop
   sizes,
-  srcSet
-})
-{
+
+}) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,28 +20,27 @@ export default function ImageWithSkeleton({
   return (
     <>
       {/* ======= Thumbnail Image ======= */}
-     <img
-  src={finalSrc}
-  alt={alt}
-  // 🟢 Priority instructions
-  fetchPriority={priority ? "high" : "low"}
-  loading={priority ? "eager" : "lazy"}
-  decoding={priority ? "sync" : "async"}
+      <img
+        src={finalSrc}
+        alt={alt}
+        // 🟢 Priority instructions
+        fetchPriority={priority ? "high" : "low"}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
 
-  onLoad={() => setLoaded(true)}
-  onError={() => setError(true)}
-  onClick={() => !click && setIsModalOpen(true)}
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+        onClick={() => !click && setIsModalOpen(true)}
 
-  className={`
+        className={`
     ${className}
     border border-gray-300 rounded-md object-cover
     transition-all duration-300 ease-in-out
     ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
     ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
   `}
-  srcSet={srcSet} // 👈 Browser ko sizes ki list dega
         sizes={sizes}
-/>
+      />
 
       {/* ======= True Fullscreen Modal (via Portal) ======= */}
       {!click && isModalOpen &&

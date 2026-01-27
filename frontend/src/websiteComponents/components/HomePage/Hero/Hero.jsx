@@ -19,7 +19,7 @@ const slides = [
   {
     id: 1,
     image: "/heroSlider/joinadventure.webp",
-    title: "Custom Camper Vans",
+    title: "Custom Camper Vans..",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {

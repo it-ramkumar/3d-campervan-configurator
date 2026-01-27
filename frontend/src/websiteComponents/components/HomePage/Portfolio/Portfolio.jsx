@@ -12,11 +12,7 @@ const images = [
   { id: 4, src: "/images/p4.jpg", alt: "Sleeping nook" },
   { id: 5, src: "/images/p5.webp", alt: "Storage solutions" },
 ];
-const srcSet = `
-    ${images[0].src.replace('.webp', '-sm.webp')} 600w,
-    ${images[0].src.replace('.webp', '-md.webp')} 1200w,
-    ${images[0].src} 2000w
-  `;
+
 
 export default function Portfolio() {
   // Mobile par height ko override karne ke liye !important style ya strict class
@@ -52,7 +48,7 @@ export default function Portfolio() {
                 <PortfolioImage key={img.id} img={img} className="h-full"      // ✅ Best for below the fold
                  priority={true}
                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                 srcSet={srcSet}/>
+                 />
               ))}
             </div>
           </div>
