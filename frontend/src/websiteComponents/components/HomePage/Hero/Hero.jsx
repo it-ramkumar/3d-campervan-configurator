@@ -79,6 +79,7 @@ export default function Hero() {
               priority={index === 0}
               className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''
                 }`}
+                decoding={"sync"}
               style={{ contentVisibility: 'auto' }} // 🟢 Rendering optimization
             />
             {/* Dark Overlay */}

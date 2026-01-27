@@ -7,7 +7,8 @@ export default function ImageWithSkeleton({
   alt,
   className = "",
   click = false,
-  priority = false // 🟢 New Prop
+  priority = false ,// 🟢 New Prop
+  decoding
 })
 {
   const [loaded, setLoaded] = useState(false);
@@ -24,7 +25,7 @@ export default function ImageWithSkeleton({
         alt={alt}
         fetchpriority={priority ? "high" : "low"}
         loading={priority ? "eager" : "lazy"}
-        decoding="async"
+        decoding={decoding ? "sync" : "async"}
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
         onClick={() => !click && setIsModalOpen(true)}
