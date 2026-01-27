@@ -7,7 +7,7 @@ import RichParagraph from "../../Common/Paragraph/RichParagraph";
 
 const images = [
   { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior" },
-  { id: 2, src: "/images/p2.webp", alt: "Overhead view of kitchen" },
+  { id: 2, src: "/images/p2.jpg", alt: "Overhead view of kitchen" },
   { id: 3, src: "/images/p3.webp", alt: "Compact kitchenette" },
   { id: 4, src: "/images/p4.webp", alt: "Sleeping nook" },
   { id: 5, src: "/images/p5.webp", alt: "Storage solutions" },
