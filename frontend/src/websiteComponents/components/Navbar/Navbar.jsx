@@ -231,6 +231,7 @@ export default function Navbar({ forceMobile }) {
                 alt="BBV logo"
                 className="w-[170px] h-[30px] object-contain"
                 priority={true}
+                click={true}
               />
             </Link>
           )}

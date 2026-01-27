@@ -12,6 +12,11 @@ const images = [
   { id: 4, src: "/images/p4.webp", alt: "Sleeping nook" },
   { id: 5, src: "/images/p5.webp", alt: "Storage solutions" },
 ];
+const srcSet = `
+    ${images[0].src.replace('.webp', '-sm.webp')} 600w,
+    ${images[0].src.replace('.webp', '-md.webp')} 1200w,
+    ${images[0].src} 2000w
+  `;
 
 export default function Portfolio() {
   // Mobile par height ko override karne ke liye !important style ya strict class
@@ -45,7 +50,9 @@ export default function Portfolio() {
             <div className="grid grid-cols-3 gap-4">
               {images.slice(2).map((img, index) => (
                 <PortfolioImage key={img.id} img={img} className="h-full"      // ✅ Best for below the fold
-                  priority={index < 2} />
+                 priority={true}
+                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                 srcSet={srcSet}/>
               ))}
             </div>
           </div>
@@ -53,9 +60,9 @@ export default function Portfolio() {
 
         {/* --- MOBILE VIEW (Strict Height Control) --- */}
         <div className="flex flex-col gap-3 lg:hidden">
-          {images.map((img) => (
+          {images.map((img,index) => (
             <div key={img.id} className="w-full relative h-[160px]"> {/* Height ko 160px kar diya hai */}
-              <PortfolioImage img={img} className="w-full h-full" />
+              <PortfolioImage img={img} className="w-full h-full" priority={index === 0}/>
             </div>
           ))}
         </div>
