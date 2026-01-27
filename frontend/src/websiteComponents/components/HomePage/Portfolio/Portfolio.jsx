@@ -7,9 +7,9 @@ import RichParagraph from "../../Common/Paragraph/RichParagraph";
 
 const images = [
   { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior" },
-  { id: 2, src: "/images/p2.jpg", alt: "Overhead view of kitchen" },
-  { id: 3, src: "/images/p3.jpg", alt: "Compact kitchenette" },
-  { id: 4, src: "/images/p4.jpg", alt: "Sleeping nook" },
+  { id: 2, src: "/images/p2.webp", alt: "Overhead view of kitchen" },
+  { id: 3, src: "/images/p3.webp", alt: "Compact kitchenette" },
+  { id: 4, src: "/images/p4.webp", alt: "Sleeping nook" },
   { id: 5, src: "/images/p5.webp", alt: "Storage solutions" },
 ];
 
@@ -47,7 +47,8 @@ export default function Portfolio() {
               {images.slice(2).map((img, index) => (
                 <PortfolioImage key={img.id} img={img} className="h-full"      // ✅ Best for below the fold
                  priority={true}
-                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                 sizes="(max-width: 768px) 655px, 1200px" // ✅ Yahan pass karo
+
                  />
               ))}
             </div>
@@ -58,7 +59,9 @@ export default function Portfolio() {
         <div className="flex flex-col gap-3 lg:hidden">
           {images.map((img,index) => (
             <div key={img.id} className="w-full relative h-[160px]"> {/* Height ko 160px kar diya hai */}
-              <PortfolioImage img={img} className="w-full h-full"  priority={true}/>
+              <PortfolioImage img={img} className="w-full h-full"  priority={true}
+                sizes="(max-width: 768px) 655px, 1200px" // ✅ Yahan pass karo
+/>
             </div>
           ))}
         </div>
