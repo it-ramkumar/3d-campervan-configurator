@@ -30,7 +30,7 @@ const slides = [
   },
   {
     id: 3,
-    image: "/heroSlider/heroimg3.webp",
+    image: "/heroSlider/heroimg3.jpg",
     title: "Custom Camper Vans",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },

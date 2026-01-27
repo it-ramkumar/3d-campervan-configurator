@@ -60,6 +60,7 @@ export default function Customize({
                   className="object-cover w-full h-full"
                   width={500}
                   height={500}
+                  
                 />
               </div>
             </div>
