@@ -58,7 +58,7 @@ export default function Portfolio() {
         <div className="flex flex-col gap-3 lg:hidden">
           {images.map((img,index) => (
             <div key={img.id} className="w-full relative h-[160px]"> {/* Height ko 160px kar diya hai */}
-              <PortfolioImage img={img} className="w-full h-full" priority={index === 0}/>
+              <PortfolioImage img={img} className="w-full h-full"  priority={true}/>
             </div>
           ))}
         </div>
