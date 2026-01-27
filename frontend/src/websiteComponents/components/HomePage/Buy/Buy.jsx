@@ -113,7 +113,7 @@ export default function Buy() {
             // ✅ Performance optimizations add karo
             cssMode={false} // Keep false for autoplay
             watchSlidesProgress={false}
-            watchSlidesVisibility={false}
+            // watchSlidesVisibility={false}
             preventInteractionOnTransition={true}
 
             // ✅ Resize handling optimize karo

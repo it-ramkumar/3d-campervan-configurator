@@ -7,8 +7,8 @@ import Loader from "../websiteComponents/components/Loader/Loader";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
 
 // Lazy-loaded Widgets
-const ChatWidget = lazy(() => import("../websiteComponents/components/ChatMaxima/ChatMaxima"));
-
+// Routes.jsx mein ye hai?
+import ChatWidget  from '../websiteComponents/components/ChatMaxima/ChatMaxima'
 // Lazy-loaded Pages & Components
 const Home = lazy(() => import("../pages/Home"));
 const Van = lazy(() => import("../pages/Van"));
@@ -51,13 +51,6 @@ const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCa
 
 const AppRoutes = () => {
   const location = useLocation();
-  const [showChat, setShowChat] = useState(false);
-
-  // Delay chat widget load
-  useEffect(() => {
-    const timer = setTimeout(() => setShowChat(true), 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   // GA page view tracking
   useEffect(() => {
@@ -71,11 +64,11 @@ const AppRoutes = () => {
   return (
     <>
       {/* Only show chat on non-admin pages */}
-      {!isAdminRoute && showChat && (
+      {/* {!isAdminRoute && (
         <Suspense fallback={null}>
-          <ChatWidget />
+          <ChatWidget  />
         </Suspense>
-      )}
+      )} */}
 
       <ScrollFromTop />
 

@@ -1,76 +1,87 @@
 import { useEffect, useState } from "react";
 
 function ChatWidget() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    // Load after 3 seconds OR on first scroll (whichever comes first)
-    let timer;
-    let scrollHandler;
+    const timer = setTimeout(() => setShouldLoad(true), 3000);
 
-    const loadWidget = () => {
-      if (isLoaded) return;
-      setIsLoaded(true);
+    const handleScroll = () => {
+      setShouldLoad(true);
+      window.removeEventListener('scroll', handleScroll);
     };
 
-    // Timer: 3 seconds
-    timer = setTimeout(loadWidget, 3000);
-
-    // Scroll: Load immediately when user scrolls
-    scrollHandler = () => {
-      loadWidget();
-      window.removeEventListener('scroll', scrollHandler);
-    };
-    window.addEventListener('scroll', scrollHandler, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, [isLoaded]);
+  }, []);
+useEffect(() => {
+  if (!shouldLoad) return;
 
-  useEffect(() => {
-    if (!isLoaded) return;
+  window.chatmaximaConfig = {
+    token: "miutk867bnhw",
+    theme_color: "#5c526b",
+    widget_icon: "https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.png",
+  };
 
-    // ChatMaxima configuration
-    window.chatmaximaConfig = {
-      token: "miutk867bnhw",
-      theme_color: "#5c526b",
-      widget_icon:
-        "https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.png",
-    };
+  const script = document.createElement("script");
+  script.src = "https://widget.chatmaxima.com/embed.min.js";
+  script.onload = () => {
+    console.log("Script loaded");
 
-    // Avoid duplicate script injection
-    if (document.getElementById("chatmaxima-widget")) return;
+    setTimeout(() => {
+      if (window.embedChatbot) {
+        console.log("Initializing ChatMaxima...");
+        window.embedChatbot();
 
-    const script = document.createElement("script");
-    script.src = "https://widget.chatmaxima.com/embed.min.js";
-    script.id = "chatmaxima-widget";
-    script.defer = true;
-    script.async = true;
+        // Auto-open after 2 seconds
+        setTimeout(() => {
+          // Multiple methods to try opening
+          const openMethods = [
+            () => window.ChatMaxima?.open(),
+            () => window.openChatWidget?.(),
+            () => window.showChatWidget?.(),
+            () => {
+              // Find and click the chat button
+              const selectors = [
+                '[class*="chatmaxima"]',
+                '[id*="chatmaxima"]',
+                '[class*="chat-widget"]',
+                '[class*="widget-button"]',
+                'iframe[src*="chatmaxima"]',
+                '[data-chatmaxima]'
+              ];
 
-    // Optional: Remove cache busting for better caching
-    // script.src = "https://widget.chatmaxima.com/embed.min.js?v=" + new Date().getTime();
+              for (let selector of selectors) {
+                const element = document.querySelector(selector);
+                if (element) {
+                  console.log('Found chat element:', element);
+                  element.click();
+                  return true;
+                }
+              }
+              return false;
+            }
+          ];
 
-    script.onload = () => {
-      console.log("✅ ChatMaxima loaded");
-    };
-
-    script.onerror = () => {
-      console.error("❌ ChatMaxima failed to load");
-      setIsLoaded(false); // Allow retry
-    };
-
-    document.body.appendChild(script);
-
-    return () => {
-      const oldScript = document.getElementById("chatmaxima-widget");
-      if (oldScript) {
-        document.body.removeChild(oldScript);
+          // Try each method
+          for (let method of openMethods) {
+            try {
+              if (method()) break;
+            } catch (e) {
+              console.log('Method failed:', e);
+            }
+          }
+        }, 2000);
       }
-      delete window.chatmaximaConfig;
-    };
-  }, [isLoaded]);
+    }, 500);
+  };
+
+  document.body.appendChild(script);
+}, [shouldLoad]);
 
   return null;
 }
