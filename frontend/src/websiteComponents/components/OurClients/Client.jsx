@@ -33,7 +33,7 @@ const schemaData = generateClientStoriesSchema();
       {/* Page Sections */}
       <Navbar />
       <div className="tour-hero">
-             <HeroSection  title={newTitleText} image={heroImage}  showButton={false} />
+             <HeroSection  title={newTitleText} image={heroImage}  showButton={false} description="Delivering trusted van solutions to our valued clients." />
       </div>
       <div className="tour-details">
         <Clientdetail />

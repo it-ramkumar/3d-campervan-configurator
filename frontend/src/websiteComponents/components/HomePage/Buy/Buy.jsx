@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules'; // ✅ Autoplay import kiya
 import { availableVans } from '../../../../api/van/availableVans';
 import Loader from '../../Loader/Loader';
+import { Link } from 'react-router-dom';
 import { Heading2, RichParagraph, ImageWithSkeleton, WhiteButton, BlackButton } from '../../Common/Common'
 
 // Top mein add karo
@@ -78,7 +79,9 @@ export default function Buy() {
           <Heading2 text="Custom Campervan Builders: Build or Buy" />
           <div className="max-w-3xl mx-auto text-base text-gray-700 leading-relaxed text-left">
             <RichParagraph className='my-2'>
-              We are <b>premier custom campervan builders</b>, dedicated to crafting your perfect mobile home. Explore our current inventory and upcoming pipeline below.
+              We are <b>premier custom campervan builders</b>, dedicated to crafting your perfect mobile home. Explore our current
+              <Link to="/vans-for-sale" className="text-blue-700 font-bold underline hover:text-blue-900"> inventory  </Link>
+               and upcoming pipeline below.
             </RichParagraph>
 
             <ul className="mt-6 space-y-4">

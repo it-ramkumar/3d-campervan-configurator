@@ -33,7 +33,7 @@ export default function Blog() {
         {/* Header Section */}
         <div className="text-center mb-10 lg:mb-14">
           <Heading2 text="Explore Our Van Life Blog" />
-          <RichParagraph className="max-w-2xl mx-auto">Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.</RichParagraph>
+          <RichParagraph className="max-w-2xl mx-auto">Check our <Link to="/blog" className="text-blue-700 font-bold underline hover:text-blue-900">blog</Link> to learn everything about vanlife, custom Sprinter vans, and campervans.</RichParagraph>
         </div>
 
         {/* Blog Post Grid */}

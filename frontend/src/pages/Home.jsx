@@ -8,6 +8,7 @@ import {
   BatteryCharging,
   Armchair
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // Direct imports (Above the fold - immediately visible)
 import Navbar from "../websiteComponents/components/Navbar/Navbar";
@@ -46,10 +47,14 @@ const Home = () => {
   const desc = "When you give us 4-5 months, we design and build your custom camper van from scratch, the way you want it";
 
   const descriptionList = [
-    {
-      text: "3D renderings to help you visualise your future van before we even pick up a tool.",
-      icon: CheckCircle2,
-    },
+      {   text: (
+          <span>
+            <Link to="/configurator" className="text-blue-700 font-bold underline hover:text-blue-900">
+              3D renderings
+            </Link>{" "}
+            to help you visualise your future van before we even pick up a tool.
+          </span>
+        ), icon: CheckCircle2 },
     {
       text: "3D Scanning, engineered CAD modelling (of your layout), and manufacturing in Automated CNC machines.",
       icon: Ruler,
