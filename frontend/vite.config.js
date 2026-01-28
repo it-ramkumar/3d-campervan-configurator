@@ -12,20 +12,5 @@ export default defineConfig({
     global: 'window',
   },
   build: {
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove all console.log/warn
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.warn'] // Extra safety
-      }
-    },
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          redux: ['redux', 'react-redux', 'redux-persist'],
-        }
-      }
-    }}
+}
 })
