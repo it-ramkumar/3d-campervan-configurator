@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import {Shield, Car, Home, CreditCard, Phone, CheckCircle, Star, ArrowUpRight, Building, FileText, DollarSign, Users, HomeIcon } from "lucide-react";
+import { Shield, Car, Home, CreditCard, Phone, CheckCircle, Star, ArrowUpRight, Building, FileText, DollarSign, Users, HomeIcon } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Heading2, Heading3, RichParagraph, Heading4, WhiteButton } from '../../Common/Common'
+import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -88,19 +89,17 @@ export default function Financing() {
           >
             <RichParagraph>
               You've completed your research and decided to trust Big Bear Vans for your dream campervan. But, before starting the process of choosing the{" "}
-              <a
-                href="https://bigbearvans.com/interior-options/"
-                className="text-[#1e2a4a] font-semibold hover:underline underline-offset-4"
-              >
+              <Link
+                to="/van-options/interior-options"
+                className="text-blue-700 font-bold underline hover:text-blue-900"              >
                 interior
-              </a>{" "}
+              </Link>{" "}
               &{" "}
-              <a
-                href="https://bigbearvans.com/innovation/"
-                className="text-[#1e2a4a] font-semibold hover:underline underline-offset-4"
-              >
+              <Link
+                to="/van-options/exterior-options"
+                className="text-blue-700 font-bold underline hover:text-blue-900"              >
                 exterior
-              </a>{" "}
+              </Link>{" "}
               choices, the most important thing is finding a way to finance your van.
             </RichParagraph>
 
@@ -138,8 +137,8 @@ export default function Financing() {
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
                   className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl ${activeSection === item.id
-                      ? "bg-gradient-to-r from-[#1e2a4a] to-[#111827] text-white transform -translate-y-1 shadow-xl"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-gradient-to-r from-[#1e2a4a] to-[#111827] text-white transform -translate-y-1 shadow-xl"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                 />
 
@@ -239,7 +238,7 @@ export default function Financing() {
                       <Heading4 text="All-in-One Loan" />
                       <RichParagraph white={true}>
                         <span className="text-xs text-gray-300">
-                          (Mercedes Sprinter Van + Conversion)                          </span>
+                          (Mercedes Sprinter Van + Conversion)  </span>
                       </RichParagraph>
 
                     </div>
@@ -544,7 +543,7 @@ export default function Financing() {
             <RichParagraph white={true} className="my-6">
               If you are unsure which option is best for you, please contact us. We will be happy to discuss your project and help you find the right path.
             </RichParagraph>
-<WhiteButton label={"Contact Us Today"}/>
+            <WhiteButton label={"Contact Us Today"} />
           </motion.div>
         </div>
       </section>

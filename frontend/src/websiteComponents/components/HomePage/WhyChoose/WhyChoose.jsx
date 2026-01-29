@@ -26,6 +26,7 @@ import {
   Sun,
 } from 'lucide-react';
 import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, BlackButton } from '../../Common/Common'
+import { Link } from "react-router-dom";
 
 
 // --- Data with Enhanced Text and Icons ---
@@ -81,7 +82,8 @@ const sections = [
   },
   {
     title: "Family-friendly Layouts",
-    intro: "While others are built for couples, ours are for the whole crew. We’re proud to have built several family-friendly campervans. In our family layouts, you can:",
+    intro: (
+      <span>While others are built for couples, ours are for the whole crew. We’re proud to have built several <Link to={"/layout-by-category/Layouts%20for%20Families%20(3–9%20People)"} className="text-blue-700 font-bold underline hover:text-blue-900" >family-friendly campervans</Link>. In our family layouts, you can:</span>),
     features: [
       { text: "Sit, sleep, and travel safely with <strong>4 or even 9 people.</strong>", icon: <Users size={20} /> },
       { text: "Enjoy outdoors in the rear <strong>foldable patio and roof deck.</strong>", icon: <TentTree size={20} /> },
@@ -97,7 +99,9 @@ const sections = [
   },
   {
     title: "Off-grid Ready",
-    intro: "Every Big Bear van comes with a professional-grade electrical and water system, so you can go anywhere to stay without a second thought. We install:",
+    intro: (
+      <span>Every Big Bear van comes with a professional-grade <Link to={"/van-options/system-options"} className="text-blue-700 font-bold underline hover:text-blue-900" >electrical and water system</Link>, so you can go anywhere to stay without a second thought. We install:</span>
+      ),
     features: [
       { text: "<strong>Rapid Alternator Charging:</strong> A DC-DC charger delivering up to <strong>50A</strong>, and up to <strong>250A</strong> with a 2nd alternator.", icon: <BatteryCharging size={20} /> },
       { text: "Self-heating <strong>lithium batteries (15,600 watt-hours)</strong> for sub-zero temperatures.", icon: <Thermometer size={20} /> },

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import AirService from "../../AirService/AirService";
+import { Link } from "react-router-dom";
 import { Heading2, RichParagraph,Heading3,Heading4 } from '../../Common/Common'
 
 
@@ -47,28 +48,8 @@ const fadeInUp = {
     },
   },
 };
-const titleStagger = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
-    },
-  },
-};
-const titleLetter = {
-  hidden: { opacity: 0, y: 20, x: -10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    x: 0,
-    transition: {
-      ease: "easeOut",
-      duration: 0.4,
-    },
-  },
-};
+
+
 const InfoCard = ({ title, description, className = "" }) => (
   <div className={`text-center flex flex-col items-center ${className}`}>
     <Heading3 text={title} textColor="text-black"/>
@@ -165,7 +146,9 @@ export default function ProcessPage() {
       title: "Start Your Journey: Vehicle Sourcing",
       circleColor: "bg-white",
       details: [
-        { subtitle: "Bring Your Van", description: "Already own a Sprinter? We'll inspect it and plan your build." },
+        { subtitle: "Bring Your Van", description: (<span>Already own a Sprinter? We'll inspect it and plan your build.
+          <Link to="/van-layouts" className="text-blue-700 font-bold underline hover:text-blue-900"> Here is our previous work.</Link>
+        </span>) },
         { subtitle: "We'll Source It For You", description: "Access a brand-new van directly from a Mercedes dealer at a great price. We leverage our purchasing power in the LA/San Diego market to secure preferential pricing, handling all negotiations, paperwork, and delivery to our facility." },
       ],
     },
@@ -299,7 +282,7 @@ export default function ProcessPage() {
             {/* Right Column: Text & Pro Tip */}
             <div className="font-serif text-base md:text-xl leading-relaxed space-y-6 text-left">
               <RichParagraph>
-                For most of our clients, the process is simple and seamless. We handle the logistics so you can focus on the adventure ahead.
+                For most of <Link to="/our-clients" className="text-blue-700 font-bold underline hover:text-blue-900">our clients</Link>, the process is simple and seamless. We handle the logistics so you can focus on the adventure ahead.
               </RichParagraph>
 
               <RichParagraph>

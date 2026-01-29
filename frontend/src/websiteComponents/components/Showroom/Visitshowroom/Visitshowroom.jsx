@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Customize from "../../Customize/Cutomize";
 import { Heading2, RichParagraph} from '../../Common/Common'
+import { Link } from "react-router-dom";
 
 
 export default function Showroom() {
@@ -65,7 +66,7 @@ export default function Showroom() {
           </RichParagraph>
           <Heading2 text="Why visit us?" className="my-2"/>
         <RichParagraph className="max-w-3xl mx-auto my-2">
-            When you step into our workshop, you become part of the build process. Here’s why a visit to our showroom is valuable for you:
+            When you step into our workshop, you become part of the <Link to="/our-process" className="text-blue-700 font-bold underline hover:text-blue-900">build process</Link>. Here’s why a visit to our showroom is valuable for you:
         </RichParagraph>
 
         </div>

@@ -5,6 +5,7 @@ import { pageView, initAnalytics } from '../websiteComponents/CustomHooks/analyt
 // Direct imports (needed immediately, small size)
 import Loader from "../websiteComponents/components/Loader/Loader";
 import ScrollFromTop from "../components/ScrollFromTop/ScrollFromTop";
+import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/PrivateComponent";
 
 // Lazy-loaded Widgets
 // Routes.jsx mein ye hai?
@@ -36,7 +37,7 @@ const BlogDetail = lazy(() => import("../websiteComponents/components/BlogDetail
 const OurClients = lazy(() => import("../websiteComponents/components/OurClients/Client"));
 const Cushionpage = lazy(() => import("../websiteComponents/components/Cushion/Cushion"));
 const CustomVan = lazy(() => import("../websiteComponents/components/LayoutByCategory/LayoutByCategory"));
-const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent"));
+// const PrivateRoute = lazy(() => import("../websiteComponents/components/PrivateComponent/PrivateComponent"));
 const Financing = lazy(() => import("../websiteComponents/components/Financing/Financing"));
 const SprinterPresentation = lazy(() => import("../websiteComponents/components/SprinterPresentation/SprinterPresentation"));
 const Wheelbase = lazy(() => import("../websiteComponents/components/LayoutWheelBase/LayoutWheelBase"));

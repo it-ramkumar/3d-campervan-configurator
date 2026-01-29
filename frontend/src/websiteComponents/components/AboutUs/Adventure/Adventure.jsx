@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import { Heading2, RichParagraph, ImageWithSkeleton,WhiteButton } from '../../Common/Common'
 
 
@@ -206,7 +207,7 @@ export default function AboutPage() {
                 </div>
                 <div className="p-8 flex-grow">
                   <RichParagraph white={true}>
-                    Our third van, Blue Whale, was a standout. This pre-owned Ford
+                    Our third van, <Link to="/layout-detail/blue-whale-van" className="text-blue-200 hover:text-blue-300">Blue Whale</Link>, was a standout. This pre-owned Ford
                     Transit 148 wheelbase high roof van, which could accommodate
                     six people, was showcased at expos. It included a bathroom, a
                     hammock on the roof, and a rear deck. Although we sold Blue
@@ -233,7 +234,7 @@ export default function AboutPage() {
                 </div>
                 <div className="p-8 flex-grow">
                   <RichParagraph white={true}>
-                    Our fourth van, the demo van Gray Wolf, is a 144 wheelbase
+                    Our fourth van, the demo van <Link to="/layout-detail/santa-monica-gray" className="text-blue-200 hover:text-blue-300">Gray Wolf</Link>, is a 144 wheelbase
                     Sprinter that sits and sleeps five, reflecting our commitment
                     as van builders to innovation and comfort.
                   </RichParagraph>

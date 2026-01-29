@@ -125,7 +125,12 @@ export default function Dashboard() {
       await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/logout`, { method: "POST", credentials: "include" });
       localStorage.clear();
       navigate("/login");
-    } catch (error) { navigate("/login"); }
+    } catch (error) {
+      navigate("/login")
+      console.error("Error:", error);
+
+    }
+
   };
 
   const renderContent = () => {
