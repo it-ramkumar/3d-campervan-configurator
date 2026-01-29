@@ -1,7 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Keep your imports here...
 import VansForm from "../adminPanel/Vans/VansForm";
@@ -125,11 +125,9 @@ export default function Dashboard() {
       await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/logout`, { method: "POST", credentials: "include" });
       localStorage.clear();
       navigate("/login");
-    } catch (error) {
-      navigate("/login")
+    } catch (error) { navigate("/login")
       console.error("Error:", error);
-
-    }
+     }
 
   };
 
@@ -225,9 +223,18 @@ export default function Dashboard() {
       <div className="flex-1 flex flex-col">
         <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0">
           <h2 className="text-xl font-bold text-slate-800 tracking-tight capitalize">
-            {menuItems.find(i => i.id === selected)?.label}
+            {/* {menuItems.find(i => i.id === selected)?.label} */}
+             <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+
+            <Link to="/" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Home</Link>
+            <Link to="/vans-for-sale" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van For Sale</Link>
+            <Link to="/van-layouts" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van Layouts</Link>
+
+          </div>
           </h2>
+
           <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+
             <span className="text-sm font-bold text-slate-600">Super Admin</span>
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">A</div>
           </div>

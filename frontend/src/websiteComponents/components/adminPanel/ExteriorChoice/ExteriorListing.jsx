@@ -2,12 +2,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import DetailModal from "./Detail";
 import { Search } from "lucide-react";
 
 export default function ExteriorList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [deleteLoading, setDeleteLoading] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null); // Add this
+const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchInteriors = async (query = "") => {
@@ -61,21 +65,10 @@ export default function ExteriorList({ setSelected }) {
       setDeleteLoading(null);
     }
   };
-
-  const handleView = (item) => {
-    Swal.fire({
-      title: `<span class="text-xl font-black">${item.title}</span>`,
-      html: `
-        <div class="text-left space-y-2 text-sm p-4 bg-slate-50 rounded-2xl border border-slate-100">
-          <p><strong>Category:</strong> ${item.subCategoryId?.categoryId?.title || "N/A"}</p>
-          <p><strong>Sub-Cat:</strong> ${item.subCategoryId?.title || "N/A"}</p>
-          <p><strong>Info:</strong> ${item.description?.join(", ") || "No description"}</p>
-        </div>
-      `,
-      showConfirmButton: false,
-      customClass: { popup: 'rounded-[2rem]' }
-    });
-  };
+const handleView = (item) => {
+  setSelectedItem(item); // Store the clicked item
+  setOpenModal(true);    // Open the modal
+};
 
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
@@ -179,8 +172,8 @@ export default function ExteriorList({ setSelected }) {
                   >
                     View
                   </button>
-                  <button
-                    onClick={() => setSelected("exterior-form")}
+                  <button disabled={true}
+                    // onClick={() => setSelected("exterior-form")}
                     className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit
@@ -191,6 +184,14 @@ export default function ExteriorList({ setSelected }) {
           ))}
         </div>
       )}
-    </div>
+{openModal && (
+  <DetailModal
+    item={selectedItem}
+    onClose={() => {
+      setOpenModal(false);
+      setSelectedItem(null);
+    }}
+  />
+)}    </div>
   );
 }

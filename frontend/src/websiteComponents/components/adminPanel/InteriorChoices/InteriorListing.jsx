@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Search, Trash2 } from "lucide-react";
+import DetailModal from "./Detail";
 
 export default function InteriorList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null); // Add this
+const [openModal, setOpenModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(null);
 
   const fetchInteriors = async (query = "") => {
@@ -62,22 +65,10 @@ export default function InteriorList({ setSelected }) {
     }
   };
 
-  const handleView = (item) => {
-    console.log(item)
-    Swal.fire({
-      title: `<span class="text-xl font-black">${item.title}</span>`,
-      html: `
-        <div class="text-left space-y-2 text-sm p-4 bg-slate-50 rounded-2xl border border-slate-100">
-          <p><strong>Category:</strong> ${item.subCategoryId?.categoryId?.title || "N/A"}</p>
-          <p><strong>Sub-Category:</strong> ${item.subCategoryId?.title || "N/A"}</p>
-          <p><strong>Description:</strong> ${item.description?.join(", ") || "No description"}</p>
-        </div>
-      `,
-      showConfirmButton: false,
-      customClass: { popup: 'rounded-[2rem]' }
-    });
-  };
-
+const handleView = (item) => {
+  setSelectedItem(item); // Store the clicked item
+  setOpenModal(true);    // Open the modal
+};
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
       <div className="animate-pulse">Loading interior items...</div>
@@ -186,10 +177,12 @@ export default function InteriorList({ setSelected }) {
                     View
                   </button>
                   <button
-                    onClick={() => {
-                      setSelected("interior-form");
-                      // If you use dispatch for edit data, add it here
-                    }}
+                       disabled={true}
+
+                    // onClick={() => {
+                    //   // setSelected("interior-form");
+                    //   // If you use dispatch for edit data, add it here
+                    // }}
                     className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit
@@ -200,6 +193,15 @@ export default function InteriorList({ setSelected }) {
           ))}
         </div>
       )}
+      {openModal && (
+  <DetailModal
+    item={selectedItem}
+    onClose={() => {
+      setOpenModal(false);
+      setSelectedItem(null);
+    }}
+  />
+)}
     </div>
   );
 }

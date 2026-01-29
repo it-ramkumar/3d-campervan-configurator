@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Search } from "lucide-react";
+import DetailModal from "./Detail";
 
 export default function SystemList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null); // Add this
+  const [openModal, setOpenModal] = useState(false);
 
   const fetchInteriors = async (query = "") => {
     try {
@@ -63,18 +66,8 @@ export default function SystemList({ setSelected }) {
   };
 
   const handleView = (item) => {
-    Swal.fire({
-      title: `<span class="text-xl font-black">${item.title}</span>`,
-      html: `
-        <div class="text-left space-y-2 text-sm p-4 bg-slate-50 rounded-2xl border border-slate-100">
-          <p><strong>Category:</strong> ${item.subCategoryId?.categoryId?.title || "N/A"}</p>
-          <p><strong>Sub-Cat:</strong> ${item.subCategoryId?.title || "N/A"}</p>
-          <p><strong>Info:</strong> ${item.description?.join(", ") || "No description"}</p>
-        </div>
-      `,
-      showConfirmButton: false,
-      customClass: { popup: 'rounded-[2rem]' }
-    });
+    setSelectedItem(item); // Store the clicked item
+    setOpenModal(true);    // Open the modal
   };
 
   if (loading) return (
@@ -160,11 +153,11 @@ export default function SystemList({ setSelected }) {
               {/* Content Section */}
               <div className="p-5 flex-1 flex flex-col">
                 <div className="mb-4">
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
-                        {item.subCategoryId?.categoryId?.title || "General"}
-                     </span>
-                   </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
+                      {item.subCategoryId?.categoryId?.title || "General"}
+                    </span>
+                  </div>
                   <h3 className="font-bold text-slate-800 text-base line-clamp-1">{item.title}</h3>
                   <p className="text-slate-400 text-xs mt-1 font-medium italic">
                     {item.subCategoryId?.title || "No Subcategory"}
@@ -190,6 +183,16 @@ export default function SystemList({ setSelected }) {
             </div>
           ))}
         </div>
+
+      )}
+      {openModal && (
+        <DetailModal
+          item={selectedItem}
+          onClose={() => {
+            setOpenModal(false);
+            setSelectedItem(null);
+          }}
+        />
       )}
     </div>
   );

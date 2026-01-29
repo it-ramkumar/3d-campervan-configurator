@@ -101,6 +101,15 @@ const deleteFromS3 = async (fileUrl) => {
       key = fileUrl.split(`${process.env.CLOUDFRONT_URL}/`)[1];
     }
 
+      // CloudFront
+    if (fileUrl.includes(process.env.CLOUDFRONT_URL)) {
+      key = fileUrl.split(`${process.env.CLOUDFRONT_URL}/`)[1];
+    }
+
+      if (key.includes("?")) {
+      key = key.split("?")[0];
+    }
+
     if (!key) {
       console.warn("⚠️ Could not extract S3 key from URL:", fileUrl);
       return;

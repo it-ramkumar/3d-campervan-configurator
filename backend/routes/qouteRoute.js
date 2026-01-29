@@ -5,7 +5,7 @@ const Quote = require("../models/quote");
 const nodemailer = require("nodemailer");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
 const Lead = require("../models/leadsEmail");
-
+const { deleteFromS3 } = require("../services/s3");
 
 
 // Nodemailer transporter
@@ -165,18 +165,29 @@ router.get("/all-quotes", protect, adminOnly, async (req, res) => {
 });
 
 // ✅ Get quote by ID
-router.get("/:id", protect, adminOnly, async (req, res) => {
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id);
+    // console.log(quote,"quote")
+
     if (!quote) {
       return res.status(404).json({ message: "Quote not found." });
     }
-    res.status(200).json({ data: quote });
+
+    // 🟢 Agar image / file URL save hai to pehle S3 se delete karo
+      if (quote.model?.url) {
+      await deleteFromS3(quote.model.url);
+    }
+    // 🟢 Ab DB se record delete karo
+    await Quote.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "Quote and related file deleted successfully." });
   } catch (err) {
-    console.error("❌ Error fetching quote by ID:", err);
-    res.status(500).json({ message: "Server error while fetching quote." });
+    console.error("❌ Error deleting quote:", err);
+    res.status(500).json({ message: "Server error while deleting quote." });
   }
 });
+
 
 // ✅ Update quote by ID
 router.put("/:id", protect, adminOnly, async (req, res) => {
