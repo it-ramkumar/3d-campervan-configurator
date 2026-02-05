@@ -1,13 +1,11 @@
 import { lazy, Suspense } from "react";
 import { generateHomeSchema } from "../websiteComponents/schema/homeSchema";
 import { createFAQSchema } from "../websiteComponents/schema/faqSchema";
-import {
-  CheckCircle2,
-  Ruler,
-  LayoutPanelTop,
-  BatteryCharging,
-  Armchair
-} from "lucide-react";
+import CheckCircle2 from "lucide-react/dist/esm/icons/check-circle-2";
+import Ruler from "lucide-react/dist/esm/icons/ruler";
+import LayoutPanelTop from "lucide-react/dist/esm/icons/layout-panel-top";
+import BatteryCharging from "lucide-react/dist/esm/icons/battery-charging";
+import Armchair from "lucide-react/dist/esm/icons/armchair";
 import { Link } from "react-router-dom";
 
 // Direct imports (Above the fold - immediately visible)
