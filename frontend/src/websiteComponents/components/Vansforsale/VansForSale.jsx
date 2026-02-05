@@ -1,15 +1,19 @@
-import React, { useEffect, useState, useCallback } from "react";
-import AvailableVans from "./AvailableVans/AvailableVans";
-import SoldVans from "./SoldVans/SoldVans";
-import Consultation from "../Consultation/Consultation";
-import FaqV from "../Faqs/Faqs";
+import React, { useEffect, useState, useCallback, Suspense } from "react";
 import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
+import { lazy } from "react";
 import HeroSection from "../HeroSection/HeroSection";
 import { vansByStatus } from "../../../api/van/van-by-status";
 import { createItemListSchema } from "../../schema/vanSchema";
 import { createFAQSchema } from "../../schema/faqSchema";
 import { createServiceSchema } from "../../schema/serviceSchema"
+// Lazy load everything else
+const AvailableVans = lazy(() => import("./AvailableVans/AvailableVans"));
+const SoldVans = lazy(() => import("./SoldVans/SoldVans"));
+const Consultation = lazy(() => import("../Consultation/Consultation"));
+const FaqV = lazy(() => import("../Faqs/Faqs"));
+const Footer = lazy(() => import("../Footer/Footer"));
+
+import Loader from "../Loader/Loader";
 
 export default function VansForSale() {
   const limit = 9;
@@ -86,7 +90,7 @@ export default function VansForSale() {
   useEffect(() => { fetchByStatus("coming_soon", comingPage, setComingVans, comingHasMore, setComingHasMore, setComingLoading); }, [comingPage, fetchByStatus]);
 
   /* ================= SEO & JSON-LD (React 19) ================= */
- 
+
   // Create schemas
   const schemas = [
     availableVans.length > 0 && createItemListSchema("Available Camper Vans", availableVans, "InStock"),
@@ -103,10 +107,10 @@ export default function VansForSale() {
     : "Custom Camper Vans for Sale | Big Bear Vans";
 
   const pageDesc = "Expert Custom Camper Van Builds. Browse our available inventory or let us build your dream van. Over 105+ high-quality custom builds completed.";
-  const pageImage = "https://bigbearvans.com/images/inventory-hero.jpg"; // Ek achi inventory ki image ka path
+  const pageImage = "https://bigbearvans.com/images/ambulance.webp"; // Ek achi inventory ki image ka path
   const currentUrl = "https://bigbearvans.com/vans-for-sale";
   return (
-    <div>
+    <main>
       {/* --- React 19 Native Metadata Hoisting --- */}
       <title>{pageTitle}</title>
       <meta name="keywords" content="buy custom camper van, used sprinter camper for sale, ready to go campervans, inventory big bear vans" />
@@ -131,19 +135,23 @@ export default function VansForSale() {
 
       <Navbar />
       <HeroSection title="Camper Vans For Sale" description="Buy our exclusive and ready-to-roll vans for sale Today." image="/heroSlider/herov.webp" link="/inquiry" buttonText="Get a Quote" showButton={true} />
-
+<Suspense fallback={<Loader />}>
       <AvailableVans availableVans={availableVans} hasMore={availableHasMore} loading={availableLoading} onLoadMore={() => setAvailablePage(p => p + 1)} />
-
+</Suspense>
+<Suspense fallback={<Loader />}>
       <SoldVans status="coming_soon" vans={comingVans} soldHeading="Upcoming Camper Vans" soldDesc="Planned builds coming soon." hasMore={comingHasMore} loading={comingLoading} onLoadMore={() => setComingPage(p => p + 1)} />
-
       <SoldVans status="sale_pending" vans={pendingVans} soldHeading="Sale Pending Vans" soldDesc="Reserved builds in final stages." hasMore={pendingHasMore} loading={pendingLoading} onLoadMore={() => setPendingPage(p => p + 1)} />
-
-      <SoldVans status="sold" vans={soldVans} soldHeading="A Showcase of our Sold Camper Vans
+  <SoldVans status="sold" vans={soldVans} soldHeading="A Showcase of our Sold Camper Vans
 " soldDesc="The camper vans below have already found their happy owners. We’ve proudly built over 105 camper vans with a reputation for quality.Check our past builds to get inspired for your custom van." hasMore={soldHasMore} loading={soldLoading} onLoadMore={() => setSoldPage(p => p + 1)} />
+</Suspense>
 
-      <Consultation vanForSale={true} />
-      <FaqV faqs={faqs} />
-      <Footer />
-    </div>
+
+<Suspense fallback={<Loader />}>
+  <Consultation vanForSale={true} />
+  <FaqV faqs={faqs} />
+  <Footer />
+</Suspense>
+
+    </main>
   );
 }
