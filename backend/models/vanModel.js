@@ -85,6 +85,8 @@ const vanSchema = new mongoose.Schema(
       type: [String],
       default: []
     },
+    // Model mein add karein
+order: { type: Number, default: 0 }
   },
   {
     timestamps: true,

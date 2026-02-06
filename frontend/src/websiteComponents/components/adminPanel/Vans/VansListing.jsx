@@ -7,6 +7,8 @@ import { deleteVan } from "../../../../api/van/deleteVan";
 import Detail from "./Detail";
 import Swal from "sweetalert2";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
+import axios from "axios";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function VanListing({ setSelected }) {
   const dispatch = useDispatch();
@@ -86,6 +88,31 @@ export default function VanListing({ setSelected }) {
     setIsopen(true);
   };
 
+
+const onDragEnd = async (result) => {
+  if (!result.destination) return;
+
+  const items = Array.from(vans);
+  const [reorderedItem] = items.splice(result.source.index, 1);
+  items.splice(result.destination.index, 0, reorderedItem);
+
+  // 1. UI update karein for smooth feel
+  setVans(items);
+
+  // 2. Backend ko data bhejein
+  const updatedOrder = items.map((van, index) => ({
+    _id: van._id,
+    order: index,
+  }));
+
+  try {
+    await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/van/reorder`, { newOrder: updatedOrder });
+  } catch (err) {
+    console.error("Failed to save order");
+    // Optionally: fetchVans() wapis call karein agar error aaye
+  }
+};
+
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
       <div className="animate-pulse">Loading fleet data...</div>
@@ -140,78 +167,80 @@ export default function VanListing({ setSelected }) {
         )}
       </div>
 
-      {/* --- Fleet Grid --- */}
+   {/* --- Fleet Grid with DND --- */}
       {vans.length === 0 ? (
         <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
           <p className="text-slate-400 font-medium">No vans found in your fleet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {vans.map((van) => (
-            <div
-              key={van._id}
-              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col"
-            >
-              {/* Image Header */}
-              <div className="relative h-56 overflow-hidden">
-                {van.gallery?.length > 0 ? (
-                  <ImageWithSkeleton
-                    src={van.gallery[0]?.url || van.gallery[0]}
-                    alt={van.van_listing?.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-                    <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">No Preview</span>
-                  </div>
-                )}
-                {/* Price Badge */}
-                <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
-                  <span className="text-blue-700 font-black text-sm">${van.van_listing?.price || "0"}</span>
-                </div>
-              </div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="vans-grid" direction="horizontal">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+              >
+                {vans.map((van, index) => (
+                  <Draggable key={van._id} draggableId={van._id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          ...provided.draggableProps.style,
+                          opacity: snapshot.isDragging ? 0.8 : 1,
+                        }}
+                        className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col"
+                      >
+                        {/* Image Header */}
+                        <div className="relative h-56 overflow-hidden">
+                          {van.gallery?.length > 0 ? (
+                            <ImageWithSkeleton
+                              src={van.gallery[0]?.url || van.gallery[0]}
+                              alt={van.van_listing?.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                              <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">No Preview</span>
+                            </div>
+                          )}
+                          <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
+                            <span className="text-blue-700 font-black text-sm">${van.van_listing?.price || "0"}</span>
+                          </div>
+                        </div>
 
-              {/* Content Body */}
-              <div className="p-6 flex flex-col flex-1">
-                <div className="mb-4">
-                  <h3 className="font-bold text-slate-800 text-lg mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                    {van.van_listing?.title || "Untitled Unit"}
-                  </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">
-                    {van.van_listing?.description || "No description provided for this van listing."}
-                  </p>
-                </div>
+                        {/* Content Body */}
+                        <div className="p-6 flex flex-col flex-1">
+                          <div className="mb-4">
+                            <h3 className="font-bold text-slate-800 text-lg mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                              {van.van_listing?.title || "Untitled Unit"}
+                            </h3>
+                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">
+                              {van.van_listing?.description || "No description provided."}
+                            </p>
+                          </div>
 
-                {/* Buttons (Lite Styling) */}
-                <div className="mt-auto pt-4 flex items-center gap-2">
-                  <button
-                    onClick={() => handleView(van)}
-                    className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-all active:scale-95"
-                  >
-                    Details
-                  </button>
-                  <button
-                    onClick={() => handleEdit(van)}
-                    className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100 transition-all active:scale-95"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(van.slug)}
-                    className="p-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
-                    title="Delete"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
+                          <div className="mt-auto pt-4 flex items-center gap-2">
+                            <button onClick={() => handleView(van)} className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100">Details</button>
+                            <button onClick={() => handleEdit(van)} className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100">Edit</button>
+                            <button onClick={() => handleDelete(van.slug)} className="p-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            </div>
-          ))}
-        </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
-
       {/* --- Pagination (BigBear Style) --- */}
       {pages > 1 && (
         <div className="flex justify-center items-center py-10">

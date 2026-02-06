@@ -87,7 +87,7 @@ router.post('/', protect, adminOnly, upload.fields([
 router.get('/available', async (req, res) => {
   try {
     const vans = await Van.find({ status: 'available' })
-      .sort({ createdAt: -1 });
+      .sort({ order: 1 });
 
     res.status(200).json({
       count: vans.length,
@@ -119,7 +119,7 @@ router.get('/van-by-status', async (req, res) => {
     const skip = (page - 1) * limit;
 
     const vans = await Van.find({ status })
-      .sort({ createdAt: -1 })
+      .sort({ order: 1 })
       .skip(Number(skip))
       .limit(Number(limit));
 
@@ -161,7 +161,7 @@ router.get("/", async (req, res) => {
 
     // ✅ Vans with pagination + search
     const vans = await Van.find(query)
-      .sort({ createdAt: -1 })
+      .sort({ order: 1 })
       .skip((page - 1) * limit)
       .limit(limit);
 
@@ -206,6 +206,22 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
+router.put("/reorder", async (req, res) => {
+  try {
+    console.log("Reorder request body:", req.body);
+    const { newOrder } = req.body; // Array of objects: [{_id: "...", order: 1}, ...]
+
+    const updatePromises = newOrder.map((item) =>
+      Van.findByIdAndUpdate(item._id, { order: item.order })
+    );
+
+    await Promise.all(updatePromises);
+
+    res.status(200).json({ success: true, message: "Order updated!" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 }
