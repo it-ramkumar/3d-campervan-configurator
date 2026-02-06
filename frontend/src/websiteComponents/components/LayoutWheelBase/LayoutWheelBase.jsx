@@ -6,7 +6,7 @@ import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton,BlackButton } from '../Common/Common'
+import { Heading2, RichParagraph, Heading3, ImageWithSkeleton, WhiteButton, BlackButton } from '../Common/Common'
 
 import { layoutByWheelbaseSchema } from "../../schema/layoutByWheelBase"
 
@@ -192,12 +192,17 @@ export default function CamperProjectsPage() {
             <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${filterConfig.length} gap-4 mb-4`}>
               {filterConfig.map((filter) => (
                 <div key={filter.key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {/* label mein htmlFor add kiya */}
+                  <label
+                    htmlFor={`filter-${filter.key}`}
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     {filter.label}
                   </label>
 
                   {filter.type === "text" ? (
                     <input
+                      id={`filter-${filter.key}`} // Yahan unique ID di
                       type="text"
                       placeholder={`Search ${filter.label.toLowerCase()}...`}
                       value={tempFilters[filter.key]}
@@ -208,6 +213,7 @@ export default function CamperProjectsPage() {
                     />
                   ) : (
                     <select
+                      id={`filter-${filter.key}`} // Yahan bhi unique ID di
                       value={tempFilters[filter.key]}
                       onChange={(e) =>
                         setTempFilters({ ...tempFilters, [filter.key]: e.target.value })
@@ -230,7 +236,6 @@ export default function CamperProjectsPage() {
             <div className="flex gap-3">
               <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
               <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
-
             </div>
           </div>
 
@@ -267,12 +272,14 @@ export default function CamperProjectsPage() {
                     {/* IMAGES */}
                     <div className="relative w-1/2 h-[350px] lg:h-[550px]">
                       <ImageWithSkeleton
+                        alt={project.van_listing?.title || "Van Layout Image"}
                         src={project.gallery?.[0]}
                         className={`absolute top-0 w-[70%] h-full object-cover ${isReversed ? "left-0" : "right-0"
                           }`}
                       />
 
                       <ImageWithSkeleton
+                        alt={project.van_listing?.title || "Van Layout Image"}
                         src={project.gallery?.[1]}
                         className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"
                           }`}
