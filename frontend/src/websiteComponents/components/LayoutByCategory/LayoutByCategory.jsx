@@ -6,7 +6,7 @@ import HeroSection from "../HeroSection/HeroSection";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader"
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton,BlackButton } from '../Common/Common'
+import { Heading2, RichParagraph, ImageWithSkeleton, WhiteButton, BlackButton } from '../Common/Common'
 
 import { LayoutByCategorySchema } from "../../schema/layoutByCategorySchema";
 
@@ -108,7 +108,7 @@ export default function CamperProjectsPage() {
   const pageDescription = `Explore our professional ${formattedCategory} camper van layouts. Featuring custom ${model || ''} configurations with optimized sitting, sleeping, and bathroom setups.`;
   const pageKeywords = `${formattedCategory} layouts, custom van builds, ${category} floor plans, big bear vans projects`;
   const jsonLd = LayoutByCategorySchema(category, layouts)
-  const heroImage = "/heroSlider/custom_build.jpg";
+  const heroImage = "/heroSlider/custom_build.webp";
   const newTitleText = category;
   const newDescriptionText = category;
 
@@ -139,6 +139,9 @@ export default function CamperProjectsPage() {
         {JSON.stringify(jsonLd)}
       </script>
       <Navbar />
+      <main id="main-content">
+
+
       <div className="tour-hero">
         <HeroSection
           title={newTitleText}
@@ -150,107 +153,111 @@ export default function CamperProjectsPage() {
 
       <section className="bg-white font-serif py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto">
-          {/* FILTER SECTION */}
-          <div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
-            <Heading2 text="Filter Layouts" className="my-4" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-4">
+        {/* FILTER SECTION */}
+<div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
+  <Heading2 text="Filter Layouts" className="my-4" />
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-4">
 
-              {/* SEARCH */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input
-                  type="text"
-                  placeholder="Search vans..."
-                  value={tempSearch}
-                  onChange={(e) => setTempSearch(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                />
-              </div>
+    {/* SEARCH */}
+    <div>
+      <label htmlFor="search-input" className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search vans..."
+        value={tempSearch}
+        onChange={(e) => setTempSearch(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      />
+    </div>
 
-              {/* MODEL */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Model</label>
-                <select
-                  value={tempModel}
-                  onChange={(e) => setTempModel(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Models</option>
-                  {filters?.models?.map((m, i) => (
-                    <option key={i} value={m}>{m}</option>
-                  ))}
-                </select>
-              </div>
+    {/* MODEL */}
+    <div>
+      <label htmlFor="model-select" className="block text-sm font-medium text-gray-700 mb-2">Model</label>
+      <select
+        id="model-select"
+        value={tempModel}
+        onChange={(e) => setTempModel(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      >
+        <option value="">All Models</option>
+        {filters?.models?.map((m, i) => (
+          <option key={i} value={m}>{m}</option>
+        ))}
+      </select>
+    </div>
 
-              {/* SIT */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sits</label>
-                <select
-                  value={tempSit}
-                  onChange={(e) => setTempSit(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Sits</option>
-                  {filters?.sits?.map((s, i) => (
-                    <option key={i} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
+    {/* SIT */}
+    <div>
+      <label htmlFor="sit-select" className="block text-sm font-medium text-gray-700 mb-2">Sits</label>
+      <select
+        id="sit-select"
+        value={tempSit}
+        onChange={(e) => setTempSit(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      >
+        <option value="">All Sits</option>
+        {filters?.sits?.map((s, i) => (
+          <option key={i} value={s}>{s}</option>
+        ))}
+      </select>
+    </div>
 
-              {/* SLEEP */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sleeps</label>
-                <select
-                  value={tempSleep}
-                  onChange={(e) => setTempSleep(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Sleeps</option>
-                  {filters?.sleeps?.map((s, i) => (
-                    <option key={i} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
+    {/* SLEEP */}
+    <div>
+      <label htmlFor="sleep-select" className="block text-sm font-medium text-gray-700 mb-2">Sleeps</label>
+      <select
+        id="sleep-select"
+        value={tempSleep}
+        onChange={(e) => setTempSleep(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      >
+        <option value="">All Sleeps</option>
+        {filters?.sleeps?.map((s, i) => (
+          <option key={i} value={s}>{s}</option>
+        ))}
+      </select>
+    </div>
 
-              {/* BED TYPE */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Bed Type</label>
-                <select
-                  value={tempBedType}
-                  onChange={(e) => setTempBedType(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Bed Types</option>
-                  {[...new Set(filters?.bedType || [])].map((b, i) => (
-                    <option key={i} value={b}>{b}</option>
-                  ))}
-                </select>
-              </div>
+    {/* BED TYPE */}
+    <div>
+      <label htmlFor="bed-select" className="block text-sm font-medium text-gray-700 mb-2">Bed Type</label>
+      <select
+        id="bed-select"
+        value={tempBedType}
+        onChange={(e) => setTempBedType(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      >
+        <option value="">All Bed Types</option>
+        {[...new Set(filters?.bedType || [])].map((b, i) => (
+          <option key={i} value={b}>{b}</option>
+        ))}
+      </select>
+    </div>
 
-              {/* BATHROOM TYPE */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Bathroom Type</label>
-                <select
-                  value={tempBathroomType}
-                  onChange={(e) => setTempBathroomType(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                >
-                  <option value="">All Bathroom Types</option>
-                  {[...new Set(filters?.bathroomType || [])].map((b, i) => (
-                    <option key={i} value={b}>{b}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+    {/* BATHROOM TYPE */}
+    <div>
+      <label htmlFor="bathroom-select" className="block text-sm font-medium text-gray-700 mb-2">Bathroom Type</label>
+      <select
+        id="bathroom-select"
+        value={tempBathroomType}
+        onChange={(e) => setTempBathroomType(e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+      >
+        <option value="">All Bathroom Types</option>
+        {[...new Set(filters?.bathroomType || [])].map((b, i) => (
+          <option key={i} value={b}>{b}</option>
+        ))}
+      </select>
+    </div>
+  </div>
 
-            {/* BUTTONS */}
-            <div className="flex gap-3">
-              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
-              <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
-
-
-            </div>
-          </div>
+  {/* BUTTONS */}
+  <div className="flex gap-3">
+    <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
+    <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
+  </div>
+</div>
 
           {/* RESULTS */}
           {loading ? (
@@ -287,11 +294,14 @@ export default function CamperProjectsPage() {
                     {/* IMAGES */}
                     <div className="relative w-1/2 h-[350px] lg:h-[550px]">
                       <ImageWithSkeleton
+                        alt={project.van_listing?.title || "Van Layout Image"}
+
                         src={project.gallery?.[0]}
                         className={`absolute top-0 w-[70%] h-full object-cover ${isReversed ? "left-0" : "right-0"}`}
                       />
 
                       <ImageWithSkeleton
+                        alt={project.van_listing?.title || "Van Layout Image"}
                         src={project.gallery?.[1]}
                         className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"}`}
                       />
@@ -326,6 +336,7 @@ export default function CamperProjectsPage() {
           )}
         </div>
       </section>
+          </main>
       <Footer />
     </>
   );
