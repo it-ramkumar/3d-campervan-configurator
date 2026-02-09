@@ -16,7 +16,7 @@ import { BlackButton, WhiteButton,ImageWithSkeleton, Heading1 } from '../../Comm
 const slides = [
   {
     id: 1,
-    image: "/heroSlider/joinadventure.webp",
+    image: "/heroSlider/long_van.jpg",
     title: "Custom Camper Vans..",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },

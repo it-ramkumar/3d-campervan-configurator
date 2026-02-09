@@ -92,11 +92,11 @@ export const initAnalytics = () => {
     return;
   }
 
-  // Check if gtag is loaded
-  if (typeof window.gtag !== 'function') {
-    console.warn('gtag not loaded, analytics disabled');
-    return;
-  }
+  // // Check if gtag is loaded
+  // if (typeof window.gtag !== 'function') {
+  //   console.warn('gtag not loaded, analytics disabled');
+  //   return;
+  // }
 
   isInitialized = true;
 
