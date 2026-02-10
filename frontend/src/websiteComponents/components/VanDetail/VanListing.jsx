@@ -111,6 +111,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
               <HeroSpecItem label="Make & Model" value={vanDetail?.van_listing.specifications?.make_model} />
               <HeroSpecItem label="Wheelbase" value={vanDetail?.van_listing.specifications?.wheelbase} />
               <HeroSpecItem label="Drivetrain" value={vanDetail?.van_listing.specifications?.drivetrain} />
+              <HeroSpecItem label="Roof" value={vanDetail?.van_listing?.roof} />
+
               <HeroSpecItem label="Sit & Sleep" value={`${vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - ${vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}`} />
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
