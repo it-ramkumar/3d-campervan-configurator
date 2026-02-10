@@ -19,6 +19,7 @@ export default function VanListing({ setSelected }) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
   const limit = 8;
 
   useEffect(() => {
@@ -168,18 +169,25 @@ const onDragEnd = async (result) => {
       </div>
 
    {/* --- Fleet Grid with DND --- */}
-      {vans.length === 0 ? (
+    {vans.length === 0 ? (
         <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
           <p className="text-slate-400 font-medium">No vans found in your fleet.</p>
         </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="vans-grid" direction="horizontal">
+          <Droppable
+            droppableId="vans-grid"
+            direction={viewMode === "grid" ? "horizontal" : "vertical"}
+          >
             {(provided) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+                className={
+                  viewMode === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
+                  : "flex flex-col gap-4"
+                }
               >
                 {vans.map((van, index) => (
                   <Draggable key={van._id} draggableId={van._id} index={index}>
@@ -192,43 +200,45 @@ const onDragEnd = async (result) => {
                           ...provided.draggableProps.style,
                           opacity: snapshot.isDragging ? 0.8 : 1,
                         }}
-                        className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col"
+                        className={`group bg-white rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300 flex ${viewMode === 'list' ? 'flex-row items-center p-4 gap-6' : 'flex-col overflow-hidden'}`}
                       >
-                        {/* Image Header */}
-                        <div className="relative h-56 overflow-hidden">
+                        {/* Image Section */}
+                        <div className={`relative overflow-hidden shrink-0 ${viewMode === 'list' ? 'h-20 w-32 rounded-xl' : 'h-56'}`}>
                           {van.gallery?.length > 0 ? (
                             <ImageWithSkeleton
                               src={van.gallery[0]?.url || van.gallery[0]}
                               alt={van.van_listing?.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           ) : (
-                            <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-                              <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">No Preview</span>
-                            </div>
+                            <div className="w-full h-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-300 font-bold uppercase">No Preview</div>
                           )}
-                          <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
-                            <span className="text-blue-700 font-black text-sm">${van.van_listing?.price || "0"}</span>
-                          </div>
                         </div>
 
                         {/* Content Body */}
-                        <div className="p-6 flex flex-col flex-1">
-                          <div className="mb-4">
-                            <h3 className="font-bold text-slate-800 text-lg mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                        <div className={`flex flex-1 items-center justify-between ${viewMode === 'grid' ? 'p-6 flex-col' : 'flex-row'}`}>
+                          <div className={viewMode === 'grid' ? 'w-full mb-4' : 'flex-1'}>
+                            <h3 className="font-bold text-slate-800 text-base line-clamp-1 group-hover:text-blue-600">
                               {van.van_listing?.title || "Untitled Unit"}
                             </h3>
-                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2">
-                              {van.van_listing?.description || "No description provided."}
-                            </p>
+                            {viewMode === 'grid' && (
+                              <p className="text-slate-500 text-sm mt-2 line-clamp-2">{van.van_listing?.description}</p>
+                            )}
                           </div>
 
-                          <div className="mt-auto pt-4 flex items-center gap-2">
-                            <button onClick={() => handleView(van)} className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100">Details</button>
-                            <button onClick={() => handleEdit(van)} className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100">Edit</button>
-                            <button onClick={() => handleDelete(van.slug)} className="p-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                          <div className={`flex items-center gap-3 ${viewMode === 'grid' ? 'w-full pt-4 border-t' : ''}`}>
+                            <span className="text-blue-700 font-black text-sm mr-2">${van.van_listing?.price}</span>
+                            <button onClick={() => handleView(van)} className="px-4 py-2 rounded-lg bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100">Details</button>
+                            <button onClick={() => handleEdit(van)} className="px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100">Edit</button>
+                            <button onClick={() => handleDelete(van.slug)} className="p-2 rounded-lg bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all">
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                             </button>
+                            {/* Drag Handle Icon for List View */}
+                            {viewMode === 'list' && (
+                               <div className="ml-2 text-slate-300">
+                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 7h2v2H7V7zm0 4h2v2H7v-2zm4-4h2v2h-2V7zm0 4h2v2h-2v-2zM7 15h2v2H7v-2zm4 0h2v2h-2v-2z" /></svg>
+                               </div>
+                            )}
                           </div>
                         </div>
                       </div>
