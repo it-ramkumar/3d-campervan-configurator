@@ -19,7 +19,7 @@ export default function VanListing({ setSelected }) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [search, setSearch] = useState("");
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState("list"); // 'grid' or 'list'
   const limit = 8;
 
   useEffect(() => {
