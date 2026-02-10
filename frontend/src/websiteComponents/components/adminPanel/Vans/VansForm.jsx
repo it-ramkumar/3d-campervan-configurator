@@ -22,7 +22,7 @@ const VansForm = ({ setSelected }) => {
       title: "",
       description: "",
       subtitle: "",
-      model_name: "",
+      roof: "",
       price: "",
       tagline: "",
       specifications: {
@@ -100,7 +100,7 @@ const VansForm = ({ setSelected }) => {
         title: "",
         description: "",
         subtitle: "",
-        model_name: "",
+        roof: "",
         price: "",
         tagline: "",
         specifications: {
@@ -134,6 +134,7 @@ const VansForm = ({ setSelected }) => {
     const newErrors = {};
     if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
     if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
+    if (!formData.van_listing.roof?.trim()) newErrors.roof = "Roof is required";
     if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
     if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
     if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
@@ -286,13 +287,13 @@ const VansForm = ({ setSelected }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Model Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roof *</label>
                 <input
-                  name="model_name"
-                  value={formData.van_listing.model_name}
+                  name="roof"
+                  value={formData.van_listing.roof}
                   onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Enter model name"
+                  className={`w-full px-4 py-2 border rounded-lg ${errors.roof ? "border-red-500" : "border-gray-300"}`}
+                  placeholder="Enter roof type"
                 />
               </div>
 
