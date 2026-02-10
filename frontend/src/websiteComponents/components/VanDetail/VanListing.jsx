@@ -100,7 +100,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           alt={`${vanDetail.van_listing.title} custom van`}
           className="bg-image absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-60"></div>
+        <div className="absolute inset-0 bg-black opacity-20"></div>
         <div className="absolute inset-0 bg-[linear-gradient(270.39deg,rgba(0,0,0,0.1)_0.33%,#000000_106.96%)]"></div>
 
         <div className="relative z-10 h-full flex flex-col justify-end pb-8 px-4 sm:px-8 lg:px-16">
@@ -111,8 +111,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
               <HeroSpecItem label="Make & Model" value={vanDetail?.van_listing.specifications?.make_model} />
               <HeroSpecItem label="Wheelbase" value={vanDetail?.van_listing.specifications?.wheelbase} />
               <HeroSpecItem label="Drivetrain" value={vanDetail?.van_listing.specifications?.drivetrain} />
-              <HeroSpecItem label="Roof" value={vanDetail?.van_listing?.roof} />
-
+          {vanDetail?.van_listing?.roof && <HeroSpecItem label="Roof" value={vanDetail?.van_listing?.roof} />}
               <HeroSpecItem label="Sit & Sleep" value={`${vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - ${vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}`} />
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
