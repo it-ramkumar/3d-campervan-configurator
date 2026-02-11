@@ -112,7 +112,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
               <HeroSpecItem label="Wheelbase" value={vanDetail?.van_listing.specifications?.wheelbase} />
               <HeroSpecItem label="Drivetrain" value={vanDetail?.van_listing.specifications?.drivetrain} />
           {vanDetail?.van_listing?.roof && <HeroSpecItem label="Roof" value={vanDetail?.van_listing?.roof} />}
-              <HeroSpecItem label="Sit & Sleep" value={`${vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - ${vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}`} />
+              {vanDetail?.van_listing?.capacity && <HeroSpecItem label="Sit & Sleep" value={`${vanDetail?.van_listing.specifications?.capacity?.sits || "0"} - ${vanDetail?.van_listing.specifications?.capacity?.sleeps || "0"}`} />}
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <BlackButton label="Book A Call Now" onClick={onConsultationClick} />
@@ -131,7 +131,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           </div>
         </div>
       </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-6 px-4 bg-slate-50 rounded-2xl border border-gray-100">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-6 px-4 bg-slate-50 rounded-2xl border border-gray-100">
 
   {/* Transmission Block */}
   <div className="flex flex-col items-center gap-2 group">
@@ -143,7 +143,15 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       {vanDetail.van_listing.specifications.transmission || "Manual"}
     </p>
   </div>
-
+  <div className="flex flex-col items-center gap-2 group">
+    <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-blue-50 transition-colors">
+      <Settings2 className="w-6 h-6 text-blue-600" />
+    </div>
+    <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">Engine</span>
+    <p className="text-sm font-semibold text-gray-800">
+      {vanDetail.van_listing.specifications.engine || "Manual"}
+    </p>
+  </div>
   {/* Exterior Color Block */}
   <div className="flex flex-col items-center gap-2 group">
     <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-green-50 transition-colors">
