@@ -18,10 +18,16 @@ const contentBlockSchema = new mongoose.Schema({
     default: undefined
   },
   // Arrays ke liye default: undefined use karein taaki [] save na ho
-  list_items: {
-    type: [String],
-    default: undefined
-  },
+list_items: {
+  type: [
+    {
+      text: { type: String, trim: true },
+      sub_items: [{ type: String, trim: true }]
+    }
+  ],
+  default: undefined
+}
+  ,
   // Nested Object ke liye pure object ko undefined set karein
   table_data: {
     type: {

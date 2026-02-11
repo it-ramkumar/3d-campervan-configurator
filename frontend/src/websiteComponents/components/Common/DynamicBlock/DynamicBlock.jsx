@@ -7,7 +7,7 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
       block_type: type,
       title: "",
       content: "",
-      list_items: type === "list" ? [{ text: "", sub_items: [] }] : [],
+      list_items: type === "list" ? [] : undefined,
       table_data: type === "table" ? { headers: ["Column 1"], rows: [[""]] } : null,
       order: blocks.length,
     };
@@ -26,65 +26,145 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
     });
   };
 
-  // --- List Specific Functions ---
   const handleListItemChange = (blockIndex, itemIndex, value) => {
     setBlocks((prev) => {
-      const newBlocks = JSON.parse(JSON.stringify(prev)); // Deep clone for safety
-      newBlocks[blockIndex].list_items[itemIndex].text = value;
-      return newBlocks;
+      const updatedBlocks = [...prev];
+
+      // Ensure block exists
+      if (!updatedBlocks[blockIndex]) return prev;
+
+      const block = { ...updatedBlocks[blockIndex] };
+
+      // Ensure list_items array exists
+      const listItems = [...(block.list_items || [])];
+
+      // Ensure item exists
+      const currentItem = listItems[itemIndex] || { text: "", sub_items: [] };
+
+      // Update text only
+      listItems[itemIndex] = {
+        ...currentItem,
+        text: value
+      };
+
+      block.list_items = listItems;
+      updatedBlocks[blockIndex] = block;
+
+      return updatedBlocks;
     });
   };
 
+
   const addListItem = (blockIndex) => {
     setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const targetBlock = { ...newBlocks[blockIndex] };
-      targetBlock.list_items = [...targetBlock.list_items, { text: "", sub_items: [] }];
-      newBlocks[blockIndex] = targetBlock;
-      return newBlocks;
+      const updated = [...prev];
+      if (!updated[blockIndex]) return prev;
+
+      const block = { ...updated[blockIndex] };
+
+      block.list_items = [
+        ...(block.list_items || []),
+        { text: "", sub_items: [] }
+      ];
+
+      updated[blockIndex] = block;
+      return updated;
     });
   };
 
   const removeListItem = (blockIndex, itemIndex) => {
     setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const targetBlock = { ...newBlocks[blockIndex] };
-      targetBlock.list_items = targetBlock.list_items.filter((_, i) => i !== itemIndex);
-      newBlocks[blockIndex] = targetBlock;
-      return newBlocks;
+      const updated = [...prev];
+      if (!updated[blockIndex]) return prev;
+
+      const block = { ...updated[blockIndex] };
+
+      block.list_items = (block.list_items || []).filter(
+        (_, i) => i !== itemIndex
+      );
+
+      updated[blockIndex] = block;
+      return updated;
     });
   };
 
-  // ✅ FIXED: Missing Sub-item Change Function
   const handleSubItemChange = (blockIndex, itemIndex, subIndex, value) => {
     setBlocks((prev) => {
-      const newBlocks = JSON.parse(JSON.stringify(prev));
-      newBlocks[blockIndex].list_items[itemIndex].sub_items[subIndex] = value;
-      return newBlocks;
+      const updated = [...prev];
+      if (!updated[blockIndex]) return prev;
+
+      const block = { ...updated[blockIndex] };
+      const listItems = [...(block.list_items || [])];
+
+      const currentItem = listItems[itemIndex];
+      if (!currentItem) return prev;
+
+      const subItems = [...(currentItem.sub_items || [])];
+      subItems[subIndex] = value;
+
+      listItems[itemIndex] = {
+        ...currentItem,
+        sub_items: subItems
+      };
+
+      block.list_items = listItems;
+      updated[blockIndex] = block;
+
+      return updated;
     });
   };
+
 
   // ✅ FIXED: Sub-item Add Function (Double add fixed)
   const addSubItem = (blockIndex, itemIndex) => {
     setBlocks((prev) => {
-      const newBlocks = JSON.parse(JSON.stringify(prev));
-      if (!newBlocks[blockIndex].list_items[itemIndex].sub_items) {
-        newBlocks[blockIndex].list_items[itemIndex].sub_items = [];
-      }
-      newBlocks[blockIndex].list_items[itemIndex].sub_items.push("");
-      return newBlocks;
+      const updated = [...prev];
+      if (!updated[blockIndex]) return prev;
+
+      const block = { ...updated[blockIndex] };
+      const listItems = [...(block.list_items || [])];
+
+      const currentItem = listItems[itemIndex];
+      if (!currentItem) return prev;
+
+      listItems[itemIndex] = {
+        ...currentItem,
+        sub_items: [...(currentItem.sub_items || []), ""]
+      };
+
+      block.list_items = listItems;
+      updated[blockIndex] = block;
+
+      return updated;
     });
   };
 
   // ✅ FIXED: Missing Remove Sub-item Function
   const removeSubItem = (blockIndex, itemIndex, subIndex) => {
     setBlocks((prev) => {
-      const newBlocks = JSON.parse(JSON.stringify(prev));
-      newBlocks[blockIndex].list_items[itemIndex].sub_items =
-        newBlocks[blockIndex].list_items[itemIndex].sub_items.filter((_, i) => i !== subIndex);
-      return newBlocks;
+      const updated = [...prev];
+      if (!updated[blockIndex]) return prev;
+
+      const block = { ...updated[blockIndex] };
+      const listItems = [...(block.list_items || [])];
+
+      const currentItem = listItems[itemIndex];
+      if (!currentItem) return prev;
+
+      listItems[itemIndex] = {
+        ...currentItem,
+        sub_items: (currentItem.sub_items || []).filter(
+          (_, i) => i !== subIndex
+        )
+      };
+
+      block.list_items = listItems;
+      updated[blockIndex] = block;
+
+      return updated;
     });
   };
+
 
   // --- Table Specific Functions ---
   const addTableColumn = (blockIndex) => {
@@ -123,15 +203,23 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
     });
   };
 
-  const removeTableRow = (blockIndex, rowIndex) => {
-    setBlocks((prev) => {
-      const newBlocks = [...prev];
-      const targetBlock = { ...newBlocks[blockIndex] };
-      targetBlock.table_data.rows = targetBlock.table_data.rows.filter((_, i) => i !== rowIndex);
-      newBlocks[blockIndex] = targetBlock;
-      return newBlocks;
+const removeTableRow = (blockIndex, rowIndex) => {
+  setBlocks((prev) => {
+    const newBlocks = prev.map((block, i) => {
+      if (i !== blockIndex) return block;
+
+      return {
+        ...block,
+        table_data: {
+          ...block.table_data,
+          rows: block.table_data.rows.filter((_, rIndex) => rIndex !== rowIndex)
+        }
+      };
     });
-  };
+
+    return newBlocks;
+  });
+};
 
   return (
     <div className="space-y-6">
@@ -175,19 +263,28 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
               />
             )}
 
-            {block.block_type === 'list' && block.list_items && (
+            {block.block_type === "list" && (
               <div className="space-y-4 mt-2 border-l-2 border-blue-50 pl-4">
-                {block.list_items.map((item, iIndex) => (
+
+                {(block.list_items || []).map((item, iIndex) => (
                   <div key={iIndex} className="space-y-2 p-2 bg-gray-50 rounded">
+
+                    {/* Main Item */}
                     <div className="flex gap-2 items-center">
-                      <span className="text-blue-500 font-bold">{iIndex + 1}.</span>
+                      <span className="text-blue-500 font-bold">
+                        {iIndex + 1}.
+                      </span>
+
                       <input
                         type="text"
-                        value={item.text || ""}
-                        onChange={(e) => handleListItemChange(index, iIndex, e.target.value)}
+                        value={item?.text || ""}
+                        onChange={(e) =>
+                          handleListItemChange(index, iIndex, e.target.value)
+                        }
                         className="flex-1 p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 ring-blue-300"
                         placeholder={`Main Item ${iIndex + 1}`}
                       />
+
                       <button
                         type="button"
                         onClick={() => removeListItem(index, iIndex)}
@@ -197,26 +294,39 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
                       </button>
                     </div>
 
+                    {/* Sub Items */}
                     <div className="ml-8 space-y-2">
-                      {item.sub_items?.map((sub, sIndex) => (
+                      {(item?.sub_items || []).map((sub, sIndex) => (
                         <div key={sIndex} className="flex gap-2 items-center">
                           <span className="text-gray-400">└</span>
+
                           <input
                             type="text"
                             value={sub || ""}
-                            onChange={(e) => handleSubItemChange(index, iIndex, sIndex, e.target.value)}
+                            onChange={(e) =>
+                              handleSubItemChange(
+                                index,
+                                iIndex,
+                                sIndex,
+                                e.target.value
+                              )
+                            }
                             className="flex-1 p-1.5 border border-gray-200 rounded text-xs focus:outline-none"
                             placeholder="Sub-item text..."
                           />
+
                           <button
                             type="button"
-                            onClick={() => removeSubItem(index, iIndex, sIndex)}
+                            onClick={() =>
+                              removeSubItem(index, iIndex, sIndex)
+                            }
                             className="text-gray-400 hover:text-red-400"
                           >
-                            -
+                            −
                           </button>
                         </div>
                       ))}
+
                       <button
                         type="button"
                         onClick={() => addSubItem(index, iIndex)}
@@ -227,6 +337,7 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
                     </div>
                   </div>
                 ))}
+
                 <button
                   type="button"
                   onClick={() => addListItem(index)}
@@ -234,6 +345,7 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
                 >
                   + Add Main Item
                 </button>
+
               </div>
             )}
 

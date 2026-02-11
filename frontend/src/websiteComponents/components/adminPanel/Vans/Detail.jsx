@@ -101,14 +101,33 @@ export default function Detail({ setIsopen, detail }) {
                           <p className="text-slate-600 leading-relaxed mt-1">{block.content}</p>
                         )}
 
-                        {block.block_type === 'list' && (
-                          <div className="mt-2">
-                            {block.title && <h4 className="font-bold text-slate-800 mb-2">{block.title}</h4>}
-                            <ul className="list-disc list-inside space-y-1 text-slate-600">
-                              {block.list_items.map((item, i) => <li key={i}>{item}</li>)}
-                            </ul>
-                          </div>
-                        )}
+                       {block.block_type === "list" && (
+  <div className="mt-2">
+    {block.title && (
+      <h4 className="font-bold text-slate-800 mb-2">
+        {block.title}
+      </h4>
+    )}
+
+    <ul className="list-disc list-inside space-y-1 text-slate-600">
+      {(block.list_items || []).map((item, i) => (
+        <li key={i}>
+          {item?.text}
+
+          {/* Sub Items */}
+          {(item?.sub_items?.length > 0) && (
+            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+              {item.sub_items.map((sub, sIndex) => (
+                <li key={sIndex}>{sub}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
 
                         {block.block_type === 'table' && block.table_data && (
                           <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 shadow-sm">

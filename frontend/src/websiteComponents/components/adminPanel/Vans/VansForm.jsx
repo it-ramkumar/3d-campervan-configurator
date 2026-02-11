@@ -84,8 +84,23 @@ const VansForm = ({ setSelected }) => {
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);
       setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
-      // --- Naya: Blocks ko edit data se load karein ---
-      setBlocks(editData.blocks || []);
+if (editData.blocks) {
+  const transformedBlocks = editData.blocks.map((block) => {
+    if (block.block_type === "list") {
+      return {
+        ...block,
+        list_items: (block.list_items || []).map((item) => ({
+          text: item?.text || "",
+          sub_items: item?.sub_items || []
+        }))
+      };
+    }
+
+    return block;
+  });
+
+  setBlocks(transformedBlocks);
+}
 
       setFeatures(editData.detailed_features?.length > 0
         ? editData.detailed_features
@@ -130,25 +145,25 @@ const VansForm = ({ setSelected }) => {
     dispatch(clearEditData());
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
-    if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
-    if (!formData.van_listing.roof?.trim()) newErrors.roof = "Roof is required";
-    if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
-    if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
-    if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
-    if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
-    if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
-    if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
+  // const validateForm = () => {
+  //   // const newErrors = {};
+  //   // if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
+  //   // if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
+  //   // if (!formData.van_listing.roof?.trim()) newErrors.roof = "Roof is required";
+  //   // if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
+  //   // if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
+  //   // if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
+  //   // if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
+  //   // if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
+  //   // if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
-    // if (features.length === 0) {
-    //   newErrors.features = "At least one feature category is required";
-    // }
+  //   // if (features.length === 0) {
+  //   //   newErrors.features = "At least one feature category is required";
+  //   // }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  //   // setErrors(newErrors);
+  //   // return Object.keys(newErrors).length === 0;
+  // };
 
   useEffect(() => {
     return () => {
@@ -158,104 +173,97 @@ const VansForm = ({ setSelected }) => {
     };
   }, [galleryPreviews]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    setLoading(true);
-    try {
-      if (removedExistingGallery.length > 0) {
-        await Promise.all(
-          removedExistingGallery.map(url =>
-            axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/delete-image`, { imageUrl: url })
-          )
-        );
-      }
+  try {
+    const formToSend = new FormData();
 
-      const formToSend = new FormData();
-      galleryFiles.forEach((file) => formToSend.append("gallery", file));
-      formToSend.append("galleryOrder", JSON.stringify(existingGallery));
+const cleanedBlocks = (blocks || [])
+  .map((block) => {
+    const b = { ...block };
 
-      const cleanedMediaUrls = mediaUrls.filter(url => url.trim() !== "");
-      formToSend.append("media", JSON.stringify(cleanedMediaUrls));
-      formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("status", formData.status);
-      formToSend.append("detailed_features", JSON.stringify(features));
+    // ✅ LIST BLOCK CLEANING
+    if (b.block_type === "list") {
+      b.list_items = (b.list_items || [])
+        .map((item) => {
+          if (!item || typeof item !== "object") return null;
 
-      // ============================================================
-      // ✅ Naya: Blocks Cleanup aur Filtering Logic
-      // ============================================================
-      const cleanedBlocks = blocks
-        .map((block) => {
-          let b = { ...block };
+          const cleanedSubItems = (item.sub_items || [])
+            .filter((sub) => sub && sub.trim() !== "");
 
-          // Frontend ki temporary _id delete karein taaki DB space bache
-          delete b._id;
+          const mainText = item.text?.trim() || "";
 
-          // Block type ke hisaab se unwanted keys delete karein
-          if (b.block_type === "heading" || b.block_type === "subheading") {
-            delete b.content;
-            delete b.list_items;
-            delete b.table_data;
-          }
-          else if (b.block_type === "paragraph") {
-            delete b.title;
-            delete b.list_items;
-            delete b.table_data;
-          }
-          else if (b.block_type === "list") {
-            delete b.content;
-            delete b.table_data;
-            // Sirf wo items rakhein jo khali nahi hain
-            b.list_items = b.list_items?.filter(item => item && item.trim() !== "");
-          }
-          else if (b.block_type === "table") {
-            delete b.content;
-            delete b.list_items;
-            // Khali rows ko filter karein
-            if (b.table_data?.rows) {
-              b.table_data.rows = b.table_data.rows.filter(row =>
-                row.some(cell => cell && cell.trim() !== "")
-              );
-            }
-          }
-          return b;
+          // Agar main text empty hai to pura item remove
+          if (!mainText) return null;
+
+          return {
+            text: mainText,
+            ...(cleanedSubItems.length > 0 && {
+              sub_items: cleanedSubItems,
+            }),
+          };
         })
-        .filter((block) => {
-          // Sirf wo block bhejien jisme asli data ho
-          const hasTitle = block.title && block.title.trim() !== "";
-          const hasContent = block.content && block.content.trim() !== "";
-          const hasListItems = block.list_items && block.list_items.length > 0;
-          const hasTableData = block.block_type === "table" &&
-            block.table_data?.rows?.length > 0;
+        .filter(Boolean);
 
-          return hasTitle || hasContent || hasListItems || hasTableData;
-        });
-
-      // Cleaned blocks ko FormData mein add karein
-      formToSend.append("blocks", JSON.stringify(cleanedBlocks));
-      // ============================================================
-
-      formToSend.append("insertAt", "0");
-
-      if (editData?._id) {
-        await updateVan(editData, formToSend);
-        setSelected("Vans-listing");
-      } else {
-        await createVan(formToSend);
-        setSelected("Vans-listing");
+      // Agar koi valid list item nahi bacha
+      if (!b.list_items.length) {
+        delete b.list_items;
       }
-      resetForm();
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Submission Failed",
-        text: err.response?.data?.message || "Internal server error",
-      });
-    } finally {
-      setLoading(false);
     }
-  };
+
+    // ✅ REMOVE EMPTY FIELDS
+    Object.keys(b).forEach((key) => {
+      const value = b[key];
+
+      if (
+        value === null ||
+        value === undefined ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      ) {
+        delete b[key];
+      }
+    });
+
+    return b;
+  })
+  .filter((block) => Object.keys(block).length > 1);
+
+// 2. Append Data
+    formToSend.append("van_listing", JSON.stringify(formData.van_listing));
+    formToSend.append("status", formData.status);
+    formToSend.append("detailed_features", JSON.stringify(features));
+    formToSend.append("media", JSON.stringify(mediaUrls.filter(u => u && u.trim() !== "")));
+    formToSend.append("blocks", JSON.stringify(cleanedBlocks));
+    formToSend.append("galleryOrder", JSON.stringify(existingGallery));
+    formToSend.append("insertAt", "0");
+    galleryFiles.forEach((file) => formToSend.append("gallery", file));
+
+    // 3. API Call (Route Slug base hai, toh slug bhejein)
+    if (editData?._id) {
+      console.log("Updating van via slug:", editData.slug);
+      await updateVan(editData.slug, formToSend); // Parent ID ki jagah SLUG use karein
+    } else {
+      await createVan(formToSend);
+    }
+
+    Swal.fire("Success", "Van saved successfully", "success");
+    setSelected("Vans-listing");
+    resetForm();
+
+  } catch (err) {
+    console.error("Submission Error Details:", err.response?.data || err);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: err.response?.data?.error || "Check console for details",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">

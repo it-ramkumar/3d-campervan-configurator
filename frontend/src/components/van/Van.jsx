@@ -11,7 +11,6 @@ import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
 import {ArrowBigDownDash, ArrowBigUpDash} from "lucide-react"
 import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
-
 import {
   addModelToScene,
 } from "../../customeHooks/addSceneToModel";
@@ -88,6 +87,7 @@ function Van() {
   useEffect(() => {
     if (groupRef.current) centerModelByBoundingBox(groupRef);
   }, [groupRef.current]);
+
   useEffect(() => {
     setTargetPos([0, 0, 0]);
   }, [isIntView]);

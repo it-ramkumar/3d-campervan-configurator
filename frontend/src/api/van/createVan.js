@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 
 // ✅ Create Van
 const createVan = async (formDataToSend) => {
+
   try {
     const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/van`, formDataToSend, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -30,10 +31,12 @@ const createVan = async (formDataToSend) => {
 };
 
 const updateVan = async (editData, formDataToSend) => {
+  // console.log("updateVan called with slug:", editData);
+
   try {
 
     const res = await axios.put(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/van/${editData.slug}`,
+      `${import.meta.env.VITE_REACT_APP_API_URL}/van/${editData}`,
       formDataToSend,
       { withCredentials: true } // keep cookie session
     );
