@@ -204,31 +204,46 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
                   )}
 
                   {/* --- LIST BLOCK (Feature Highlight Style) --- */}
-                  {block.block_type === 'list' && (
-                    <div className="mt-4 max-w-4xl bg-white p-8 rounded-3xl shadow-md border-l-4 border-l-[#2761FD]">
-                      {block.title && (
-                        <h4 className="font-extrabold text-black text-2xl mb-6 flex items-center gap-2">
-                          <span className="w-2 h-8 bg-blue-500 rounded-full inline-block"></span>
-                          {block.title}
-                        </h4>
-                      )}
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {block.list_items.map((item, i) => (
-                          <li
-                            key={i}
-                            className="flex items-center p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors group"
-                          >
-                            <div className="mr-4 text-blue-500 group-hover:scale-125 transition-transform">
-                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                            <span className="text-gray-700 font-medium">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+               {block.block_type === 'list' && (
+  <div className="mt-4 max-w-4xl bg-white p-8 rounded-3xl shadow-md border-l-4 border-l-[#2761FD]">
+    {block.title && (
+      <h4 className="font-extrabold text-black text-2xl mb-6 flex items-center gap-2">
+        <span className="w-2 h-8 bg-blue-500 rounded-full inline-block"></span>
+        {block.title}
+      </h4>
+    )}
+    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {(block.list_items || []).map((itemObj, i) => (
+        <li
+          key={i}
+          className="flex flex-col p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors group"
+        >
+          <div className="flex items-center gap-2">
+            <div className="text-blue-500 group-hover:scale-125 transition-transform">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <span className="text-gray-700 font-medium">{itemObj.text}</span>
+          </div>
+
+          {/* Optional: Show Sub-items */}
+          {itemObj.sub_items && itemObj.sub_items.length > 0 && (
+            <ul className="ml-6 mt-2 list-disc list-inside text-gray-500 space-y-1">
+              {itemObj.sub_items.map((sub, sIndex) => (
+                <li key={sIndex}>{sub}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
 
                   {/* --- TABLE BLOCK (Modern Specs Table) --- */}
                   {block.block_type === 'table' && block.table_data && (
