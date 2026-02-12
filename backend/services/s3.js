@@ -18,14 +18,20 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+let _dracoDecoder = null;
+let _dracoEncoder = null;
 
+async function getDraco() {
+  if (!_dracoDecoder) _dracoDecoder = await draco3d.createDecoderModule();
+  if (!_dracoEncoder) _dracoEncoder = await draco3d.createEncoderModule();
+  return { decoder: _dracoDecoder, encoder: _dracoEncoder };
+}
 // ✅ Maximum Compression (No Meshoptimizer)
 async function compressGLB(fileBuffer) {
   try {
-    console.log("🛠️ Starting Advanced GLB Compression...");
+    console.log("🛠️ Starting Memory-Efficient Compression...");
 
-    const decoder = await draco3d.createDecoderModule();
-    const encoder = await draco3d.createEncoderModule();
+    const { decoder, encoder } = await getDraco();
 
     const io = new WebIO()
       .registerExtensions(ALL_EXTENSIONS)
@@ -36,25 +42,18 @@ async function compressGLB(fileBuffer) {
 
     const document = await io.readBinary(new Uint8Array(fileBuffer));
 
-    const originalSize = (fileBuffer.length / (1024 * 1024)).toFixed(2);
-    console.log("📦 Original size:", originalSize, "MB");
-
     await document.transform(
-
-      // Safe vertex weld (not aggressive)
       weld({ tolerance: 0.0005 }),
-
       prune(),
 
-      // 🔥 Texture Optimization (BIG SIZE REDUCTION)
+      // Texture optimization ko light karein
       textureCompress({
         encoder: sharp,
         targetFormat: "webp",
-        quality: 75,
-        resize: [2048, 2048], // Resize only if larger
+        quality: 60, // Quality 75 se 60 ki taaki RAM kam use ho
+        resize: [1024, 1024], // 2048 live server ke liye heavy hai
       }),
 
-      // Safe quantization (not 8-bit extreme)
       quantize({
         quantizePosition: 14,
         quantizeNormal: 10,
@@ -62,31 +61,24 @@ async function compressGLB(fileBuffer) {
         quantizeColor: 8,
       }),
 
-      // Maximum Draco compression
       draco({
         method: "edgebreaker",
-        encodeSpeed: 0,
-        decodeSpeed: 10,
+        encodeSpeed: 5, // Speed 0 se 5 karein (0 zyada CPU/RAM leta hai)
+        decodeSpeed: 5,
       }),
 
       prune()
     );
 
     const outBuffer = await io.writeBinary(document);
-    const compressed = Buffer.from(outBuffer);
 
-    const newSize = (compressed.length / (1024 * 1024)).toFixed(2);
-    const savedMB = ((fileBuffer.length - compressed.length) / (1024 * 1024)).toFixed(2);
-    const savings = ((1 - compressed.length / fileBuffer.length) * 100).toFixed(1);
+    // Explicitly help garbage collection
+    document.dispose();
 
-    console.log(`✅ COMPRESSED: ${originalSize}MB → ${newSize}MB (${savings}%)`);
-    console.log(`💾 SAVED: ${savedMB} MB`);
-
-    return compressed;
+    return Buffer.from(outBuffer);
 
   } catch (err) {
     console.error("❌ Compression Error:", err.message);
-    console.log("⚠️ Uploading original file");
     return fileBuffer;
   }
 }
