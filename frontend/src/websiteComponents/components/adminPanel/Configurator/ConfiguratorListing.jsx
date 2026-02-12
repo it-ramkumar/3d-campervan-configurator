@@ -127,7 +127,7 @@ export default function ConfiguratorListing({ setSelected }) {
                     {filteredModels.map((item) => (
                         <div
                             key={item._id}
-                            onClick={() => handleView(item)}
+                            // onClick={() => handleView(item)}
                             className="bg-white border border-slate-200 p-6 rounded-[2.5rem] hover:shadow-2xl hover:shadow-slate-200/50 transition-all group relative overflow-hidden"
                         >
                             <div className="flex justify-between items-start mb-6">

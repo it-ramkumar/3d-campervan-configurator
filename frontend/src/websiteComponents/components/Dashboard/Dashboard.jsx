@@ -27,6 +27,8 @@ import JobListing from "../adminPanel/Job/JobListing";
 import Applications from "../adminPanel/Applications/Applications";
 import QuickLinks from "../adminPanel/Linktree/QuickLinks";
 import AddQuickLink from "../adminPanel/Linktree/AddQuickLink";
+import BaseVanForm from "../adminPanel/BaseVan/BaseVanForm";
+import BaseVanListing from "../adminPanel/BaseVan/BaseVanListing";
 
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
@@ -68,7 +70,7 @@ export default function Dashboard() {
       id: "system-choices",
       label: "System Options",
       desc: "Manage system designs and materials.",
-      icon: "🛋️"
+      icon: "⚙️"
     },
     {
       id: "Inquiry-data",
@@ -111,6 +113,12 @@ export default function Dashboard() {
       label: "3D Config",
       desc: "Manage 3D configurator options.",
       icon: "⚙️"
+    },
+     {
+      id: "BaseVanListing",
+      label: "Base Vans",
+      desc: "Manage base van configurations.",
+      icon: "🚐"
     },
     {
       id: "Users",
@@ -156,6 +164,8 @@ export default function Dashboard() {
       case "applications": return <Applications setSelected={setSelected} />;
       case "quickLink": return <QuickLinks setSelected={setSelected} />;
       case "addQuickLink": return <AddQuickLink setSelected={setSelected} />;
+      case "BaseVan": return <BaseVanForm setSelected={setSelected} />;
+      case "BaseVanListing": return <BaseVanListing setSelected={setSelected} />;
       default: return <PortfolioListing setSelected={setSelected} />;
     }
   };

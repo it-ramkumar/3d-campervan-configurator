@@ -33,6 +33,7 @@ const Sitemap = require("./routes/siteMap");
 const SystemRoute = require("./routes/systemR");
 const SystemCategory =require("./routes/systemCat");
 const SystemSubCategory = require("./routes/systemSubCat")
+const BaseVanRoute = require("./routes/baseVan");
 
 
 const app = express();
@@ -81,6 +82,7 @@ app.use("/api/jobs", Job);
 app.use("/api/applications", Application);
 app.use("/api/quick-links", QuickLinks);
 app.use("/sitemap.xml", Sitemap);
+app.use("/api", BaseVanRoute);
 
 
 

@@ -1,7 +1,6 @@
-import { useState, useEffect,useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { toggleModelSelection } from "../../customeHooks/toogleModelSelection";
 import { isDependencyMet } from "../../customeHooks/isDependecyMet";
-// import Swal from "sweetalert2";
 import { StepDescriptions } from "../../customeHooks/stepDescription";
 import { groupByGroup } from "../../customeHooks/groupByGroup";
 import NextBackButton from "./MultiStepPaginationButtons";
@@ -16,13 +15,9 @@ import { fetchExterior } from "../../api/model/modelExterior.js";
 import { fetchSystem } from "../../api/model/modelSystem.js";
 import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
-import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
+// import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
 import { useGLTF } from "@react-three/drei";
-
-
-
-
-
+import Loader from "../../websiteComponents/components/Loader/Loader.jsx";
 
 const MultiStepForm = ({
   addModelToScene,
@@ -34,17 +29,19 @@ const MultiStepForm = ({
   modelRefs,
   orbitControlsRef,
   SantaMonica
-
-
 }) => {
-  const dispatch = useDispatch()
-  const router = useNavigate()
+  const dispatch = useDispatch();
+  const router = useNavigate();
+
+  // Redux States
   const models = useSelector((state) => state.models || []);
-  const addedModels = useSelector((state) => state.addedModels.addedModels)
-  const interior = models?.interior?.data.data ;
-  const exterior = models?.exterior?.data.data;
-  const system   = models?.system?.data.data   ;
- const cancelSourceRef = useRef(null);
+  const addedModels = useSelector((state) => state.addedModels.addedModels);
+  const interior = models?.interior?.data?.data;
+  const exterior = models?.exterior?.data?.data;
+  const system = models?.system?.data?.data;
+
+  // Local States
+  const cancelSourceRef = useRef(null);
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -53,74 +50,57 @@ const MultiStepForm = ({
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [modelUrl, setModelUrl] = useState(null);
 
-  const interiorSteps = Object.entries(groupByGroup(interior))
-  const exteriorSteps = Object.entries(groupByGroup(exterior))
-  const systemSteps = Object.entries(groupByGroup(system))
+  // Global Loading State
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-// Helper to preload GLTF
-const preloadGLTF = (url) => {
-  try {
-    useGLTF.preload(url); // ✅ drei preload, cache me store karega
-    console.log("✅ Preloaded GLTF:", url);
-  } catch (err) {
-    console.warn("⚠️ Failed to preload GLTF:", url, err);
-  }
-};
-
-useEffect(() => {
-  const fetchAndPreload = async () => {
-    let fetchingThunk;
-
-    if (activeTab === "interior") fetchingThunk = fetchInterior;
-    else if (activeTab === "exterior") fetchingThunk = fetchExterior;
-    else if (activeTab === "system") fetchingThunk = fetchSystem;
-
-    if (!fetchingThunk) return;
-
-    try {
-      const resultAction = await dispatch(fetchingThunk());
-
-      if (fetchingThunk.rejected.match(resultAction)) {
-        console.warn("❌ Fetch error:", resultAction.error.message);
-        return;
+  // 1. Initial Mega-Fetch: Teenon categories ek sath fetch hongi
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        setIsInitialLoading(true);
+        // Parallel fetching for performance
+        await Promise.all([
+          dispatch(fetchInterior()),
+          dispatch(fetchExterior()),
+          dispatch(fetchSystem())
+        ]);
+      } catch (err) {
+        console.error("Error fetching initial data:", err);
+      } finally {
+        setIsInitialLoading(false);
       }
+    };
+    loadAllData();
+  }, [dispatch]);
 
-      const fetchedData = resultAction.payload?.data || [];
-      console.log("✅ Data fetched for:", activeTab, "Models:", fetchedData.length);
-
-      // 🔹 Preload GLTF models
-      fetchedData.forEach((model) => {
-        if (model?.glbFile) preloadGLTF(model.glbFile);
-
-        // Optional: preload thumbnail
-        if (model?.thumbnailUrl) {
-          const img = new Image();
-          img.src = model.thumbnailUrl;
+  // 2. Preloading logic: Jab data aa jaye toh background mein models preload karein
+  useEffect(() => {
+    if (!isInitialLoading) {
+      const allData = [...(interior || []), ...(exterior || []), ...(system || [])];
+      allData.forEach((model) => {
+        if (model?.glbFile) {
+          try {
+            useGLTF.preload(model.glbFile);
+          } catch (e) {
+            console.warn("Preload failed for:", model.glbFile);
+          }
         }
       });
-    } catch (err) {
-      console.error("⚠️ Unexpected error:", err);
     }
-  };
+  }, [isInitialLoading, interior, exterior, system]);
 
-  fetchAndPreload();
-}, [activeTab, dispatch]);
+  // 3. Memoized Steps: Taaki tab switch hone par calculation fast ho
+  const steps = useMemo(() => {
+    if (activeTab === "interior") return Object.entries(groupByGroup(interior || []));
+    if (activeTab === "exterior") return Object.entries(groupByGroup(exterior || []));
+    return Object.entries(groupByGroup(system || []));
+  }, [activeTab, interior, exterior, system]);
 
+  const progressPercent = Math.round(((currentStep + 1) / (steps.length || 1)) * 100);
 
-  let steps;
-  if (activeTab === "interior") {
-    steps = interiorSteps;
-  } else if (activeTab === "exterior") {
-    steps = exteriorSteps;
-  } else {
-    steps = systemSteps;
-  }
-
-
-  const progressPercent = Math.round(((currentStep + 1) / steps.length) * 100);
-
-  if (interior?.length < 0 || !steps || steps.length === 0 || !steps[currentStep]) {
-    return <GIFVanLoader />
+  // 4. Early Return for Loader: Jab tak saara data nahi milta
+  if (isInitialLoading || !steps || steps.length === 0 || !steps[currentStep]) {
+    return <Loader />;
   }
   return (
  <div className="  rounded-xl">

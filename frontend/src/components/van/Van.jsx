@@ -9,7 +9,7 @@ import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
 import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
-import {ArrowBigDownDash, ArrowBigUpDash} from "lucide-react"
+import { ArrowBigDownDash, ArrowBigUpDash } from "lucide-react"
 import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
 import {
   addModelToScene,
@@ -24,43 +24,42 @@ import { centerModelByBoundingBox } from "../../customeHooks/centerCanvas";
 import { cameraDirectionBack } from "../../customeHooks/interiorDirectionBack";
 import { interiorDirectionNext } from "../../customeHooks/interiorDirectionNext";
 import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
- import { useGLTF } from "@react-three/drei";
- import SantaMonika144 from "../../components/van-model-components/VanModel"
-
+import { useGLTF } from "@react-three/drei";
+import axios from "axios";
+import BaseVanModel from "./BaseVanModel";
 function Van() {
-  const vans =[
-  {
-    layout: "Mercedes-Benz Sprinter",
-    modelYear :"2022",
-    price: 224543,
-    shortDescription:"",
-    spec:{
-      wheelBase : 144,
-      drivetrain:"AWD",
-      SitSleep: "2-5"
-    },
-    img: "./images/white-removebg-preview.png",
-    colors: "Standard",
-    component: SantaMonika144,
-  },
-    {
-    layout: "Santa Monica v6 turbo",
-    modelYear :"2022",
-    price: 224543,
-    shortDescription:"",
-    spec:{
-      wheelBase : 170,
-      drivetrain:"AWD",
-      SitSleep: "5-7"
-    },
-    img: "./images/white-removebg-preview.png",
-    colors: "Standard",
-    component: SantaMonika144,
-  }
-]
+  //   const vans =[
+  //   {
+  //     layout: "Mercedes-Benz Sprinter",
+  //     modelYear :"2022",
+  //     price: 224543,
+  //     shortDescription:"",
+  //     spec:{
+  //       wheelBase : 144,
+  //       drivetrain:"AWD",
+  //       SitSleep: "2-5"
+  //     },
+  //     img: "./images/white-removebg-preview.png",
+  //     colors: "Standard",
+  //     component: SantaMonika144,
+  //   },
+  //     {
+  //     layout: "Santa Monica v6 turbo",
+  //     modelYear :"2022",
+  //     price: 224543,
+  //     shortDescription:"",
+  //     spec:{
+  //       wheelBase : 170,
+  //       drivetrain:"AWD",
+  //       SitSleep: "5-7"
+  //     },
+  //     img: "./images/white-removebg-preview.png",
+  //     colors: "Standard",
+  //     component: SantaMonika144,
+  //   }
+  // ]
   const [isSanta, setIsSanta] = useState(0)
-  const Santa = vans[0].component
-  const SantaMonica = vans[0]
+
   const dispatch = useDispatch();
   const addedModels = useSelector((state) => state.addedModels.addedModels);
   const [isOpen, setIsOpen] = useState(false);
@@ -69,6 +68,9 @@ function Van() {
   const [showExterior, setShowExterior] = useState(false);
   const [isIntView, setIsIntView] = useState(false);
   const [targetPos, setTargetPos] = useState([0, 0, 0]);
+  const [vans, setVans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const SantaMonica = vans[0]
   const CAMERA_OFFSET = 0.2;
 
   const orbitControlsRef = useRef();
@@ -83,8 +85,23 @@ function Van() {
     targetPos[1],
     targetPos[2] + CAMERA_OFFSET,
   ];
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+  const fetchVans = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/add-base-van`);
+      console.log(res.data.data,"vans")
+      if (res.data.success) {
+        setVans(res.data.data);
+      }
+    } catch (err) {
+      console.error("Error fetching vans:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
+    fetchVans();
     if (groupRef.current) centerModelByBoundingBox(groupRef);
   }, [groupRef.current]);
 
@@ -139,27 +156,27 @@ function Van() {
 
 
 
-function DynamicModel({ model, setActiveModelId, modelRefs }) {
-const { scene } = useGLTF(model.glbFile);
+  function DynamicModel({ model, setActiveModelId, modelRefs }) {
+    const { scene } = useGLTF(model.glbFile);
 
-  return (
-    <primitive
-      object={scene}
-      ref={(el) => (modelRefs.current[model.id] = el)}
-      position={model.position || [0, 0, 0]}
-      scale={model.scale || [1, 1, 1]}
-      rotation={model.rotation || [0, 0, 0]}
-      castShadow
-      receiveShadow
-      onClick={() => setActiveModelId(model.id)}
-    />
-  );
-}
-const jsonLd = configuratorSchema();
+    return (
+      <primitive
+        object={scene}
+        ref={(el) => (modelRefs.current[model.id] = el)}
+        position={model.position || [0, 0, 0]}
+        scale={model.scale || [1, 1, 1]}
+        rotation={model.rotation || [0, 0, 0]}
+        castShadow
+        receiveShadow
+        onClick={() => setActiveModelId(model.id)}
+      />
+    );
+  }
+  const jsonLd = configuratorSchema();
 
   return (
     <>
-    {/* React 19 Native Metadata */}
+      {/* React 19 Native Metadata */}
       <title>3D Camper Van Configurator | Design Your Own Van | Big Bear Vans</title>
       <meta
         name="description"
@@ -171,214 +188,214 @@ const jsonLd = configuratorSchema();
       <script type="application/ld+json">
         {JSON.stringify(jsonLd)}
       </script>
-    <div className="">
-    </div>
-    <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto md:overflow-y-hidden bg-brand color-scroll">
+      <div className="">
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 sm:gap-2 md:gap-0 lg:gap-2 h-screen overflow-auto md:overflow-y-hidden bg-brand color-scroll">
 
-      {/* Canvas Section - 50% on mobile, 75% on desktop */}
-      <div className="canvas-parent md:col-span-8" >
-        <div className="meta-data bg-brand shadow-xl  p-2 relative">
-          {/* Toggle Button */}
-          <div
-            className="flex justify-between  cursor-pointer"
+        {/* Canvas Section - 50% on mobile, 75% on desktop */}
+        <div className="canvas-parent md:col-span-8" >
+          <div className="meta-data bg-brand shadow-xl  p-2 relative">
+            {/* Toggle Button */}
+            <div
+              className="flex justify-between  cursor-pointer"
 
-          >
-            <h1 className="text-sm font-bold z-10000 text-dark">
-            <Navbar forceMobile={true}/>
-            </h1>
+            >
+              <h1 className="text-sm font-bold z-10000 text-dark">
+                <Navbar forceMobile={true} />
+              </h1>
 
-            <span  onClick={() => setIsOpen(!isOpen)} className="text-dark">
-              {isOpen ? <ArrowBigUpDash/> : <ArrowBigDownDash/>}
-            </span>
-          </div>
+              <span onClick={() => setIsOpen(!isOpen)} className="text-dark">
+                {isOpen ? <ArrowBigUpDash /> : <ArrowBigDownDash />}
+              </span>
+            </div>
 
-          {/* Accordion Overlay Content */}
-          {isOpen && (
-            <div className="absolute top-full left-0 w-full bg-white shadow-xl p-2 border z-50">
-              <div className="heading-button md:flex md:justify-between">
-                <div>
-                  <h1 className="text-3xl text-dark">
-                    {SantaMonica.layout}
-                    <sub className="text-gray-500 text-xs">{SantaMonica.modelYear}</sub>
-                  </h1>
+            {/* Accordion Overlay Content */}
+            {isOpen && (
+              <div className="absolute top-full left-0 w-full bg-white shadow-xl p-2 border z-50">
+                <div className="heading-button md:flex md:justify-between">
+                  <div>
+                    <h1 className="text-3xl text-dark">
+                      {SantaMonica.layout}
+                      <sub className="text-gray-500 text-xs">{SantaMonica.modelYear}</sub>
+                    </h1>
 
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <div className="rounded-full flex bg-brand mt-3 md:mt-0">
-
-                    <button onClick={() => setIsSanta(1)} className={`${isSanta === 1 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition" :"px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
-                      {vans[1].layout}
-                    </button>
                   </div>
 
-                  <div>
-                    <table className="w-full border bg-dark text-brand rounded-lg overflow-hidden text-sm">
-                      <thead>
-                        <tr>
-                          <th className="px-2 py-2">Wheel Base</th>
-                          <th className="px-2 py-2">Drive Train</th>
-                          <th className="px-2 py-2">Sit & Sleep</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="text-center">
-                          <td className="px-2 py-2">{SantaMonica.spec.wheelBase}</td>
-                          <td className="px-2 py-2">{SantaMonica.spec.drivetrain}</td>
-                          <td className="px-2 py-2">{SantaMonica.spec.SitSleep}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div className="flex flex-col gap-2">
+                    <div className="rounded-full flex bg-brand mt-3 md:mt-0">
+
+                      <button onClick={() => setIsSanta(1)} className={`${isSanta === 1 ? "bg-white px-4 py-2 text-xs rounded-full shadow-sm text-dark transition" : "px-4 py-2 text-xs rounded-full shadow-sm text-dark transition"}`}>
+                        {vans[1].layout}
+                      </button>
+                    </div>
+
+                    <div>
+                      <table className="w-full border bg-dark text-brand rounded-lg overflow-hidden text-sm">
+                        <thead>
+                          <tr>
+                            <th className="px-2 py-2">Wheel Base</th>
+                            <th className="px-2 py-2">Drive Train</th>
+                            <th className="px-2 py-2">Sit & Sleep</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="text-center">
+                            <td className="px-2 py-2">{SantaMonica.spec.wheelBase}</td>
+                            <td className="px-2 py-2">{SantaMonica.spec.drivetrain}</td>
+                            <td className="px-2 py-2">{SantaMonica.spec.SitSleep}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
 
 
-        <div className="canvas bg-white relative h-[45vh] lg:h-[90vh] ">
-          <div className="w-fulll h-full">
-            <Canvas className="h-screen">
-              <CameraAssigner cameraRef={cameraRef} />
+          <div className="canvas bg-white relative h-[45vh] lg:h-[90vh] ">
+            <div className="w-fulll h-full">
+              <Canvas className="h-screen">
+                <CameraAssigner cameraRef={cameraRef} />
 
-              {isIntView ? (
-                <>
-                  <SpotLightCom position={[0.6, -0.1, 1.1]} />
-                  <SpotLightCom position={[0, -0.1, 1.1]} />
-                  <SpotLightCom position={[-0.6, 0.3, 1.1]} />
-                </>
-              ) : (
-                <ambientLight intensity={0.25} />
-              )}
+                {isIntView ? (
+                  <>
+                    <SpotLightCom position={[0.6, -0.1, 1.1]} />
+                    <SpotLightCom position={[0, -0.1, 1.1]} />
+                    <SpotLightCom position={[-0.6, 0.3, 1.1]} />
+                  </>
+                ) : (
+                  <ambientLight intensity={0.25} />
+                )}
 
 
-              <Preload all />
-              <Suspense
-                fallback={
-                  <Html fullscreen>
-                    <div className="flex flex-col justify-center items-center h-full gap-4">
-                      {/* 3D Cube Icon */}
-                      <svg xmlns="http://www.w3.org/2000/svg"
-                        className="h-12 w-12 animate-spin text-gray-700"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
+                <Preload all />
+                <Suspense
+                  fallback={
+                    <Html fullscreen>
+                      <div className="flex flex-col justify-center items-center h-full gap-4">
+                        {/* 3D Cube Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                          className="h-12 w-12 animate-spin text-gray-700"
+                          fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                            d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
                    001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-                      </svg>
+                        </svg>
 
-                      {/* Loading Text */}
-                      <p className="text-gray-800 font-medium text-center">
-                        Good things take time — your model is on the way!
-                      </p>
-                    </div>
-                  </Html>
-                }
-              >
-                <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-                  <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
-                  <Santa showExterior={showExterior} />
-                {addedModels.map((model) => (
-        <DynamicModel
-          key={model._id || model.id}
-          model={model}
-          setActiveModelId={setActiveModelId}
-          modelRefs={modelRefs}
-        />
-      ))}
-                </group>
-              </Suspense>
-              {isIntView ? (
-                <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
-              ) : (
-                <ExteriorCameraControls cameraRef={cameraRef} orbitControlsRef={orbitControlsRef} />
-              )}
+                        {/* Loading Text */}
+                        <p className="text-gray-800 font-medium text-center">
+                          Good things take time — your model is on the way!
+                        </p>
+                      </div>
+                    </Html>
+                  }
+                >
+                  <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
+                    <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
+                    <BaseVanModel url={vans[0]?.glbFileUrl} showExterior={showExterior} />
+                    {addedModels.map((model) => (
+                      <DynamicModel
+                        key={model._id || model.id}
+                        model={model}
+                        setActiveModelId={setActiveModelId}
+                        modelRefs={modelRefs}
+                      />
+                    ))}
+                  </group>
+                </Suspense>
+                {isIntView ? (
+                  <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
+                ) : (
+                  <ExteriorCameraControls cameraRef={cameraRef} orbitControlsRef={orbitControlsRef} />
+                )}
 
-              <ExportableScene ref={sceneRef} exportSceneCallback={setSceneToExport} />
-            </Canvas>
-          </div>
-          <div className="absolute top-1 left-3/8  gap-3">
-            {/* View Toggle Button */}
-            <div className="flex bg-brand  rounded-full">
-              {/* Interior View Button */}
-              <button
-                onClick={() => setIsIntView(false)}
-                className={`px-4 py-1 rounded-full flex items-center gap-2 text-sm transition-colors
+                <ExportableScene ref={sceneRef} exportSceneCallback={setSceneToExport} />
+              </Canvas>
+            </div>
+            <div className="absolute top-1 left-3/8  gap-3">
+              {/* View Toggle Button */}
+              <div className="flex bg-brand  rounded-full">
+                {/* Interior View Button */}
+                <button
+                  onClick={() => setIsIntView(false)}
+                  className={`px-4 py-1 rounded-full flex items-center gap-2 text-sm transition-colors
       ${!isIntView ? "bg-white text-dark" : ""}`}
-              >
+                >
 
-                Interior
-              </button>
+                  Interior
+                </button>
 
-              {/* Exit Interior Button */}
-              <button
-                onClick={() => setIsIntView(true)}
-                className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm  transition-colors
+                {/* Exit Interior Button */}
+                <button
+                  onClick={() => setIsIntView(true)}
+                  className={`px-4 py-2 rounded-full flex items-center gap-2 text-sm  transition-colors
       ${isIntView ? "bg-white text-dark" : ""}`}
-              >
+                >
 
-                Exterior
-              </button>
+                  Exterior
+                </button>
+              </div>
+
+
+              {/* Interior Navigation Buttons */}
+
             </div>
-
-
-            {/* Interior Navigation Buttons */}
-
-          </div>
-          {isIntView && (
-            <div className=" absolute gap-4 bg-opacity-70 p-2 bottom-5 flex flex-col right-0 rounded-md">
-              <button
-                onClick={() => cameraDirectionBack(camPros, setTargetPos)}
-                className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
-                aria-label="Previous view"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 4c.55 0 1 .45 1 1v6h6c.55 0 1 .45 1 1s-.45 1-1 1h-6v6c0 .55-.45 1-1
+            {isIntView && (
+              <div className=" absolute gap-4 bg-opacity-70 p-2 bottom-5 flex flex-col right-0 rounded-md">
+                <button
+                  onClick={() => cameraDirectionBack(camPros, setTargetPos)}
+                  className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
+                  aria-label="Previous view"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4c.55 0 1 .45 1 1v6h6c.55 0 1 .45 1 1s-.45 1-1 1h-6v6c0 .55-.45 1-1
            1s-1-.45-1-1v-6H5c-.55 0-1-.45-1-1s.45-1 1-1h6V5c0-.55.45-1 1-1z"/>
-                </svg>
-              </button>
-              <button
-                onClick={() => interiorDirectionNext(camPros, setTargetPos)}
-                className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
-                aria-label="Next view"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M20 12H4" />
-                </svg>
+                  </svg>
+                </button>
+                <button
+                  onClick={() => interiorDirectionNext(camPros, setTargetPos)}
+                  className="bg-white hover:bg-brand hover:text-dark text-dark p-2 rounded-md transition-colors"
+                  aria-label="Next view"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M20 12H4" />
+                  </svg>
 
-              </button>
-            </div>
-          )}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Canvas Controls Overlay */}
+
         </div>
 
-        {/* Canvas Controls Overlay */}
-
+        {/* Cards Section - 50% on mobile, 25% on desktop */}
+        <div className="card-section col-span-4 p-2 bg-white shadow-md md:h-screen">
+          <MultiStepForm
+            addModelToScene={(m) =>
+              addModelToScene(m, addedModels, dispatch, setActiveModelId, modelRefs, cameraRef, orbitControlsRef)
+            }
+            removeModelFromScene={(label) => removeModelFromScene(label, dispatch, addedModels)}
+            getAddedQuantity={(label) => getAddedQuantity(label, addedModels)}
+            toggleExterior={setShowExterior}
+            sceneRef={sceneRef}
+            cameraRef={cameraRef}
+            modelRefs={modelRefs}
+            orbitControlsRef={orbitControlsRef}
+            SantaMonica={SantaMonica}
+          />
+        </div>
       </div>
 
-      {/* Cards Section - 50% on mobile, 25% on desktop */}
-      <div className="card-section col-span-4 p-2 bg-white shadow-md md:h-screen">
-        <MultiStepForm
-          addModelToScene={(m) =>
-            addModelToScene(m, addedModels, dispatch, setActiveModelId, modelRefs, cameraRef, orbitControlsRef)
-          }
-          removeModelFromScene={(label) => removeModelFromScene(label, dispatch, addedModels)}
-          getAddedQuantity={(label) => getAddedQuantity(label, addedModels)}
-          toggleExterior={setShowExterior}
-          sceneRef={sceneRef}
-          cameraRef={cameraRef}
-          modelRefs={modelRefs}
-          orbitControlsRef={orbitControlsRef}
-          SantaMonica={SantaMonica}
-        />
-      </div>
-    </div>
 
-
-</>
+    </>
   );
 }
 
