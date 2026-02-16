@@ -15,9 +15,9 @@ import { fetchExterior } from "../../api/model/modelExterior.js";
 import { fetchSystem } from "../../api/model/modelSystem.js";
 import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
-// import GIFVanLoader from "../gif-van-loader/GifVanLoader.jsx";
+import FullPageLoader from "./FullPageLoader.jsx"
 import { useGLTF } from "@react-three/drei";
-import Loader from "../../websiteComponents/components/Loader/Loader.jsx";
+// import Loader from "../../websiteComponents/components/Loader/Loader.jsx";
 
 const MultiStepForm = ({
   addModelToScene,
@@ -99,8 +99,8 @@ const MultiStepForm = ({
   const progressPercent = Math.round(((currentStep + 1) / (steps.length || 1)) * 100);
 
   // 4. Early Return for Loader: Jab tak saara data nahi milta
-  if (isInitialLoading || !steps || steps.length === 0 || !steps[currentStep]) {
-    return <Loader />;
+  if (isInitialLoading || !steps || steps.length === 0 || !steps[currentStep] || SantaMonica.layout === null || SantaMonica.layout === undefined || SantaMonica.layout.length === 0) {
+    return <FullPageLoader />;
   }
   return (
  <div className="  rounded-xl">

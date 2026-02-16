@@ -27,6 +27,7 @@ import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
 import { useGLTF } from "@react-three/drei";
 import axios from "axios";
 import BaseVanModel from "./BaseVanModel";
+import FullPageLoader from "../multi-step-form/FullPageLoader";
 function Van() {
   //   const vans =[
   //   {
@@ -90,7 +91,7 @@ function Van() {
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/add-base-van`);
-      console.log(res.data.data,"vans")
+      console.log(res.data.data, "vans")
       if (res.data.success) {
         setVans(res.data.data);
       }
@@ -275,27 +276,19 @@ function Van() {
                 <Suspense
                   fallback={
                     <Html fullscreen>
-                      <div className="flex flex-col justify-center items-center h-full gap-4">
-                        {/* 3D Cube Icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                          className="h-12 w-12 animate-spin text-gray-700"
-                          fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                            d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0
-                   001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-                        </svg>
-
-                        {/* Loading Text */}
-                        <p className="text-gray-800 font-medium text-center">
-                          Good things take time — your model is on the way!
-                        </p>
-                      </div>
+                      <FullPageLoader />
                     </Html>
                   }
                 >
                   <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
                     <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
-                    <BaseVanModel url={vans[0]?.glbFileUrl} showExterior={showExterior} />
+
+                    {/* Sirf tab render karein jab vans array mein data ho aur glbFileUrl mil jaye */}
+                    {vans && vans.length > 0 && vans[0]?.glbFileUrl ? (
+                      <BaseVanModel url={vans[0].glbFileUrl} showExterior={showExterior} />
+                    ) : (
+                      null // Ya yahan koi loader dikha sakte hain
+                    )}
                     {addedModels.map((model) => (
                       <DynamicModel
                         key={model._id || model.id}
@@ -390,6 +383,7 @@ function Van() {
             modelRefs={modelRefs}
             orbitControlsRef={orbitControlsRef}
             SantaMonica={SantaMonica}
+
           />
         </div>
       </div>
