@@ -5,9 +5,9 @@ export default function MultiStepPaginationButtons({ onClick, text, disabled = f
   const baseClasses = "w-full py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1";
 
   const variants = {
-    primary: "bg-cyan-500 hover:bg-cyan-400 text-white shadow-md",
-    secondary: "bg-slate-700 hover:bg-slate-600 text-slate-200 border border-white/10",
-    accent: "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white shadow-md",
+    primary: "bg-black hover:bg-gray-800 text-white shadow-md",
+    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-700 border border-black/10",
+    accent: "bg-black hover:bg-gray-800 text-white shadow-md",
   };
 
   const isBack = text.includes("←");

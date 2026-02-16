@@ -69,20 +69,21 @@ export default function ModelsCard({
   };
 
   // Extension Modal Component
+  // Extension Modal Component - LIGHT THEME
   const ExtensionModal = ({ model, onClose }) => {
     const extensions = getExtensionsForModel(model.label);
 
     return (
-      <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col">
+      <div className="fixed inset-0 z-50 bg-white flex flex-col">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 border-b border-black/10">
           <div>
-            <h3 className="text-lg font-bold text-white">{model.label}</h3>
-            <p className="text-sm text-slate-400">Select Extensions</p>
+            <h3 className="text-lg font-bold text-black">{model.label}</h3>
+            <p className="text-sm text-gray-500">Select Extensions</p>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition"
+            className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-black hover:bg-black/20 transition"
           >
             <X size={20} />
           </button>
@@ -112,12 +113,12 @@ export default function ModelsCard({
                 className={`
                   flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all
                   ${isExtSelected
-                    ? "bg-cyan-500/10 border-cyan-500/50"
-                    : "bg-white/5 border-white/10 hover:border-white/30"
+                    ? "bg-black/5 border-black/30"
+                    : "bg-gray-100 border-black/10 hover:border-black/20"
                   }
                 `}
               >
-                <div className="w-20 h-20 rounded-xl bg-slate-800 flex-shrink-0 overflow-hidden">
+                <div className="w-20 h-20 rounded-xl bg-white border border-black/10 flex-shrink-0 overflow-hidden">
                   <ImageWithSkeleton
                     src={ext.image}
                     alt={ext.label}
@@ -125,13 +126,13 @@ export default function ModelsCard({
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-base font-bold text-white mb-1">{ext.label}</h4>
-                  <p className="text-sm text-slate-400 mb-2">Extension Option</p>
+                  <h4 className="text-base font-bold text-black mb-1">{ext.label}</h4>
+                  <p className="text-sm text-gray-500 mb-2">Extension Option</p>
                   <div className={`
                     inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium
                     ${isExtSelected
-                      ? "bg-cyan-500 text-slate-900"
-                      : "bg-white/10 text-slate-300"
+                      ? "bg-black text-white"
+                      : "bg-black/10 text-gray-700"
                     }
                   `}>
                     {isExtSelected ? (
@@ -147,10 +148,10 @@ export default function ModelsCard({
         </div>
 
         {/* Done Button */}
-        <div className="p-4 border-t border-white/10 bg-slate-900">
+        <div className="p-4 border-t border-black/10 bg-gray-100">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold rounded-xl transition"
+            className="w-full py-3 bg-black hover:bg-gray-800 text-white font-bold rounded-xl transition"
           >
             Done
           </button>
@@ -159,11 +160,10 @@ export default function ModelsCard({
     );
   };
 
-  // Desktop Layout...
+  // Desktop Layout - LIGHT THEME
   if (!isMobile) {
     return (
       <div className="h-full overflow-y-auto p-3 space-y-2">
-        {/* Desktop code same as before */}
         {regularModels.map((model) => {
           const modelDependencies = TYPE_DEPENDENCIES[model.type] || [];
           const missingDependencies = modelDependencies.filter(dep => {
@@ -203,22 +203,22 @@ export default function ModelsCard({
                 className={`
                   flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border-2
                   ${isSelected
-                    ? "bg-cyan-500/10 border-cyan-500/50"
-                    : "bg-white/5 border-transparent hover:border-white/20"
+                    ? "bg-black/5 border-black/30"
+                    : "bg-gray-100 border-transparent hover:border-black/20"
                   }
                   ${isDisabled ? "opacity-50" : ""}
                 `}
               >
-                <div className="w-16 h-16 rounded-lg bg-slate-800 flex-shrink-0">
+                <div className="w-16 h-16 rounded-lg bg-white border border-black/10 flex-shrink-0">
                   <ImageWithSkeleton src={model.image} alt={model.label} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h6 className="text-sm font-bold text-white truncate">{model.label}</h6>
-                  {model.description && <p className="text-xs text-slate-400 line-clamp-1">{model.description}</p>}
+                  <h6 className="text-sm font-bold text-black truncate">{model.label}</h6>
+                  {model.description && <p className="text-xs text-gray-500 line-clamp-1">{model.description}</p>}
                 </div>
                 <div className={`
                   w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${isSelected ? "border-cyan-500 bg-cyan-500 text-slate-900" : "border-slate-600"}
+                  ${isSelected ? "border-black bg-black text-white" : "border-gray-300"}
                 `}>
                   {isSelected && <Check size={14} strokeWidth={3} />}
                 </div>
@@ -228,7 +228,7 @@ export default function ModelsCard({
               {hasExtensions && (
                 <button
                   onClick={() => setShowExtensionModal(model)}
-                  className="ml-4 mt-2 text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                  className="ml-4 mt-2 text-xs text-black hover:text-gray-600 flex items-center gap-1"
                 >
                   <Plus size={12} /> {extensions.length} Extensions Available
                 </button>
@@ -248,7 +248,7 @@ export default function ModelsCard({
     );
   }
 
-  // MOBILE LAYOUT
+  // MOBILE LAYOUT - LIGHT THEME
   return (
     <>
       {/* Extension Modal */}
@@ -259,9 +259,9 @@ export default function ModelsCard({
         />
       )}
 
-      <div className="h-full flex flex-col">
+      <div className="h-full flex flex-col ">
         {/* Cards Container */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden ">
           <div
             ref={scrollRef}
             onScroll={handleScroll}
@@ -309,23 +309,23 @@ export default function ModelsCard({
                     className={`
                       flex flex-row rounded-2xl overflow-hidden border-2 transition-all duration-300
                       ${isSelected
-                        ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.3)]"
-                        : "bg-slate-800 border-white/10"
+                        ? "bg-gray-100 border-black/30 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
+                        : "bg-white border-black/10"
                       }
                       ${isDisabled ? "opacity-60" : ""}
                       ${isActive ? "scale-100" : "scale-95 opacity-90"}
                     `}
                   >
                     {/* Image */}
-                    <div className="w-[40%] aspect-square bg-slate-900/50 relative flex items-center justify-center p-3 border-r border-white/5">
+                    <div className="w-[40%] aspect-square bg-gray-50 relative flex items-center justify-center p-3 border-r border-black/5">
                       <ImageWithSkeleton
                         src={model.image}
                         alt={model.label}
                         className="max-w-full max-h-full object-contain"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center">
-                          <Check className="text-slate-900" size={14} strokeWidth={3} />
+                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black flex items-center justify-center">
+                          <Check className="text-white" size={14} strokeWidth={3} />
                         </div>
                       )}
                     </div>
@@ -333,24 +333,24 @@ export default function ModelsCard({
                     {/* Content */}
                     <div className="w-[60%] p-3 flex flex-col justify-between">
                       <div>
-                        <h6 className="text-sm font-bold text-white mb-1 line-clamp-1">{model.label}</h6>
-                        <p className="text-xs text-slate-400 line-clamp-2">{model.description}</p>
+                        <h6 className="text-sm font-bold text-black mb-1 line-clamp-1">{model.label}</h6>
+                        <p className="text-xs text-gray-500 line-clamp-2">{model.description}</p>
                       </div>
 
                       <div className="mt-2">
                         {isDisabled ? (
-                          <div className="px-2 py-1 rounded bg-red-500/10 border border-red-500/30 flex items-center gap-1">
-                            <AlertCircle size={10} className="text-red-400" />
-                            <p className="text-[10px] text-red-400">Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}</p>
+                          <div className="px-2 py-1 rounded bg-gray-200 border border-gray-300 flex items-center gap-1">
+                            <AlertCircle size={10} className="text-gray-500" />
+                            <p className="text-[10px] text-gray-500">Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}</p>
                           </div>
                         ) : isSelected ? (
-                          <div className="px-2 py-1 rounded bg-cyan-500/20 border border-cyan-400/50 flex items-center justify-center gap-1">
-                            <Check size={12} className="text-cyan-400" />
-                            <p className="text-xs text-cyan-400 font-bold">Selected</p>
+                          <div className="px-2 py-1 rounded bg-black/10 border border-black/20 flex items-center justify-center gap-1">
+                            <Check size={12} className="text-black" />
+                            <p className="text-xs text-black font-bold">Selected</p>
                           </div>
                         ) : (
-                          <div className="px-2 py-1 rounded bg-white/5 border border-white/20">
-                            <p className="text-xs text-slate-300 text-center">Tap to Select</p>
+                          <div className="px-2 py-1 rounded bg-gray-100 border border-black/10">
+                            <p className="text-xs text-gray-600 text-center">Tap to Select</p>
                           </div>
                         )}
                       </div>
@@ -364,7 +364,7 @@ export default function ModelsCard({
                         e.stopPropagation();
                         setShowExtensionModal(model);
                       }}
-                      className="w-full mt-2 py-2 px-3 rounded-xl bg-slate-700/50 border border-white/10 text-xs text-cyan-400 font-medium flex items-center justify-center gap-2 hover:bg-slate-700 transition"
+                      className="w-full mt-2 py-2 px-3 rounded-xl bg-gray-100 border border-black/10 text-xs text-black font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition"
                     >
                       <Plus size={14} />
                       {extensions.length} Extension{extensions.length > 1 ? 's' : ''} Available
@@ -381,14 +381,14 @@ export default function ModelsCard({
               <button
                 onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
                 disabled={activeIndex === 0}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/95 text-white flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-white/20"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={() => scrollToCard(Math.min(regularModels.length - 1, activeIndex + 1))}
                 disabled={activeIndex === regularModels.length - 1}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/95 text-white flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-white/20"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
               >
                 <ChevronRight size={20} />
               </button>
@@ -398,7 +398,7 @@ export default function ModelsCard({
 
         {/* Pagination Dots */}
         {regularModels.length > 1 && (
-          <div className="flex justify-center gap-2 py-2 bg-slate-900 border-t border-white/5 flex-shrink-0">
+          <div className="flex justify-center gap-2 py-2 bg-white border-t border-black/5 flex-shrink-0">
             {regularModels.map((_, idx) => (
               <button
                 key={idx}
@@ -406,8 +406,8 @@ export default function ModelsCard({
                 className={`
                   h-1.5 rounded-full transition-all duration-300
                   ${idx === activeIndex
-                    ? 'w-6 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]'
-                    : 'w-1.5 bg-slate-600'
+                    ? 'w-6 bg-black shadow-[0_0_8px_rgba(0,0,0,0.3)]'
+                    : 'w-1.5 bg-gray-300'
                   }
                 `}
               />
