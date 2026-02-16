@@ -1,59 +1,100 @@
 const mongoose = require("mongoose");
 
-const quoteSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  phone: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  model: {
-    id: { type: String, required: true },
-    url: { type: String, required: true }
-  },
-  parts: {
-    type: Array,
-    default: []
-  },
+const partSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      required: true
+    },
 
-  // 🔑 New Fields
-  status: {
-    type: String,
-    enum: ["New", "Contacted", "In Progress", "Closed Won", "Closed Lost"],
-    default: "New"
-  },
-  notes: {
-    type: String,
-    default: ""
-  },
-  followUpDate: {
-    type: Date,
-    default: null
-  },
+    label: {
+      type: String
+    },
 
-  createdAt: {
-    type: Date,
-    default: Date.now
+    type: {
+      type: String
+    },
+
+    // 🔮 Future drag/drop support
+    position: {
+      type: [Number], // [x, y, z]
+      default: undefined, // 👈 required nahi
+      validate: {
+        validator: function (v) {
+          return !v || v.length === 3;
+        },
+        message: "Position must be an array of 3 numbers"
+      }
+    },
+
+    rotation: {
+      type: [Number], // [x, y, z]
+      default: undefined, // 👈 required nahi
+      validate: {
+        validator: function (v) {
+          return !v || v.length === 3;
+        },
+        message: "Rotation must be an array of 3 numbers"
+      }
+    }
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
+  { _id: false }
+);
+
+const quoteSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    email: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    phone: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
+    model: {
+      id: {
+        type: String,
+        required: true
+      },
+      layout: {
+        type: String
+      }
+    },
+
+    parts: {
+      type: [partSchema],
+      default: []
+    },
+
+    status: {
+      type: String,
+      enum: ["New", "Contacted", "In Progress", "Closed Won", "Closed Lost"],
+      default: "New"
+    },
+
+    notes: {
+      type: String,
+      default: ""
+    },
+
+    followUpDate: {
+      type: Date,
+      default: null
+    }
+  },
+  {
+    timestamps: true // 👈 auto createdAt & updatedAt
   }
-});
-
-// auto-update "updatedAt"
-quoteSchema.pre("save", function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
+);
 
 module.exports = mongoose.model("Quote", quoteSchema);

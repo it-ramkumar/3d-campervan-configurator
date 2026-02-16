@@ -1,6 +1,6 @@
 import { showQuoteForm } from "./showQuoteForm";
 import Swal from "sweetalert2";
-import { ExportScene } from "./exportSceneToOrder";
+// import { ExportScene } from "./exportSceneToOrder";
 import axios from "axios";
 import { setPreview } from "../redux/slices/previewSlice";
 
@@ -13,7 +13,8 @@ export const handleGetQuote = async (
   addedModels,
   router,
   dispatch,
-  cancelSourceRef // 👈 extra arg
+  cancelSourceRef, // 👈 extra arg,
+    BaseVan
 ) => {
   showQuoteForm(async (formData) => {
     if (
@@ -30,22 +31,34 @@ export const handleGetQuote = async (
     }
 
     try {
-      const { id, url } = await ExportScene(
-        sceneRef,
-        setUploadProgress,
-        setIsUploading,
-        setUploadSuccess,
-        setModelUrl,
-        router,
-        cancelSourceRef
-      );
-
-      const payload = {
+      // const { id, url } = await ExportScene(
+      //   sceneRef,
+      //   setUploadProgress,
+      //   setIsUploading,
+      //   setUploadSuccess,
+      //   setModelUrl,
+      //   router,
+      //   cancelSourceRef
+      // );
+      console.log(addedModels,"added models")
+const configData = addedModels?.map(part => ({
+        id: part.id || part._id,
+        label: part.label,
+        type: part.type,
+        // Agat admin ko exact positions dikhani hain:
+        position: part.position ? [part.position.x, part.position.y, part.position.z] : null,
+        rotation: part.rotation ? [part.rotation.x, part.rotation.y, part.rotation.z] : null
+      }));
+    const payload = {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        model: { id, url },
-        parts: addedModels,
+        model: {
+          id: BaseVan?.id || "base-van",
+          layout: BaseVan?.layout
+        },
+        parts: configData,
+        submittedAt: new Date().toISOString()
       };
 
       const res = await axios.post(

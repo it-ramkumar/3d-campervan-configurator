@@ -9,7 +9,7 @@ import { PrivateRoute } from "../websiteComponents/components/PrivateComponent/P
 
 // Lazy-loaded Widgets
 // Routes.jsx mein ye hai?
-import ChatWidget  from '../websiteComponents/components/ChatMaxima/ChatMaxima'
+import ChatWidget from '../websiteComponents/components/ChatMaxima/ChatMaxima'
 // Lazy-loaded Pages & Components
 const Home = lazy(() => import("../pages/Home"));
 const Van = lazy(() => import("../pages/Van"));
@@ -49,6 +49,7 @@ const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/
 const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPage"));
 const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
 // const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
+const PreviewPage = lazy(() => import("../components/preview/PreviewConfigureVan"));
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -60,7 +61,7 @@ const AppRoutes = () => {
 
   // Check if admin route
   const isAdminRoute = location.pathname.startsWith('/dashboard') ||
-                       location.pathname.startsWith('/login');
+    location.pathname.startsWith('/login');
 
   return (
     <>
@@ -114,7 +115,7 @@ const AppRoutes = () => {
           <Route path="/quick-links" element={<QuickLiks />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/where-to-camp" element={<WhereToCamp />} />
-          {/* <Route path="/system-options" element={<SystemOptions />} /> */}
+          <Route path="/quote/preview/:id" element={<PreviewPage />} />
 
           {/* Forms */}
           <Route path="/inquiry" element={<Inquiry />} />

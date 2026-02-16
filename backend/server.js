@@ -14,7 +14,7 @@ const van = require('./routes/van')
 const portfolio = require('./routes/portfolio')
 const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
-const Export = require("./routes/exportModel");
+// const Export = require("./routes/exportModel");
 const userRoute = require("./routes/authRoute");
 const TestBlog = require("./routes/testBlog")
 const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
@@ -61,7 +61,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", DelelteImageFromS3);
 app.use("/api/test-blog", TestBlog)
 app.use("/api/portfolio", portfolio)
-app.use("/api", Export)
+// app.use("/api", Export)
 app.use("/api/van", van)
 app.use("/api", userRoute);
 app.use("/api/inquery", inquery)

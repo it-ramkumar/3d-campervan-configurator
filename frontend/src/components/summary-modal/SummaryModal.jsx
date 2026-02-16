@@ -11,6 +11,7 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
   setIsUploading,
   setUploadSuccess,
   setModelUrl,
+  BaseVan
 }) {
   const dispatch = useDispatch();
   const router = useNavigate()
@@ -54,7 +55,8 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
       setModelUrl, addedModels,
       router,
       dispatch,
-      cancelSourceRef
+      cancelSourceRef,
+      BaseVan
     )
   };
 

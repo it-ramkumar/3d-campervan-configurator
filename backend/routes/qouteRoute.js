@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Quote = require("../models/quote");
-// const appendToSheet = require("../services/appendToSheet");
 const nodemailer = require("nodemailer");
-const { protect, adminOnly } = require("../middleware/authMiddleware")
 const Lead = require("../models/leadsEmail");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 const { deleteFromS3 } = require("../services/s3");
-
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -19,38 +17,43 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Simple parts formatter (no S3 links now)
 function formatPartsHTML(parts) {
-  if (!parts || !Array.isArray(parts) || parts.length === 0) return "N/A";
-
-  let html = "<ul>";
-  for (const part of parts) {
-    html += `<li>
-      <strong>Category:</strong> ${part.category} <br/>
-      <strong>Label:</strong> ${part.label} <br/>
-      <strong>Price:</strong> $${part.price} <br/>
-      <strong>Image:</strong> <a href="${part.imageUrl}" target="_blank">View Image</a> <br/>
-      <strong>Model:</strong> <a href="${part.modelUrl}" target="_blank">View Model</a>
-    </li><br/>`;
+  if (!parts || !Array.isArray(parts) || parts.length === 0) {
+    return "No additional parts selected.";
   }
-  html += "</ul>";
-  return html;
+
+  return `
+    <ul>
+      ${parts
+        .map(
+          (part) => `
+            <li>
+              <strong>${part.label || "Unnamed Part"}</strong>
+              (${part.id})
+              ${part.type ? `<br/><strong>Type:</strong> ${part.type}` : ""}
+            </li>
+          `
+        )
+        .join("")}
+    </ul>
+  `;
 }
 
-// POST - Create new quote request and send emails
+// POST - Create new quote request
 router.post("/", async (req, res) => {
-  // console.log("➡️ /quote route hit");
-
   try {
     const { name, email, phone, model, parts } = req.body;
 
-    // Validation
-    if (!name || !email || !phone || !model || !model.id || !model.url) {
-      return res.status(400).json({ message: "All fields are required." });
+    // Basic validation
+    if (!name || !email || !phone || !model || !model.id) {
+      return res.status(400).json({
+        message: "Name, email, phone and model.id are required.",
+      });
     }
-    // console.log("➡️ parts object:", parts);
 
-    // Create new quote document
-    const newQuote = new Quote({
+    // Save quote (JSON only — no S3 model URL)
+    const newQuote = await Quote.create({
       name,
       email,
       phone,
@@ -58,73 +61,88 @@ router.post("/", async (req, res) => {
       parts,
     });
 
-    await newQuote.save();
+    // 🔥 Generate dynamic preview link
+    const previewLink = `${process.env.FRONTEND_URL}/quote/preview/${newQuote._id}`;
 
-    // Format parts
     const htmlParts = formatPartsHTML(parts);
 
-    // 1️⃣ Get all sub-admin emails from Lead collection
+    // Get admin + sub-admin emails
     const leads = await Lead.find({}, { email: 1, _id: 0 });
-    const leadEmails = leads.map(l => l.email).filter(Boolean);
+    const leadEmails = leads.map((l) => l.email).filter(Boolean);
     const allAdminEmails = [process.env.GMAIL_USER, ...leadEmails];
 
-
     const emailContent = `
-<h2>New Quote Request - 3D Big Bear Van Configurator</h2>
-<p><strong>Name:</strong> ${name}</p>
-<p><strong>Email:</strong> ${email}</p>
-<p><strong>Phone:</strong> ${phone}</p>
-<p><strong>Model:</strong> ${model.id}</p>
-<p><strong>Model URL:</strong> <a href="${model.url}" target="_blank">${model.url}</a></p>
-<p><strong>Parts Requested:</strong> ${htmlParts}</p>
-<p><strong>Request Time:</strong> ${new Date().toLocaleString()}</p>
-`;
+      <h2>New Quote Request - Van Configurator</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Model:</strong> ${model.id}</p>
+      <p><strong>Layout:</strong> ${model.layout || "N/A"}</p>
+      <p><strong>Selected Parts:</strong></p>
+      ${htmlParts}
+      <p><strong>Preview Link:</strong>
+        <a href="${previewLink}" target="_blank">
+          ${previewLink}
+        </a>
+      </p>
+      <p><strong>Submitted At:</strong> ${new Date().toLocaleString()}</p>
+    `;
 
-    // Send email to admin
     try {
+      // Admin email
       await transporter.sendMail({
-        from: `"3D Big Bear Van Configurator" <${process.env.GMAIL_USER}>`,
+        from: `"Van Configurator" <${process.env.GMAIL_USER}>`,
         to: allAdminEmails,
         subject: `New Quote Request from ${name}`,
         html: emailContent,
       });
 
-      console.log("✅ Admin email sent successfully.");
-
-      // Send confirmation email to user
+      // User confirmation
       await transporter.sendMail({
-        from: `"3D Big Bear Van Configurator" <${process.env.GMAIL_USER}>`,
+        from: `"Van Configurator" <${process.env.GMAIL_USER}>`,
         to: email,
-        subject: "Your Quote Request Received",
+        subject: "Your Quote Request Has Been Received",
         html: `
           <h2>Hi ${name},</h2>
-          <p>Thank you for submitting your quote request. Here are the details we received:</p>
-          <p><strong>Model:</strong> ${model.id}</p>
-          <p><strong>Parts Requested:</strong> ${htmlParts}</p>
-          <p>Our team will review your request and get back to you shortly.</p>
-          <p>Best regards,<br/>3D Camper Configurator Team</p>
+          <p>Thank you for submitting your van configuration.</p>
+          <p>You can preview your configured van here:</p>
+          <p>
+            <a href="${previewLink}" target="_blank">
+              ${previewLink}
+            </a>
+          </p>
+          <p>Our team will contact you shortly.</p>
+          <p>Best regards,<br/>Van Configurator Team</p>
         `,
       });
 
-      // console.log("✅ User confirmation email sent successfully.");
-
     } catch (emailErr) {
-      console.error("❌ Error sending emails:", emailErr);
-      // Continue, MongoDB save is successful
+      console.error("Email sending error:", emailErr);
+      // Continue even if email fails
     }
 
     res.status(201).json({
-      message: "Quote request saved successfully. Confirmation email sent.",
+      message: "Quote saved successfully.",
       quote: newQuote,
+      previewLink,
     });
 
   } catch (err) {
-    console.error("❌ Error saving quote:", err);
-    res.status(500).json({ message: "Server error while saving quote." });
+    console.error("Quote save error:", err);
+    res.status(500).json({
+      message: "Server error while saving quote.",
+    });
   }
 });
-
-
+router.get("/all-quotes", protect, adminOnly, async (req, res) => {
+  try {
+    const quotes = await Quote.find().sort({ createdAt: -1 });
+    res.status(200).json({ data: quotes });
+  } catch (err) {
+    console.error("❌ Error fetching all quotes:", err);
+    res.status(500).json({ message: "Server error while fetching quotes." });
+  }
+});
 // GET - Fetch quotes by email or phone
 router.get("/search", protect, adminOnly, async (req, res) => {
 
@@ -153,42 +171,19 @@ router.get("/search", protect, adminOnly, async (req, res) => {
   }
 });
 
-// ✅ Get all quotes
-router.get("/all-quotes", protect, adminOnly, async (req, res) => {
-  try {
-    const quotes = await Quote.find().sort({ createdAt: -1 });
-    res.status(200).json({ data: quotes });
-  } catch (err) {
-    console.error("❌ Error fetching all quotes:", err);
-    res.status(500).json({ message: "Server error while fetching quotes." });
-  }
-});
-
-// ✅ Get quote by ID
-router.delete("/:id", protect, adminOnly, async (req, res) => {
+router.get("/preview/:id", async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id);
-    // console.log(quote,"quote")
 
     if (!quote) {
-      return res.status(404).json({ message: "Quote not found." });
+      return res.status(404).json({ message: "Quote not found" });
     }
 
-    // 🟢 Agar image / file URL save hai to pehle S3 se delete karo
-      if (quote.model?.url) {
-      await deleteFromS3(quote.model.url);
-    }
-    // 🟢 Ab DB se record delete karo
-    await Quote.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({ message: "Quote and related file deleted successfully." });
+    res.json(quote);
   } catch (err) {
-    console.error("❌ Error deleting quote:", err);
-    res.status(500).json({ message: "Server error while deleting quote." });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
-
 // ✅ Update quote by ID
 router.put("/:id", protect, adminOnly, async (req, res) => {
   try {
@@ -208,18 +203,6 @@ router.put("/:id", protect, adminOnly, async (req, res) => {
   }
 });
 
-// ✅ Delete quote by ID
-router.delete("/:id", protect, adminOnly, async (req, res) => {
-  try {
-    const deletedQuote = await Quote.findByIdAndDelete(req.params.id);
-    if (!deletedQuote) {
-      return res.status(404).json({ message: "Quote not found." });
-    }
-    res.status(200).json({ message: "Quote deleted successfully" });
-  } catch (err) {
-    console.error("❌ Error deleting quote:", err);
-    res.status(500).json({ message: "Server error while deleting quote." });
-  }
-});
+
 
 module.exports = router;
