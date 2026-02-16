@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { Home, Sun, Settings } from "lucide-react";
 
 export default function TabButtons({
   activeTab,
@@ -6,34 +7,42 @@ export default function TabButtons({
   setCurrentStep,
   toggleExterior,
 }) {
-  const [tabs] = useState([
-    { key: "interior", label: "Interior" },
-    { key: "exterior", label: "Exterior" },
-    { key: "system", label: "System" },
-  ]);
+  const tabs = [
+    { key: "interior", label: "Interior", icon: Home, short: "Int" },
+    { key: "exterior", label: "Exterior", icon: Sun, short: "Ext" },
+    { key: "system", label: "System", icon: Settings, short: "Sys" },
+  ];
 
   return (
-    <div className="flex justify-between mt-1 bg-gray-200  rounded-full ">
-      {tabs.map((t) => (
-        <button
-          key={t.key}
-          onClick={() => {
-            setActiveTab(t.key);
-            setCurrentStep(0);
-            if (t.key === "interior") toggleExterior(false);
-            if (t.key === "exterior") toggleExterior(true);
-             if (t.key === "system") toggleExterior(true);
-          }}
-          aria-current={activeTab === t.key ? "page" : undefined}
-          className={`px-4 py-2 text-xs  rounded-full w-full  text-gray-800 transition
-            ${activeTab === t.key
-             &&'bg-dark text-white shadow-sm '
+    <div className="flex p-1 rounded-xl bg-slate-800 border border-white/10">
+      {tabs.map((t) => {
+        const Icon = t.icon;
+        const isActive = activeTab === t.key;
 
-            }`}
-        >
-          {t.label}
-        </button>
-      ))}
+        return (
+          <button
+            key={t.key}
+            onClick={() => {
+              setActiveTab(t.key);
+              setCurrentStep(0);
+              if (t.key === "interior") toggleExterior(false);
+              if (t.key === "exterior") toggleExterior(true);
+              if (t.key === "system") toggleExterior(true);
+            }}
+            className={`
+              flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium transition-all
+              ${isActive
+                ? "bg-cyan-500 text-white shadow-lg"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+              }
+            `}
+          >
+            <Icon size={14} />
+            <span className="hidden sm:inline">{t.label}</span>
+            <span className="sm:hidden">{t.short}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
