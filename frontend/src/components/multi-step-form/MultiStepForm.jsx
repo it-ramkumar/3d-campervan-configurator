@@ -17,7 +17,7 @@ import { handleGetQuote } from "../../customeHooks/handleQuote.js";
 import { useNavigate } from "react-router-dom";
 import FullPageLoader from "./FullPageLoader.jsx"
 import { useGLTF } from "@react-three/drei";
-import { Loader2, CheckCircle2, Sparkles } from "lucide-react";
+import { Loader2, CheckCircle2, Sparkles,ShoppingCart } from "lucide-react";
 
 const MultiStepForm = ({
   addModelToScene,
@@ -32,7 +32,7 @@ const MultiStepForm = ({
 }) => {
   const dispatch = useDispatch();
   const router = useNavigate();
-
+  const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
   const models = useSelector((state) => state.models || []);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
   const interior = models?.interior?.data?.data;
@@ -99,10 +99,10 @@ const MultiStepForm = ({
   }
 
   return (
-    <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden">
+    <div className="h-full flex flex-col bg-slate-900 text-white overflow-hidden relative">
+
       {/* Fixed Header */}
-      <div className="flex-shrink-0 p-3 lg:p-4 border-b border-white/10 bg-slate-900/95 backdrop-blur-sm z-10">
-        {/* Tabs */}
+      <div className="flex-shrink-0 p-3 border-b border-white/10 bg-slate-900 z-10">
         <TabButtons
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -110,7 +110,7 @@ const MultiStepForm = ({
           toggleExterior={toggleExterior}
         />
 
-        {/* Progress Bar */}
+        {/* Progress */}
         <div className="mt-3">
           <div className="h-1 bg-slate-700 rounded-full overflow-hidden">
             <div
@@ -118,25 +118,33 @@ const MultiStepForm = ({
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <div className="flex justify-between mt-1 text-[10px] lg:text-xs text-slate-400">
+          <div className="flex justify-between mt-1 text-[10px] text-slate-400">
             <span>Step {currentStep + 1} of {steps.length}</span>
             <span className="text-cyan-400 font-medium">{progressPercent}%</span>
           </div>
         </div>
 
-        {/* Step Title */}
-        <div className="mt-2">
-          <h2 className="text-sm lg:text-base font-bold text-white capitalize flex items-center gap-2">
-            <Sparkles size={14} className="text-cyan-400" />
-            {steps[currentStep][0].replace(/-/g, " ")}
-          </h2>
-          <p className="text-[10px] lg:text-xs text-slate-400 mt-0.5 line-clamp-1">
-            {StepDescriptions[steps[currentStep][0]]}
-          </p>
+        {/* Title */}
+        <div className="mt-2 flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-white capitalize flex items-center gap-2">
+              <Sparkles size={14} className="text-cyan-400" />
+              {steps[currentStep][0].replace(/-/g, " ")}
+            </h2>
+            <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+              {StepDescriptions[steps[currentStep][0]]}
+            </p>
+          </div>
+
+          {/* Mobile: Items Count Badge */}
+          <div className="lg:hidden flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs">
+            <CheckCircle2 size={12} className="text-cyan-400" />
+            <span>{addedModels.length} items</span>
+          </div>
         </div>
       </div>
 
-      {/* Scrollable Cards Section */}
+      {/* Cards Section */}
       <div className="flex-1 overflow-hidden relative min-h-0">
         <ModelsCard
           steps={steps}
@@ -153,12 +161,11 @@ const MultiStepForm = ({
         />
       </div>
 
-      {/* Fixed Footer with Navigation & Quote */}
-      <div className="flex-shrink-0 border-t border-white/10 bg-slate-900/95 backdrop-blur-sm">
-        {/* Navigation Buttons - Horizontal Layout */}
-        <div className="p-2 lg:p-3 border-b border-white/5">
-          <div className="flex justify-between items-center gap-2">
-            {/* Left Button */}
+      {/* Footer - Navigation Only (No Quote Button) */}
+      <div className="flex-shrink-0 border-t border-white/10 bg-slate-900 z-20 pb-[env(safe-area-inset-bottom)] lg:pb-0">
+        <div className="p-3">
+          <div className="flex justify-between items-center gap-3">
+            {/* Back Button */}
             <div className="flex-1">
               {activeTab === "exterior" && currentStep === 0 ? (
                 <NextBackButton
@@ -190,8 +197,8 @@ const MultiStepForm = ({
               )}
             </div>
 
-            {/* Right Button */}
-            <div className="flex-1 flex justify-end">
+            {/* Next Button */}
+            <div className="flex-1">
               {activeTab === "interior" && currentStep === steps.length - 1 ? (
                 <NextBackButton
                   onClick={() => {
@@ -227,55 +234,98 @@ const MultiStepForm = ({
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Quote Section */}
-        <div className="p-2 lg:p-3 bg-slate-800/50">
-          <div className="flex items-center justify-between gap-3 mb-2">
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] text-slate-400 uppercase">Selected Van</p>
-              <h3 className="text-xs lg:text-sm font-bold text-white truncate">
-                {SantaMonica?.layout || "Loading..."}
-              </h3>
-            </div>
-            <div className="text-right flex-shrink-0">
-              <p className="text-[10px] text-slate-400 uppercase">Items</p>
-              <div className="flex items-center gap-1 text-cyan-400 font-bold text-sm">
-                <CheckCircle2 size={12} />
-                <span>{addedModels.length}</span>
-              </div>
+      {/* MOBILE: Floating Action Button (FAB) for Quote */}
+      <div className="lg:hidden fixed bottom-20 right-4 z-40">
+        <button
+          onClick={() => setShowQuoteConfirm(true)}
+          className="w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.5)] flex items-center justify-center hover:scale-110 transition-transform active:scale-95 border-2 border-white/20"
+        >
+          <ShoppingCart size={24} />
+          {addedModels.length > 0 && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center border-2 border-slate-900">
+              {addedModels.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Quote Confirmation Modal */}
+      {showQuoteConfirm && (
+        <div className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex items-center justify-center p-4 lg:hidden">
+          <div className="w-full max-w-sm bg-slate-900 rounded-3xl border border-white/10 p-6">
+            <h3 className="text-xl font-bold text-white mb-2">Get Your Quote</h3>
+            <p className="text-sm text-slate-400 mb-6">
+              You have {addedModels.length} items selected for {SantaMonica?.layout || "your van"}.
+            </p>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowQuoteConfirm(false);
+                  handleGetQuote(
+                    sceneRef,
+                    setUploadProgress,
+                    setIsUploading,
+                    setUploadSuccess,
+                    setModelUrl,
+                    addedModels,
+                    router,
+                    dispatch,
+                    cancelSourceRef
+                  );
+                }}
+                disabled={isUploading}
+                className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {isUploading ? (
+                  <><Loader2 size={18} className="animate-spin" /> Saving...</>
+                ) : (
+                  <><Sparkles size={18} /> Save & Get Quote</>
+                )}
+              </button>
+
+              <button
+                onClick={() => setShowQuoteConfirm(false)}
+                className="w-full py-3 bg-white/10 text-white font-medium rounded-xl hover:bg-white/20 transition"
+              >
+                Continue Configuring
+              </button>
             </div>
           </div>
-
-          <button
-            onClick={() =>
-              handleGetQuote(
-                sceneRef,
-                setUploadProgress,
-                setIsUploading,
-                setUploadSuccess,
-                setModelUrl,
-                addedModels,
-                router,
-                dispatch,
-                cancelSourceRef
-              )
-            }
-            disabled={isUploading}
-            className="w-full py-2 px-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs lg:text-sm font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isUploading ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                <span>Saving... {uploadProgress}%</span>
-              </>
-            ) : (
-              <>
-                <Sparkles size={14} />
-                <span>Save & Get Quote</span>
-              </>
-            )}
-          </button>
         </div>
+      )}
+
+      {/* DESKTOP: Quote Section in Footer */}
+      <div className="hidden lg:block flex-shrink-0 border-t border-white/10 bg-slate-800/50 p-3">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div>
+            <p className="text-[10px] text-slate-400 uppercase">Selected Van</p>
+            <h3 className="text-sm font-bold text-white truncate max-w-[150px]">
+              {SantaMonica?.layout || "Loading..."}
+            </h3>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] text-slate-400 uppercase">Items</p>
+            <div className="flex items-center gap-1 text-cyan-400 font-bold">
+              <CheckCircle2 size={14} />
+              <span>{addedModels.length}</span>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onClick={() => handleGetQuote(/* ...params */)}
+          disabled={isUploading}
+          className="w-full py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm font-bold rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {isUploading ? (
+            <><Loader2 size={16} className="animate-spin" /> Saving... {uploadProgress}%</>
+          ) : (
+            <><Sparkles size={16} /> Save & Get Quote</>
+          )}
+        </button>
       </div>
 
       {/* Summary Modal */}

@@ -204,7 +204,7 @@ function Van() {
             <div className="flex items-center justify-between">
 
               {/* LEFT: Navbar - Clean without glass panel */}
-              <div className="relative z-30">
+              <div className="relative z-10000">
                 <Navbar forceMobile={true} />
               </div>
 
