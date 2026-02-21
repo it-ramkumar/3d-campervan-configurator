@@ -42,30 +42,34 @@ export const showQuoteForm = (onSubmit) => {
     buttonsStyling: false,
     focusConfirm: false,
 
-    preConfirm: () => {
-      const name = document.getElementById("swal-name").value.trim();
-      const email = document.getElementById("swal-email").value.trim();
-      const phone = document.getElementById("swal-phone").value.trim();
-      const country = document.getElementById("swal-country").value;
+ preConfirm: async () => {
+  await new Promise(r => setTimeout(r, 50)); // 50ms wait for inputs to render
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^\+?[0-9\s()\-]{7,15}$/;
+  const name = document.getElementById("swal-name")?.value.trim() || "";
+  const email = document.getElementById("swal-email")?.value.trim() || "";
+  const phone = document.getElementById("swal-phone")?.value.trim() || "";
+  const country = document.getElementById("swal-country")?.value || "";
 
-      if (!name || !email || !phone) {
-        Swal.showValidationMessage("ALL FIELDS ARE REQUIRED");
-        return false;
-      }
-      if (!emailRegex.test(email)) {
-        Swal.showValidationMessage("INVALID EMAIL ADDRESS");
-        return false;
-      }
-      if (!phoneRegex.test(phone)) {
-        Swal.showValidationMessage("INVALID PHONE NUMBER");
-        return false;
-      }
+  if (!name || !email || !phone) {
+    Swal.showValidationMessage("ALL FIELDS ARE REQUIRED");
+    return false;
+  }
 
-      return { name, email, phone: country + " " + phone };
-    },
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\+?[0-9\s()\-]{7,15}$/;
+
+  if (!emailRegex.test(email)) {
+    Swal.showValidationMessage("INVALID EMAIL ADDRESS");
+    return false;
+  }
+
+  if (!phoneRegex.test(phone)) {
+    Swal.showValidationMessage("INVALID PHONE NUMBER");
+    return false;
+  }
+
+  return { name, email, phone: country + " " + phone };
+}
   }).then((result) => {
     if (result.isConfirmed && result.value) {
       onSubmit(result.value);
