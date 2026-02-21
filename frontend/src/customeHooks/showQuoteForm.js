@@ -1,8 +1,6 @@
 import Swal from "sweetalert2";
 
 export const showQuoteForm = (onSubmit) => {
-  let nameInput, emailInput, phoneInput, countrySelect;
-
   Swal.fire({
     title: "REQUEST A QUOTE",
     html: `
@@ -10,11 +8,11 @@ export const showQuoteForm = (onSubmit) => {
         <p class="swal-sub-title">Enter your details to receive a custom configuration summary.</p>
 
         <div class="input-wrapper">
-          <input type="text" id="swal-name" class="premium-input" placeholder="FULL NAME" />
+          <input type="text" id="swal-name" class="premium-input" placeholder="FULL NAME" autocomplete="off" />
         </div>
 
         <div class="input-wrapper">
-          <input type="email" id="swal-email" class="premium-input" placeholder="EMAIL ADDRESS" />
+          <input type="email" id="swal-email" class="premium-input" placeholder="EMAIL ADDRESS" autocomplete="off" />
         </div>
 
         <div class="phone-container">
@@ -26,7 +24,7 @@ export const showQuoteForm = (onSubmit) => {
             <option value="+971">🇦🇪 +971</option>
             <option value="+91">🇮🇳 +91</option>
           </select>
-          <input type="tel" id="swal-phone" class="premium-input phone-input" placeholder="PHONE NUMBER" />
+          <input type="tel" id="swal-phone" class="premium-input phone-input" placeholder="PHONE NUMBER" autocomplete="off" />
         </div>
       </div>
     `,
@@ -44,19 +42,15 @@ export const showQuoteForm = (onSubmit) => {
     buttonsStyling: false,
     focusConfirm: false,
 
-    // ✅ DOM ready callback
-    didOpen: () => {
-      nameInput = document.getElementById("swal-name");
-      emailInput = document.getElementById("swal-email");
-      phoneInput = document.getElementById("swal-phone");
-      countrySelect = document.getElementById("swal-country");
-    },
-
     preConfirm: () => {
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const country = countrySelect.value;
+      // ✅ Live Build Fix: Always fetch fresh values inside the hook
+      const name = document.getElementById("swal-name").value.trim();
+      const email = document.getElementById("swal-email").value.trim();
+      const phone = document.getElementById("swal-phone").value.trim();
+      const country = document.getElementById("swal-country").value;
+
+      // Debugging: Live console pe check karne ke liye (Aap isse remove bhi kar sakte hain)
+      console.log("Validating:", { name, email, phone });
 
       if (!name || !email || !phone) {
         Swal.showValidationMessage("ALL FIELDS ARE REQUIRED");
@@ -64,14 +58,13 @@ export const showQuoteForm = (onSubmit) => {
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^\+?[0-9\s()\-]{7,15}$/;
-
       if (!emailRegex.test(email)) {
         Swal.showValidationMessage("INVALID EMAIL ADDRESS");
         return false;
       }
 
-      if (!phoneRegex.test(phone)) {
+      // Live phone number validation ko simple rakha hai
+      if (phone.length < 7) {
         Swal.showValidationMessage("INVALID PHONE NUMBER");
         return false;
       }
