@@ -27,8 +27,7 @@ import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
 import { useGLTF } from "@react-three/drei";
 import axios from "axios";
 import BaseVanModel from "./BaseVanModel";
-import FullPageLoader from "../multi-step-form/FullPageLoader";
-
+import Loader from "../../websiteComponents/components/Loader/Loader"
 function Van() {
   const [isSanta, setIsSanta] = useState(0)
   const dispatch = useDispatch();
@@ -73,6 +72,7 @@ function Van() {
     }
   };
 
+  // console.log(vans,"base van")
   useEffect(() => {
     fetchVans();
     if (groupRef.current) centerModelByBoundingBox(groupRef);
@@ -312,7 +312,7 @@ function Van() {
               )}
 
               <Preload all />
-              <Suspense fallback={<Html fullscreen><FullPageLoader /></Html>}>
+              <Suspense fallback={<Html fullscreen><Loader /></Html>}>
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
                   <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
 

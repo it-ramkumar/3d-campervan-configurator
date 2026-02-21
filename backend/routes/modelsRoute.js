@@ -45,10 +45,10 @@ router.post(
         category === "interior"
           ? InteriorModel
           : category === "exterior"
-          ? ExteriorModel
-          : category === "system"
-          ? SystemModel
-          : null;
+            ? ExteriorModel
+            : category === "system"
+              ? SystemModel
+              : null;
 
       if (!Model)
         return res.status(400).json({ success: false, message: "Invalid category" });
@@ -68,6 +68,71 @@ router.post(
   }
 );
 
+
+
+router.get("/interior", async (req, res) => {
+  try {
+    const data = await InteriorModel.find();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.get("/exterior", async (req, res) => {
+  try {
+    const data = await ExteriorModel.find();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.get("/system", async (req, res) => {
+  try {
+    const data = await SystemModel.find();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    const [interior, exterior, system] = await Promise.all([
+      InteriorModel.find(),
+      ExteriorModel.find(),
+      SystemModel.find()
+    ]);
+    res.json({ success: true, data: [...interior, ...exterior, ...system] });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+// routes/models.js
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find in all categories
+    const [interior, exterior, system] = await Promise.all([
+      InteriorModel.findById(id),
+      ExteriorModel.findById(id),
+      SystemModel.findById(id)
+    ]);
+
+    const part = interior || exterior || system;
+
+    if (!part) {
+      return res.status(404).json({ success: false, message: "Part not found" });
+    }
+
+    res.json({ success: true, data: part });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 router.put(
   "/edit/:id",
   protect,
@@ -83,10 +148,10 @@ router.put(
         category === "interior"
           ? InteriorModel
           : category === "exterior"
-          ? ExteriorModel
-          : category === "system"
-          ? SystemModel
-          : null;
+            ? ExteriorModel
+            : category === "system"
+              ? SystemModel
+              : null;
 
       if (!Model)
         return res
@@ -163,10 +228,10 @@ router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
       category === "interior"
         ? InteriorModel
         : category === "exterior"
-        ? ExteriorModel
-        : category === "system"
-        ? SystemModel
-        : null;
+          ? ExteriorModel
+          : category === "system"
+            ? SystemModel
+            : null;
 
     if (!Model) {
       return res.status(400).json({ success: false, message: "Invalid category" });
@@ -191,45 +256,4 @@ router.delete("/delete/:id", protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-
-router.get("/interior", async (req, res) => {
-  try {
-    const data = await InteriorModel.find();
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-router.get("/exterior", async (req, res) => {
-  try {
-    const data = await ExteriorModel.find();
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-router.get("/system", async (req, res) => {
-  try {
-    const data = await SystemModel.find();
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-router.get("/all", async (req, res) => {
-  try {
-    const [interior, exterior, system] = await Promise.all([
-      InteriorModel.find(),
-      ExteriorModel.find(),
-      SystemModel.find()
-    ]);
-    res.json({ success: true, data: [...interior, ...exterior, ...system] });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
 module.exports = router;

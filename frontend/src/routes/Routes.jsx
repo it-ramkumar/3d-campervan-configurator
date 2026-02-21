@@ -60,8 +60,8 @@ const AppRoutes = () => {
   }, [location]);
 
   // Check if admin route
-  const isAdminRoute = location.pathname.startsWith('/dashboard') ||
-    location.pathname.startsWith('/login');
+  // const isAdminRoute = location.pathname.startsWith('/dashboard') ||
+  //   location.pathname.startsWith('/login');
 
   return (
     <>

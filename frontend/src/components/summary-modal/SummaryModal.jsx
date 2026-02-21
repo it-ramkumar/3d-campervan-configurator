@@ -1,24 +1,21 @@
-import React, { useState,useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAddedModels } from '../../redux/slices/addedModels.js'
 import Swal from "sweetalert2";
 import { handleGetQuote } from '../../customeHooks/handleQuote.js';
-import { useNavigate } from 'react-router-dom';
 import ImageWithSkeleton from '../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx';
 
-export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
-  setUploadProgress,
-  setIsUploading,
-  setUploadSuccess,
-  setModelUrl,
-  BaseVan
+export default function SummaryModal({
+  SummaryModal,
+  setSummaryModal,
+  BaseVan,
+  setLoading
 }) {
   const dispatch = useDispatch();
-  const router = useNavigate()
-   const cancelSourceRef = useRef(null);
 
   const addedModels = useSelector((state) => state.addedModels.addedModels);
   const [selectedItem, setSelectedItem] = useState(null);
+
 
   const handleClose = () => {
     setSummaryModal(false);
@@ -48,15 +45,11 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
 
   const handleConfirmOrder = () => {
     setSummaryModal(false);
-    handleGetQuote(sceneRef,
-      setUploadProgress,
-      setIsUploading,
-      setUploadSuccess,
-      setModelUrl, addedModels,
-      router,
+    handleGetQuote(
+      addedModels,
       dispatch,
-      cancelSourceRef,
-      BaseVan
+      BaseVan,
+      setLoading
     )
   };
 
@@ -127,10 +120,7 @@ export default function SummaryModal({ SummaryModal, setSummaryModal, sceneRef,
 
             {/* Footer */}
             <div className="px-6 py-4 border-t bg-dark flex justify-between items-center shadow-inner">
-              {/* <div className="text-gray-700 text-sm">
-                <p>Total Items: <span className="font-semibold">{itemCount}</span></p>
-                <p>Total Amount: <span className="font-semibold">${totalAmount}</span></p>
-              </div> */}
+
               <div className="">
                 <button
                   onClick={handleClose}

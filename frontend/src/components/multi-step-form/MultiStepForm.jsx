@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { toggleModelSelection } from "../../customeHooks/toogleModelSelection";
 import { isDependencyMet } from "../../customeHooks/isDependecyMet";
 import { StepDescriptions } from "../../customeHooks/stepDescription";
@@ -14,8 +14,7 @@ import { fetchInterior } from "../../api/model/modelInterior.js";
 import { fetchExterior } from "../../api/model/modelExterior.js";
 import { fetchSystem } from "../../api/model/modelSystem.js";
 import { handleGetQuote } from "../../customeHooks/handleQuote.js";
-import { useNavigate } from "react-router-dom";
-import FullPageLoader from "./FullPageLoader.jsx"
+import Loader from "../../websiteComponents/components/Loader/Loader.jsx"
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
 
@@ -24,14 +23,12 @@ const MultiStepForm = ({
   removeModelFromScene,
   getAddedQuantity,
   toggleExterior,
-  sceneRef,
   cameraRef,
   modelRefs,
   orbitControlsRef,
   BaseVan
 }) => {
   const dispatch = useDispatch();
-  const router = useNavigate();
   const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
   const models = useSelector((state) => state.models || []);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
@@ -39,20 +36,16 @@ const MultiStepForm = ({
   const exterior = models?.exterior?.data?.data;
   const system = models?.system?.data?.data;
 
-  const cancelSourceRef = useRef(null);
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
   const [summaryModal, setSummaryModal] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [modelUrl, setModelUrl] = useState(null);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadAllData = async () => {
       try {
-        setIsInitialLoading(true);
+        setLoading(true);
         await Promise.all([
           dispatch(fetchInterior()),
           dispatch(fetchExterior()),
@@ -61,14 +54,14 @@ const MultiStepForm = ({
       } catch (err) {
         console.error("Error fetching initial data:", err);
       } finally {
-        setIsInitialLoading(false);
+        setLoading(false);
       }
     };
     loadAllData();
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isInitialLoading) {
+    if (!loading) {
       const allData = [...(interior || []), ...(exterior || []), ...(system || [])];
       allData.forEach((model) => {
         if (model?.glbFile) {
@@ -80,7 +73,7 @@ const MultiStepForm = ({
         }
       });
     }
-  }, [isInitialLoading, interior, exterior, system]);
+  }, [loading, interior, exterior, system]);
 
   const steps = useMemo(() => {
     if (activeTab === "interior") return Object.entries(groupByGroup(interior || []));
@@ -90,10 +83,10 @@ const MultiStepForm = ({
 
   const progressPercent = Math.round(((currentStep + 1) / (steps.length || 1)) * 100);
 
-  if (isInitialLoading || !steps || steps.length === 0 || !steps[currentStep] || BaseVan?.layout === null) {
+  if (loading || !steps || steps.length === 0 || !steps[currentStep] || BaseVan?.layout === null) {
     return (
       <div className="h-full flex items-center justify-center bg-slate-900">
-        <FullPageLoader />
+        <Loader />
       </div>
     );
   }
@@ -265,22 +258,16 @@ const MultiStepForm = ({
                 onClick={() => {
                   setShowQuoteConfirm(false);
                   handleGetQuote(
-                    sceneRef,
-                    setUploadProgress,
-                    setIsUploading,
-                    setUploadSuccess,
-                    setModelUrl,
                     addedModels,
-                    router,
                     dispatch,
-                    cancelSourceRef,
-                    BaseVan
+                    BaseVan,
+                    setLoading
                   );
                 }}
-                disabled={isUploading}
+                disabled={loading}
                 className="w-full py-3 bg-black text-white font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
               >
-                {isUploading ? (
+                {loading ? (
                   <><Loader2 size={18} className="animate-spin" /> Saving...</>
                 ) : (
                   <><Sparkles size={18} /> Save & Get Quote</>
@@ -317,22 +304,17 @@ const MultiStepForm = ({
         </div>
 
         <button
-          onClick={() => handleGetQuote(sceneRef,
-            setUploadProgress,
-            setIsUploading,
-            setUploadSuccess,
-            setModelUrl,
+          onClick={() => handleGetQuote(
             addedModels,
-            router,
             dispatch,
-            cancelSourceRef,
-            BaseVan
+            BaseVan,
+            setLoading
           )}
-          disabled={isUploading}
+          disabled={loading}
           className="w-full py-2.5 bg-black hover:bg-gray-800 text-white text-sm font-bold rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          {isUploading ? (
-            <><Loader2 size={16} className="animate-spin" /> Saving... {uploadProgress}%</>
+          {loading ? (
+            <><Loader2 size={16} className="animate-spin" /> Saving...</>
           ) : (
             <><Sparkles size={16} /> Save & Get Quote</>
           )}
@@ -344,12 +326,9 @@ const MultiStepForm = ({
         <SummaryModal
           SummaryModal={summaryModal}
           setSummaryModal={setSummaryModal}
-          sceneRef={sceneRef}
-          setUploadProgress={setUploadProgress}
-          setIsUploading={setIsUploading}
-          setUploadSuccess={setUploadSuccess}
-          setModelUrl={setModelUrl}
           BaseVan={BaseVan}
+          addedModels={addedModels}
+          setLoading={setLoading}
         />
       )}
     </div>
