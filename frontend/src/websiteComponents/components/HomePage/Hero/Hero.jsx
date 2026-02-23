@@ -17,7 +17,7 @@ const slides = [
   {
     id: 1,
     image: "/heroSlider/long_van.jpg",
-    title: "Custom Camper Vans..",
+    title: "Custom Camper Vans.",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
@@ -85,7 +85,6 @@ export default function Hero() {
           </SwiperSlide>
         ))}
 
-        {/* --- Content (Fixed over all slides) --- */}
         {/* 🟢 Reflow Fix: 'contain-layout' use kiya hai taake text animation se slides disturb na hon */}
         <div
           className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8 pointer-events-none"
