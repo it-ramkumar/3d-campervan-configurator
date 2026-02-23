@@ -80,7 +80,7 @@ export default function BlogsListing() {
       <title>{pageTitle}</title>
       <meta name="description" content={pageDesc} />
       <meta name="keywords" content="van life blog, camper van bathroom tips, van kitchen materials, sprinter conversion guide, big bear vans blog" />
-      <link rel="canonical" href="https://bigbearvans.com/blogs" />
+      <link rel="canonical" href="https://bigbearvans.com/blog" />
 
       {/* Social Media Tags */}
       <meta property="og:title" content={pageTitle} />
