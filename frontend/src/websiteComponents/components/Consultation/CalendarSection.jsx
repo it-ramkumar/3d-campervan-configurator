@@ -260,15 +260,23 @@ const generateCalendar = () => {
     setBookingStep(2); // Move to time selection after date selection
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+const formatDate = (dateString) => {
+    // ✅ FIX: Date string ko properly parse karo (YYYY-MM-DD format)
+    const [year, month, day] = dateString.split('-');
+
+    // ✅ Local date object banao (UTC confusion avoid karo)
+    const date = new Date(year, month - 1, day); // month is 0-indexed
+
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: userTimeZone
     });
-  };
+};
 
   // ... (rest of the code remains the same)
 
