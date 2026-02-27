@@ -77,22 +77,23 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     try {
         const { name, email, phone, startTime, endTime, summary, description, timezone } = req.body;
 
+        console.log("🔍 CREATE EVENT REQUEST:");
+        console.log("Timezone from frontend:", timezone);
+        console.log("Start time from frontend:", startTime);
+
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ User ka timezone (frontend se aaya)
-        const userTimezone = timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // ✅ Frontend se aayi timezone use karo (fallback California)
+        const userTimezone = timezone || 'America/Los_Angeles';
 
-        // ✅ CORRECT WAY: Frontend se ISO string parse karo WITH timezone
+        // ✅ ISO string ko user timezone mein parse karo
         const eventStart = DateTime.fromISO(startTime, { zone: userTimezone });
         const eventEnd = DateTime.fromISO(endTime, { zone: userTimezone });
 
-        console.log("🔍 DEBUG TIMEZONE CHECK:");
-        console.log("User Timezone:", userTimezone);
-        console.log("Original startTime from frontend:", startTime);
-        console.log("Parsed eventStart (with TZ):", eventStart.toISO());
-        console.log("Converted to UTC:", eventStart.toUTC().toISO());
+        console.log("Parsed Start (with TZ):", eventStart.toISO());
+        console.log("Parsed Start (UTC):", eventStart.toUTC().toISO());
 
-        // ✅ Availability Check (UTC mein)
+        // Availability check
         const events = await calendar.events.list({
             calendarId: "primary",
             timeMin: eventStart.toUTC().toISO(),
@@ -101,16 +102,16 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         });
 
         if (events.data.items.length > 0) {
-            return res.status(400).json({ message: "This time slot is already booked." });
+            return res.status(400).json({ message: "Time slot already booked" });
         }
 
-        // ✅ Event create karo - TIMEZONE PROPERLY SET
+        // ✅ Event create - USER TIMEZONE MEIN
         const event = {
             summary: summary || `Meeting with ${name}`,
             description: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}\n\n${description || ""}`,
             start: {
-                dateTime: eventStart.toISO(), // ✅ ISO format with timezone offset
-                timeZone: userTimezone // ✅ User ka timezone
+                dateTime: eventStart.toISO(), // ✅ ISO with offset
+                timeZone: userTimezone // ✅ California timezone
             },
             end: {
                 dateTime: eventEnd.toISO(),
@@ -125,12 +126,16 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
             },
         };
 
+        console.log("📅 Creating event with timezone:", userTimezone);
+
         const response = await calendar.events.insert({
             calendarId: "primary",
             resource: event,
             conferenceDataVersion: 1,
-            sendUpdates: 'all' // ✅ Email bhejega with proper timezone
+            sendUpdates: 'all'
         });
+
+        console.log("✅ Event created successfully");
 
         res.json({
             message: "Booking successful",
@@ -151,35 +156,39 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
 // ✅ SLOTS ENDPOINT - FIXED VERSION
 router.get("/slots", ensureAuthenticated, async (req, res) => {
     try {
+        // ✅ DEFAULT timezone America/Los_Angeles (California)
         const { date, timezone = 'America/Los_Angeles' } = req.query;
+
+        console.log("🔍 SLOTS REQUEST:");
+        console.log("Date:", date);
+        console.log("Timezone:", timezone);
+
         const startHour = 9, endHour = 17, durationMinutes = 30;
         const slots = [];
 
-        // ✅ User timezone mein din ki shuruaat
+        // ✅ User timezone mein parse karo
         let start = DateTime.fromISO(date, { zone: timezone })
             .set({ hour: startHour, minute: 0, second: 0, millisecond: 0 });
 
         if (!start.isValid) {
-            return res.status(400).json({ message: "Invalid date or timezone provided." });
+            return res.status(400).json({ message: "Invalid date or timezone" });
         }
 
         let end = DateTime.fromISO(date, { zone: timezone })
             .set({ hour: endHour, minute: 0, second: 0, millisecond: 0 });
 
-        // ✅ Booked events fetch (UTC mein)
-        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+        console.log("Start time:", start.toISO());
+        console.log("End time:", end.toISO());
 
-        const timeMin = start.toUTC().toISO();
-        const timeMax = end.toUTC().toISO();
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
         const events = await calendar.events.list({
             calendarId: "primary",
-            timeMin: timeMin,
-            timeMax: timeMax,
+            timeMin: start.toUTC().toISO(),
+            timeMax: end.toUTC().toISO(),
             singleEvents: true,
         });
 
-        // ✅ Booked times ko Luxon objects mein convert
         const bookedTimes = events.data.items.map(ev => {
             const startTimeStr = ev.start.dateTime || ev.start.date + 'T00:00:00';
             const endTimeStr = ev.end.dateTime || ev.end.date + 'T23:59:59';
@@ -190,22 +199,18 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             };
         });
 
-        // ✅ Current time in user's timezone
         const now = DateTime.now().setZone(timezone);
 
-        // ✅ Slots generate
         while (start < end) {
             const slotStart = start;
             const slotEnd = start.plus({ minutes: durationMinutes });
 
             let available = true;
 
-            // Past time check
             if (slotStart < now) {
                 available = false;
             }
 
-            // Booked check
             if (bookedTimes.some(booked =>
                 slotStart < booked.end && slotEnd > booked.start
             )) {
@@ -221,10 +226,11 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             start = slotEnd;
         }
 
+        console.log(`✅ Generated ${slots.length} slots for ${timezone}`);
         res.json(slots);
 
     } catch (err) {
-        console.error("Slots error:", err);
+        console.error("❌ Slots error:", err);
         res.status(500).json({
             message: "Error fetching slots",
             error: err.message

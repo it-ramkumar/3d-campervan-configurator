@@ -83,30 +83,30 @@ export default function BookingPage() {
   };
 
   // Step 4: Fetch available slots for selected date - Timezone ke saath
-  useEffect(() => {
+  // ✅ Slots fetch karte waqt timezone bhejo
+useEffect(() => {
     if (isLoggedIn && selectedDate) {
-      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      // Backend ko date aur user ka time zone bhejein
-      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          //  console.log("Slots received for timezone:", userTimeZone, data);
-          // Agar data mein error message hai, to slots ko empty set karein aur alert dein
-          if (data.error) {
-            console.error("Backend Error fetching slots:", data.error);
-            setSlots([]);
-            // alert("Error fetching slots: " + data.message); // Agar zaruri ho
-          } else {
-            setSlots(data);
-          }
-        })
-        .catch((err) => {
-          console.error("Network error fetching slots:", err);
-          setSlots([]);
-        });
+        console.log("🔍 Fetching slots for timezone:", userTimeZone); // ✅ ADD THIS
+
+        fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("📥 Received slots:", data); // ✅ ADD THIS
+                if (data.error) {
+                    console.error("Backend Error fetching slots:", data.error);
+                    setSlots([]);
+                } else {
+                    setSlots(data);
+                }
+            })
+            .catch((err) => {
+                console.error("Network error fetching slots:", err);
+                setSlots([]);
+            });
     }
-  }, [isLoggedIn, selectedDate]);
+}, [isLoggedIn, selectedDate]);
 
   // Step 5: Submit booking - Backend ko ISO strings bhej rahe hain (correct)
 // Step 5: Submit booking
@@ -115,17 +115,23 @@ const handleBooking = async () => {
     if (!formData.name || !formData.email)
         return alert("Name and Email are required.");
 
-    // ✅ User ka timezone bhi bhejo
+    // ✅ User ka ACTUAL timezone
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    console.log("🔍 BOOKING DEBUG:");
+    console.log("User Timezone:", userTimezone); // Should be "America/Los_Angeles"
+    console.log("Selected Slot:", selectedSlot);
 
     const bookingData = {
         ...formData,
-        startTime: selectedSlot.start, // ISO string with offset
+        startTime: selectedSlot.start,
         endTime: selectedSlot.end,
-        timezone: userTimezone, // ✅ ADD THIS
+        timezone: userTimezone, // ✅ MUST INCLUDE
         summary: formData.summary || "Meeting",
         description: formData.description || "",
     };
+
+    console.log("📤 Sending booking data:", bookingData);
 
     setSubmitting(true);
     try {
@@ -138,18 +144,22 @@ const handleBooking = async () => {
         const data = await res.json();
 
         if (!res.ok) {
-            console.error("Backend error:", data);
-            return alert(data.message || `Error: ${res.status}`);
+            console.error("❌ Backend error:", data);
+            alert(data.message || `Error: ${res.status}`);
+            setSubmitting(false);
+            return;
         }
 
+        console.log("✅ Booking successful:", data);
         setMeetLink(data.meetLink);
         setBookingStep(5);
         setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
         setSubmitting(false);
 
     } catch (err) {
-        console.error("Network error:", err);
-        alert("Network error - check console for details");
+        console.error("❌ Network error:", err);
+        alert("Network error - check console");
+        setSubmitting(false);
     }
 };
 
