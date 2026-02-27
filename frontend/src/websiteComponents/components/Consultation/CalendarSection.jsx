@@ -196,48 +196,57 @@ const handleBooking = async () => {
   };
 
   // ✅ FIX: Calendar mein bhi local date ka comparison theek karein
-  const generateCalendar = () => {
+  // ✅ FIX: Calendar mein bhi local date ka comparison theek karein
+const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth);
     const firstDay = getFirstDayOfMonth(currentMonth);
     const calendar = [];
 
-    // ✅ USER LOCAL DATE (YYYY-MM-DD string) - Yeh zaruri hai
+    // ✅ USER LOCAL DATE (YYYY-MM-DD string) - Consistent tareeqa
     const todayString = getTodayDate();
 
     // Add empty cells for days before the first day of month
     for (let i = 0; i < firstDay; i++) {
-      calendar.push(null);
+        calendar.push(null);
     }
 
     // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-      // Date object banayein (Server ke time zone mein)
-      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+        // ✅ FIX: User ke timezone mein date string banao (UTC confusion avoid karo)
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      // Isko YYYY-MM-DD format mein convert karein
-      const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        // Date object banao WITHOUT time (midnight local time)
+        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
 
-      const isToday = dateString === todayString;
-      const isSelected = dateString === selectedDate;
+        // ✅ CORRECT WAY: User timezone mein YYYY-MM-DD format
+        const dateString = date.toLocaleDateString('en-CA', {
+            timeZone: userTimeZone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }); // 'en-CA' locale gives YYYY-MM-DD format
 
-      // Past check: Calendar date string ko today string se compare karein
-      const isPast = dateString < todayString;
+        const isToday = dateString === todayString;
+        const isSelected = dateString === selectedDate;
 
-      // ✅ Sunday disable check
-      const isSunday = date.getDay() === 0;
+        // Past check: Calendar date string ko today string se compare karein
+        const isPast = dateString < todayString;
 
-      calendar.push({
-        day,
-        date: dateString,
-        isToday,
-        isSelected,
-        isPast,
-        isSunday // ✅ added property
-      });
+        // ✅ Sunday disable check
+        const isSunday = date.getDay() === 0;
+
+        calendar.push({
+            day,
+            date: dateString,
+            isToday,
+            isSelected,
+            isPast,
+            isSunday
+        });
     }
 
     return calendar;
-  };
+};
 
 
   const navigateMonth = (direction) => {
