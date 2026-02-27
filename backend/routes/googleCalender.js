@@ -117,7 +117,9 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
                 dateTime: eventEnd.toISO(),
                 timeZone: userTimezone
             },
-            attendees: [{ email: email }],
+            attendees: [{ email: email },
+                {email:"nlaiba588@gmail.com"}
+            ],
             conferenceData: {
                 createRequest: {
                     requestId: `meet-${Date.now()}`,
