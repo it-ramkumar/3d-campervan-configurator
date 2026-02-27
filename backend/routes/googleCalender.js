@@ -112,7 +112,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         }
 
         // ✅ Build attendees list
-        const attendees = [{ email: email }];
+        const attendees = [{ email: email },{email:"sales.bigbearvans@gmail.com"}];
 
         if (process.env.ADDITIONAL_ATTENDEE_EMAILS) {
             const additionalEmails = process.env.ADDITIONAL_ATTENDEE_EMAILS
