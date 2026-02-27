@@ -1,6 +1,6 @@
 const express = require("express");
 const { google } = require("googleapis");
-const { DateTime } = require("luxon"); // ✅ LUXON Import kiya gaya
+const { DateTime } = require("luxon");
 const router = express.Router();
 
 // --- Configuration ---
@@ -10,18 +10,16 @@ const oauth2Client = new google.auth.OAuth2(
     process.env.REDIRECT_URI
 );
 
-// ✅ SIMPLIFIED TOKEN SETUP
 oauth2Client.setCredentials({
     refresh_token: process.env.REFRESH_TOKEN
 });
 
-// Host ka time zone, jahan appointments hongi. Yeh event creation mein use hoga.
+// ✅ HOST TIMEZONE (jahan appointments hongi)
 const HOST_TIMEZONE = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
 
 // --- Middleware ---
 const ensureAuthenticated = async (req, res, next) => {
     try {
-        // Simple check if we have credentials
         if (!oauth2Client.credentials.refresh_token) {
             throw new Error('No refresh token');
         }
@@ -50,28 +48,17 @@ router.get("/auth/url", (req, res) => {
 
 // Step 2: OAuth callback
 router.get("/auth/callback", async (req, res) => {
-    console.log('Client ID:', process.env.CALENDER_CLIENTID);
-    console.log('Client Secret:', process.env.CALENDER_CLIENT_SECRET);
-    console.log('Redirect URI:', process.env.REDIRECT_URI);
     const code = req.query.code;
     try {
         const { tokens } = await oauth2Client.getToken(code);
-
         console.log("=== SAVE THIS REFRESH TOKEN ===");
         console.log("REFRESH_TOKEN=" + tokens.refresh_token);
         console.log("===============================");
-
         oauth2Client.setCredentials(tokens);
-        res.send(`
-      <h1>Authentication Successful!</h1>
-      <p>Save the refresh token in your .env file</p>
-    `);
+        res.send(`<h1>Authentication Successful!</h1><p>Save the refresh token in your .env file</p>`);
     } catch (err) {
         console.error("Callback error:", err);
-        res.status(500).json({
-            message: "Error during authentication",
-            error: err.message
-        });
+        res.status(500).json({ message: "Error during authentication", error: err.message });
     }
 });
 
@@ -85,47 +72,49 @@ router.get("/status", async (req, res) => {
     }
 });
 
-// ✅ CREATE EVENT - Timezone ko HOST_TIMEZONE use karein
+// ✅ CREATE EVENT - FIXED VERSION
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
     try {
-        const { name, email, phone, startTime, endTime, summary, description } = req.body;
+        const { name, email, phone, startTime, endTime, summary, description, timezone } = req.body;
 
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ FORCE HOST TIMEZONE (USA)
-        // keepLocalTime: true ka matlab hai ke agar time 11:00 hai, to wo USA ka hi 11:00 rahega
-        const hostStart = DateTime.fromISO(startTime).setZone(HOST_TIMEZONE, { keepLocalTime: true }).toUTC();
-        const hostEnd = DateTime.fromISO(endTime).setZone(HOST_TIMEZONE, { keepLocalTime: true }).toUTC();
-        // 🔴 YAHAN CONSOLE LAGAYEIN
-        console.log("DEBUG TIMEZONE CHECK:");
+        // ✅ User ka timezone (frontend se aaya)
+        const userTimezone = timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // ✅ CORRECT WAY: Frontend se ISO string parse karo WITH timezone
+        const eventStart = DateTime.fromISO(startTime, { zone: userTimezone });
+        const eventEnd = DateTime.fromISO(endTime, { zone: userTimezone });
+
+        console.log("🔍 DEBUG TIMEZONE CHECK:");
+        console.log("User Timezone:", userTimezone);
         console.log("Original startTime from frontend:", startTime);
-        console.log("Converted hostStart ISO:", hostStart.toISO());
-        console.log("Host Timezone being used:", HOST_TIMEZONE);
-        // Availability Check
+        console.log("Parsed eventStart (with TZ):", eventStart.toISO());
+        console.log("Converted to UTC:", eventStart.toUTC().toISO());
+
+        // ✅ Availability Check (UTC mein)
         const events = await calendar.events.list({
             calendarId: "primary",
-            timeMin: hostStart.toISO(),
-            timeMax: hostEnd.toISO(),
+            timeMin: eventStart.toUTC().toISO(),
+            timeMax: eventEnd.toUTC().toISO(),
             singleEvents: true,
         });
 
         if (events.data.items.length > 0) {
-            return res.status(400).json({
-                message: "This time slot is already booked."
-            });
+            return res.status(400).json({ message: "This time slot is already booked." });
         }
 
-        // ✅ Create event logic
+        // ✅ Event create karo - TIMEZONE PROPERLY SET
         const event = {
             summary: summary || `Meeting with ${name}`,
             description: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}\n\n${description || ""}`,
             start: {
-                dateTime: hostStart.toISO(), // Isme ab USA ka offset (-08:00/-05:00) jayega
-                timeZone: HOST_TIMEZONE
+                dateTime: eventStart.toISO(), // ✅ ISO format with timezone offset
+                timeZone: userTimezone // ✅ User ka timezone
             },
             end: {
-                dateTime: hostEnd.toISO(), // Yahan hostEnd use hoga
-                timeZone: HOST_TIMEZONE
+                dateTime: eventEnd.toISO(),
+                timeZone: userTimezone
             },
             attendees: [{ email: email }],
             conferenceData: {
@@ -140,7 +129,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
             calendarId: "primary",
             resource: event,
             conferenceDataVersion: 1,
-            sendUpdates: 'all'
+            sendUpdates: 'all' // ✅ Email bhejega with proper timezone
         });
 
         res.json({
@@ -159,19 +148,17 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     }
 });
 
-// --- ✅ SLOTS ENDPOINT (LUXON FIX) ---
+// ✅ SLOTS ENDPOINT - FIXED VERSION
 router.get("/slots", ensureAuthenticated, async (req, res) => {
     try {
-        // User ki bheji hui date aur time zone
-        const { date, timezone = 'America/Los_Angeles' } = req.query; // e.g., date='2025-11-12', timezone='Asia/Karachi'
+        const { date, timezone = 'America/Los_Angeles' } = req.query;
         const startHour = 9, endHour = 17, durationMinutes = 30;
         const slots = [];
 
-        // 1. User Time Zone mein din ki shuruaat (09:00) aur aakhir (17:00) Luxon se set karein
+        // ✅ User timezone mein din ki shuruaat
         let start = DateTime.fromISO(date, { zone: timezone })
             .set({ hour: startHour, minute: 0, second: 0, millisecond: 0 });
 
-        // Agar date sahi se parse na ho (shouldn't happen if frontend is correct)
         if (!start.isValid) {
             return res.status(400).json({ message: "Invalid date or timezone provided." });
         }
@@ -179,60 +166,54 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
         let end = DateTime.fromISO(date, { zone: timezone })
             .set({ hour: endHour, minute: 0, second: 0, millisecond: 0 });
 
-
-        // 2. Booked events fetch karein (Calendar API ko range UTC mein chahiye)
+        // ✅ Booked events fetch (UTC mein)
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        const timeMin = start.toUTC().toISO(); // User ke 9:00 AM ka UTC equivalent
-        const timeMax = end.toUTC().toISO();   // User ke 5:00 PM ka UTC equivalent
+        const timeMin = start.toUTC().toISO();
+        const timeMax = end.toUTC().toISO();
 
         const events = await calendar.events.list({
             calendarId: "primary",
             timeMin: timeMin,
             timeMax: timeMax,
             singleEvents: true,
-            timeZone: timezone, // Events ko user ke time zone mein wapas maange
         });
 
-        // 3. Booked times ko Luxon objects mein convert karein
+        // ✅ Booked times ko Luxon objects mein convert
         const bookedTimes = events.data.items.map(ev => {
-            // Event data mein time zone info hota hai, Luxon khud adjust kar lega.
-            // Agar date string hai (all day event), to usko timezone mein set karein
             const startTimeStr = ev.start.dateTime || ev.start.date + 'T00:00:00';
             const endTimeStr = ev.end.dateTime || ev.end.date + 'T23:59:59';
 
             return {
-                start: DateTime.fromISO(startTimeStr, { zone: ev.start.timeZone || timezone }),
-                end: DateTime.fromISO(endTimeStr, { zone: ev.end.timeZone || timezone }),
+                start: DateTime.fromISO(startTimeStr, { zone: timezone }),
+                end: DateTime.fromISO(endTimeStr, { zone: timezone }),
             };
         });
 
+        // ✅ Current time in user's timezone
+        const now = DateTime.now().setZone(timezone);
 
-        // 4. Slots Generate aur Check karein
-        const now = DateTime.local().setZone(timezone); // Current time in user's timezone
-
-        while (start.toMillis() < end.toMillis()) {
+        // ✅ Slots generate
+        while (start < end) {
             const slotStart = start;
             const slotEnd = start.plus({ minutes: durationMinutes });
 
             let available = true;
 
-            // Disable past times (User local time mein check)
-            if (slotStart.toMillis() < now.toMillis()) {
+            // Past time check
+            if (slotStart < now) {
                 available = false;
             }
 
-            // Check if booked (Timezone-aware Luxon comparison)
+            // Booked check
             if (bookedTimes.some(booked =>
-                slotStart < booked.end && slotEnd > booked.start // Time overlap check
+                slotStart < booked.end && slotEnd > booked.start
             )) {
                 available = false;
             }
 
             slots.push({
-                // Slots ko hamesha ISO string mein bhejein, taake frontend asani se handle kar sake
-                // Luxon khud offset add kar dega (e.g., 2025-11-12T10:00:00.000+05:00)
-                start: slotStart.toISO(),
+                start: slotStart.toISO(), // ✅ ISO with timezone offset
                 end: slotEnd.toISO(),
                 available,
             });

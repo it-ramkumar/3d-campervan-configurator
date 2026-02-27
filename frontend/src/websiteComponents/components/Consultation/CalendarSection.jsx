@@ -109,49 +109,49 @@ export default function BookingPage() {
   }, [isLoggedIn, selectedDate]);
 
   // Step 5: Submit booking - Backend ko ISO strings bhej rahe hain (correct)
-  const handleBooking = async () => {
+// Step 5: Submit booking
+const handleBooking = async () => {
     if (!selectedSlot) return alert("Please select a time slot.");
     if (!formData.name || !formData.email)
-      return alert("Name and Email are required.");
+        return alert("Name and Email are required.");
 
+    // ✅ User ka timezone bhi bhejo
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const bookingData = {
-      ...formData,
-      startTime: selectedSlot.start, // ✅ Backend se aayi ISO string (offset ke saath)
-      endTime: selectedSlot.end,   // ✅ Backend se aayi ISO string (offset ke saath)
-      summary: formData.summary || "Meeting",
-      description: formData.description || "",
+        ...formData,
+        startTime: selectedSlot.start, // ISO string with offset
+        endTime: selectedSlot.end,
+        timezone: userTimezone, // ✅ ADD THIS
+        summary: formData.summary || "Meeting",
+        description: formData.description || "",
     };
 
     setSubmitting(true);
     try {
-      // console.log("Sending booking data:", bookingData);
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bookingData),
+        });
 
-      const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
+        const data = await res.json();
 
-      const data = await res.json();
+        if (!res.ok) {
+            console.error("Backend error:", data);
+            return alert(data.message || `Error: ${res.status}`);
+        }
 
-      if (!res.ok) {
-        console.error("Backend error:", data);
-        return alert(data.message || `Error: ${res.status}`);
-      }
-
-      setMeetLink(data.meetLink);
-      setBookingStep(5);
-
-      // Remove booked slot
-      setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
-      setSubmitting(false);
+        setMeetLink(data.meetLink);
+        setBookingStep(5);
+        setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+        setSubmitting(false);
 
     } catch (err) {
-      console.error("Network error:", err);
-      alert("Network error - check console for details");
+        console.error("Network error:", err);
+        alert("Network error - check console for details");
     }
-  };
+};
 
   // Copy meeting link to clipboard
   const copyToClipboard = () => {

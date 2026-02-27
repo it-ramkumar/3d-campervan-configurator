@@ -17,7 +17,7 @@ const slides = [
   {
     id: 1,
     image: "/heroSlider/long_van.jpg",
-    title: "Custom Camper Vans.",
+    title: "Custom Camper Vans....",
     desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
   },
   {
@@ -91,7 +91,7 @@ export default function Hero() {
           style={{ contain: 'layout style' }}
         >
           <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0 pointer-events-auto">
-            <Heading1 text="Custom Camper Vans." />
+            <Heading1 text="Custom Camper Vans..." />
             <Paragraph text="Buy, customize, or try the 3D configurator from Big Bear Vans today." />
             <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
               <BlackButton label="Order Custom Build" link="/inquiry" />
