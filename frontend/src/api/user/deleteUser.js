@@ -3,17 +3,17 @@ import Swal from "sweetalert2";
 export const deleteUser = async (id) => {
 
   try {
-    const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/quote/${id}`, {
+    const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/quote/delete-quote/${id}`, {
       withCredentials: true,
     });
     Swal.fire({
-          icon: "success",
-          title: "Delete successfully!",
-          text: "Your User has been Deleted successfully.",
-        });
+      icon: "success",
+      title: "Delete successfully!",
+      text: "Your User has been Deleted successfully.",
+    });
     return res.data;
   } catch (err) {
-        Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Error",
       text: err.response.data.message,

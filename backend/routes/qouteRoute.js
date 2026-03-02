@@ -202,6 +202,24 @@ router.put("/:id", protect, adminOnly, async (req, res) => {
     res.status(500).json({ message: "Server error while updating quote." });
   }
 });
+router.delete("/delete-quote/:id", protect, adminOnly, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const quote = await Quote.findById(id);
+
+    if (!quote) {
+      return res.status(404).json({ message: "Quote not found." });
+    }
+
+    await Quote.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Quote deleted successfully." });
+  } catch (err) {
+    console.error("❌ Error deleting quote:", err);
+    res.status(500).json({ message: "Server error while deleting quote." });
+  }
+});
 
 
 
