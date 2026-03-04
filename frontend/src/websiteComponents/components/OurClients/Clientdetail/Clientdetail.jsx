@@ -331,7 +331,7 @@ export default function ClientStories() {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
 
-          <Heading2 text="Our Client Stories" className="my-4"/>
+          <Heading2 text="Our Client Stories" className="my-4" />
           <RichParagraph className="max-w-3xl mx-auto my-4">
             At Big Bear Vans, we build premium custom campervans. These luxurious
             vans enable our clients to hit the road, explore, and live off the
@@ -451,7 +451,7 @@ export default function ClientStories() {
               </div>
 
               <div className="lg:col-span-2">
-                <Heading3 text="Lake Tahoe Campervan" textColor="text-black" className="my-4"/>
+                <Heading3 text="Lake Tahoe Campervan" textColor="text-black" className="my-4" />
                 <RichParagraph className="mb-6">
 
                   We designed this  <Link to="https://bigbearvans.com/layout-detail/lake-tahoe" target="_blank" rel="noopener noreferrer" className="px-4 py-1 bg-white border border-blue-200 rounded-full text-xs font-bold text-blue-700 shadow-sm">
@@ -597,9 +597,9 @@ export default function ClientStories() {
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold uppercase tracking-wider mb-6 w-fit">
                   Featured Build
                 </div>
-                <Heading3 text="The Cusco Campervan" textColor="text-black" className="my-4"/>
+                <Heading3 text="The Cusco Campervan" textColor="text-black" className="my-4" />
                 <RichParagraph className="my-6">
-                  <Link to="https://bigbearvans.com/layout-detail/cusco-campervan/" target="_blank" rel="noopener noreferrer" className="px-4 py-1 bg-white border border-blue-200 rounded-full text-xs font-bold text-blue-700 shadow-sm">
+                  <Link to="https://bigbearvans.com/layout-detail/cusco-campervan/" target="_blank" rel="noopener noreferrer" className="px-4 py-1 bg-white border border-blue-200 rounded-full text-xs font-bold text-secondary shadow-sm">
                     Cusco
                   </Link>
                   is our pet-friendly campervan designed for clients with two dogs, featuring dedicated pet areas and enhanced ventilation systems.
@@ -734,7 +734,7 @@ export default function ClientStories() {
                       <div className="p-2.5 bg-gray-900 rounded-xl text-white shadow-lg">
                         <Car className="w-5 h-5" />
                       </div>
-                      <Heading4 text="The Garage" textColor="text-black" className="my-4"/>
+                      <Heading4 text="The Garage" textColor="text-black" className="my-4" />
                     </div>
                     <div className="space-y-3">
                       <IconFeature text="Secure, separated garage for up to three motorcycles" index={0} icon={Shield} />
@@ -749,7 +749,7 @@ export default function ClientStories() {
                       <div className="p-2.5 bg-emerald-600 rounded-xl text-white shadow-lg">
                         <Home className="w-5 h-5" />
                       </div>
-                      <Heading4 text="The Living Space" textColor="text-black" className="my-4"/>
+                      <Heading4 text="The Living Space" textColor="text-black" className="my-4" />
                     </div>
                     <div className="space-y-3">
                       <IconFeature text="Comfortable sleeping for five with loft bed system" index={0} icon={Users} />
@@ -856,7 +856,7 @@ export default function ClientStories() {
                 <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 shadow-sm">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
-                    <Heading4 text="Client Vision" textColor="text-black" className="my-4"/>
+                    <Heading4 text="Client Vision" textColor="text-black" className="my-4" />
                   </div>
                   <div className="grid grid-cols-1 gap-4">
                     <IconFeature text="Off-grid ready campervan
@@ -876,7 +876,7 @@ export default function ClientStories() {
                 <div className="px-2">
                   <div className="flex items-center gap-3 mb-8">
                     <div className="w-1.5 h-6 bg-slate-900 rounded-full"></div>
-                    <Heading3 text="Our Delivery" textColor="text-black" className="my-4"/>
+                    <Heading3 text="Our Delivery" textColor="text-black" className="my-4" />
                   </div>
                   <div className="space-y-6">
                     <IconFeature
@@ -1000,7 +1000,7 @@ export default function ClientStories() {
               {/* RIGHT SIDE: Narrative and Testimonial (Spans 5 columns) */}
               <div className="lg:col-span-5 flex flex-col justify-center space-y-8">
                 <div>
-                  <Heading3 text="San Diego Campervan" textColor="text-black" className="my-4"/>
+                  <Heading3 text="San Diego Campervan" textColor="text-black" className="my-4" />
                   <RichParagraph className="my-4">
                     We built the
                     <Link to="https://bigbearvans.com/layout-detail/san-diego-campervan" target="_blank" rel="noopener noreferrer" className="px-4 py-1 bg-white border border-blue-200 rounded-full text-xs font-bold text-blue-700 shadow-sm">
@@ -1095,7 +1095,7 @@ export default function ClientStories() {
             <div className="flex justify-center mb-3">
               <Star className="w-7 h-7 text-white" />
             </div>
-            <Heading2 text="Why Our Clients Choose Us?" textColor="text-white" className="my-4"/>
+            <Heading2 text="Why Our Clients Choose Us?" textColor="text-white" className="my-4" />
             <RichParagraph white={true} className="my-4 max-w-3xl mx-auto text-center">
               With a consistent five-star rating from owners across the USA,
               we've built more than 105 campervans. Here's why these people
@@ -1133,7 +1133,7 @@ export default function ClientStories() {
                 <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <feature.icon className="w-5 h-5 text-white" />
                 </div>
-                <Heading4 text={feature.title} className="my-4"/>
+                <Heading4 text={feature.title} className="my-4" />
 
                 {typeof feature.description === "string" ? (
                   <RichParagraph white={true}>
@@ -1154,7 +1154,7 @@ export default function ClientStories() {
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <Heading2 text="Why Should You Buy a Custom Campervan from Us?" className="my-4"/>
+            <Heading2 text="Why Should You Buy a Custom Campervan from Us?" className="my-4" />
             <RichParagraph className="text-gray-600">
               When you buy a self-contained campervan from us, you actually get plenty of advantages over others. Here’s why you should buy a custom campervan:
             </RichParagraph>
@@ -1170,7 +1170,7 @@ export default function ClientStories() {
               <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
                 <Plane className="text-white w-6 h-6" />
               </div>
-              <Heading4 text="Ease of Travel" textColor="text-black" className="my-4"/>
+              <Heading4 text="Ease of Travel" textColor="text-black" className="my-4" />
               <ul className="space-y-3 text-sm text-gray-600">
                 <ListItem text={"You gain a stress-free traveling experience without worrying about advance bookings, hotel check-ins, flight delays, rental car counters, etc."} />
                 <ListItem text={" Your van is your private, clean room, so there will be zero worries about hygiene."} />
@@ -1186,7 +1186,7 @@ export default function ClientStories() {
               <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-200">
                 <Compass className="text-white w-6 h-6" />
               </div>
-              <Heading4 text="Complete Freedom" textColor="text-black" className="my-4"/>
+              <Heading4 text="Complete Freedom" textColor="text-black" className="my-4" />
 
               <ul className="space-y-3 text-sm text-gray-600">
                 <ListItem text={" With a campervan, you are free to stop anywhere, anytime. See a perfect view? Just pull over and make it your home for the night."} />
@@ -1203,7 +1203,7 @@ export default function ClientStories() {
               <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-200">
                 <Heart className="text-white w-6 h-6" />
               </div>
-              <Heading4 text="Personal Comfort" textColor="text-black" className="my-4"/>
+              <Heading4 text="Personal Comfort" textColor="text-black" className="my-4" />
               <ul className="space-y-3 text-sm text-gray-600">
                 <ListItem text={"With our custom van, you can stop relying on unhealthy road food. A full kitchen with all the accessories gives you control over your diet."} />
                 <ListItem text={"Your pets will travel safely with you in a campervan, not in cargo or a kennel."} />
@@ -1219,7 +1219,7 @@ export default function ClientStories() {
               <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6">
                 <Zap className="text-white w-6 h-6" />
               </div>
-              <Heading4 text="Spontaneity" className="my-4"/>
+              <Heading4 text="Spontaneity" className="my-4" />
               <ul className="space-y-3 text-sm text-white">
                 <ListItem text={" Your van is always 90% packed. Just add food and fuel, and you’re good to go."} className={true} />
                 <ListItem text={"With our campervans, you’ll have the ability to say yes to last-minute trip pan"} className={true} />
@@ -1238,7 +1238,7 @@ export default function ClientStories() {
                   <div className="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mb-6">
                     <BatteryCharging className="text-white w-6 h-6" />
                   </div>
-                  <Heading4 text="Complete Self-Sufficiency" className="my-4"/>
+                  <Heading4 text="Complete Self-Sufficiency" className="my-4" />
                   <ul className="space-y-3 text-sm text-white">
                     <ListItem text={"  Our campervans are completely self-sufficient. Our solar and battery systems run your fridge, lights, and devices without ever plugging in."} className={true} />
                     <ListItem text={" You carry your own water, have hot showers, wash dishes in remote locations, have a private, sanitary bathroom 24/7, and basically can do anything you want."} className={true} />
@@ -1257,7 +1257,7 @@ export default function ClientStories() {
                 <DollarSign className="text-emerald-600 w-8 h-8" />
               </div>
               <div className="flex-grow">
-                <Heading4 text="Financial Efficiency After Purchase" textColor="text-black" className="my-4"/>
+                <Heading4 text="Financial Efficiency After Purchase" textColor="text-black" className="my-4" />
                 <RichParagraph>
                   Unlike money spent on flights and hotels, a campervan is a physical asset you retain. The major investment is upfront. After that, you eliminate recurring costs for flights, hotels, and restaurant-heavy trips. You control your daily travel budget, often drastically reducing it.
                 </RichParagraph>
@@ -1272,7 +1272,7 @@ export default function ClientStories() {
       {/* Final CTA */}
       <section className="py-20 md:py-24 lg:py-28 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Heading2 text="Ready to Begin Your Journey?" className="my-4"/>
+          <Heading2 text="Ready to Begin Your Journey?" className="my-4" />
           <RichParagraph className="my-4">
             Ready to customize your campervan? Let's talk about the van that
             fits your lifestyle
@@ -1290,7 +1290,7 @@ export default function ClientStories() {
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Heading2 text="See Our Vans in Action" className="my-4"/>
+            <Heading2 text="See Our Vans in Action" className="my-4" />
 
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

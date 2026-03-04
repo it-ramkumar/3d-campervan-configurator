@@ -112,7 +112,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         }
 
         // ✅ Build attendees list
-        const attendees = [{ email: email },{email:"sales.bigbearvans@gmail.com"}];
+        const attendees = [{ email: email }];
 
         if (process.env.ADDITIONAL_ATTENDEE_EMAILS) {
             const additionalEmails = process.env.ADDITIONAL_ATTENDEE_EMAILS
@@ -126,16 +126,17 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         }
 
         // ✅ Event create - HOST TIMEZONE MEIN
+        // ✅ FIXED VERSION
         const event = {
             summary: summary || `Meeting with ${name}`,
             description: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}\n\n${description || ""}`,
             start: {
-                dateTime: eventStart.toISO(), // ✅ HOST timezone
-                timeZone: HOST_TZ // ✅ HOST timezone
+                dateTime: userStart.toISO(), // ✅ User timezone use karo
+                timeZone: timezone           // ✅ User ka timezone
             },
             end: {
-                dateTime: eventEnd.toISO(),
-                timeZone: HOST_TZ
+                dateTime: userEnd.toISO(),   // ✅ User timezone use karo
+                timeZone: timezone           // ✅ User ka timezone
             },
             attendees: attendees,
             conferenceData: {
