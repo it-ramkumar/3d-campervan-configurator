@@ -24,6 +24,7 @@ const corsOptions = {
     "https://new.bigbearvans.com",
     "https://bigbearvans.com",
     "https://www.bigbearvans.com",
+    "https://big-bear-vans.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
