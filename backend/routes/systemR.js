@@ -15,15 +15,8 @@ const { uploadToS3,deleteFromS3 } = require("../services/s3");
 router.post("/system", upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
-    // const description = JSON.parse(req.body.description || "[]");
-    // Blocks ko parse karein
     const blocks = JSON.parse(req.body.blocks || "[]");
 
-    // if (!data.title) {
-    //   return res.status(400).json({ success: false, message: "Title is required" });
-    // }
-
-    // Category/SubCategory Validation
     if (data.categoryId) {
       const categoryExists = await InteriorCategory.findById(data.categoryId);
       if (!categoryExists) return res.status(400).json({ success: false, message: "Invalid categoryId" });
@@ -32,8 +25,6 @@ router.post("/system", upload.array("images"), async (req, res) => {
       const subExists = await InteriorSubCategory.findById(data.subCategoryId);
       if (!subExists) return res.status(400).json({ success: false, message: "Invalid subCategoryId" });
     }
-
-    // S3 Image Upload
     let uploadedImages = [];
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
@@ -41,17 +32,10 @@ router.post("/system", upload.array("images"), async (req, res) => {
         uploadedImages.push(uploadedUrl);
       }
     }
-
-    // if (uploadedImages.length === 0) {
-    //   return res.status(400).json({ success: false, message: "At least one image is required" });
-    // }
-
     const newItem = new InteriorChoice({
-      // title: data.title,
       categoryId: data.categoryId || null,
       subCategoryId: data.subCategoryId || null,
-      // description,
-      blocks, // ✅ Blocks yaha save honge
+      blocks,
       link: data.link || "",
       images: uploadedImages
     });
@@ -88,38 +72,58 @@ router.get("/system", async (req, res) => {
 router.put('/system/:id', upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
-    const description = JSON.parse(req.body.description || "[]");
-    const blocks = JSON.parse(req.body.blocks || "[]"); // ✅ Blocks update ke liye
+    const blocks = JSON.parse(req.body.blocks || "[]");
 
+    // Find existing item
     const interior = await InteriorChoice.findById(req.params.id);
     if (!interior) return res.status(404).json({ success: false, message: "InteriorChoice not found" });
 
-    let uploadedImages = interior.images || [];
+    // Validate categoryId if provided
+    if (data.categoryId) {
+      const categoryExists = await InteriorCategory.findById(data.categoryId);
+      if (!categoryExists) return res.status(400).json({ success: false, message: "Invalid categoryId" });
+    }
+
+    // Validate subCategoryId if provided
+    if (data.subCategoryId) {
+      const subExists = await InteriorSubCategory.findById(data.subCategoryId);
+      if (!subExists) return res.status(400).json({ success: false, message: "Invalid subCategoryId" });
+    }
+
+    let uploadedImages = [];
+
     if (req.files && req.files.length > 0) {
+      // ✅ S3 se purani images delete karo
+      if (interior.images && interior.images.length > 0) {
+        console.log("Deleting old images from S3...");
+        for (const oldImageUrl of interior.images) {
+          await deleteFromS3(oldImageUrl);
+        }
+      }
+
+      // ✅ New images upload karo
+      console.log("Uploading new images to S3...");
       for (const file of req.files) {
         const uploadedUrl = await uploadToS3(file.buffer, "Interior-choices", file.originalname);
         uploadedImages.push(uploadedUrl);
       }
-    }
 
-    // Update Fields
-    interior.title = data.title || interior.title;
+      // Replace with new images
+      interior.images = uploadedImages;
+    }
+    // Agar new images nahi aaye toh purani images keep rahegi
+
+    // Update fields (POST route ke hisab se)
     interior.categoryId = data.categoryId || interior.categoryId;
     interior.subCategoryId = data.subCategoryId || interior.subCategoryId;
-    interior.description = description.length > 0 ? description : interior.description;
-
-    // ✅ Blocks update logic
-    // Agar frontend se naye blocks aaye hain toh update karein, warna purane rehne dein
     interior.blocks = blocks.length > 0 ? blocks : interior.blocks;
-
-    interior.images = uploadedImages;
     interior.link = data.link || interior.link;
 
     await interior.save();
     res.status(200).json({ success: true, message: "InteriorChoice updated successfully", data: interior });
 
   } catch (err) {
-    console.error(err);
+    console.error("Update Error:", err);
     res.status(500).json({ success: false, message: "Update failed", error: err.message });
   }
 });
