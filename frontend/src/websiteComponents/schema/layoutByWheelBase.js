@@ -1,42 +1,55 @@
-export const layoutByWheelbaseSchema = (wheelbase, layouts) => {
-  // Wheelbase titles mapping
-  const wheelbaseTitles = {
-    "144": "Sprinter 144 Wheelbase",
-    "148": "Transit 148 Wheelbase",
-    "159": "Promaster 159 Wheelbase",
-    "136": "Promaster 136 Wheelbase"
-  };
+export const generateWheelbaseLayoutsSchema = (layouts, wheelbase, currentPage = 1) => {
+  if (!layouts || layouts.length === 0) return null;
 
-  // Wheelbase descriptions mapping
-  const wheelbaseDescriptions = {
-    "144": "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures.",
-    "148": "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs.",
-    "159": "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle.",
-    "136": "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
-  };
+  // ✅ Wheelbase-friendly slug
+  const wheelbaseSlug = wheelbase
+    ? wheelbase
+        .toLowerCase()
+        .replace(/[\s—–]+/g, "-") // spaces & em-dash to hyphen
+        .replace(/[^\w-]/g, "")   // remove special characters
+    : "all";
 
-  const title = wheelbaseTitles[wheelbase] || `${wheelbase} Wheelbase Camper Vans`;
-  const description = wheelbaseDescriptions[wheelbase] || `Custom camper van layouts for ${wheelbase} wheelbase.`;
+  const baseUrl = "https://bigbearvans.com/layout-by-wheelbase";
+  const currentUrl = currentPage > 1
+    ? `${baseUrl}/${wheelbaseSlug}?page=${currentPage}`
+    : `${baseUrl}/${wheelbaseSlug}`;
 
   return {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": `${title} | Big Bear Vans`,
-    "description": description,
-    "mainEntity": {
-      "@type": "ItemList",
-      "numberOfItems": layouts.length,
-      "itemListElement": layouts.map((project, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": {
-          "@type": "CreativeWork",
-          "name": project.van_listing?.title,
-          "image": project.gallery?.[0],
-          "url": `https://bigbearvans.com/layout-detail/${project.slug}`,
-          "description": project.van_listing?.description?.substring(0, 150)
-        }
-      }))
-    }
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${currentUrl}#webpage`,
+        "url": currentUrl,
+        "name": `${wheelbase || 'All'} Wheelbase Van Layouts${currentPage > 1 ? ` - Page ${currentPage}` : ""} | Big Bear Vans`,
+        "description": `Explore our ${wheelbase || 'custom'} camper van layouts. Custom built for comfort and adventure.${currentPage > 1 ? ` Page ${currentPage}` : ""}`
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${currentUrl}#itemlist`,
+        "name": `${wheelbase || 'Big Bear Vans'} Layout Gallery`,
+        "numberOfItems": layouts.length,
+        "itemListElement": layouts.map((project, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Product",
+            "name": project.van_listing?.title || project.title,
+            "image": project.gallery?.[0] || "https://bigbearvans.com/images/limage1.webp",
+            "url": `${baseUrl}/${wheelbaseSlug}/${project.slug}`,
+            "category": wheelbase || "Camper Van Layout",
+            "brand": { "@type": "Brand", "name": "Big Bear Vans" },
+            "description": project.van_listing?.description?.substring(0, 150) || "",
+            "additionalProperty": [
+              {
+                "@type": "PropertyValue",
+                "name": "Seating / Sleeping",
+                "value": `${project.van_listing?.specifications?.capacity?.sits || 0} / ${project.van_listing?.specifications?.capacity?.sleeps || 0}`
+              }
+            ]
+          }
+        }))
+      }
+    ]
   };
 };

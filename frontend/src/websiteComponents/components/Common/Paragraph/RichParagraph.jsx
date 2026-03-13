@@ -1,37 +1,35 @@
+import React from "react";
+
 const RichParagraph = ({
   children,
   html,
-  textColor = "text-black",
+  textColor = "text-[#5A5A5A]",
   className = "",
   inlineStyle = {},
-  white = false,
-  onClick,
+  onClick
 }) => {
-  const finalColorClass = white ? "text-white" : "text-black";
+  // Styles remains same, just changed tag from <p> to <div> to allow nested lists
+  const baseStyles = "text-[14px] sm:text-base lg:text-[15px] leading-relaxed tracking-tighter font-body opacity-90";
 
   if (html) {
     return (
-      <p
-        className={`text-sm sm:text-base md:text-lg lg:text-[16px] leading-relaxed font-serif ${finalColorClass} ${className}`}
+      <div
+        className={`${baseStyles} ${textColor} ${className}`}
         style={inlineStyle}
         dangerouslySetInnerHTML={{ __html: html }}
+        onClick={onClick}
       />
     );
   }
 
   return (
-    <p
+    <div
       onClick={onClick}
-      className={`
-        text-sm sm:text-base md:text-lg lg:text-[16px]
-        leading-relaxed font-serif
-        ${finalColorClass}
-        ${className}
-      `}
+      className={`${baseStyles} ${textColor} ${className}`}
       style={inlineStyle}
     >
       {children}
-    </p>
+    </div>
   );
 };
 

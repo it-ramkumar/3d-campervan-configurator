@@ -1,40 +1,38 @@
-// helpers/layoutSchema.js
-
-export const generateLayoutSchema = (van) => {
+export const generateLayoutSchema = (van, currentUrl) => {
   if (!van) return null;
 
-  const url = window.location.href;
   const details = van.van_listing || van;
   const gallery = van.gallery || [van.heroImage];
   const specs = details.specifications || {};
 
-  // 1. Base Product Schema
   const schema = {
     "@context": "https://schema.org/",
     "@type": "Product",
+    "@id": `${currentUrl}#product`, // ✅ Unique ID for this specific layout
     "name": details.title || details.name,
     "image": gallery,
-    "description": details.description || details.subtitle || `Explore the ${details.title} custom campervan build.`,
+    "description": details.description || `Custom ${specs.make_model} camper van conversion layout featuring ${specs.capacity?.sits} seats and ${specs.capacity?.sleeps} berths by Big Bear Vans.`,
     "brand": {
       "@type": "Brand",
       "name": "Big Bear Vans"
     },
-    "category": "Campervan Conversion", // Global category
+    "category": "Campervan Conversion",
     "model": specs.make_model || "",
     "offers": {
       "@type": "Offer",
-      "url": url,
-      "priceCurrency": "GBP",
+      "url": currentUrl,
+      "priceCurrency": "USD", // ✅ Fixed from GBP to USD
       "availability": "https://schema.org/InStock",
       "seller": {
         "@type": "Organization",
-        "name": "Big Bear Vans"
+        "name": "Big Bear Vans",
+        "@id": "https://bigbearvans.com/#organization"
       }
     },
     "additionalProperty": []
   };
 
-  // 2. Wheelbase, Sit/Sleep, Make/Model ko separate properties mein add karna
+  // ✅ Adding Specs
   if (specs.wheelbase) {
     schema.additionalProperty.push({
       "@type": "PropertyValue",
@@ -56,20 +54,12 @@ export const generateLayoutSchema = (van) => {
     });
   }
 
-  if (details.size) {
-    schema.additionalProperty.push({
-      "@type": "PropertyValue",
-      "name": "Van Size",
-      "value": details.size
-    });
-  }
-
-  // 3. Build Categories (Insulation, Electrics, etc.) ko add karna
+  // ✅ Build Categories (Insulation, etc.)
   if (van.detailed_features) {
     van.detailed_features.forEach(feature => {
       schema.additionalProperty.push({
         "@type": "PropertyValue",
-        "name": `Build Feature: ${feature.category}`,
+        "name": feature.category,
         "value": feature.items?.join(", ")
       });
     });

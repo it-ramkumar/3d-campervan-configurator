@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getAllBlogs } from "../../../../api/blog/getAllBlogs";
 import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { Heading2, RichParagraph, Heading3, BlackButton, ImageWithSkeleton } from '../../Common/Common'
-
+import { ArrowUpRight, Calendar, Clock } from "lucide-react";
+import { Heading2, Heading3, RichParagraph, SecondaryButton, ImageWithSkeleton } from '../../Common/Common'
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -27,78 +27,80 @@ export default function Blog() {
   if (loading) return <Loader />;
 
   return (
-    <section className="w-full mt-10 md:mt-24 py-12 bg-gray-100">
-      <div className="container mx-auto px-4">
+    <section className="w-full py-20 bg-secondary overflow-hidden antialiased">
+      <div className="container mx-auto px-4 max-w-7xl">
 
-        {/* Header Section */}
-        <div className="text-center mb-10 lg:mb-14">
+        {/* --- Header Section --- */}
+        <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
+          <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase  mb-4 block">Insights & Stories</RichParagraph>
           <Heading2 text="Explore Our Van Life Blog" />
-          <RichParagraph className="max-w-2xl mx-auto">Check our blog to learn everything about vanlife, custom Sprinter vans, and campervans.</RichParagraph>
+          <div className="w-16 h-1 bg-hover mx-auto rounded-lg my-6"></div>
+          <RichParagraph className="">
+            Expert advice on custom Sprinter conversions, off-grid living, and the freedom of the open road.
+          </RichParagraph>
         </div>
 
-        {/* Blog Post Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
-          {blogs.slice(0, 4).map((post) => (
+        {/* --- Blog Post Grid --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[var(--gap-sm)]">
+          {blogs?.slice(0, 4).map((post) => (
             <Link
-              key={post._id}
-              to={`/blog-detail/${post.slug}`}
-              className="group relative h-[400px] w-full rounded-[24px] border-2 border-gray-800 overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 ease-in-out hover:-translate-y-2"
+              key={post?._id}
+              to={`/blog-detail/${post?.slug}`}
+              className="group flex flex-col h-full bg-white rounded-lg overflow-hidden border border-primary/5 shadow-sm hover:shadow-xl transition-all duration-500"
             >
               {/* Image Container */}
-              <div className="absolute inset-0 z-0">
+              <div className="relative aspect-[16/10] overflow-hidden">
                 <ImageWithSkeleton
-                  src={post.gallery?.[0]}
-                  alt={post.title}
+                  src={post?.gallery?.[0]}
+                  alt={post?.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  click={true}
                 />
-                {/* Darker Overlay for better text contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+                {/* Floating Date Badge */}
+                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-[var(--gap-sm)] border border-primary/5">
+                  <Calendar size={12} className="text-hover" />
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
+                    {new Date(post?.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  </span>
+                </div>
               </div>
 
-              {/* Content Overlay */}
-              <div className="relative z-10 h-full flex flex-col justify-between p-6">
-
-                {/* Arrow Icon (Top Right) */}
-                <div className="self-end translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                  <div className="p-2 bg-white rounded-full shadow-lg">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="black"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
+              {/* Content Section */}
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex items-center gap-sm mb-4">
+                  <RichParagraph className="!text-xs uppercase  text-hover bg-hover/10 px-2 py-1 rounded-lg">
+                    Resources
+                  </RichParagraph>
+                  <div className="flex items-center gap-sm text-primary/40">
+                    <Clock size={12} />
+                    <span className="text-[10px]">5 min read</span>
                   </div>
                 </div>
 
-                {/* Text Bottom */}
-                <div>
-                  {/* Category or Date could go here */}
-                  <span className="text-[10px] uppercase tracking-[2px] text-white/60 font-bold mb-2 block">
-                    {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) || 'Van Life'}
-                  </span>
-                  <Heading3 text={post.title.length > 50 ? post.title.slice(0, 50) + "..." : post.title} className="text-white" />
+                <Heading3 text={post.title} className=" mb-4 group-hover:text-hover transition-colors line-clamp-2" />
+                <RichParagraph className=" line-clamp-3 mb-6">
+                  {post.description}
+                </RichParagraph>
+
+                {/* Bottom Link */}
+                <div className="flex items-center gap-sm  group-hover:gap-4 transition-all">
+                  <RichParagraph className="text-hover !text-sm">
+                    Read Article
+                  </RichParagraph>
+
+                  <ArrowUpRight size={16} className="text-hover" />
                 </div>
               </div>
-
-              {/* Hover Inner Border */}
-              <div className="absolute inset-0 border-[1px] border-white/0 group-hover:border-white/20 rounded-[24px] pointer-events-none transition-all duration-500 m-2"></div>
             </Link>
           ))}
         </div>
 
-        {/* View All Blogs Button (Optional) */}
-        <div className="mt-12 text-center">
-          <BlackButton label="View All Blog Posts" link="/blog" />
-
+        {/* --- Footer CTA --- */}
+        <div className="mt-20 text-center">
+          <SecondaryButton
+            label="Browse All Articles"
+            link="/blog"
+            className="!px-10 !py-4 shadow-lg !rounded-lg"
+          />
         </div>
 
       </div>

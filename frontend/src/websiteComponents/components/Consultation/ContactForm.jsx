@@ -1,57 +1,47 @@
 "use client";
-
-import BlackButton from "../Common/Button/BlackButton";
+import SecondaryButton from "../Common/Button/SecondaryButton";
 import { Heading2, RichParagraph } from '../Common/Common'
 
-
-export default function ContactForm({
-  formData,
-  handleChange,
-  handleSubmit,
-  loading,
-}) {
+export default function ContactForm({ formData, handleChange, handleSubmit, loading }) {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-12">
-      {/* Heading Section */}
-      <div className="max-w-2xl mb-8">
+    <div className="bg-white p-8 md:p-12 rounded-lg border border-primary/5 shadow-sm flex flex-col items-center">
+      <div className="max-w-2xl mb-10 text-center">
         <Heading2 text="Let’s Connect" />
-        <RichParagraph>
-          Tell us what’s on your mind! Whether it’s a project idea or a quick question,
-          we’re here to help.
+        <RichParagraph className="mt-2">
+          Tell us what’s on your mind! Whether it’s a project idea or a quick question, we’re here to help.
         </RichParagraph>
       </div>
 
-      {/* Contact Form */}
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 md:space-y-6 w-full"
-      >
-        {["name", "email", "phone", "message"].map((field) => (
-          <div key={field}>
-            {field === "message" ? (
-              <textarea
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                placeholder="Your Message"
-                rows="4"
-                className="w-full p-4 md:p-6 rounded-xl bg-[#D9D9D9] placeholder:text-black font-serif focus:ring-2 focus:ring-[#2761FD] focus:outline-none"
-              />
-            ) : (
+      <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--gap-sm)]">
+          {["name", "email", "phone"].map((field) => (
+            <div key={field} className="flex flex-col">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">{field}</label>
               <input
                 type={field === "email" ? "email" : "text"}
                 name={field}
                 value={formData[field]}
                 onChange={handleChange}
                 placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
-                className="w-full p-4 md:p-6 rounded-xl bg-[#D9D9D9] placeholder:text-black font-serif focus:ring-2 focus:ring-[#2761FD] focus:outline-none"
+                className="w-full p-4 rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all text-primary placeholder:text-primary/30 font-sans"
               />
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col">
+          <label className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">Message</label>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Your Message"
+            rows="4"
+            className="w-full p-4 rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all text-primary font-sans"
+          />
+        </div>
 
-        <div className="pt-4">
-          <BlackButton
+        <div className="pt-4 flex justify-center">
+          <SecondaryButton
             type="submit"
             disabled={loading}
             label={loading ? "Submitting..." : "Send Message"}

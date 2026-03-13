@@ -1,319 +1,299 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getByWheelBase } from "../../../api/portfolio/wheelBase";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom"; // useSearchParams add kiya
 import HeroSection from "../HeroSection/HeroSection";
+import { Helmet } from "react-helmet-async";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import Loader from "../Loader/Loader"
-import { Heading2, RichParagraph, Heading3, ImageWithSkeleton, WhiteButton, BlackButton } from '../Common/Common'
-
-import { layoutByWheelbaseSchema } from "../../schema/layoutByWheelBase"
+import Loader from "../Loader/Loader";
+import {
+  Heading2,
+  RichParagraph,
+  Heading3,
+  ImageWithSkeleton,
+  PrimaryButton,
+  SecondaryButton
+} from '../Common/Common';
+import { Search, SlidersHorizontal } from "lucide-react";
+import { generateWheelbaseLayoutsSchema } from "../../schema/layoutByWheelBase";
 
 export default function CamperProjectsPage() {
   const { wheelbase } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams(); // URL params ke liye
 
   const [layouts, setLayouts] = useState([]);
-  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-
   const [filters, setFilters] = useState({});
 
-  // MAIN FILTER STATES (applied filters)
+  // URL se page number get karo, default 1
+  const currentPage = parseInt(searchParams.get('page')) || 1;
+
   const [appliedFilters, setAppliedFilters] = useState({
-    search: "",
-    model: "",
-    sit: "",
-    sleep: "",
-    bedType: "",
-    bathroomType: ""
+    search: searchParams.get('search') || "",
+    model: searchParams.get('model') || "",
+    sit: searchParams.get('sit') || "",
+    sleep: searchParams.get('sleep') || "",
+    bedType: searchParams.get('bedType') || "",
+    bathroomType: searchParams.get('bathroomType') || ""
   });
 
-  // TEMP STATES (before Apply Filters)
   const [tempFilters, setTempFilters] = useState({
-    search: "",
-    model: "",
-    sit: "",
-    sleep: "",
-    bedType: "",
-    bathroomType: ""
+    search: searchParams.get('search') || "",
+    model: searchParams.get('model') || "",
+    sit: searchParams.get('sit') || "",
+    sleep: searchParams.get('sleep') || "",
+    bedType: searchParams.get('bedType') || "",
+    bathroomType: searchParams.get('bathroomType') || ""
   });
 
   useEffect(() => {
     const fetch = async () => {
       try {
         setLoading(true);
-
         const data = await getByWheelBase(
-          wheelbase,
-          page,
-          appliedFilters.search,
-          appliedFilters.model,
-          appliedFilters.sit,
-          appliedFilters.sleep,
-          appliedFilters.bedType,
-          appliedFilters.bathroomType
+          wheelbase, currentPage, appliedFilters.search, appliedFilters.model,
+          appliedFilters.sit, appliedFilters.sleep, appliedFilters.bedType, appliedFilters.bathroomType
         );
-
         if (data?.success) {
           setLayouts(data.data || []);
           setTotalPages(data.pages || 1);
           setFilters(data.filters || {});
-        } else {
-          console.error("Failed:", data?.message);
         }
-      } catch (err) {
-        console.error("Error:", err);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) { console.error(err); }
+      finally { setLoading(false); }
     };
-
     fetch();
-  }, [wheelbase, page, appliedFilters]);
+  }, [wheelbase, currentPage, appliedFilters]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page]);
+  }, [currentPage]);
 
-  // APPLY FILTERS
+  // URL update karne ka function
+  const updateURL = (newFilters, page = 1) => {
+    const params = new URLSearchParams();
+
+    // Page add karo (agar 1 nahi hai toh)
+    if (page > 1) {
+      params.set('page', page.toString());
+    }
+
+    // Filters add karo (agar empty nahi hai toh)
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (value && value.trim() !== '') {
+        params.set(key, value);
+      }
+    });
+
+    setSearchParams(params);
+  };
+
   const handleApplyFilters = () => {
     setAppliedFilters({ ...tempFilters });
-    setPage(1);
+    updateURL(tempFilters, 1); // Page 1 pe reset karo
   };
 
-  // CLEAR FILTERS
   const handleClearFilters = () => {
-    const cleared = {
-      search: "",
-      model: "",
-      sit: "",
-      sleep: "",
-      bedType: "",
-      bathroomType: ""
-    };
+    const cleared = { search: "", model: "", sit: "", sleep: "", bedType: "", bathroomType: "" };
     setTempFilters(cleared);
     setAppliedFilters(cleared);
-    setPage(1);
+    updateURL(cleared, 1);
   };
 
-  const heroImage =
-    wheelbase === "144"
-      ? "/heroSlider/144.jpg"
-      : wheelbase === "148"
-        ? "/heroSlider/148.jpg"
-        : wheelbase === "159"
-          ? "/heroSlider/159.jpg"
-          : wheelbase === "136"
-            ? "/heroSlider/136.jpg"
-            : wheelbase === "170"
-              ? "/heroSlider/170.png"
-              : "/heroSlider/170";
-  const newTitleText =
-    wheelbase === "144"
-      ? "Sprinter 144 Wheelbase"
-      : wheelbase === "148"
-        ? "Transit 148 Wheelbase"
-        : wheelbase === "159"
-          ? "Promaster 159 Wheelbase"
-          : wheelbase === "136"
-            ? "Promaster 136 Wheelbase"
-            : wheelbase === "170"
-              ? "Mercedes Sprinter 170 Wheelbase"
-              : "";
-  const newDescriptionText =
-    wheelbase === "144"
-      ? "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts, offering ample space and comfort for your adventures."
-      : wheelbase === "148"
-        ? "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds that prioritize roominess and functionality for all your travel needs."
-        : wheelbase === "159"
-          ? "Experience the expansive Promaster 159 wheelbase. Designed for those seeking maximum interior space and flexibility in their campervan lifestyle."
-          : wheelbase === "136"
-            ? "Uncover the compact efficiency of the Promaster 136 wheelbase. Great for agile campervan designs that don't compromise on comfort and utility."
-            : wheelbase === "170"
-              ? "Experience ultimate freedom with the Mercedes Sprinter 170 wheelbase. Designed for full-time van life, offering maximum living space, expansive layouts, and unparalleled comfort for long-distance adventures."
-              : "";
+  // Pagination handlers
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      updateURL(appliedFilters, currentPage - 1);
+    }
+  };
 
-  const filterConfig = [
-    { key: "search", label: "Search", type: "text" },
-    { key: "model", label: "Model", type: "select", options: filters?.models },
-    { key: "sit", label: "Sits", type: "select", options: filters?.sits },
-    { key: "sleep", label: "Sleeps", type: "select", options: filters?.sleeps },
-    { key: "bedType", label: "Bed Type", type: "select", options: filters?.bedType },
-    { key: "bathroomType", label: "Bathroom Type", type: "select", options: filters?.bathroomType }
-  ];
-  const pageTitle = newTitleText[wheelbase] || `${wheelbase} Wheelbase`;
-  const pageKeywords = `${wheelbase} wheelbase layout, custom ${wheelbase} van build, ${wheelbase} sprinter conversion, camper van floor plans ${wheelbase}, big bear vans ${wheelbase}`;
-  const pageDescription = newDescriptionText[wheelbase] || `Custom camper van layouts for ${wheelbase} wheelbase.`;
-  const jsonLd = layoutByWheelbaseSchema(wheelbase, layouts)
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      updateURL(appliedFilters, currentPage + 1);
+    }
+  };
+
+  // Dynamic Content based on Wheelbase
+  const contentMap = {
+    "144": { title: "Sprinter 144 Wheelbase", img: "/images2/vfs2.webp", desc: "Explore the versatility of the Sprinter 144 wheelbase. Ideal for a range of campervan layouts." },
+    "148": { title: "Transit 148 Wheelbase", img: "/images2/148.webp", desc: "Discover the spacious Transit 148 wheelbase. Perfect for custom campervan builds." },
+    "159": { title: "Promaster 159 Wheelbase", img: "/images2/159.webp", desc: "Experience the expansive Promaster 159 wheelbase for maximum interior space." },
+    "136": { title: "Promaster 136 Wheelbase", img: "/heroSlider/136.jpg", desc: "Uncover the compact efficiency of the Promaster 136 wheelbase." },
+    "170": { title: "Mercedes Sprinter 170 Wheelbase", img: "/images2/vfs.webp", desc: "Experience ultimate freedom with the Mercedes Sprinter 170 wheelbase." }
+  };
+
+  const currentContent = contentMap[wheelbase] || { title: `${wheelbase} Wheelbase`, img: "/images2/vfs2.webp", desc: `Custom camper van layouts for ${wheelbase} wheelbase.` };
+  const pageSuffix = currentPage > 1 ? ` - Page ${currentPage}` : "";
+  const activeModel = searchParams.get('model');
+  const modelSuffix = activeModel ? ` for ${activeModel}` : "";
+  const pageTitle = `${currentContent.title}${modelSuffix} Layouts${pageSuffix} | Big Bear Vans`;
+  const jsonLd = generateWheelbaseLayoutsSchema(layouts, wheelbase, currentPage);
+const canonicalUrl = `https://bigbearvans.com${location.pathname}${currentPage > 1 ? `?page=${currentPage}` : ""}`;
   return (
     <>
-      {/* ✅ SEO META TAGS */}
-      <title>{`${pageTitle} Layouts | Big Bear Vans`}</title>
-      <meta name="keywords" content={pageKeywords} />
-      <meta name="description" content={pageDescription} />
-      <link rel="canonical" href={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+    <Helmet>
+  {/* ✅ 1. Standard SEO Meta Tags */}
+  <title>{pageTitle}</title>
+  <meta name="description" content={`${currentContent.desc}${pageSuffix}`} />
+  <link rel="canonical" href={canonicalUrl} />
 
-      {/* 🆕 ADDITIONAL IMPORTANT TAGS */}
-      <meta name="robots" content="index, follow" />
-      <meta name="theme-color" content="#f8fafc" /> {/* Aapke bigbear theme ke mutabiq */}
+  {/* Robots Logic (Expertly handled, keep it!) */}
+  {(currentPage > 1 || searchParams.toString()) ? (
+    <meta name="robots" content="noindex, follow" />
+  ) : (
+    <meta name="robots" content="index, follow" />
+  )}
 
-      {/* ✅ OPEN GRAPH (Facebook, WhatsApp, LinkedIn) */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
-      <meta property="og:description" content={pageDescription} />
-      <meta property="og:url" content={`https://bigbearvans.com/wheelbase/${wheelbase}`} />
+  {/* ✅ 2. Open Graph (Facebook/WhatsApp/LinkedIn) */}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={`${currentContent.desc}${pageSuffix}`} />
+  <meta property="og:url" content={`https://bigbearvans.com${location.pathname}${location.search}`} />
+  {/* Yahan inventory ki sabse best van ki image ka link dein */}
+  <meta property="og:image" content="https://bigbearvans.com/images/limage1.webp" />
 
-      {/* ✅ TWITTER CARDS */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={`${pageTitle} Layouts | Big Bear Vans`} />
-      <meta name="twitter:description" content={pageDescription} />
+  {/* ✅ 3. Twitter Card Tags (Added specific Title/Description/Image) */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@bigbearvans" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={`${currentContent.desc}${pageSuffix}`} />
+  <meta name="twitter:image" content="https://bigbearvans.com/images/limage1.webp" />
 
-      {/* ✅ JSON-LD SCHEMA */}
-      <script type="application/ld+json">
-        {JSON.stringify(jsonLd)}
-      </script>
+  {/* ✅ 4. JSON-LD Schema */}
+  <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+</Helmet>
       <Navbar />
-      <div className="tour-hero">
+
+      <main className="bg-secondary min-h-screen">
         <HeroSection
-          title={newTitleText}
-          description={newDescriptionText}
-          image={heroImage}
+          title={currentContent.title}
+          description={currentContent.desc}
+          image={currentContent.img}
           showButton={false}
         />
-      </div>
 
-      <section className="bg-white font-serif py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto">
-          {/* FILTER SECTION */}
-          <div className="max-w-[1250px] mx-auto mb-12 bg-gray-50 p-6 rounded-lg shadow-sm">
-            <Heading2 text="Filter Vans" />
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${filterConfig.length} gap-4 mb-4`}>
-              {filterConfig.map((filter) => (
-                <div key={filter.key}>
-                  {/* label mein htmlFor add kiya */}
-                  <label
-                    htmlFor={`filter-${filter.key}`}
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    {filter.label}
-                  </label>
+        <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto max-w-[1300px]">
 
-                  {filter.type === "text" ? (
+            {/* --- FILTER DASHBOARD --- */}
+            <div className="bg-white p-8 rounded-[var(--radius-md)] shadow-sm border border-primary/5 mb-16">
+              <div className="flex items-center gap-[var(--gap-sm)] mb-8 pb-4 border-b border-secondary">
+                <SlidersHorizontal size={20} className="text-hover" />
+                <Heading3 text="Filter Collection" className="!mb-0 !text-primary" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--gap-lg)]">
+                {/* Search */}
+                <div className="space-y-2">
+                  <RichParagraph className=" text-primary/40 uppercase !text-xs">Keywords</RichParagraph>
+                  <div className="relative">
                     <input
-                      id={`filter-${filter.key}`} // Yahan unique ID di
-                      type="text"
-                      placeholder={`Search ${filter.label.toLowerCase()}...`}
-                      value={tempFilters[filter.key]}
-                      onChange={(e) =>
-                        setTempFilters({ ...tempFilters, [filter.key]: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+                      type="text" placeholder="Search builds..." value={tempFilters.search}
+                      onChange={(e) => setTempFilters({ ...tempFilters, search: e.target.value })}
+                      className="w-full pl-10 pr-4 py-3 bg-secondary border-none rounded-[var(--radius-md)] focus:ring-2 focus:ring-hover text-sm text-primary"
                     />
-                  ) : (
-                    <select
-                      id={`filter-${filter.key}`} // Yahan bhi unique ID di
-                      value={tempFilters[filter.key]}
-                      onChange={(e) =>
-                        setTempFilters({ ...tempFilters, [filter.key]: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
-                    >
-                      <option value="">All {filter.label}</option>
-                      {filter.options?.map((option, i) => (
-                        <option key={i} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* BUTTONS */}
-            <div className="flex gap-3">
-              <BlackButton onClick={handleApplyFilters} label={"Apply Filters"} />
-              <WhiteButton onClick={handleClearFilters} label={"Clear All"} />
-            </div>
-          </div>
-
-          {/* RESULTS */}
-          {loading ? (
-            <Loader />
-          ) : layouts.length === 0 ? (
-            <div className="text-center py-20 text-lg text-gray-600">No vans found.</div>
-          ) : (
-            <div className="space-y-16">
-              {layouts.map((project, index) => {
-                const isReversed = index % 2 !== 0;
-
-                return (
-                  <div
-                    key={project._id}
-                    className={`group max-w-[1250px] mx-auto flex flex-row ${isReversed ? "flex-row-reverse" : ""
-                      } items-center justify-between gap-4 lg:gap-12`}
-                  >
-                    {/* TEXT */}
-                    <div className="flex flex-col text-black w-1/2 text-center lg:text-left">
-                      <Heading2 text={project.van_listing?.title} />
-                      <RichParagraph className="my-2">
-
-                        {project.van_listing?.description}
-                      </RichParagraph>
-
-                      <BlackButton
-                        label="View Details"
-                        link={`/layout-detail/${project.slug}`}
-                      />
-                    </div>
-
-                    {/* IMAGES */}
-                    <div className="relative w-1/2 h-[350px] lg:h-[550px]">
-                      <ImageWithSkeleton
-                        alt={project.van_listing?.title || "Van Layout Image"}
-                        src={project.gallery?.[0]}
-                        className={`absolute top-0 w-[70%] h-full object-cover ${isReversed ? "left-0" : "right-0"
-                          }`}
-                      />
-
-                      <ImageWithSkeleton
-                        alt={project.van_listing?.title || "Van Layout Image"}
-                        src={project.gallery?.[1]}
-                        className={`absolute w-[50%] h-[55%] object-cover -bottom-2 ${isReversed ? "right-[5%]" : "left-[5%]"
-                          }`}
-                      />
-                    </div>
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/30" size={16} />
                   </div>
-                );
-              })}
+                </div>
+
+                {/* Select Filters */}
+                {[
+                  { label: "Model", key: "model", options: filters?.models },
+                  { label: "Seating", key: "sit", options: filters?.sits },
+                  { label: "Sleeping", key: "sleep", options: filters?.sleeps },
+                  { label: "Bed Type", key: "bedType", options: filters?.bedType },
+                  { label: "Bathroom", key: "bathroomType", options: filters?.bathroomType },
+                ].map((f) => (
+                  <div key={f.key} className="space-y-2">
+                    <RichParagraph className=" text-primary/40 uppercase !text-xs">{f.label}</RichParagraph>
+                    <select
+                      value={tempFilters[f.key]}
+                      onChange={(e) => setTempFilters({ ...tempFilters, [f.key]: e.target.value })}
+                      className="w-full px-4 py-3 bg-secondary border-none rounded-[var(--radius-md)] focus:ring-2 focus:ring-hover text-sm text-primary font-medium appearance-none cursor-pointer"
+                    >
+                      <option value="">All {f.label}s</option>
+                      {f.options?.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
+                    </select>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-[var(--gap-md)] mt-10 pt-6 border-t border-secondary">
+                <SecondaryButton label="Apply Filters" onClick={handleApplyFilters} />
+                <PrimaryButton label="Clear All" onClick={handleClearFilters} />
+              </div>
             </div>
-          )}
 
-          {/* PAGINATION */}
-          {!loading && layouts.length > 0 && (
-            <div className="flex justify-center items-center gap-4 mt-20">
-              <BlackButton label={"Previous"} onClick={() => setPage(page - 1)}
+            {/* --- RESULTS --- */}
+            {loading ? <Loader /> : layouts.length === 0 ? (
+              <div className="text-center py-32 bg-white rounded-[var(--radius-md)] border border-dashed border-primary/10">
+                <Search size={48} className="mx-auto text-primary/10 mb-4" />
+                <Heading3 text="No builds found for this wheelbase." className="!text-primary/40" />
+              </div>
+            ) : (
+              <div className="space-y-[var(--gap-2xl)]">
+                {layouts.map((project, index) => {
+                  const isReversed = index % 2 !== 0;
+                  return (
+                    <div key={project._id} className={`flex flex-col ${isReversed ? "lg:flex-row-reverse" : "lg:flex-row"} items-center gap-[var(--gap-xl)] lg:gap-[var(--gap-2xl)]`}>
 
-                disabled={page === 1} />
+                      <div className="w-full lg:w-1/2 space-y-6">
+                        <div className="space-y-2">
+                          <RichParagraph className="text-hover uppercase !text-sm tracking-wider font-bold">Big Bear Classic</RichParagraph>
+                          <Heading2 text={project.van_listing?.title} className="!text-left !text-primary !leading-tight" />
+                        </div>
+                        <RichParagraph className="!text-left !text-primary/80">
+                          {project.van_listing?.description}
+                        </RichParagraph>
+                        <div className="pt-4">
+                          <SecondaryButton label="View Details" link={`/layout-detail/${project.slug}`} />
+                        </div>
+                      </div>
 
+                      <div className="w-full lg:w-1/2 relative">
+                        <div className="relative aspect-[16/10] overflow-hidden rounded-[var(--radius-lg)] shadow-2xl border border-primary/5">
+                          <ImageWithSkeleton
+                            src={project.gallery?.[0]}
+                            alt={project.van_listing?.title}
+                            className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
+                          />
+                        </div>
+                        <div className={`absolute -bottom-10 w-1/2 aspect-square hidden md:block rounded-[var(--radius-lg)] overflow-hidden border-[10px] border-white shadow-2xl ${isReversed ? "-left-10" : "-right-10"}`}>
+                          <ImageWithSkeleton src={project.gallery?.[1]} alt="Interior View" className="w-full h-full object-cover" />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
-              <span className="text-lg font-semibold text-gray-700">
-                Page {page} of {totalPages}
-              </span>
-
-              <BlackButton
-                label={"Next"}
-                onClick={() => setPage(page + 1)}
-                disabled={page === totalPages}
-
-              />
-
-            </div>
-          )}
-        </div>
-      </section>
+            {/* --- PAGINATION --- */}
+            {!loading && layouts.length > 0 && (
+              <div className="flex justify-center items-center gap-[var(--gap-xl)] mt-32 pt-12 border-t border-primary/10">
+                <SecondaryButton
+                  label="Previous"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className="!py-2 !px-6"
+                />
+                <div className="text-center">
+                  <p className="text-[10px] font-black text-primary/30 uppercase tracking-[0.3em] mb-1">Page</p>
+                  <Heading3 text={`${currentPage} of ${totalPages}`} className="!mb-0 !text-primary" />
+                </div>
+                <SecondaryButton
+                  label="Next"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="!py-2 !px-6"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
       <Footer />
     </>
   );

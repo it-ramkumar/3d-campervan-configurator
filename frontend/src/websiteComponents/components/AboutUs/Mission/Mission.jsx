@@ -1,157 +1,154 @@
 "use client";
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // Import framer-motion
+import { motion } from 'framer-motion';
 import { FaCog, FaFeatherAlt, FaRulerCombined, FaBolt, FaBed, FaPalette } from 'react-icons/fa';
-import { Heading2, RichParagraph,ImageWithSkeleton } from '../../Common/Common'
-
+import { Heading2, RichParagraph, ImageWithSkeleton, Heading3 } from '../../Common/Common';
 
 export default function Mission() {
-const advantages = [
-  {
-    icon: <FaCog size={40} />,
-    text: "We craft your dream campervan exactly how you imagine it from concept to completion. See your build in 3D, choose your colors and finishes, and make it truly yours."
-  },
-  {
-    icon: <FaFeatherAlt size={40} />,
-    text: "Built with lightweight, high-quality materials for smoother performance and better fuel efficiency backed by 100+ successful builds of real vanlife experience."
-  },
-  {
-    icon: <FaRulerCombined size={40} />,
-    text: "We stay ahead of the curve by adding smart innovations like modern windows, elevator beds, and flexible layouts keeping your camper future-ready."
-  },
-  {
-    icon: <FaBolt size={40} />,
-    text: "Every detail is engineered with precision using 3D CAD and CNC technology. Our custom electrical components are reliable, easy to replace, and built to last."
-  },
-  {
-    icon: <FaBed size={40} />,
-    text: "Experience comfort anywhere our elevator beds save space, and full insulation keeps your van cozy in every climate, all year round."
-  },
-  {
-    icon: <FaPalette size={40} />,
-    text: "Designed around your lifestyle stylish interiors, smart storage, and optimized roofs with solar panels, skylights, and more for the perfect adventure setup."
-  }
-];
+  const advantages = [
+    {
+      icon: <FaCog size={36} />,
+      title: "Custom Concept",
+      text: "We craft your dream campervan exactly how you imagine it from concept to completion. See your build in 3D, choose your colors and finishes, and make it truly yours."
+    },
+    {
+      icon: <FaFeatherAlt size={36} />,
+      title: "Lightweight Build",
+      text: "Built with lightweight, high-quality materials for smoother performance and better fuel efficiency backed by 100+ successful builds of real vanlife experience."
+    },
+    {
+      icon: <FaRulerCombined size={36} />,
+      title: "Smart Innovation",
+      text: "We stay ahead of the curve by adding smart innovations like modern windows, elevator beds, and flexible layouts keeping your camper future-ready."
+    },
+    {
+      icon: <FaBolt size={36} />,
+      title: "Precision Engineering",
+      text: "Every detail is engineered with precision using 3D CAD and CNC technology. Our custom electrical components are reliable, easy to replace, and built to last."
+    },
+    {
+      icon: <FaBed size={36} />,
+      title: "All-Season Comfort",
+      text: "Experience comfort anywhere—our elevator beds save space, and full insulation keeps your van cozy in every climate, all year round."
+    },
+    {
+      icon: <FaPalette size={36} />,
+      title: "Stylish Utility",
+      text: "Designed around your lifestyle: stylish interiors, smart storage, and optimized roofs with solar panels and skylights for the perfect adventure setup."
+    }
+  ];
 
-
-  // Animation variants for sections fading in
   const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
 
-  // Stagger container for advantage cards
   const cardContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
+      transition: { staggerChildren: 0.15 }
     }
   };
-
-  // Individual card animation
-  const cardVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
-
 
   return (
-    <div className="bg-white min-h-screen py-16 px-4 md:px-12 lg:px-24 font-serif overflow-x-hidden">
+    <div className="bg-secondary min-h-screen py-20 px-6 md:px-12 lg:px-24 font-body overflow-x-hidden">
 
       {/* Mission and Purpose Section */}
       <motion.div
-        className="flex flex-col items-center mb-24"
+        className="max-w-7xl mx-auto mb-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.2 }}
         variants={sectionVariants}
       >
-        <Heading2 text="Mission and Purpose" className='my-6'/>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 w-full max-w-7xl">
-          {/* Image */}
-          <motion.div
-            className="w-full lg:w-1/2 flex-shrink-0 p-2 border-2 border-gray-800 rounded-[18px]"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            // NEW: Continuous floating animation
-            animate={{ y: ["0rem", "-0.75rem", "0rem"] }}
-            whileHover={{ y: "-0.75rem", scale: 1.02, boxShadow: "0px 10px 30px rgba(0,0,0,0.1)" }}
-          >
-            <ImageWithSkeleton
-              src="/images/mission.webp"
-              alt="Cozy interior of a custom campervan"
-              className="rounded-[15px] w-full h-auto object-cover "
-            />
-          </motion.div>
-          {/* Text */}
-          <motion.div
+        <div className="text-center mb-16">
+          <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Our Core Values</RichParagraph>
+          <Heading2 text="Mission and Purpose" className='mt-2 text-primary' />
+          <div className="h-1 w-16 bg-primary mx-auto mt-4 rounded-lg"></div>
+        </div>
 
-            initial={{ opacity: 0, x: 50 }}
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          {/* Image Container */}
+          <motion.div
+            className="w-full lg:w-1/2 relative group"
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <RichParagraph>
-              At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs. We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort. Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
-            </RichParagraph>
+            {/* Design Element: Decorative border box using primary color opacity */}
+            <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-primary/20 rounded-lg -z-10 group-hover:-bottom-2 group-hover:-right-2 transition-all duration-500"></div>
 
+            <div className="p-2 bg-white rounded-lg shadow-xl">
+              <ImageWithSkeleton
+                src="/images/mission.webp"
+                alt="Cozy interior of a custom campervan"
+                className="rounded-lg w-full h-auto object-cover"
+              />
+            </div>
+          </motion.div>
+
+          {/* Text Content */}
+          <motion.div
+            className="w-full lg:w-1/2 space-y-6"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
+              At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs.
+            </RichParagraph>
+            <RichParagraph className="text-primary/80 leading-relaxed">
+              We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort.
+            </RichParagraph>
+            <RichParagraph className="text-primary/80 leading-relaxed">
+              Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
+            </RichParagraph>
           </motion.div>
         </div>
       </motion.div>
 
       {/* Our Advantages Section */}
       <motion.div
-        className="flex flex-col items-center"
+        className="max-w-7xl mx-auto"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.1 }}
         variants={sectionVariants}
       >
+        <div className="text-center mb-16">
+          <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Why Choose Us</RichParagraph>
+          <Heading2 text="Our Advantages" className='mt-2' />
+        </div>
 
-        <Heading2 text="Our Advantages" className='my-6'/>
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={cardContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
         >
           {advantages.map((advantage, index) => (
             <motion.div
               key={index}
-              className="group bg-black text-white rounded-[10px] p-8 flex flex-col items-center text-center shadow-lg cursor-pointer"
-              style={{ minHeight: '400px' }}
-              variants={cardVariants}
-              whileHover={{
-                y: -10,
-                scale: 1.03,
-                boxShadow: "0px 20px 40px rgba(0,0,0,0.25)"
+              className="group bg-primary rounded-lg p-10 flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 }
               }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 15
-              }}
+              whileHover={{ y: -10 }}
             >
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 text-black group-hover:text-blue-600 transition-colors duration-300 ease-in-out">
-                {/* NEW: Added motion.div to icon for individual hover animation */}
-                <motion.div whileHover={{ rotate: 360, scale: 1.1 }}>
-                  {advantage.icon}
-                </motion.div>
+              {/* Icon Container using secondary background for contrast */}
+              <div className="w-20 h-20 bg-secondary rounded-lg flex items-center justify-center mb-8 text-primary transition-transform duration-500 group-hover:rotate-[360deg]">
+                {advantage.icon}
               </div>
-              <RichParagraph white={true}>
-                      {advantage.text}
+
+              <Heading3 text= {advantage.title} className="text-secondary"/>
+
+
+
+              <RichParagraph className="text-secondary/70 ">
+                {advantage.text}
               </RichParagraph>
             </motion.div>
           ))}

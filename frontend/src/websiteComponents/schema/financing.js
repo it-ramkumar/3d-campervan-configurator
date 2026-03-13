@@ -1,17 +1,40 @@
 export const generateFinancingSchema = () => ({
   "@context": "https://schema.org",
   "@type": "FinancialService",
+  "@id": "https://bigbearvans.com/financing/#service",
   "name": "Big Bear Vans Financing Options",
-  "description": "Custom campervan financing solutions. Options include RV loans for pre-built vans, all-in-one chassis and conversion loans, and real estate collateral financing.",
-  "serviceType": ["RV Loans", "Custom Van Conversion Financing", "Auto Loans"],
+  "description": "Flexible campervan financing with 15-year terms. Partnered with Trident Funding for specialized RV loans and all-in-one van conversion financing.",
+  "url": "https://bigbearvans.com/financing",
+  "serviceType": [
+    "RV Loans",
+    "Custom Van Conversion Financing",
+    "All-in-one Chassis & Build Loans"
+  ],
   "provider": {
     "@type": "LocalBusiness",
-    "name": "Big Bear Vans"
+    "@id": "https://bigbearvans.com/#organization",
+    "name": "Big Bear Vans",
+    "image": "https://bigbearvans.com/heroSlider/limage2.webp",
+    "telephone": "+1-951-441-9719",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "320 W Big Bear Blvd, Big Bear, CA 92314, United States",
+      "addressLocality": "Big Bear City",
+      "addressRegion": "CA",
+      "postalCode": "92314",
+      "addressCountry": "US"
+    }
   },
-  "areaServed": "USA",
+  "areaServed": {
+    "@type": "Country",
+    "name": "United States"
+  },
   "offers": {
     "@type": "Offer",
-    "description": "Extended 15-year terms for RV loans and all-in-one custom build financing with 20-30% down payment."
+    "description": "Specialized RV financing with 20-30% down payment and terms up to 180 months (15 years).",
+    "category": "RV Finance",
+    "priceCurrency": "USD",
+    "url": "https://bigbearvans.com/financing"
   },
   "mainEntityOfPage": {
     "@type": "WebPage",

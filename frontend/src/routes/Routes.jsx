@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { pageView, initAnalytics } from '../websiteComponents/CustomHooks/analytics';
 
@@ -50,6 +51,7 @@ const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPa
 const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
 // const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
 const PreviewPage = lazy(() => import("../components/preview/PreviewConfigureVan"));
+const ShareIcon = lazy(() => import("../websiteComponents/components/Common/ShareIcon/ShareIcon"));
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -71,6 +73,8 @@ const AppRoutes = () => {
           <ChatWidget  />
         </Suspense>
       )} */}
+      <ShareIcon />
+      {/* rest of the page */}
 
       <ScrollFromTop />
 
@@ -154,8 +158,10 @@ export default function AppWrapper() {
   }, []);
 
   return (
+    <HelmetProvider>
     <Router>
       <AppRoutes />
     </Router>
+    </HelmetProvider>
   );
 }

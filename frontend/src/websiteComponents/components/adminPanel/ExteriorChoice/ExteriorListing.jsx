@@ -4,14 +4,16 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import DetailModal from "./Detail";
 import { Search } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setEditData, clearEditData } from "../../../../redux/slices/editData"
 
 export default function ExteriorList({ setSelected }) {
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch()
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // Add this
-const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchInteriors = async (query = "") => {
@@ -33,6 +35,7 @@ const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     fetchInteriors();
   }, []);
+
 
   const handleSearch = () => {
     fetchInteriors(searchTerm);
@@ -65,10 +68,10 @@ const [openModal, setOpenModal] = useState(false);
       setDeleteLoading(null);
     }
   };
-const handleView = (item) => {
-  setSelectedItem(item); // Store the clicked item
-  setOpenModal(true);    // Open the modal
-};
+  const handleView = (item) => {
+    setSelectedItem(item); // Store the clicked item
+    setOpenModal(true);    // Open the modal
+  };
 
   if (loading) return (
     <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
@@ -87,7 +90,11 @@ const handleView = (item) => {
         </div>
 
         <button
-          onClick={() => setSelected("exterior-form")}
+          onClick={() => {
+            setSelected("exterior-form")
+            dispatch(clearEditData());
+          }
+          }
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
         >
           <span className="text-lg">+</span> Add New Choice
@@ -153,11 +160,11 @@ const handleView = (item) => {
               {/* Content Section */}
               <div className="p-5 flex-1 flex flex-col">
                 <div className="mb-4">
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
-                        {item.subCategoryId?.categoryId?.title || "General"}
-                     </span>
-                   </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
+                      {item.subCategoryId?.categoryId?.title || "General"}
+                    </span>
+                  </div>
                   <h3 className="font-bold text-slate-800 text-base line-clamp-1">{item.title}</h3>
                   <p className="text-slate-400 text-xs mt-1 font-medium italic">
                     {item.subCategoryId?.title || "No Subcategory"}
@@ -172,8 +179,11 @@ const handleView = (item) => {
                   >
                     View
                   </button>
-                  <button disabled={true}
-                    // onClick={() => setSelected("exterior-form")}
+                  <button
+                    onClick={() => {
+                      setSelected("exterior-form")
+                      dispatch(setEditData(item))
+                    }}
                     className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit
@@ -184,14 +194,14 @@ const handleView = (item) => {
           ))}
         </div>
       )}
-{openModal && (
-  <DetailModal
-    item={selectedItem}
-    onClose={() => {
-      setOpenModal(false);
-      setSelectedItem(null);
-    }}
-  />
-)}    </div>
+      {openModal && (
+        <DetailModal
+          item={selectedItem}
+          onClose={() => {
+            setOpenModal(false);
+            setSelectedItem(null);
+          }}
+        />
+      )}    </div>
   );
 }

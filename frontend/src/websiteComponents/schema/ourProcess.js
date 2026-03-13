@@ -1,38 +1,44 @@
 export const generateProcessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How We Build Your Custom Camper Van",
-  "description": "A 5-month comprehensive process from vehicle sourcing and 3D design to precision engineering and final delivery.",
-  "estimatedCost": {
-    "@type": "MonetaryAmount",
-    "currency": "USD",
-    "value": "Varies by build"
-  },
+  "name": "How We Build Your Custom Big Bear Van",
+  "description": "Our transparent 5-month custom van conversion process, from 3D visualization to final handover.",
+  "totalTime": "P5M", // Period: 5 Months
   "step": [
     {
       "@type": "HowToStep",
+      "name": "Consultation & 3D Design",
+      "text": "We start with a detailed consultation followed by 3D visualization of your layout and material selection.",
+      "url": "https://bigbearvans.com/our-process#step1"
+    },
+    {
+      "@type": "HowToStep",
       "name": "Vehicle Sourcing",
-      "text": "Bring your own Sprinter or let us source a new one with up to $10,000 off MSRP."
+      "text": "We help you find the perfect Mercedes Sprinter or Ford Transit through our dealer network if you don't already have one.",
+      "url": "https://bigbearvans.com/our-process#step2"
     },
     {
       "@type": "HowToStep",
-      "name": "Collaborative Design",
-      "text": "Consultations and photorealistic 3D renderings to visualize your layout."
+      "name": "The 5-Month Build Phase",
+      "text": "Precision engineering of your electrical, plumbing, and custom cabinetry. We keep you updated with progress photos.",
+      "url": "https://bigbearvans.com/our-process#step3"
     },
     {
       "@type": "HowToStep",
-      "name": "Engineering",
-      "text": "Optimizing electrical, plumbing, and weight distribution for safety."
+      "name": "Quality Control & Testing",
+      "text": "Rigorous off-grid testing of all systems (Solar, Water, HVAC) to ensure everything is trail-ready.",
+      "url": "https://bigbearvans.com/our-process#step4"
     },
     {
       "@type": "HowToStep",
-      "name": "Build & Assembly",
-      "text": "2-4 months of interior craftsmanship and exterior upgrades with weekly updates."
-    },
-    {
-      "@type": "HowToStep",
-      "name": "Fly in, Drive out",
-      "text": "Pick up your van in Big Bear, California, with 2 nights of camping on us."
+      "name": "Handover & LAX Valet Pickup",
+      "text": "Fly in to LAX, and we provide complimentary valet pickup to bring you to your new home on wheels.",
+      "url": "https://bigbearvans.com/our-process#step5"
     }
-  ]
-});
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Big Bear Vans",
+    "logo": "https://bigbearvans.com/images/blackLogo.jpg"
+  }
+})

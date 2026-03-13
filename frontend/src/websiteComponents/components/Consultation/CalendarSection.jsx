@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Link } from "react-router-dom";
-import WhiteButton from "../Common/Button/WhiteButton"
+import PrimaryButton from "../Common/Button/PrimaryButton"
 import { Heading4, Heading3, RichParagraph } from '../Common/Common'
-
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -12,25 +11,18 @@ export default function BookingPage() {
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState();
   const [submitting, setSubmitting] = useState(false);
-  // ✅ FIX: Hamesha user ke local date ko YYYY-MM-DD format mein return karein.
+
+  // Your existing functions remain the same...
   const getTodayDate = () => {
     const now = new Date();
-    // User ke system time zone ko use karke date string banao
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-    // New Date object ko user ke local time zone mein convert karke, sirf date part lein.
-    // Note: Agar aapko ye complex lage to aap sirf `now.toISOString().split('T')[0]` bhi use kar sakte hain
-    // agar aapka server aur client UTC mein date fetch karte hain, lekin neeche wala tareeqa behtar hai.
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: userTimeZone };
     const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
-
     const year = dateParts.find(p => p.type === 'year').value;
     const month = dateParts.find(p => p.type === 'month').value;
     const day = dateParts.find(p => p.type === 'day').value;
-
-    return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
+    return `${year}-${month}-${day}`;
   };
-
 
   const [selectedDate, setSelectedDate] = useState(getTodayDate());
   const [bookingStep, setBookingStep] = useState(1);
@@ -45,10 +37,8 @@ export default function BookingPage() {
     description: "",
   });
 
-  // Step 1: Get Google OAuth URL and login status
+  // All your existing useEffect and handler functions...
   useEffect(() => {
-
-
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/auth/url`)
       .then((res) => res.json())
       .then((data) => setAuthUrl(data.url)).catch((err) => console.error("Error fetching Auth URL:", err));
@@ -58,122 +48,108 @@ export default function BookingPage() {
       .then((data) => setIsLoggedIn(data.loggedIn)).catch((err) => console.error("Error fetching Status:", err));
   }, []);
 
-  // Step 2: Redirect to Google login
   const handleLogin = () => {
     window.location.href = authUrl;
   };
 
-  // Step 3: Handle form input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ LOCAL TIME DISPLAY FUNCTION - Theek hai, backend se aayi ISO string ko local time mein dikhaega.
   const formatTimeSlot = (slotTime) => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // slotTime ab backend se ISO string (offset ke saath) aayegi, new Date usko theek se parse karega.
     const date = new Date(slotTime);
-
     return date.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      timeZone: userTimeZone // Theek se local time zone mein display karein
+      timeZone: userTimeZone
     });
   };
 
-  // Step 4: Fetch available slots for selected date - Timezone ke saath
-  // ✅ Slots fetch karte waqt timezone bhejo
-useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn && selectedDate) {
-        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      console.log("🔍 Fetching slots for timezone:", userTimeZone);
 
-        console.log("🔍 Fetching slots for timezone:", userTimeZone); // ✅ ADD THIS
-
-        fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("📥 Received slots:", data); // ✅ ADD THIS
-                if (data.error) {
-                    console.error("Backend Error fetching slots:", data.error);
-                    setSlots([]);
-                } else {
-                    setSlots(data);
-                }
-            })
-            .catch((err) => {
-                console.error("Network error fetching slots:", err);
-                setSlots([]);
-            });
+      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("📥 Received slots:", data);
+          if (data.error) {
+            console.error("Backend Error fetching slots:", data.error);
+            setSlots([]);
+          } else {
+            setSlots(data);
+          }
+        })
+        .catch((err) => {
+          console.error("Network error fetching slots:", err);
+          setSlots([]);
+        });
     }
-}, [isLoggedIn, selectedDate]);
+  }, [isLoggedIn, selectedDate]);
 
-  // Step 5: Submit booking - Backend ko ISO strings bhej rahe hain (correct)
-// Step 5: Submit booking
-const handleBooking = async () => {
+  const handleBooking = async () => {
     if (!selectedSlot) return alert("Please select a time slot.");
     if (!formData.name || !formData.email)
-        return alert("Name and Email are required.");
+      return alert("Name and Email are required.");
 
-    // ✅ User ka ACTUAL timezone
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
     console.log("🔍 BOOKING DEBUG:");
-    console.log("User Timezone:", userTimezone); // Should be "America/Los_Angeles"
+    console.log("User Timezone:", userTimezone);
     console.log("Selected Slot:", selectedSlot);
 
     const bookingData = {
-        ...formData,
-        startTime: selectedSlot.start,
-        endTime: selectedSlot.end,
-        timezone: userTimezone, // ✅ MUST INCLUDE
-        summary: formData.summary || "Meeting",
-        description: formData.description || "",
+      ...formData,
+      startTime: selectedSlot.start,
+      endTime: selectedSlot.end,
+      timezone: userTimezone,
+      summary: formData.summary || "Meeting",
+      description: formData.description || "",
     };
 
     console.log("📤 Sending booking data:", bookingData);
 
     setSubmitting(true);
     try {
-        const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(bookingData),
-        });
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/calendar/create-event`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData),
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (!res.ok) {
-            console.error("❌ Backend error:", data);
-            alert(data.message || `Error: ${res.status}`);
-            setSubmitting(false);
-            return;
-        }
-
-        console.log("✅ Booking successful:", data);
-        setMeetLink(data.meetLink);
-        setBookingStep(5);
-        setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+      if (!res.ok) {
+        console.error("❌ Backend error:", data);
+        alert(data.message || `Error: ${res.status}`);
         setSubmitting(false);
+        return;
+      }
+
+      console.log("✅ Booking successful:", data);
+      setMeetLink(data.meetLink);
+      setBookingStep(5);
+      setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+      setSubmitting(false);
 
     } catch (err) {
-        console.error("❌ Network error:", err);
-        alert("Network error - check console");
-        setSubmitting(false);
+      console.error("❌ Network error:", err);
+      alert("Network error - check console");
+      setSubmitting(false);
     }
-};
+  };
 
-  // Copy meeting link to clipboard
   const copyToClipboard = () => {
     navigator.clipboard.writeText(meetLink)
       .then(() => alert("Meeting link copied to clipboard!"))
       .catch(err => console.error("Failed to copy: ", err));
   };
 
-  // ✅ FIX: Reset booking mein local date use karein (getTodayDate function use karein)
   const resetBooking = () => {
     setSelectedSlot(null);
-    setSelectedDate(getTodayDate()); // FIX: Ab sahi local date set hogi
+    setSelectedDate(getTodayDate());
     setFormData({
       name: "",
       email: "",
@@ -185,433 +161,462 @@ const handleBooking = async () => {
     setMeetLink("");
   };
 
-  // Calendar functions
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
 
   const getFirstDayOfMonth = (date) => {
-    // Sun=0, Mon=1, etc.
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   };
 
-  // ✅ FIX: Calendar mein bhi local date ka comparison theek karein
-  // ✅ FIX: Calendar mein bhi local date ka comparison theek karein
-const generateCalendar = () => {
+  const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth);
     const firstDay = getFirstDayOfMonth(currentMonth);
     const calendar = [];
-
-    // ✅ USER LOCAL DATE (YYYY-MM-DD string) - Consistent tareeqa
     const todayString = getTodayDate();
 
-    // Add empty cells for days before the first day of month
     for (let i = 0; i < firstDay; i++) {
-        calendar.push(null);
+      calendar.push(null);
     }
 
-    // Add days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-        // ✅ FIX: User ke timezone mein date string banao (UTC confusion avoid karo)
-        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const dateString = date.toLocaleDateString('en-CA', {
+        timeZone: userTimeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
 
-        // Date object banao WITHOUT time (midnight local time)
-        const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const isToday = dateString === todayString;
+      const isSelected = dateString === selectedDate;
+      const isPast = dateString < todayString;
+      const isSunday = date.getDay() === 0;
 
-        // ✅ CORRECT WAY: User timezone mein YYYY-MM-DD format
-        const dateString = date.toLocaleDateString('en-CA', {
-            timeZone: userTimeZone,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }); // 'en-CA' locale gives YYYY-MM-DD format
-
-        const isToday = dateString === todayString;
-        const isSelected = dateString === selectedDate;
-
-        // Past check: Calendar date string ko today string se compare karein
-        const isPast = dateString < todayString;
-
-        // ✅ Sunday disable check
-        const isSunday = date.getDay() === 0;
-
-        calendar.push({
-            day,
-            date: dateString,
-            isToday,
-            isSelected,
-            isPast,
-            isSunday
-        });
+      calendar.push({
+        day,
+        date: dateString,
+        isToday,
+        isSelected,
+        isPast,
+        isSunday
+      });
     }
 
     return calendar;
-};
-
+  };
 
   const navigateMonth = (direction) => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
   };
 
   const handleDateSelect = (date) => {
-    if (date.isPast) return;
+    if (date.isPast || date.isSunday) return;
     setSelectedDate(date.date);
-    setSelectedSlot(null); // Date change hone par slot reset karein
-    setBookingStep(2); // Move to time selection after date selection
+    setSelectedSlot(null);
+    setBookingStep(2);
   };
 
-const formatDate = (dateString) => {
-    // ✅ FIX: Date string ko properly parse karo (YYYY-MM-DD format)
+  const formatDate = (dateString) => {
     const [year, month, day] = dateString.split('-');
-
-    // ✅ Local date object banao (UTC confusion avoid karo)
-    const date = new Date(year, month - 1, day); // month is 0-indexed
-
+    const date = new Date(year, month - 1, day);
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: userTimeZone
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: userTimeZone
     });
-};
-
-  // ... (rest of the code remains the same)
+  };
 
   const calendar = generateCalendar();
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+  const days = [
+    { id: 1, label: 'Sun' },
+    { id: 2, label: 'Mon' },
+    { id: 3, label: 'Tue' },
+    { id: 4, label: 'Wed' },
+    { id: 5, label: 'Thu' },
+    { id: 6, label: 'Fri' },
+    { id: 7, label: 'Sat' }
   ];
 
   return (
-    <div className="flex bg-white justify-center">
+    <div className="flex bg-[#F5F5F0] min-h-screen justify-center items-center p-4">
+      {/* Main Container */}
+      <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-2xl overflow-hidden min-h-[700px] border border-[#001F3D]/5">
 
-      <div className="flex w-full max-w-6xl">
-
-
-        <div className="hidden lg:flex lg:w-1/2 text-black p-8 flex-col justify-between bg-gray-50 border-r border-gray-200">
+        {/* Sidebar: Navy Theme */}
+        <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-white p-10 flex-col justify-between relative">
           <div>
+       
 
-            <div className="flex justify-start mb-8">
-              <div className="overflow-hidden flex items-center justify-center">
-                <Link to="/" className="block">
-                  <ImageWithSkeleton
-                    src="/images/blackLogo.jpg"
-                    alt="BBV logo"
-                    className="w-[70px] border-none object-contain"
-                    click={true}
-                  />
-                </Link>
-              </div>
+            <Heading3 text="Consultation Call" textColor="text-white" className="mb-8" />
+
+            {/* Step Indicators */}
+            <div className="space-y-6 relative">
+              <div className="absolute left-[15px] top-2 bottom-2 w-px bg-white/10"></div>
+              {[1, 2, 3, 4].map((s) => (
+                <div key={s} className="flex items-center gap-4 relative z-10">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? 'bg-[#ED985F] text-[#001F3D]' : 'bg-white/10 text-white/30'}`}>
+                    {s}
+                  </div>
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? 'text-white' : 'text-white/30'}`}>
+                    {s === 1 ? 'Date' : s === 2 ? 'Time' : s === 3 ? 'Details' : 'Review'}
+                  </span>
+                </div>
+              ))}
             </div>
+          </div>
 
-            <Heading3 text="Book Your Consultation Call" textColor="text-black" className="my-2" />
-
-
-
-            <div className="mb-8">
-              <div className="flex items-center mb-3">
-                <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 1 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
-                  1
-                </div>
-                <RichParagraph className={`font-medium ${bookingStep >= 1 ? 'text-black' : 'text-gray-500'}`}>Date</RichParagraph>
-              </div>
-              <div className="flex items-center mb-3">
-                <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 2 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
-                  2
-                </div>
-                <RichParagraph className={`font-medium ${bookingStep >= 2 ? 'text-black' : 'text-gray-500'}`}>Time</RichParagraph>
-              </div>
-              <div className="flex items-center mb-3">
-                <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 3 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
-                  3
-                </div>
-                <RichParagraph className={`font-medium ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Info</RichParagraph>
-              </div>
-              <div className="flex items-center mb-3">
-                <RichParagraph className={` ${bookingStep >= 3 ? 'text-black' : 'text-gray-500'}`}>Details</RichParagraph>
-              </div>
-              <div className="flex items-center">
-                <div className={`w-7 h-7 rounded-full text-sm flex items-center justify-center mr-3 ${bookingStep >= 4 ? 'bg-black text-white' : 'bg-gray-200 text-gray-500'}`}>
-                  4
-                </div>
-                <RichParagraph className={` ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Confirmation</RichParagraph>
-              </div>
-              <div className="flex items-center">
-                <RichParagraph className={` ${bookingStep >= 4 ? 'text-black' : 'text-gray-500'}`}>Summary</RichParagraph>
-              </div>
-            </div>
-
-            <div className="space-y-4 text-left">
-              <div>
-                <RichParagraph className="text-sm text-gray-600 mb-1">
-                  Need assistance or have questions before booking?
-                </RichParagraph>
-                <RichParagraph className="text-black font-semibold">Host: +1 (951) 441-9719</RichParagraph>
-              </div>
-
-            </div>
+          <div className="bg-white/5 p-4 rounded-lg border border-white/10">
+            <p className="text-[10px] uppercase font-bold tracking-widest text-[#ED985F] mb-1">Support Line</p>
+            <p className="text-sm font-medium">+1 (951) 441-9719</p>
           </div>
         </div>
 
-
-        <div className="flex-1 flex flex-col lg:w-1/2">
-
-          <div className="flex-1 p-6 overflow-y-auto">
-            {!authUrl ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+        {/* Content Area */}
+        <div className="flex-1 p-8 md:p-12 overflow-y-auto bg-white">
+          {!isLoggedIn ? (
+            <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
+              <div className="text-center">
+                <Heading3 text="Welcome Back" />
+                <RichParagraph>Please sign in with Google to manage your bookings.</RichParagraph>
               </div>
-            ) : !isLoggedIn ? (
-              <div className="max-w-sm mx-auto mt-8">
-                <div className="text-center mb-8">
-                  <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Booking System</h1>
-                  <RichParagraph>
-                    Please login with Google to continue
-                  </RichParagraph>
+              <button
+                onClick={handleLogin}
+                className="flex items-center gap-4 px-8 py-4 bg-[#F5F5F0] border border-[#001F3D]/10 rounded-lg font-bold hover:bg-[#ED985F] hover:text-white transition-all shadow-sm"
+              >
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5" alt="google" />
+                Continue with Google
+              </button>
+            </div>
+          ) : (
+            <div className="max-w-md mx-auto">
+
+              {/* Step 1: Date Selection */}
+              {bookingStep === 1 && (
+                <div className="animate-in slide-in-from-right-4 duration-500">
+                  <header className="text-center mb-8">
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Schedule</span>
+                    <Heading4 text="Select a Date" />
+                  </header>
+
+                  <div className="bg-[#F5F5F0]/50 p-6 rounded-lg border border-[#001F3D]/5">
+                    <div className="flex justify-between items-center mb-6">
+                      <button
+                        onClick={() => navigateMonth(-1)}
+                        className="p-2 hover:bg-white rounded-lg transition-all text-[#001F3D] hover:text-[#ED985F]"
+                      >
+                        ←
+                      </button>
+                      <h3 className="font-bold text-sm uppercase tracking-widest text-[#001F3D]">
+                        {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                      </h3>
+                      <button
+                        onClick={() => navigateMonth(1)}
+                        className="p-2 hover:bg-white rounded-lg transition-all text-[#001F3D] hover:text-[#ED985F]"
+                      >
+                        →
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1 mb-2">
+                      {days.map(d => (
+                        <div key={d.id} className="text-center text-[10px] font-bold text-[#001F3D]/30 py-2">
+                          {d.label}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1">
+                      {calendar.map((d, i) => (
+                        <button
+                          key={i}
+                          onClick={() => d && handleDateSelect(d)}
+                          disabled={!d || d.isPast || d.isSunday}
+                          className={`h-10 rounded-lg text-xs font-bold transition-all ${
+                            !d
+                              ? 'invisible'
+                              : d.isSelected
+                                ? 'bg-[#001F3D] text-white shadow-lg'
+                                : d.isPast || d.isSunday
+                                  ? 'text-gray-300 cursor-not-allowed bg-gray-50'
+                                  : d.isToday
+                                    ? 'bg-[#ED985F]/20 text-[#ED985F] hover:bg-[#ED985F] hover:text-white'
+                                    : 'hover:bg-[#ED985F] hover:text-white text-[#001F3D] bg-white'
+                          }`}
+                        >
+                          {d?.day}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <button
-                  onClick={handleLogin}
-                  className="bg-white text-gray-900 px-6 py-3 rounded-lg border border-gray-300 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3 w-full font-medium text-sm"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                  </svg>
-                  Login with Google
-                </button>
-              </div>
-            ) : (
-              <div className="max-w-sm mx-auto">
+              )}
 
-                <div className="lg:hidden mb-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                      <ImageWithSkeleton
-                        src="/images/blackLogo.jpg"
-                        alt="BBV logo"
-                        className="w-[100px] h-[30px] object-contain"
+              {/* Step 2: Time Selection */}
+              {bookingStep === 2 && (
+                <div className="animate-in slide-in-from-right-4">
+                  <header className="text-center mb-8">
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Time</span>
+                    <Heading4 text="Available Slots" />
+                    <p className="text-xs font-bold text-[#001F3D]/60 mt-2">{formatDate(selectedDate)}</p>
+                  </header>
+
+                  {slots.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-[#F5F5F0] rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-[#001F3D]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-[#001F3D]/60 mb-4">No slots available for this date</p>
+                      <button
+                        onClick={() => setBookingStep(1)}
+                        className="text-[#ED985F] font-bold text-xs uppercase tracking-widest hover:underline"
+                      >
+                        Choose Different Date
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-2 gap-3 mb-8">
+                        {slots.filter(s => s.available !== false).map((s, i) => (
+                          <button
+                            key={i}
+                            onClick={() => {setSelectedSlot(s); setBookingStep(3)}}
+                            className={`p-4 border rounded-lg font-bold text-xs transition-all ${
+                              selectedSlot?.start === s.start
+                                ? 'border-[#ED985F] bg-[#ED985F]/10 text-[#ED985F]'
+                                : 'border-[#001F3D]/10 hover:border-[#ED985F] hover:text-[#ED985F] bg-[#F5F5F0]/30 text-[#001F3D]'
+                            }`}
+                          >
+                            {formatTimeSlot(s.start)}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setBookingStep(1)}
+                        className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/40 hover:text-[#001F3D] transition-colors"
+                      >
+                        Change Date
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Step 3: Form */}
+              {bookingStep === 3 && (
+                <div className="animate-in slide-in-from-right-4 space-y-6">
+                  <header className="text-center mb-8">
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Details</span>
+                    <Heading4 text="Meeting Information" />
+                  </header>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                        Full Name *
+                      </label>
+                      <input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Enter your full name"
+                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                        Email Address *
+                      </label>
+                      <input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="your.email@example.com"
+                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                        Phone Number
+                      </label>
+                      <input
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="+1 (555) 123-4567"
+                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                        Meeting Topic
+                      </label>
+                      <input
+                        name="summary"
+                        value={formData.summary}
+                        onChange={handleChange}
+                        placeholder="Brief topic or purpose of meeting"
+                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                        Additional Notes
+                      </label>
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Any specific topics or questions you'd like to discuss..."
+                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30 resize-none"
+                        rows="3"
                       />
                     </div>
                   </div>
-                  <div className="w-12 h-px bg-gray-300"></div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={() => setBookingStep(2)}
+                      className="flex-1 py-4 rounded-lg bg-[#F5F5F0] text-[10px] font-bold uppercase tracking-widest text-[#001F3D] hover:bg-[#001F3D]/5 transition-colors"
+                    >
+                      Back
+                    </button>
+                    <button
+                      onClick={() => setBookingStep(4)}
+                      disabled={!formData.name || !formData.email}
+                      className="flex-1 py-4 rounded-lg bg-[#001F3D] text-white text-[10px] font-bold uppercase tracking-widest hover:bg-[#ED985F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Review Booking
+                    </button>
+                  </div>
                 </div>
+              )}
 
+              {/* Step 4: Summary */}
+              {bookingStep === 4 && (
+                <div className="animate-in zoom-in-95 space-y-6">
+                  <header className="text-center mb-8">
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Review</span>
+                    <Heading4 text="Confirm Details" />
+                  </header>
 
-                <div>
-
-                  {bookingStep === 1 && (
-                    <div className="max-w-sm mx-auto">
-                      <Heading3 text="Select a Date" textColor="text-black" className="text-center my-4" />
-
-                      <div className="bg-white border border-gray-200 rounded-lg p-3 mb-4 shadow-sm">
-                        <div className="flex items-center justify-between mb-3">
-                          {/* Previous Month Button */}
-                          <button
-                            onClick={() => navigateMonth(-1)}
-                            aria-label="Go to previous month"
-                            className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-                          >
-                            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                          </button>
-
-                          <h3 className="text-sm font-semibold">{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h3>
-
-                          {/* Next Month Button */}
-                          <button
-                            onClick={() => navigateMonth(1)}
-                            aria-label="Go to next month"
-                            className="p-1 hover:bg-gray-100 rounded-md transition-colors"
-                          >
-                            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </button>
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1 mb-1">
-                          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-                            <div key={day + index} className="text-center text-xs font-medium py-1 text-gray-500">{day}</div>
-                          ))}
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1">
-                          {calendar.map((date, index) => (
-                            <button
-                              key={index}
-                              onClick={() => date && handleDateSelect(date)}
-                              // Date ke liye label: maslan "Select October 24 2026"
-                              aria-label={date ? `Select ${date.day} ${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}` : ""}
-                              disabled={!date || date.isPast || date.isSunday}
-                              className={`
-              h-7 rounded-md text-xs transition-all font-medium
-              ${!date ? 'invisible' : ''}
-              ${date?.isPast || date?.isSunday ? 'text-gray-300 cursor-not-allowed' : ''}
-              ${date?.isToday && !date?.isSelected ? 'bg-blue-50 text-blue-600 border border-blue-200' : ''}
-              ${date?.isSelected ? 'bg-black text-white shadow-md' : ''}
-              ${!date?.isPast && !date?.isSunday && !date?.isSelected && !date?.isToday ? 'hover:bg-gray-50 text-gray-700' : 'text-gray-600'}
-            `}
-                            >
-                              {date?.day}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      {selectedDate && (
-                        <div className="text-center p-3 bg-gray-50 rounded-lg border border-gray-200 mb-4">
-                          <Heading4 text="Selected Date" textColor="text-black" className="text-center my-4" />
-                          <RichParagraph>
-                            {formatDate(selectedDate)}
-                          </RichParagraph>
-                        </div>
-                      )}
+                  <div className="bg-[#F5F5F0] rounded-lg p-6 border border-[#001F3D]/5 space-y-4">
+                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Date</span>
+                      <span className="text-sm font-bold text-[#001F3D]">{formatDate(selectedDate)}</span>
                     </div>
-                  )}
-
-
-                  {bookingStep === 2 && (
-                    <div className="max-w-sm mx-auto">
-                      <Heading4 text="Select a Time" textColor="text-black" className="text-center my-4" />
-
-                      <RichParagraph className="text-center my-2">
-                        {formatDate(selectedDate)}
-                      </RichParagraph>
-                      {slots.length === 0 ? (
-                        <div className="text-center py-6">
-                          <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                          <RichParagraph>
-                            No available slots for selected day.
-                          </RichParagraph>
-                          <button onClick={() => setBookingStep(1)} className="text-black hover:text-gray-700 font-medium underline text-sm">Choose another date</button>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-2 gap-2 mb-4">
-                          {slots.map((slot, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => { if (slot.available) { setSelectedSlot(slot); setBookingStep(3); } }}
-                              disabled={!slot.available}
-                              className={`p-3 border-2 rounded-lg text-center transition-all font-medium text-sm ${selectedSlot === slot
-                                ? "bg-black text-white border-black shadow-md"
-                                : slot.available
-                                  ? "bg-white text-gray-900 border-gray-200 hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm"
-                                  : "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                                }`}
-                            >
-                              {formatTimeSlot(slot.start)}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                      <div className="text-center">
-                        <WhiteButton label={"Back to Date Selection"} onClick={() => setBookingStep(1)} />
-                      </div>
+                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Time</span>
+                      <span className="text-sm font-bold text-[#001F3D]">
+                        {selectedSlot && formatTimeSlot(selectedSlot.start)}
+                      </span>
                     </div>
-                  )}
-
-
-                  {bookingStep === 3 && (
-                    <div className="max-w-sm mx-auto font-serif">
-                      <Heading4 text="Enter Your Details" textColor="text-black" className="text-center my-4" />
-                      <RichParagraph className="text-center my-2">
-                        {formatDate(selectedDate)} at {selectedSlot && formatTimeSlot(selectedSlot.start)}
-
-                      </RichParagraph>
-
-                      <div className="space-y-3 mb-4 font-serif">
-
-                        <div><label className="block text-gray-700 mb-1 font-medium text-sm">Name *</label><input type="text" name="name" placeholder="Your full name" value={formData.name} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
-                        <div><label className="block text-gray-700 mb-1 font-medium text-sm">Email *</label><input type="email" name="email" placeholder="Your email address" value={formData.email} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" required /></div>
-                        <div><label className="block text-gray-700 mb-1 font-medium text-sm">Phone (optional)</label><input type="tel" name="phone" placeholder="Your phone number" value={formData.phone} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
-                        <div><label className="block text-gray-700 mb-1 font-medium text-sm">Meeting Title</label><input type="text" name="summary" placeholder="What is this meeting about?" value={formData.summary} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
-                        <div><label className="block text-gray-700 mb-1 font-medium text-sm">Additional Details</label><textarea name="description" placeholder="Any additional information..." value={formData.description} onChange={handleChange} rows="3" className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-colors text-sm" /></div>
-                      </div>
-                      <div className="flex gap-2">
-                        <WhiteButton label={"back"} onClick={() => setBookingStep(2)} />
-                        <WhiteButton label={"Continue to Summary"} onClick={() => setBookingStep(4)} disabled={!formData.name || !formData.email} />
-                      </div>
+                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Name</span>
+                      <span className="text-sm font-bold text-[#001F3D]">{formData.name}</span>
                     </div>
-                  )}
-
-
-                  {bookingStep === 4 && (
-                    <div className="max-w-sm mx-auto">
-                      <Heading4 text="Meeting Summary" textColor="text-black" className="text-center my-4" />
-
-                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 text-sm">
-
-                        <div className="space-y-3 font-serif">
-                          <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Date & Time</span><span className="font-semibold text-right">{formatDate(selectedDate)}<br />at {selectedSlot && formatTimeSlot(selectedSlot.start)}</span></div>
-                          <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Duration</span><span className="font-semibold">{selectedSlot && Math.round((new Date(selectedSlot.end) - new Date(selectedSlot.start)) / (1000 * 60))} min</span></div>
-                          <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Name</span><span className="font-semibold">{formData.name}</span></div>
-                          <div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Email</span><span className="font-semibold">{formData.email}</span></div>
-                          {formData.phone && (<div className="flex justify-between items-center pb-2 border-b border-gray-200"><span className="text-gray-600">Phone</span><span className="font-semibold">{formData.phone}</span></div>)}
-                          {formData.summary && (<div className="flex justify-between items-start"><span className="text-gray-600">Title</span><span className="font-semibold text-right">{formData.summary}</span></div>)}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button onClick={() => setBookingStep(3)} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium flex-1 text-sm">Back</button>
-                        <button disabled={submitting} onClick={handleBooking} className={`${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"} text-white px-4 py-2 rounded-lg transition-colors font-medium flex-1 text-sm`}>{submitting ? "Submitting..." : "Confirm Booking"}</button>
-                      </div>
+                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Email</span>
+                      <span className="text-sm font-bold text-[#001F3D]">{formData.email}</span>
                     </div>
-                  )}
-
-
-                  {bookingStep === 5 && (
-                    <div className="text-center max-w-sm mx-auto py-6">
-
-                      <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
+                    {formData.phone && (
+                      <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Phone</span>
+                        <span className="text-sm font-bold text-[#001F3D]">{formData.phone}</span>
                       </div>
-                      <Heading4 text="Booking Confirmed!" textColor="text-black" className="text-center my-4" />
-                      <RichParagraph className="my-2">
-                        Your meeting has been scheduled successfully.
-                      </RichParagraph>
-                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <RichParagraph className="my-2">
-                          Your Google Meet link:
-                        </RichParagraph>
-                        <div className="flex items-center bg-white p-2 rounded border">
-                          <RichParagraph className="my-2">
-                            {meetLink}
-                          </RichParagraph>
-                          <button onClick={copyToClipboard} className="ml-2 text-gray-600 hover:text-black p-1 rounded hover:bg-gray-100 transition-colors" title="Copy to clipboard">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                          </button>
-                        </div>
+                    )}
+                    {formData.summary && (
+                      <div className="border-b border-[#001F3D]/10 pb-3">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">Topic</span>
+                        <span className="text-sm text-[#001F3D]">{formData.summary}</span>
                       </div>
-                      <RichParagraph className="my-2">
-                        Your meeting has been successfully scheduled! Please check your inbox to confirm the booking and find all the meeting details. We look forward to connecting with you.
+                    )}
+                    {formData.description && (
+                      <div>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">Notes</span>
+                        <span className="text-sm text-[#001F3D]">{formData.description}</span>
+                      </div>
+                    )}
+                  </div>
 
-                      </RichParagraph>
-
-                      <WhiteButton label={"Book Another Meeting"} onClick={resetBooking} />
-
-                    </div>
-                  )}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setBookingStep(3)}
+                      className="flex-1 py-4 rounded-lg bg-[#F5F5F0] text-[10px] font-bold uppercase tracking-widest text-[#001F3D] hover:bg-[#001F3D]/5 transition-colors"
+                    >
+                      Edit Details
+                    </button>
+                    <button
+                      onClick={handleBooking}
+                      disabled={submitting}
+                      className="flex-1 py-4 rounded-lg bg-[#ED985F] text-white text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {submitting ? "Booking..." : "Confirm & Schedule"}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
 
+              {/* Step 5: Success */}
+              {bookingStep === 5 && (
+                <div className="text-center py-12 animate-in fade-in zoom-in">
+                  <div className="w-20 h-20 bg-[#ED985F]/10 text-[#ED985F] rounded-lg flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/>
+                    </svg>
+                  </div>
+                  <Heading3 text="Booking Confirmed!" />
+                  <p className="text-sm text-[#001F3D]/60 mb-8 max-w-sm mx-auto">
+                    Your consultation is confirmed. Check your email for calendar invite and meeting details.
+                  </p>
 
-          <div className="lg:hidden border-t border-gray-200 p-3 bg-white sticky bottom-0">
-            <div className="text-center">
-              <RichParagraph>
-                Need help? Call us at
-              </RichParagraph>
-              <RichParagraph>
-                +1 (951) 441-9719
-              </RichParagraph>
+                  {meetLink && (
+                    <div className="p-4 bg-[#F5F5F0] rounded-lg border border-[#001F3D]/5 flex items-center justify-between gap-4 mb-8">
+                      <span className="text-[10px] font-mono truncate text-[#001F3D]/60 flex-1 text-left">
+                        {meetLink}
+                      </span>
+                      <button
+                        onClick={copyToClipboard}
+                        className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest hover:underline whitespace-nowrap"
+                      >
+                        Copy Link
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    <PrimaryButton
+                      label="Schedule Another Meeting"
+                      onClick={resetBooking}
+                      className="w-full"
+                    />
+                    <Link
+                      to="/"
+                      className="block w-full py-3 text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 hover:text-[#001F3D] transition-colors"
+                    >
+                      Back to Home
+                    </Link>
+                  </div>
+                </div>
+              )}
+
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

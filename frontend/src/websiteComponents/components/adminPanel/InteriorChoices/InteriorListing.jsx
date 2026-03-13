@@ -4,8 +4,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Search, Trash2 } from "lucide-react";
 import DetailModal from "./Detail";
+import { useDispatch } from "react-redux";
+import { setEditData, clearEditData } from "../../../../redux/slices/editData"
 
 export default function InteriorList({ setSelected }) {
+    const dispatch = useDispatch()
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -84,9 +87,10 @@ const handleView = (item) => {
           <h2 className="text-2xl font-black text-slate-800 tracking-tight">Interior Items</h2>
           <p className="text-sm text-slate-500">Manage your interior customization choices</p>
         </div>
-
         <button
-          onClick={() => setSelected("interior-form")}
+          onClick={() =>{ setSelected("interior-form")
+                   dispatch(clearEditData());}
+          }
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
         >
           <span className="text-lg">+</span> Add New Item
@@ -177,12 +181,10 @@ const handleView = (item) => {
                     View
                   </button>
                   <button
-                       disabled={true}
-
-                    // onClick={() => {
-                    //   // setSelected("interior-form");
-                    //   // If you use dispatch for edit data, add it here
-                    // }}
+                    onClick={() => {
+                      setSelected("interior-form")
+                      dispatch(setEditData(item))
+                    }}
                     className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit

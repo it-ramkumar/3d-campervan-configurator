@@ -6,7 +6,8 @@ import Ruler from "lucide-react/dist/esm/icons/ruler";
 import LayoutPanelTop from "lucide-react/dist/esm/icons/layout-panel-top";
 import BatteryCharging from "lucide-react/dist/esm/icons/battery-charging";
 import Armchair from "lucide-react/dist/esm/icons/armchair";
-import { Link } from "react-router-dom";
+import { CustomLink } from "../websiteComponents/components/Common/Common";
+import { Helmet } from "react-helmet-async";
 
 // Direct imports (Above the fold - immediately visible)
 import Navbar from "../websiteComponents/components/Navbar/Navbar";
@@ -45,14 +46,14 @@ const Home = () => {
   const desc = "When you give us 4-5 months, we design and build your custom camper van from scratch, the way you want it";
 
   const descriptionList = [
-      {   text: (
-          <span>
-            <Link to="/configurator" className="text-blue-700 font-bold underline hover:text-blue-900">
-              3D renderings
-            </Link>{" "}
-            to help you visualise your future van before we even pick up a tool.
-          </span>
-        ), icon: CheckCircle2 },
+    {
+      text: (
+        <span>
+          <CustomLink to="/configurator" text={"3D renderings "}/>
+           to help you visualise your future van before we even pick up a tool.
+        </span>
+      ), icon: CheckCircle2
+    },
     {
       text: "3D Scanning, engineered CAD modelling (of your layout), and manufacturing in Automated CNC machines.",
       icon: Ruler,
@@ -71,7 +72,7 @@ const Home = () => {
     },
   ];
 
-  const image = "/images/custom4.webp";
+  const image = "/images2/layout.webp";
   const orderButtonLabel = "Order Custom Build";
   const orderButtonLink = "/inquiry";
   const lastText = "Start by filling out our TEST. We'll ask a few questions and then give you a real estimate of what your dream van will cost.";
@@ -99,49 +100,53 @@ const Home = () => {
     },
   ];
 
-  const homeSchemaData = generateHomeSchema();
+  const homeSchemaData = generateHomeSchema(faqs);
   const faqSchema = createFAQSchema(faqs);
 
   return (
     <>
-      {/* SEO Meta Tags */}
-      <title>Luxury Custom Camper Van Conversions | Big Bear Vans</title>
-      <meta name="keywords" content="custom camper vans, van conversion USA, big bear vans, sprinter van conversion" />
-      <meta name="description" content="Expertly crafted custom camper vans for off-grid living. We use 3D Scanning and CNC precision to build your dream Mercedes Sprinter or Ford Transit conversion." />
-      <link rel="canonical" href="https://bigbearvans.com/" />
+     <Helmet>
+        {/* Basic Meta Tags */}
+        <title>Luxury Custom Camper Van Conversions | Big Bear Vans</title>
+        <meta name="description" content="Expertly crafted custom camper vans for off-grid living. We use 3D Scanning and CNC precision to build your dream Mercedes Sprinter or Ford Transit conversion." />
+        <meta name="keywords" content="custom camper vans, van conversion USA, big bear vans, sprinter van conversion, luxury motorhomes" />
+        <link rel="canonical" href="https://bigbearvans.com" />
 
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="Big Bear Vans | Premium Custom Builds & 3D Design" />
-      <meta property="og:description" content="From 3D renderings to the final build, we create high-end camper vans tailored to your lifestyle. Start your journey here." />
-      <meta property="og:image" content="https://bigbearvans.com/images/custom4.webp" />
-      <meta property="og:url" content="https://bigbearvans.com/" />
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Big Bear Vans | Premium Custom Builds & 3D Design" />
+        <meta property="og:description" content="From 3D renderings to the final build, we create high-end camper vans tailored to your lifestyle." />
+        <meta property="og:image" content="https://bigbearvans.com/images/custom4.webp" />
+        <meta property="og:url" content="https://bigbearvans.com" />
 
-      {/* Twitter Cards */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Big Bear Vans | Luxury Custom Camper Vans" />
-      <meta name="twitter:description" content="Design and build your dream camper van with 3D precision. Order your custom build today." />
-      <meta name="twitter:image" content="https://bigbearvans.com/images/custom4.webp" />
+        {/* Twitter Cards */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Big Bear Vans | Luxury Custom Camper Vans" />
+        <meta name="twitter:description" content="Design and build your dream camper van with 3D precision. Order your custom build today." />
+        <meta name="twitter:image" content="https://bigbearvans.com/images/custom4.webp" />
 
-      {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify([homeSchemaData, faqSchema])}
-      </script>
-
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify([homeSchemaData, faqSchema])}
+        </script>
+      </Helmet>
       {/* Above the fold - Load immediately */}
       <Navbar />
       <Hero />
 
       {/* Below the fold - Lazy load with Suspense */}
-      <div className="overflow-x-hidden">
+      {/* Parent container mein flex aur space-y add kiya hai */}
+      <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-32">
+
         <Suspense fallback={<SectionSkeleton height="300px" />}>
-          <div className="tour-buy">
+          <section >
             <Buy />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Section: Customize - py-16 md:py-24 ko handle kiya gaya hai */}
         <Suspense fallback={<SectionSkeleton height="500px" />}>
-          <div className="tour-customizer">
+          <section className="tour-customizer bg-secondary py-16 md:py-24">
             <Customize
               mainTitle={maintitle}
               sectionTitle={sectiontitle}
@@ -151,57 +156,61 @@ const Home = () => {
               orderButtonLabel={orderButtonLabel}
               orderButtonLink={orderButtonLink}
               lastText={lastText}
-              className="bg-gray-100"
             />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Portfolio */}
         <Suspense fallback={<SectionSkeleton height="600px" />}>
-          <div className="tour-portfolio">
+          <section>
             <Portfolio />
-          </div>
+          </section>
         </Suspense>
-
+        {/* Section: Why Choose */}
         <Suspense fallback={<SectionSkeleton height="400px" />}>
-          <div className="tour-whychoose">
+          <section >
             <WhyChoose />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Section: Our Process */}
         <Suspense fallback={<SectionSkeleton height="500px" />}>
-          <div className="tour-our-process">
+          <section >
             <OurProcess />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Section: Testimonials */}
         <Suspense fallback={<SectionSkeleton height="400px" />}>
-          <div className="tour-testimonials">
-            <Testimonials />
-          </div>
+          <section >      <Testimonials />
+          </section>
         </Suspense>
 
+        {/* Section: Blog */}
         <Suspense fallback={<SectionSkeleton height="400px" />}>
-          <div className="tour-blog">
-            <Blog />
-          </div>
+          <section >      <Blog />
+          </section>
         </Suspense>
 
+        {/* Section: Consultation */}
         <Suspense fallback={<SectionSkeleton height="300px" />}>
-          <div className="tour-consultation">
+          <section className="tour-consultation bg-secondary">
             <Consultation />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Section: FAQs */}
         <Suspense fallback={<SectionSkeleton height="400px" />}>
-          <div className="tour-Faqs">
+          <section className="tour-Faqs">
             <FAQs faqs={faqs} />
-          </div>
+          </section>
         </Suspense>
 
+        {/* Footer: No extra top space-y needed usually, but it follows the pattern */}
         <Suspense fallback={<SectionSkeleton height="200px" />}>
-          <div className="Footer">
+          <footer className="Footer">
             <Footer />
-          </div>
+          </footer>
         </Suspense>
       </div>
     </>

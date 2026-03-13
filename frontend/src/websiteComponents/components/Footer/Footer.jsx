@@ -1,288 +1,229 @@
 "use client";
 
 import React, { useState } from "react";
-const Swal = () => import('sweetalert2');
+// SweetAlert dynamic import
+const Swal = async () => (await import('sweetalert2')).default;
 import { Link } from "react-router-dom";
-import { FaTwitter, FaInstagram, FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin, FaArrowRight, FaYoutube, FaCopy } from "react-icons/fa";
-import { FooterListItem } from "../Common/Li/FooterLiItem"; // ✅ Import
-import { Heading3, RichParagraph,Heading4, ImageWithSkeleton } from '../Common/Common'
-
-
-
-const handleCopy = (text) => {
-  navigator.clipboard.writeText(text);
-  alert(`Copied: ${text}`);
-};
+import {
+  FaTwitter, FaInstagram, FaMapMarkerAlt, FaEnvelope,
+  FaPhoneAlt, FaLinkedin, FaArrowRight, FaYoutube, FaCopy
+} from "react-icons/fa";
+import { FooterListItem } from "../Common/Li/FooterLiItem";
+import { Heading3, RichParagraph, Heading4, ImageWithSkeleton } from '../Common/Common';
 
 export default function Footer() {
   const [email, setEmail] = useState("");
 
-  const handleSubscribe = () => {
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    alert(`Copied: ${text}`);
+  };
+
+  const handleSubscribe = async () => {
+    const MySwal = await Swal();
     if (!email.trim()) {
-      Swal.fire({
+      MySwal.fire({
         icon: "warning",
         title: "Email Required",
         text: "Please enter your email address first!",
-        confirmButtonColor: "#3085d6",
+        confirmButtonColor: "var(--color-primary)",
       });
       return;
     }
 
-    Swal.fire({
+    MySwal.fire({
       icon: "success",
       title: "Subscribed!",
       text: "You'll receive notifications and updates soon 🎉",
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "var(--color-primary)",
     });
 
     setEmail("");
   };
 
   return (
-    <footer className="relative text-white pt-16 pb-8 bg-cover bg-center bg-no-repeat font-serif">
-      {/* Background Image with Overlay */}
+    <footer className="relative text-white pt-16 pb-8 bg-[var(--color-primary)] font-body overflow-hidden">
+      {/* Background Overlay */}
       <div
-        className="absolute inset-0 bg-cover bg-center md:bg-no-repeat"
-        style={{
-          backgroundImage: "url('/heroSlider/Screenshot.webp')",
-        }}
+        className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none"
+        style={{ backgroundImage: "url('/heroSlider/Screenshot.webp')" }}
       />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/80"></div>
-
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        {/* Main Grid */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-start"
+          style={{ gap: 'var(--gap-xl)' }}
+        >
 
-          {/* Company Info */}
-          <div className="space-y-6">
+          {/* 1. Company Info & Socials */}
+          <div className="flex flex-col" style={{ gap: 'var(--gap-md)' }}>
             <Link to="/" className="block">
               <ImageWithSkeleton
                 src="/images/logooFooter.webp"
                 alt="BBV logo"
-                className="w-[170px] h-[30px] border-none object-contain"
+                className="w-[180px] h-auto border-none object-contain"
                 click={true}
               />
             </Link>
             <RichParagraph white={true}>
-
-              <span className="text-sm text-white">
-
+              <span className="text-sm text-[var(--color-secondary)] opacity-80 leading-relaxed">
                 Wherever the road leads you is your home. Our custom campers, be it Transit or Sprinter camper vans, are designed to make every journey memorable.
               </span>
             </RichParagraph>
 
-
-            {/* Social Icons */}
-            <div className="flex gap-4">
-              <Link
-                to="https://x.com/bigbearvans_"
-                aria-label="Follow us on X (Twitter)"
-                className="p-2 transition-all duration-300 transform hover:scale-125"
-              >
-                <FaTwitter size={20} />
-              </Link>
-
-              <Link
-                to="https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w"
-                aria-label="Visit our YouTube channel"
-                className="p-2 transition-all duration-300 transform hover:scale-125"
-              >
-                <FaYoutube size={20} />
-              </Link>
-
-              <Link
-                to="https://www.linkedin.com/company/big-bear-vans"
-                aria-label="Connect with us on LinkedIn"
-                className="p-2 transition-all duration-300 transform hover:scale-125"
-              >
-                <FaLinkedin size={20} />
-              </Link>
-
-              <Link
-                to="https://www.instagram.com/bigbearvans/?hl=en"
-                aria-label="Follow us on Instagram"
-                className="p-2 transition-all duration-300 transform hover:scale-125"
-              >
-                <FaInstagram size={20} />
-              </Link>
+            <div className="flex" style={{ gap: 'var(--gap-sm)' }}>
+              {[
+                { icon: <FaTwitter />, link: "https://x.com/bigbearvans_", label: "Twitter" },
+                { icon: <FaYoutube />, link: "https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w", label: "YouTube" },
+                { icon: <FaLinkedin />, link: "https://www.linkedin.com/company/big-bear-vans", label: "LinkedIn" },
+                { icon: <FaInstagram />, link: "https://www.instagram.com/bigbearvans/?hl=en", label: "Instagram" }
+              ].map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.link}
+                  aria-label={item.label}
+                  className="p-2.5 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center"
+                  style={{
+                    color: 'white',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: 'var(--radius-md)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
+                >
+                  {item.icon}
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Quick Links - ✅ Using FooterListItem */}
+          {/* 2. Quick Links - All Links Added */}
           <div>
-            {/* H4 ki jagah H3 use karein */}
-            <Heading3 text="Quick Links" textColor="text-white my-4 text-lg lg:text-xl" />
-             <ul className="space-y-1">
-              <FooterListItem to="/" className="text-sm">Home</FooterListItem>
-              <FooterListItem to="/vans-for-sale" className="text-sm">Vans For Sale</FooterListItem>
-              <FooterListItem to="/van-layouts" className="text-sm"> Layouts</FooterListItem>
-              <FooterListItem to="/about-us" className="text-sm">About Us</FooterListItem>
-              <FooterListItem to="/careers" className="text-sm">Career</FooterListItem>
-              <FooterListItem to="/blog" className="text-sm">Blog</FooterListItem>
-              <FooterListItem to="/faq" className="text-sm">FAQs</FooterListItem>
-              <FooterListItem to="/quick-links" className="text-sm">Quick Links</FooterListItem>
+            <Heading3 text="Quick Links" textColor="text-white mb-6 text-lg font-bold" />
+            <ul className="grid grid-cols-2 lg:grid-cols-1" style={{ gap: 'var(--gap-xs)' }}>
+              <FooterListItem to="/">Home</FooterListItem>
+              <FooterListItem to="/vans-for-sale">Vans For Sale</FooterListItem>
+              <FooterListItem to="/van-layouts">Layouts</FooterListItem>
+              <FooterListItem to="/about-us">About Us</FooterListItem>
+              <FooterListItem to="/careers">Careers</FooterListItem>
+              <FooterListItem to="/blog">Blog</FooterListItem>
+              <FooterListItem to="/faq">FAQs</FooterListItem>
+              <FooterListItem to="/quick-links">Quick Links</FooterListItem>
+              {/* <FooterListItem to="/privacy">Privacy Policy</FooterListItem>
+              <FooterListItem to="/terms">Terms of Service</FooterListItem> */}
             </ul>
           </div>
 
-          {/* Contact Info */}
-         <div>
-  {/* 🟢 FIXED: Heading4 ko Heading3 kiya hierarchy theek karne ke liye */}
-  <Heading3 text="Contact Info" textColor="text-white my-4" />
-
-  <ul className="space-y-4">
-    <li className="flex items-start gap-3">
-      <FaMapMarkerAlt className="text-white mt-1 text-sm" aria-hidden="true" />
-      <div className="flex items-center gap-2">
-        <span>
-          <RichParagraph white={true}>
-            <span className="text-sm text-white">
-              320 W Big Bear Blvd, Big Bear City, California, 92314, USA
-            </span>
-          </RichParagraph>
-        </span>
-        {/* 🟢 FIXED: Copy button ko aria-label diya */}
-        <FaCopy
-          role="button"
-          aria-label="Copy address to clipboard"
-          onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")}
-          className="cursor-pointer text-gray-400 hover:text-white transition-colors"
-        />
-      </div>
-    </li>
-
-    <li className="flex items-start gap-3">
-      <FaPhoneAlt className="text-white mt-1 text-sm" aria-hidden="true" />
-      <div className="flex flex-col">
-        {/* Phone 1 */}
-        <div className="flex items-center gap-2 text-sm">
-          {/* 🟢 FIXED: Link ko aria-label diya */}
-          <Link to="tel:+19514419748" aria-label="Call us at +1 951 441 9748">
-            <RichParagraph white={true}>
-              <span className="text-sm text-white">+1 (951) 441-9748</span>
-            </RichParagraph>
-          </Link>
-          <FaCopy
-            role="button"
-            aria-label="Copy phone number +1 951 441 9748"
-            onClick={() => handleCopy("+19514419748")}
-            className="cursor-pointer text-gray-400 hover:text-white transition-colors"
-          />
-        </div>
-
-        {/* Phone 2 */}
-        <div className="flex items-center gap-2 text-sm">
-          {/* 🟢 FIXED: Link ko aria-label diya */}
-          <Link to="tel:+19514419719" aria-label="Call us at +1 951 441 9719">
-            <RichParagraph white={true}>
-              <span className="text-sm text-white">+1 (951) 441-9719</span>
-            </RichParagraph>
-          </Link>
-          <FaCopy
-            role="button"
-            aria-label="Copy phone number +1 951 441 9719"
-            onClick={() => handleCopy("+19514419719")}
-            className="cursor-pointer text-gray-400 hover:text-white transition-colors"
-          />
-        </div>
-      </div>
-    </li>
-
-    <li className="flex items-start gap-3">
-      <FaEnvelope className="text-white mt-1 text-sm" aria-hidden="true" />
-      {/* 🟢 FIXED: Email link ko aria-label diya */}
-      <Link to="mailto:bigbearvans@gmail.com" aria-label="Send us an email">
-        <RichParagraph white={true}>
-          <span className="text-sm text-white">bigbearvans@gmail.com</span>
-        </RichParagraph>
-      </Link>
-    </li>
-  </ul>
-</div>
-
-          {/* Business Hours & Newsletter */}
+          {/* 3. Contact Info */}
           <div>
-            <Heading4 text="  Business Hours" textColor="text-white my-4" />
-
-
-            <ul className="space-y-2 mb-6 text-sm">
-              <li className="flex justify-between text-gray-300">
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    Mon - Fri:
+            <Heading3 text="Contact Info" textColor="text-white mb-6 text-lg font-bold" />
+            <ul className="flex flex-col" style={{ gap: 'var(--gap-md)' }}>
+              <li className="flex items-start" style={{ gap: 'var(--gap-sm)' }}>
+                <FaMapMarkerAlt className="mt-1 text-sm shrink-0" style={{ color: 'var(--color-hover)' }} />
+                <div className="flex flex-col">
+                  <span className="text-sm text-[var(--color-secondary)] opacity-90 leading-snug">
+                    320 W Big Bear Blvd, Big Bear City, California, 92314, USA
                   </span>
-                </RichParagraph>
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    9:00 AM - 6:00 PM
-                  </span>
-                </RichParagraph>
-              </li>
-              <li className="flex justify-between text-gray-300">
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    Saturday:
-                  </span>
-                </RichParagraph>
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    10:00 AM - 4:00 PM
-                  </span>
-                </RichParagraph>
-
+                  <button
+                    onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")}
+                    className="flex items-center gap-1 text-[10px] uppercase tracking-wider opacity-40 hover:opacity-100 transition-opacity mt-2"
+                    style={{ color: 'var(--color-hover)' }}
+                  >
+                    <FaCopy /> Copy Address
+                  </button>
+                </div>
               </li>
 
-              <li className="flex justify-between text-gray-300">
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    Sunday:
-                  </span>
-                </RichParagraph>
-                <RichParagraph white={true}>
-                  <span className="text-sm text-white">
-                    By Appointment
-                  </span>
-                </RichParagraph>
+              <li className="flex items-start" style={{ gap: 'var(--gap-sm)' }}>
+                <FaPhoneAlt className="mt-1 text-sm shrink-0" style={{ color: 'var(--color-hover)' }} />
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 group">
+                    <Link to="tel:+19514419748" className="text-sm hover:text-[var(--color-hover)] transition-colors">+1 (951) 441-9748</Link>
+                    <FaCopy onClick={() => handleCopy("+19514419748")} className="cursor-pointer text-white/20 hover:text-white text-xs" />
+                  </div>
+                  <div className="flex items-center gap-2 group">
+                    <Link to="tel:+19514419719" className="text-sm hover:text-[var(--color-hover)] transition-colors">+1 (951) 441-9719</Link>
+                    <FaCopy onClick={() => handleCopy("+19514419719")} className="cursor-pointer text-white/20 hover:text-white text-xs" />
+                  </div>
+                </div>
+              </li>
+
+              <li className="flex items-start" style={{ gap: 'var(--gap-sm)' }}>
+                <FaEnvelope className="mt-1 text-sm shrink-0" style={{ color: 'var(--color-hover)' }} />
+                <Link to="mailto:bigbearvans@gmail.com" className="text-sm hover:text-[var(--color-hover)] transition-colors truncate">
+                  bigbearvans@gmail.com
+                </Link>
               </li>
             </ul>
+          </div>
 
-            {/* Newsletter Signup */}
-            <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
-              <Heading4 text="Stay Updated" white={true} className="my-2" />
+          {/* 4. Business Hours & Newsletter */}
+          <div className="flex flex-col" style={{ gap: 'var(--gap-lg)' }}>
+            <div>
+              <Heading4 text="Business Hours" className="text-white mb-4 text-xs font-bold uppercase tracking-widest" />
+              <div className="flex flex-col text-sm" style={{ gap: 'var(--gap-xs)' }}>
+                <div className="flex justify-between border-b border-white/5 pb-1">
+                  <span className="opacity-60">Mon - Fri:</span>
+                  <span>9:00 AM - 6:00 PM</span>
+                </div>
+                <div className="flex justify-between border-b border-white/5 pb-1">
+                  <span className="opacity-60">Saturday:</span>
+                  <span>10:00 AM - 4:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="opacity-60">Sunday:</span>
+                  <span style={{ color: 'var(--color-hover)' }}>By Appointment</span>
+                </div>
+              </div>
+            </div>
 
-              <div className="flex gap-2">
+            {/* Newsletter */}
+            <div
+              className="p-4 border border-white/10"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.03)',
+                borderRadius: 'var(--radius-md)'
+              }}
+            >
+              <p className="text-xs font-bold uppercase tracking-widest mb-3 opacity-80">Stay Updated</p>
+              <div className="flex" style={{ gap: 'var(--gap-xs)' }}>
                 <input
                   type="email"
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 min-w-0 bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="flex-1 min-w-0 bg-black/20 border border-white/10 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--color-hover)] transition-colors"
+                  style={{ borderRadius: 'var(--radius-md)' }}
                 />
                 <button
                   onClick={handleSubscribe}
-                  aria-label="Subscribe to newsletter" // Ye label screen reader ko batayega ke ye button kya karta hai
-                  className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
+                  aria-label="Subscribe"
+                  className="p-2.5 transition-all duration-300 flex items-center justify-center"
+                  style={{
+                    backgroundColor: 'var(--color-hover)',
+                    color: 'white',
+                    borderRadius: 'var(--radius-md)'
+                  }}
                 >
-                  <FaArrowRight aria-hidden="true" /> {/* Icon ko screen reader se hide kar diya */}
+                  <FaArrowRight />
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-700 mb-8"></div>
-
         {/* Bottom Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center">
-          <RichParagraph white={true}>
-            <span className="text-sm text-white">
-
-              © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
-            </span>
-          </RichParagraph>
-
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-[12px] opacity-40 tracking-[0.2em] uppercase">
+            © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
+          </p>
+          <div className="flex gap-6 text-[10px] uppercase tracking-widest opacity-40">
+             <Link to="/privacy" className="hover:text-[var(--color-hover)] transition-colors">Privacy</Link>
+             <Link to="/terms" className="hover:text-[var(--color-hover)] transition-colors">Terms</Link>
+             <Link to="/sitemap" className="hover:text-[var(--color-hover)] transition-colors">Sitemap</Link>
+          </div>
         </div>
       </div>
 
@@ -291,7 +232,11 @@ export default function Footer() {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.chatmaximaConfig = { token: 'miutk867bnhw' , theme_color:'#5c526b' , widget_icon:'https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.png' };
+              window.chatmaximaConfig = {
+                token: 'miutk867bnhw',
+                theme_color: '#ED985F',
+                widget_icon: 'https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.png'
+              };
             `,
           }}
         />

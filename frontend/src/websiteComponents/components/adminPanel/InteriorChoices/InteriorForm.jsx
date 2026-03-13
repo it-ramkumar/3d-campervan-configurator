@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DropDownWithDelete from "../../Common/DropDownWithDelete/DropDownWithDelete";
 import DynamicBlocks from "../../Common/DynamicBlock/DynamicBlock";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function AdminForms() {
-  // ================= State Management =================
+  const editData = useSelector((state) => state.editData.editData);
+  const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [interiorForm, setInteriorForm] = useState({
@@ -19,8 +21,11 @@ export default function AdminForms() {
 
   const [activeTab, setActiveTab] = useState("category");
   const [loading, setLoading] = useState(false);
+  const [categoryForm, setCategoryForm] = useState({ title: "", description: "" });
+  const [subCategoryForm, setSubCategoryForm] = useState({ title: "", description: "", categoryId: "" });
 
-  // ================= Fetch Data =================
+
+  // ============================
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/interior/category`);
@@ -50,8 +55,23 @@ export default function AdminForms() {
     fetchSubCategories();
   }, []);
 
-  // ================= Category Form =================
-  const [categoryForm, setCategoryForm] = useState({ title: "", description: "" });
+  useEffect(() => {
+    if (editData) {
+      setInteriorForm({
+        title: editData.title || "",
+        categoryId: editData.categoryId?._id || editData.categoryId || "",
+        subCategoryId: editData.subCategoryId?._id || editData.subCategoryId || "",
+        descriptions: editData.description && editData.description.length > 0
+          ? editData.description
+          : [""],
+        images: editData.images || [],
+        link: editData.link || "",
+        blocks: editData.blocks || []
+      });
+    }
+  }, [editData]);
+
+
 
   const handleExteriorCategorySubmit = async (e) => {
     e.preventDefault();
@@ -71,9 +91,6 @@ export default function AdminForms() {
       setLoading(false);
     }
   };
-
-  // ================= SubCategory Form =================
-  const [subCategoryForm, setSubCategoryForm] = useState({ title: "", description: "", categoryId: "" });
 
   const handleInteriorSubCategorySubmit = async (e) => {
     e.preventDefault();
@@ -95,8 +112,6 @@ export default function AdminForms() {
     }
   };
 
-
-
   const handleInteriorDescChange = (index, value) => {
     const newDescriptions = [...interiorForm.descriptions];
     newDescriptions[index] = value;
@@ -117,85 +132,55 @@ export default function AdminForms() {
   const handleInteriorImagesChange = (e) => {
     setInteriorForm(prev => ({ ...prev, images: [...e.target.files] }));
   };
+
   const handleExteriorSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Blocks ko clean aur unmein se unwanted fields ko remove karein
+      // 1. Blocks cleaning logic - DEEP COPY banao
       const cleanedBlocks = interiorForm.blocks
         .map((block) => {
-          // Deep copy banayein
-          let b = { ...block };
+          // ✅ Deep copy banao instead of shallow copy
+          let b = JSON.parse(JSON.stringify(block));
+          delete b._id; // New object ke liye _id hatana sahi hai
 
-          // Remove _id from block to save space (since we are not using it)
-          delete b._id;
-
-          // Block type ke hisaab se cleaning aur unwanted keys delete karna
           if (b.block_type === "heading" || b.block_type === "subheading") {
-            delete b.content;
-            delete b.list_items;
-            delete b.table_data;
-          }
-          else if (b.block_type === "paragraph") {
-            delete b.title;
-            delete b.list_items;
-            delete b.table_data;
-          }
-          // ... existing code inside map function ...
-
-          else if (b.block_type === "list") {
-            delete b.content;
-            delete b.table_data;
-
-            // ✅ New Nested List Cleaning Logic
+            delete b.content; delete b.list_items; delete b.table_data;
+          } else if (b.block_type === "paragraph") {
+            delete b.title; delete b.list_items; delete b.table_data;
+          } else if (b.block_type === "list") {
+            delete b.content; delete b.table_data;
             if (b.list_items) {
               b.list_items = b.list_items
                 .map(item => ({
-                  // Main text ko trim karein
                   text: item.text ? item.text.trim() : "",
-                  // Sub-items array ko filter aur trim karein
-                  sub_items: item.sub_items
-                    ? item.sub_items.filter(sub => sub && sub.trim() !== "").map(sub => sub.trim())
-                    : []
+                  sub_items: item.sub_items ? item.sub_items.filter(sub => sub && sub.trim() !== "").map(sub => sub.trim()) : []
                 }))
-                // Sirf wahi main items rakhein jinka text khali nahi hai
                 .filter(item => item.text !== "");
             }
-          }
-
-          // ... rest of the code ...
-          else if (b.block_type === "table") {
-            delete b.content;
-            delete b.list_items;
-            // Khali rows filter karein
-            if (b.table_data) {
-              b.table_data.rows = b.table_data.rows.filter(row =>
-                row.some(cell => cell && cell.trim() !== "")
-              );
+          } else if (b.block_type === "table") {
+            delete b.content; delete b.list_items;
+            if (b.table_data && b.table_data.rows) {
+              // ✅ New array banao, original modify mat karo
+              b.table_data = {
+                ...b.table_data,
+                rows: b.table_data.rows.filter(row => row.some(cell => cell && cell.trim() !== ""))
+              };
             }
           }
           return b;
         })
         .filter((block) => {
-          const hasTitle = block.title && block.title.trim() !== "";
-          const hasContent = block.content && block.content.trim() !== "";
-
-          // ✅ List check ko nested structure ke liye update kiya
-          const hasListItems = block.block_type === "list" &&
-            block.list_items &&
-            block.list_items.length > 0;
-
-          const hasTableData = block.block_type === "table" &&
-            block.table_data &&
-            block.table_data.rows.length > 0;
-
-          return hasTitle || hasContent || hasListItems || hasTableData;
+          return block.title?.trim() || block.content?.trim() || (block.block_type === "list" && block.list_items?.length > 0) || (block.block_type === "table" && block.table_data?.rows.length > 0);
         });
 
-      // 2. FormData preparation
-      const formData = new FormData();
+      // 2. Check if it's edit or create
+      const isEdit = editData && editData._id && Object.keys(editData).length > 0;
+      console.log("Is Edit:", isEdit, "Edit Data ID:", editData?._id);
 
+      // 3. FormData Preparation
+      const formData = new FormData();
       formData.append("data", JSON.stringify({
         title: interiorForm.title,
         categoryId: interiorForm.categoryId,
@@ -203,36 +188,54 @@ export default function AdminForms() {
         link: interiorForm.link
       }));
 
-      // Filter empty descriptions
       const validDescriptions = interiorForm.descriptions.filter(d => d.trim() !== "");
       formData.append("description", JSON.stringify(validDescriptions));
-
-      // ✅ Cleaned blocks bhej rahe hain (Ab isme junk keys nahi hain)
       formData.append("blocks", JSON.stringify(cleanedBlocks));
 
-      interiorForm.images.forEach((file) => formData.append("images", file));
-
-      // 3. API Call
-      await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/interior`, formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+      // Images append logic - Only new files for both create and edit
+      interiorForm.images.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file);
+        }
       });
 
-      alert("InteriorChoice Created Successfully!");
+      // 4. API Call - Create or Edit
+      if (isEdit) {
+        // PUT request for edit
+        await axios.put(
+          `${import.meta.env.VITE_REACT_APP_API_URL}/interior/${editData._id}`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        alert("Updated Successfully!");
+      } else {
+        // POST request for create
+        await axios.post(
+          `${import.meta.env.VITE_REACT_APP_API_URL}/interior`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        alert("Created Successfully!");
+      }
 
-      // Reset Form
+      // 5. Reset Form & Clear Edit State
       setInteriorForm({
         title: "", categoryId: "", subCategoryId: "",
         descriptions: [""], images: [], link: "", blocks: []
       });
 
+      // Clear Redux edit state
+      dispatch({ type: 'CLEAR_EDIT_DATA' });
+
     } catch (err) {
       console.error("Submission Error:", err);
-      alert(err.response?.data?.message || "Error creating InteriorChoice");
+      alert(err.response?.data?.message || "Error saving data");
     } finally {
       setLoading(false);
     }
   };
-  // ================= Tab Navigation =================
+
+  // ============================
   const tabs = [
     { id: "category", label: "Category" },
     { id: "subcategory", label: "SubCategory" },
@@ -277,7 +280,7 @@ export default function AdminForms() {
         </div>
       )}
 
-      {/* ================= Category Form ================= */}
+      {/* ============================ */}
       {activeTab === "category" && (
         <form onSubmit={handleExteriorCategorySubmit} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100">
@@ -321,7 +324,7 @@ export default function AdminForms() {
         </form>
       )}
 
-      {/* ================= SubCategory Form ================= */}
+      {/* ============================ */}
       {activeTab === "subcategory" && (
         <form onSubmit={handleInteriorSubCategorySubmit} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100">
@@ -375,11 +378,11 @@ export default function AdminForms() {
         </form>
       )}
 
-      {/* ================= InteriorChoice Form ================= */}
+      {/* ============================ */}
       {activeTab === "interior" && (
         <form onSubmit={handleExteriorSubmit} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800 mb-6 pb-2 border-b border-gray-100">
-            Create New Interior Choice
+            {editData && editData._id ? "Edit Interior Choice" : "Create New Interior Choice"}
           </h2>
 
           {/* Interior Title (Fixed) */}
@@ -486,7 +489,7 @@ export default function AdminForms() {
             className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700"
             disabled={loading}
           >
-            Create Interior Choice
+            {editData && editData._id ? "Update Interior Choice" : "Create Interior Choice"}
           </button>
         </form>
       )}

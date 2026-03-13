@@ -314,9 +314,7 @@ function Van() {
               <Preload all />
               <Suspense fallback={<Html fullscreen><Loader /></Html>}>
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-<Environment
-  files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
-/>
+                  <Environment files="/textures/zwartkops_straight_afternoon_1k.hdr" />
 
                   {/* Canvas ke andar jahan BaseVanModel hai */}
                   {vans && vans?.length > 0 ? (

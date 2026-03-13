@@ -1,178 +1,167 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import { Video, Globe, Camera, Users, Zap, MapPin, ArrowUpRight } from "lucide-react";
 import AirService from "../../AirService/AirService";
-import { Heading2, RichParagraph,Heading4,ImageWithSkeleton } from '../../Common/Common'
+import { Heading2, RichParagraph, Heading3, Heading4, ImageWithSkeleton, SecondaryButton } from '../../Common/Common'
 
-
-// --- Framer Motion Animation Variants ---
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 1, 0.5, 1],
-    },
-  },
-};
-const imageVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.25, 1, 0.5, 1],
-    },
-  },
-};
-const WalkthroughIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-7 h-7 text-slate-800 flex-shrink-0 transition-colors duration-300 group-hover:text-black" fill="currentColor">
-    <path fillOpacity=".3" d="M12 3L4 9v12h16V9l-8-6zm-2.25 8.5H7.5v-2h2.25v2zm0 4.5H7.5v-2h2.25v2zm4.5 0h-2.25v-2h2.25v2zm0-4.5h-2.25v-2h2.25v2z" />
-    <path d="M10 10.5h2v2h-2zM10 15h2v2h-2zM14.5 10.5h2v2h-2zM14.5 15h2v2h-2z" />
-  </svg>
-);
-const MaterialsIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-7 h-7 text-slate-800 flex-shrink-0 transition-colors duration-300 group-hover:text-black" fill="currentColor">
-    <path fillOpacity=".3" d="M17.5 2.5c-2.48 0-4.5 2.02-4.5 4.5 0 .88.26 1.69.72 2.39L4 19.13V22h2.87l9.75-9.75c.7.46 1.51.72 2.38.72 2.48 0 4.5-2.02 4.5-4.5S19.98 2.5 17.5 2.5zM7 20H5v-2h2v2z" />
-    <path d="M17.5 4C18.88 4 20 5.12 20 6.5s-1.12 2.5-2.5 2.5S15 7.88 15 6.5 16.12 4 17.5 4z" />
-  </svg>
-);
-const TeamIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-7 h-7 text-slate-800 flex-shrink-0 transition-colors duration-300 group-hover:text-black" fill="currentColor">
-    <path fillOpacity=".3" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
-    <path d="M8 8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm8 0c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm-8 4c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
-  </svg>
-);
-
-
-
-const ShowroomAndTours = () => {
-
-
+export default function ShowroomAndTours() {
   return (
-    <div className="bg-slate-50 text-blackish font-sans">
-      {/* Big Bear Destination Section */}
-      <section className="relative w-full h-[250px] overflow-hidden group">
-        <ImageWithSkeleton
-          src="/images/virtuaal1.webp"
-          alt="Big Bear Lake and mountains"
-          className="absolute inset-0 w-full h-full object-cover origin-center "
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-        <div className="relative z-10 flex items-center justify-center h-full p-6 text-center">
-          <RichParagraph className=" max-w-3xl font-bold" white={true} >
-            Visiting our showroom isn’t just about vans. Big Bear itself is a destination worth the trip. Surrounded by mountains, a beautiful lake, and two ski resorts, you’ll enjoy your time here as much as your visit with us.
-          </RichParagraph>
+    <div className="bg-secondary min-h-screen selection:bg-hover selection:text-white">
+
+      {/* --- Section 1: Minimalist Header --- */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+          <div className="max-w-2xl">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-4 mb-4"
+            >
+              <span className="w-8 h-[2px] bg-hover"></span>
+              <RichParagraph className="text-hover font-bold !text-sm tracking-wider">
+                Remote Design Studio
+              </RichParagraph>
+
+            </motion.div>
+            <Heading2 text="Virtual Tours For Distant Clients" className="text-primary" />
+          </div>
+          <div className="max-w-md">
+            <RichParagraph className="
+              border-hover/30 pl-6 py-2">
+              If you’re out of State, no problem. We’ll bring the showroom to you. Jump on a video call with us via FaceTime or Zoom. We’ll give you a full virtual tour of our workshop, just like you’re here in person.
+            </RichParagraph>
+          </div>
         </div>
       </section>
 
-      {/* Virtual Tours Section */}
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
-        <Heading2 text="Virtual Tours For Distant Clients
-" className="text-center"/>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={containerVariants}
-        >
+      {/* --- Section 2: The Floating Experience --- */}
+      <section className="max-w-7xl mx-auto px-6 mb-32">
+        <div className="grid lg:grid-cols-12 gap-12 items-stretch">
 
-          <RichParagraph className="max-w-4xl mx-auto ">
-            If you’re out of State, no problem. We’ll bring the showroom to you. Jump on a video call with us via FaceTime or Zoom. We’ll give you a full virtual tour of our workshop, just like you’re here in person.
-          </RichParagraph>
+          {/* Main Showcase Image */}
+         <motion.div
+  className="lg:col-span-7 relative group"
+  initial={{ opacity: 0, scale: 0.95 }}
+  whileInView={{ opacity: 1, scale: 1 }}
+>
+  <div className="sticky top-10 w-full rounded-lg overflow-hidden shadow-2xl border border-primary/5 bg-[#001F3D]">
+    {/* 1. h-auto aur aspect-video use karne se landscape gif kabhi crop nahi hogi.
+      2. Agar image portrait (1080x1920) hai toh aspect-square ya aspect-[9/16] use karein.
+    */}
+    <div className="relative w-full aspect-video">
+      <ImageWithSkeleton
+        src="/images2/Client.webp"
+        alt="Virtual Session"
+        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+      />
+    </div>
 
+    <div className="absolute inset-0 bg-gradient-to-t from-[#001F3D]/40 to-transparent pointer-events-none"></div>
 
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
-            {/* Left Side: Image with Glow Effect */}
-            <motion.div variants={imageVariants} className="w-full md:w-7/12 lg:w-1/2 group relative">
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-slate-400 to-slate-700 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-1000"></div>
-              <div className="relative aspect-[700/500] bg-gray-200 overflow-hidden rounded-xl border-2 border-slate-800/80 shadow-2xl">
-                <ImageWithSkeleton
-                  src="/images/virtuaal2.webp"
-                  alt="Laptop screen showing a virtual tour of a campervan"
-                  className="w-full h-full object-cover"
-                />
+    {/* Floating Action Badge */}
+    {/* <div className="absolute top-6 right-6">
+      <motion.div
+        whileHover={{ rotate: 45 }}
+        className="w-16 h-16 bg-[#E1D9BC] rounded-lg flex items-center justify-center text-[#001F3D] cursor-pointer shadow-xl"
+      >
+        <ArrowUpRight size={28} />
+      </motion.div>
+    </div> */}
+  </div>
+</motion.div>
+
+          {/* Feature Cards Stack */}
+          <div className="lg:col-span-5 flex flex-col gap-8">
+            <div className="space-y-12 py-10">
+              <Heading3 text="What to expect in your session:" />
+
+              <div className="space-y-10">
+                {[
+                  { icon: Camera, title: "Live Walkthrough", desc: "Real-time inspection of finished builds and cabinetry details." },
+                  { icon: Globe, title: "Material Close-ups", desc: "High-def views of countertops, flooring, and fabric textures." },
+                  { icon: Users, title: "Expert Consultation", desc: "Face-to-face time with our lead engineers and project managers." }
+                ].map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    className="group flex gap-6"
+                  >
+                    <div className="w-14 h-14 shrink-0 bg-white rounded-lg flex items-center justify-center text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
+                      <item.icon size={24} />
+                    </div>
+                    <div className="space-y-2">
+                      <Heading4 text={item.title} className="!mb-0" />
+                      <RichParagraph >{item.desc}</RichParagraph>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Right Side: Text Content */}
-            <motion.div variants={containerVariants} className="w-full md:w-5/12 lg:w-1/2 text-lg font-serif text-slate-700 space-y-6">
-
-              <motion.div variants={containerVariants} className="space-y-4">
-                {/* Item 1 */}
-                <Heading4 text="Via Zoom calls, you’ll be able to:" textColor="text-black my-4"/>
-
-
-                <motion.div variants={itemVariants} className="group relative rounded-xl p-5 backdrop-blur-lg bg-white/60 hover:bg-white/70 border border-white/30 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-
-                  <div className="absolute top-0 left-0 h-full w-1.5 bg-slate-400 rounded-l-xl transition-all duration-300 group-hover:bg-black"></div>
-
-                  <div className="flex items-center gap-x-5 pl-4">
-
-                    <div className="bg-slate-200/70 p-2 rounded-full transition-colors duration-300 group-hover:bg-slate-200"><WalkthroughIcon /></div>
-
-                    <RichParagraph>
-                      Walk through our finished builds and ongoing projects.
-                    </RichParagraph>
-
-                  </div>
-                </motion.div>
-                {/* Item 2 */}
-                <motion.div variants={itemVariants} className="group relative rounded-xl p-5 backdrop-blur-lg bg-white/60 hover:bg-white/70 border border-white/30 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <div className="absolute top-0 left-0 h-full w-1.5 bg-slate-400 rounded-l-xl transition-all duration-300 group-hover:bg-black"></div>
-                  <div className="flex items-center gap-x-5 pl-4">
-                    <div className="bg-slate-200/70 p-2 rounded-full transition-colors duration-300 group-hover:bg-slate-200"><MaterialsIcon /></div>
-                    <RichParagraph>
-                      See materials, layouts, and design options up close.
-                    </RichParagraph>
-
-                  </div>
-                </motion.div>
-                {/* Item 3 */}
-                <motion.div variants={itemVariants} className="group relative rounded-xl p-5 backdrop-blur-lg bg-white/60 hover:bg-white/70 border border-white/30 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <div className="absolute top-0 left-0 h-full w-1.5 bg-slate-400 rounded-l-xl transition-all duration-300 group-hover:bg-black"></div>
-                  <div className="flex items-center gap-x-5 pl-4">
-                    <div className="bg-slate-200/70 p-2 rounded-full transition-colors duration-300 group-hover:bg-slate-200"><TeamIcon /></div>
-                    <RichParagraph>
-                      Meet with our project manager, engineering, and design teams.
-                    </RichParagraph>
-
-                  </div>
-                </motion.div>
-              </motion.div>
-              <RichParagraph>
-                Many of our clients complete the entire design process virtually and only visit once to pick up their finished van.
-
-              </RichParagraph>
-              <RichParagraph>
-                Whether you meet us in person or online, you’ll get the same hands-on design experience and access to our team.
-
-              </RichParagraph>
+            {/* CTA Box */}
+            <div className="mt-auto bg-primary rounded-lg p-10 text-secondary relative overflow-hidden group">
+              <div className="relative z-10">
+                <Heading4 text="Ready to start?" className="text-secondary mb-4" />
+                <RichParagraph className="mb-8 text-secondary">
+                  Book a personalized Zoom session and let's bring your vision to life.
+                </RichParagraph>
+                <SecondaryButton label="Schedule Your Tour" link={"/contact"}/>
 
 
-            </motion.div>
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-lg blur-3xl group-hover:bg-hover/20 transition-all duration-500"></div>
+            </div>
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        <AirService />
+      {/* --- Section 3: The Big Bear Journey --- */}
+      <section className="max-w-7xl mx-auto px-6 py-24">
+        <div className="relative rounded-lg overflow-hidden group min-h-[500px] flex items-center">
+          <ImageWithSkeleton
+            src="/images/virtuaal1.webp"
+            alt="Big Bear Destination"
+            className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
+          />
+          <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm lg:backdrop-blur-none lg:bg-transparent lg:bg-gradient-to-r lg:from-primary lg:via-primary/60 lg:to-transparent" />
 
+          <div className="relative z-10 px-10 md:px-20 max-w-2xl">
+            <div className="inline-flex items-center gap-3 bg-hover/20 backdrop-blur-md px-4 py-2 rounded-lg mb-6">
+              <MapPin size={14} className="text-hover" />
+              <RichParagraph className="text-hover !text-sm uppercase">Big Bear Lake, CA</RichParagraph>
+            </div>
+            <Heading2 text="A Destination Worth the Drive" className="text-secondary !text-4xl md:!text-5xl" />
+            <RichParagraph white={true} className="mt-6  text-secondary">
+              Surrounded by mountains, ski resorts, and crystal-clear waters, visiting our workshop is the perfect excuse for a weekend getaway.
+            </RichParagraph>
+            <div className="mt-10 h-[1px] w-full bg-white/20"></div>
+            <div className="mt-6 flex gap-10">
+              <div>
+                <RichParagraph className="text-hover">2</RichParagraph>
+                <RichParagraph className=" text-secondary !text-sm uppercase">Ski Resorts</RichParagraph>
+              </div>
+              <div>
+                <RichParagraph className="text-hover ">100+</RichParagraph>
+                <RichParagraph className="text-secondary !text-sm uppercase">Nature Trails</RichParagraph>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      </main>
+      {/* --- Section 4: Travel Logistics --- */}
+      <section className="bg-white py-32 rounded-t-[60px]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <Heading2 text="Travel Logistics" className="text-primary" />
+            <div className="w-16 h-1 bg-hover mx-auto mt-4 rounded-lg"></div>
+          </div>
+          <AirService />
+        </div>
+      </section>
+
     </div>
   );
-};
-
-export default ShowroomAndTours;
+}

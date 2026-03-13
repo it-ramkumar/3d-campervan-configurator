@@ -1,155 +1,84 @@
 "use client";
 import React, { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, BlackButton } from '../Common/Common'
-
+// import { ChevronRight, Plus, Minus, Settings2 } from "lucide-react";
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, SecondaryButton, CustomLink } from '../Common/Common'
 
 export default function Customize({
-  mainTitle = "",
-  sectionTitle,
+  mainTitle = "Custom Build",
+  sectionTitle = "Personalize Your Build",
   description = "",
   descriptionList = [],
   image = "/images/custom4.webp",
   orderButtonLabel = "Order Custom Build",
   orderButtonLink = "/inquiry",
-  showToggle = true,
-  lastText = "",
   showButton = true,
-  className
+  className = ""
 }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className={`pb-12 md:pb-24 pt-12 mt-10 md:mt-24 font-serif bg-gray-100 ${className}`}>
-      <div className="container mx-auto px-4">
-        {/* Header Section */}
-        <div className="max-w-3xl mx-auto text-center mb-10 md:mb-16">
-          <Heading2 text={mainTitle} className="py-4 md:py-6 text-gray-900" />
-          <RichParagraph>{description}</RichParagraph>
-        </div>
+    <section className={`bg-secondary py-16 antialiased overflow-hidden ${className}`}>
+      <div className="container mx-auto px-4 max-w-7xl">
 
-        {/* Main Grid: Mobile pe stack (1 col), Desktop pe 2 cols */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
-          {/* Image Section: Responsiveness Fixed */}
-          <div className="relative flex justify-center lg:justify-start">
-            <div
-              className="relative overflow-hidden shadow-2xl transition-all duration-300"
-              style={{
-                // Mobile pe 100% width, desktop pe 500px
-                width: "100%",
-                maxWidth: "500px",
-                aspectRatio: "1/1", // Square shape maintain rakhega
-                borderRadius: "30px",
-                border: "2px solid #464444ff",
-                boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
-                backgroundColor: "white",
-                padding: "1px"
-              }}
-            >
-              <div
-                className="w-full h-full overflow-hidden"
-                style={{ borderRadius: "28px" }}
-              >
-                <ImageWithSkeleton
-                  src={image}
-                  alt="Custom van interior"
-                  className="object-cover w-full h-full"
-                  width={500}
-                  height={500}
-                  priority={true}
-                />
-              </div>
-            </div>
+          {/* LEFT: Image Container with FIXED Height */}
+          <div className="relative group">
+            {/* Div size fixed at 400px, background matches theme */}
+            <div className="relative h-[400px] w-full rounded-lg overflow-hidden shadow-lg border-2 border-white bg-primary/10 transition-all duration-500 group-hover:shadow-2xl flex items-center justify-center">
 
-            {/* Floating Badge: Mobile pe chota size */}
-            <div className="absolute -top-4 right-0 lg:-right-4 bg-white rounded-2xl shadow-xl p-3 md:p-4 border border-gray-100">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-xs md:text-sm font-semibold text-gray-900">Premium Build</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Content Section */}
-          <div className="w-full">
-            <div className="mb-8">
-              <Heading3
-                text={sectionTitle}
-                textColor="text-black mb-6"
+              <ImageWithSkeleton
+                src={image}
+                alt="Customization"
+                /* object-contain: Poori image dikhayega bina cut kiye.
+                   w-full h-full: Div ke andar rahegi.
+                */
+                className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
               />
 
-              {/* Features List */}
-              <div
-                className={`space-y-4 mb-6 transition-all duration-500 ease-in-out ${!expanded ? "max-h-[250px]" : "max-h-[1200px]"
-                  } overflow-hidden relative`}
-              >
-                {descriptionList.map((item, index) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={index} className="flex items-start gap-3">
-                      <Icon className="w-5 h-5 text-gray-700 flex-shrink-0 mt-1" />
-                      <RichParagraph className="text-gray-700 text-sm md:text-base">
-                        {item.text}
-                      </RichParagraph>
-                    </div>
-                  );
-                })}
+              {/* Gradient Overlay - Subtle taaki image ke upar text nazar aaye */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none"></div>
 
-                {/* Gradient Fade if collapsed */}
-                {!expanded && (
-                  <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-gray-100 to-transparent pointer-events-none"></div>
-                )}
+              {/* Overlay Content */}
+              <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
+                <Heading3 text={mainTitle} className="!text-secondary !mb-1  drop-shadow-md" />
+                <RichParagraph className="text-secondary !mb-0 line-clamp-1 !text-sm">{description}</RichParagraph>
               </div>
+            </div>
 
-              {/* Last Text Section */}
-              {expanded && lastText && (
-                <div className="mt-4 pt-4 border-t border-gray-200 animate-fadeIn">
-                  <RichParagraph className="text-gray-700">
-                    {lastText}
+            {/* Subtle Accent Background - Rounded as per your preference */}
+            <div className="absolute -z-10 -top-4 -left-4 w-24 h-24 bg-secondary/30 rounded-lg blur-xl"></div>
+          </div>
+
+          {/* RIGHT: Content Section */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-3 mb-6">
+              {/* <Settings2 className="w-6 h-6 text-primary" /> */}
+              <Heading2 text={sectionTitle} className="!mb-0 text-primary" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-8">
+              {(expanded ? descriptionList : descriptionList).map((item, index) => (
+                <div key={index} className="flex items-start gap-3 group">
+                  <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-secondary group-hover:bg-primary transition-colors shrink-0"></div>
+                  <RichParagraph className="!mb-0 ">
+                    {item.text}
                   </RichParagraph>
                 </div>
-              )}
+              ))}
+            </div>
 
-           {/* Toggle Button */}
-{showToggle && (
-  <button
-    onClick={() => setExpanded(!expanded)}
-    // 🟢 FIXED: text-blue-700 (better contrast) aur focus outline add ki
-    className="flex items-center gap-2 text-blue-700 hover:text-blue-800 my-4 cursor-pointer font-semibold focus:outline-none"
-    aria-expanded={expanded} // 🟢 Screen reader ko batayega ke content khula hai ya band
-  >
-    {expanded ? (
-      <>
-        <ChevronUp aria-hidden="true" className="w-4 h-4" />
-        <span>Show Less</span>
-      </>
-    ) : (
-      <>
-        <ChevronDown aria-hidden="true" className="w-4 h-4" />
-        <span>See More</span>
-      </>
-    )}
-  </button>
-)}
-
-              {/* CTA Section */}
+            <div className="flex flex-col gap-6 pt-6 border-t border-primary/10">
               {showButton && (
-                <div className="space-y-4 mt-8">
-                  <BlackButton
-                    label={orderButtonLabel}
-                    link={orderButtonLink}
-                    className="w-full py-4 text-lg shadow-lg"
-                  />
-                  <RichParagraph className="text-center my-2">
-                    Get a free quote within 24 hours
-
-                  </RichParagraph>
-
-                </div>
+                <SecondaryButton
+                  label={orderButtonLabel}
+                  link={orderButtonLink}
+                  className="!rounded-lg !px-10 !py-4 w-full sm:w-fit shadow-md shadow-secondary/10"
+                />
               )}
             </div>
           </div>
+
         </div>
       </div>
     </section>

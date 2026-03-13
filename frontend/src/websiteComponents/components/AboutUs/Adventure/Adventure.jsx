@@ -4,10 +4,8 @@ import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
-import { Heading2, RichParagraph, ImageWithSkeleton,WhiteButton } from '../../Common/Common'
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, PrimaryButton } from '../../Common/Common';
 
-
-// Placeholder images - replace with your actual image paths
 const ownersImage = "/images/anna.webp";
 const ambulanceImage = "/images/ambulance.webp";
 const prototypeImage = "/images/liftbed.webp";
@@ -17,271 +15,169 @@ const ctaBgImage = "/heroSlider/long_van.jpg";
 
 export default function AboutPage() {
   const controls = useAnimation();
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.2, // Trigger when 20% of the section is visible
-  });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
-  // Use a separate InView hook for the card section to trigger the stagger animation
   const cardControls = useAnimation();
-  const [cardRef, cardInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  const [cardRef, cardInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   useEffect(() => {
-    if (inView) {
-      controls.start("visible");
-    }
-  }, [controls, inView]);
-
-  useEffect(() => {
-    if (cardInView) {
-      cardControls.start("visible");
-    }
-  }, [cardControls, cardInView]);
-
-  // const sentenceVariants = {
-  //   hidden: { opacity: 1 },
-  //   visible: {
-  //     opacity: 1,
-  //     transition: {
-  //       delay: 0.3,
-  //       staggerChildren: 0.06, // Controls the delay between each letter
-  //     },
-  //   },
-  // };
-  // const letterVariants = {
-  //   hidden: { opacity: 0, y: 20 },
-  //   visible: {
-  //     opacity: 1,
-  //     y: 0,
-  //     transition: {
-  //       type: "spring",
-  //       stiffness: 100,
-  //     },
-  //   },
-  // };
-  const cardContainerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.2,
-      },
-    },
-  };
-  const cardItemVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      }
-    },
-  };
-
+    if (inView) controls.start("visible");
+    if (cardInView) cardControls.start("visible");
+  }, [controls, cardControls, inView, cardInView]);
 
   return (
-    <div className="bg-white text-black font-serif">
-      {/* SECTION 1: Meet the Owners */}
-      <section className="container mx-auto px-6 pt-1 md:pt-3 pb-20 md:pb-28">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-20">
+    <div className="bg-secondary text-primary font-body overflow-x-hidden">
+
+      {/* SECTION 1: Narrative Intro (Clean & Modern) */}
+      <section className="container mx-auto px-6 py-24 lg:py-40">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <motion.div
-            className="flex-shrink-0 w-full md:w-1/2 lg:max-w-[700px]"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 }}
+            className="w-full lg:w-1/2 relative"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
           >
+            {/* Design Element: Simple Primary Border Box */}
+            <div className="absolute -top-6 -left-6 w-full h-full border-2 border-primary/20 rounded-lg -z-10 hidden md:block"></div>
+
             <ImageWithSkeleton
               src={ownersImage}
-              alt="Artur and Anna, owners of Big Bear Vans"
-              className="w-full h-auto !max-h-64 md:!max-h-[700px] object-cover "
+              alt="Artur and Anna"
+              className="w-full h-[500px] object-cover rounded-lg shadow-xl relative z-10"
             />
           </motion.div>
-          <motion.div
-            className="w-full md:w-1/2 max-w-xl"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <Heading2 text='Meet the Owners of Big Bear Vans: Artur and Anna' className='text-center my-4' />
 
-            <RichParagraph>
-              As RV enthusiasts and travel bloggers back in Europe, we traveled
-              with our kids with a trailer and later a bus. After moving to the
-              USA, we continued exploring RV culture with a fifth-wheel trailer
-              and later our first camper van. Combining all the knowledge and
-              experience from our travels around Europe and the USA in different
-              types of RVs, we were eager to create a perfect compact van space
-              for a family of 5. Here is the story of our personal camper van
-              evolution and how we came up with the Santa Monica layout.
+          <motion.div
+            className="w-full lg:w-1/2 space-y-8"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <div>
+              <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">The Founders</RichParagraph>
+              <Heading2 text='Artur and Anna' className="mt-2" />
+              <div className="h-1 w-20 bg-primary mt-4 rounded-lg"></div>
+            </div>
+
+            <RichParagraph className="text-xl font-medium leading-relaxed opacity-90">
+              Our journey wasn’t born in a factory—it was born on the open road across Europe and the USA.
+            </RichParagraph>
+
+            <RichParagraph className="opacity-80">
+              Combining all the knowledge from our travels in trailers, buses, and fifth-wheels, we were eager to create the perfect compact van space for a family of 5. Every build we create is a result of that evolution.
             </RichParagraph>
           </motion.div>
         </div>
       </section>
 
-      {/* SECTION 2: Van Evolution Stories */}
-      <section className="bg-gray-50">
-        <div className="container mx-auto px-6 pt-1 md:pt-3 pb-10 md:pb-14">
-          {/* NEW: Wrapper motion.div for staggered animation */}
+      {/* SECTION 2: Van Evolution (Asymmetric Grid Design) */}
+      <section className="bg-primary py-24 lg:py-40">
+        <div className="container mx-auto px-6">
+          <div className="mb-20">
+            <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Our Journey</RichParagraph>
+            <Heading2 text="The Evolution of Our Vans" className="text-secondary mt-2" />
+          </div>
+
           <motion.div
             ref={cardRef}
-            variants={cardContainerVariants}
             initial="hidden"
             animate={cardControls}
+            variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
+            className="grid grid-cols-1 md:grid-cols-12 gap-8"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+            {/* Wide Card 1 */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500"
+            >
+              <div className="h-80 overflow-hidden relative">
+                <ImageWithSkeleton src={ambulanceImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute top-4 left-4 bg-primary text-secondary px-4 py-1 rounded-lg text-xs font-bold uppercase">Build 01</div>
+              </div>
+              <div className="p-10">
+                <Heading3 text="Ambulance Afterlife" className="text-primary mb-4" />
+                <RichParagraph className="text-primary opacity-80">
+                  Our journey began in 2020 with a Sprinter ambulance conversion. We crafted this for family use, retiring it only after 300,000 miles of memories.
+                </RichParagraph>
+              </div>
+            </motion.div>
 
-              {/* Card 1: Ambulance afterlife */}
-              <motion.div
-                variants={cardItemVariants} // Apply item variant for staggered entry
-                className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
-              >
-                <div className="relative overflow-hidden">
-                  <ImageWithSkeleton
-                    src={ambulanceImage}
-                    alt="The first Sprinter ambulance conversion"
-                    className="w-full h-96 object-cover"
-                  />
+            {/* Small Card 2 */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500"
+            >
+              <div className="h-80 overflow-hidden relative">
+                <ImageWithSkeleton src={prototypeImage} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div className="p-10">
+                <Heading3 text="Lift Bed Prototype" className="text-primary mb-4" />
+                <RichParagraph className="text-primary opacity-80">
+                  This build featured our first attempt at an elevator bed—a feature that now defines the Santa Monica layout.
+                </RichParagraph>
+              </div>
+            </motion.div>
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <Heading2 text="Ambulance Afterlife" className="absolute bottom-8 left-8 text-white" />
+            {/* Small Card 3 */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500"
+            >
+              <div className="h-80 overflow-hidden">
+                <ImageWithSkeleton src={blueWhaleImage} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              </div>
+              <div className="p-10">
+                <Heading3 text="Blue Whale" className="text-primary mb-4" />
+                <RichParagraph className="text-primary opacity-80">
+                  A Ford Transit 148 high roof with roof hammocks and rear decks. View the <Link to="/layout-detail/blue-whale-van" className="font-bold underline">Layout Details</Link>.
+                </RichParagraph>
+              </div>
+            </motion.div>
 
-                </div>
-                <div className="p-8 flex-grow">
-                  <RichParagraph white={true}>
-                    Our journey with campervans began with our first build in
-                    2020—a 2011 Sprinter ambulance. We crafted this van with our
-                    own hands for family use, giving it a second life after it
-                    retired at 300,000 miles. It became not only our campervan
-                    but also a mobile office.
-                  </RichParagraph>
-
-                </div>
-              </motion.div>
-
-              {/* Card 2: Lift bed prototype */}
-              <motion.div
-                variants={cardItemVariants} // Apply item variant for staggered entry
-                className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
-              >
-                <div className="relative overflow-hidden">
-                  <ImageWithSkeleton
-                    src={prototypeImage}
-                    alt="Van featuring an elevator bed prototype"
-                    className="w-full h-96 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <Heading2 text="Lift Bed Prototype" className="absolute bottom-8 left-8 text-white" />
-
-                </div>
-                <div className="p-8 flex-grow">
-                  <RichParagraph white={true}>
-                    Our second personal van was also an ambulance and featured our
-                    first attempt at building an elevator bed.
-                  </RichParagraph>
-
-                </div>
-              </motion.div>
-
-              {/* Card 3: Blue Whale */}
-              <motion.div
-                variants={cardItemVariants} // Apply item variant for staggered entry
-                className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
-              >
-                <div className="relative overflow-hidden">
-                  <ImageWithSkeleton
-                    src={blueWhaleImage}
-                    alt="The Blue Whale, a Ford Transit high roof van"
-                    className="w-full h-96 object-cover "
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <Heading2 text="Blue Whale" className="absolute bottom-8 left-8 text-white" />
-
-                </div>
-                <div className="p-8 flex-grow">
-                  <RichParagraph white={true}>
-                    Our third van, <Link to="/layout-detail/blue-whale-van" className="text-blue-200 hover:text-blue-300">Blue Whale</Link>, was a standout. This pre-owned Ford
-                    Transit 148 wheelbase high roof van, which could accommodate
-                    six people, was showcased at expos. It included a bathroom, a
-                    hammock on the roof, and a rear deck. Although we sold Blue
-                    Whale to grow our company, our kids still miss it.
-                  </RichParagraph>
-
-                </div>
-              </motion.div>
-
-              {/* Card 4: Gray Wolf */}
-              <motion.div
-                variants={cardItemVariants} // Apply item variant for staggered entry
-                className="group flex flex-col bg-gray-800 shadow-xl rounded-lg overflow-hidden border border-gray-700 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/30 hover:border-cyan-400"
-              >
-                <div className="relative overflow-hidden">
-                  <ImageWithSkeleton
-                    src={grayWolfImage}
-                    alt="The Gray Wolf, a 144 wheelbase Sprinter van"
-                    className="w-full h-96 object-cover "
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                  <Heading2 text="Gray Wolf" className="absolute bottom-8 left-8 text-white" />
-
-                </div>
-                <div className="p-8 flex-grow">
-                  <RichParagraph white={true}>
-                    Our fourth van, the demo van <Link to="/layout-detail/santa-monica-gray" className="text-blue-200 hover:text-blue-300">Gray Wolf</Link>, is a 144 wheelbase
-                    Sprinter that sits and sleeps five, reflecting our commitment
-                    as van builders to innovation and comfort.
-                  </RichParagraph>
-
-                </div>
-              </motion.div>
-            </div>
+            {/* Wide Card 4 */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
+              className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500"
+            >
+              <div className="h-80 overflow-hidden">
+                <ImageWithSkeleton src={grayWolfImage} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              </div>
+              <div className="p-10">
+                <Heading3 text="Gray Wolf" className="text-primary mb-4" />
+                <RichParagraph className="text-primary opacity-80">
+                  Our 144 Sprinter demo sleeps five and reflects our commitment to innovation. View the <Link to="/layout-detail/santa-monica-gray" className="font-bold underline">Santa Monica</Link> build.
+                </RichParagraph>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* SECTION 3: Join the Adventure CTA */}
-      <motion.section
-        className="relative w-full h-[350px] md:h-[450px] flex items-center justify-center text-center text-white mb-7 md:mb-15 group overflow-hidden"
-        ref={ref}
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { opacity: 1, transition: { duration: 0.5 } },
-        }}
-        initial="hidden"
-        animate={controls}
-      >
-        <motion.img
-          src={ctaBgImage}
-          alt="Scenic view from inside a custom camper van"
-          loading="eager"
-          fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover bg-gray-800 transition-all duration-1000 ease-in-out group-hover:scale-110 group-hover:brightness-85"
-          initial={{ scale: 1.15 }}
-          variants={{
-            visible: { scale: 1.05, transition: { duration: 2, ease: "easeOut" } }
-          }}
-        />
-        <div className="absolute inset-0 bg-black/70"></div>
-        <div className="relative px-6 z-10 flex flex-col items-center">
-          <Heading2 text="Join the Adventure" className='text-white' />
-          <RichParagraph white={true} className='max-w-2xl my-4'>
-            Become a creator of your own home on wheels. Design your floor plan,
-            select materials, and customize finishes as if building your dream
-            vacation home. When you have a vision, we make it come true with
-            innovative solutions tailored to your requests.
-          </RichParagraph>
-          <WhiteButton label={"Start Your Build"} link={"/contact"} />
-
-
+      {/* SECTION 3: Minimalist CTA (Overlay Style) */}
+      <section className="relative py-32 lg:py-48 flex items-center justify-center overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img src={ctaBgImage} className="w-full h-full object-cover" alt="Adventure" />
+          <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm"></div>
         </div>
-      </motion.section>
+
+        <motion.div
+          className="relative z-10 text-center max-w-4xl px-6"
+          ref={ref}
+          initial="hidden"
+          animate={controls}
+          variants={{ visible: { opacity: 1, y: 0 }, hidden: { opacity: 0, y: 40 } }}
+        >
+          <Heading2 text="Join the Adventure" className="text-secondary mb-8" />
+          <RichParagraph white={true} className="text-secondary opacity-90 mb-10 text-lg">
+            Become a creator of your own home on wheels. Design your floor plan,
+            select materials, and customize finishes for your dream rig.
+          </RichParagraph>
+          <div className="flex justify-center">
+             <PrimaryButton label="Start Your Build" link="/contact" />
+          </div>
+        </motion.div>
+      </section>
     </div>
   );
 }

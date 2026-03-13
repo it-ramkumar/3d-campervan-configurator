@@ -1,14 +1,14 @@
+import React from "react";
+
 const Heading1 = ({
-  text = "Custom Camper Vans...",
-  textColor = "text-white",
+  text = "Title",
+  textColor = "text-secondary",
   className = "",
-  inlineStyle = {},
+  inlineStyle = {}
 }) => {
   return (
     <h1
-      className={`text-2xl sm:text-3xl md:text-5xl lg:text-[64px] xl:text-[72px]
-      font-extrabold leading-tight tracking-normal font-serif
-      break-words text-center ${textColor} ${className}`}
+      className={`text-3xl sm:text-4xl md:text-5xl lg:text-[64px] xl:text-[72px] font-sembold leading-tight tracking-tight font-body ${textColor} ${className}`}
       style={inlineStyle}
     >
       {text}

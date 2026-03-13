@@ -9,14 +9,14 @@ import { getnavWheel } from "../../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
-import { Heading4,ImageWithSkeleton } from '../Common/Common'
+import { Heading4, ImageWithSkeleton } from '../Common/Common'
 
 // --- Sub Components ---
 const NavListItem = ({ to, children, isActive, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className={`block py-1 ${isActive ? "text-indigo-600 font-bold" : "text-gray-700 hover:text-indigo-600"} transition-colors`}
+    className={`block py-1 ${isActive ? "text-primary font-semibold" : "text-primary hover:text-hover"} transition-colors font-body tracking-tight text-[14px]`}
   >
     {children}
   </FooterListItem>
@@ -26,7 +26,7 @@ const BlogListItem = ({ to, children, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className="block py-2 text-gray-700 hover:text-indigo-600 transition-colors"
+    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:text-hover transition-colors"
     bullets="list-desc"
   >
     {children} →
@@ -37,14 +37,14 @@ const ViewAllLink = ({ to, children, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className="block py-2 text-gray-700 hover:text-indigo-600 transition-colors"
+    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:text-hover transition-colors"
   >
     {children} →
   </FooterListItem>
 );
 
 const MobileSectionTitle = ({ children }) => (
-  <Heading4 text={children} textColor="text-indigo-600" />
+  <Heading4 text={children} textColor="text-primary" />
 );
 
 // --- Main Component ---
@@ -67,7 +67,6 @@ export default function Navbar({ forceMobile }) {
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
 
-  // Sync state with location change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setDesktopMenu(null);
@@ -75,21 +74,19 @@ export default function Navbar({ forceMobile }) {
     document.body.style.overflow = '';
   }, [location.pathname]);
 
-  // Prevent scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
   }, [isMobileMenuOpen]);
 
-  // Data Fetching with error boundary
   useEffect(() => {
     const loadData = async () => {
       try {
         const [b, c, w] = await Promise.all([
-          getAllBlogs().catch(() => ({ data: [] })),
-          getNavCat().catch(() => ({ data: [] })),
-          getnavWheel().catch(() => ({ data: [] }))
+          getAllBlogs()?.catch(() => ({ data: [] })),
+          getNavCat()?.catch(() => ({ data: [] })),
+          getnavWheel()?.catch(() => ({ data: [] }))
         ]);
-        setData({ blogs: b.data || [], categories: c.data || [], wheelBases: w.data || [] });
+        setData({ blogs: b?.data || [], categories: c?.data || [], wheelBases: w?.data || [] });
       } catch (err) {
         console.error("Error loading data", err);
         setData({ blogs: [], categories: [], wheelBases: [] });
@@ -98,51 +95,40 @@ export default function Navbar({ forceMobile }) {
     loadData();
   }, []);
 
-  // Optimized Desktop Mega Menu Animation
-  useEffect(() => {
-    if (!megaMenuRef.current || forceMobile) return;
+useEffect(() => {
+  if (!megaMenuRef.current || forceMobile) return;
 
+  const element = megaMenuRef.current;
+
+  if (animationRef.current) {
+    animationRef.current.kill();
+    animationRef.current = null;
+  }
+
+  if (desktopMenu) {
+    gsap.set(element, { display: 'block', height: 'auto', opacity: 0, y: -20 });
+    animationRef.current = gsap.to(element, {
+      opacity: 1,
+      y: 0,
+      duration: 0.25,
+      ease: "power2.out",
+    });
+  } else {
+    animationRef.current = gsap.to(element, {
+      opacity: 0,
+      y: -10,
+      duration: 0.2,
+      ease: "power2.in",
+    });
+  }
+
+  return () => {
     if (animationRef.current) {
       animationRef.current.kill();
+      animationRef.current = null;
     }
-
-    const element = megaMenuRef.current;
-
-    if (desktopMenu) {
-      gsap.set(element, {
-        display: 'block',
-        height: 'auto',
-        opacity: 0,
-        y: -20
-      });
-
-      animationRef.current = gsap.to(element, {
-        opacity: 1,
-        y: 0,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      });
-    } else {
-      animationRef.current = gsap.to(element, {
-        opacity: 0,
-        y: -10,
-        duration: 0.2,
-        ease: "power2.in",
-        force3D: true,
-        onComplete: () => {
-          gsap.set(element, { display: 'none' });
-        }
-      });
-    }
-
-    return () => {
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
-    };
-  }, [desktopMenu, forceMobile]);
-
+  };
+}, [desktopMenu, forceMobile]);
   const handleHover = useCallback((menu) => {
     if (forceMobile) return;
     clearTimeout(timeoutRef.current);
@@ -179,59 +165,45 @@ export default function Navbar({ forceMobile }) {
       );
     }
 
-    if (section.title === "Explore Layout Options") {
-      const displayCats = isMobile ? data.categories.slice(0, 4) : data.categories;
+    if (section?.title === "Explore Layout Options") {
+      const displayCats = isMobile ? data?.categories?.slice(0, 4) : data?.categories;
       return (
         <>
-          {displayCats.map((cat, i) => (
+          {displayCats?.map((cat, i) => (
             <NavListItem key={i} to={`/layout-by-category/${cat}`} onClick={closeMobile}>
               {cat} →
             </NavListItem>
           ))}
-          {isMobile && data.categories.length > 4 && (
+          {isMobile && data?.categories?.length > 4 && (
             <ViewAllLink to="/van-layouts" onClick={closeMobile}>View All Categories</ViewAllLink>
           )}
         </>
       );
     }
 
-    if (section.title === "Van Models Options") {
-      return data.wheelBases.map((base, i) => (
+    if (section?.title === "Van Models Options") {
+      return data?.wheelBases?.map((base, i) => (
         <NavListItem key={i} to={`/wheel-base/${base}`} onClick={closeMobile}>
           {getWheelbaseLabel(base)} →
         </NavListItem>
       ));
     }
 
-    return section.items?.map((item, i) => (
-      <NavListItem key={i} to={item.link} isActive={location.pathname === item.link} onClick={closeMobile}>
-        {item.label}
+    return section?.items?.map((item, i) => (
+      <NavListItem key={i} to={item?.link} isActive={location.pathname === item?.link} onClick={closeMobile}>
+        {item?.label}
       </NavListItem>
     ));
   }, [data, location.pathname, getWheelbaseLabel]);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (animationRef.current) animationRef.current.kill();
-    };
-  }, []);
-
   return (
     <>
       {/* --- Main Navigation Bar --- */}
-      <nav className={`sticky top-0 w-full   font-serif z-[1000] flex items-center ${forceMobile ? "bg-none h-[15px] " : "px-6 bg-white shadow-md h-[65px] "}`}>
+      <nav className={`sticky top-0 w-full font-body z-[1000] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary shadow-md h-[65px]"}`}>
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {!forceMobile && (
             <Link to="/">
-              <ImageWithSkeleton
-                src="/images/logoo.webp"
-                alt="BBV logo"
-                className="w-[170px] h-[30px] object-contain"
-                priority={true}
-                click={true}
-              />
+              <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[170px] h-[30px] object-contain" priority={true} click={true} />
             </Link>
           )}
 
@@ -243,15 +215,13 @@ export default function Navbar({ forceMobile }) {
                 to={link.path}
                 onMouseEnter={() => link.hasDropdown && handleHover(link.name)}
                 onMouseLeave={() => link.hasDropdown && handleMouseLeave()}
-                className={`flex items-center gap-1 uppercase text-[11px] tracking-widest font-bold transition-colors duration-200 ${
-                  isParentActive(link.name) ? "text-indigo-600" : "text-black hover:text-indigo-600"
+                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200 ${
+                  isParentActive(link.name) ? "text-primary" : "text-primary hover:text-hover"
                 }`}
               >
                 {link.label}
                 {link.hasDropdown && (
-                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${
-                    desktopMenu === link.name ? 'rotate-180' : ''
-                  }`} />
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${desktopMenu === link.name ? 'rotate-180' : ''}`} />
                 )}
               </Link>
             ))}
@@ -261,16 +231,15 @@ export default function Navbar({ forceMobile }) {
             {!forceMobile && (
               <Link
                 to="/contact"
-                className="hidden lg:block px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white animate-gradient-flow border border-white/20 transition-transform hover:scale-105"
+                className="hidden lg:block px-5 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-widest text-primary border border-black/20 transition-transform hover:scale-105"
               >
                 Book Consultation
               </Link>
             )}
-            {/* Hamburger menu - only show on mobile/tablet or when forceMobile is true */}
             <button
               aria-label="Menu"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`${forceMobile ? "block" : "block lg:hidden p-2"} text-black  transition-transform hover:scale-110`}
+              className={`${forceMobile ? "block" : "block lg:hidden p-2"} text-primary transition-transform hover:scale-110`}
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -281,7 +250,7 @@ export default function Navbar({ forceMobile }) {
       {/* --- Desktop Mega Menu --- */}
       <div
         ref={megaMenuRef}
-        className="fixed left-0 w-full bg-white shadow-2xl z-[999] border-t will-change-transform"
+        className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary"
         style={{
           top: "65px",
           display: desktopMenu && !forceMobile ? 'block' : 'none',
@@ -292,9 +261,9 @@ export default function Navbar({ forceMobile }) {
       >
         <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 gap-10">
           {menuContent[desktopMenu]?.sections?.map((sec, idx) => (
-            <div key={idx} className={idx === 0 ? "border-r pr-10" : ""}>
-              <Heading4 text={sec.title} textColor="text-indigo-600" />
-              <ul className="space-y-1 mt-4">{renderSectionItems(sec)}</ul>
+            <div key={idx} className={idx === 0 ? "border-r pr-10 border-primary" : ""}>
+              <Heading4 text={sec.title} textColor="text-primary" />
+              <ul className="space-y-1 font-body mt-4">{renderSectionItems(sec)}</ul>
             </div>
           ))}
         </div>
@@ -302,12 +271,12 @@ export default function Navbar({ forceMobile }) {
 
       {/* --- Mobile Menu --- */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-[1001]" onClick={() => setIsMobileMenuOpen(false)}>
+        <div className="fixed inset-0 bg-black/25 z-[1001]" onClick={() => setIsMobileMenuOpen(false)}>
           <div
-            className="fixed right-0 top-0 h-full w-[85%] bg-white p-6 overflow-y-auto transform transition-transform duration-300 will-change-transform"
+            className="fixed right-0 top-0 h-full w-[85%] p-6 overflow-y-auto transform transition-transform duration-300 will-change-transform bg-secondary text-primary"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-8 border-b pb-4">
+            <div className="flex justify-between items-center mb-8 border-b border-primary pb-4">
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
                 <ImageWithSkeleton src="/images/logoo.webp" alt="Logo" className="w-32" priority={true} />
               </Link>
@@ -316,11 +285,11 @@ export default function Navbar({ forceMobile }) {
 
             <div className="space-y-2">
               {navLinks.map((link) => (
-                <div key={link.name} className="border-b last:border-0">
+                <div key={link.name} className="border-b border-primary last:border-0">
                   {!link.hasDropdown ? (
                     <Link
                       to={link.path}
-                      className="block py-4 font-bold text-lg uppercase transition-colors hover:text-indigo-600"
+                      className="block py-4 font-semibold text-lg uppercase transition-colors hover:text-hover"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -328,7 +297,7 @@ export default function Navbar({ forceMobile }) {
                   ) : (
                     <>
                       <button
-                        className="w-full flex justify-between items-center py-4 font-bold text-lg uppercase transition-colors hover:text-indigo-600"
+                        className="w-full flex justify-between items-center py-4 font-semibold text-lg uppercase transition-colors hover:text-hover"
                         onClick={() => setMobileMenu(mobileMenu === link.name ? null : link.name)}
                       >
                         {link.label}
@@ -351,7 +320,7 @@ export default function Navbar({ forceMobile }) {
               <div className="pt-6">
                 <Link
                   to="/contact"
-                  className="block w-full bg-black text-white text-center py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-transform hover:scale-105"
+                  className="block w-full bg-primary font-body text-secondary text-center py-4 rounded-md font-semibold uppercase tracking-tight text-xs transition-transform hover:scale-105"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Book Free Consultation

@@ -1,10 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { Plus, Minus, HelpCircle } from "lucide-react";
 import { Heading2, RichParagraph } from '../Common/Common'
-
-
 
 export default function FAQs({ faqs }) {
   const [openIndex, setOpenIndex] = useState(null);
@@ -14,57 +11,86 @@ export default function FAQs({ faqs }) {
   };
 
   return (
-    <div className="bg-gray-100  py-12 mt-24 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* FAQ Section Heading */}
-        <div className="text-center mb-8">
-          <Heading2 text="FAQs"/>
+    <section className="bg-white py-20 px-4 overflow-hidden antialiased">
+      <div className="max-w-3xl mx-auto">
 
+        {/* --- Header --- */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-secondary text-hover mb-6">
+            <HelpCircle size={28} />
+          </div>
+          <Heading2 text="Frequently Asked Questions" />
+          <div className="w-12 h-1 bg-hover mx-auto rounded-lg mt-6 mb-4"></div>
+          <RichParagraph className="">
+            Everything you need to know about our custom build process and services.
+          </RichParagraph>
         </div>
 
-        {/* FAQ Accordion */}
+        {/* --- Accordion --- */}
         <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-black text-white rounded-lg p-3 relative overflow-hidden transition-all duration-300 ease-in-out transform hover:scale-[1.01] hover:shadow-lg"
-            >
-              {/* Left Border */}
-              <div className="absolute top-0 left-0 w-2 h-full bg-[#2761FD]"></div>
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
 
-              {/* Question + Toggle */}
+            return (
               <div
-                className="flex justify-between items-start cursor-pointer py-1"
-                onClick={() => handleToggle(index)}
-              >
-                <RichParagraph white={true}>
-                  {faq.question}
-                </RichParagraph>
-                <div className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0 flex items-center justify-center rounded-full bg-black border border-[#2761FD]">
-                  {openIndex === index ? (
-                    <FaMinus className="text-[#2761FD] text-sm md:text-lg" />
-                  ) : (
-                    <FaPlus className="text-[#2761FD] text-sm md:text-lg" />
-                  )}
-                </div>
-              </div>
-
-              {/* Answer */}
-              <div
-                className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                  openIndex === index
-                    ? "max-h-96 opacity-100 mt-2"
-                    : "max-h-0 opacity-0 mt-0"
+                key={index}
+                className={`group border-2 transition-all duration-300 rounded-lg overflow-hidden ${
+                  isOpen
+                  ? "border-hover bg-secondary/50"
+                  : "border-primary/5 bg-white hover:border-hover/30"
                 }`}
               >
-                <RichParagraph white={true}>
-                  {faq.answer}
-                </RichParagraph>
+                {/* Question Area */}
+                <button
+                  onClick={() => handleToggle(index)}
+                  className="w-full flex justify-between items-center gap-[var(--gap-sm)] p-6 md:p-8 text-left focus:outline-none"
+                >
+                  <RichParagraph className={`font-bold transition-colors duration-300 ${
+                    isOpen ? "text-primary" : "text-primary/80"
+                  }`}>
+                    {faq.question}
+                  </RichParagraph>
+
+                  {/* Icon Toggle */}
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                    isOpen
+                    ? "bg-hover text-secondary rotate-180"
+                    : "bg-secondary text-primary/40 group-hover:bg-hover group-hover:text-secondary"
+                  }`}>
+                    {isOpen ? <Minus size={18} /> : <Plus size={18} />}
+                  </div>
+                </button>
+
+                {/* Answer Area */}
+                <div
+                  className={`transition-all duration-500 ease-in-out overflow-hidden ${
+                    isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="px-6 pb-8 md:px-8 md:pb-10">
+                    <div className="h-px bg-hover/20 mb-6"></div>
+                    <RichParagraph className=" leading-relaxed">
+                      {faq.answer}
+                    </RichParagraph>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* --- Footer Support --- */}
+        <div className="mt-16 text-center p-8 bg-secondary rounded-lg border border-dashed border-primary/20">
+          <p className="text-sm text-primary/60 mb-2 font-medium">Still have questions?</p>
+          <a
+            href="/contact"
+            className="text-hover font-black uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center justify-center gap-2"
+          >
+            Contact Our Support Team <span>→</span>
+          </a>
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 }

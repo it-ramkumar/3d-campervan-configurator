@@ -1,43 +1,47 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ChevronDown, Sparkles, Tag, Search, Truck, Filter, X, CheckCircle2 } from "lucide-react";
+import { CheckCircle, ChevronDown, Sparkles, Tag, Search, Truck, Filter, X, CheckCircle2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton } from '../Common/Common'
-
+import { Heading2, RichParagraph, Heading3, Heading4, ImageWithSkeleton, SecondaryButton, PrimaryButton } from '../Common/Common';
 
 const MAX_INITIAL_ITEMS = 50;
 
-// --- 1. RenderBlocks Component (Wahi design jo aapko pehle diya tha) ---
+
+// --- 1. RenderBlocks: Updated to show Titles correctly ---
 const RenderBlocks = ({ blocks }) => {
   if (!blocks || !Array.isArray(blocks)) return null;
 
   return (
-    <div className="space-y-6 mt-4">
+    <div className="space-y-8 mt-6">
       {blocks.sort((a, b) => a.order - b.order).map((block, idx) => {
         switch (block.block_type) {
           case 'heading':
-            return <h2 key={idx} className="text-xl font-bold text-gray-900">{block.title}</h2>;
+            // Yahan block.title ko ensure kiya gaya hai
+            return <div key={idx} className="mb-4"><Heading2 text={block.title} /></div>;
           case 'subheading':
-            return <h3 key={idx} className="text-lg font-semibold text-gray-800">{block.title}</h3>;
+            return <div key={idx} className="mb-2"><Heading3 text={block.title} /></div>;
           case 'paragraph':
-            return <div key={idx} className="text-gray-600 leading-relaxed">{block.content}</div>;
+            return <div key={idx} className="text-primary/70 leading-relaxed text-base font-medium">{block.content}</div>;
           case 'list':
             return (
-              <div key={idx} className="space-y-3">
-                {block.title && <p className="font-bold text-gray-800">{block.title}</p>}
+              <div key={idx} className="bg-secondary/30 p-6 rounded-lg border border-primary/5">
+                {/* Agar title hai toh lazmi show hoga */}
+                {block.title && <p className="font-black text-primary uppercase text-xs tracking-widest mb-4">{block.title}</p>}
                 <ul className="space-y-4">
                   {block.list_items?.map((item, iIdx) => (
-                    <li key={iIdx}>
+                    <li key={iIdx} className="group">
                       <div className="flex items-start gap-3">
-                        <CheckCircle2 className="h-5 w-5 text-black mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{item.text}</span>
+                        <div className="mt-1 bg-primary/10 p-1 rounded-lg group-hover:bg-hover transition-colors">
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary group-hover:text-white" />
+                        </div>
+                        <span className="text-primary/80 font-semibold">{item.text}</span>
                       </div>
                       {item.sub_items?.length > 0 && (
-                        <ul className="ml-10 mt-2 space-y-2 border-l border-gray-200 pl-4">
+                        <ul className="ml-8 mt-3 space-y-2 border-l-2 border-primary/10 pl-5">
                           {item.sub_items.map((sub, sIdx) => (
-                            <li key={sIdx} className="text-sm text-gray-500 flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                            <li key={sIdx} className="text-sm text-primary/60 flex items-center gap-2 hover:text-hover transition-colors">
+                              <span className="w-1.5 h-1.5 bg-hover rounded-lg shrink-0"></span>
                               {sub}
                             </li>
                           ))}
@@ -50,26 +54,28 @@ const RenderBlocks = ({ blocks }) => {
             );
           case 'table':
             return (
-              <div key={idx} className="overflow-x-auto my-4 border border-gray-100 rounded-lg shadow-sm">
-                {block.title && <p className="p-2 font-bold bg-gray-50 text-sm border-b">{block.title}</p>}
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-gray-50 text-gray-600">
-                    <tr>
-                      {block.table_data?.headers.map((h, hi) => (
-                        <th key={hi} className="px-4 py-2 font-semibold border-b">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {block.table_data?.rows.map((row, ri) => (
-                      <tr key={ri} className="border-b last:border-0">
-                        {row.map((cell, ci) => (
-                          <td key={ci} className="px-4 py-2 text-gray-600">{cell}</td>
+              <div key={idx} className="overflow-hidden my-6 border-2 border-primary/5 rounded-lg shadow-sm">
+                {block.title && <div className="p-4 bg-primary text-white font-bold text-sm uppercase tracking-wider">{block.title}</div>}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-secondary text-primary">
+                      <tr>
+                        {block.table_data?.headers.map((h, hi) => (
+                          <th key={hi} className="px-6 py-4 font-black uppercase text-[10px] tracking-widest border-b border-primary/10">{h}</th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white">
+                      {block.table_data?.rows.map((row, ri) => (
+                        <tr key={ri} className="border-b border-primary/5 last:border-0 hover:bg-secondary/20 transition-colors">
+                          {row.map((cell, ci) => (
+                            <td key={ci} className="px-6 py-4 text-primary/70 font-medium">{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             );
           default:
@@ -80,18 +86,15 @@ const RenderBlocks = ({ blocks }) => {
   );
 };
 
-const categoryVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+// Animation Configs
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
-const contentVariants = {
-  hidden: { opacity: 0, height: 0 },
-  visible: {
-    opacity: 1,
-    height: "auto",
-    transition: { type: "spring", stiffness: 70, damping: 10, staggerChildren: 0.05 },
-  },
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
 };
 
 export default function ExteriorChoicesList({ initialData, heading }) {
@@ -108,264 +111,275 @@ export default function ExteriorChoicesList({ initialData, heading }) {
     setExpandedCategories((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
 
-const getFilteredCategories = () => {
+  const filteredCategories = (() => {
     let filtered = categories;
+    if (selectedCategoryFilter !== "all") filtered = filtered.filter(cat => cat._id === selectedCategoryFilter);
+    if (!searchQuery.trim()) return filtered;
 
-    if (selectedCategoryFilter !== "all") {
-      filtered = filtered.filter((cat) => cat._id === selectedCategoryFilter);
-    }
+    const query = searchQuery.toLowerCase();
+    return filtered.map(cat => {
+      const categoryMatch = cat.title.toLowerCase().includes(query);
+      const filteredSubCategories = cat.subCategories.map(sub => {
+        const filteredItems = sub.items.filter(item =>
+          item.title?.toLowerCase().includes(query) ||
+          item.description?.some(d => d.toLowerCase().includes(query)) ||
+          item.blocks?.some(b => b.title?.toLowerCase().includes(query) || b.content?.toLowerCase().includes(query))
+        );
+        return { ...sub, items: filteredItems, hasMatch: sub.title.toLowerCase().includes(query) || filteredItems.length > 0 };
+      }).filter(sub => sub.hasMatch);
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+      const filteredDirectItems = cat.items.filter(item =>
+        item.title?.toLowerCase().includes(query) || item.description?.some(d => d.toLowerCase().includes(query))
+      );
 
-      filtered = filtered.map((cat) => {
-        const categoryMatch =
-          cat.title.toLowerCase().includes(query) ||
-          cat.description?.toLowerCase().includes(query);
+      return { ...cat, subCategories: filteredSubCategories, items: filteredDirectItems, hasMatch: categoryMatch || filteredSubCategories.length > 0 || filteredDirectItems.length > 0 };
+    }).filter(cat => cat.hasMatch);
+  })();
 
-        const filteredSubCategories = cat.subCategories.map((sub) => {
-          const subMatch = sub.title.toLowerCase().includes(query);
-
-          const filteredItems = sub.items.filter((item) => {
-            // 1. Check direct title
-            const titleMatch = item.title?.toLowerCase().includes(query);
-
-            // 2. Check description array
-            const descMatch = item.description?.some((desc) =>
-              desc.toLowerCase().includes(query)
-            );
-
-            // 3. Check blocks (This was missing or incomplete)
-            const blockMatch = item.blocks?.some((b) =>
-              b.title?.toLowerCase().includes(query) ||
-              b.content?.toLowerCase().includes(query) ||
-              b.list_items?.some(li => li.text?.toLowerCase().includes(query))
-            );
-
-            return titleMatch || descMatch || blockMatch;
-          });
-
-          return {
-            ...sub,
-            items: filteredItems,
-            hasMatch: subMatch || filteredItems.length > 0
-          };
-        }).filter((sub) => sub.hasMatch);
-
-        const filteredDirectItems = cat.items.filter((item) => {
-          const titleMatch = item.title?.toLowerCase().includes(query);
-          const descMatch = item.description?.some((desc) =>
-            desc.toLowerCase().includes(query)
-          );
-          const blockMatch = item.blocks?.some((b) =>
-            b.title?.toLowerCase().includes(query) ||
-            b.content?.toLowerCase().includes(query)
-          );
-          return titleMatch || descMatch || blockMatch;
-        });
-
-        return {
-          ...cat,
-          subCategories: filteredSubCategories,
-          items: filteredDirectItems,
-          hasMatch: categoryMatch || filteredSubCategories.length > 0 || filteredDirectItems.length > 0
-        };
-      }).filter((cat) => cat.hasMatch);
-    }
-    return filtered;
-  };
-
-  const filteredCategories = getFilteredCategories();
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 sm:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-secondary/40 backdrop-blur-3xl rounded-lg p-4 sm:p-10 border border-primary/5">
 
-        {/* Header Section */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 sm:mb-16">
-          <div className="inline-flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-black/5 rounded-2xl">
-              <Sparkles className="h-7 w-7 sm:h-9 sm:w-9 text-black" />
-            </div>
-            <Heading2 text={`${heading} Choices`} className="capitalize"/>
+      {/* --- SEARCH & FILTER BAR: Premium Glassmorphism --- */}
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-12 relative z-10">
+        <div className="bg-white/80 backdrop-blur-md rounded-lg p-3 shadow-2xl border border-white flex flex-col lg:flex-row gap-3">
+          <div className="flex-1 relative">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-primary/30" />
+            <input
+              type="text"
+              placeholder="Search by keyword, material, or style..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-14 pr-6 py-5 bg-secondary/50 border-none rounded-lg focus:ring-2 focus:ring-hover/20 outline-none text-primary font-bold placeholder:text-primary/20 transition-all"
+            />
           </div>
-          <div className="max-w-2xl mx-auto">
-            <RichParagraph className="text-gray-600 text-lg">
-              Explore our premium {heading.toLowerCase()} selections designed to elevate your space
-            </RichParagraph>
+          <div className="relative">
+            <Filter className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-primary/30 pointer-events-none" />
+            <select
+              value={selectedCategoryFilter}
+              onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+              className="w-full lg:w-72 pl-14 pr-12 py-5 bg-primary text-white rounded-lg outline-none appearance-none font-black text-xs uppercase tracking-widest cursor-pointer hover:bg-hover transition-colors"
+            >
+              <option value="all">All Categories</option>
+              {categories.map((cat) => <option key={cat._id} value={cat._id}>{cat.title}</option>)}
+            </select>
+            <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50 pointer-events-none" />
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
-        {/* Search & Filters */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8 sm:mb-12">
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100">
-            <div className="flex flex-col lg:flex-row gap-4 items-center">
-              <div className="flex-1 w-full relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search materials, colors, styles..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-black outline-none transition-all"
-                />
-              </div>
-              <div className="relative w-full lg:w-auto">
-                <select
-                  value={selectedCategoryFilter}
-                  onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                  className="w-full lg:w-64 pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none appearance-none"
+      {/* --- CATEGORIES FEED --- */}
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-10">
+        <AnimatePresence mode="popLayout">
+          {filteredCategories.map((cat, index) => {
+            const activeSubId = activeSubCategoryMap[cat._id];
+            const allActiveItems = activeSubId != null ? cat.subCategories.find((s) => s._id === activeSubId)?.items || [] : cat.items;
+            const activeItems = showFullItemListMap[cat._id] ? allActiveItems : allActiveItems.slice(0, MAX_INITIAL_ITEMS);
+            const activeItem = activeItemMap[cat._id];
+            const isExpanded = expandedCategories[cat._id];
+            const isEven = index % 2 === 0;
+
+            return (
+              <motion.div key={cat._id} variants={itemVariants} layout className="bg-white rounded-lg border border-primary/5 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500">
+
+                {/* Category Trigger */}
+                <div
+                  onClick={() => toggleCategory(cat._id)}
+                  className="p-8 cursor-pointer flex items-center justify-between gap-6 group"
                 >
-                  <option value="all">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>{cat.title}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 gap-5 sm:gap-6">
-          <AnimatePresence>
-            {filteredCategories.map((cat, index) => {
-              const activeSubId = activeSubCategoryMap[cat._id];
-              const allActiveItems = activeSubId != null ? cat.subCategories.find((s) => s._id === activeSubId)?.items || [] : cat.items;
-              const activeItems = showFullItemListMap[cat._id] ? allActiveItems : allActiveItems.slice(0, MAX_INITIAL_ITEMS);
-              const activeItem = activeItemMap[cat._id];
-              const isExpanded = expandedCategories[cat._id];
-              const alternateLayout = index % 2 === 0;
-
-              return (
-                <motion.div key={cat._id} variants={categoryVariants} initial="hidden" animate="visible" className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-
-                  {/* Category Header Clickable */}
-                  <div onClick={() => toggleCategory(cat._id)} className="p-5 sm:p-7 cursor-pointer hover:bg-gray-50/50 transition-colors flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 text-left">
-                      <div className="p-3 bg-black/5 rounded-xl"><Tag className="h-6 w-6 text-black" /></div>
-                      <div>
-                        <Heading3 text={cat.title} className="mb-2" textColor="text-black"/>
-                        <RichParagraph className="text-gray-600 text-sm">{cat.description}</RichParagraph>
-                      </div>
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 bg-secondary text flex items-center justify-center rounded-lg group-hover:bg-primary transition-all duration-500">
+                      <Tag className="h-6 w-6 text-primary group-hover:text-white transition-colors" />
                     </div>
-                    <motion.div animate={{ rotate: isExpanded ? 180 : 0 }}><ChevronDown className="h-5 w-5 text-gray-600" /></motion.div>
+                    <div>
+                      <Heading2 text={cat.title} />
+                      <RichParagraph className="text-primary/40  mt-1 uppercase">{cat.subCategories.length || cat.items.length} Options Available</RichParagraph>
+                    </div>
                   </div>
+                  <div className={`w-12 h-12 rounded-full border-2 border-secondary flex items-center justify-center transition-all ${isExpanded ? 'bg-primary border-primary' : 'group-hover:border-hover'}`}>
+                    <ChevronDown className={`h-5 w-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-white' : 'text-primary'}`} />
+                  </div>
+                </div>
 
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div variants={contentVariants} initial="hidden" animate="visible" exit="hidden" className="border-t border-gray-100 p-5 sm:p-8">
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-8 pb-12 pt-4 border-t border-secondary">
 
-                        {/* Subcategory Buttons */}
-                   {cat.subCategories.length > 0 && (
-  <div className="flex flex-col gap-6 mb-8"> {/* Main vertical gap */}
-    {cat.subCategories.map((sub) => (
-      <div key={sub._id} className="space-y-2"> {/* Button aur Desc ka personal container */}
+                        {/* Sub-Nav System */}
+                        {cat.subCategories.length > 0 && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+                            {cat.subCategories.map((sub) => {
+                              const isActive = activeSubId === sub._id;
 
-        {/* Button - Active state logic wahi hai */}
-        <button
-          onClick={() => {
-            setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
-            setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
-          }}
-          className={`px-5 py-2.5 rounded-full border transition-all inline-block w-fit ${
-            activeSubId === sub._id
-            ? "bg-black text-white shadow-md"
-            : "bg-white text-gray-700 hover:border-gray-400"
-          }`}
-        >
-          {sub.title}
-        </button>
+                              return (
+                                <SecondaryButton
+                                  key={sub._id}
+                                  onClick={() => {
+                                    setActiveSubCategoryMap({ ...activeSubCategoryMap, [cat._id]: sub._id });
+                                    setActiveItemMap({ ...activeItemMap, [cat._id]: sub.items[0] || null });
+                                  }}
+                                  className={`text-left p-5 rounded-lg border-2 transition-all duration-300 group
+          ${isActive
+                                      ? "bg-primary border-primary shadow-lg scale-[1.02]"
+                                      : "bg-white border-secondary  hover:border-hover"
+                                    }`}
+                                  label={
+                                    <div>
+                                      <Heading4
+                                        className={`font-bold
+                ${isActive ? "text-primary" : "text-primary"}
+                group-hover:${isActive ? "text-secondary" : "text-hover"}
+                transition-colors`}
+                                        text={sub.title}
+                                      />
+                                      {sub.description && (
+                                        <p
+                                          className={`text-[11px] mt-2 line-clamp-2 leading-relaxed
+                  ${isActive ? "text-primary hover:text-secondary" : "text-primary/50"}
+                  group-hover:${isActive ? "text-secondary/70 " : "text-hover/70"}
+                  transition-colors`}
+                                        >
+                                          {sub.description}
+                                        </p>
+                                      )}
+                                    </div>
+                                  }
+                                />
+                              );
+                            })}
+                          </div>)}
 
-        {/* Description - Hamesha niche aayegi */}
-        {sub.description && (
-          <div className="pl-1"> {/* Thodi si padding for alignment */}
-             <RichParagraph className="text-sm text-gray-500 leading-relaxed max-w-2xl">
-                {sub.description}
-             </RichParagraph>
-          </div>
-        )}
+                        {/* Item Chips */}
+                      {/* Item Chips - Fixed Title Logic */}
+<div className="flex flex-wrap gap-2 mb-12 bg-secondary/30 p-4 rounded-lg">
+  {activeItems.map((item) => {
+    const isActive = activeItem?._id === item._id;
 
-      </div>
-    ))}
-  </div>
-)}
+    // Dusri file wali logic yahan add ki hai taaki "Untitled" na aaye
+    const buttonLabel =
+      item.heading ||
+      item.title ||
+      item.blocks?.find((b) => b.block_type === "heading")?.title ||
+      "Untitled Option";
 
-                        {/* Items Selection */}
-                        <div className="flex flex-wrap gap-3 mb-10">
-                          {activeItems.map((item) => {
-                            // Logic to decide button text
-                            const buttonLabel =
-                              item.title ||
-                              item.blocks?.find((b) => b.block_type === "heading")?.title ||
-                              "Untitled Option";
+    return (
+      <PrimaryButton
+        key={item._id}
+        onClick={() => setActiveItemMap({ ...activeItemMap, [cat._id]: item })}
+        className={`uppercase transition-all ${
+          isActive
+            ? "bg-primary text-secondary shadow-lg"
+            : "bg-white !text-primary/60 hover:!text-secondary"
+        }`}
+        label={buttonLabel} // Ab ye buttonLabel use karega
+      />
+    );
+  })}
+</div>
 
-                            return (
-                              <button
-                                key={item._id}
-                                onClick={() => setActiveItemMap({ ...activeItemMap, [cat._id]: item })}
-                                className={`flex items-center gap-2 px-4 py-3 rounded-xl border transition-all duration-200 ${activeItem?._id === item._id
-                                    ? "bg-black text-white border-black shadow-md"
-                                    : "bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300 hover:shadow-sm"
-                                  }`}
-                              >
-                                <span className="font-medium">{buttonLabel}</span>
-                                {activeItem?._id === item._id && <CheckCircle className="h-4 w-4" />}
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {/* Active Item Details */}
+                        {/* Feature Display Card */}
                         <AnimatePresence mode="wait">
                           {activeItem && (
-                            <motion.div key={activeItem._id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 sm:p-10 border border-gray-100">
-                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-                                <div className={`${alternateLayout ? "" : "lg:order-2"}`}>
-                                  <ImageWithSkeleton  src={activeItem.images?.[0]} alt={activeItem.title} className="rounded-xl shadow-lg" />
+                            <motion.div
+                              key={activeItem._id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{ duration: 0.5 }}
+                              className="bg-secondary/50 backdrop-blur-sm rounded-lg p-6 lg:p-12 border border-white shadow-xl overflow-hidden"
+                            >
+                              <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${isEven ? "" : "lg:flex-row-reverse"}`}>
+
+                                {/* --- Image Section with Portrait Fix --- */}
+                                <div className={`relative group w-full ${isEven ? "lg:order-1" : "lg:order-2"}`}>
+                                  {/* Subtle Glow Background */}
+                                  <div className="absolute inset-0 bg-primary/5 rounded-lg blur-3xl group-hover:bg-primary transition-all duration-700" />
+
+                                  {/* Image Container: Fixed Aspect Ratio for Portrait Images */}
+                                  <div className="relative z-10 overflow-hidden rounded-lg border-4 border-white shadow-2xl aspect-[4/5] md:aspect-square lg:aspect-[4/5] max-h-[550px] mx-auto bg-gray-100">
+                                    <ImageWithSkeleton
+                                      src={activeItem.images?.[0]}
+                                      alt={activeItem.title}
+                                      className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                                    />
+                                  </div>
                                 </div>
-                                <div className={`space-y-6 ${alternateLayout ? "" : "lg:order-1"}`}>
+
+                                {/* --- Content Section --- */}
+                                <div className={`space-y-8 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
                                   <div>
-                                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{activeItem.title}</h3>
-                                    <div className="w-16 h-1 bg-black rounded-full" />
+                                    <RichParagraph className="uppercase ">
+                                      Featured Option
+                                    </RichParagraph>
+                                    <div className="mt-4">
+                                      <Heading3 text={activeItem.title} />
+                                    </div>
                                   </div>
 
-                                  {/* --- Description Array --- */}
-                                  {activeItem.description?.length > 0 && (
-                                    <div className="space-y-4">
-                                      {activeItem.description.map((desc, i) => (
-                                        <div key={i} className="flex items-start gap-4">
-                                          <div className="p-2 bg-black rounded-lg shrink-0"><Truck className="h-4 w-4 text-white" /></div>
-                                          <RichParagraph className="text-gray-700">{desc}</RichParagraph>
+                                  <div className="space-y-4">
+                                    {activeItem.description?.map((desc, i) => (
+                                      <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="flex gap-4 p-5 bg-secondary rounded-2xl border border-white shadow-sm hover:shadow-md transition-shadow"
+                                      >
+                                        <div className="mt-1">
+                                          <Truck className="h-5 w-5 text-primary shrink-0" />
                                         </div>
-                                      ))}
-                                    </div>
-                                  )}
+                                        <RichParagraph className=" italic">
+                                          {desc}
+                                        </RichParagraph>
+                                      </motion.div>
+                                    ))}
+                                  </div>
 
-                                  {/* --- BLOCKS DATA (Rendered alongside description) --- */}
                                   <RenderBlocks blocks={activeItem.blocks} />
 
                                   {activeItem.link && (
-                                    <Link to={activeItem.link} target="_blank">
-                                      <button className="px-8 py-3.5 bg-black text-white rounded-xl font-semibold hover:bg-gray-900 transition-all">
-                                        View Complete Details
-                                      </button>
-                                    </Link>
+                                    <div className="pt-6">
+                                      <Link to={activeItem.link} target="_blank" className="inline-block">
+                                        <button className="group flex items-center gap-6 bg-primary text-secondary pl-8 pr-3 py-3 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#001F3D]/90 transition-all shadow-lg hover:shadow-xl">
+                                         {activeItem.title === "AquaGuard Performance Laminate Flooring" || activeItem.title === "AquaGuard Bamboo Flooring" ? "view flooring options" : "view stain options"}
+                                          <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center group-hover:bg-secondary/20 transition-all">
+                                            <ArrowRight size={18} />
+                                          </div>
+                                        </button>
+                                      </Link>
+                                    </div>
                                   )}
                                 </div>
+
                               </div>
                             </motion.div>
                           )}
                         </AnimatePresence>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* No Results Fallback */}
+      {filteredCategories.length === 0 && (
+        <div className="text-center py-40 bg-white rounded-lg border-2 border-dashed border-primary/10">
+          <div className="bg-secondary w-20 h-20 rounded-lg flex items-center justify-center mx-auto mb-6">
+            <Search size={32} className="text-primary/20" />
+          </div>
+          <Heading3 text="No matches found" />
+          <button onClick={() => setSearchQuery("")} className="mt-4 text-hover font-bold hover:underline">Clear all filters</button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

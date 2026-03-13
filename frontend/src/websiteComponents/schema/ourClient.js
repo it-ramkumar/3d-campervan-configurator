@@ -1,78 +1,78 @@
-// helpers/clientStoriesSchema.js
-
-export const generateClientStoriesSchema = () => {
-  const url = typeof window !== "undefined" ? window.location.href : "https://bigbearvans.com/client-stories";
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Our Client Stories | Big Bear Vans",
-    "description": "Explore custom built campervans for families, pet owners, adventure lovers, and retirees. Real stories from real van owners.",
-    "url": url,
-    "mainEntity": {
-      "@type": "ItemList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
+export const schemaData =()=>( {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Client Stories & Custom Build Gallery | Big Bear Vans",
+  "description": "Explore our custom van builds: Lake Tahoe (Family), Blue Whale (6-Seater), Cusco (Pet-friendly), MotoVan (Adventure), and San Diego (Mobile Office).",
+  "url": "https://bigbearvans.com/our-clients",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Lake Tahoe Campervan",
+        "item": {
+          "@type": "Product",
           "name": "Lake Tahoe Campervan - Family Edition",
-          "description": "A custom 144 AWD Sprinter van designed for a family of four with elevator bed system.",
-          "item": {
-            "@type": "Review",
-            "author": { "@type": "Person", "name": "Family of Four" },
-            "reviewBody": "Big Bear Vans had the design layout that we wanted for a family, and they're family-focused.",
-            "itemReviewed": {
-              "@type": "Product",
-              "name": "Lake Tahoe Campervan"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Cusco Campervan - Pet Friendly",
-          "description": "Pet-friendly campervan featuring dedicated dog areas and climate control.",
-          "item": {
-            "@type": "Review",
-            "author": { "@type": "Person", "name": "Cathy and Ben" },
-            "reviewBody": "One of the big reasons why we decided to go with Big Bear Vans was that we have four dogs.",
-            "itemReviewed": {
-              "@type": "Product",
-              "name": "Cusco Campervan"
-            }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "MotoVan - Adventure Basecamp",
-          "description": "Built for riders with a separate garage for three motorcycles and living space for five.",
-          "item": {
-             "@type": "Product",
-             "name": "MotoVan"
+          "description": "144 AWD Sprinter for a family of four with elevator bed system."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blue Whale Campervan",
+        "item": {
+          "@type": "Product",
+          "name": "Blue Whale - 6 Seater Campervan",
+          "description": "Short campervan with seating/sleeping for six, featuring a rooftop hammock."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Cusco Campervan",
+        "item": {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Cathy and Ben" },
+          "reviewBody": "One of the big reasons we chose Big Bear Vans was for our four dogs.",
+          "itemReviewed": {
+            "@type": "Product",
+            "name": "Cusco & Sasha Pet-Friendly Vans"
           }
         }
-      ]
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Big Bear Vans",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://bigbearvans.com/logo.png"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "The MotoVan",
+        "item": {
+          "@type": "Product",
+          "name": "MotoVan - Adventure Basecamp",
+          "description": "Exclusive van with a dedicated garage for three motorcycles and sleeping for five."
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "Vermont Campervan",
+        "item": {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Client from Vermont" },
+          "reviewBody": "It feels so homey. Big Bear Vans adapted to more than two travelers.",
+          "itemReviewed": { "@type": "Product", "name": "Vermont 170 AWD Sprinter" }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 6,
+        "name": "San Diego Campervan",
+        "item": {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": "Remote Worker / Architect" },
+          "reviewBody": "I am a remote worker, so I wanted an office space as well as a beefy electrical system.",
+          "itemReviewed": { "@type": "Product", "name": "San Diego Mobile Office Van" }
+        }
       }
-    }
-  };
-};
-
-/**
- * Meta Tags Helper (Optional but Recommended)
- */
-export const getClientStoriesMetaTags = () => {
-  return {
-    title: "Our Client Stories | Custom Built Campervans by Big Bear Vans",
-    description: "See how Big Bear Vans builds luxury custom vans for families, pets, and off-grid adventures. Read real customer reviews and see their builds.",
-    ogImage: "https://bigbearvans.com/OurClients/v1.jpg",
-    url: "https://bigbearvans.com/client-stories"
-  };
-};
+    ]
+  }
+})

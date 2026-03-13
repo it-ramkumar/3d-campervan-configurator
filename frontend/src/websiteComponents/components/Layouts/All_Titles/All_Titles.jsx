@@ -6,9 +6,9 @@ import {
   SparklesIcon,
   LayoutTemplateIcon,
   ArrowRightIcon,
+  Layers
 } from "lucide-react";
-import { Heading2, RichParagraph, BlackButton } from '../../Common/Common'
-
+import { Heading2, RichParagraph, SecondaryButton } from '../../Common/Common'
 
 const LIMIT = 12;
 
@@ -22,94 +22,57 @@ export default function All_Titles() {
   const location = useLocation();
   const isFetchingRef = useRef(false);
 
-  // --- Core Fetch Function ---
+  // --- Fetch Logic (Same as before, optimized for UI) ---
   const fetchPortfolios = useCallback(async (pageNumber = 1, isLoadMore = false) => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
-
     try {
       setLoading(true);
       if (pageNumber === 1) setInitialLoad(true);
-
-      // API FIX: Pass arguments individually as the function expects (page, limit, search)
-      // Object nahi bhejna, warna API sirf page 1 return karegi
       const res = await getAllPortfolio(pageNumber, LIMIT, "");
-
       if (res.success) {
-        const responseData = res.data; // Yeh axios ka data object hai
-        const newData = responseData?.data || []; // Actual array of items
+        const responseData = res.data;
+        const newData = responseData?.data || [];
         const totalPages = responseData?.pages || 0;
         const currentPage = responseData?.page || pageNumber;
 
         if (isLoadMore) {
           setPortfolios((prev) => {
             const combined = [...prev, ...newData];
-            // Remove duplicates by _id
             const uniqueMap = new Map();
-            combined.forEach((item) => {
-              if (item._id) uniqueMap.set(item._id, item);
-            });
+            combined.forEach((item) => { if (item._id) uniqueMap.set(item._id, item); });
             return Array.from(uniqueMap.values());
           });
         } else {
           setPortfolios(newData);
         }
-
-        // States update karein
         setPage(currentPage);
         setHasMore(currentPage < totalPages);
       }
     } catch (error) {
-      console.error("Error fetching portfolios:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
       setInitialLoad(false);
       isFetchingRef.current = false;
     }
-  }, []); // Dependencies empty taake closures stale na hon
+  }, []);
 
-  // --- Initial Load ---
-  useEffect(() => {
-    fetchPortfolios(1, false);
-  }, [fetchPortfolios]);
+  useEffect(() => { fetchPortfolios(1, false); }, [fetchPortfolios]);
 
-  // --- Manual Load More Handler ---
   const handleLoadMore = useCallback(() => {
     if (loading || !hasMore || isFetchingRef.current) return;
-    const nextPage = page + 1;
-    fetchPortfolios(nextPage, true);
+    fetchPortfolios(page + 1, true);
   }, [loading, hasMore, page, fetchPortfolios]);
 
-  // --- Infinite Scroll Handler ---
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const currentScroll = window.innerHeight + window.scrollY;
-
-      // Jab user bottom se 300px door ho tab load kare
-      if (currentScroll >= scrollHeight - 300 && hasMore && !loading) {
-        handleLoadMore();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleLoadMore, hasMore, loading]);
-
-  // --- Loading Skeleton ---
+  // --- UI Components ---
   if (initialLoad) {
     return (
-      <div className="rounded-2xl bg-white p-6 shadow-xl border border-gray-200/50">
-        <div className="mb-6 flex items-center gap-3 animate-pulse">
-          <div className="h-10 w-10 rounded-xl bg-gray-200"></div>
-          <div className="space-y-2">
-            <div className="h-5 w-48 bg-gray-200 rounded"></div>
-            <div className="h-4 w-32 bg-gray-100 rounded"></div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      <div className="bg-white rounded-lg p-8 shadow-sm border border-[#001F3D]/5">
+        <div className="h-8 w-64 bg-[#F5F5F0] animate-pulse rounded-lg mb-8" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-50 rounded-xl border border-gray-100"></div>
+            <div key={i} className="h-16 bg-[#F5F5F0] rounded-lg animate-pulse" />
           ))}
         </div>
       </div>
@@ -117,64 +80,56 @@ export default function All_Titles() {
   }
 
   return (
-    <div className="group rounded-2xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl border border-gray-200/50 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl">
-      {/* Header */}
-      <div className="mb-6 flex items-center justify-between border-b border-gray-200/60 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900 shadow-lg">
-              <LayoutTemplateIcon className="h-5 w-5 text-white" />
-            </div>
+    <div className="bg-white rounded-lg p-8 border border-[#001F3D]/10 shadow-sm transition-all duration-500 hover:shadow-md">
+
+      {/* --- HEADER --- */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 border-b border-[#F5F5F0] pb-8">
+        <div className="flex items-start gap-4">
+          <div className="p-3 mt-3 bg-primary rounded-lg text-white shadow-lg shadow-primary/20">
+            <Layers size={24} />
           </div>
           <div>
-            <Heading2 text="Quick Access Layouts"/>
-            <RichParagraph>
-                 {portfolios.length} layouts loaded {hasMore ? `(more available)` : `(all loaded)`}
+            <Heading2 text="Build Catalog" className=" !mb-1" />
+            <RichParagraph className="!text-xs opacity-50 uppercase tracking-widest font-bold">
+              {portfolios.length} Models {hasMore ? 'Available' : 'Completed'}
             </RichParagraph>
-
           </div>
         </div>
-        <SparklesIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+        <div className="flex items-center gap-2 text-xs font-black text-hover uppercase  bg-secondary px-4 py-2 rounded-lg">
+          <SparklesIcon size={12} /> Live Inventory
+        </div>
       </div>
 
-      {/* Grid */}
+      {/* --- GRID --- */}
       {portfolios.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="space-y-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {portfolios.map((item) => {
               const path = `/layout-detail/${item.slug}`;
               const isActive = location.pathname === path;
 
               return (
-                <Link key={item._id} to={path}>
+                <Link key={item._id} to={path} className="block group">
                   <div
-                    className="relative overflow-hidden"
                     onMouseEnter={() => setHoveredId(item._id)}
                     onMouseLeave={() => setHoveredId(null)}
+                    className={`relative p-5 rounded-lg border-2 transition-all duration-300 flex items-center justify-between ${
+                      isActive
+                        ? "bg-[#001F3D] border-[#001F3D] shadow-xl translate-y-[-2px]"
+                        : "bg-white border-[#F5F5F0] hover:border-[#ED985F]/30 hover:shadow-lg"
+                    }`}
                   >
-                    <div
-                      className={`absolute inset-0 rounded-xl transition-all duration-500 ${
-                        isActive
-                          ? "bg-gray-900 shadow-lg"
-                          : "bg-white border border-gray-100 shadow-sm hover:shadow-md"
-                      } ${hoveredId === item._id ? "scale-[1.02]" : ""}`}
-                    ></div>
+                    <div className="flex flex-col overflow-hidden">
+                      <RichParagraph className={`uppercase mb-1 !text-xs font-bold ${isActive ? "text-hover" : "text-primary/30"}`}>
+                        {item?.van_listing?.specifications?.wheelbase || "Custom"}
+                      </RichParagraph>
+                      <RichParagraph className={`font-bold  truncate pr-4 ${isActive ? "text-white" : "text-primary"}`}>
+                        {item?.van_listing?.title || "Untitled Build"}
+                      </RichParagraph>
+                    </div>
 
-                    <div className="relative z-10 flex items-center justify-between p-4">
-                      <span
-                        className={`text-sm font-semibold truncate max-w-[85%] transition-colors ${
-                          isActive ? "text-white" : "text-gray-800"
-                        }`}
-                        title={item?.van_listing?.title}
-                      >
-                        {item?.van_listing?.title || "Untitled"}
-                      </span>
-
-                      <ArrowRightIcon
-                        className={`h-4 w-4 transition-all ${
-                          isActive ? "text-white" : "text-gray-300"
-                        } ${hoveredId === item._id ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"}`}
-                      />
+                    <div className={`transition-all duration-300 ${isActive ? "text-white" : "text-[#ED985F]"} ${hoveredId === item._id ? "translate-x-1" : "opacity-0"}`}>
+                      <ArrowRightIcon size={18} />
                     </div>
                   </div>
                 </Link>
@@ -182,35 +137,32 @@ export default function All_Titles() {
             })}
           </div>
 
-          {/* Load More Button */}
+          {/* --- LOAD MORE --- */}
           {hasMore && (
-            <div className="mt-8 flex justify-center">
-              <BlackButton    onClick={handleLoadMore}
+            <div className="flex justify-center pt-6 border-t border-[#F5F5F0]">
+              <SecondaryButton
+                onClick={handleLoadMore}
                 disabled={loading}
-                label=   {loading ? (
-                  <>
-                    Loading More...
-                  </>
-                ) : (
-                  <>
-                    Load More ({page})                  </>
-                )}/>
-
+                className="!bg-[#001F3D] !text-white !px-12 !py-4 !rounded-lg hover:!bg-[#ED985F] transition-colors"
+                label={loading ? "Synchronizing..." : `Load More Layouts (${page})`}
+              />
             </div>
           )}
-        </>
+        </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-10 text-gray-400">
-          <LayoutTemplateIcon className="h-10 w-10 mb-2 opacity-20" />
-          <p>No layouts found</p>
+        <div className="py-20 text-center bg-[#F5F5F0] rounded-lg border-2 border-dashed border-[#001F3D]/10">
+          <LayoutTemplateIcon className="mx-auto h-12 w-12 text-[#001F3D]/20 mb-4" />
+          <p className="font-bold text-[#001F3D]/40 uppercase tracking-widest text-sm">No Builds Found</p>
         </div>
       )}
 
-      {/* Footer Info */}
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-[10px] text-gray-400 text-center uppercase tracking-widest">
-          {hasMore ? "Scroll to explore more" : "End of catalog"}
-        </p>
+      {/* --- FOOTER --- */}
+      <div className="mt-12 flex items-center justify-center gap-4">
+        <div className="h-px bg-[#F5F5F0] flex-grow"></div>
+        <span className="text-[9px] font-black text-[#001F3D]/30 uppercase tracking-[0.4em]">
+           Brooklyn Built Vans Catalog
+        </span>
+        <div className="h-px bg-[#F5F5F0] flex-grow"></div>
       </div>
     </div>
   );

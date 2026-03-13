@@ -1,109 +1,120 @@
 "use client";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, BlackButton } from '../../Common/Common'
+import {
+  Heading2, RichParagraph, Heading3,
+  ImageWithSkeleton, SecondaryButton,CustomLink
+} from '../../Common/Common';
 
-
-export default function SoldVans({ vans,
+export default function SoldVans({
+  vans,
   soldHeading,
   soldDesc,
   hasMore,
   loading,
-  onLoadMore }) {
+  onLoadMore
+}) {
+  if (!vans || vans.length === 0) return null;
 
   return (
-    <>
+    <section className="bg-secondary py-16 md:py-24 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
 
-      {vans.length > 0 ? (<section className="bg-white md:mt-24 mt-10 py-10 px-4 md:px-8 overflow-hidden">
-        <div className="max-w-screen-2xl mx-auto">
-
-          {/* Heading Section */}
-
-          <div className="text-center mb-10 md:mb-16">
-            <Heading2 text={soldHeading} />
-            <RichParagraph className="max-w-2xl mx-auto">
-              {soldDesc}
-            </RichParagraph>
-
+        {/* --- Section Header --- */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 mb-3">
+               <span className="w-8 h-[2px] bg-hover opacity-30"></span>
+               <RichParagraph className="text-hover uppercase  font-bold !text-xs italic">The Archive</RichParagraph>
+            </div>
+            <Heading2 text={soldHeading} className="text-primary" />
+            <div className="mt-4">
+              <RichParagraph >
+                {soldDesc}
+              </RichParagraph>
+            </div>
           </div>
 
-          {/* Vans Grid: 1 col on mobile, 2 on tablet, 3 on desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {vans?.length > 0 ? (
-              vans.map((van) => (
-                <div
-                  key={van._id}
-                  className="group relative w-full aspect-[4/3] rounded-[24px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
-                >
-                  <Link to={`/van-detail/${van.slug}`}>
-                  <div className="relative w-full h-full">
-  {/* Image OR Designed Fallback */}
-  {van?.gallery?.[0] ? (
-    <ImageWithSkeleton
-      src={van.gallery[0]}
-      alt={van?.van_listing?.title}
-      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-    />
-  ) : (
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-      {/* subtle pattern */}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-
-      {/* big model / year feel */}
-      <span className="text-gray-500 text-xs uppercase tracking-widest">
-        Image coming soon
-      </span>
-    </div>
-  )}
-
-  {/* SOLD Stamp */}
-  {van?.status === "sold" && (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-      <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
-        SOLD
-      </div>
-    </div>
-  )}
-
-  {/* Gradient overlay – always */}
-  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
-
-  {/* Content */}
-  <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
-    <Heading3 text={van?.van_listing?.title || "Custom Camper Build"} />
-
-    <RichParagraph className="text-white/80 text-sm">
-      View Details →
-    </RichParagraph>
-  </div>
-</div>
-
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center">
-                <p className="text-gray-400 text-lg">No sold vans found.</p>
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-center mt-12">
-            <BlackButton
-              onClick={onLoadMore}
-              disabled={loading || !hasMore}
-              label={
-                loading
-                  ? "Fetching..."
-                  : !hasMore
-                    ? "No More Builds"
-                    : "Load More Builds"
-              }
-            />
-          </div>
 
         </div>
-      </section>) : ""}
-    </>
+
+        {/* --- Vans Grid --- */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {vans.map((van) => (
+            <div
+              key={van._id}
+              className="group relative flex flex-col bg-white shadow-sm hover:shadow-xl transition-all duration-500 border border-[var(--color-primary)]/10 rounded-lg"
+            >
+              {/* Image Container */}
+              <Link to={`/van-detail/${van.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-[var(--color-primary)]/5 rounded-t-lg">
+
+                {van?.gallery?.[0] ? (
+                  <ImageWithSkeleton
+                    src={van.gallery[0]}
+                    alt={van?.van_listing?.title}
+                    className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--color-primary)]/10">
+                    <span className="text-[var(--color-primary)] opacity-40 text-[10px] font-bold uppercase tracking-widest">Gallery Coming Soon</span>
+                  </div>
+                )}
+
+                {/* Elegant Sold Tag */}
+                <div className="absolute top-4 right-4 z-20">
+                  <div className="bg-[var(--color-primary)] text-[var(--color-secondary)] text-[9px] font-black px-3 py-1.5 uppercase tracking-widest shadow-lg rounded-sm">
+                    Sold Out
+                  </div>
+                </div>
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[var(--color-primary)]/30 backdrop-blur-[2px]">
+                   <div className="bg-[var(--color-secondary)] text-[var(--color-primary)] px-5 py-2 font-bold text-xs uppercase tracking-widest shadow-2xl rounded-lg">
+                     View Build
+                   </div>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)]/40 via-transparent to-transparent z-0" />
+              </Link>
+
+              {/* Info Bottom */}
+              <div className="p-6">
+                <div className="mb-4">
+                   <Heading3 text={van?.van_listing?.title || "Signature Build"} className="text-[var(--color-primary)] text-lg mb-1" />
+                   <RichParagraph className=" uppercase">
+                      {van?.van_listing?.subtitle || "Premium Conversion"}
+                   </RichParagraph>
+                </div>
+
+                <div className="h-[1px] w-full bg-[var(--color-secondary)] mb-4" />
+
+                <div className="flex items-center justify-between">
+                  <CustomLink  to={`/van-detail/${van.slug}`} text={"  Full Specs →"}/>
+
+                  <div className="w-2 h-2 rounded-full bg-[var(--color-highlight)] group-hover:animate-ping" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* --- Load More Section --- */}
+        <div className="flex flex-col items-center mt-20">
+          <div className="w-12 h-[3px] bg-[var(--color-highlight)] mb-8 rounded-full" />
+          <SecondaryButton
+            onClick={onLoadMore}
+            disabled={loading || !hasMore}
+            label={
+              loading
+                ? "Opening Vault..."
+                : !hasMore
+                  ? "End of Archive"
+                  : "Load More Past Builds"
+            }
+          />
+        </div>
+
+      </div>
+    </section>
   );
 }

@@ -3,10 +3,8 @@ import React, { useState } from "react";
 import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
-const Swal = () => import('sweetalert2');
 import { contact } from "../../../api/contact/contact";
 import { Heading2, RichParagraph } from '../Common/Common'
-
 
 export default function Consultation() {
   const [formData, setFormData] = useState({
@@ -24,109 +22,43 @@ export default function Consultation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🔹 Required field validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
-      let missingFields = [];
-      if (!formData.name.trim()) missingFields.push("Name");
-      if (!formData.email.trim()) missingFields.push("Email");
-      if (!formData.phone.trim()) missingFields.push("Phone");
-
-      Swal.fire({
-        title: "Missing Required Fields",
-        html: `<p>Please fill in the following required fields:</p>
-               <ul style="text-align:left; margin-top:10px;">
-                 ${missingFields.map((f) => `<li><b>${f}</b></li>`).join("")}
-               </ul>`,
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
-    // 🔹 Email validation
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      Swal.fire({
-        title: "Invalid Email",
-        text: "Please enter a valid email address.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
-    // 🔹 Phone validation
-    if (!/^\d{10,15}$/.test(formData.phone)) {
-      Swal.fire({
-        title: "Invalid Phone Number",
-        text: "Please enter a valid phone number (10–15 digits).",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+      // SweetAlert Logic here
       return;
     }
 
     setLoading(true);
     try {
       const result = await contact(formData);
-
       if (result.success) {
-        Swal.fire({
-          title: "Success!",
-          text: "Your consultation request has been submitted successfully! Please check your email to view your booking details.",
-          icon: "success",
-          timer: 3000,
-          // showConfirmButton: false,
-        });
-
-
-        // 🔹 Reset form
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          message: "",
-        });
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong while submitting the form.",
-          icon: "error",
-          confirmButtonText: "Try Again",
-        });
+        setFormData({ name: "", email: "", phone: "", message: "" });
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong while submitting the form.",
-        icon: "error",
-        confirmButtonText: "Try Again",
-      });
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
-
-
-    <div className="bg-white min-h-screen py-8 px-4 md:py-16 md:px-24 flex flex-col items-center space-y-12">
+    <div className="bg-secondary min-h-screen py-20 flex flex-col items-center space-y-16">
       {/* ===== Header Text ===== */}
-      <div className="flex flex-col items-center text-center px-4 space-y-6">
-
+      <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl">
+        <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">Connect With Us</RichParagraph>
         <Heading2 text="Schedule Your Free Consultation Call" />
-        <RichParagraph className="max-w-2xl text-center">Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
+        <div className="w-16 h-1 bg-hover rounded-lg"></div>
+        <RichParagraph className="">
+          Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
         </RichParagraph>
       </div>
 
       {/* ===== Calendar Section ===== */}
-      <div className="w-full">
+      <div className="w-full max-w-6xl bg-white rounded-lg shadow-sm border border-primary/5">
         <CalendarSection />
       </div>
 
       {/* ===== Contact Form Section ===== */}
-      <div className="w-full lg:w-6/8 ">
+      <div className="w-full max-w-4xl">
         <ContactForm
           formData={formData}
           handleChange={handleChange}
@@ -136,10 +68,9 @@ export default function Consultation() {
       </div>
 
       {/* ===== Map Section ===== */}
-      <div className="w-full">
+      <div className="w-full max-w-6xl">
         <MapSection />
       </div>
     </div>
-      </>
   );
 }

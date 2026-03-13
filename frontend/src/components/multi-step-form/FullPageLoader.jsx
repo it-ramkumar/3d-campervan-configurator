@@ -17,7 +17,7 @@ export default function FullPageLoader() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         @keyframes loading-bar {
           0% { width: 0%; }
           50% { width: 70%; }

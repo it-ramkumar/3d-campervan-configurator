@@ -1,330 +1,173 @@
 "use client";
-
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton } from '../../Common/Common'
+import {
+  Truck,
+  PencilRuler,
+  Cpu,
+  Hammer,
+  KeyRound,
+  CheckCircle2,
+  Calendar
+} from "lucide-react";
+import { Heading2,Heading4, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton,CustomLink } from '../../Common/Common'
 
-// Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// Data for the process steps
 const processSteps = [
   {
     time: "Immediate",
+    icon: <Truck size={24} />,
     title: "Start Your Journey: Vehicle Sourcing",
-    imageSrc: "/images/process1.webp",
+    imageSrc: "/images2/op4.webp",
     altText: "Vans parked in a row",
     details: [
-      {
-        subtitle: "Bring Your Van",
-        description:
-          "Already own a Sprinter? We’ll inspect it and plan your build.",
-      },
-      {
-        subtitle: "We’ll Source It For You",
-        description:
-          "Access a brand-new van directly from a Mercedes dealer at a great price. We leverage our purchasing power in the LA/San Diego market to secure preferential pricing, handling all negotiations, paperwork, and delivery to our facility.",
-      },
+      { subtitle: "Bring Your Van", description: "Already own a Sprinter? We’ll inspect it and plan your build." },
+      { subtitle: "We’ll Source It For You", description: "Access a brand-new van directly from a Mercedes dealer at a great price. We secure preferential pricing in LA/San Diego and handle all paperwork." },
     ],
   },
   {
     time: "1 Month",
+    icon: <PencilRuler size={24} />,
     title: "Collaborative Design Phase",
-    imageSrc: "/images/process3.webp",
+    imageSrc: "/images2/Client.webp",
     altText: "Designers collaborating on a 3D model",
     details: [
-      {
-        subtitle: "Zoom Consultations",
-        description:
-          "Meet your Project Manager to discuss needs (adventure trips, family size, storage priorities).",
-      },
-      {
-        subtitle: "3D Renderings",
-        description:
-          "Our designers create photorealistic visuals of your van’s layout, color schemes, and materials.",
-      },
-      {
-        subtitle: "Refine & Approve",
-        description: "Tweaks are unlimited until you’re 100% satisfied.",
-      },
+      { subtitle: "Zoom Consultations", description: "Meet your Project Manager to discuss adventure trips, family size, and storage priorities." },
+      { subtitle: "3D Renderings & Refine", description: "Our designers create photorealistic visuals. Tweaks are unlimited until you’re 100% satisfied." },
     ],
   },
   {
     time: "2 Months",
+    icon: <Cpu size={24} />,
     title: "Engineering & Precision Planning",
-    imageSrc: "/images/process4.webp",
+    imageSrc: "/images2/op3.png",
     altText: "3D rendering of a van interior",
     details: [
-      {
-        subtitle: "What Happens",
-        description:
-          "Our engineers ensure every detail (electrical systems, storage dimensions, weight distribution) is optimized for safety and functionality.",
-      },
-      {
-        subtitle: "Client Involvement",
-        description:
-          "Approve final blueprints and material samples (e.g., countertop finishes, fabric swatches).",
-      },
+      { subtitle: "Systems Optimization", description: "Engineers ensure electrical, storage, and weight distribution are optimized for safety and functionality." },
+      { subtitle: "Client Involvement", description: "Approve final blueprints and material samples like countertop finishes and fabric swatches." },
     ],
   },
   {
     time: "3-4 Months",
+    icon: <Hammer size={24} />,
     title: "Build & Assembly",
-    imageSrc: "/images/process6.webp",
+    imageSrc: "/images2/op5.png",
     altText: "A camper van being built in a workshop",
     details: [
-      {
-        subtitle: "Interior Build (2 Months)",
-        description: "Cabinetry, electrical, plumbing, and insulation installed.",
-      },
-      {
-        subtitle: "Exterior Upgrades (1 Month)",
-        description:
-          "Roof racks, solar panels, custom paint/wraps, or off-grid packages.",
-      },
-      {
-        subtitle: "Quality Checks",
-        description: "Weekly photo/video updates sent to you.",
-      },
+      { subtitle: "Interior & Exterior Build", description: "Cabinetry, electrical, plumbing, and roof racks or solar panels are installed by experts." },
+      { subtitle: "Quality Checks", description: "Weekly photo/video updates are sent to you so you can watch your van come to life." },
     ],
   },
   {
     time: "Pickup",
+    icon: <KeyRound size={24} />,
     title: "Delivery & Beyond",
-    imageSrc: "/images/process5.webp",
+    imageSrc: "/heroSlider/contact.webp",
     altText: "A converted camper van in a scenic location",
     details: [
-      {
-        subtitle: "Walkthrough & Test Drive",
-        description: "Learn every feature with our team.",
-      },
-      {
-        subtitle: "Lifetime Support",
-        description: "1-Year Warranty (3 years extended) on craftsmanship.",
-      },
-      {
-        subtitle: "Upgrades & Servicing",
-        description:
-          "Visit our California workshops for maintenance or new features.",
-      },
+      { subtitle: "Walkthrough & Test Drive", description: "Learn every feature with our team to ensure you're ready for the road." },
+      { subtitle: "Lifetime Support", description: "1-Year Warranty (3 years extended) and lifetime access to our California workshops." },
     ],
   },
 ];
 
 export default function OurProcess() {
-
-
-  const headerRef = useRef(null);
-  const stepsRef = useRef([]);
-  const buttonRef = useRef(null);
-  const timelineRef = useRef(null);
-  const timelineFillRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    stepsRef.current = [];
-  }, []);
-
-  const addStepRef = (el) => {
-    if (el && !stepsRef.current.includes(el)) {
-      stepsRef.current.push(el);
-    }
-  };
-
-  useEffect(() => {
-    // Header animation
-    gsap.fromTo(
-      headerRef.current,
-      { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
-    );
-
-    // Timeline fill animation on scroll
-    gsap.fromTo(
-      timelineFillRef.current,
-      { height: 0 },
-      {
-        height: "100%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "top center",
-          end: "bottom center",
-          scrub: true,
-        },
-      }
-    );
-
-    // Enhanced scroll animation for each step
-    stepsRef.current.forEach((step, index) => {
-      const isEven = index % 2 === 0;
-      const textContent = step.querySelector(".text-content");
-      const imageContent = step.querySelector(".image-content");
-      const timelineCircle = step.querySelector(".timeline-circle");
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: step,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray(".process-card").forEach((card) => {
+        gsap.from(card, {
+          opacity: 0,
+          y: 50,
+          duration: 1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          }
+        });
       });
-
-      if (timelineCircle) {
-        tl.fromTo(
-          timelineCircle,
-          { scale: 0 },
-          { scale: 1, duration: 0.5, ease: "back.out(1.7)" }
-        );
-      }
-      if (textContent) {
-        tl.fromTo(
-          textContent,
-          { opacity: 0, x: isEven ? -50 : 50 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.3"
-        );
-      }
-      if (imageContent) {
-        tl.fromTo(
-          imageContent,
-          { opacity: 0, x: isEven ? 50 : -50 },
-          { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" },
-          "<"
-        );
-      }
-    });
-
-    // Button animation
-    gsap.fromTo(
-      buttonRef.current,
-      { opacity: 0, scale: 0.8 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-        scrollTrigger: {
-          trigger: buttonRef.current,
-          start: "top 95%",
-          toggleActions: "play none none none",
-        },
-      }
-    );
+    }, containerRef);
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div className="bg-black/75 text-white  py-10 md:py-24 px-4 md:px-8 font-serif overflow-x-hidden">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-20" ref={headerRef}>
-          <Heading2 text={"Big Bear Vans Custom Build Process"} className="text-white" />
+    <section ref={containerRef} className="bg-secondary py-20 overflow-hidden antialiased font-sans">
+      <div className="container mx-auto px-4 max-w-7xl">
 
-          <RichParagraph white={true} className="max-w-2xl mx-auto"> Our transparent, collaborative process ensures your vision comes to
-            life, from initial ideas to keys in your hand. Here's how it works.</RichParagraph>
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
+          <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase mb-4 block">Our Methodology</RichParagraph>
+          <Heading2 text={"Big Bear Vans Custom Build Process"} />
+          <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg my-8"></div>
+          <RichParagraph>
+            Our transparent, collaborative process ensures your vision comes to life, from initial ideas to keys in your hand.
+          </RichParagraph>
         </div>
 
-        {/* Process Steps Container with Timeline Line */}
-        <div
-          ref={timelineRef}
-          className="group relative space-y-24
-                     before:hidden before:lg:block before:absolute before:left-1/2 before:top-0
-                     before:h-full before:w-0.5 before:bg-[#4a4a4a] before:-translate-x-1/2"
-        >
-          <div
-            ref={timelineFillRef}
-            className="hidden lg:block absolute left-1/2 top-0 h-full w-0.5 bg-white
-                       -translate-x-1/2 transition-shadow duration-300 group-hover:shadow-glow"
-          ></div>
+        {/* Timeline Grid */}
+        <div className="relative">
+          {/* Vertical Line */}
+          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-primary/10 -translate-x-1/2"></div>
 
-          {processSteps.map((step, index) => {
-            const isEven = index % 2 === 0;
+          <div className="space-y-32">
+            {processSteps.map((step, index) => (
+              <div key={index} className={`process-card flex flex-col lg:flex-row items-center md:gap-[var(--gap-lg)] gap-0 ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
 
-            const textContent = (
-              <div
-                className="text-content relative lg:static border-l-4 border-[#4a4a4a] lg:border-none pl-8 lg:pl-0
-                           transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
-              >
-                <div
-                  className="absolute lg:hidden -left-[10px] top-2 w-5 h-5 bg-white rounded-full
-                             ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500"
-                ></div>
-                <div className="flex flex-col justify-center">
-                  <RichParagraph className="mt-4" white={true}>
-                    {step.time}
-                  </RichParagraph>
-                  <Heading3 text={step.title} className="text-white" />
+                {/* Image Side */}
+                <div className="w-full lg:w-[45%]">
+                  <div className="relative group overflow-hidden rounded-lg shadow-xl border-4 border-white transition-transform duration-700 hover:scale-[1.02]">
+                    <ImageWithSkeleton
+                      src={step.imageSrc}
+                      alt={step.altText}
+                      className="w-full h-full aspect-[6/4] object-cover"
+                    />
+                    {/* Time Badge */}
+                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg flex items-center gap-[var(--gap-sm)] border border-primary/5">
+                      <Calendar size={14} className="text-hover" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">{step.time}</span>
+                    </div>
+                  </div>
+                </div>
 
+                {/* Center Icon */}
+                <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-14 h-14 rounded-lg bg-white shadow-xl border-2 border-hover items-center justify-center z-10 transition-colors group-hover:bg-hover">
+                  <div className="text-hover">{step.icon}</div>
+                </div>
 
-                  <div className="space-y-4">
-                    {step.details.map((item, idx) => (
-                      <div key={idx}>
-                        <Heading3 text={item.subtitle} className="text-white" />
-                        <RichParagraph white={true}>
-                          {item.description}
-                        </RichParagraph>
+                {/* Content Side */}
+                <div className={`w-full lg:w-[45%] ${index % 2 !== 0 ? 'lg:pr-20' : 'lg:pl-20'}`}>
+                  <div className="inline-flex items-center gap-[var(--gap-sm)] mb-4">
+                    <CheckCircle2 size={16} className="text-hover" />
+                    <RichParagraph className="font-bold uppercase !text-xs text-hover">Step 0{index + 1}</RichParagraph>
+                  </div>
+                  <Heading3 text={step.title} className="mb-8" />
 
+                  <div className="space-y-8">
+                    {step.details.map((detail, dIdx) => (
+                      <div key={dIdx} className="relative pl-6 before:absolute before:left-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-hover before:rounded-full">
+                        <Heading4 text={detail.subtitle} className="mb-2"/>
+                        <RichParagraph>{detail.description}</RichParagraph>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            );
 
-            const imageContent = (
-              <div
-                className="image-content w-full relative overflow-hidden rounded-lg shadow-2xl
-                           transition-all duration-300 ease-in-out lg:hover:scale-105 lg:hover:shadow-glow"
-              >
-                <ImageWithSkeleton
-                  src={step.imageSrc}
-                  alt={step.altText}
-                  className=" object-cover"
-                />
               </div>
-            );
-
-            const timelineCircle = (
-              <div className="timeline-circle hidden lg:flex items-center justify-center">
-                <div
-                  className="w-5 h-5 bg-white rounded-full z-10
-                             ring-2 ring-offset-2 ring-offset-black/75 ring-gray-500
-                             transition-all duration-300 ease-in-out hover:ring-white hover:shadow-glow"
-                ></div>
-              </div>
-            );
-
-            return (
-              <div
-                key={index}
-                ref={addStepRef}
-                className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] lg:gap-16 items-center"
-              >
-                {isEven ? (
-                  <>
-                    <div className="mb-8 lg:mb-0">{textContent}</div>
-                    {timelineCircle}
-                    <div>{imageContent}</div>
-                  </>
-                ) : (
-                  <>
-                    <div className="mb-8 lg:mb-0 lg:col-start-3">{textContent}</div>
-                    <div className="lg:col-start-2 lg:row-start-1">{timelineCircle}</div>
-                    <div className="lg:col-start-1 lg:row-start-1">{imageContent}</div>
-                  </>
-                )}
-              </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
-        {/* Call to action button */}
-        <div className="mt-20 text-center" ref={buttonRef}>
-          <WhiteButton label={"Get a Quote"} link="/contact" />
-
-
+        {/* Global CTA */}
+        <div className="mt-32 text-center bg-white p-12 md:p-20 rounded-lg shadow-sm border border-primary/5">
+           <Heading3 text="Ready to start your build?" className="mb-8 text-primary" />
+           <SecondaryButton label={"Get a Custom Quote"} link="/contact" />
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }

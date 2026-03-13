@@ -1,72 +1,92 @@
 "use client";
 import React from "react";
-import  { Heading2, RichParagraph,ImageWithSkeleton, BlackButton } from '../../Common/Common'
-
+import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton } from '../../Common/Common'
 
 const images = [
-  { id: 1, src: "/images/p1.webp", alt: "Spacious custom van interior" },
-  { id: 2, src: "/images/p2.jpg", alt: "Overhead view of kitchen" },
-  { id: 3, src: "/images/p3.webp", alt: "Compact kitchenette" },
-  { id: 4, src: "/images/p4.webp", alt: "Sleeping nook" },
-  { id: 5, src: "/images/p5.webp", alt: "Storage solutions" },
+  { id: 1, src: "/images/p1.webp",alt: "Overhead view of kitchen", tag: "Kitchenette"
+     },
+  { id: 2, src: "/images2/finance.webp",alt: "Spacious custom van interior", tag: "Living Space"  },
+  { id: 3, src: "/images/p3.webp", alt: "Compact kitchenette", tag: "Details" },
+  { id: 4, src: "/images/p4.webp",alt: "Storage solutions", tag: "Storage" },
+  { id: 5, src: "/images/p5.webp", alt: "Sleeping nook", tag: "Comfort"  },
 ];
 
-
 export default function Portfolio() {
-  // Mobile par height ko override karne ke liye !important style ya strict class
-  const PortfolioImage = ({ img, className }) => (
-    <div className={`relative rounded-xl overflow-hidden border-2 border-gray-800 shadow-sm ${className}`}>
+
+  const PortfolioImage = ({ img, className, priority = false }) => (
+    <div className={`group relative rounded-lg overflow-hidden border-2 border-white shadow-sm transition-all duration-500 hover:shadow-xl ${className}`}>
       <ImageWithSkeleton
         src={img.src}
         alt={img.alt}
-        className="absolute inset-0 w-full h-full object-cover" // Image ko container ke andar fit karne ke liye
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+        priority={priority}
       />
+      {/* Overlay on Hover using theme colors */}
+      <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+         <span className="text-secondary text-[10px] font-black uppercase tracking-[0.2em] bg-hover px-3 py-1.5 rounded-lg shadow-lg">
+            {img.tag}
+         </span>
+      </div>
     </div>
   );
 
   return (
-    <section className="w-full mt-10 md:mt-24 py-12 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-6 lg:mb-16">
-          <Heading2 text={"From Dream to Your Driveway"} />
-          <RichParagraph>
-            Take a look at some of our best custom vans.
+    // Background secondary (#F5F5F0) use kiya hai taake sequence barkarar rahe
+    <section className="w-full py-20 bg-secondary antialiased">
+      <div className="container mx-auto px-4 max-w-7xl">
 
-          </RichParagraph>
-
-        </div>
-
-        {/* --- DESKTOP VIEW (Same as before) --- */}
-        <div className="hidden lg:grid grid-cols-[492px_1fr] gap-4 max-w-screen-xl mx-auto h-[725px]">
-          <PortfolioImage img={images[0]} className="h-full" />
-          <div className="grid grid-rows-[402px_1fr] gap-4">
-            <PortfolioImage img={images[1]} className="w-full" />
-            <div className="grid grid-cols-3 gap-4">
-              {images.slice(2).map((img, index) => (
-                <PortfolioImage key={img.id} img={img} className="h-full"      // ✅ Best for below the fold
-                 priority={true}
-                 sizes="(max-width: 768px) 655px, 1200px" // ✅ Yahan pass karo
-
-                 />
-              ))}
-            </div>
+        {/* --- Header --- */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-primary/10 pb-10">
+          <div className="max-w-2xl">
+            <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase mb-3 block">Our Craft</RichParagraph>
+            <Heading2 text="From Dream to Your Driveway" />
+            <RichParagraph className="mt-4">
+              Explore the craftsmanship and attention to detail in our latest custom van conversions.
+            </RichParagraph>
           </div>
         </div>
 
-        {/* --- MOBILE VIEW (Strict Height Control) --- */}
-        <div className="flex flex-col gap-3 lg:hidden">
-          {images.map((img,index) => (
-            <div key={img.id} className="w-full relative h-[160px]"> {/* Height ko 160px kar diya hai */}
-              <PortfolioImage img={img} className="w-full h-full"  priority={true}
-                sizes="(max-width: 768px) 655px, 1200px" // ✅ Yahan pass karo
-/>
+        {/* --- DESKTOP VIEW (Bento Grid) --- */}
+        <div className="hidden lg:grid grid-cols-12 gap-[var(--gap-sm)] h-[750px]">
+          {/* Main Large Image */}
+          <div className="col-span-5 h-full">
+             <PortfolioImage img={images[0]} className="h-full" priority={true} />
+          </div>
+
+          {/* Right Side Complex Grid */}
+          <div className="col-span-7 grid grid-rows-12 gap-[var(--gap-sm)] h-full">
+             {/* Middle Wide Image */}
+             <div className="row-span-7">
+                <PortfolioImage img={images[1]} className="h-full" />
+             </div>
+             {/* Bottom Three Small Images */}
+             <div className="row-span-5 grid grid-cols-3 gap-[var(--gap-sm)]">
+                {images.slice(2).map((img) => (
+                   <PortfolioImage key={img.id} img={img} className="h-full" />
+                ))}
+             </div>
+          </div>
+        </div>
+
+        {/* --- MOBILE VIEW --- */}
+        <div className="flex flex-col gap-[var(--gap-sm)] lg:hidden">
+          {images.slice(0, 4).map((img) => (
+            <div key={img.id} className="w-full relative h-[250px]">
+              <PortfolioImage img={img} className="w-full h-full" />
             </div>
           ))}
         </div>
 
-        {/* Action Button */}
-        <div className="flex justify-center mt-8 lg:mt-16">
-          <BlackButton label="View Our Portfolio" link="/van-layouts" />
+        {/* --- Action CTA --- */}
+        <div className="flex flex-col items-center mt-12 lg:mt-20">
+          <SecondaryButton
+            label="Explore Full Gallery"
+            link="/van-layouts"
+            className="!rounded-lg !px-12 !py-4 shadow-lg hover:-translate-y-1 transition-all"
+          />
+          <p className="mt-6 text-[10px] font-black uppercase tracking-widest text-primary/40">
+              Updated Weekly • 2026 Collection
+          </p>
         </div>
 
       </div>

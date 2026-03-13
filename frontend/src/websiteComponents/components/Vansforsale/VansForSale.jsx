@@ -101,28 +101,40 @@ export default function VansForSale() {
     createServiceSchema(),
   ].filter(Boolean);
 
-  const vanCount = availableVans.length;
-  const pageTitle = vanCount > 0
-    ? `(${vanCount}) Available Vans for Sale | Big Bear Vans`
-    : "Custom Camper Vans for Sale | Big Bear Vans";
+  /* ================= SEO LOGIC ================= */
+  const availableCount = availableVans.length;
+  const totalCount = availableVans.length + soldVans.length + pendingVans.length + comingVans.length;
 
-  const pageDesc = "Expert Custom Camper Van Builds. Browse our available inventory or let us build your dream van. Over 105+ high-quality custom builds completed.";
+  // Step 1: Default Title jo hamesha rahega (Jab tak data load ho raha ho)
+  let pageTitle = "Custom Camper Vans for Sale | Big Bear Vans";
+
+  // Step 2: Agar Available vans hain toh unhe priority dein
+  if (availableCount > 0) {
+    pageTitle = `${availableCount} Available Custom Vans for Sale | Big Bear Vans`;
+  }
+  // Step 3: Agar available nahi hain par doosri categories hain
+  else if (totalCount > 0) {
+    pageTitle = "Browse Our Custom Camper Van Inventory | Big Bear Vans";
+  }
+
+  // Simple Description jo 4 categories ko cover kare
+  const pageDesc = `Explore our ${availableCount || 'latest'} available builds, upcoming projects, and sold gallery. Over 105+ high-quality custom Sprinter and Transit conversions by Big Bear Vans.`;
+
   const pageImage = "https://bigbearvans.com/images/ambulance.webp"; // Ek achi inventory ki image ka path
-  const currentUrl = "https://bigbearvans.com/vans-for-sale";
   return (
     <main>
       {/* --- React 19 Native Metadata Hoisting --- */}
       <title>{pageTitle}</title>
       <meta name="keywords" content="buy custom camper van, used sprinter camper for sale, ready to go campervans, inventory big bear vans" />
       <meta name="description" content={pageDesc} />
-      <link rel="canonical" href={currentUrl} />
+      <link rel="canonical" href="https://bigbearvans.com/vans-for-sale" />
       <meta name="robots" content="index, follow" />
       {/* Open Graph (Facebook, WhatsApp, LinkedIn) */}
       <meta property="og:type" content="website" />
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={pageDesc} />
       <meta property="og:image" content={pageImage} />
-      <meta property="og:url" content={currentUrl} />
+      <meta property="og:url" content="https://bigbearvans.com/vans-for-sale" />
 
       {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -134,24 +146,23 @@ export default function VansForSale() {
       </script>
 
       <Navbar />
-      <HeroSection title="Camper Vans For Sale" description="Buy our exclusive and ready-to-roll vans for sale Today." image="/heroSlider/herov.webp" link="/inquiry" buttonText="Get a Quote" showButton={true} />
-<Suspense fallback={<Loader />}>
-      <AvailableVans availableVans={availableVans} hasMore={availableHasMore} loading={availableLoading} onLoadMore={() => setAvailablePage(p => p + 1)} />
-</Suspense>
-<Suspense fallback={<Loader />}>
-      <SoldVans status="coming_soon" vans={comingVans} soldHeading="Upcoming Camper Vans" soldDesc="Planned builds coming soon." hasMore={comingHasMore} loading={comingLoading} onLoadMore={() => setComingPage(p => p + 1)} />
-      <SoldVans status="sale_pending" vans={pendingVans} soldHeading="Sale Pending Vans" soldDesc="Reserved builds in final stages." hasMore={pendingHasMore} loading={pendingLoading} onLoadMore={() => setPendingPage(p => p + 1)} />
-  <SoldVans status="sold" vans={soldVans} soldHeading="A Showcase of our Sold Camper Vans
+      <HeroSection title="Camper Vans For Sale" description="Buy our exclusive and ready-to-roll vans for sale Today." image="/images2/vfs.webp" link="/inquiry" buttonText="Get a Quote" showButton={true} />
+      {/* <Suspense fallback={<Loader />}> */}
+        <AvailableVans availableVans={availableVans} hasMore={availableHasMore} loading={availableLoading} onLoadMore={() => setAvailablePage(p => p + 1)} />
+      {/* </Suspense> */}
+      {/* <Suspense fallback={<Loader />}> */}
+        <SoldVans status="coming_soon" vans={comingVans} soldHeading="Upcoming Camper Vans" soldDesc="Planned builds coming soon." hasMore={comingHasMore} loading={comingLoading} onLoadMore={() => setComingPage(p => p + 1)} />
+        <SoldVans status="sale_pending" vans={pendingVans} soldHeading="Sale Pending Vans" soldDesc="Reserved builds in final stages." hasMore={pendingHasMore} loading={pendingLoading} onLoadMore={() => setPendingPage(p => p + 1)} />
+        <SoldVans status="sold" vans={soldVans} soldHeading="A Showcase of our Sold Camper Vans
 " soldDesc="The camper vans below have already found their happy owners. We’ve proudly built over 105 camper vans with a reputation for quality.Check our past builds to get inspired for your custom van." hasMore={soldHasMore} loading={soldLoading} onLoadMore={() => setSoldPage(p => p + 1)} />
-</Suspense>
+      {/* </Suspense> */}
 
 
-<Suspense fallback={<Loader />}>
-  <Consultation vanForSale={true} />
-  <FaqV faqs={faqs} />
-  <Footer />
-</Suspense>
-
+      <Suspense fallback={<Loader />}>
+        <Consultation vanForSale={true} />
+        <FaqV faqs={faqs} />
+      </Suspense>
+<Footer />
     </main>
   );
 }

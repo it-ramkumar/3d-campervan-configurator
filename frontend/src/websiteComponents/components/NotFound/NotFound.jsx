@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
@@ -17,12 +18,12 @@ const NotFound = () => {
 
   return (
     <>
-
+      <Helmet>
         <title>404 - Page Not Found | BigBear Vans</title>
         <meta name="robots" content="noindex, nofollow" />
         <meta name="prerender-status-code" content="404" />
         <meta name="description" content="The page you are looking for does not exist or has been moved." />
-   
+      </Helmet>
 
       <Navbar />
       <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 text-gray-800 p-4">

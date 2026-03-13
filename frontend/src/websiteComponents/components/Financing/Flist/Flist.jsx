@@ -1,22 +1,21 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Shield, Car, Home, CreditCard, Phone, CheckCircle, Star, ArrowUpRight, Building, FileText, DollarSign, Users, HomeIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Car, Home, CreditCard, Building,Wallet, BadgeCheck, ArrowRight, ShieldCheck,Landmark  } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heading2, Heading3, RichParagraph, Heading4, WhiteButton } from '../../Common/Common'
+import { Heading2, Heading3, RichParagraph, Heading4, PrimaryButton, CustomLink, SecondaryButton } from '../../Common/Common'
 import { Link } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Financing() {
+export default function Flist() {
   const [activeSection, setActiveSection] = useState("new-builds");
   const containerRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // General Fade In for sections
       gsap.utils.toArray(".anim-section").forEach((section) => {
         gsap.from(section, {
           y: 40,
@@ -30,23 +29,7 @@ export default function Financing() {
           },
         });
       });
-
-      // Card hover animations
-      gsap.utils.toArray(".finance-card").forEach((card) => {
-        gsap.from(card, {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        });
-      });
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
@@ -57,496 +40,274 @@ export default function Financing() {
   ];
 
   return (
-    <div ref={containerRef} className="w-full bg-gray-50 font-serif text-[#1e2a4a] overflow-hidden">
+    <div ref={containerRef} className="w-full bg-secondary text-primary overflow-hidden">
 
       {/* Introduction Section */}
-      <section className="anim-section container mx-auto px-4 sm:px-6 pt-12 pb-8">
-        <div className="text-center mb-8 md:mb-12">
+      <section className="anim-section container mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <div className="text-center mb-12">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-16 h-16 bg-gradient-to-br from-[#1e2a4a] to-[#111827] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-[#1e2a4a]/50"
+            className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg"
           >
-            <CreditCard className="w-8 h-8 text-white" />
+            <CreditCard className="w-8 h-8 text-secondary" />
           </motion.div>
+
           <Heading2 text="Financing Your Dream Van" />
-          {/* <h1 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight text-black">Financing Your Dream Van</h1> */}
-          <div className="flex items-center justify-center gap-2 text-gray-500">
-            <span className="h-px w-8 bg-gray-300"></span>
-            <RichParagraph>
-              Premium Funding Solutions
-            </RichParagraph>
-            {/* <p className="text-xs uppercase tracking-widest font-semibold">Premium Funding Solutions</p> */}
-            <span className="h-px w-8 bg-gray-300"></span>
+
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <span className="h-px w-12 bg-hover"></span>
+            <RichParagraph className="!text-sm tracking-wider font-bold uppercase text-hover ">Premium Funding</RichParagraph>
+            <span className="h-px w-12 bg-hover"></span>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-center"
-          >
-            <RichParagraph>
-              You've completed your research and decided to trust Big Bear Vans for your dream campervan. But, before starting the process of choosing the{" "}
-              <Link
-                to="/van-options/interior-options"
-                className="text-blue-700 font-bold underline hover:text-blue-900"              >
-                interior
-              </Link>{" "}
-              &{" "}
-              <Link
-                to="/van-options/exterior-options"
-                className="text-blue-700 font-bold underline hover:text-blue-900"              >
-                exterior
-              </Link>{" "}
-              choices, the most important thing is finding a way to finance your van.
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center">
+            <RichParagraph >
+              You've completed your research and decided to trust Big Bear Vans for your dream campervan.
+              Before choosing your
+              <CustomLink to="/van-options/interior-options" text={" interior "}/>
+
+               &
+               <CustomLink to="/van-options/exterior-options" text={" exterior "}/>
+
+              options, the most important thing is finding a way to finance your van.
             </RichParagraph>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-gradient-to-r from-[#1e2a4a] to-[#111827] p-6 rounded-2xl border border-[#1e2a4a]/50 shadow-xl relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
-              <div className="relative z-10">
-                <RichParagraph white={true}>
-                  Traditional auto loans often do not cover the conversion. However, we have several trusted options and partners to help you fund your dream van.
-
-                </RichParagraph>
-              </div>
-            </motion.div>
-          </motion.div>
+          {/* Dark Info Box */}
+          <div className="bg-primary  p-8 rounded-lg shadow-2xl border border-primary">
+            <RichParagraph className="text-center text-secondary">
+              Traditional auto loans often do not cover the conversion. However, we have several trusted options and partners to help you fund your dream van.
+            </RichParagraph>
+          </div>
         </div>
       </section>
 
       {/* Navigation Tabs */}
-      <section className="anim-section py-6 bg-white border-y border-gray-200">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="flex flex-wrap justify-center gap-2 sm:gap-3"
-          >
+      <section className="anim-section py-8 border-y border-primary/10">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {navigationItems.map((item) => {
               const Icon = item.icon;
+              const isActive = activeSection === item.id;
+
               return (
-                <WhiteButton
-                  label={item.label}
+                <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl ${activeSection === item.id
-                    ? "bg-gradient-to-r from-[#1e2a4a] to-[#111827] text-white transform -translate-y-1 shadow-xl"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  className={`flex items-center gap-3 px-8 py-4 rounded-lg font-black text-xs uppercase tracking-widest transition-all duration-300 border-2 ${isActive
+                    ? "bg-primary text-secondary border-primary shadow-xl"
+                    : "bg-transparent text-primary border-primary/20 hover:border-primary"
                     }`}
-                />
-
-
-
+                >
+                  <Icon size={18} />
+                  {item.label}
+                </button>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Financing Options */}
-      <section className="anim-section container mx-auto px-4 sm:px-6 pb-16">
-
-        {/* New Builds Section */}
-        {activeSection === "new-builds" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="space-y-12"
-          >
-            <div className="text-center mb-12">
-              <Heading2 text="Financing for New Custom Builds" />
-              <RichParagraph >
-                If you are starting a new custom build with us, you have two common paths for financing.
-              </RichParagraph>
-
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {/* Option 1 */}
-              <div className="finance-card rounded-2xl p-0 shadow-xl flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-br from-[#1e2a4a] to-[#111827] border border-[#1e2a4a]/50 min-h-[400px] w-full max-w-md mx-auto">
-                {/* Header */}
-                <div className="p-6 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
-                      <Car className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <Heading3 text="Finance the Van Only" />
-                      <RichParagraph white={true}>
-                        (Most Common Method)
-                      </RichParagraph>
-
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 flex-grow flex flex-col gap-4">
-                  <RichParagraph white={true}>
-                    This is the most common route our clients take. The process is simple:
-                  </RichParagraph>
+      {/* Content Section */}
 
 
-                  <div className="space-y-4 flex-grow">
-                    <div className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-green-500/30">
-                        <CheckCircle className="w-3 h-3 text-green-400" />
-                      </div>
-                      <div className="flex-grow">
-                        <Heading4 text=" Finance the Van" />
-                        <RichParagraph white={true}>
-                          <span className="text-xs text-gray-300">
-                            You secure your own financing for the new Sprinter van chassis, often directly through Mercedes-Benz Financial Services.
-                          </span>
-                        </RichParagraph>
-                      </div>
-                    </div>
 
-                    <div className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-green-500/30">
-                        <CheckCircle className="w-3 h-3 text-green-400" />
-                      </div>
-                      <div className="flex-grow">
-                        <Heading4 text="Pay for Conversion" />
-                        <RichParagraph white={true}>
-                          <span className="text-xs text-gray-300">
-                            You pay for the custom conversion (typically $90,000 - $150,000) using cash or a separate line of credit.
-                          </span>
-                        </RichParagraph>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+<section className="anim-section container mx-auto px-4 sm:px-6 py-20 min-h-[600px]">
+  <AnimatePresence mode="wait">
+
+    {/* NEW BUILDS */}
+    {activeSection === "new-builds" && (
+      <motion.div key="new-builds" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+
+        <div className="text-center mb-12">
+          <Heading3 text="Financing for New Custom Builds" className="mb-4" />
+          <RichParagraph className="">
+            If you are starting a new custom build with us, you have two common paths for financing.
+          </RichParagraph>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+          {/* Card 1 */}
+          <div className="bg-primary p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-secondary/10 rounded-lg">
+                <Wallet className="text-secondary" size={28} />
               </div>
-
-              {/* Option 2 */}
-              <div className="finance-card rounded-2xl p-0 shadow-xl flex flex-col overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-br from-[#1e2a4a] to-[#111827] border border-[#1e2a4a]/50 min-h-[400px] w-full max-w-md mx-auto">
-                {/* Header */}
-                <div className="p-6 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
-                      <Shield className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <Heading4 text="All-in-One Loan" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          (Mercedes Sprinter Van + Conversion)  </span>
-                      </RichParagraph>
-
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 flex-grow flex flex-col gap-4">
-                  <div className="space-y-4 flex-grow">
-                    <div className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-blue-500/30">
-                        <Building className="w-3 h-3 text-blue-400" />
-                      </div>
-                      <div className="flex-grow">
-                        <Heading4 text="Partner" />
-                        <RichParagraph white={true}>
-                          <span className="text-xs text-gray-300">
-                            We work directly with a partner Mercedes dealership.
-                          </span>
-                        </RichParagraph>
-
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-blue-500/30">
-                        <CreditCard className="w-3 h-3 text-blue-400" />
-                      </div>
-                      <div className="flex-grow">
-                        <Heading4 text="Loan" />
-                        <RichParagraph white={true}>
-                          <span className="text-xs text-gray-300">
-                            They can include our estimate for the custom build into one extended 6-year car loan.
-                          </span>
-                        </RichParagraph>
-
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-blue-500/30">
-                        <Star className="w-3 h-3 text-blue-400" />
-                      </div>
-                      <div className="flex-grow">
-                        <Heading4 text="Requirements" />
-                        <RichParagraph white={true}>
-                          <span className="text-xs text-gray-300">
-                            This loan covers both the new Sprinter and the conversion, and typically requires a 30% down payment.
-                          </span>
-                        </RichParagraph>
-
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-white/5 p-3 rounded-lg border border-white/10 backdrop-blur-sm mt-auto">
-                    <RichParagraph white={true}>
-                      How to apply: please call us, we will go over the quote for a custom build, and then submit it together to the dealership.
-
-                    </RichParagraph>
-
-                  </div>
-                </div>
+              <div>
+                <Heading3 text="Finance the Van Only" className="mb-0 text-secondary" />
+                <p className="text-secondary/60 text-xs italic">(Most Common Method)</p>
               </div>
             </div>
-          </motion.div>
-        )}
 
-        {/* Pre-Built Vans Section */}
-        {activeSection === "pre-built" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="text-center mb-6 sm:mb-8">
-              <Heading2 text="Financing for Pre-Built Vans" />
-              {/* <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Financing for Pre-Built Vans</h2> */}
-              <RichParagraph>
-                If you are purchasing one of our completed, ready-to-go campervans, here are your primary financing options.
-
-              </RichParagraph>
-
-            </div>
-
-            <div className="finance-card rounded-2xl p-0 shadow-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-br from-[#1e2a4a] to-[#111827] border border-[#1e2a4a]/50 min-h-[520px] sm:min-h-[550px] w-full max-w-md mx-auto">
-              {/* Header */}
-              <div className="p-3 sm:p-4 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-lg sm:rounded-xl flex items-center justify-center border border-white/20 flex-shrink-0">
-                    <Building className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <Heading4 text="RV Loan Financing" />
-                    <RichParagraph white={true}>
-                      Through our trusted partner
-                    </RichParagraph>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-3 sm:p-4 flex flex-col h-[calc(520px-64px)] sm:h-[calc(550px-80px)]">
-                <div className="grid grid-cols-1 gap-1.5 sm:gap-2 mb-3 sm:mb-4 flex-grow">
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Provider" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Trident Funding - Specialized RV financing experts                          </span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Loan Type" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          RV Loan specifically designed for campervans                       </span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Requirements" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Good credit score and a 20% down payment. Minimum credit score typically 680+                        </span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Process" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Quick pre-approval with soft credit check that doesn't affect your credit score                        </span>
-                      </RichParagraph>
-
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Benefits" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Competitive interest rates, flexible terms (up to 15 years), quick approval process, specialized understanding of campervan values                       </span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-1.5 sm:gap-2">
-                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500/20 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 border border-green-500/30">
-                      <CheckCircle className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-green-400" />
-                    </div>
-                    <div className="flex-grow min-w-0">
-                      <Heading4 text="Loan Amounts" />
-                      <RichParagraph>
-                        <span className="text-xs text-gray-300">
-                          Available for campervans ranging from $50,000 to $250,000+                         </span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-yellow-500/10 p-2 rounded-lg border border-yellow-500/20 mb-3 sm:mb-4 backdrop-blur-sm">
-                  <RichParagraph>
-                    <strong>Note:</strong> We have had numerous clients successfully use this option, including for a $189,000 campervan. The application process is straightforward and our partners understand the unique nature of custom campervan financing.
-                  </RichParagraph>
-
-                </div>
-
-                <motion.a
-                  href="https://www.tridentfunding.com/rv-loans/?source=0&subsource=84&keycode=trident%20funding%20rv&promocode=17143878190&utm_source=google&utm_medium=cpc&utm_campaign=goog_tf_us_search_branded&utm_content=tf_rv_branded_ex&utm_term=trident%20funding%20rv&gad_source=1&gad_campaignid=17143878190&gbraid=0AAAAACqngBIVceM_a0q7g5nAU4smrIwfb&gclid=CjwKCAiAz_DIBhBJEiwAVH2XwJ_gATYaMNa92kICXqBKpYTmS1X_dR8o_URDk5w36fOiPJc3TbUw-xoC6lEQAvD_BwE"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-1/2 sm:w-1/2 bg-white text-[#1e2a4a] py-2 px-3 rounded-lg font-semibold text-[11px] sm:text-xs flex items-center justify-center gap-1.5 hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl mt-auto mx-auto"
-                >
-                  Start Your Application
-                  <ArrowUpRight className="w-3 h-3" />
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Alternative Financing Section */}
-        {activeSection === "alternative" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="max-w-2xl mx-auto"
-          >
-            <div className="text-center mb-12">
-              <Heading2 text="Alternative Financing" className="text-black" />
-              <RichParagraph>
-
-                Using Real Estate for Better Rates
-              </RichParagraph>
-
-            </div>
-
-            <div className="finance-card rounded-2xl p-0 shadow-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl bg-gradient-to-br from-[#1e2a4a] to-[#111827] border border-[#1e2a4a]/50 min-h-[400px] w-full max-w-lg mx-auto">
-              {/* Header */}
-              <div className="p-6 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
-                    <HomeIcon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <Heading4 text="Real Estate Collateral" />
-                    <RichParagraph white={true}>
-                      <span className="text-xs text-gray-300">
-                        Leverage your property for better terms</span>
-                    </RichParagraph>
-
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col h-[calc(400px-112px)]">
-                <div className="grid grid-cols-1 gap-4 mb-6 flex-grow">
-                  <div className="flex items-start gap-4">
-                    <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-purple-500/30">
-                      <Building className="w-3 h-3 text-purple-400" />
-                    </div>
-                    <div className="flex-grow">
-                      <Heading4 text="Provider" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          ADU Loans Net (CrossCountry Mortgage)</span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0 border border-purple-500/30">
-                      <CreditCard className="w-3 h-3 text-purple-400" />
-                    </div>
-                    <div className="flex-grow">
-                      <Heading4 text="Loan Type" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Uses your real estate as collateral</span>
-                      </RichParagraph>
-
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-green-500/10 p-3 rounded-lg border border-green-500/20 backdrop-blur-sm mt-auto">
-                  <div className="flex items-start gap-4">
-                    <Star className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
-                    <div className="flex-grow">
-                      <Heading4 text="Benefit" />
-                      <RichParagraph white={true}>
-                        <span className="text-xs text-gray-300">
-                          Often provides very good interest rates compared to traditional auto or RV loans.</span>
-                      </RichParagraph>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </section>
-
-      {/* CTA Section */}
-      <section className="anim-section w-full relative py-16 bg-gradient-to-br from-[#1e2a4a] to-[#111827]">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="max-w-2xl mx-auto"
-          >
-            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/20 shadow-xl">
-              <Phone className="w-8 h-8 text-white" />
-            </div>
-
-            <Heading3 text="Have Questions?" className="my-4" />
-            <RichParagraph white={true} className="my-6">
-              If you are unsure which option is best for you, please contact us. We will be happy to discuss your project and help you find the right path.
+            <RichParagraph className="text-secondary mb-8 border-b border-secondary/10 pb-4">
+              This is the most common route our clients take. The process is simple:
             </RichParagraph>
-            <WhiteButton label={"Contact Us Today"} />
-          </motion.div>
+
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <BadgeCheck className="text-secondary/50 shrink-0" size={24} />
+                <div>
+                  <Heading4 text="Finance the Van" className="mb-1 text-secondary" />
+                  <RichParagraph className="text-secondary/80 text-sm">
+                    You secure your own financing for the new Sprinter van chassis, often directly through Mercedes-Benz Financial Services.
+                  </RichParagraph>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <BadgeCheck className="text-secondary/50 shrink-0" size={24} />
+                <div>
+                  <Heading4 text="Pay for Conversion" className="mb-1 text-secondary" />
+                  <RichParagraph className="text-secondary/70 text-sm">
+                    You pay for the custom conversion (typically $90,000 - $150,000) using cash or a separate line of credit.
+                  </RichParagraph>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-primary p-8 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border border-primary/10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-secondary/10 rounded-lg">
+                <Landmark className="text-secondary" size={28} />
+              </div>
+              <div>
+                <Heading4 text="All-in-One Loan" className="mb-0 text-secondary" />
+                <p className="text-secondary/60 text-xs italic">(Mercedes Sprinter Van + Conversion)</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/5 transition-colors">
+                <ArrowRight size={18} className="text-secondary mt-1" />
+                <div>
+                  <Heading4 text="Partner" className="text-secondary text-base mb-0" />
+                  <RichParagraph className="text-secondary/80 text-sm">We work directly with a partner Mercedes dealership.</RichParagraph>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/5 transition-colors">
+                <ArrowRight size={18} className="text-secondary mt-1" />
+                <div>
+                  <Heading4 text="Loan" className="text-secondary text-base mb-0" />
+                  <RichParagraph className="text-secondary/80 text-sm">They can include our estimate for the custom build into one extended 6-year car loan.</RichParagraph>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/5 transition-colors">
+                <ArrowRight size={18} className="text-secondary mt-1" />
+                <div>
+                  <Heading4 text="Requirements" className="text-secondary text-base mb-0" />
+                  <RichParagraph className="text-secondary/80 text-sm">This loan covers both the new Sprinter and the conversion, and typically requires a 30% down payment.</RichParagraph>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-secondary/5 rounded-lg">
+              <RichParagraph className="text-secondary text-sm italic">
+                How to apply: please call us, we will go over the quote for a custom build, and then submit it together to the dealership.
+              </RichParagraph>
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+    )}
+
+    {/* PRE BUILT */}
+    {activeSection === "pre-built" && (
+      <motion.div key="pre-built" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <div className="text-center mb-12">
+          <Heading3 text="Financing for Pre-Built Vans" className="!text-primary mb-4" />
+          <RichParagraph className="!text-primary/70">
+            If you are purchasing one of our completed, ready-to-go campervans, here are your primary financing options.
+          </RichParagraph>
+        </div>
+
+        <div className="bg-primary p-10 rounded-lg shadow-2xl max-w-3xl mx-auto border border-primary/10">
+          <div className="flex items-center gap-4 mb-10 border-b border-secondary/10 pb-6">
+            <ShieldCheck className="text-secondary" size={40} />
+            <Heading3 text="RV Loan Financing" className="!mb-0 text-secondary" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+            {[
+              { title: "Provider", text: "Trident Funding - Specialized RV financing experts" },
+              { title: "Loan Type", text: "RV Loan specifically designed for campervans" },
+              { title: "Requirements", text: "Good credit score and a 20% down payment. Minimum credit score typically 680+" },
+              { title: "Process", text: "Quick pre-approval with soft credit check that doesn't affect your credit score" }
+            ].map((item, i) => (
+              <div key={i} className="group">
+                <Heading3 text={item.title} className="text-sm uppercase tracking-widest opacity-50 text-secondary mb-2" />
+                <RichParagraph className="text-secondary font-medium">{item.text}</RichParagraph>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 p-6 bg-secondary/5 rounded-lg border border-secondary/10">
+            <Heading3 text="Benefits" className="mb-4 text-secondary text-xl" />
+            <RichParagraph className="text-secondary/80">
+              Competitive interest rates, flexible terms (up to 15 years), quick approval process, specialized understanding of campervan values
+            </RichParagraph>
+          </div>
+        </div>
+      </motion.div>
+    )}
+
+    {/* ALTERNATIVE */}
+    {activeSection === "alternative" && (
+      <motion.div key="alternative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <div className="text-center mb-12">
+          <Heading3 text="Alternative Financing" className="!text-primary mb-4" />
+          <RichParagraph className="!text-primary/70">
+            Using Real Estate for Better Rates
+          </RichParagraph>
+        </div>
+
+        <div className="bg-primary text-secondary p-12 rounded-lg shadow-2xl max-w-2xl mx-auto text-center border border-primary/10 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-2 h-full bg-secondary opacity-20"></div>
+          <Home className="mx-auto mb-6 text-secondary opacity-80" size={48} />
+
+          <Heading3 text="Real Estate Collateral" className="mb-4 text-secondary" />
+          <RichParagraph className="text-secondary/80 mb-8">
+            Leverage your property for better terms
+          </RichParagraph>
+
+          <div className="grid grid-cols-1 gap-6 text-left max-w-md mx-auto">
+            <div className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5">
+               <div className="font-bold text-secondary shrink-0 w-24">Provider:</div>
+               <div className="text-secondary/90 text-sm">ADU Loans Net (CrossCountry Mortgage)</div>
+            </div>
+            <div className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5">
+               <div className="font-bold text-secondary shrink-0 w-24">Loan Type:</div>
+               <div className="text-secondary/90 text-sm">Uses your real estate as collateral</div>
+            </div>
+            <div className="flex items-center gap-4 p-4 rounded-lg bg-secondary/5">
+               <div className="font-bold text-secondary shrink-0 w-24">Benefit:</div>
+               <div className="text-secondary/90 text-sm font-semibold italic">Often provides very good interest rates.</div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    )}
+
+  </AnimatePresence>
+</section>
+
+      {/* CTA */}
+      <section className="anim-section py-24 bg-primary ">
+        <div className="container mx-auto px-4 text-center">
+          <Heading2 text="Have Questions?" className="mb-6 text-secondary" />
+          <RichParagraph className="max-w-2xl mx-auto opacity-70 mb-12 text-secondary">
+            Contact us and we will help you choose the best financing path for your project.
+          </RichParagraph>
+          <SecondaryButton label="Contact Us Today" link={"/contact"} />
         </div>
       </section>
+
     </div>
   );
 }

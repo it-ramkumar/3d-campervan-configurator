@@ -1,50 +1,62 @@
-// helpers/schemaHelper.js
+export const generateDynamicSchema = (options, current, categories) => {
+  const baseUrl = "https://bigbearvans.com";
+  const currentUrl = `${baseUrl}/options/${options}`;
 
-export const generateDynamicSchema = (options, currentConfig, categories) => {
-  const baseSchema = {
+  return {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": currentConfig.title,
-    "description": currentConfig.desc,
-    "url": window.location.href,
-    "mainEntity": {
-      "@type": "ItemList",
-      "numberOfItems": 0,
-      "itemListElement": []
-    }
-  };
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${currentUrl}/#webpage`,
+        "url": currentUrl,
+        "name": `${current.title} | Big Bear Vans`,
+        "description": current.desc,
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": baseUrl },
+            { "@type": "ListItem", "position": 2, "name": current.title, "item": currentUrl }
+          ]
+        }
+      },
+      {
+        "@type": "ItemList",
+        "name": current.title,
+        "numberOfItems": categories?.length || 0,
+        "itemListElement": (categories || []).map((cat, index) => {
 
-  if (categories && categories.length > 0) {
-    let counter = 1;
-    const items = [];
-
-    categories.forEach((cat) => {
-      // Direct items aur subcategories dono se items nikalna
-      const catItems = cat.items || [];
-      const subCatItems = cat.subCategories?.flatMap(sub => sub.items) || [];
-      const allItems = [...catItems, ...subCatItems];
-
-      allItems.forEach((item) => {
-        items.push({
-          "@type": "ListItem",
-          "position": counter++,
-          "item": {
-            "@type": "Product",
-            "name": item.title,
-            "description": item.description?.[0] || item.title,
-            "image": item.images?.[0] || "",
-            "brand": {
-              "@type": "Brand",
-              "name": "Big Bear Vans"
+          // ✅ Block-based content (System) vs Simple content (Interior/Exterior) logic
+          const getDesc = (item) => {
+            // Agar block-based hai (System options)
+            if (Array.isArray(item.descriptionBlocks)) {
+              return item.descriptionBlocks
+                .filter(b => b.type === 'paragraph' || b.type === 'heading')
+                .map(b => b.text)
+                .join(" ").substring(0, 160) + "...";
             }
-          }
-        });
-      });
-    });
+            // Agar simple array ya string hai (Interior/Exterior)
+            if (Array.isArray(item.description)) {
+              return item.description.join(" ").substring(0, 160) + "...";
+            }
+            return item.description || current.desc;
+          };
 
-    baseSchema.mainEntity.itemListElement = items;
-    baseSchema.mainEntity.numberOfItems = items.length;
-  }
-
-  return baseSchema;
+          return {
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Service", // Options are services/upgrades
+              "name": cat.name || cat.title,
+              "description": getDesc(cat),
+              "image": cat.image ? `${baseUrl}${cat.image}` : `${baseUrl}${current.heroImage}`,
+              "provider": {
+                "@type": "LocalBusiness",
+                "@id": `${baseUrl}/#organization`
+              }
+            }
+          };
+        })
+      }
+    ]
+  };
 };

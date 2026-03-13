@@ -4,8 +4,12 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Search } from "lucide-react";
 import DetailModal from "./Detail";
+import { useDispatch } from "react-redux";
+import { setEditData, clearEditData } from "../../../../redux/slices/editData"
+
 
 export default function SystemList({ setSelected }) {
+   const dispatch = useDispatch()
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(null);
@@ -87,7 +91,9 @@ export default function SystemList({ setSelected }) {
         </div>
 
         <button
-          onClick={() => setSelected("system-form")}
+           onClick={() =>{  setSelected("system-form")
+                   dispatch(clearEditData());}
+          }
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
         >
           <span className="text-lg">+</span> Add New Choice
@@ -173,7 +179,11 @@ export default function SystemList({ setSelected }) {
                     View
                   </button>
                   <button
-                    onClick={() => setSelected("system-form")}
+                    onClick={() => {
+                      setSelected("system-form")
+                      dispatch(setEditData(item))
+
+                    }}
                     className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
                   >
                     Edit

@@ -1,196 +1,165 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/free-mode";
+import "swiper/css/effect-fade";
+
+// Aapke Custom Components
 import Paragraph from "../../Common/Paragraph/HeroParagraph";
-import { BlackButton, WhiteButton,ImageWithSkeleton, Heading1 } from '../../Common/Common'
-
-
-// Define the pure black color for buttons and primary accents
-
+import { SecondaryButton, PrimaryButton, ImageWithSkeleton, Heading1, RichParagraph } from '../../Common/Common'
 
 const slides = [
   {
     id: 1,
     image: "/heroSlider/long_van.jpg",
-    title: "Custom Camper Vans.",
-    desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
+    title: "Custom Camper Van Builds..",
+    desc: "Hand-built, road-ready. Your van, your rules.",
+    tag: "Premium Builds"
   },
   {
     id: 2,
     image: "/heroSlider/heroimg2.webp",
-    title: "Custom Camper Vans",
-    desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
+    title: "Off-Grid Camper Vans",
+    desc: "Solar. Water. Heat. Live anywhere, need nothing.",
+    tag: "Off-Grid Living"
   },
   {
     id: 3,
-    image: "/heroSlider/heroimg3.jpg",
-    title: "Custom Camper Vans",
-    desc: "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
+    image: "/images2/contact.webp",
+    title: "Van Conversion Specialists",
+    desc: "Tell us your vision. We'll build it.",
+    tag: "Custom Engineering"
   },
 ];
 
 export default function Hero() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
   const [swiper, setSwiper] = useState(null);
 
-  // useEffect is required to correctly initialize Swiper's navigation module with refs
-  useEffect(() => {
-    if (swiper) {
-      swiper.params.navigation.prevEl = prevRef.current;
-      swiper.params.navigation.nextEl = nextRef.current;
-      swiper.navigation.init();
-      swiper.navigation.update();
-    }
-  }, [swiper]);
-
   return (
-    <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-screen overflow-hidden">
+    <div className="relative w-full h-[85vh] md:h-[95vh] overflow-hidden bg-black">
       <Swiper
         onSwiper={setSwiper}
-        modules={[Navigation, Pagination, Autoplay]}
-        slidesPerView={1}
-        observer={true}
-        observeParents={true}
-        /* 🟢 Performance: GPU Acceleration enable ki hai */
-        watchSlidesProgress={true}
-        autoplay={{
-          delay: 7000,
-          disableOnInteraction: false,
-        }}
-        speed={1500}
+        modules={[Navigation, Pagination, Autoplay, EffectFade]}
+        effect="fade"
+        speed={1200}
         loop={true}
-        className="w-full h-full will-change-transform" // 🟢 GPU help
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        className="w-full h-full"
       >
         {slides.map((slide, index) => (
-          <SwiperSlide key={slide.id} className="relative overflow-hidden">
-            {/* Background Image */}
-            <ImageWithSkeleton
-              src={slide.image}
-              alt={slide.title}
-              // 🟢 LCP Fix: Hero section ki pehli slide hamesha priority true hogi
-              priority={index === 0}
-              className={`absolute inset-0 w-full h-full object-cover z-0 slide-bg-image ${slide.id === 0.8 ? 'brightness-[1.15]' : ''
-                }`}
-                decoding={"sync"}
-              style={{ contentVisibility: 'auto' }} // 🟢 Rendering optimization
-            />
-            {/* Dark Overlay */}
-            <div className="absolute inset-0 md:bg-black/50 z-10 pointer-events-none"></div>
+          <SwiperSlide key={slide.id} className="relative">
+            {/* Background Image with Ken Burns Effect */}
+            <div className="absolute inset-0 overflow-hidden">
+              <ImageWithSkeleton
+                src={slide.image}
+                alt={slide.title}
+                priority={index === 0}
+                className="w-full h-full object-cover transform scale-110 animate-ken-burns"
+              />
+            </div>
+
+            {/* Cinematic Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+            {/* Content Container */}
+            <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-6 md:px-12 lg:px-20">
+              <div className="max-w-4xl space-y-4 md:space-y-6">
+
+                {/* Animated Tagline - Using Hover color as accent */}
+                <div className="flex items-center gap-sm animate-fade-in-up">
+                  <span className="w-8 h-[2px] bg-hover"></span>
+                  <RichParagraph className="text-hover uppercase font-bold !text-sm !tracking-wider">
+                    {slide.tag}
+                  </RichParagraph>
+                </div>
+
+                {/* Heading Component */}
+                <div className="max-w-4/6 animate-fade-in-up delay-100 ">
+                  <Heading1
+                    text={slide.title}
+                  />
+                </div>
+
+                {/* Paragraph Component */}
+                <div className="max-w-4/6 animate-fade-in-up delay-200">
+                  <Paragraph
+                    text={slide.desc}
+                    className="text-secondary/70"
+                  />
+                </div>
+
+                {/* Button Components */}
+                <div className="flex flex-wrap gap-[var(--gap-sm)] pt-4 md:pt-6 animate-fade-in-up delay-300">
+                  <SecondaryButton
+                    label="Order Custom Build"
+                    link="/inquiry"
+                  />
+                  <PrimaryButton
+                    label="View Van Inventory"
+                    link="/vans-for-sale"
+                  />
+                </div>
+
+              </div>
+            </div>
           </SwiperSlide>
         ))}
-
-        {/* 🟢 Reflow Fix: 'contain-layout' use kiya hai taake text animation se slides disturb na hon */}
-        <div
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center h-full text-white px-4 md:px-8 pointer-events-none"
-          style={{ contain: 'layout style' }}
-        >
-          <div className="max-w-4xl text-center space-y-4 animated-content -mt-4 md:mt-0 pointer-events-auto">
-            <Heading1 text="Custom Camper Vans..." />
-            <Paragraph text="Buy, customize, or try the 3D configurator from Big Bear Vans today." />
-            <div className="flex flex-row gap-4 justify-center items-center pt-4 mobile-button-position">
-              <BlackButton label="Order Custom Build" link="/inquiry" />
-              <WhiteButton label="View Van Inventory" link="/vans-for-sale" />
-            </div>
-          </div>
-        </div>
       </Swiper>
-      {/* Custom Navigation (Prev Button) */}
-      <div className="absolute left-4 md:left-6 top-1/2 z-30 -translate-y-1/2">
+
+      {/* Modern Minimal Controls - Using Secondary & Hover interaction */}
+      <div className="absolute bottom-12 right-6 md:right-12 z-30 flex items-center gap-[var(--gap-sm)]">
         <button
-          ref={prevRef}
-          aria-label="Previous slide" // <-- Ye line add ki
-          className="bg-white/20 backdrop-blur-sm text-white w-5 h-5 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
           onClick={() => swiper?.slidePrev()}
+          className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
         >
-          <svg
-            aria-hidden="true" // <-- Ye line add ki taaki icon skip ho jaye
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 md:w-6 md:h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
+          <ChevronLeft size={24} />
         </button>
-      </div>
-
-      {/* Custom Navigation (Next Button) */}
-      <div className="absolute right-4 md:right-6 top-1/2 z-30 -translate-y-1/2">
         <button
-          ref={nextRef}
-          aria-label="Next slide" // <-- Ye line add ki
-          className="bg-white/20 backdrop-blur-sm pointer-events-auto text-white w-5 h-5 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:bg-white/40"
           onClick={() => swiper?.slideNext()}
+          className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
         >
-          <svg
-            aria-hidden="true" // <-- Ye line add ki
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 md:w-6 md:h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+          <ChevronRight size={24} />
         </button>
       </div>
-      {/* Custom Pagination Container */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3 custom-pagination"></div>
 
-      {/* Combined styles for pagination, mobile button position, and image brightness */}
+      {/* Progress Indicator Line - Using Theme Hover color */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-secondary/10 z-30">
+        <div className="h-full bg-hover animate-slide-progress"></div>
+      </div>
+
+      {/* Custom Keyframe Animations */}
       <style>{`
-        /* --- Image Brightness Fix --- */
-        .slide-bg-image {
-            transition: filter 0.5s ease;
+        @keyframes ken-burns {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.15); }
         }
-
-        /* --- Pagination Styling --- */
-        .custom-pagination .custom-bullet {
-          width: 12px;
-          height: 12px;
-          background-color: grey;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          opacity: 0.8;
+        .animate-ken-burns {
+          animation: ken-burns 10s ease-out forwards;
         }
-        .custom-pagination .custom-bullet-active {
-          background-color: white;
-          opacity: 1;
-          transform: scale(1.2);
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
 
-        /* --- Mobile Button Position & Size Fix --- */
-        @media (max-width: 768px) {
-            /* 1. LOWER BUTTONS (Increased margin to push them down more) */
-            .mobile-button-position {
-                margin-top: 50px;
-            }
-
-            /* 2. REDUCE BUTTON SIZE */
-            .custom-mobile-button {
-                padding: 8px 15px !important;
-                font-size: 12px !important;
-            }
+        @keyframes slide-progress {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+        .animate-slide-progress {
+          animation: slide-progress 6s linear infinite;
         }
       `}</style>
     </div>
-  )
+  );
 }

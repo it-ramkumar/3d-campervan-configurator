@@ -1,4 +1,5 @@
 import React from "react";
+import RichParagraph from "./RichParagraph";
 
 /**
  * Paragraph Component
@@ -10,17 +11,17 @@ import React from "react";
  */
 const Paragraph = ({
   text = "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
-  textColor = "text-white",
+  textColor = "",
   className = "",
   inlineStyle = {},
 }) => {
   return (
-    <p
-      className={`text-sm sm:text-base md:text-lg lg:text-[20px] font-normal font-serif desc-text ${textColor} ${className}`}
-      style={inlineStyle}
-    >
-      {text}
-    </p>
+ <RichParagraph
+  className={`text-sm sm:text-base md:text-lg lg:text-[20px] tracking-tight ${textColor} ${className}`}
+  style={inlineStyle}
+>
+  {text}
+</RichParagraph>
   );
 };
 

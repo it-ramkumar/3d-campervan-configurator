@@ -1,229 +1,164 @@
 "use client";
 import { useRef } from 'react';
-import { Link } from "react-router-dom"
-import { Heading2, RichParagraph,Heading3,ImageWithSkeleton, WhiteButton, BlackButton } from '../../Common/Common'
+import { Link } from "react-router-dom";
+import {
+  Heading2, RichParagraph, Heading3,
+  ImageWithSkeleton, PrimaryButton, SecondaryButton,CustomLink
+} from '../../Common/Common';
 
-
-// --- Icons remain same ---
+// --- Icons (Adventure Ready) ---
 const PowerIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
   </svg>
 );
 const BathroomIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h18M3 7.5h18M4.5 12H6m13.5 0h-1.5M4.5 16.5h15" />
+  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v18M19 3v18M5 11h14M8 11V8a4 4 0 018 0v3" />
   </svg>
 );
 const KitchenIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
   </svg>
 );
 const BedIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-  </svg>
-);
-const VanIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 md:h-14 md:w-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6.375 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zM17.625 16.5a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 17.25h17.25c.621 0 1.125-.504 1.125-1.125V9.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v6.375c0 .621.504 1.125 1.125 1.125zM9 8.625V6.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125v2.25" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 12h17.25" />
+  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
   </svg>
 );
 
 const FEATURES = [
-  { text: "Exceptional off-grid power", icon: <PowerIcon />, textFirst: true },
-  { text: "Fully-equipped bathroom with hot water", icon: <BathroomIcon />, textFirst: true },
-  { text: "Kitchen with microwave & refrigerator", icon: <KitchenIcon />, textFirst: false },
-  { text: "Space-saving elevator & dinette bed", icon: <BedIcon />, textFirst: false },
-];
-
-// --- New Upcoming Data ---
-const UPCOMING_VANS = [
-  // { name: "Lowroof Poptop", desc: "Compact versatility meets rooftop comfort." },
-  // { name: "Montreal AWD 170", desc: "Stone Gray powerhouse for rugged terrains." },
-  // { name: "Santa Monica (Matte Gray)", desc: "Ford Transit build with premium sleek finish." },
-  // { name: "Santa Monica Edition", desc: "Another Ford Transit masterpiece in production." },
-  // { name: "Ford Transit Demo Van", desc: "Featuring our signature double bed layout." },
+  { text: "Off-grid power", icon: <PowerIcon /> },
+  { text: "Full bathroom", icon: <BathroomIcon /> },
+  { text: "Pro kitchen", icon: <KitchenIcon /> },
+  { text: "Elevator bed", icon: <BedIcon /> },
 ];
 
 export default function AvailableVans({ availableVans, hasMore, loading, onLoadMore }) {
-  const sectionRef = useRef(null);
-  const headerRef = useRef(null);
-  const contentRef = useRef(null);
-  const featuresSectionRef = useRef(null);
-  const featureItemsRef = useRef([]);
-  const centralIconRef = useRef(null);
-  const circularPathRef = useRef(null);
-
   return (
-    <>
-      <section ref={sectionRef} className="bg-white overflow-hidden mt-10 md:mt-24">
-        <div ref={headerRef} className="max-w-7xl mx-auto text-center mb-6 px-4 md:px-8 lg:px-16">
-          <Heading2 text='In-Stock & Ready to Roll Vans For Sale' />
-        </div>
+    <section className="bg-[var(--color-secondary)] py-16 md:py-28 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
-        <div ref={contentRef} className="max-w-4xl mx-auto text-black md:mb-20 px-4 md:px-8 lg:px-16 ">
-          <RichParagraph>At Big Bear Vans, our Class BRVs for sale are truly turn-key solutions. Each van has premium features, including:</RichParagraph>
-
-          <div ref={featuresSectionRef} className="relative flex justify-center items-center my-8 md:my-12 h-60 md:h-72">
-            <div className="gradient-glow absolute w-56 h-56 md:w-64 md:h-64 rounded-full"></div>
-            <svg ref={circularPathRef} className="circular-path absolute w-56 h-56 md:w-64 md:h-64 cursor-pointer" viewBox="0 0 100 100">
-              <defs>
-                <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6b7280" />
-                  <stop offset="50%" stopColor="#4b5563" />
-                  <stop offset="100%" stopColor="#374151" />
-                </linearGradient>
-              </defs>
-              <circle cx="50" cy="50" r="45" fill="none" stroke="url(#pathGradient)" strokeWidth="0.8" strokeDasharray="3,3" opacity="0.8" />
-            </svg>
-            {/* Connection lines and Icons logic remains same as your original */}
-            <div ref={centralIconRef} className="central-icon floating absolute flex justify-center items-center w-20 h-20 md:w-24 md:h-24 bg-gray-800 rounded-full shadow-lg border border-gray-700">
-              <VanIcon />
+        {/* --- Header Section --- */}
+        <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16">
+          <div className="max-w-2xl">
+            <RichParagraph className="uppercase mb-4 !text-sm tracking-wider text-hover font-bold">
+              Ready for adventure
+            </RichParagraph>
+            <Heading2 text='In-Stock & Ready to Roll'  />
+            <div className="mt-4">
+              <RichParagraph>
+                Our Class B RVs are turn-key solutions. Skip the build wait and hit the road today with premium features already installed.
+              </RichParagraph>
             </div>
+          </div>
 
-            {/* Feature Mapping (Simplified for brevity, same as yours) */}
-            {FEATURES.map((f, i) => (
-              <div key={i} ref={el => featureItemsRef.current[i] = el} className={`feature-item absolute flex flex-col items-center text-center w-28 md:w-32 cursor-pointer group ${i === 0 ? '-translate-x-28 -translate-y-20 md:-translate-x-32 md:-translate-y-24' : i === 1 ? 'translate-x-28 -translate-y-20 md:translate-x-32 md:-translate-y-24' : i === 2 ? '-translate-x-28 translate-y-20 md:-translate-x-32 md:translate-y-24' : 'translate-x-28 translate-y-20 md:translate-x-32 md:translate-y-24'}`}>
-                {i < 2 && <RichParagraph>{f.text}</RichParagraph>}
-                <div className="feature-icon bg-gray-800 rounded-full p-2 shadow-lg border border-gray-700 transition-all duration-300">
-                  {f.icon}
-                </div>
-                {i >= 2 && <RichParagraph>{f.text}</RichParagraph>}
+          <div className="grid grid-cols-2 gap-3 w-full md:w-auto">
+            {FEATURES.map((feat, idx) => (
+              <div key={idx} className="flex items-center gap-3 bg-white/50 backdrop-blur-sm p-3 border border-white/20" style={{ borderRadius: 'var(--radius-md)' }}>
+                <div className="text-primary bg-white p-2 shadow-sm rounded-lg">{feat.icon}</div>
+                <RichParagraph className="text-primary">{feat.text}</RichParagraph>
               </div>
             ))}
           </div>
-
-          <RichParagraph>Everything is set up for you. Skip the stress of a long DIY build or waiting months for a custom conversion and check out our vans for sale.</RichParagraph>
         </div>
 
-        <div className="relative pt-8 pb-12 md:pt-12 md:pb-16 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
-
-            {availableVans && availableVans.length > 0 ? (
-              // Case 1: Display Live Inventory
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-
-                {availableVans?.length > 0 ? (
-                  availableVans.map((van) => (
-                    <div
-  key={van._id}
-  className="group relative w-full aspect-[16/10] rounded-[28px] overflow-hidden border-2 border-gray-800 shadow-xl transition-all duration-500 hover:shadow-2xl md:hover:-translate-y-2"
->
-
-                      <Link to={`/van-detail/${van.slug}`}>
-                        <div className="relative w-full h-full">
-                          {/* Image OR Fallback */}
-                          {van?.gallery?.[0] ? (
-                            <ImageWithSkeleton
-                              src={van.gallery[0]}
-                              alt={van?.van_listing?.title}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                          ) : (
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black flex justify-center">
-                              {/* Subtle pattern */}
-                              <div className="absolute  inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,#2761FD_0%,transparent_40%)]" />
-                              <span className="text-gray-500 text-xs mt-20 uppercase tracking-widest">
-                                Image coming soon
-                              </span>
-                            </div>
-                          )}
-
-                          {/* SOLD Stamp */}
-                          {van?.status === "sold" && (
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                              <div className="transform -rotate-12 bg-red-600 text-white font-black text-xl md:text-2xl px-8 py-2 rounded-lg shadow-2xl border-2 border-white/40 backdrop-blur-sm">
-                                SOLD
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Gradient Overlay – always */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>
-
-                          {/* Content */}
-                          <div className="absolute inset-0 p-6 flex flex-col justify-end z-30">
-                            <Heading3 text={van?.van_listing?.title || "Custom Camper Build"} />
-
-                            <RichParagraph className="text-white/80 line-clamp-2">
-                              {van?.van_listing?.subtitle ||
-                                "A premium camper conversion crafted for comfort, adventure, and everyday usability."}
-                            </RichParagraph>
-
-                            <p className="text-white/60 text-xs mt-2 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-100 hidden md:block">
-                              View Details →
-                            </p>
-                          </div>
-                        </div>
-
-                      </Link>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-full py-20 text-center">
-                    <p className="text-gray-400 text-lg">No sold vans found.</p>
-                  </div>
-                )}
-              </div>
-
-            ) : (
-              // Case 2: Display Coming Soon Grid
-              <div className="w-full">
-                <div className="text-center mb-10">
-                  <span className="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Pipeline</span>
-                  <Heading2 text="Upcoming Builds In Progress" className="mt-2" />
-                  <RichParagraph>Our workshop is busy! Here are the next builds hitting the floor soon.</RichParagraph>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {UPCOMING_VANS.map((van, idx) => (
-                    <div key={idx} className="bg-white p-8 rounded-[2rem] border-2 border-dashed border-gray-200 flex flex-col items-center text-center hover:border-sky-400 transition-colors group">
-                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-sky-50 transition-colors">
-                        <svg className="w-8 h-8 text-gray-400 group-hover:text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+        {/* --- Main Inventory Grid --- */}
+        {availableVans && availableVans.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
+            {availableVans.map((van) => (
+              <div
+                key={van._id}
+                className="group relative flex flex-col bg-white overflow-hidden transition-all duration-500 hover:shadow-2xl"
+                style={{ borderRadius: 'var(--radius-md)' }}
+              >
+                <Link to={`/van-detail/${van.slug}`} className="relative block aspect-[16/10] overflow-hidden bg-slate-100">
+                  {/* Logic: Image or Coming Soon Placeholder */}
+                  {van.gallery?.[0] ? (
+                    <ImageWithSkeleton
+                      src={van.gallery[0]}
+                      alt={`${van?.van_listing?.title} - Luxury Custom Camper Van by Big Bear Vans`}
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-200 to-slate-300">
+                      <div className="mb-2 text-[var(--color-primary)]/20">
+                         <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                       </div>
-                      <h4 className="text-xl font-bold text-gray-800 mb-2">{van.name}</h4>
-                      <p className="text-gray-500 text-sm mb-6">{van.desc}</p>
-                      <div className="mt-auto">
-                        <span className="text-xs font-semibold text-sky-600 uppercase tracking-tighter italic">Status: Under Construction</span>
-                      </div>
+                      <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-primary)] opacity-40">
+                        Image Coming Soon
+                      </span>
                     </div>
-                  ))}
+                  )}
 
-                  {/* Contact CTA Card */}
-                  <div className="bg-slate-900 p-8 rounded-[2rem] flex flex-col items-center text-center text-white justify-center">
-                    <Heading3 text="Want a custom build?" className="text-white mb-4" />
-                    <RichParagraph className="text-gray-300 mb-6">Don't wait for these to finish. Secure your spot now.</RichParagraph>
-                    <WhiteButton label="Inquire Now" link="/inquiry" />
+                  {/* SOLD Badge */}
+                  {van?.status === "sold" && (
+                    <div className="absolute top-4 left-4 z-20 bg-red-600 text-white text-[10px] font-black px-4 py-1.5 uppercase tracking-widest shadow-lg" style={{ borderRadius: 'var(--radius-md)' }}>
+                      Sold Out
+                    </div>
+                  )}
+
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)]/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
+
+                  {/* Hover Icon */}
+                  <div className="absolute bottom-6 right-6 z-20 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                    <div className="bg-white text-[var(--color-primary)] p-4 shadow-xl" style={{ borderRadius: 'var(--radius-md)' }}>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </div>
                   </div>
+                </Link>
+
+                <div className="p-8">
+                  <div className="flex justify-between items-start mb-4">
+                    <Heading3 text={van?.van_listing?.title || "Custom Build"} />
+                    <RichParagraph className='!text-xs font-bold text-hover'>2026 Edition</RichParagraph>
+                  </div>
+                  <RichParagraph className="line-clamp-2 mb-6">
+                    {van?.van_listing?.subtitle || "A premium camper conversion crafted for the ultimate freedom."}
+                  </RichParagraph>
+                  <div className="h-[1px] w-full bg-slate-100 mb-6" />
+                  <CustomLink to={`/van-detail/${van.slug}`} text={"Explore Details +"}/>
+
                 </div>
               </div>
-            )}
-            {/* Load More Button */}
-
-            <div className="flex justify-center mt-12">
-              <BlackButton
-                onClick={onLoadMore}
-                disabled={loading || !hasMore}
-                label={
-                  loading
-                    ? "Fetching..."
-                    : !hasMore
-                      ? "No More Builds"
-                      : "Load More Builds"
-                }
-              />
+            ))}
+          </div>
+        ) : (
+          /* --- Pipeline / Coming Soon Section --- */
+          <div className="mt-10">
+            <div className="text-center mb-12">
+               <Heading2 text="Upcoming Builds In Progress" />
+               <RichParagraph className="opacity-70">Securing the next generation of adventure vans.</RichParagraph>
             </div>
 
-
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2].map((_, idx) => (
+                <div key={idx} className="bg-white/40 border-2 border-dashed border-gray-300 p-10 flex flex-col items-center text-center justify-center space-y-4" style={{ borderRadius: 'var(--radius-md)' }}>
+                  <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse" />
+                  <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
+                </div>
+              ))}
+              <div className="bg-[var(--color-primary)] p-10 flex flex-col items-center text-center justify-center shadow-2xl" style={{ borderRadius: 'var(--radius-md)' }}>
+                <Heading3 text="Want a custom build?" className="text-white mb-4" />
+                <p className="text-white/60 text-sm mb-8 italic">Don't wait for these to finish. Secure your spot now.</p>
+                <PrimaryButton label="Inquire Now" link="/inquiry" />
+              </div>
+            </div>
           </div>
+        )}
+
+        <div className="mt-20 flex flex-col items-center">
+          <div className="w-20 h-[1px] bg-[var(--color-primary)]/20 mb-8" />
+          <SecondaryButton
+            onClick={onLoadMore}
+            disabled={loading || !hasMore}
+            label={loading ? "Refreshing Inventory..." : !hasMore ? "End of Listing" : "View More Available Vans"}
+          />
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

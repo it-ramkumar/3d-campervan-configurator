@@ -3,24 +3,24 @@ import React from "react";
 
 export default function MapSection() {
   return (
-    <div className="relative w-full rounded-[20px] overflow-hidden shadow-lg">
+    <div className="relative w-full rounded-lg overflow-hidden shadow-xl border-4 border-white">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3230.29039862544!2d-116.85188968472872!3d34.26077828269445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c4b5b94f396ad3%3A0xaad9ce8a9f148bf!2s320%20W%20Big%20Bear%20Blvd%2C%20Big%20Bear%20City%2C%20CA%2092314%2C%20USA!5e0!3m2!1sen!2s!4v169.jpg"
-        title="Office Location Map" // Ye zaroori hai
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3301.1234!2d-116.8612!3d34.2585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzTCsDE1JzMwLjYiTiAxMTbCsDUxJzQwLjMiVw!5e0!3m2!1sen!2sus!4v123456789"
+        title="Office Location Map"
         width="100%"
-        height="450"
+        height="500"
         style={{ border: 0 }}
         allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
-        className="rounded-[20px] w-full h-[400px] md:h-[500px]"
+        className="w-full h-[400px] md:h-[550px] grayscale-[20%] contrast-[1.1]"
       ></iframe>
 
-      <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl shadow-md">
-        <h3 className="font-serif text-lg font-bold text-gray-800">
+      <div className="absolute top-6 left-6 bg-primary text-white p-6 rounded-lg shadow-2xl max-w-xs border-b-4 border-hover">
+        <h3 className="font-sans text-lg font-bold mb-1">
           Big Bear Vans Location
         </h3>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-white/70 leading-relaxed">
           320 W Big Bear Blvd, Big Bear City, CA 92314, USA
         </p>
       </div>

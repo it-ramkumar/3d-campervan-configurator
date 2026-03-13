@@ -1,18 +1,47 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Helmet } from "react-helmet-async";
+
+// Components
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import HeroSection from '../HeroSection/HeroSection';
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
-import SystemOptions from "./SystemOptions"
+import SystemOptions from "./SystemOptions";
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
-import { useParams } from 'react-router-dom';
-import { generateDynamicSchema } from '../../schema/optionsSchema'; // Path check karlein
+
+// Helpers
+import { generateDynamicSchema } from '../../schema/optionsSchema';
+
+const PAGE_CONFIG = {
+  "exterior-options": {
+    api: "exterior",
+    keyword:"bathroom",
+    title: "Campervan Exterior Upgrades",
+    desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical accessories.",
+    heroImage: "/heroSlider/exteriorhero.webp"
+  },
+  "interior-options": {
+    api: "interior",
+    title: "Premium Interior Finishes",
+    desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
+    heroImage: "/heroSlider/interiorHero.png"
+  },
+  "system-options": {
+    api: "system",
+    title: "Electrical & Water Systems",
+    desc: "Reliable, high-performance electrical and water systems designed for off-grid travel and ultimate independence.",
+    heroImage: "/heroSlider/system.jpg"
+  }
+};
 
 export default function ExteriorChoicePage() {
   const { options } = useParams();
+  const current = PAGE_CONFIG[options];
 
   const [dataState, setDataState] = useState({
     categories: [],
@@ -23,41 +52,12 @@ export default function ExteriorChoicePage() {
     loading: true,
   });
 
-  // 1. Config ko useEffect ke bahar rakhein taaki render mein use ho sake
-  const config = {
-    "exterior-options": {
-      api: "exterior",
-      title: "Campervan Exterior Upgrades",
-      desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical accessories.",
-      heroImage: "/heroSlider/exteriorhero.webp"
-    },
-    "interior-options": {
-      api: "interior",
-      title: "Premium Interior Finishes",
-      desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
-      heroImage: "/heroSlider/interiorHero.png" // Ensure karein ye image path sahi ho
-    },
-    "system-options": {
-      api: "system",
-      title: "Electrical and Water System in Big Bear Vans",
-      desc: "Electrical and water systems keep your campervan running smoothly, powering lights, heating water, and charging your devices. At Big Bear Vans, we install reliable, high-performance electrical and water systems designed for off-grid travel. Let us walk you through every component we offer, so you know exactly what goes into your van and why it matters..",
-      heroImage: "/heroSlider/system.jpg" // Ensure karein ye image path sahi ho
-    }
-  };
-  const current = config[options];
-
   useEffect(() => {
-
-    // Agar URL galat hai toh wapis bhej do
-    if (!current) {
-      // navigate('/'); // Optional: Redirect if wrong URL
-      return;
-    }
+    if (!current) return;
 
     const fetchCategories = async () => {
-      setDataState(prev => ({ ...prev, loading: true })); // Loader start karein
+      setDataState(prev => ({ ...prev, loading: true }));
       try {
-        // 2. FIX: current.api use karein (sirf current nahi)
         const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/${current.api}`);
         const data = res.data.data || [];
 
@@ -73,7 +73,7 @@ export default function ExteriorChoicePage() {
 
           if (!categoryMap[cat._id]) {
             categoryMap[cat._id] = { ...cat, subCategories: {}, items: [] };
-            initialExpanded[cat._id] = true;
+            initialExpanded[cat._id] = false;
             initialShowFullMap[cat._id] = false;
           }
 
@@ -117,68 +117,137 @@ export default function ExteriorChoicePage() {
       }
     };
 
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     fetchCategories();
-  }, [options]); // 3. FIX: Dependency array mein 'options' zaroori hai
+  }, [options, current]);
 
   if (!current) return <Loader />;
+const canonicalUrl = `https://bigbearvans.com/options/${options}`;
+// Is logic ko return se pehle rakhein
+const getDynamicMetaDesc = () => {
+  if (dataState.categories && dataState.categories.length > 0) {
+    // 1. Saari sub-categories ke titles nikalna (e.g., Sink, Backsplash, Countertop)
+    const subCatTitles = dataState.categories.flatMap(cat =>
+      cat.subCategories.map(sub => sub.title)
+    ).join(", ");
 
+    // 2. Kuch prominent items ke naam uthana (Pehle 3-4 items)
+    const itemNames = dataState.categories.flatMap(cat =>
+      cat.subCategories.flatMap(sub => sub.items.slice(0, 2).map(item => item.title))
+    ).slice(0, 4).join(", ");
+
+    // 3. Aik unique summary banana
+    const finalString = `Explore our ${current.title}: Includes ${subCatTitles}. Featured products: ${itemNames}. Custom build your van with Big Bear Vans.`;
+
+    return finalString.substring(0, 160); // Meta description 160 characters se zyada nahi honi chahiye
+  }
+  return current.desc;
+};
+
+const finalDesc = getDynamicMetaDesc();
+
+console.log(dataState,"dataState")
   return (
-    <div>
-      <title>{current.title}</title>
-      <meta name="description" content={current.desc} />
-      <meta name="keywords" content={current.keywords} />
+    <div className="bg-secondary min-h-screen font-body">
+     <Helmet>
+  {/* Standard SEO */}
+  <title>{`${current.title} | Big Bear Vans`}</title>
+  <meta name="description" content={finalDesc} />
+  <meta name="keywords" content={current.keyword || "custom van options, campervan upgrades"} />
+  <link rel="canonical" href={canonicalUrl} />
 
-      {/* Open Graph (Facebook/LinkedIn share) */}
-      <meta property="og:title" content={current.title} />
-      <meta property="og:description" content={current.desc} />
-      <meta property="og:image" content={current.heroImage} />
-      <meta property="og:url" content={current.pageUrl} />
-      <meta property="og:type" content="website" />
+  {/* Open Graph */}
+  <meta property="og:title" content={`${current.title} | Big Bear Vans`} />
+  <meta property="og:description" content={finalDesc} />
+  <meta property="og:image" content={`https://bigbearvans.com${current.heroImage}`} />
 
-      {/* Twitter Meta Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={current.title} />
-      <meta name="twitter:description" content={current.desc} />
-      <meta name="twitter:image" content={current.heroImage} />
-      <script type="application/ld+json">
-        {JSON.stringify(generateDynamicSchema(options, current, dataState.categories))}
-      </script>
+  {/* Twitter */}
+  <meta name="twitter:title" content={current.title} />
+  <meta name="twitter:description" content={finalDesc} />
+  <meta name="twitter:image" content={`https://bigbearvans.com${current.heroImage}`} />
+
+  {/* Schema Logic */}
+  <script type="application/ld+json">
+    {JSON.stringify(generateDynamicSchema(options, current, dataState.categories))}
+  </script>
+</Helmet>
+
+
       <Navbar />
-      <div className='hero'>
+
+      {/* --- Hero Section with Overlay --- */}
+      <section className="relative overflow-hidden">
         <HeroSection
-          title={current.title} // Dynamic Title
-          description={current.desc} // Dynamic Description
-          image={current.heroImage} // Dynamic Image
+          title={current.title}
+          description={current.desc}
+          image={current.heroImage}
           link="/inquiry"
           buttonText="Get a Quote"
           showButton={false}
         />
-      </div>
+        {/* Subtle Bottom Curve/Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F5F5F0] to-transparent" />
+      </section>
 
-      <div className='list'>
-        {!dataState.loading ? (
-          // key={options} dene se component fresh reset hoga jab page badlega
-          <ExteriorChoicesList key={options} initialData={dataState} heading={current.api} />
-        ) : (
-          <div className="py-20"><Loader /></div>
+      {/* --- Main Content Area --- */}
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+
+        {/* Loader Wrapper for List */}
+        <div className="transition-all duration-500">
+          {!dataState.loading ? (
+            <div className="animate-fadeIn">
+              <ExteriorChoicesList
+                key={options}
+                initialData={dataState}
+                heading={current.api}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center py-40">
+              <Loader />
+            </div>
+          )}
+        </div>
+
+        {/* --- Contextual Components (System Specific) --- */}
+        {current.api === "system" && (
+          <section className="mt-20 border-t border-[#001F3D]/10 pt-20 animate-fadeIn">
+            <div className="bg-white rounded-[20px] p-8 lg:p-12 shadow-sm border border-[#001F3D]/5">
+               <SystemOptions />
+            </div>
+          </section>
         )}
-      </div>
-      {
-        current.api === "system" &&
-        <div className='list'>
-          <SystemOptions />
-        </div>
-      }
-      {
-        current.api === "exterior" &&
-        <div className='list'>
-          <ExteriorCTR />
-          <AdditionalAccessories />
-        </div>
-      }
+
+        {/* --- Contextual Components (Exterior Specific) --- */}
+        {current.api === "exterior" && (
+          <section className="mt-20 space-y-20 animate-fadeIn">
+            <div className="bg-[#001F3D] text-white rounded-lg p-1 overflow-hidden shadow-2xl">
+               <ExteriorCTR />
+            </div>
+            <div className="pt-10">
+               <div className="flex items-center gap-4 mb-10">
+                  <div className="h-[2px] flex-grow bg-[#001F3D]/10"></div>
+                  <h2 className="text-2xl font-bold uppercase tracking-widest text-[#001F3D]">Additional Accessories</h2>
+                  <div className="h-[2px] flex-grow bg-[#001F3D]/10"></div>
+               </div>
+               <AdditionalAccessories />
+            </div>
+          </section>
+        )}
+      </main>
 
       <Footer />
+
+      {/* --- Custom Scoping Styles --- */}
+      <style >{`
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }

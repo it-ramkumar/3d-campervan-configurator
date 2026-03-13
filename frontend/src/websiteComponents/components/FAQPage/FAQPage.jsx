@@ -8,7 +8,97 @@ import {
 } from 'lucide-react';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import { Helmet } from 'react-helmet-async';
+// FAQ Schema Generator
+const generateFAQSchema = (faqData) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqData.flatMap(category =>
+    category.questions.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  )
+});
 
+// Organization Schema
+const generateOrganizationSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Big Bear Vans",
+  "description": "Custom campervan builds and conversions in Big Bear Lake, California. Expert van life solutions with premium craftsmanship.",
+  "url": "https://bigbearvans.com",
+"telephone": "+1-951-441-9719", // Add actual phone
+  "email": "visit.bigbearvans@gmail.com", // Add actual email
+"address": {
+        "@type": "PostalAddress",
+        "streetAddress": "320 W Big Bear Blvd, Big Bear, CA 92314, United States",
+        "addressLocality": "Big Bear City",
+        "addressRegion": "CA",
+        "postalCode": "92314",
+        "addressCountry": "US"
+      },
+  "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 34.260751,
+        "longitude": -116.8497999
+      },
+  "openingHours": [
+    "Mo-Fr 09:00-18:00",
+    "Sa 10:00-16:00"
+  ],
+  "priceRange": "$$$",
+  "serviceArea": {
+    "@type": "Place",
+    "name": "Southern California"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Van Conversion Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Custom Van Conversion",
+          "description": "Complete custom campervan builds"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Van Component Installation",
+          "description": "Installation of van components and accessories"
+        }
+      }
+    ]
+  }
+});
+
+// Breadcrumb Schema
+const generateBreadcrumbSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bigbearvans.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "FAQs",
+      "item": "https://bigbearvans.com/faq"
+    }
+  ]
+});
 const FAQPage = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -66,9 +156,94 @@ const FAQPage = () => {
   const toggleFAQ = (id) => {
     setOpenIndex(openIndex === id ? null : id);
   };
+ // SEO Data
+  const pageTitle = "Frequently Asked Questions | Big Bear Vans";
+  const pageDescription = "Get answers to all your campervan questions. From custom builds to financing, locations to warranties - everything you need to know about Big Bear Vans.";
+  const pageUrl = "https://bigbearvans.com/faq";
+  const pageImage = "https://bigbearvans.com/images/w9.webp";
 
-  return (<>
-<Navbar/>
+  // Generate schemas
+  const faqSchema = generateFAQSchema(faqData);
+  const organizationSchema = generateOrganizationSchema();
+  const breadcrumbSchema = generateBreadcrumbSchema();
+  return (
+  <>
+    <Helmet>
+        {/* ✅ 1. Standard SEO Meta Tags */}
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta name="keywords" content="Big Bear Vans FAQ, campervan questions, van conversion FAQ, custom van builds, van life questions, RV conversion FAQ" />
+        <link rel="canonical" href={pageUrl} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+
+        {/* Geographic targeting */}
+        <meta name="geo.region" content="US-CA" />
+        <meta name="geo.placename" content="Big Bear City" />
+        <meta name="geo.position" content="34.2439;-116.9114" />
+
+        {/* ✅ 2. Enhanced Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content="Big Bear Vans" />
+        <meta property="og:locale" content="en_US" />
+
+        {/* Business specific */}
+        <meta property="business:contact_data:street_address" content="320 W Big Bear Blvd" />
+        <meta property="business:contact_data:locality" content="Big Bear City" />
+        <meta property="business:contact_data:region" content="CA" />
+        <meta property="business:contact_data:postal_code" content="92314" />
+        <meta property="business:contact_data:country_name" content="USA" />
+
+        {/* ✅ 3. Enhanced Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@BigBearVans" />
+        <meta name="twitter:creator" content="@BigBearVans" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={pageImage} />
+        <meta name="twitter:image:alt" content="Big Bear Vans FAQ - Custom Campervan Builds" />
+
+        {/* ✅ 4. Additional Meta Tags */}
+        <meta name="author" content="Big Bear Vans" />
+        <meta name="theme-color" content="#1e293b" />
+        <meta name="format-detection" content="telephone=no" />
+
+        {/* ✅ 5. Multiple JSON-LD Schemas */}
+        <script type="application/ld+json">
+          {JSON.stringify([
+            faqSchema,
+            organizationSchema,
+            breadcrumbSchema,
+            {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": pageTitle,
+              "description": pageDescription,
+              "url": pageUrl,
+              "image": pageImage,
+              "inLanguage": "en-US",
+              "isPartOf": {
+                "@type": "WebSite",
+                "name": "Big Bear Vans",
+                "url": "https://bigbearvans.com"
+              },
+              "about": {
+                "@type": "Organization",
+                "name": "Big Bear Vans"
+              },
+              "mainContentOfPage": {
+                "@type": "FAQPage"
+              }
+            }
+          ])}
+        </script>
+      </Helmet>
+    <Navbar />
     <div className="min-h-screen bg-[#f8fafc]">
       {/* HERO SECTION - Full Width */}
       <section className="relative h-[500px] w-full flex items-center justify-center bg-black overflow-hidden">
@@ -105,29 +280,25 @@ const FAQPage = () => {
                 return (
                   <div
                     key={id}
-                    className={`transition-all duration-300 border-b border-slate-200 bg-transparent ${
-                      isOpen ? 'pb-6' : 'pb-0'
-                    }`}
+                    className={`transition-all duration-300 border-b border-slate-200 bg-transparent ${isOpen ? 'pb-6' : 'pb-0'
+                      }`}
                   >
                     <button
                       onClick={() => toggleFAQ(id)}
                       className="w-full flex items-start justify-between py-6 text-left group"
                     >
-                      <span className={`text-xl font-bold transition-colors pr-8 ${
-                        isOpen ? 'text-black' : 'text-slate-600 group-hover:text-black'
-                      }`}>
+                      <span className={`text-xl font-bold transition-colors pr-8 ${isOpen ? 'text-black' : 'text-slate-600 group-hover:text-black'
+                        }`}>
                         {faq.q}
                       </span>
-                      <div className={`shrink-0 mt-1 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 text-black' : 'text-slate-400'
-                      }`}>
+                      <div className={`shrink-0 mt-1 transition-transform duration-300 ${isOpen ? 'rotate-180 text-black' : 'text-slate-400'
+                        }`}>
                         <ChevronDown size={28} strokeWidth={3} />
                       </div>
                     </button>
 
-                    <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                      isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-                    }`}>
+                    <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+                      }`}>
                       <div className="text-slate-500 text-lg leading-relaxed font-medium pb-4">
                         {faq.a}
                       </div>
@@ -165,8 +336,8 @@ const FAQPage = () => {
         </div>
       </div>
     </div>
-    <Footer/>
-    </>
+    <Footer />
+  </>
   );
 };
 
