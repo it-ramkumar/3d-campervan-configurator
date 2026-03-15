@@ -7,7 +7,7 @@ import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
 import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
-import ExportableScene from "../exportable-scene/ExportableScene";
+// import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
 import { ArrowBigDownDash, ArrowBigUpDash, X, ChevronLeft, ChevronRight, Menu } from "lucide-react"
 import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
@@ -220,82 +220,81 @@ function Van() {
           )}
 
 
-{/* Desktop Van Info - Bottom Left */}
-<div className="hidden lg:block absolute bottom-8 left-4 z-40 w-full max-w-[320px]">
-  <div
-    className="glass-panel-light rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:bg-black/5 shadow-lg"
-    onClick={() => setIsOpen(!isOpen)}
-  >
-    {/* Compact View */}
-    <div className="p-3 flex items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
-          <span className="text-xl">🚐</span>
-        </div>
-        <div>
-          <h1 className="text-sm font-bold text-black leading-tight">
-            {vans[isSanta]?.layout || "Loading..."}
-          </h1>
-          <p className="text-xs text-gray-500">
-            {vans[isSanta]?.modelYear} • {vans[isSanta]?.spec?.wheelBase}" WB
-          </p>
-        </div>
-      </div>
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-black text-white rotate-180" : "bg-black/10 text-black"}`}>
-        <ArrowBigDownDash size={18} />
-      </div>
-    </div>
-
-    {/* Expanded View - With Tailwind Custom Scroll */}
-    {isOpen && (
-      <div className="px-3 pb-3 border-t border-black/10 pt-3">
-        <p className="text-[9px] font-black text-black/40 uppercase tracking-widest mb-2 ml-1">Select Model</p>
-
-        {/* Horizontal Scroll Container */}
-        <div className="flex gap-2 mb-4 overflow-x-auto pb-3 flex-nowrap custom-scrollbar">
-          {vans?.map((van, idx) => (
-            <button
-              key={idx}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsSanta(idx);
-              }}
-              className={`flex-shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border ${
-                isSanta === idx
-                  ? "bg-black text-white border-black shadow-md"
-                  : "bg-white text-gray-500 border-black/5 hover:border-black/20"
-              }`}
+          {/* Desktop Van Info - Bottom Left */}
+          <div className="hidden lg:block absolute bottom-8 left-4 z-40 w-full max-w-[320px]">
+            <div
+              className="glass-panel-light rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:bg-black/5 shadow-lg"
+              onClick={() => setIsOpen(!isOpen)}
             >
-              {van?.layout}
-            </button>
-          ))}
-        </div>
+              {/* Compact View */}
+              <div className="p-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
+                    <span className="text-xl">🚐</span>
+                  </div>
+                  <div>
+                    <h1 className="text-sm font-bold text-black leading-tight">
+                      {vans[isSanta]?.layout || "Loading..."}
+                    </h1>
+                    <p className="text-xs text-gray-500">
+                      {vans[isSanta]?.modelYear} • {vans[isSanta]?.spec?.wheelBase}" WB
+                    </p>
+                  </div>
+                </div>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-black text-white rotate-180" : "bg-black/10 text-black"}`}>
+                  <ArrowBigDownDash size={18} />
+                </div>
+              </div>
 
-        {/* Specs Table (Grid) */}
-        <div className="grid grid-cols-3 gap-2">
-          <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-            <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Wheelbase</p>
-            <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.wheelBase}"</p>
-          </div>
-          <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-            <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Drivetrain</p>
-            <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.drivetrain}</p>
-          </div>
-          <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-            <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Capacity</p>
-            <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.SitSleep} S</p>
-          </div>
-        </div>
+              {/* Expanded View - With Tailwind Custom Scroll */}
+              {isOpen && (
+                <div className="px-3 pb-3 border-t border-black/10 pt-3">
+                  <p className="text-[9px] font-black text-black/40 uppercase tracking-widest mb-2 ml-1">Select Model</p>
 
-        <div className="mt-4 text-center">
-          <p className="text-[8px] text-black/20 uppercase font-black tracking-[0.3em]">
-            Official Big Bear Vans Configuration
-          </p>
-        </div>
-      </div>
-    )}
-  </div>
-</div>
+                  {/* Horizontal Scroll Container */}
+                  <div className="flex gap-2 mb-4 overflow-x-auto pb-3 flex-nowrap custom-scrollbar">
+                    {vans?.map((van, idx) => (
+                      <button
+                        key={idx}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsSanta(idx);
+                        }}
+                        className={`flex-shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border ${isSanta === idx
+                            ? "bg-black text-white border-black shadow-md"
+                            : "bg-white text-gray-500 border-black/5 hover:border-black/20"
+                          }`}
+                      >
+                        {van?.layout}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Specs Table (Grid) */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Wheelbase</p>
+                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.wheelBase}"</p>
+                    </div>
+                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Drivetrain</p>
+                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.drivetrain}</p>
+                    </div>
+                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Capacity</p>
+                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.SitSleep} S</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-center">
+                    <p className="text-[8px] text-black/20 uppercase font-black tracking-[0.3em]">
+                      Official Big Bear Vans Configuration
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
           {/* 3D Canvas */}
           <div className="w-full h-full" ref={canvasContainerRef}>
             <Canvas className="h-full w-full">
@@ -314,9 +313,9 @@ function Van() {
               <Preload all />
               <Suspense fallback={<Html fullscreen><Loader /></Html>}>
                 <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-<Environment
-  files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
-/>
+                  <Environment
+                    files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
+                  />
                   {/* Canvas ke andar jahan BaseVanModel hai */}
                   {vans && vans?.length > 0 ? (
                     <BaseVanModel
@@ -325,9 +324,9 @@ function Van() {
                     />
                   ) : null}
 
-                  {addedModels.map((model) => (
+                  {addedModels?.map((model) => (
                     <DynamicModel
-                      key={model._id || model.id}
+                      key={model?._id || model?.id}
                       model={model}
                       setActiveModelId={setActiveModelId}
                       modelRefs={modelRefs}
@@ -400,7 +399,7 @@ function Van() {
             cameraRef={cameraRef}
             modelRefs={modelRefs}
             orbitControlsRef={orbitControlsRef}
-            BaseVan={vans[isSanta] } // Pass the selected van's data
+            BaseVan={vans[isSanta]} // Pass the selected van's data
           />
         </div>
       </div>
