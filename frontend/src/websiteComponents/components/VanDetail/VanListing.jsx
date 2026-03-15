@@ -8,6 +8,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Heading2, Heading3, Heading1, RichParagraph, ImageWithSkeleton, SecondaryButton, ShareButton, Breadcrumb, PrimaryButton } from '../Common/Common';
+// import VanCanvas from "../Vansforsale/Models/VanCanvas"
 
 // --- Theme Aware Icons ---
 const SvgCheckmark = () => (
@@ -316,6 +317,10 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         })}
       </div>
     </section>
+
+
+    {/*Model  */}
+    {/* <VanCanvas/> */}
       {/* ============================ */}
       <section className="py-24 bg-[#F5F5F0] text-center px-6 border-t border-primary/5">
         <div className="max-w-2xl mx-auto">
