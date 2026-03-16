@@ -16,21 +16,21 @@ const slides = [
   {
     id: 1,
     image: "/heroSlider/long_van.jpg",
-    title: "Custom Camper Van Builds..",
+    title: "Campervans For Sale",
     desc: "Hand-built, road-ready. Your van, your rules.",
     tag: "Premium Builds"
   },
   {
     id: 2,
     image: "/heroSlider/heroimg2.webp",
-    title: "Off-Grid Camper Vans",
+    title: "Custom Campervans",
     desc: "Solar. Water. Heat. Live anywhere, need nothing.",
     tag: "Off-Grid Living"
   },
   {
     id: 3,
     image: "/images2/contact.webp",
-    title: "Van Conversion Specialists",
+    title: "Custom Van builders",
     desc: "Tell us your vision. We'll build it.",
     tag: "Custom Engineering"
   },
