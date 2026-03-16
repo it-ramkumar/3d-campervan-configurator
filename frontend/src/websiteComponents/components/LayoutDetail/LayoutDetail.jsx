@@ -8,6 +8,7 @@ import { Helmet } from "react-helmet-async";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Loader from "../Loader/Loader";
+import Consultation from "../Consultation/Consultation";
 import {generateLayoutSchema} from "../../schema/layoutDetail"
 import {
   Heading2,
@@ -54,7 +55,14 @@ export default function LayoutDetail() {
   const [activeImage, setActiveImage] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const containerRef = useRef(null);
-console.log(van,"van")
+    // 👇 Consultation section ka ref
+  const consultationRef = useRef(null);
+
+  const scrollToConsultation = () => {
+    consultationRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+// console.log(van,"van")
 
   useEffect(() => {
     const fetchLayout = async () => {
@@ -284,7 +292,7 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
               <div className="flex flex-col gap-4 pt-4">
                           <SecondaryButton
                             label="Secure This Build"
-                            // onClick={onConsultationClick}
+                            onClick={scrollToConsultation}
                           />
                           <ShareButton
                             title={van?.van_listing?.title}
@@ -339,49 +347,61 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
         </section>
 
         {/* {videos} */}
-<section className="py-12 px-4 flex flex-col items-center" style={{ backgroundColor: '#F5F5F0' }}>
+      {/* ============================ */}
+      {uniqueMedia.length > 0 ? (
+        <section className="py-12 px-4 flex flex-col items-center" style={{ backgroundColor: '#F5F5F0' }}>
 
       {/* Heading */}
       <div className="text-center mb-12">
-        <Heading2 text="Media Gallery"/>
-        {/* <div className="h-1 w-20 mx-auto mt-2" style={{ backgroundColor: '#001F3D' }}></div> */}
+        <h2 className="text-3xl font-bold uppercase tracking-tighter" style={{ color: '#001F3D' }}>
+          Media Gallery
+        </h2>
+        <div className="h-1 w-20 mx-auto mt-2" style={{ backgroundColor: '#001F3D' }}></div>
       </div>
 
       {/* Grid: Isme humne flex-wrap use kiya hai taaki boxes center rahein */}
       <div className="flex flex-wrap justify-center gap-8 w-full max-w-7xl">
-        {uniqueMedia?.map((link, i) => {
+        {uniqueMedia.map((link, i) => {
           const isYouTube = link.includes("youtube");
 
           return (
             <div
               key={i}
-              className={`w-full shadow-lg bg-white transition-all rounded-lg border-secondary border-2 overflow-hidden duration-300 ${
+              className={`w-full shadow-lg bg-white transition-all duration-300 ${
                 isYouTube ? 'max-w-[700px]' : 'max-w-[350px]'
               }`}
-
+              style={{
+                borderRadius: '15px', // Normal Rounded Borders
+                border: '2px solid #001F3D',
+                overflow: 'hidden'
+              }}
             >
-             <div
-  className={`rounded-lg relative w-full overflow-hidden ${
-    isYouTube ? 'aspect-video' : 'aspect-[9/12.5]'
-  }`}
-
->
-  <iframe
-    src={getEmbedUrl(link)}
-    className="absolute top-0 left-0 w-full h-full border-0"
-    scrolling="no"
-    allowTransparency="true"
-    allowFullScreen
-  ></iframe>
-</div>
+              <div className="relative w-full" style={{
+                // YouTube wide hai, Instagram lamba hai lekin ab width limited hai
+                paddingBottom: isYouTube ? '56.25%' : '140%',
+                height: 0
+              }}>
+                <iframe
+                  src={getEmbedUrl(link)}
+                  className="absolute top-0 left-0 w-full h-full"
+                  frameBorder="0"
+                  scrolling="no"
+                  allowTransparency="true"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           );
         })}
       </div>
     </section>
+      ):""}
       </main>
 )}
 
+<div ref={consultationRef} className="tour-consultation">
+        <Consultation />
+      </div>
 
       <Footer />
     </>

@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { Link } from "react-router-dom";
 import {
   Heading2, RichParagraph, Heading3,
-  ImageWithSkeleton, PrimaryButton, SecondaryButton,CustomLink
+  ImageWithSkeleton, PrimaryButton, SecondaryButton, CustomLink
 } from '../../Common/Common';
 
 // --- Icons (Adventure Ready) ---
@@ -46,11 +46,10 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
             <RichParagraph className="uppercase mb-4 !text-sm tracking-wider text-hover font-bold">
               Ready for adventure
             </RichParagraph>
-            <Heading2 text='In-Stock & Ready to Roll'  />
+            <Heading2 text='In-Stock Vans for sale' />
             <div className="mt-4">
               <RichParagraph>
-                Our Class B RVs are turn-key solutions. Skip the build wait and hit the road today with premium features already installed.
-              </RichParagraph>
+                Skip the build wait and hit the road in your van with premium features already installed.              </RichParagraph>
             </div>
           </div>
 
@@ -84,7 +83,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-200 to-slate-300">
                       <div className="mb-2 text-[var(--color-primary)]/20">
-                         <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                       </div>
                       <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-primary)] opacity-40">
                         Image Coming Soon
@@ -105,7 +104,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                   {/* Hover Icon */}
                   <div className="absolute bottom-6 right-6 z-20 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <div className="bg-white text-[var(--color-primary)] p-4 shadow-xl" style={{ borderRadius: 'var(--radius-md)' }}>
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
                   </div>
                 </Link>
@@ -119,7 +118,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                     {van?.van_listing?.subtitle || "A premium camper conversion crafted for the ultimate freedom."}
                   </RichParagraph>
                   <div className="h-[1px] w-full bg-slate-100 mb-6" />
-                  <CustomLink to={`/van-detail/${van.slug}`} text={"Explore Details +"}/>
+                  <CustomLink to={`/van-detail/${van.slug}`} text={"Explore Details +"} />
 
                 </div>
               </div>
@@ -129,8 +128,8 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
           /* --- Pipeline / Coming Soon Section --- */
           <div className="mt-10">
             <div className="text-center mb-12">
-               <Heading2 text="Upcoming Builds In Progress" />
-               <RichParagraph className="opacity-70">Securing the next generation of adventure vans.</RichParagraph>
+              <Heading2 text="Upcoming Builds In Progress" />
+              <RichParagraph className="opacity-70">Securing the next generation of adventure vans.</RichParagraph>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

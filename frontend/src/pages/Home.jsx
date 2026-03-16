@@ -133,9 +133,6 @@ const Home = () => {
       {/* Above the fold - Load immediately */}
       <Navbar />
       <Hero />
-
-      {/* Below the fold - Lazy load with Suspense */}
-      {/* Parent container mein flex aur space-y add kiya hai */}
       <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-32">
 
         <Suspense fallback={<SectionSkeleton height="300px" />}>

@@ -16,7 +16,7 @@ export default function Layouts() {
   const vanLayoutsData = [
     {
       id: "family",
-      title: "Campervans Layouts for Family (For 2+)",
+      title: "Campervan Layouts for Family (For 2+)",
       images: [
         "/images/limage1.webp", "/images/limage2.webp", "/images2/layout1.webp",
         "/images/limage4.webp", "/images/image5l.webp", "/images/image6l.webp",
@@ -27,25 +27,25 @@ export default function Layouts() {
     },
     {
       id: "couples",
-      title: "Campervans Layouts for Couples (For 2)",
+      title: "Campervan Layouts for Couples (For 2)",
       images: ["/images/image5l.webp", "/images/image6l.webp", "/images/image7l.webp", "/images/image8l.webp"],
       link: "/layout-by-category/Layouts for Solo & Couple Travelers"
     },
     {
       id: "short-vans",
-      title: "Campervans Layouts Short Vans",
+      title: "Short Campervan Layouts ",
       images: ["/shortVans/image1.jpg", "/shortVans/image2.jpg", "/shortVans/image3.jpg", "/shortVans/image4.jpg"],
       link: "/layout-by-category/Flagship Short Van — Santa Monica"
     },
     {
       id: "long-vans",
-      title: "Campervans Layouts Long Vans",
+      title: "Long Campervan Layouts ",
       images: ["/longVans/image1.jpg", "/longVans/image2.jpg", "/longVans/image3.jpg", "/longVans/image4.jpg"],
       link: "/layout-by-category/Flagship Long Van — Montreal"
     },
     {
       id: "custom-build",
-      title: "Campervans Layouts Custom Vans",
+      title: "Custom Campervan Layouts ",
       images: ["/customBuild/image1.jpg", "/customBuild/image2.jpg", "/customBuild/image3.jpg", "/customBuild/image4.jpg"],
       link: "/layout-by-category/Portfolio of Custom Builds"
     }

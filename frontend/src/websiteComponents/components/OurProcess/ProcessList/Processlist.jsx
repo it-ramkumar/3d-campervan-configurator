@@ -191,8 +191,8 @@ export default function ProcessPage() {
 
             <div className="space-y-8">
               <RichParagraph  className=" text-secondary">
-                Logistics shouldn't be your headache. We handle the complexity so you can focus on the destination
-                <CustomLink to="/our-clients" text={" Meet Our Clients."}/>
+                Logistics shouldn't be your headache. We handle the complexity so you can focus on the destination.
+                {/* <CustomLink to="/our-clients" text={" Meet Our Clients."}/> */}
 
               </RichParagraph>
 

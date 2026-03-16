@@ -131,7 +131,7 @@ export default function AdditionalAccessories() {
             <Heading3 text={"Have a specific accessory in mind?"} className="mb-2 text-secondary"/>
             <RichParagraph className="text-secondary">We can source and install custom equipment tailored to your build.</RichParagraph>
           </div>
-          <SecondaryButton label={"Discuss Custom Ideas"}/>
+          <SecondaryButton label={"Discuss Custom Ideas"} link={"/contact"}/>
 
         </motion.div>
 

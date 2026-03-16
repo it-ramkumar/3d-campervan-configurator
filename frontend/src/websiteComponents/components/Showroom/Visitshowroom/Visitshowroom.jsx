@@ -56,7 +56,7 @@ export default function Showroom() {
         { text: "How big should the bathroom be?", icon: Ruler },
         { text: "Which countertop and cabinet style feels right?", icon: Hammer },
       ],
-      image: "/images2/op3.webp",
+      image: "/images2/op3.png",
       isReversed: false
     },
   ];

@@ -208,7 +208,6 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-8 pb-12 pt-4 border-t border-secondary">
 
                         {/* Sub-Nav System */}
                         {cat.subCategories.length > 0 && (
@@ -301,7 +300,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                   <div className="absolute inset-0 bg-primary/5 rounded-lg blur-3xl group-hover:bg-primary transition-all duration-700" />
 
                                   {/* Image Container: Fixed Aspect Ratio for Portrait Images */}
-                                  <div className="relative z-10 overflow-hidden rounded-lg border-4 border-white shadow-2xl aspect-[4/5] md:aspect-square lg:aspect-[4/5] max-h-[550px] mx-auto bg-gray-100">
+                                  <div className="relative z-10 overflow-hidden rounded-lg border-4 border-white shadow-2xl mx-auto bg-gray-100">
                                     <ImageWithSkeleton
                                       src={activeItem.images?.[0]}
                                       alt={activeItem.title}
@@ -313,9 +312,9 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                 {/* --- Content Section --- */}
                                 <div className={`space-y-8 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
                                   <div>
-                                    <RichParagraph className="uppercase ">
+                                    {/* <RichParagraph className="uppercase ">
                                       Featured Option
-                                    </RichParagraph>
+                                    </RichParagraph> */}
                                     <div className="mt-4">
                                       <Heading3 text={activeItem.title} />
                                     </div>
@@ -360,7 +359,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                             </motion.div>
                           )}
                         </AnimatePresence>
-                      </div>
+
                     </motion.div>
                   )}
                 </AnimatePresence>

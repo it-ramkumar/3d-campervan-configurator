@@ -48,7 +48,7 @@ export default function Sprinterpage() {
 </Helmet>
       <Navbar />
       <div className="tour-hero">
-   <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage}  />
+   <HeroSection title={newTitleText} description={newDescriptionText} image={heroImage} link="/contact" buttonText="Get a Quote"/>
       </div>
         <div className="tour-financing-list">
           <Flist />

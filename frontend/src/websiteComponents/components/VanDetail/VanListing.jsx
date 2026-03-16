@@ -271,7 +271,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       </section>
 
       {/* ============================ */}
-<section className="py-12 px-4 flex flex-col items-center" style={{ backgroundColor: '#F5F5F0' }}>
+       {uniqueMedia.length > 0 ? (
+        <section className="py-12 px-4 flex flex-col items-center" style={{ backgroundColor: '#F5F5F0' }}>
 
       {/* Heading */}
       <div className="text-center mb-12">
@@ -317,6 +318,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         })}
       </div>
     </section>
+      ):""}
+
 
 
     {/*Model  */}

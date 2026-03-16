@@ -41,7 +41,7 @@ export default function Portfolio() {
             <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase mb-3 block">Our Craft</RichParagraph>
             <Heading2 text="From Dream to Your Driveway" />
             <RichParagraph className="mt-4">
-              Explore the craftsmanship and attention to detail in our latest custom van conversions.
+              Explore the craftsmanship and attention to detail in our best custom van conversions.
             </RichParagraph>
           </div>
         </div>

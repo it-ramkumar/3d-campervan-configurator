@@ -94,11 +94,11 @@ export default function AirService() {
         </div>
 
         {/* Premium Pickup Service CTA using Primary & Hover classes */}
-        <motion.div
+        {/* <motion.div
           className="mt-20 bg-primary rounded-lg p-8 md:p-12 text-secondary shadow-2xl relative overflow-hidden group"
           whileHover={{ scale: 1.01 }}
         >
-          {/* Animated Car Track Pattern */}
+
           <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none overflow-hidden">
              <Car className="absolute -right-10 top-1/2 -translate-y-1/2 w-64 h-64 -rotate-12" />
           </div>
@@ -126,7 +126,7 @@ export default function AirService() {
               </motion.button>
             </Link>
           </div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </motion.div>
   );

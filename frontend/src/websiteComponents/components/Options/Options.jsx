@@ -13,6 +13,7 @@ import AdditionalAccessories from './ExteriorAccessories';
 import SystemOptions from "./SystemOptions";
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
+import Consultation from '../Consultation/Consultation';
 
 // Helpers
 import { generateDynamicSchema } from '../../schema/optionsSchema';
@@ -22,7 +23,7 @@ const PAGE_CONFIG = {
     api: "exterior",
     keyword:"bathroom",
     title: "Campervan Exterior Upgrades",
-    desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical accessories.",
+    desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical exterior accessories.",
     heroImage: "/heroSlider/exteriorhero.webp"
   },
   "interior-options": {
@@ -34,7 +35,7 @@ const PAGE_CONFIG = {
   "system-options": {
     api: "system",
     title: "Electrical & Water Systems",
-    desc: "Reliable, high-performance electrical and water systems designed for off-grid travel and ultimate independence.",
+    desc: "Reliable, high-performance electrical and water systems, installed in every custom van.",
     heroImage: "/heroSlider/system.jpg"
   }
 };
@@ -186,11 +187,11 @@ console.log(dataState,"dataState")
           showButton={false}
         />
         {/* Subtle Bottom Curve/Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F5F5F0] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 " />
       </section>
 
       {/* --- Main Content Area --- */}
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+      <main className="">
 
         {/* Loader Wrapper for List */}
         <div className="transition-all duration-500">
@@ -235,7 +236,7 @@ console.log(dataState,"dataState")
           </section>
         )}
       </main>
-
+<Consultation/>
       <Footer />
 
       {/* --- Custom Scoping Styles --- */}

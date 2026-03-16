@@ -26,7 +26,7 @@ const PetFriendlySection = ({ imageData }) => {
                 With our pet-specific campervans, you can comfortably go shopping or hiking on a trail where pets are not allowed by leaving them in the van with the A/C or heater on and the engine off.
             <CustomLink to="/layout-detail/cusco-campervan" text={" Cusco, "}/>
 
-  <CustomLink to="/layout-detail/santa-barbara" text={" Sasha, "}/>
+  {/* <CustomLink to="/layout-detail/santa-barbara" text={" Sasha, "}/> */}
   <CustomLink to="/layout-detail/santa-barbara" text={"  Santa Barbara, "}/>
   <CustomLink to="/layout-detail/ventura-campervan" text={" Ventura, "}/>
                   etc, are our exclusive pet-friendly campervans.

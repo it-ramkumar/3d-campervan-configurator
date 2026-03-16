@@ -60,7 +60,7 @@ const RetireeSection = ({ imageData }) => {
             <div className="lg:col-span-5 order-1 lg:order-2 text-white">
               <Heading3 text="Vermont Campervan" className="text-white mb-6 uppercase" />
               <RichParagraph className="text-secondary mb-10">
-                <CustomLink to="/" text={" VERMONT "}/>
+                <CustomLink to="/layout-detail/vermont" text={" VERMONT "}/>
                 is a 170 AWD Sprinter campervan that we designed for a couple who wanted to travel with their grandchildren.
               </RichParagraph>
 
