@@ -62,7 +62,10 @@ export default function Buy() {
 
           {/* Quote card — 3rd column */}
           <div className="p-6 bg-primary/5 rounded-lg border border-primary/10 flex items-center">
-            <RichParagraph className="!italic !mb-0">
+
+            <RichParagraph
+            
+            className="!italic !mb-0">
               "Our mission is to create highly functional, beautiful mobile spaces for the modern explorer."
             </RichParagraph>
           </div>
@@ -129,7 +132,7 @@ export default function Buy() {
                   <div className="p-5 flex flex-col flex-grow">
                     <Heading3
                       text={van?.van_listing?.title || "New Build"}
-                   
+
                       className="truncate block"
                     />
                     <RichParagraph className="mt-2 mb-6 line-clamp-2 h-12">

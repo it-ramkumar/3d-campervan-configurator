@@ -40,10 +40,10 @@ export default function Customize({
               <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none"></div>
 
               {/* Overlay Content */}
-              <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
+              {/* <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
                 <Heading3 text={mainTitle} className="!text-secondary !mb-1  drop-shadow-md" />
                 <RichParagraph className="text-secondary !mb-0 line-clamp-1 !text-sm">{description}</RichParagraph>
-              </div>
+              </div> */}
             </div>
 
             {/* Subtle Accent Background - Rounded as per your preference */}

@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const RichParagraph = ({
   children,
@@ -8,28 +9,43 @@ const RichParagraph = ({
   inlineStyle = {},
   onClick
 }) => {
-  // Styles remains same, just changed tag from <p> to <div> to allow nested lists
   const baseStyles = "text-[14px] sm:text-base lg:text-[15px] leading-relaxed tracking-tighter font-body opacity-90";
+
+  // Animation variants
+  const fadeInVariant = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 0.9,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
+  const commonProps = {
+    // Framer Motion specific props
+    initial: "hidden",
+    whileInView: "visible",
+    viewport: { once: true, margin: "-50px" }, // Jab screen ke thora andar aaye tab trigger ho
+    variants: fadeInVariant,
+
+    onClick: onClick,
+    className: `${baseStyles} ${textColor} ${className}`,
+    style: { ...inlineStyle, borderRadius: '8px' } // Rounded borders as per your preference
+  };
 
   if (html) {
     return (
-      <div
-        className={`${baseStyles} ${textColor} ${className}`}
-        style={inlineStyle}
+      <motion.div
+        {...commonProps}
         dangerouslySetInnerHTML={{ __html: html }}
-        onClick={onClick}
       />
     );
   }
 
   return (
-    <div
-      onClick={onClick}
-      className={`${baseStyles} ${textColor} ${className}`}
-      style={inlineStyle}
-    >
+    <motion.div {...commonProps}>
       {children}
-    </div>
+    </motion.div>
   );
 };
 

@@ -65,14 +65,24 @@
   --animate-fade-loop-2: fade-loop-reverse 6s infinite alternate ease-in-out;
 }
 
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+html.lenis {
+  height: auto;
 }
 
-html {
-  scroll-behavior: smooth;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 @keyframes fadeInUp {

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store/store';
 import { PersistGate } from "redux-persist/integration/react";
 import Loader from "./websiteComponents/components/Loader/Loader"
-
+import SmoothScroll from "./websiteComponents/components/Common/SmoothScrolling/SmoothScroll"
 // Fix global for browser
 if (typeof global === "undefined") {
   window.global = window;
@@ -16,13 +16,15 @@ if (typeof global === "undefined") {
 const AppRoutes = lazy(() => import('./routes/Routes')); // Lazy load routes
 
 createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
     <StrictMode>
+  <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Suspense fallback={<Loader/>}>
+        <SmoothScroll>
           <AppRoutes />
+        </SmoothScroll>
         </Suspense>
       </PersistGate>
-    </StrictMode>
   </Provider>
+    </StrictMode>
 );

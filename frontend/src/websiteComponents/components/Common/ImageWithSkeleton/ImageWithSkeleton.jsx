@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-// Props mein 'priority' add karein (default false rakhein)
+import { motion } from "framer-motion"; // 🟢 Added Motion
+
 export default function ImageWithSkeleton({
   src,
   alt,
   className = "",
   click = false,
-  priority = false,// 🟢 New Prop
+  priority = false,
   sizes,
-
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -17,30 +17,49 @@ export default function ImageWithSkeleton({
 
   const finalSrc = error ? "/no-image.png" : src;
 
+  // Animation Variants for Reveal Effect
+  const imageReveal = {
+    hidden: { opacity: 0, y: 30, scale: 1.05 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+    }
+  };
+
   return (
     <>
-      {/* ======= Thumbnail Image ======= */}
-      <img
-        src={finalSrc}
-        alt={alt}
-        // 🟢 Priority instructions
-        fetchPriority={priority ? "high" : "low"}
-        loading={priority ? "eager" : "lazy"}
-        decoding={priority ? "sync" : "async"}
+      {/* ======= Thumbnail Wrapper ======= */}
+      {/* Wrapper isliye takay overflow-hidden se image reveal cool lage */}
+      <div className="overflow-hidden rounded-md h-full w-full">
+        <motion.img
+          initial={priority ? false : "hidden"} // Priority images foran dikhengi
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={imageReveal}
 
-        onLoad={() => setLoaded(true)}
-        onError={() => setError(true)}
-        onClick={() => !click && setIsModalOpen(true)}
+          src={finalSrc}
+          alt={alt}
+          fetchPriority={priority ? "high" : "low"}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
 
-        className={`
-    ${className}
-    border border-gray-300 rounded-md object-cover
-    transition-all duration-300 ease-in-out
-    ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
-    ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
-  `}
-        sizes={sizes}
-      />
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+          onClick={() => !click && setIsModalOpen(true)}
+
+          className={`
+            ${className}
+            border border-gray-300 object-cover
+            transition-all duration-300 ease-in-out
+            ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
+            cursor-pointer
+          `}
+          style={{ borderRadius: '8px' }} // Normal rounded borders as requested
+          sizes={sizes}
+        />
+      </div>
 
       {/* ======= True Fullscreen Modal (via Portal) ======= */}
       {!click && isModalOpen &&
@@ -49,7 +68,9 @@ export default function ImageWithSkeleton({
             className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           >
-            <div
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               className="relative w-full h-full bg-black flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
@@ -65,7 +86,7 @@ export default function ImageWithSkeleton({
                 alt={alt}
                 className="max-w-[95%] max-h-[90%] object-contain rounded-xl shadow-2xl transition-transform duration-300 hover:scale-105"
               />
-            </div>
+            </motion.div>
           </div>,
           document.body
         )}
