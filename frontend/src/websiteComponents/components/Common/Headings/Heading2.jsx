@@ -12,7 +12,7 @@ const Heading2 = ({
   const heading2Variants = {
     hidden: {
       opacity: 0,
-      y: 35 // Thora sa niche se start hoga
+      y: 55 // Thora sa niche se start hoga
     },
     visible: {
       opacity: 1,

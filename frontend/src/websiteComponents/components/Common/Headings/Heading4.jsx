@@ -12,7 +12,7 @@ const Heading4 = ({
   const heading4Variants = {
     hidden: {
       opacity: 0,
-      y: 15 // Very subtle move
+      y: 25 // Very subtle move
     },
     visible: {
       opacity: 1,

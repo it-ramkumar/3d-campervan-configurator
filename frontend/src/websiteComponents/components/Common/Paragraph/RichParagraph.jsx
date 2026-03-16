@@ -13,7 +13,7 @@ const RichParagraph = ({
 
   // Animation variants
   const fadeInVariant = {
-    hidden: { opacity: 0, y: 25 },
+    hidden: { opacity: 0, y: 35 },
     visible: {
       opacity: 0.9,
       y: 0,
@@ -21,18 +21,18 @@ const RichParagraph = ({
     }
   };
 
-  const commonProps = {
-    // Framer Motion specific props
+const commonProps = {
     initial: "hidden",
     whileInView: "visible",
-    viewport: { once: true, margin: "-50px" }, // Jab screen ke thora andar aaye tab trigger ho
+    // once: false karne se ye har baar scroll par chale ga
+    // amount: 0.1 ka matlab hai jab 10% element nazar aaye tab animation shuru ho
+    viewport: { once: false, amount: 0.1, margin: "-50px" },
     variants: fadeInVariant,
 
     onClick: onClick,
     className: `${baseStyles} ${textColor} ${className}`,
-    style: { ...inlineStyle, borderRadius: '8px' } // Rounded borders as per your preference
+    style: { ...inlineStyle, borderRadius: '8px' }
   };
-
   if (html) {
     return (
       <motion.div

@@ -12,7 +12,7 @@ const Heading3 = ({
   const heading3Variants = {
     hidden: {
       opacity: 0,
-      y: 20 // H1 aur H2 se thora kam displacement taake subtle lage
+      y: 30 // H1 aur H2 se thora kam displacement taake subtle lage
     },
     visible: {
       opacity: 1,
