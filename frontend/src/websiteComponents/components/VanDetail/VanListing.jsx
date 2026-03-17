@@ -80,34 +80,44 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
           {/* LEFT: MAIN GALLERY CAROUSEL */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
-              <ImageWithSkeleton
-                src={gallery[activeImage]}
-                alt={vanDetail.van_listing.title}
-                className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-              />
-              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all">
-                <ChevronLeft size={24} />
-              </button>
-              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all">
-                <ChevronRight size={24} />
-              </button>
-            </div>
+        <div className="lg:col-span-7 space-y-4">
+  <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white aspect-[4/3] flex items-center justify-center">
+    {gallery && gallery[activeImage] ? (
+      <>
+        <ImageWithSkeleton
+          src={gallery[activeImage]}
+          alt={vanDetail.van_listing.title}
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+        />
+        <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all">
+          <ChevronLeft size={24} />
+        </button>
+        <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all">
+          <ChevronRight size={24} />
+        </button>
+      </>
+    ) : (
+      <div className="flex flex-col items-center justify-center text-gray-400">
+        <span className="text-lg font-medium">Image Coming Soon</span>
+      </div>
+    )}
+  </div>
 
-            {/* Thumbnails Grid */}
-            <div className="grid grid-cols-5 gap-3">
-              {gallery.map((img, i) => (
-                <div
-                  key={i}
-                  onClick={() => setActiveImage(i)}
-                  className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${activeImage === i ? 'border-[#ED985F]' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                >
-                  <img src={img} className="w-full h-full object-cover" alt={`Thumbnail ${i}`} />
-                </div>
-              ))}
-            </div>
-          </div>
+  {/* Thumbnails Grid - Only show if there are images */}
+  {gallery && gallery.length > 0 && (
+    <div className="grid grid-cols-5 gap-3">
+      {gallery.map((img, i) => (
+        <div
+          key={i}
+          onClick={() => setActiveImage(i)}
+          className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${activeImage === i ? 'border-[#ED985F]' : 'border-transparent opacity-60 hover:opacity-100'}`}
+        >
+          <img src={img} className="w-full h-full object-cover" alt={`Thumbnail ${i}`} />
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
           {/* RIGHT: STICKY INFO PANEL */}
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
@@ -140,7 +150,8 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
             <div className="flex flex-col gap-4 pt-4">
               <SecondaryButton
                 label="Secure This Build"
-                onClick={onConsultationClick}
+            link={"/inquiry"}
+            className="w-full"
               />
               <ShareButton
                 title={vanDetail?.van_listing?.title}

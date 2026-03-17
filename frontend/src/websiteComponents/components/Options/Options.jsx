@@ -74,7 +74,7 @@ export default function ExteriorChoicePage() {
 
           if (!categoryMap[cat._id]) {
             categoryMap[cat._id] = { ...cat, subCategories: {}, items: [] };
-            initialExpanded[cat._id] = false;
+            initialExpanded[cat._id] = true;
             initialShowFullMap[cat._id] = false;
           }
 

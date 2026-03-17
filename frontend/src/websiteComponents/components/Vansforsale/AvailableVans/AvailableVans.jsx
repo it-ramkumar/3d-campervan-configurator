@@ -112,7 +112,8 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                 <div className="p-8">
                   <div className="flex justify-between items-start mb-4">
                     <Heading3 text={van?.van_listing?.title || "Custom Build"} />
-                    <RichParagraph className='!text-xs font-bold !text-hover'>2026 Edition</RichParagraph>
+                    {van.van_listing.price > 100 && <Heading3 text={`$${Number(van.van_listing.price).toLocaleString()}`} className='!text-hover' />
+                    }                    {/* <RichParagraph className=' font-bold !text-hover'>{`$${Number(van?.van_listing?.price).toLocaleString()}`}</RichParagraph> */}
                   </div>
                   <RichParagraph className="line-clamp-2 mb-6">
                     {van?.van_listing?.subtitle || "A premium camper conversion crafted for the ultimate freedom."}
