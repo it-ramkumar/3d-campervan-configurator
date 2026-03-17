@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 const RichParagraph = ({
   children,
   html,
-  textColor = "text-[#5A5A5A]",
+  textColor = "text-secondary",
   className = "",
   inlineStyle = {},
   onClick

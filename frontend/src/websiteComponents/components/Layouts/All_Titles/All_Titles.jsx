@@ -119,11 +119,11 @@ export default function All_Titles() {
                         : "bg-white border-[#F5F5F0] hover:border-[#ED985F]/30 hover:shadow-lg"
                     }`}
                   >
-                    <div className="flex flex-col overflow-hidden">
-                      <RichParagraph className={`uppercase mb-1 !text-xs font-bold ${isActive ? "text-hover" : "text-primary/30"}`}>
+                    <div className="flex flex-col ">
+                      <RichParagraph className={`uppercase mb-1 !text-xs font-bold !text-primary`}>
                         {item?.van_listing?.specifications?.wheelbase || "Custom"}
                       </RichParagraph>
-                      <RichParagraph className={`font-bold  truncate pr-4 ${isActive ? "text-white" : "text-primary"}`}>
+                      <RichParagraph className={`font-bold  truncate pr-4 !text-primary `}>
                         {item?.van_listing?.title || "Untitled Build"}
                       </RichParagraph>
                     </div>
