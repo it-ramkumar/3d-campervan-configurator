@@ -14,17 +14,22 @@ if (typeof global === "undefined") {
 }
 
 const AppRoutes = lazy(() => import('./routes/Routes')); // Lazy load routes
+const isDashboard = window.location.pathname.startsWith('/dashboard');
 
 createRoot(document.getElementById('root')).render(
-    <StrictMode>
-  <Provider store={store}>
+  <StrictMode>
+    <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Suspense fallback={<Loader/>}>
-        <SmoothScroll>
-          <AppRoutes />
-        </SmoothScroll>
+        <Suspense fallback={<Loader />}>
+          {isDashboard ? (
+            <AppRoutes />
+          ) : (
+            <SmoothScroll>
+              <AppRoutes />
+            </SmoothScroll>
+          )}
         </Suspense>
       </PersistGate>
-  </Provider>
-    </StrictMode>
+    </Provider>
+  </StrictMode>
 );

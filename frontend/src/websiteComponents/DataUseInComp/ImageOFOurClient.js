@@ -11,7 +11,6 @@ export const imageData = {
     "/OurClients/blue1.jpg",
     "/OurClients/blue2.jpeg",
     "/OurClients/blue3.jpg",
-    // "/OurClients/blue4.jpg",
   ],
   cusco: ["/OurClients/c1.jpg", "/OurClients/c2.jpg", "/OurClients/c3.jpg"],
   lakeTahoe: [
