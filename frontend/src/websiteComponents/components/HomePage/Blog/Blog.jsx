@@ -32,7 +32,7 @@ export default function Blog() {
 
         {/* --- Header Section --- */}
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase  mb-4 block">Insights & Stories</RichParagraph>
+          <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase  mb-4 block">Insights & Stories</RichParagraph>
           <Heading2 text="Explore Our Van Life Blog" />
           <div className="w-16 h-1 bg-hover mx-auto rounded-lg my-6"></div>
           <RichParagraph className="">
@@ -57,7 +57,7 @@ export default function Blog() {
                 />
                 {/* Floating Date Badge */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-[var(--gap-sm)] border border-primary/5">
-                  <Calendar size={12} className="text-hover" />
+                  <Calendar size={12} className="!text-hover" />
                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
                     {new Date(post?.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </span>
@@ -67,7 +67,7 @@ export default function Blog() {
               {/* Content Section */}
               <div className="p-8 flex flex-col flex-grow">
                 <div className="flex items-center gap-sm mb-4">
-                  <RichParagraph className="!text-xs uppercase  text-hover bg-hover/10 px-2 py-1 rounded-lg">
+                  <RichParagraph className="!text-xs uppercase  !text-hover bg-hover/10 px-2 py-1 rounded-lg">
                     Resources
                   </RichParagraph>
                   <div className="flex items-center gap-sm text-primary/40">
@@ -76,18 +76,18 @@ export default function Blog() {
                   </div>
                 </div>
 
-                <Heading3 text={post.title} className=" mb-4 group-hover:text-hover transition-colors line-clamp-2" />
+                <Heading3 text={post.title} className=" mb-4 group-hover:!text-hover transition-colors line-clamp-2" />
                 <RichParagraph className=" line-clamp-3 mb-6">
                   {post.description}
                 </RichParagraph>
 
                 {/* Bottom Link */}
                 <div className="flex items-center gap-sm  group-hover:gap-4 transition-all">
-                  <RichParagraph className="text-hover !text-sm">
+                  <RichParagraph className="!text-hover !text-sm">
                     Read Article
                   </RichParagraph>
 
-                  <ArrowUpRight size={16} className="text-hover" />
+                  <ArrowUpRight size={16} className="!text-hover" />
                 </div>
               </div>
             </Link>

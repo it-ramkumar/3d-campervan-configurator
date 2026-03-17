@@ -24,7 +24,7 @@ export default function CustomLink({
   // const variants = {
   //   primary: " text-secondary hover:bg-hover hover:text-secondary",
   //   outline: " text-primary bg-transparent hover:bg-primary hover:text-white",
-  //   ghost: "text-primary hover:bg-secondary hover:text-hover shadow-none"
+  //   ghost: "text-primary hover:bg-secondary hover:!text-hover shadow-none"
   // };
 
   // const combinedClasses = `${baseStyles} ${variants[variant]} ${className}`;

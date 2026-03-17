@@ -73,7 +73,7 @@ export default function Showroom() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <RichParagraph className="!text-hover !text-sm font-bold tracking-wider uppercase ">
+            <RichParagraph className="!!text-hover !text-sm font-bold tracking-wider uppercase ">
               Experience the Craftsmanship
             </RichParagraph>
 
@@ -119,7 +119,7 @@ export default function Showroom() {
            whileHover={{ scale: 1.01 }}
         >
           <div className="relative z-10 space-y-6">
-            <Coffee className="mx-auto text-hover" size={48} />
+            <Coffee className="mx-auto !text-hover" size={48} />
             <Heading2 text="Ready to touch and feel?" className="text-secondary" />
             <RichParagraph className="max-w-xl mx-auto text-secondary opacity-80">
               Schedule your private workshop tour today. The coffee is on us.

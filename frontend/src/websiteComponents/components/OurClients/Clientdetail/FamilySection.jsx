@@ -16,7 +16,7 @@ const FamilySection = ({ imageData }) => {
     <section className="py-20 bg-secondary">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="inline-flex p-3 bg-primary rounded-lg text-hover mb-4">
+          <div className="inline-flex p-3 bg-primary rounded-lg !text-hover mb-4">
             <Users size={32} />
           </div>
           <Heading2 text="Family-friendly Campervans" className="mb-4" />

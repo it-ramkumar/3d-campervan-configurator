@@ -108,7 +108,7 @@ const WhyChoose = () => {
 
         {/* --- Section Header --- */}
         <div className="text-center max-w-3xl mx-auto mb-20 md:mb-32">
-          <RichParagraph className="text-hover font-bold uppercase !text-xs mb-4 block">Our Advantage</RichParagraph>
+          <RichParagraph className="!text-hover font-bold uppercase !text-xs mb-4 block">Our Advantage</RichParagraph>
           <Heading2 text={"Why Choose Big Bear Vans?"} />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg my-6"></div>
           <RichParagraph >
@@ -172,7 +172,7 @@ const WhyChoose = () => {
 </div>
                 {/* Text Content */}
                 <div className="w-full lg:w-1/2 space-y-8">
-                  <div className="inline-flex items-center gap-2 text-hover !text-xs font-bold uppercase ">
+                  <div className="inline-flex items-center gap-2 !text-hover !text-xs font-bold uppercase ">
                     <Plus size={14} />
                     Feature {index + 1}
                   </div>
@@ -187,7 +187,7 @@ const WhyChoose = () => {
                       <div className="grid grid-cols-1 gap-4">
                         {section.features.map((feature, fIndex) => (
                           <div key={fIndex} className="flex items-start gap-4 p-5 bg-secondary rounded-lg border border-primary/5 transition-colors hover:bg-white hover:border-hover/30 group">
-                            <div className="p-2.5 rounded-lg bg-white shadow-sm text-hover group-hover:bg-hover group-hover:text-white transition-colors">
+                            <div className="p-2.5 rounded-lg bg-white shadow-sm !text-hover group-hover:bg-hover group-hover:text-white transition-colors">
                               {feature.icon}
                             </div>
                             <div className="text-sm pt-1">
@@ -210,7 +210,7 @@ const WhyChoose = () => {
 
                     <button
                       onClick={() => toggleExpand(index)}
-                      className="group flex items-center gap-[var(--gap-sm)] text-xs font-bold uppercase tracking-widest text-hover hover:text-primary transition-colors"
+                      className="group flex items-center gap-[var(--gap-sm)] text-xs font-bold uppercase tracking-widest !text-hover hover:text-primary transition-colors"
                     >
                       <span className="bg-hover text-secondary p-1 rounded-lg group-hover:bg-primary transition-colors">
                         {isExpanded ? <ChevronUp size={10} /> : <ChevronDown size={10} />}

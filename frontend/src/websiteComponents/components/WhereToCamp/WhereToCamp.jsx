@@ -88,7 +88,7 @@ const WhereToCamp = () => {
                 {tableData && tableData.length > 0 && (
                     <div className="border-t border-primary/20 bg-white p-6 lg:p-10">
                         <div className="mb-4">
-                            <RichParagraph className="!text-sm font-bold uppercase tracking-widest text-hover">Site Logistics</RichParagraph>
+                            <RichParagraph className="!text-sm font-bold uppercase tracking-widest !text-hover">Site Logistics</RichParagraph>
                             <div className="h-1 w-8 bg-hover mt-1 rounded-full"></div>
                         </div>
 
@@ -221,7 +221,7 @@ const campingSchema = {
                                 If you’re coming here to visit our showroom or to pick up your campervan, why not make a trip out of it? Big Bear has some beautiful campgrounds and RV parks nearby where you can stay to check that everything works great and meets your expectations.
                             </RichParagraph>
 
-                            <p className="text-xs font-bold text-hover uppercase tracking-wider pt-4">
+                            <p className="text-xs font-bold !text-hover uppercase tracking-wider pt-4">
                                 Start Your Adventure Below
                             </p>
                         </div>
@@ -234,7 +234,7 @@ const campingSchema = {
                             {/* Category Heading */}
                             <div className="flex items-center gap-4 mb-10">
                                 <div className="flex flex-col">
-                                    <RichParagraph className="!text-sm uppercase font-bold text-hover tracking-wider mb-1">
+                                    <RichParagraph className="!text-sm uppercase font-bold !text-hover tracking-wider mb-1">
                                         Explore Category {String(catIndex + 1).padStart(2, '0')}
                                     </RichParagraph>
                                     <Heading2 text={category.categoryTitle} />

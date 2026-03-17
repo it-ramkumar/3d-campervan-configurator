@@ -100,7 +100,7 @@ export default function BlogDetail() {
             <ul className="space-y-3 ml-2">
               {listItems.map((item, idx) => (
                 <li key={idx} className="flex gap-3 items-start text-primary/80">
-                  <span className="text-hover font-black mt-1.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
+                  <span className="!text-hover font-black mt-1.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
                   <span className="leading-relaxed">{formatBoldTags(item)}</span>
                 </li>
               ))}
@@ -117,7 +117,7 @@ export default function BlogDetail() {
       case "heading":
         return (
           <div key={index} className="mb-10 mt-16 group">
-            <p className="text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Section {index + 1}</p>
+            <p className="!text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Section {index + 1}</p>
             <Heading2 text={formatBoldTags(block.text)} className="!text-left !text-primary" />
             <div className="w-20 h-1 bg-hover mt-4 rounded-full transition-all group-hover:w-32" />
           </div>
@@ -184,7 +184,7 @@ export default function BlogDetail() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {values?.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-3 bg-secondary rounded-[var(--radius-sm)]">
-                    <ChevronRight size={14} className="text-hover" />
+                    <ChevronRight size={14} className="!text-hover" />
                     <span className="text-sm font-medium text-primary/80">{formatBoldTags(item)}</span>
                   </div>
                 ))}
@@ -257,7 +257,7 @@ export default function BlogDetail() {
         elements.push(
           <div key={i} className="my-20 flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-1/2">
-               <p className="text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Deep Dive</p>
+               <p className="!text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Deep Dive</p>
                <Heading2 text={block.text} className="!text-left !text-primary !mb-0" />
             </div>
             <div className="w-full lg:w-1/2 rounded-[var(--radius-lg)] overflow-hidden shadow-xl border border-primary/5">
@@ -321,12 +321,12 @@ const metaDescription = blog.description ||
         <div className="absolute inset-0 flex items-end pb-20 px-4">
           <div className="max-w-5xl mx-auto w-full text-center">
              <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1 }}>
-                <p className="text-hover font-black text-xs lg:text-sm tracking-[0.5em] uppercase mb-6">Expert Journal</p>
+                <p className="!text-hover font-black text-xs lg:text-sm tracking-[0.5em] uppercase mb-6">Expert Journal</p>
                 <Heading1 text={blog.title} className="!text-white !leading-[1.1] !mb-8 drop-shadow-2xl" />
                 <div className="flex flex-wrap justify-center gap-8 text-white/60 text-[10px] lg:text-xs uppercase tracking-widest font-sans">
-                  <span className="flex items-center gap-2 border-r border-white/20 pr-8"><CalendarDays size={14} className="text-hover" /> {new Date(blog.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                  <span className="flex items-center gap-2 border-r border-white/20 pr-8"><Clock size={14} className="text-hover" /> {Math.ceil((blog.content?.length || 0) * 1.5)} Min Read</span>
-                  <span className="flex items-center gap-2"><BookOpen size={14} className="text-hover" /> {blog.content?.length} Insights</span>
+                  <span className="flex items-center gap-2 border-r border-white/20 pr-8"><CalendarDays size={14} className="!text-hover" /> {new Date(blog.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  <span className="flex items-center gap-2 border-r border-white/20 pr-8"><Clock size={14} className="!text-hover" /> {Math.ceil((blog.content?.length || 0) * 1.5)} Min Read</span>
+                  <span className="flex items-center gap-2"><BookOpen size={14} className="!text-hover" /> {blog.content?.length} Insights</span>
                 </div>
              </motion.div>
           </div>
@@ -340,7 +340,7 @@ const metaDescription = blog.description ||
         <aside className="hidden lg:block lg:col-span-1">
           <div className="sticky top-32 flex flex-col items-center gap-8">
             <div className="w-px h-20 bg-primary/10" />
-            <button onClick={handleShare} className="p-4 bg-white rounded-full shadow-sm hover:shadow-xl hover:text-hover transition-all border border-primary/5">
+            <button onClick={handleShare} className="p-4 bg-white rounded-full shadow-sm hover:shadow-xl hover:!text-hover transition-all border border-primary/5">
                <Share2 size={20} />
             </button>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] rotate-90 mt-10 whitespace-nowrap text-primary/30">Share Article</p>
@@ -355,7 +355,7 @@ const metaDescription = blog.description ||
 
           <div className="mt-24 pt-12 border-t border-secondary flex flex-col items-center text-center">
             <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mb-6">
-               <Share2 size={24} className="text-hover" />
+               <Share2 size={24} className="!text-hover" />
             </div>
             <Heading3 text="Found this helpful?" className="!mb-2" />
             <p className="text-primary/50 text-sm mb-8 font-sans">Spread the knowledge with your fellow van-lifers.</p>
@@ -375,7 +375,7 @@ const metaDescription = blog.description ||
             {blog.gallery?.length > 0 && (
               <div className="bg-white p-6 rounded-[var(--radius-md)] shadow-sm border border-primary/5">
                 <div className="flex items-center gap-2 mb-6 border-b border-secondary pb-4">
-                  <ImageIcon size={16} className="text-hover"/>
+                  <ImageIcon size={16} className="!text-hover"/>
                   <p className="text-[10px] font-black uppercase tracking-widest text-primary">Visual Gallery</p>
                 </div>
                 <div className="rounded-[var(--radius-sm)] overflow-hidden aspect-square mb-4 border border-secondary">
@@ -398,7 +398,7 @@ const metaDescription = blog.description ||
             {/* Stats Box */}
             <div className="bg-primary text-white p-8 rounded-[var(--radius-md)] shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 opacity-10 -mr-4 -mt-4"><FileText size={100} /></div>
-              <p className="text-hover font-black text-[10px] tracking-widest uppercase mb-6">Article Summary</p>
+              <p className="!text-hover font-black text-[10px] tracking-widest uppercase mb-6">Article Summary</p>
               <div className="space-y-5 relative z-10">
                 <div className="flex justify-between items-center border-b border-white/10 pb-3">
                   <span className="text-white/50 text-[10px] uppercase tracking-wider">Depth</span>

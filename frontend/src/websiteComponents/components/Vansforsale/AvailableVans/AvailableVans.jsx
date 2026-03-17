@@ -43,7 +43,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
         {/* --- Header Section --- */}
         <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl">
-            <RichParagraph className="uppercase mb-4 !text-sm tracking-wider text-hover font-bold">
+            <RichParagraph className="uppercase mb-4 !text-sm tracking-wider !text-hover font-bold">
               Ready for adventure
             </RichParagraph>
             <Heading2 text='In-Stock Vans for sale' />
@@ -112,7 +112,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                 <div className="p-8">
                   <div className="flex justify-between items-start mb-4">
                     <Heading3 text={van?.van_listing?.title || "Custom Build"} />
-                    <RichParagraph className='!text-xs font-bold text-hover'>2026 Edition</RichParagraph>
+                    <RichParagraph className='!text-xs font-bold !text-hover'>2026 Edition</RichParagraph>
                   </div>
                   <RichParagraph className="line-clamp-2 mb-6">
                     {van?.van_listing?.subtitle || "A premium camper conversion crafted for the ultimate freedom."}

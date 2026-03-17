@@ -54,7 +54,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <div>
-              <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">The Founders</RichParagraph>
+              <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">The Founders</RichParagraph>
               <Heading2 text='Artur and Anna' className="mt-2" />
               <div className="h-1 w-20 bg-primary mt-4 rounded-lg"></div>
             </div>
@@ -74,7 +74,7 @@ export default function AboutPage() {
       <section className="bg-primary py-24 lg:py-40">
         <div className="container mx-auto px-6">
           <div className="mb-20">
-            <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Our Journey</RichParagraph>
+            <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">Our Journey</RichParagraph>
             <Heading2 text="The Evolution of Our Vans" className="text-secondary mt-2" />
           </div>
 

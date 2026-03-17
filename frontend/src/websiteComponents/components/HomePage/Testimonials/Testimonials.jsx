@@ -45,7 +45,7 @@ export default function Testimonials() {
 
         {/* --- Header --- */}
         <div className="text-center mb-16 md:mb-24">
-          <RichParagraph className="text-hover uppercase font-bold !text-sm tracking-wider mb-4">Testimonials</RichParagraph>
+          <RichParagraph className="!text-hover uppercase font-bold !text-sm tracking-wider mb-4">Testimonials</RichParagraph>
           <Heading2 text={"Voices of the Van Life"} />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg mt-6"></div>
         </div>
@@ -72,12 +72,12 @@ export default function Testimonials() {
                 className="group relative bg-white p-8 md:p-10 rounded-lg border border-primary/5 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer h-full flex flex-col"
               >
                 {/* Quote Icon Decoration */}
-                <div className="absolute top-8 right-8 text-primary/5 group-hover:text-hover/20 transition-colors">
+                <div className="absolute top-8 right-8 text-primary/5 group-hover:!text-hover/20 transition-colors">
                   <Quote size={40} fill="currentColor" />
                 </div>
 
                 {/* Stars */}
-                <div className="flex gap-sm text-hover mb-6">
+                <div className="flex gap-sm !text-hover mb-6">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -97,7 +97,7 @@ export default function Testimonials() {
                   </div>
                   <div>
                     <RichParagraph className="font-bold text-primary">{review.name}</RichParagraph>
-                    <RichParagraph className='text-hover'>Verified Owner</RichParagraph>
+                    <RichParagraph className='!text-hover'>Verified Owner</RichParagraph>
                   </div>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export default function Testimonials() {
                 {selectedReview.initial}
               </div>
               <Heading3 text={selectedReview.name} className="mb-2 text-primary" />
-              <div className="flex gap-[var(--gap-sm)] text-hover mb-8">
+              <div className="flex gap-[var(--gap-sm)] !text-hover mb-8">
                   {[...Array(5)].map((_, i) => (
                     <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
                   ))}
@@ -134,7 +134,7 @@ export default function Testimonials() {
 
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-sm text-xs font-black uppercase tracking-widest text-primary/40 hover:text-hover transition-colors"
+                className="flex items-center gap-sm text-xs font-black uppercase tracking-widest text-primary/40 hover:!text-hover transition-colors"
               >
                 {isCopied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
                 {isCopied ? "Review Copied" : "Copy Feedback"}

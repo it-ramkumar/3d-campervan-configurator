@@ -83,7 +83,7 @@ const AdventureSection = ({ imageData }) => {
                 </div>
                 <div className="bg-primary p-6 rounded-lg text-secondary">
                   <div className="flex items-center gap-3 mb-4">
-                    <Home className="text-hover" size={24} />
+                    <Home className="!text-hover" size={24} />
                     <Heading4 text="The Living Space" className="uppercase  text-secondary" />
                   </div>
                   <ul className="space-y-2 text-sm opacity-90">

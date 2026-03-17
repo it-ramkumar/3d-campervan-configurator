@@ -13,28 +13,37 @@ import Paragraph from "../../Common/Paragraph/HeroParagraph";
 import { SecondaryButton, PrimaryButton, ImageWithSkeleton, Heading1, RichParagraph } from '../../Common/Common'
 
 const slides = [
-  {
-    id: 1,
-    image: "/heroSlider/long_van.jpg",
-    title: "Campervans For Sale",
-    desc: "Hand-built, road-ready. Your van, your rules.",
-    tag: "Premium Builds"
-  },
-  {
-    id: 2,
-    image: "/heroSlider/heroimg2.webp",
-    title: "Custom Campervans",
-    desc: "Solar. Water. Heat. Live anywhere, need nothing.",
-    tag: "Off-Grid Living"
-  },
-  {
-    id: 3,
-    image: "/images2/contact.webp",
-    title: "Custom Van builders",
-    desc: "Tell us your vision. We'll build it.",
-    tag: "Custom Engineering"
-  },
-];
+    {
+      id: 1,
+      image: "/heroSlider/long_van.jpg",
+      tag: "Vans For Sale",
+      title: "Campervans For Sale",
+      desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
+      btnText: "View Inventory",
+      link: "/vans-for-sale",
+      type: "sale"
+    },
+    {
+      id: 2,
+      image: "/heroSlider/heroimg2.webp",
+      tag: "Bespoke Service",
+      title: "Custom Van Builds",
+      desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
+      btnText: "Build Your Own",
+      link: "/inquiry",
+      type: "custom"
+    },
+    {
+      id: 3,
+      image: "/images2/contact.webp",
+      tag: "Our Layouts",
+      title: "Previous Layouts",
+      desc: "Explore our past projects and get inspired by our signature craftsmanship.",
+      btnText: "Browse Gallery",
+      link: "/van-layouts",
+      type: "portfolio"
+    }
+  ];
 
 export default function Hero() {
   const [swiper, setSwiper] = useState(null);
@@ -73,7 +82,7 @@ export default function Hero() {
                 {/* Animated Tagline - Using Hover color as accent */}
                 <div className="flex items-center gap-sm animate-fade-in-up">
                   <span className="w-8 h-[2px] bg-hover"></span>
-                  <RichParagraph className="text-hover uppercase font-bold !text-sm !tracking-wider">
+                  <RichParagraph className="!text-hover uppercase font-bold !text-sm !tracking-wider">
                     {slide.tag}
                   </RichParagraph>
                 </div>
@@ -96,12 +105,12 @@ export default function Hero() {
                 {/* Button Components */}
                 <div className="flex flex-wrap gap-[var(--gap-sm)] pt-4 md:pt-6 animate-fade-in-up delay-300">
                   <SecondaryButton
-                    label="Order Custom Build"
-                    link="/inquiry"
+                    label={slide.btnText}
+                    link={slide.link}
                   />
                   <PrimaryButton
-                    label="View Van Inventory"
-                    link="/vans-for-sale"
+                    label="ORDER CUSTOM BUILd"
+                    link="/contact"
                   />
                 </div>
 

@@ -25,7 +25,7 @@ export default function SoldVans({
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
                <span className="w-8 h-[2px] bg-hover opacity-30"></span>
-               <RichParagraph className="text-hover uppercase  font-bold !text-xs italic">The Archive</RichParagraph>
+               <RichParagraph className="!text-hover uppercase  font-bold !text-xs italic">The Archive</RichParagraph>
             </div>
             <Heading2 text={soldHeading} className="text-primary" />
             <div className="mt-4">

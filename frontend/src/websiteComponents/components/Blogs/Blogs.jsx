@@ -172,7 +172,7 @@ const location = useLocation();
           {/* --- BLOG GRID --- */}
           <div className="space-y-12">
             <div className="flex items-center gap-3 border-b border-primary/10 pb-4">
-              <BookOpen size={24} className="text-hover" />
+              <BookOpen size={24} className="!text-hover" />
               <Heading2 text={searchTerm ? `Results for "${searchTerm}"` : "Latest Articles"} className="!mb-0" />
             </div>
 
@@ -199,8 +199,8 @@ const location = useLocation();
 
                     <div className="p-8 flex flex-col flex-grow">
                       <div className="flex-grow space-y-4">
-                        <p className="text-hover font-bold text-[10px] tracking-widest uppercase">Article</p>
-                        <Heading3 text={blog.title} className="group-hover:text-hover transition-colors line-clamp-2 !leading-tight" />
+                        <p className="!text-hover font-bold text-[10px] tracking-widest uppercase">Article</p>
+                        <Heading3 text={blog.title} className="group-hover:!text-hover transition-colors line-clamp-2 !leading-tight" />
                         <RichParagraph className="line-clamp-3 !text-primary/70 !text-sm">
                           {blog.description}
                         </RichParagraph>

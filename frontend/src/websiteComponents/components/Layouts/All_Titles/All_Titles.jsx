@@ -95,7 +95,7 @@ export default function All_Titles() {
             </RichParagraph>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs font-black text-hover uppercase  bg-secondary px-4 py-2 rounded-lg">
+        <div className="flex items-center gap-2 text-xs font-black !text-hover uppercase  bg-secondary px-4 py-2 rounded-lg">
           <SparklesIcon size={12} /> Live Inventory
         </div>
       </div>

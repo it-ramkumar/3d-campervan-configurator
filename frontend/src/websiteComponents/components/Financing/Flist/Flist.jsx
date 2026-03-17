@@ -57,7 +57,7 @@ export default function Flist() {
 
           <div className="flex items-center justify-center gap-3 mt-4">
             <span className="h-px w-12 bg-hover"></span>
-            <RichParagraph className="!text-sm tracking-wider font-bold uppercase text-hover ">Premium Funding</RichParagraph>
+            <RichParagraph className="!text-sm tracking-wider font-bold uppercase !text-hover ">Premium Funding</RichParagraph>
             <span className="h-px w-12 bg-hover"></span>
           </div>
         </div>

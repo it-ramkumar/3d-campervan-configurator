@@ -35,7 +35,7 @@ export default function Buy() {
 
         {/* ── TOP HEADER: full-width, centered ── */}
         <div className="text-center mb-4">
-          <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase mb-3">
+          <RichParagraph className="!!text-hover font-bold !text-sm tracking-wider uppercase mb-3">
             Premium Builds
           </RichParagraph>
           <Heading2 text="Build or Buy Your Dream Van" />
@@ -64,7 +64,7 @@ export default function Buy() {
           <div className="p-6 bg-primary/5 rounded-lg border border-primary/10 flex items-center">
 
             <RichParagraph
-            
+
             className="!italic !mb-0">
               "Our mission is to create highly functional, beautiful mobile spaces for the modern explorer."
             </RichParagraph>

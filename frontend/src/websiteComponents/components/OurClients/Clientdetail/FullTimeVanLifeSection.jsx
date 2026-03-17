@@ -10,7 +10,7 @@ const FullTimeVanLifeSection = ({ imageData }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row items-center gap-6 mb-16 border-b border-primary/10 pb-10">
-          <div className="p-4 bg-primary rounded-lg text-hover shadow-lg">
+          <div className="p-4 bg-primary rounded-lg !text-hover shadow-lg">
             <Home size={40} />
           </div>
           <div>
@@ -45,7 +45,7 @@ const FullTimeVanLifeSection = ({ imageData }) => {
           </div>
 
           <div className="lg:col-span-6 bg-primary p-8 md:p-12 rounded-lg text-secondary relative overflow-hidden flex flex-col justify-center shadow-xl">
-            <Star className="absolute top-8 right-8 text-hover opacity-20" size={60} />
+            <Star className="absolute top-8 right-8 !text-hover opacity-20" size={60} />
             <RichParagraph className="text-lg italic leading-relaxed mb-8 relative z-10 text-secondary">
               "Big Bear Vans did a full conversion for my MB Sprinter, and I could not be happier! I had very specific requests, and they met all of my requests and are truly a completely customizable conversion company. I went to about three different conversion companies, and I was only given certain planned layouts and certain colors. Not at Big Bear Vans, they accommodated my every wish. They are also extremely knowledgeable. I came back for a couple of upgrades, and they gladly accommodated me. I highly suggest Big Bear Vans for your conversion!"            </RichParagraph>
             <div className="flex items-center gap-4 border-t border-secondary/10 pt-6">
@@ -82,7 +82,7 @@ const FullTimeVanLifeSection = ({ imageData }) => {
 
             <div className="lg:col-span-5 flex flex-col space-y-6">
               <div>
-                <div className="inline-block  text-hover rounded-lg text-sm font-black uppercase tracking-wider mb-4">
+                <div className="inline-block  !text-hover rounded-lg text-sm font-black uppercase tracking-wider mb-4">
                   Case Study
                 </div>
                 <Heading3 text="San Diego Campervan" className="mb-4" />

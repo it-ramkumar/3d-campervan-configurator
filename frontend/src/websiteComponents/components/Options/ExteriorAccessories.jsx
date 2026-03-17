@@ -101,7 +101,7 @@ export default function AdditionalAccessories() {
                 {/* Content */}
                 <div className="p-8 flex-grow flex flex-col">
                   <div className="flex justify-between items-start mb-4">
-                    <Heading4 text={item.title}  className="group-hover:text-hover transition-colors" />
+                    <Heading4 text={item.title}  className="group-hover:!text-hover transition-colors" />
                   </div>
 
                   <RichParagraph className="!text-primary  mb-6 ">
@@ -110,9 +110,9 @@ export default function AdditionalAccessories() {
 
                   {/* Footer Interaction */}
                   <div className="pt-6 border-t border-[#001F3D]/5 flex items-center justify-between">
-                    <RichParagraph className=" uppercase !text-sm text-hover">Verified Accessory</RichParagraph>
+                    <RichParagraph className=" uppercase !text-sm !text-hover">Verified Accessory</RichParagraph>
                     {/* <div className="w-8 h-8 rounded-full bg-[#F5F5F0] group-hover:bg-[#001F3D] flex items-center justify-center transition-all duration-300">
-                      <ArrowRight className="w-4 h-4 text-primary group-hover:text-hover" />
+                      <ArrowRight className="w-4 h-4 text-primary group-hover:!text-hover" />
                     </div> */}
                   </div>
                 </div>

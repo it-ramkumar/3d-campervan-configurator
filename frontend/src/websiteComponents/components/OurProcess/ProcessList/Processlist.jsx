@@ -38,7 +38,7 @@ const ProcessStep = ({ time, title, details, isLast = false }) => (
   <div className="grid grid-cols-[80px_auto_1fr] md:grid-cols-[120px_auto_1fr] gap-x-6 md:gap-x-12 relative group">
     {/* Left: Time Label */}
     <div className="pt-2 text-right">
-      <RichParagraph className="uppercase text-hover !text-sm tracking-wider font-bold group-hover:text-primary transition-colors">
+      <RichParagraph className="uppercase !text-hover !text-sm tracking-wider font-bold group-hover:text-primary transition-colors">
         {time}
       </RichParagraph>
     </div>
@@ -198,7 +198,7 @@ export default function ProcessPage() {
 
               {/* Pro Tip Box */}
               <div className="bg-secondary/10 backdrop-blur-md border border-white/20 rounded-lg p-8 space-y-4">
-                <div className="flex items-center gap-3 text-hover">
+                <div className="flex items-center gap-3 !text-hover">
                   <Sparkles size={20} />
                   <RichParagraph className="text-secondary uppercase !text-xs font-bold">Pro Tip</RichParagraph>
                 </div>

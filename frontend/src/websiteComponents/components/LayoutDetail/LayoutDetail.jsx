@@ -42,7 +42,7 @@ const HeroSpecItem = ({ icon: Icon, label, value }) => (
         {label}
       </RichParagraph>
     </div>
-    <RichParagraph className=" text-primary group-hover:text-hover transition-colors">
+    <RichParagraph className=" text-primary group-hover:!text-hover transition-colors">
       {value || "N/A"}
     </RichParagraph>
   </div>
@@ -158,7 +158,7 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
         <div className="fixed inset-0 z-[9999] bg-primary/95 backdrop-blur-md flex items-center justify-center p-4 font-body">
           <button
             onClick={() => setIsLightboxOpen(false)}
-            className="absolute top-8 right-8 text-secondary hover:text-hover transition-all"
+            className="absolute top-8 right-8 text-secondary hover:!text-hover transition-all"
           >
             <X size={40} />
           </button>
@@ -241,7 +241,7 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
             <div className="lg:col-span-5 lg:sticky lg:top-24 h-fit space-y-8">
 
               <div>
-                <RichParagraph className="text-hover uppercase !text-xs font-bold">
+                <RichParagraph className="!text-hover uppercase !text-xs font-bold">
                   Signature Layout
                 </RichParagraph>
 
@@ -305,7 +305,7 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
         {/* BUILD OVERVIEW */}
         <section className="py-24 px-6 bg-white rounded-t-lg shadow-2xl relative z-20">
           <div className="container mx-auto max-w-5xl text-center">
-            <RichParagraph className="text-hover uppercase !text-xs font-bold">
+            <RichParagraph className="!text-hover uppercase !text-xs font-bold">
               The Design Philosophy
             </RichParagraph>
 
@@ -328,14 +328,14 @@ const currentUrl = `https://bigbearvans.com${location.pathname}`;
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {van?.detailed_features?.filter(f => f.items?.length > 0)?.map((feature, index) => (
                 <div key={index} className="p-8 bg-white/5 rounded-lg border  hover:bg-white transition-all group">
-                  <div className="text-hover mb-6 group-hover:scale-110 transition-transform">
+                  <div className="!text-hover mb-6 group-hover:scale-110 transition-transform">
                     {getFeatureIcon(feature.category)}
                   </div>
                   <Heading3 text={feature.category} className="mb-6"/>
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
-                        <span className="text-hover mr-2">•</span> {item}
+                        <span className="!text-hover mr-2">•</span> {item}
                       </li>
                     ))}
                   </ul>

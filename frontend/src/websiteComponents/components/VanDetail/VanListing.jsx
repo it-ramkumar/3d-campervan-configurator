@@ -12,7 +12,7 @@ import { Heading2, Heading3, Heading1, RichParagraph, ImageWithSkeleton, Seconda
 
 // --- Theme Aware Icons ---
 const SvgCheckmark = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 !text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>
   </svg>
 );
@@ -20,7 +20,7 @@ const SvgCheckmark = () => (
 const HeroSpecItem = ({ label, value }) => (
   <div className="group py-2 border-b border-primary/10 transition-all duration-300 hover:border-hover">
     <RichParagraph className="uppercase  mb-1 !text-xs">{label}</RichParagraph>
-    <RichParagraph className="font-bold  group-hover:text-hover ">{value}</RichParagraph>
+    <RichParagraph className="font-bold  group-hover:!text-hover ">{value}</RichParagraph>
   </div>
 );
 
@@ -120,7 +120,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
 
             {vanDetail.status === "available" && (
               <div className="p-6 bg-white rounded-lg border border-primary/5 shadow-sm">
-                <RichParagraph className=" text-hover uppercase font-bold">Total Listing Price</RichParagraph>
+                <RichParagraph className=" !text-hover uppercase font-bold">Total Listing Price</RichParagraph>
                 <Heading3 text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`} className="font-bold text-primary mt-1 " />
               </div>
             )}
@@ -145,7 +145,7 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
               <ShareButton
                 title={vanDetail?.van_listing?.title}
               />
-              <RichParagraph className="text-center  text-hover !text-xs uppercase  font-bold">Limited 2026 Build Slots</RichParagraph>
+              <RichParagraph className="text-center  !text-hover !text-xs uppercase  font-bold">Limited 2026 Build Slots</RichParagraph>
             </div>
           </div>
         </div>
@@ -157,28 +157,28 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
           <div className="flex items-center gap-4">
             <div className="p-3 bg-secondary rounded-lg text-primary"><Settings2 /></div>
             <div>
-              <RichParagraph className=" font-bold text-hover uppercase ">Transmission</RichParagraph>
+              <RichParagraph className=" font-bold !text-hover uppercase ">Transmission</RichParagraph>
               <RichParagraph className="font-bold">{specs?.transmission || "Automatic"}</RichParagraph>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="p-3 bg-secondary rounded-lg text-primary"><Zap /></div>
             <div>
-              <RichParagraph className="font-bold text-hover uppercase">Engine</RichParagraph>
+              <RichParagraph className="font-bold !text-hover uppercase">Engine</RichParagraph>
               <RichParagraph className="font-bold">{specs?.engine || "Turbo Diesel"}</RichParagraph>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg border-4 border-secondary shadow-sm" style={{ backgroundColor: specs?.exterior_color || '#ccc' }}></div>
             <div>
-              <RichParagraph className="font-bold text-hover uppercase">Exterior</RichParagraph>
+              <RichParagraph className="font-bold !text-hover uppercase">Exterior</RichParagraph>
               <RichParagraph className="font-bold">Premium Finish</RichParagraph>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg border-4 border-secondary shadow-sm" style={{ backgroundColor: specs?.interior_color || '#333' }}></div>
             <div>
-              <RichParagraph className="font-bold text-hover uppercase ">Interior</RichParagraph>
+              <RichParagraph className="font-bold !text-hover uppercase ">Interior</RichParagraph>
               <RichParagraph className="font-bold">Custom Palette</RichParagraph>
             </div>
           </div>
@@ -245,14 +245,14 @@ const VanPage = ({ vanDetail, onConsultationClick }) => {
       <section className="py-24 bg-primary text-secondary">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <RichParagraph className="text-hover uppercase font-bold !text-xs">Build Standards</RichParagraph>
+            <RichParagraph className="!text-hover uppercase font-bold !text-xs">Build Standards</RichParagraph>
             <Heading2 text="Every Component Considered" className="text-secondary mt-4" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {vanDetail?.detailed_features?.filter(f => f.items?.length > 0).map((feature, index) => (
               <div key={index} className="p-8 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-all group">
-                <div className="text-hover mb-6 group-hover:scale-110 transition-transform">
+                <div className="!text-hover mb-6 group-hover:scale-110 transition-transform">
                   {getFeatureIcon(feature.category)}
                 </div>
                 <Heading3 text={feature.category} className="text-secondary py-4" />

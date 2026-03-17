@@ -43,7 +43,7 @@ export default function All_Layout({ layout, LayoutText, text }) {
 
         {/* --- Navigation Bar --- */}
         <div className="flex items-center justify-between mb-6 border-b border-primary/10 pb-4">
-          <div className="text-[10px] font-bold tracking-widest text-hover uppercase">
+          <div className="text-[10px] font-bold tracking-widest !text-hover uppercase">
             Gallery View
           </div>
           <div className="flex gap-2">

@@ -16,7 +16,7 @@ const NavListItem = ({ to, children, isActive, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className={`block py-1 ${isActive ? "text-primary font-semibold" : "text-primary hover:text-hover"} transition-colors font-body tracking-tight text-[14px]`}
+    className={`block py-1 ${isActive ? "text-primary font-semibold" : "text-primary hover:!text-hover"} transition-colors font-body tracking-tight text-[14px]`}
   >
     {children}
   </FooterListItem>
@@ -26,7 +26,7 @@ const BlogListItem = ({ to, children, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:text-hover transition-colors"
+    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
     bullets="list-desc"
   >
     {children} →
@@ -37,7 +37,7 @@ const ViewAllLink = ({ to, children, onClick }) => (
   <FooterListItem
     to={to}
     onClick={onClick}
-    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:text-hover transition-colors"
+    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
   >
     {children} →
   </FooterListItem>
@@ -216,7 +216,7 @@ useEffect(() => {
                 onMouseEnter={() => link.hasDropdown && handleHover(link.name)}
                 onMouseLeave={() => link.hasDropdown && handleMouseLeave()}
                 className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200 ${
-                  isParentActive(link.name) ? "text-primary" : "text-primary hover:text-hover"
+                  isParentActive(link.name) ? "text-primary" : "text-primary hover:!text-hover"
                 }`}
               >
                 {link.label}
@@ -289,7 +289,7 @@ useEffect(() => {
                   {!link.hasDropdown ? (
                     <Link
                       to={link.path}
-                      className="block py-4 font-semibold text-lg uppercase transition-colors hover:text-hover"
+                      className="block py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -297,7 +297,7 @@ useEffect(() => {
                   ) : (
                     <>
                       <button
-                        className="w-full flex justify-between items-center py-4 font-semibold text-lg uppercase transition-colors hover:text-hover"
+                        className="w-full flex justify-between items-center py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
                         onClick={() => setMobileMenu(mobileMenu === link.name ? null : link.name)}
                       >
                         {link.label}

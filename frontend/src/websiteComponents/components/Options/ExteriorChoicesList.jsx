@@ -40,7 +40,7 @@ const RenderBlocks = ({ blocks }) => {
                       {item.sub_items?.length > 0 && (
                         <ul className="ml-8 mt-3 space-y-2 border-l-2 border-primary/10 pl-5">
                           {item.sub_items.map((sub, sIdx) => (
-                            <li key={sIdx} className="text-sm text-primary/60 flex items-center gap-2 hover:text-hover transition-colors">
+                            <li key={sIdx} className="text-sm text-primary/60 flex items-center gap-2 hover:!text-hover transition-colors">
                               <span className="w-1.5 h-1.5 bg-hover rounded-lg shrink-0"></span>
                               {sub}
                             </li>
@@ -232,7 +232,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                       <Heading4
                                         className={`font-bold
                 ${isActive ? "text-primary" : "text-primary"}
-                group-hover:${isActive ? "text-secondary" : "text-hover"}
+                group-hover:${isActive ? "text-secondary" : "!text-hover"}
                 transition-colors`}
                                         text={sub.title}
                                       />
@@ -240,7 +240,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                         <p
                                           className={`text-[11px] mt-2 line-clamp-2 leading-relaxed
                   ${isActive ? "text-primary hover:text-secondary" : "text-primary/50"}
-                  group-hover:${isActive ? "text-secondary/70 " : "text-hover/70"}
+                  group-hover:${isActive ? "text-secondary/70 " : "!text-hover/70"}
                   transition-colors`}
                                         >
                                           {sub.description}
@@ -376,7 +376,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
             <Search size={32} className="text-primary/20" />
           </div>
           <Heading3 text="No matches found" />
-          <button onClick={() => setSearchQuery("")} className="mt-4 text-hover font-bold hover:underline">Clear all filters</button>
+          <button onClick={() => setSearchQuery("")} className="mt-4 !text-hover font-bold hover:underline">Clear all filters</button>
         </div>
       )}
     </div>

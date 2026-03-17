@@ -44,7 +44,7 @@ export default function Consultation() {
     <div className="bg-secondary min-h-screen py-20 flex flex-col items-center space-y-16">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl">
-        <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">Connect With Us</RichParagraph>
+        <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">Connect With Us</RichParagraph>
         <Heading2 text="Schedule Your Free Consultation Call" />
         <div className="w-16 h-1 bg-hover rounded-lg"></div>
         <RichParagraph className="">

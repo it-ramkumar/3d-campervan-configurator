@@ -64,7 +64,7 @@ export default function Mission() {
         variants={sectionVariants}
       >
         <div className="text-center mb-16">
-          <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Our Core Values</RichParagraph>
+          <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">Our Core Values</RichParagraph>
           <Heading2 text="Mission and Purpose" className='mt-2 text-primary' />
           <div className="h-1 w-16 bg-primary mx-auto mt-4 rounded-lg"></div>
         </div>
@@ -120,7 +120,7 @@ export default function Mission() {
         variants={sectionVariants}
       >
         <div className="text-center mb-16">
-          <RichParagraph className="text-hover font-bold uppercase tracking-wider !text-sm">Why Choose Us</RichParagraph>
+          <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">Why Choose Us</RichParagraph>
           <Heading2 text="Our Advantages" className='mt-2' />
         </div>
 

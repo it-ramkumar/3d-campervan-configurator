@@ -75,7 +75,7 @@ const ContactField = ({ question, value, onSelect }) => (
 const Summary = ({ formData }) => (
   <div className="space-y-4 animate-fadeIn">
     <div className="flex items-center gap-3 mb-8 border-b border-primary/10 pb-4">
-      <ClipboardCheck className="text-hover" size={28} />
+      <ClipboardCheck className="!text-hover" size={28} />
       <Heading2 text="Review Configuration" className="!mb-0 !text-primary" />
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -87,7 +87,7 @@ const Summary = ({ formData }) => (
       ))}
     </div>
     <div className="mt-8 p-4 bg-hover/5 rounded-[var(--radius-sm)] flex gap-3 items-start">
-      <Info size={20} className="text-hover flex-shrink-0 mt-0.5" />
+      <Info size={20} className="!text-hover flex-shrink-0 mt-0.5" />
       <p className="text-sm text-primary/60 italic">Please double-check your selections. You can still go back to any step if you need to make changes.</p>
     </div>
   </div>
@@ -215,7 +215,7 @@ export default function InquiryForm() {
         <div className="max-w-6xl w-full mx-auto">
 
           <div className="text-center mb-16">
-            <p className="text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">Configurator</p>
+            <p className="!text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">Configurator</p>
             <Heading1 text="Build Your Dream Van" className="!text-primary" />
             <div className="w-24 h-1 bg-hover mx-auto mt-6 rounded-full" />
           </div>
@@ -300,7 +300,7 @@ export default function InquiryForm() {
                     onClick={handlePrevious}
                     disabled={currentStep === 0 || isLoading}
                     className={`flex items-center gap-2 px-8 py-4 font-black text-[10px] uppercase tracking-[0.2em] transition-all
-                      ${currentStep === 0 ? "opacity-0 pointer-events-none" : "text-primary hover:text-hover"}`}
+                      ${currentStep === 0 ? "opacity-0 pointer-events-none" : "text-primary hover:!text-hover"}`}
                   >
                     <ChevronLeft size={16} /> Previous Step
                   </button>

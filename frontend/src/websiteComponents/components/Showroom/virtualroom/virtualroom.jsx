@@ -19,7 +19,7 @@ export default function ShowroomAndTours() {
               className="flex items-center gap-4 mb-4"
             >
               <span className="w-8 h-[2px] bg-hover"></span>
-              <RichParagraph className="text-hover font-bold !text-sm tracking-wider">
+              <RichParagraph className="!text-hover font-bold !text-sm tracking-wider">
                 Remote Design Studio
               </RichParagraph>
 
@@ -129,8 +129,8 @@ export default function ShowroomAndTours() {
 
           <div className="relative z-10 px-10 md:px-20 max-w-2xl">
             <div className="inline-flex items-center gap-3 bg-hover/20 backdrop-blur-md px-4 py-2 rounded-lg mb-6">
-              <MapPin size={14} className="text-hover" />
-              <RichParagraph className="text-hover !text-sm uppercase">Big Bear Lake, CA</RichParagraph>
+              <MapPin size={14} className="!text-hover" />
+              <RichParagraph className="!text-hover !text-sm uppercase">Big Bear Lake, CA</RichParagraph>
             </div>
             <Heading2 text="A Destination Worth the Drive" className="text-secondary !text-4xl md:!text-5xl" />
             <RichParagraph white={true} className="mt-6  text-secondary">
@@ -139,11 +139,11 @@ export default function ShowroomAndTours() {
             <div className="mt-10 h-[1px] w-full bg-white/20"></div>
             <div className="mt-6 flex gap-10">
               <div>
-                <RichParagraph className="text-hover">2</RichParagraph>
+                <RichParagraph className="!text-hover">2</RichParagraph>
                 <RichParagraph className=" text-secondary !text-sm uppercase">Ski Resorts</RichParagraph>
               </div>
               <div>
-                <RichParagraph className="text-hover ">100+</RichParagraph>
+                <RichParagraph className="!text-hover ">100+</RichParagraph>
                 <RichParagraph className="text-secondary !text-sm uppercase">Nature Trails</RichParagraph>
               </div>
             </div>

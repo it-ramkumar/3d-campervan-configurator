@@ -17,7 +17,7 @@ const MobileOfficeSection = () => {
     <section className="py-20 lg:py-28 bg-secondary">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex flex-col items-center text-center mb-16">
-          <div className="p-4 bg-primary rounded-lg text-hover shadow-xl mb-6">
+          <div className="p-4 bg-primary rounded-lg !text-hover shadow-xl mb-6">
             <Briefcase size={36} />
           </div>
           <Heading2 text="Mobile Office Campervans" className="uppercase tracking-tight mb-4 text-primary" />
@@ -58,7 +58,7 @@ const MobileOfficeSection = () => {
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
             <div className="shrink-0 hidden md:block">
               <div className="w-24 h-24 border-2 border-hover/30 rounded-lg flex items-center justify-center">
-                <Zap className="text-hover" size={40} />
+                <Zap className="!text-hover" size={40} />
               </div>
             </div>
             <RichParagraph className="text-secondary text-center md:text-left opacity-90">

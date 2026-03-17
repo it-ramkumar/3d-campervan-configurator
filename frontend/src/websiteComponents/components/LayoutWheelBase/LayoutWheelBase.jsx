@@ -180,7 +180,7 @@ const canonicalUrl = `https://bigbearvans.com${location.pathname}${currentPage >
             {/* --- FILTER DASHBOARD --- */}
             <div className="bg-white p-8 rounded-[var(--radius-md)] shadow-sm border border-primary/5 mb-16">
               <div className="flex items-center gap-[var(--gap-sm)] mb-8 pb-4 border-b border-secondary">
-                <SlidersHorizontal size={20} className="text-hover" />
+                <SlidersHorizontal size={20} className="!text-hover" />
                 <Heading3 text="Filter Collection" className="!mb-0 !text-primary" />
               </div>
 
@@ -241,7 +241,7 @@ const canonicalUrl = `https://bigbearvans.com${location.pathname}${currentPage >
 
                       <div className="w-full lg:w-1/2 space-y-6">
                         <div className="space-y-2">
-                          <RichParagraph className="text-hover uppercase !text-sm tracking-wider font-bold">Big Bear Classic</RichParagraph>
+                          <RichParagraph className="!text-hover uppercase !text-sm tracking-wider font-bold">Big Bear Classic</RichParagraph>
                           <Heading2 text={project.van_listing?.title} className="!text-left !text-primary !leading-tight" />
                         </div>
                         <RichParagraph className="!text-left !text-primary/80">

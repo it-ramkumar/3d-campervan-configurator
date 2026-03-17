@@ -16,7 +16,7 @@ export default function FAQs({ faqs }) {
 
         {/* --- Header --- */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-secondary text-hover mb-6">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-secondary !text-hover mb-6">
             <HelpCircle size={28} />
           </div>
           <Heading2 text="Frequently Asked Questions" />
@@ -84,7 +84,7 @@ export default function FAQs({ faqs }) {
           <p className="text-sm text-primary/60 mb-2 font-medium">Still have questions?</p>
           <a
             href="/contact"
-            className="text-hover font-black uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center justify-center gap-2"
+            className="!text-hover font-black uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center justify-center gap-2"
           >
             Contact Our Support Team <span>→</span>
           </a>

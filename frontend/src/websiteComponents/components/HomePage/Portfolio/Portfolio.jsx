@@ -38,7 +38,7 @@ export default function Portfolio() {
         {/* --- Header --- */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-primary/10 pb-10">
           <div className="max-w-2xl">
-            <RichParagraph className="text-hover font-bold !text-sm tracking-wider uppercase mb-3 block">Our Craft</RichParagraph>
+            <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase mb-3 block">Our Craft</RichParagraph>
             <Heading2 text="From Dream to Your Driveway" />
             <RichParagraph className="mt-4">
               Explore the craftsmanship and attention to detail in our best custom van conversions.

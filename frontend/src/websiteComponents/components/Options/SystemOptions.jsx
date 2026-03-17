@@ -53,7 +53,7 @@ const VanSystemsPage = () => {
                                 <div className="grid lg:grid-cols-2 gap-8">
                                     {/* Fresh Water Tank */}
                                     <div className="bg-primary rounded-lg p-10 shadow-xl text-secondary">
-                                        <h4 className="text-2xl font-bold mb-6 text-hover">Fresh Water Tank:</h4>
+                                        <h4 className="text-2xl font-bold mb-6 !text-hover">Fresh Water Tank:</h4>
                                         <RichParagraph className="mb-8 opacity-90 text-secondary">Stores clean water for drinking, cooking, and washing. You can choose to install:</RichParagraph>
                                         <ul className="space-y-4">
                                             {["A 20-gallon freshwater tank.", "A 30-gallon freshwater tank.", "A 37-gallon undermount instead of a spare tire."].map((item, i) => (
