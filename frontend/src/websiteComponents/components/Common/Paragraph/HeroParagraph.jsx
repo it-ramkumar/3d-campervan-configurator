@@ -11,7 +11,7 @@ import RichParagraph from "./RichParagraph";
  */
 const Paragraph = ({
   text = "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
-  textColor = "",
+  textColor = "text-secondary",
   className = "",
   inlineStyle = {},
 }) => {
