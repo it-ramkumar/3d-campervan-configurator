@@ -147,7 +147,7 @@ export default function Buy() {
                         Details
                       </Link>
                       <Link
-                        to="/contact"
+                        to="/inquiry"
                         className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300 shadow-lg shadow-primary/10"
                       >
                         Inquire
