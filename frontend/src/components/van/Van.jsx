@@ -7,9 +7,8 @@ import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
 import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
-// import ExportableScene from "../exportable-scene/ExportableScene";
 import Navbar from "../../websiteComponents/components/Navbar/Navbar"
-import { ArrowBigDownDash, ArrowBigUpDash, X, ChevronLeft, ChevronRight, Menu } from "lucide-react"
+import { ArrowBigDownDash, X, ChevronLeft, ChevronRight, Menu } from "lucide-react"
 import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
 import {
   addModelToScene,
@@ -71,8 +70,13 @@ function Van() {
       setLoading(false);
     }
   };
+  // Force rerender for BaseVanModel when URL changes
+  const [modelKey, setModelKey] = useState(0);
+  const currentVanUrl = vans && vans.length > 0 ? vans[isSanta]?.glbFileUrl || vans[0]?.glbFileUrl : null;
 
-  // console.log(vans,"base van")
+  useEffect(() => {
+    if (currentVanUrl) setModelKey(prev => prev + 1);
+  }, [currentVanUrl]);
   useEffect(() => {
     fetchVans();
     if (groupRef.current) centerModelByBoundingBox(groupRef);
@@ -296,54 +300,67 @@ function Van() {
             </div>
           </div>
           {/* 3D Canvas */}
-          <div className="w-full h-full" ref={canvasContainerRef}>
-            <Canvas className="h-full w-full">
-              <CameraAssigner cameraRef={cameraRef} />
 
-              {isIntView ? (
-                <>
-                  <SpotLightCom position={[0.6, -0.1, 1.1]} />
-                  <SpotLightCom position={[0, -0.1, 1.1]} />
-                  <SpotLightCom position={[-0.6, 0.3, 1.1]} />
-                </>
-              ) : (
-                <ambientLight intensity={0.25} />
-              )}
+            <div className="w-full h-full" ref={canvasContainerRef}>
+      <Canvas className="h-full w-full">
+        <CameraAssigner cameraRef={cameraRef} />
 
-              <Preload all />
-              <Suspense fallback={<Html fullscreen><Loader /></Html>}>
-                <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-                  <Environment
-                    files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
-                  />
-                  {/* Canvas ke andar jahan BaseVanModel hai */}
-                  {vans && vans?.length > 0 ? (
-                    <BaseVanModel
-                      url={vans[isSanta]?.glbFileUrl || vans[0]?.glbFileUrl}
-                      showExterior={showExterior}
-                    />
-                  ) : null}
+        {/* Lights */}
+        {isIntView ? (
+          <>
+            <SpotLightCom position={[0.6, -0.1, 1.1]} />
+            <SpotLightCom position={[0, -0.1, 1.1]} />
+            <SpotLightCom position={[-0.6, 0.3, 1.1]} />
+          </>
+        ) : (
+          <ambientLight intensity={0.25} />
+        )}
 
-                  {addedModels?.map((model) => (
-                    <DynamicModel
-                      key={model?._id || model?.id}
-                      model={model}
-                      setActiveModelId={setActiveModelId}
-                      modelRefs={modelRefs}
-                    />
-                  ))}
-                </group>
-              </Suspense>
+        <Preload all />
 
-              {isIntView ? (
-                <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
-              ) : (
-                <ExteriorCameraControls cameraRef={cameraRef} orbitControlsRef={orbitControlsRef} />
-              )}
+        {/* Suspense wrapping Environment + Models */}
+        <Suspense fallback={<Html fullscreen><Loader /></Html>}>
+          <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
 
-              {/* <ExportableScene ref={sceneRef} exportSceneCallback={setSceneToExport} /> */}
-            </Canvas>
-          </div>
+            {/* HDR Environment */}
+       <Environment
+files="/textures/plain.hdr"
+    //  background={true}
+          onLoad={() => console.log("HDR Loaded")}
+        />
+
+            {/* Base Van Model */}
+            {currentVanUrl && (
+              <BaseVanModel
+                key={modelKey} // dynamic key ensures rerender on URL change
+                url={currentVanUrl}
+                showExterior={showExterior}
+              />
+            )}
+
+            {/* Additional dynamic models */}
+            {addedModels?.map((model) => (
+              <DynamicModel
+                key={model?._id || model?.id}
+                model={model}
+                setActiveModelId={() => {}}
+                modelRefs={modelRefs}
+              />
+            ))}
+          </group>
+        </Suspense>
+
+        {/* Camera Controls */}
+        {isIntView ? (
+          <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
+        ) : (
+          <ExteriorCameraControls
+            cameraRef={cameraRef}
+            orbitControlsRef={orbitControlsRef}
+          />
+        )}
+      </Canvas>
+    </div>
 
           {/* View Toggle - Lower z-index */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2  lg:bottom-8">
