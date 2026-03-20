@@ -265,8 +265,8 @@ function Van() {
                           setIsSanta(idx);
                         }}
                         className={`flex-shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border ${isSanta === idx
-                            ? "bg-black text-white border-black shadow-md"
-                            : "bg-white text-gray-500 border-black/5 hover:border-black/20"
+                          ? "bg-black text-white border-black shadow-md"
+                          : "bg-white text-gray-500 border-black/5 hover:border-black/20"
                           }`}
                       >
                         {van?.layout}
@@ -301,66 +301,64 @@ function Van() {
           </div>
           {/* 3D Canvas */}
 
-            <div className="w-full h-full" ref={canvasContainerRef}>
-      <Canvas className="h-full w-full">
-        <CameraAssigner cameraRef={cameraRef} />
+          <div className="w-full h-full" ref={canvasContainerRef}>
+            <Canvas className="h-full w-full">
+              <CameraAssigner cameraRef={cameraRef} />
 
-        {/* Lights */}
-        {isIntView ? (
-          <>
-            <SpotLightCom position={[0.6, -0.1, 1.1]} />
-            <SpotLightCom position={[0, -0.1, 1.1]} />
-            <SpotLightCom position={[-0.6, 0.3, 1.1]} />
-          </>
-        ) : (
-          <ambientLight intensity={0.25} />
-        )}
+              {/* Lights */}
+              {isIntView ? (
+                <>
+                  <SpotLightCom position={[0.6, -0.1, 1.1]} />
+                  <SpotLightCom position={[0, -0.1, 1.1]} />
+                  <SpotLightCom position={[-0.6, 0.3, 1.1]} />
+                </>
+              ) : (
+                <ambientLight intensity={0.25} />
+              )}
 
-        <Preload all />
+              <Preload all />
 
-        {/* Suspense wrapping Environment + Models */}
-        <Suspense fallback={<Html fullscreen><Loader /></Html>}>
-          <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
+              {/* Suspense wrapping Environment + Models */}
+              <Suspense fallback={<Html fullscreen><Loader /></Html>}>
+                <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
 
-            {/* HDR Environment */}
-       <Environment
-files="/textures/plain.hdr"
-    //  background={true}
-          onLoad={() => console.log("HDR Loaded")}
-        />
+                  {/* HDR Environment */}
+                  <Environment
+                    files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
+                    background={false}
+                  />
+                  {/* Base Van Model */}
+                  {currentVanUrl && (
+                    <BaseVanModel
+                      key={modelKey} // dynamic key ensures rerender on URL change
+                      url={currentVanUrl}
+                      showExterior={showExterior}
+                    />
+                  )}
 
-            {/* Base Van Model */}
-            {currentVanUrl && (
-              <BaseVanModel
-                key={modelKey} // dynamic key ensures rerender on URL change
-                url={currentVanUrl}
-                showExterior={showExterior}
-              />
-            )}
+                  {/* Additional dynamic models */}
+                  {addedModels?.map((model) => (
+                    <DynamicModel
+                      key={model?._id || model?.id}
+                      model={model}
+                      setActiveModelId={() => { }}
+                      modelRefs={modelRefs}
+                    />
+                  ))}
+                </group>
+              </Suspense>
 
-            {/* Additional dynamic models */}
-            {addedModels?.map((model) => (
-              <DynamicModel
-                key={model?._id || model?.id}
-                model={model}
-                setActiveModelId={() => {}}
-                modelRefs={modelRefs}
-              />
-            ))}
-          </group>
-        </Suspense>
-
-        {/* Camera Controls */}
-        {isIntView ? (
-          <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
-        ) : (
-          <ExteriorCameraControls
-            cameraRef={cameraRef}
-            orbitControlsRef={orbitControlsRef}
-          />
-        )}
-      </Canvas>
-    </div>
+              {/* Camera Controls */}
+              {isIntView ? (
+                <InteriorCameraControls camPros={camPros} targetPos={targetPos} />
+              ) : (
+                <ExteriorCameraControls
+                  cameraRef={cameraRef}
+                  orbitControlsRef={orbitControlsRef}
+                />
+              )}
+            </Canvas>
+          </div>
 
           {/* View Toggle - Lower z-index */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2  lg:bottom-8">
