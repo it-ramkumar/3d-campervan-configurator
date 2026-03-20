@@ -7,7 +7,7 @@ import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check, Loader, ClipboardChe
 import { formQuestions } from "../../DataUseInComp/InquiryFormData";
 import { Helmet } from "react-helmet-async";
 import { generateInquirySchema } from "../../schema/inquerySchema";
-
+import { useNavigate } from "react-router-dom";
 import { Heading2,Heading1} from "../Common/Common";
 
 // --------------------------- SUB-COMPONENTS --------------------------- //
@@ -101,6 +101,7 @@ export default function InquiryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [validationMessage, setValidationMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleSelect = (id, value) => {
     const group = formQuestions[currentStep];
@@ -164,9 +165,10 @@ export default function InquiryForm() {
     try {
       const result = await submitInquiry(formData);
       if (result.success) {
-        setMessage({ type: "success", text: "Your van inquiry has been received! Our team will contact you soon." });
+        // setMessage({ type: "success", text: "Your van inquiry has been received! Our team will contact you soon." });
         setFormData({});
         setCurrentStep(0);
+        navigate("/thank-you", { state: { email: formData.email } });
       } else {
         setMessage({ type: "error", text: "Something went wrong. Please try again." });
       }

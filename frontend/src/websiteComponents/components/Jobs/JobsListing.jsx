@@ -19,6 +19,7 @@ import {
   Loader2,
   ChevronRight
 } from "lucide-react";
+import { RichParagraph,Heading2,Heading3,Heading4,ImageWithSkeleton } from "../Common/Common";
 
 const Careers = () => {
   const [jobs, setJobs] = useState([]);
@@ -66,144 +67,187 @@ const Careers = () => {
         job.workMode?.toLowerCase() === filter.toLowerCase()
       );
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+return (
+  <div className="min-h-screen bg-secondary">
+    <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white py-24 overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z%22 fill=%22%23ffffff%22/%3E%3C/svg%3E')]"></div>
-        <div className="relative max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-7xl font-black mb-6 uppercase tracking-tighter">
-            Build the <span className="text-blue-500">Future</span>
-          </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-            Join Big Bear Vans and help us redefine mobile living through precision engineering and design.
-          </p>
-          <a href="#opportunities" className="inline-flex items-center gap-2 bg-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all">
-            Open Roles <ArrowRight className="w-5 h-5" />
-          </a>
-        </div>
-      </section>
+    {/* Hero Section */}
+    <section className="relative bg-primary text-secondary py-24 overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-4 text-center">
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="flex flex-col lg:flex-row gap-12">
+        <Heading2
+          className="text-5xl md:text-7xl uppercase tracking-tight"
+          text="Build the Future"
+          textColor="text-secondary"
+        />
 
-          {/* Sidebar */}
-          <aside className="lg:w-1/3 space-y-8">
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold mb-6 flex items-center gap-2 uppercase">
-                <Sparkles className="w-5 h-5 text-blue-600" /> Why Join Us?
-              </h2>
-              <div className="space-y-6">
-                {companyThoughts.map((thought) => (
-                  <div key={thought.id} className="flex gap-4">
-                    <div className={`${thought.color} p-3 rounded-2xl h-fit`}>{thought.icon}</div>
-                    <div>
-                      <h3 className="font-bold text-gray-900">{thought.title}</h3>
-                      <p className="text-gray-500 text-sm">{thought.content}</p>
-                    </div>
+        <RichParagraph className="mt-6 max-w-2xl mx-auto text-secondary/70">
+          Join Big Bear Vans and help us redefine mobile living through precision engineering and design.
+        </RichParagraph>
+
+        <a
+          href="#opportunities"
+          className="inline-flex items-center gap-2 bg-hover text-primary px-8 py-4 rounded-lg font-bold mt-8 hover:opacity-90 transition-all"
+        >
+          Open Roles <ArrowRight className="w-5 h-5" />
+        </a>
+      </div>
+    </section>
+
+    <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="flex flex-col lg:flex-row gap-12">
+
+        {/* Sidebar */}
+        <aside className="lg:w-1/3 space-y-8">
+
+          {/* Why Join */}
+          <div className="bg-white p-8 rounded-lg border border-primary/10 shadow-sm">
+            <Heading3 text="Why Join Us?" textColor="text-primary" />
+
+            <div className="space-y-6 mt-6">
+              {companyThoughts.map((thought) => (
+                <div key={thought.id} className="flex gap-4">
+                  <div className="bg-secondary p-3 rounded-lg text-primary">
+                    {thought.icon}
                   </div>
+                  <div>
+                    <Heading4 text={thought.title} textColor="text-primary" />
+                    <RichParagraph className="text-primary/60 text-sm">
+                      {thought.content}
+                    </RichParagraph>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Benefits */}
+          <div className="bg-primary text-secondary p-8 rounded-lg shadow-lg">
+            <Heading4 text="Benefits" textColor="text-secondary" />
+
+            <ul className="space-y-3 text-sm mt-4">
+              <li className="flex items-center gap-2">✔ 100% Remote Workflow</li>
+              <li className="flex items-center gap-2">✔ Competitive Salary (USD)</li>
+              <li className="flex items-center gap-2">✔ Global Impact</li>
+            </ul>
+          </div>
+        </aside>
+
+        {/* Jobs */}
+        <main className="lg:w-2/3">
+          <div id="opportunities">
+
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
+              <Heading2
+                text={`Open Positions (${filteredJobs.length})`}
+                textColor="text-primary"
+              />
+
+              <div className="flex flex-wrap gap-2">
+                {jobTypes.map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilter(type)}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
+                      filter === type
+                        ? "bg-primary text-secondary"
+                        : "bg-white text-primary/50 border border-primary/10 hover:border-hover"
+                    }`}
+                  >
+                    {type}
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl shadow-blue-100">
-              <h3 className="font-bold mb-4 flex items-center gap-2 tracking-widest uppercase text-sm">
-                <Award className="w-5 h-5" /> Benefits
-              </h3>
-              <ul className="space-y-3 text-sm font-medium opacity-90">
-                <li className="flex items-center gap-2">✅ 100% Remote Workflow</li>
-                <li className="flex items-center gap-2">✅ Competitive Salary (USD)</li>
-                <li className="flex items-center gap-2">✅ Global Impact</li>
-              </ul>
-            </div>
-          </aside>
-
-          {/* Jobs List */}
-          <main className="lg:w-2/3">
-            <div id="opportunities" className="scroll-mt-24">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">
-                  Open Positions ({filteredJobs.length})
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {jobTypes.map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setFilter(type)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
-                        filter === type ? "bg-blue-600 text-white" : "bg-white text-gray-400 border border-gray-200"
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
+            {/* Loader */}
+            {loading ? (
+              <div className="py-20 text-center">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
+                <RichParagraph className="text-primary/40 uppercase text-xs">
+                  Syncing Database...
+                </RichParagraph>
               </div>
+            ) : (
+              <div className="space-y-4">
 
-              {loading ? (
-                <div className="py-20 text-center">
-                  <Loader2 className="w-10 h-10 text-blue-600 animate-spin mx-auto mb-4" />
-                  <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Syncing Database...</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredJobs.map((job) => (
-                    <div key={job._id} className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-blue-200 transition-all shadow-sm">
-                      <div className="flex flex-col md:flex-row justify-between gap-6">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-0.5 rounded uppercase tracking-widest">
-                              {job.department}
-                            </span>
-                            <span className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-                              {job.experienceLevel}
-                            </span>
-                          </div>
+                {filteredJobs.map((job) => (
+                  <div
+                    key={job._id}
+                    className="group bg-white rounded-lg p-6 border border-primary/10 hover:border-hover transition-all shadow-sm"
+                  >
+                    <div className="flex flex-col md:flex-row justify-between gap-6">
 
-                          <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                            {cleanText(job.title)}
-                          </h3>
+                      {/* Left */}
+                      <div className="flex-1">
 
-                          <div className="flex flex-wrap gap-4 mb-4">
-                            <span className="flex items-center gap-1.5 text-xs font-bold text-gray-500">
-                              <MapPin className="w-3.5 h-3.5" /> {job.location}
-                            </span>
-                            <span className="flex items-center gap-1.5 text-xs font-bold text-gray-500">
-                              <Briefcase className="w-3.5 h-3.5" /> {job.type}
-                            </span>
-                            <span className="flex items-center gap-1.5 text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">
-                              <DollarSign className="w-3.5 h-3.5" /> ${job.salaryMin} - ${job.salaryMax}
-                            </span>
-                          </div>
-
-                          <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed">
-                            {cleanText(job.description)}
-                          </p>
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-[10px] font-bold bg-secondary text-primary px-2 py-1 rounded uppercase">
+                            {job.department}
+                          </span>
+                          <span className="text-xs text-primary/40 uppercase">
+                            {job.experienceLevel}
+                          </span>
                         </div>
 
-                        <div className="flex flex-col gap-2 justify-center">
-                          <Link to={`/apply/${job._id}`} className="bg-blue-600 text-white text-center py-2.5 px-6 rounded-xl font-bold hover:bg-blue-700 transition-all text-sm uppercase tracking-widest">
-                            Apply
-                          </Link>
-                          <Link to={`/careers/${job._id}`} className="text-center text-gray-400 text-xs font-bold hover:text-blue-600 flex items-center justify-center gap-1 group/btn">
-                            DETAILS <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
-                          </Link>
+                        <Heading3
+                          text={cleanText(job.title)}
+                          textColor="text-primary"
+                          className="group-hover:text-hover transition-colors"
+                        />
+
+                        <div className="flex flex-wrap gap-4 mt-3 mb-4">
+                          <span className="flex items-center gap-1 text-xs text-primary/60">
+                            <MapPin className="w-3.5 h-3.5" /> {job.location}
+                          </span>
+                          <span className="flex items-center gap-1 text-xs text-primary/60">
+                            <Briefcase className="w-3.5 h-3.5" /> {job.type}
+                          </span>
+                          <span className="flex items-center gap-1 text-xs bg-secondary px-2 py-1 rounded text-primary">
+                            <DollarSign className="w-3.5 h-3.5" />
+                            ${job.salaryMin} - ${job.salaryMax}
+                          </span>
                         </div>
+
+                        <RichParagraph className="text-primary/60 text-sm line-clamp-2">
+                          {cleanText(job.description)}
+                        </RichParagraph>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </main>
-        </div>
-      </div>
 
-      <Footer />
+                      {/* Right */}
+                      <div className="flex flex-col gap-2 justify-center">
+
+                        <Link
+                          to={`/apply/${job._id}`}
+                          className="bg-primary text-secondary text-center py-2.5 px-6 rounded-lg font-bold hover:bg-hover hover:text-primary transition-all text-sm uppercase"
+                        >
+                          Apply
+                        </Link>
+
+                        <Link
+                          to={`/careers/${job._id}`}
+                          className="text-center text-primary/40 text-xs font-bold hover:text-hover flex items-center justify-center gap-1"
+                        >
+                          Details <ChevronRight className="w-3 h-3" />
+                        </Link>
+
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
-  );
+
+    <Footer />
+  </div>
+);
 };
 
 export default Careers;

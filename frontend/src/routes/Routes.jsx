@@ -49,7 +49,7 @@ const CustomBuild = lazy(() => import("../websiteComponents/components/CustomBui
 const QuickLiks = lazy(() => import("../websiteComponents/components/QuickLinks/QuickLinks"));
 const FAQPage = lazy(() => import("../websiteComponents/components/FAQPage/FAQPage"));
 const WhereToCamp = lazy(() => import("../websiteComponents/components/WhereToCamp/WhereToCamp"));
-// const SystemOptions = lazy(() => import("../websiteComponents/components/SystemOptions/SystemOptions"));
+const ThankYou = lazy(() => import("../websiteComponents/components/ThankYOu/ThankYou"));
 const PreviewPage = lazy(() => import("../components/preview/PreviewConfigureVan"));
 const ShareIcon = lazy(() => import("../websiteComponents/components/Common/ShareIcon/ShareIcon"));
 
@@ -120,6 +120,8 @@ const AppRoutes = () => {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/where-to-camp" element={<WhereToCamp />} />
           <Route path="/quote/preview/:id" element={<PreviewPage />} />
+          <Route path="/thank-you" element={<ThankYou />} />
+
 
           {/* Forms */}
           <Route path="/inquiry" element={<Inquiry />} />

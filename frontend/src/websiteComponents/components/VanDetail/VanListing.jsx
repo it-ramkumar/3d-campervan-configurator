@@ -8,7 +8,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Heading2, Heading3, Heading1, RichParagraph, ImageWithSkeleton, SecondaryButton, ShareButton, Breadcrumb, PrimaryButton } from '../Common/Common';
-// import VanCanvas from "../Vansforsale/Models/VanCanvas"
+import VanCanvas from "../Vansforsale/Models/VanCanvas"
 
 // --- Theme Aware Icons ---
 const SvgCheckmark = () => (

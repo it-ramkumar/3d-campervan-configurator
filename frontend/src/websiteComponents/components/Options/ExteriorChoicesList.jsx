@@ -111,31 +111,61 @@ export default function ExteriorChoicesList({ initialData, heading }) {
     setExpandedCategories((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
   };
 
-  const filteredCategories = (() => {
-    let filtered = categories;
-    if (selectedCategoryFilter !== "all") filtered = filtered.filter(cat => cat._id === selectedCategoryFilter);
-    if (!searchQuery.trim()) return filtered;
+const filteredCategories = (() => {
+  let filtered = [...categories];
 
-    const query = searchQuery.toLowerCase();
-    return filtered.map(cat => {
-      const categoryMatch = cat.title.toLowerCase().includes(query);
-      const filteredSubCategories = cat.subCategories.map(sub => {
-        const filteredItems = sub.items.filter(item =>
-          item.title?.toLowerCase().includes(query) ||
-          item.description?.some(d => d.toLowerCase().includes(query)) ||
-          item.blocks?.some(b => b.title?.toLowerCase().includes(query) || b.content?.toLowerCase().includes(query))
-        );
-        return { ...sub, items: filteredItems, hasMatch: sub.title.toLowerCase().includes(query) || filteredItems.length > 0 };
-      }).filter(sub => sub.hasMatch);
+  // Category filter
+  if (selectedCategoryFilter !== "all") {
+    filtered = filtered.filter(cat => cat._id === selectedCategoryFilter);
+  }
 
-      const filteredDirectItems = cat.items.filter(item =>
-        item.title?.toLowerCase().includes(query) || item.description?.some(d => d.toLowerCase().includes(query))
+  // Agar search empty hai
+  if (!searchQuery.trim()) {
+    return filtered.slice().reverse(); // ✅ yahan reverse
+  }
+
+  const query = searchQuery.toLowerCase();
+
+  const result = filtered.map(cat => {
+    const categoryMatch = cat.title.toLowerCase().includes(query);
+
+    const filteredSubCategories = cat.subCategories.map(sub => {
+      const filteredItems = sub.items.filter(item =>
+        item.title?.toLowerCase().includes(query) ||
+        item.description?.some(d => d.toLowerCase().includes(query)) ||
+        item.blocks?.some(b =>
+          b.title?.toLowerCase().includes(query) ||
+          b.content?.toLowerCase().includes(query)
+        )
       );
 
-      return { ...cat, subCategories: filteredSubCategories, items: filteredDirectItems, hasMatch: categoryMatch || filteredSubCategories.length > 0 || filteredDirectItems.length > 0 };
-    }).filter(cat => cat.hasMatch);
-  })();
+      return {
+        ...sub,
+        items: filteredItems,
+        hasMatch:
+          sub.title.toLowerCase().includes(query) ||
+          filteredItems.length > 0
+      };
+    }).filter(sub => sub.hasMatch);
 
+    const filteredDirectItems = cat.items.filter(item =>
+      item.title?.toLowerCase().includes(query) ||
+      item.description?.some(d => d.toLowerCase().includes(query))
+    );
+
+    return {
+      ...cat,
+      subCategories: filteredSubCategories,
+      items: filteredDirectItems,
+      hasMatch:
+        categoryMatch ||
+        filteredSubCategories.length > 0 ||
+        filteredDirectItems.length > 0
+    };
+  }).filter(cat => cat.hasMatch);
+
+  return result.slice().reverse(); // ✅ final reverse yahan
+})();
   return (
     <div className="bg-secondary/40 backdrop-blur-3xl rounded-lg p-4 sm:p-10 border border-primary/5">
 

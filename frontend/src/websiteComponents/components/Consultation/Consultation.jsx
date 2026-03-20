@@ -23,7 +23,6 @@ export default function Consultation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
-      // SweetAlert Logic here
       return;
     }
 

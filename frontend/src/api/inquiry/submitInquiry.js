@@ -5,19 +5,11 @@ import Swal from "sweetalert2";
 export const submitInquiry = async (formData) => {
   try {
     const { data } = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`, formData, {
-      withCredentials: true,
+      // withCredentials: true,
     });
-
-    // console.log(data)
-        Swal.fire({
-  icon: "success",
-  title: "Success!",
-  text: `${data.message} Please check your email to view your booking details.`,
-});
-
     return { success: true, data };
   } catch (error) {
-        Swal.fire({
+    Swal.fire({
       icon: "error",
       title: "Error",
       text: error.response.data.message,

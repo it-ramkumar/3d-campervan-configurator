@@ -18,7 +18,6 @@ export const contact = async (formData) => {
       title: "Error",
       text: error.response.data.message,
     });
-    // console.error("Insert error:", error)
     throw error.response?.data || { message: "Something went wrong" }
   }
 }
