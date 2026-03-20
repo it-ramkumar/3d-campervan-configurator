@@ -17,7 +17,7 @@ const slides = [
       id: 1,
       image: "/heroSlider/long_van.jpg",
       tag: "Vans For Sale",
-      title: "Campervans For Sale",
+      title: "Campervans For Sale...",
       desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
       btnText: "View Inventory",
       link: "/vans-for-sale",
