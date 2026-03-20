@@ -46,9 +46,9 @@ export default function VanCanvas() {
 
           <Suspense fallback={<Loader />}>
             <Charcoal
-              scale={0.005}
+              scale={0.05}
               position={[0, -1, 0]}
-              
+
               doors={{ openDriver, openPassenger, openSlider }}
             />
             <Environment preset="city" />

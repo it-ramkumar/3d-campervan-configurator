@@ -18,9 +18,7 @@ export default function Layouts() {
       id: "family",
       title: "Campervan Layouts for Family (For 2+)",
       images: [
-        "/images/limage1.webp", "/images/limage2.webp", "/images2/layout1.webp",
-        "/images/limage4.webp", "/images/image5l.webp", "/images/image6l.webp",
-        "/images/image7l.webp", "/images/image8l.webp"
+"/layout/1(1).webp","/layout/1(2).webp","/layout/1(3).webp","/layout/1(4).webp","/layout/1(5).webp","/layout/1(6).webp","/layout/1(7).webp","/layout/1(8).webp","/layout/1(9).webp"
       ],
       link: "/layout-by-category/Layouts for Families (3–9 People)",
       showIntro: true
@@ -28,25 +26,25 @@ export default function Layouts() {
     {
       id: "couples",
       title: "Campervan Layouts for Couples (For 2)",
-      images: ["/images/image5l.webp", "/images/image6l.webp", "/images/image7l.webp", "/images/image8l.webp"],
+      images: ["/layout/1(10).webp","/layout/1(11).webp","/layout/1(12).webp","/layout/1(13).webp","/layout/1(15).webp"],
       link: "/layout-by-category/Layouts for Solo & Couple Travelers"
     },
     {
       id: "short-vans",
       title: "Short Campervan Layouts ",
-      images: ["/shortVans/image1.jpg", "/shortVans/image2.jpg", "/shortVans/image3.jpg", "/shortVans/image4.jpg"],
+      images: ["/layout/1(16).webp","/layout/1(17).webp","/layout/1(18).webp","/layout/1(1).webp","/layout/1(2).webp","/layout/1(3).webp"],
       link: "/layout-by-category/Flagship Short Van — Santa Monica"
     },
     {
       id: "long-vans",
       title: "Long Campervan Layouts ",
-      images: ["/longVans/image1.jpg", "/longVans/image2.jpg", "/longVans/image3.jpg", "/longVans/image4.jpg"],
+      images: ["/layout/1(4).webp","/layout/1(5).webp","/layout/1(6).webp","/layout/1(7).webp","/layout/1(8).webp"],
       link: "/layout-by-category/Flagship Long Van — Montreal"
     },
     {
       id: "custom-build",
       title: "Custom Campervan Layouts ",
-      images: ["/customBuild/image1.jpg", "/customBuild/image2.jpg", "/customBuild/image3.jpg", "/customBuild/image4.jpg"],
+      images: ["/layout/1(9).webp","/layout/1(10).webp","/layout/1(11).webp","/layout/1(12).webp","/layout/1(13).webp","/layout/1(15).webp"],
       link: "/layout-by-category/Portfolio of Custom Builds"
     }
   ];
