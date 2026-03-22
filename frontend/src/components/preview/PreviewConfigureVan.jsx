@@ -179,7 +179,7 @@ export default function PreviewPage() {
                           <p className="text-[9px] text-zinc-500 uppercase tracking-tighter">{part.category}</p>
                         </div>
                       </div>
-                      <p className="text-xs text-zinc-300 font-mono">${part.price}</p>
+                      {/* <p className="text-xs text-zinc-300 font-mono">${part.price}</p> */}
                     </div>
                   ))}
                 </div>
@@ -191,12 +191,12 @@ export default function PreviewPage() {
 
           {/* Checkout Footer */}
           <div className="mt-12 pt-6 border-t border-white/10">
-            <div className="flex justify-between items-end mb-6">
+            {/* <div className="flex justify-between items-end mb-6">
               <span className="text-[10px] text-zinc-500 uppercase tracking-widest leading-none">Total Investment</span>
               <span className="text-3xl font-black text-white italic leading-none">
                 ${((baseVan?.price || 0) + partsData.reduce((acc, curr) => acc + (curr.price || 0), 0)).toLocaleString()}
               </span>
-            </div>
+            </div> */}
             <Link to={"/configurator"}>
               <button className="w-full bg-white text-black py-4 font-black uppercase text-[11px] tracking-[0.2em] hover:bg-zinc-200 transition-all active:scale-[0.98]">
                 Confirm Configuration

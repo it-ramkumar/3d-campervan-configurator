@@ -14,7 +14,9 @@ if (typeof global === "undefined") {
 }
 
 const AppRoutes = lazy(() => import('./routes/Routes')); // Lazy load routes
-const isDashboard = window.location.pathname.startsWith('/dashboard');
+const isDashboard =
+  window.location.pathname.startsWith('/dashboard') ||
+  window.location.pathname.startsWith('/quote/preview/');
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
