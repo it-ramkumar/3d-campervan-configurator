@@ -72,7 +72,7 @@ const Home = () => {
     },
   ];
 
-  const image = "/images2/layout.webp";
+  const image =[ "/long/cusco(2).webp","/long/imperial(8).webp","/long/imperial(9).webp","/long/san(1).webp","/long/moto(10).webp","/family/casa(11).webp","/family/santa(9).webp","/family/san(7).webp",];
   const orderButtonLabel = "Order Custom Build";
   const orderButtonLink = "/inquiry";
   const lastText = "Start by filling out our TEST. We'll ask a few questions and then give you a real estimate of what your dream van will cost.";

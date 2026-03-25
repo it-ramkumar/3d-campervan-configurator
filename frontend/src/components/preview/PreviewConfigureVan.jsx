@@ -156,10 +156,10 @@ export default function PreviewPage() {
                   <p className="text-[10px] text-zinc-500 uppercase">Year</p>
                   <p className="text-white text-sm font-medium">{baseVan?.modelYear || 'N/A'}</p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="text-[10px] text-zinc-500 uppercase">Base Price</p>
                   <p className="text-white text-sm font-medium">${baseVan?.price?.toLocaleString() || '0'}</p>
-                </div>
+                </div> */}
               </div>
             </div>
 

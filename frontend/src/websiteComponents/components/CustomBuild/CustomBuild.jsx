@@ -68,7 +68,7 @@ const CustomBuild = () => {
               </p>
             </div>
             <div className="rounded-xl overflow-hidden shadow-2xl">
-              <img src={`${imgPath}IMG_4252.jpg`} alt="Big Bear Vans Exterior" className="w-full h-90 object-cover" />
+              <img src={`/images2/159.webp`} alt="Big Bear Vans Exterior" className="w-full h-90 object-cover" />
             </div>
           </div>
         </section>
@@ -153,7 +153,7 @@ const CustomBuild = () => {
                 </p>
                 <Link to="/contact" className="inline-block bg-black text-white px-10 py-4 rounded-sm font-black uppercase tracking-widest text-xs">Start a Custom Build</Link>
               </div>
-              <img src={'/images/w3.webp'} alt="Support" className="rounded-xl w-full" />
+              <img src={'/images2/wcu4.webp'} alt="Support" className="rounded-xl w-full" />
             </div>
           </div>
         </section>
@@ -188,7 +188,7 @@ const CustomBuild = () => {
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-8">Our Portfolio</h2>
             <p className="text-xl text-gray-700 mb-12 max-w-3xl">At Big Bear Vans, we have successfully customized 105+ campervans with a consistent five-star rating. Each van is designed for a specific person with different requirements. Check our past custom builds:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              <img src={`${imgPath}IMG_4928.jpg`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
+              <img src={`/images2/op4.webp`} alt="Portfolio 1" className="rounded-xl h-[400px] w-full object-cover" />
               <div className="bg-gray-50 rounded-xl p-12 flex flex-col justify-center items-center text-center">
                 <Link to="/van-layouts" className="text-2xl font-black uppercase tracking-tighter border-b-4 border-black pb-2">Browse Our Portfolio</Link>
               </div>
@@ -226,7 +226,7 @@ const CustomBuild = () => {
         <section className="py-24">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="text-5xl font-black uppercase tracking-tighter mb-12 text-center">Our Showroom</h2>
-            <img src={`${imgPath}40279.JPG`} alt="Showroom" className="w-full h-[500px] object-cover rounded-xl mb-12" />
+            <img src={`${imgPath}40279.webp`} alt="Showroom" className="w-full h-[500px] object-cover rounded-xl mb-12" />
             <div className="grid md:grid-cols-2 gap-16">
               <p className="text-gray-700 leading-relaxed">
                 To witness the process firsthand, we invite you to visit our showroom in Big Bear City, California. Here, you can see our building process, meet our team, and explore our ongoing and completed projects.

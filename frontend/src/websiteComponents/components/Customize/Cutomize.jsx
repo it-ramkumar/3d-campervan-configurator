@@ -1,67 +1,101 @@
 "use client";
-import React, { useState } from "react";
-// import { ChevronRight, Plus, Minus, Settings2 } from "lucide-react";
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, SecondaryButton, CustomLink } from '../Common/Common'
+import React from "react";
+// Swiper Imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+
+// Swiper Styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton } from '../Common/Common'
 
 export default function Customize({
-  mainTitle = "Custom Build",
   sectionTitle = "Personalize Your Build",
-  description = "",
+  // 'image' can be a String or an Array of Strings
+  image = "",
   descriptionList = [],
-  image = "/images/custom4.webp",
   orderButtonLabel = "Order Custom Build",
   orderButtonLink = "/inquiry",
   showButton = true,
   className = ""
 }) {
-  const [expanded, setExpanded] = useState(false);
+
+  // Logic: Agar array hai aur length > 1 hai, tabhi slider chalayen
+  const isSlider = Array.isArray(image) && image.length > 1;
+
+  // Single image source nikalne ke liye logic
+  const singleImageSrc = Array.isArray(image) ? image[0] : image;
 
   return (
-    <section className={`bg-secondary py-16 antialiased overflow-hidden ${className}`}>
+    <section className={`bg-secondary py-8 antialiased overflow-hidden ${className}`}>
       <div className="container mx-auto px-4 max-w-7xl">
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
-          {/* LEFT: Image Container with FIXED Height */}
-          <div className="relative group">
-            {/* Div size fixed at 400px, background matches theme */}
-            <div className="relative h-[400px] w-full rounded-lg overflow-hidden shadow-lg border-2 border-white bg-primary/10 transition-all duration-500 group-hover:shadow-2xl flex items-center justify-center">
+          {/* LEFT: Image/Slider Container */}
+          <div className="relative group w-full">
+            <div className="relative h-[500px] w-full rounded-lg overflow-hidden shadow-lg border-2 border-white bg-primary/10 transition-all duration-500 group-hover:shadow-2xl flex items-center justify-center">
 
-              <ImageWithSkeleton
-                src={image}
-                alt="Customization"
-                /* object-contain: Poori image dikhayega bina cut kiye.
-                   w-full h-full: Div ke andar rahegi.
-                */
-                className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
-              />
+              {isSlider ? (
+                /* CASE 1: MULTIPLE IMAGES (SLIDER) */
+                <Swiper
+                  modules={[Navigation, Pagination, Autoplay]}
+                  spaceBetween={10}
+                  slidesPerView={1}
+                  breakpoints={{
+                    // Jab screen 768px (Tablet/Desktop) ya us se bari ho
+                    768: {
+                      slidesPerView: 2,
+                    },
+                    // Agar aap mazeed bari screen par 3 dikhana chahte hain
+                    1024: {
+                      slidesPerView: 2, // Ya 3, jaisa aapko behtar lage
+                    }
+                  }}
+                  navigation
+                  pagination={{ clickable: true }}
+                  autoplay={{ delay: 3000, disableOnInteraction: false }}
+                  className="h-full w-full custom-swiper"
+                >
+                  {image.map((img, index) => (
+                    <SwiperSlide key={index}>
+                      <ImageWithSkeleton
+                        src={img}
+                        alt={`Customization ${index + 1}`}
+                        className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                /* CASE 2: SINGLE IMAGE (STATIC) */
+                <ImageWithSkeleton
+                  src={singleImageSrc}
+                  alt="Customization"
+                  className="w-full h-full object-contain object-center transition-transform duration-700 "
+                />
+              )}
 
-              {/* Gradient Overlay - Subtle taaki image ke upar text nazar aaye */}
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none"></div>
-
-              {/* Overlay Content */}
-              {/* <div className="absolute bottom-6 left-6 right-6 pointer-events-none">
-                <Heading3 text={mainTitle} className="!text-secondary !mb-1  drop-shadow-md" />
-                <RichParagraph className="text-secondary !mb-0 line-clamp-1 !text-sm">{description}</RichParagraph>
-              </div> */}
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none z-10"></div>
             </div>
 
-            {/* Subtle Accent Background - Rounded as per your preference */}
+            {/* Accent Background decoration */}
             <div className="absolute -z-10 -top-4 -left-4 w-24 h-24 bg-secondary/30 rounded-lg blur-xl"></div>
           </div>
 
           {/* RIGHT: Content Section */}
           <div className="flex flex-col">
             <div className="flex items-center gap-3 mb-6">
-              {/* <Settings2 className="w-6 h-6 text-primary" /> */}
               <Heading2 text={sectionTitle} className="!mb-0 text-primary" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-8">
-              {(expanded ? descriptionList : descriptionList).map((item, index) => (
+              {descriptionList.map((item, index) => (
                 <div key={index} className="flex items-start gap-3 group">
                   <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-secondary group-hover:bg-primary transition-colors shrink-0"></div>
-                  <RichParagraph className="!mb-0 ">
+                  <RichParagraph className="!mb-0">
                     {item.text}
                   </RichParagraph>
                 </div>
@@ -81,6 +115,24 @@ export default function Customize({
 
         </div>
       </div>
+
+      {/* Global Style for Swiper dots and buttons */}
+      <style>{`
+        .custom-swiper .swiper-button-next,
+        .custom-swiper .swiper-button-prev {
+          color: white !important;
+          transform: scale(0.5);
+          opacity: 0;
+          transition: all 0.3s ease;
+        }
+        .group:hover .swiper-button-next,
+        .group:hover .swiper-button-prev {
+          opacity: 1;
+        }
+        .custom-swiper .swiper-pagination-bullet-active {
+          background: white !important;
+        }
+      `}</style>
     </section>
   );
 }

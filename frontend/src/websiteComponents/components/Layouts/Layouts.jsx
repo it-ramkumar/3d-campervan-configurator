@@ -6,6 +6,7 @@ import Footer from "../Footer/Footer";
 import All_Titles from "./All_Titles/All_Titles";
 import { Helmet } from "react-helmet-async";
 import { generateLayoutsSchema } from "../../schema/layoutPage";
+import { vanLayoutsData } from "../../DataUseInComp/LayouData";
 
 export default function Layouts() {
   const heroImage = "/images2/layout2.webp";
@@ -13,41 +14,7 @@ export default function Layouts() {
   const newDescriptionText = "Discover the various layouts we offer for our custom vans.";
 
   // Single JSON structure for all layouts
-  const vanLayoutsData = [
-    {
-      id: "family",
-      title: "Campervan Layouts for Family (For 2+)",
-      images: [
-"/layout/1(1).webp","/layout/1(2).webp","/layout/1(3).webp","/layout/1(4).webp","/layout/1(5).webp","/layout/1(6).webp","/layout/1(7).webp","/layout/1(8).webp","/layout/1(9).webp"
-      ],
-      link: "/layout-by-category/Layouts for Families (3–9 People)",
-      showIntro: true
-    },
-    {
-      id: "couples",
-      title: "Campervan Layouts for Couples (For 2)",
-      images: ["/layout/1(10).webp","/layout/1(11).webp","/layout/1(12).webp","/layout/1(13).webp","/layout/1(15).webp"],
-      link: "/layout-by-category/Layouts for Solo & Couple Travelers"
-    },
-    {
-      id: "short-vans",
-      title: "Short Campervan Layouts ",
-      images: ["/layout/1(16).webp","/layout/1(17).webp","/layout/1(18).webp","/layout/1(1).webp","/layout/1(2).webp","/layout/1(3).webp"],
-      link: "/layout-by-category/Flagship Short Van — Santa Monica"
-    },
-    {
-      id: "long-vans",
-      title: "Long Campervan Layouts ",
-      images: ["/layout/1(4).webp","/layout/1(5).webp","/layout/1(6).webp","/layout/1(7).webp","/layout/1(8).webp"],
-      link: "/layout-by-category/Flagship Long Van — Montreal"
-    },
-    {
-      id: "custom-build",
-      title: "Custom Campervan Layouts ",
-      images: ["/layout/1(9).webp","/layout/1(10).webp","/layout/1(11).webp","/layout/1(12).webp","/layout/1(13).webp","/layout/1(15).webp"],
-      link: "/layout-by-category/Portfolio of Custom Builds"
-    }
-  ];
+
 
   const LayoutText = {
     text: "Have a look at our completed projects...",
