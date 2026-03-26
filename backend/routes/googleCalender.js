@@ -15,8 +15,8 @@ const chatId = process.env.TELEGRAM_CHAT_ID;
 router.get("/test-bot", async (req, res) => {
     console.log("Test-bot route hit!"); // Live logs mein check karne ke liye
     try {
-        // const chatId = process.env.TELEGRAM_CHAT_ID;
-        // await bot.sendMessage(chatId, "👋 Live Server Test: Bot is working!");
+        const chatId = process.env.TELEGRAM_CHAT_ID;
+        await bot.sendMessage(chatId, "👋 Live Server Test: Bot is working!");
         res.send("<h1>Check your Telegram! Message sent from Live Server.</h1>");
     } catch (err) {
         console.error("Bot Error:", err.message);
