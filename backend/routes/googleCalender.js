@@ -88,6 +88,104 @@ router.get("/status", async (req, res) => {
         res.json({ loggedIn: false });
     }
 });
+// ✅ CREATE TEST MEETING (5 minutes mein)
+router.get("/create-test-meeting", async (req, res) => {
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+        const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
+
+        // 6 minute baad meeting banao (5 min alert ke liye)
+        const now = DateTime.now().setZone(HOST_TZ);
+        const meetingStart = now.plus({ minutes: 6 });
+        const meetingEnd = meetingStart.plus({ minutes: 30 });
+
+        console.log(`🧪 Creating test meeting at: ${meetingStart.toFormat('yyyy-MM-dd HH:mm:ss')} (${HOST_TZ})`);
+
+        const testEvent = {
+            summary: "🧪 TEST MEETING - Cron Alert Check",
+            description: "This is a test meeting to check cron alerts. Delete after testing.",
+            start: {
+                dateTime: meetingStart.toISO(),
+                timeZone: HOST_TZ
+            },
+            end: {
+                dateTime: meetingEnd.toISO(),
+                timeZone: HOST_TZ
+            },
+            conferenceData: {
+                createRequest: {
+                    requestId: `test-meet-${Date.now()}`,
+                    conferenceSolutionKey: { type: "hangoutsMeet" }
+                }
+            }
+        };
+
+        const response = await calendar.events.insert({
+            calendarId: "primary",
+            resource: testEvent,
+            conferenceDataVersion: 1
+        });
+
+        res.json({
+            message: "✅ Test meeting created! Alert should come in 5 minutes.",
+            meetingTime: meetingStart.toFormat('yyyy-MM-dd HH:mm:ss'),
+            timezone: HOST_TZ,
+            eventId: response.data.id,
+            meetLink: response.data.hangoutLink,
+            note: "Wait 5 minutes for Telegram alert. Check console logs."
+        });
+
+    } catch (error) {
+        console.error("Test meeting creation error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ✅ MANUAL CRON TRIGGER (Testing ke liye)
+router.get("/test-cron-now", async (req, res) => {
+    console.log("🧪 Manual cron trigger started...");
+
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+        const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
+        const now = DateTime.now().setZone(HOST_TZ);
+
+        console.log(`⏰ Current time: ${now.toFormat('yyyy-MM-dd HH:mm:ss')} (${HOST_TZ})`);
+
+        const response = await calendar.events.list({
+            calendarId: 'primary',
+            timeMin: now.toUTC().toISO(),
+            timeMax: now.plus({ minutes: 16 }).toUTC().toISO(),
+            singleEvents: true,
+            orderBy: 'startTime',
+        });
+
+        const events = response.data.items || [];
+        const eventDetails = events.map(e => {
+            const eventStart = DateTime.fromISO(e.start.dateTime || e.start.date).setZone(HOST_TZ);
+            const minutesFromNow = Math.floor(eventStart.diff(now, 'minutes').minutes);
+
+            return {
+                title: e.summary,
+                start: eventStart.toFormat('yyyy-MM-dd HH:mm:ss'),
+                minutesFromNow: minutesFromNow,
+                shouldAlert: [15, 10, 5].includes(minutesFromNow)
+            };
+        });
+
+        res.json({
+            currentTime: now.toFormat('yyyy-MM-dd HH:mm:ss'),
+            timezone: HOST_TZ,
+            eventsFound: events.length,
+            events: eventDetails,
+            cronStatus: "Manual trigger completed - check console logs"
+        });
+
+    } catch (error) {
+        console.error("Manual cron error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 // ✅ CREATE EVENT - FIXED VERSION
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
@@ -294,13 +392,20 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
     }
 });
 
+// ✅ ENHANCED CRON JOB WITH DETAILED LOGGING
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
         const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
         const now = DateTime.now().setZone(HOST_TZ);
 
-        // Agle 16 minutes ki meetings fetch karein
+        // Har 5 minute mein detailed log, baaki mein silent
+        const shouldLog = now.minute % 5 === 0;
+
+        if (shouldLog) {
+            console.log(`\n🔄 ===== CRON CHECK: ${now.toFormat('HH:mm:ss')} =====`);
+        }
+
         const response = await calendar.events.list({
             calendarId: 'primary',
             timeMin: now.toUTC().toISO(),
@@ -310,22 +415,44 @@ cron.schedule('* * * * *', async () => {
         });
 
         const events = response.data.items;
-        if (!events || events.length === 0) return;
+
+        if (shouldLog) {
+            console.log(`📅 Found ${events?.length || 0} upcoming events`);
+        }
+
+        if (!events || events.length === 0) {
+            if (shouldLog) {
+                console.log("====\n");
+            }
+            return;
+        }
 
         for (const event of events) {
             const startTimeStr = event.start.dateTime || event.start.date;
-            const eventStart = DateTime.fromISO(startTimeStr, { zone: HOST_TZ });
+            const eventStart = DateTime.fromISO(startTimeStr);
+            const eventStartInHostTZ = eventStart.setZone(HOST_TZ);
 
-            // Difference in minutes (e.g., 15.0, 10.0, 5.0)
-            const diffInMinutes = Math.round(eventStart.diff(now, 'minutes').minutes);
+            const diffInMinutes = Math.floor(eventStartInHostTZ.diff(now, 'minutes').minutes);
 
-            // ✅ Logic: Agar time 15, 10, ya 5 minute reh gaya ho
+            if (shouldLog) {
+                console.log(`📊 "${event.summary}" - ${diffInMinutes} mins remaining`);
+            }
+
             const reminderIntervals = [15, 10, 5];
 
             if (reminderIntervals.includes(diffInMinutes)) {
+                const alertKey = `${event.id}-${diffInMinutes}`;
+
+                if (sentAlerts.has(alertKey)) {
+                    console.log(`⏭️ Alert already sent: ${event.summary} (${diffInMinutes} min)`);
+                    continue;
+                }
+
+                console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
+
                 const summary = event.summary || "Upcoming Meeting";
                 const meetLink = event.hangoutLink || "No link";
-                const timeStr = eventStart.toFormat('hh:mm a');
+                const timeStr = eventStartInHostTZ.toFormat('hh:mm a');
 
                 const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
                                  `📌 **Topic:** ${summary}\n` +
@@ -333,12 +460,29 @@ cron.schedule('* * * * *', async () => {
                                  `🔗 **Link:** ${meetLink}\n\n` +
                                  `Bhai, meeting ${diffInMinutes} minute mein shuru ho rahi hai!`;
 
-                await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
-                console.log(`Telegram Alert Sent (${diffInMinutes} min): ${summary}`);
+                try {
+                    await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
+                    sentAlerts.add(alertKey);
+                    console.log(`✅ Telegram Alert Sent Successfully!`);
+                } catch (botError) {
+                    console.error(`❌ Bot send error:`, botError.message);
+                }
             }
         }
+
+        // Cleanup old alerts (memory management)
+        if (sentAlerts.size > 50) {
+            console.log("🧹 Cleaning up old alerts...");
+            sentAlerts.clear();
+        }
+
+        if (shouldLog) {
+            console.log("====\n");
+        }
+
     } catch (error) {
         console.error("❌ Cron Job Error:", error.message);
     }
 });
+
 module.exports = router;

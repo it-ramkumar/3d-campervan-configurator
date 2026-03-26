@@ -63,7 +63,7 @@ export default function Navbar({ forceMobile }) {
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
     { name: 'vans-for-sale', label: 'Vans For Sale', path: '/vans-for-sale', hasDropdown: false },
     { name: 'layout', label: 'Layouts', path: '/van-layouts', hasDropdown: true },
-    { name: 'contact', label: 'Contact', path: '/contact', hasDropdown: false },
+    // { name: 'contact', label: 'Contact', path: '/contact', hasDropdown: false },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
 
@@ -95,40 +95,40 @@ export default function Navbar({ forceMobile }) {
     loadData();
   }, []);
 
-useEffect(() => {
-  if (!megaMenuRef.current || forceMobile) return;
+  useEffect(() => {
+    if (!megaMenuRef.current || forceMobile) return;
 
-  const element = megaMenuRef.current;
+    const element = megaMenuRef.current;
 
-  if (animationRef.current) {
-    animationRef.current.kill();
-    animationRef.current = null;
-  }
-
-  if (desktopMenu) {
-    gsap.set(element, { display: 'block', height: 'auto', opacity: 0, y: -20 });
-    animationRef.current = gsap.to(element, {
-      opacity: 1,
-      y: 0,
-      duration: 0.25,
-      ease: "power2.out",
-    });
-  } else {
-    animationRef.current = gsap.to(element, {
-      opacity: 0,
-      y: -10,
-      duration: 0.2,
-      ease: "power2.in",
-    });
-  }
-
-  return () => {
     if (animationRef.current) {
       animationRef.current.kill();
       animationRef.current = null;
     }
-  };
-}, [desktopMenu, forceMobile]);
+
+    if (desktopMenu) {
+      gsap.set(element, { display: 'block', height: 'auto', opacity: 0, y: -20 });
+      animationRef.current = gsap.to(element, {
+        opacity: 1,
+        y: 0,
+        duration: 0.25,
+        ease: "power2.out",
+      });
+    } else {
+      animationRef.current = gsap.to(element, {
+        opacity: 0,
+        y: -10,
+        duration: 0.2,
+        ease: "power2.in",
+      });
+    }
+
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.kill();
+        animationRef.current = null;
+      }
+    };
+  }, [desktopMenu, forceMobile]);
   const handleHover = useCallback((menu) => {
     if (forceMobile) return;
     clearTimeout(timeoutRef.current);
@@ -215,9 +215,8 @@ useEffect(() => {
                 to={link.path}
                 onMouseEnter={() => link.hasDropdown && handleHover(link.name)}
                 onMouseLeave={() => link.hasDropdown && handleMouseLeave()}
-                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200 ${
-                  isParentActive(link.name) ? "text-primary" : "text-primary hover:!text-hover"
-                }`}
+                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200 ${isParentActive(link.name) ? "text-primary" : "text-primary hover:!text-hover"
+                  }`}
               >
                 {link.label}
                 {link.hasDropdown && (
@@ -287,6 +286,7 @@ useEffect(() => {
               {navLinks.map((link) => (
                 <div key={link.name} className="border-b border-primary last:border-0">
                   {!link.hasDropdown ? (
+                    // Simple Link (No Dropdown)
                     <Link
                       to={link.path}
                       className="block py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
@@ -295,25 +295,46 @@ useEffect(() => {
                       {link.label}
                     </Link>
                   ) : (
-                    <>
-                      <button
-                        className="w-full flex justify-between items-center py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
-                        onClick={() => setMobileMenu(mobileMenu === link.name ? null : link.name)}
-                      >
-                        {link.label}
-                        <ChevronDown className={`transition-transform duration-200 ${mobileMenu === link.name ? "rotate-180" : ""}`} />
-                      </button>
+                    // Split Action: Text redirects, Arrow toggles
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between w-full border-b border-gray-100/10">
+                        {/* 1. Yeh text user ko page par le jayega */}
+                        <Link
+                          to={link.path}
+                          className="flex-grow py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {link.label}
+                        </Link>
+
+                        {/* 2. Yeh icon sirf dropdown toggle karega */}
+                        <button
+                          aria-label="Toggle Submenu"
+                          className="p-4 border-l border-gray-100/10"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Parent link ko trigger hone se rokega
+                            setMobileMenu(mobileMenu === link.name ? null : link.name);
+                          }}
+                        >
+                          <ChevronDown
+                            className={`w-6 h-6 transition-transform duration-200
+                ${mobileMenu === link.name ? "rotate-180" : ""}`}
+                          />
+                        </button>
+                      </div>
+
+                      {/* Dropdown Content */}
                       {mobileMenu === link.name && (
-                        <div className="pl-4 pb-4 space-y-4">
+                        <div className="pl-4 pb-4 space-y-4 bg-black/5 animate-in slide-in-from-top-2">
                           {menuContent[link.name]?.sections?.map((sec, i) => (
-                            <div key={i}>
+                            <div key={i} className="mt-4">
                               <MobileSectionTitle>{sec.title}</MobileSectionTitle>
                               <ul className="space-y-2">{renderSectionItems(sec, true)}</ul>
                             </div>
                           ))}
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               ))}

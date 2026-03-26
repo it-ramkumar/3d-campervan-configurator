@@ -17,7 +17,7 @@ export const routes = {
     "/blog",
     "/blog-detail",
   ],
-  "contact": [
-    "/contact"
-  ]
+  // "contact": [
+  //   "/contact"
+  // ]
 };

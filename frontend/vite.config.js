@@ -11,6 +11,9 @@ export default defineConfig({
   define: {
     global: 'window',
   },
+  ssr: {
+    noExternal: ['react-helmet-async']
+  },
   build: {
 }
 })
