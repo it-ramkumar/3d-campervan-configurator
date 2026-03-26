@@ -6,6 +6,7 @@ import { ArrowBigRightDash, ArrowBigLeftDash } from 'lucide-react';
 
 // Import Swiper styles
 import 'swiper/css';
+import { Link } from 'react-router-dom';
 
 export default function All_Layout({ layout, LayoutText, text }) {
   const { title, link, images: rawImages } = layout || {};
@@ -17,7 +18,7 @@ export default function All_Layout({ layout, LayoutText, text }) {
   // Convert simple string array to object array for mapping
   const images = (rawImages || []).map((imgSrc) => ({
     src: imgSrc.img,
-    label: imgSrc.img,// Aap isko dynamic bhi kar sakte hain
+    label: imgSrc.link,// Aap isko dynamic bhi kar sakte hain
   }));
 
   if (images.length === 0) return null;
@@ -88,9 +89,9 @@ export default function All_Layout({ layout, LayoutText, text }) {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 pointer-events-none"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/80 to-transparent p-6">
-                    {/* <RichParagraph className=" font-bold text-secondary !text-sm text-center uppercase">
-                      {img.label}
-                    </RichParagraph> */}
+                    <Link to={img.label} className=" font-bold text-secondary !text-sm text-center uppercase">
+                   {img.label.replace('/layout-detail/', '')}
+                    </Link>
                   </div>
                 </div>
               </SwiperSlide>

@@ -1,260 +1,281 @@
- export const vanLayoutsData = [
-    {
-      id: "family",
-      title: "Campervan Layouts for Family (For 2+)",
-      images: [
-        {
-          img: "/family/amster.jpg",
-          link: ""
-        },
-        {
-          img: "/family/amster1.webp",
-          link: ""
-        },
-        {
-          img: "/family/amster2.jpg",
-          link: ""
-        },
-        {
-          img: "/family/casa(4).webp",
-          link: ""
-        },
-        {
-          img: "/family/casa(7).webp",
-          link: ""
-        }, {
-          img: "/family/casa(11).webp",
-          link: ""
-        },
-        {
-          img: "/family/cusco(2).webp",
-          link: ""
-        },
-        {
-          img: "/family/cusco(3).webp",
-          link: ""
-        },
-        {
-          img: "/family/lake(1).webp",
-          link: ""
-        },
+export const vanLayoutsData = [
+  {
+    id: "family",
+    title: "Campervan Layouts for Family (For 2+)",
+    images: [
+      {
+        img: "/family/amster.jpg",
+        link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/family/amster1.webp",
+        link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/family/amster2.jpg",
+        link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/family/casa(4).webp",
+        link: "/layout-detail/calabasas"
+      },
+      {
+        img: "/family/casa(7).webp",
+        link: "/layout-detail/calabasas"
+      }, {
+        img: "/family/casa(11).webp",
+        link: "/layout-detail/calabasas"
+      },
+      {
+        img: "/family/cusco(2).webp",
+        link: "/layout-detail/cusco-campervan"
+      },
+      {
+        img: "/family/cusco(3).webp",
+        link: "/layout-detail/cusco-campervan"
+      },
+      {
+        img: "/family/lake(1).webp",
+        link: "/layout-detail/lake-tahoe"
+      },
 
-        {
-          img: "/family/mon(1).webp",
-          link: ""
-        },
-        {
-          img: "/family/mon(2).png",
-          link: ""
-        },
-        {
-          img: "/family/moto(2).webp",
-          link: ""
-        },
-        {
-          img: "/family/moto(4).webp",
-          link: ""
-        },
-        {
-          img: "/family/moto(9).webp",
-          link: ""
-        },
-        {
-          img: "/family/san(2).webp",
-          link: ""
-        },
-        {
-          img: "/family/san(5).webp",
-          link: ""
-        },
-        {
-          img: "/family/san(7).webp",
-          link: ""
-        },
-        {
-          img: "/family/santa(2).webp",
-          link: ""
-        },
-        {
-          img: "/family/santa(3).webp",
-          link: ""
-        },
-        {
-          img: "/family/santa(4).webp",
-          link: ""
-        },
-        {
-          img: "/family/santa(7).webp",
-          link: ""
-        },
-        {
-          img: "/family/santa(9).webp",
-          link: ""
-        },
-      ],
-      link: "/layout-by-category/Layouts for Families (3–9 People)",
-      showIntro: true
-    },
-    {
-      id: "couples",
-      title: "Campervan Layouts for Couples (For 2)",
-      images: [
-        {
-          img: "/cauple/casa(5).webp",
-          link: ""
-        },
-          {
-          img: "/cauple/casa(9).webp",
-          link: ""
-        },
-          {
-          img: "/cauple/imperial(1).webp",
-          link: ""
-        },
-          {
-          img: "/cauple/imperial(2).webp",
-          link: ""
-        },
-          {
-          img: "/cauple/port2.jpg",
-          link: ""
-        },
-          {
-          img: "/cauple/port3.jpg",
-          link: ""
-        },
-          {
-          img: "/cauple/santab1.jpg",
-          link: ""
-        },
-         {
-          img: "/cauple/santab3.jpg",
-          link: ""
-        },
-      ], link: "/layout-by-category/Layouts for Solo & Couple Travelers"
-    },
-    {
-      id: "short-vans",
-      title: "Short Campervan Layouts ",
-      images: [
-        {
-          img: "/short/casa(1).webp",
-          link: ""
-        },
-       {
-          img: "/short/casa(2).webp",
-          link: ""
-        },
-       {
-          img: "/short/lake(4).webp",
-          link: ""
-        },
-       {
-          img: "/short/lake(5).webp",
-          link: ""
-        },
-       {
-          img: "/short/port.jpg",
-          link: ""
-        },
-       {
-          img: "/short/port1.jpg",
-          link: ""
-        },
-       {
-          img: "/short/santab.jpg",
-          link: ""
-        },
-        {
-          img: "/short/santab2.jpg",
-          link: ""
-        },],
-      link: "/layout-by-category/Flagship Short Van — Santa Monica"
-    },
-    {
-      id: "long-vans",
-      title: "Long Campervan Layouts ",
-      images: [
-        {img:"/long/amster.jpg",
-        link:""
+      {
+        img: "/family/mon(1).webp",
+        link: "/layout-detail/mont-fort"
       },
-      {img:"/long/amster1.webp",
-        link:""
+      {
+        img: "/family/mon(2).png",
+        link: "/layout-detail/mont-fort"
       },
-      {img:"/long/amster2.jpg",
-        link:""
+      {
+        img: "/family/moto(2).webp",
+        link: "/layout-detail/moto-van"
       },
-      {img:"/long/cusco(1).webp",
-        link:""
+      {
+        img: "/family/moto(4).webp",
+        link: "/layout-detail/moto-van"
       },
-      {img:"/long/cusco(2).webp",
-        link:""
+      {
+        img: "/family/moto(9).webp",
+        link: "/layout-detail/moto-van"
       },
-      {img:"/long/imperial(4).webp",
-        link:""
+      {
+        img: "/family/san(2).webp",
+        link: "/layout-detail/san-clemente"
       },
-      {img:"/long/imperial(8).webp",
-        link:""
+      {
+        img: "/family/san(5).webp",
+        link: "/layout-detail/san-clemente"
       },
-      {img:"/long/imperial(9).webp",
-        link:""
+      {
+        img: "/family/san(7).webp",
+        link: "/layout-detail/san-clemente"
       },
-      {img:"/long/moto(10).webp",
-        link:""
+      {
+        img: "/family/santa(2).webp",
+        link: "/layout-detail/santa-cruz"
       },
-      {img:"/long/moto(11).webp",
-        link:""
+      {
+        img: "/family/santa(3).webp",
+        link: "/layout-detail/santa-cruz"
       },
-      {img:"/long/san(1).webp",
-        link:""
+      {
+        img: "/family/santa(4).webp",
+        link: "/layout-detail/santa-cruz"
       },
-      {img:"/long/san(4).webp",
-        link:""
+      {
+        img: "/family/santa(7).webp",
+        link: "/layout-detail/santa-cruz"
       },
-      {img:"/long/san(10).webp",
-        link:""
+      {
+        img: "/family/santa(9).webp",
+        link: "/layout-detail/santa-cruz"
       },
-      {img:"/long/santab.jpg",
-        link:""
+    ],
+    link: "/layout-by-category/Layouts for Families (3–9 People)",
+    showIntro: true
+  },
+  {
+    id: "couples",
+    title: "Campervan Layouts for Couples (For 2)",
+    images: [
+      {
+        img: "/cauple/casa(5).webp",
+        link: "/layout-detail/calabasas"
       },
-      {img:"/long/santab2.jpg",
-        link:""
+      {
+        img: "/cauple/casa(9).webp",
+        link: "/layout-detail/calabasas"
+      },
+      {
+        img: "/cauple/imperial(1).webp",
+        link: "/layout-detail/imperial"
+      },
+      {
+        img: "/cauple/imperial(2).webp",
+        link: "/layout-detail/imperial"
+      },
+      {
+        img: "/cauple/port2.jpg",
+        link: "/layout-detail/porto-campervan"
+      },
+      {
+        img: "/cauple/port3.jpg",
+        link: "/layout-detail/porto-campervan"
+      },
+      {
+        img: "/cauple/santab1.jpg",
+        link: "/layout-detail/santa-barbara"
+      },
+      {
+        img: "/cauple/santab3.jpg",
+        link: "/layout-detail/santa-barbara"
+      },
+    ], link: "/layout-by-category/Layouts for Solo & Couple Travelers"
+  },
+  {
+    id: "short-vans",
+    title: "Short Campervan Layouts ",
+    images: [
+      {
+        img: "/short/casa(1).webp",
+         link: "/layout-detail/calabasas"
+      },
+      {
+        img: "/short/casa(2).webp",
+         link: "/layout-detail/calabasas"
+      },
+      {
+        img: "/short/lake(4).webp",
+      link: "/layout-detail/lake-tahoe"
+      },
+      {
+        img: "/short/lake(5).webp",
+     link: "/layout-detail/lake-tahoe"
+      },
+      {
+        img: "/short/port.jpg",
+        link: "/layout-detail/porto-campervan"
+      },
+      {
+        img: "/short/port1.jpg",
+      link: "/layout-detail/porto-campervan"
+      },
+      {
+        img: "/short/santab.jpg",
+      link: "/layout-detail/santa-barbara"
+      },
+      {
+        img: "/short/santab2.jpg",
+ link: "/layout-detail/santa-barbara"
+      },],
+    link: "/layout-by-category/Flagship Short Van — Santa Monica"
+  },
+  {
+    id: "long-vans",
+    title: "Long Campervan Layouts ",
+    images: [
+      {
+        img: "/long/amster.jpg",
+       link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/long/amster1.webp",
+          link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/long/amster2.jpg",
+        link: "/layout-detail/amsterdam"
+      },
+      {
+        img: "/long/cusco(1).webp",
+         link: "/layout-detail/cusco-campervan"
+      },
+      {
+        img: "/long/cusco(2).webp",
+         link: "/layout-detail/cusco-campervan"
+      },
+      {
+        img: "/long/imperial(4).webp",
+    link: "/layout-detail/imperial"
+      },
+      {
+        img: "/long/imperial(8).webp",
+    link: "/layout-detail/imperial"
+      },
+      {
+        img: "/long/imperial(9).webp",
+       link: "/layout-detail/imperial"
+      },
+      {
+        img: "/long/moto(10).webp",
+        link: "/layout-detail/moto-van"
+      },
+      {
+        img: "/long/moto(11).webp",
+           link: "/layout-detail/moto-van"
+      },
+      {
+        img: "/long/san(1).webp",
+     link: "/layout-detail/san-clemente"
+      },
+      {
+        img: "/long/san(4).webp",
+ link: "/layout-detail/san-clemente"
+      },
+      {
+        img: "/long/san(10).webp",
+   link: "/layout-detail/san-clemente"
+      },
+      {
+        img: "/long/santab.jpg",
+             link: "/layout-detail/santa-barbara"
+      },
+      {
+        img: "/long/santab2.jpg",
+         link: "/layout-detail/santa-barbara"
       },
 
     ],
-      link: "/layout-by-category/Flagship Long Van — Montreal"
-    },
-    {
-      id: "custom-build",
-      title: "Custom Campervan Layouts ",
-      images: [
-         {
-          img: "/cauple/imperial(1).webp",
-          link: ""
-        },
-          {
-          img: "/cauple/imperial(2).webp",
-          link: ""
-        },
-         {img:"/long/cusco(1).webp",
-        link:""
+    link: "/layout-by-category/Flagship Long Van — Montreal"
+  },
+  {
+    id: "custom-build",
+    title: "Custom Campervan Layouts ",
+    images: [
+      {
+        img: "/cauple/imperial(1).webp",
+       link: "/layout-detail/imperial"
       },
-      {img:"/long/cusco(2).webp",
-        link:""
+      {
+        img: "/cauple/imperial(2).webp",
+       link: "/layout-detail/imperial"
       },
-       {img:"/long/moto(10).webp",
-        link:""
+      {
+        img: "/long/cusco(1).webp",
+        link: "/layout-detail/cusco-campervan"
       },
-      {img:"/long/moto(11).webp",
-        link:""
+      {
+        img: "/long/cusco(2).webp",
+     link: "/layout-detail/cusco-campervan"
       },
-       {img:"/long/san(4).webp",
-        link:""
+      {
+        img: "/long/moto(10).webp",
+        link: "/layout-detail/moto-van"
       },
-      {img:"/long/san(10).webp",
-        link:""
+      {
+        img: "/long/moto(11).webp",
+      link: "/layout-detail/moto-van"
       },
-      ],
-      link: "/layout-by-category/Portfolio of Custom Builds"
-    }
-  ];
+      {
+        img: "/long/san(4).webp",
+      link: "/layout-detail/san-clemente"
+      },
+      {
+        img: "/long/san(10).webp",
+      link: "/layout-detail/san-clemente"
+      },
+    ],
+    link: "/layout-by-category/Portfolio of Custom Builds"
+  }
+];

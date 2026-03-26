@@ -72,7 +72,9 @@ const Home = () => {
     },
   ];
 
-  const image =[ "/long/cusco(2).webp","/long/imperial(8).webp","/long/imperial(9).webp","/long/san(1).webp","/long/moto(10).webp","/family/casa(11).webp","/family/santa(9).webp","/family/san(7).webp",];
+  const image =[{img: "/long/cusco(2).webp",link:""
+  },{img:"/long/imperial(8).webp", link: "/layout-detail/imperial"},{img: "/long/imperial(9).webp", link: "/layout-detail/imperial"},{img:"/long/san(1).webp", link: "/layout-detail/san-clemente"},{img:"/long/moto(10).webp", link: "/layout-detail/moto-van"},{img:"/family/casa(11).webp", link: "/layout-detail/calabasas"},{img:"/family/santa(9).webp",  link: "/layout-detail/santa-cruz"},{img:"/family/san(7).webp", link: "/layout-detail/san-clemente"},];
+
   const orderButtonLabel = "Order Custom Build";
   const orderButtonLink = "/inquiry";
   const lastText = "Start by filling out our TEST. We'll ask a few questions and then give you a real estimate of what your dream van will cost.";

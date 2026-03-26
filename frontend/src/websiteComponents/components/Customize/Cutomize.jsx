@@ -3,6 +3,7 @@ import React from "react";
 // Swiper Imports
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Link } from "react-router-dom";
 
 // Swiper Styles
 import "swiper/css";
@@ -61,10 +62,15 @@ export default function Customize({
                   {image.map((img, index) => (
                     <SwiperSlide key={index}>
                       <ImageWithSkeleton
-                        src={img}
+                        src={img.img}
                         alt={`Customization ${index + 1}`}
                         className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
                       />
+                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/80 to-transparent p-6">
+                    <Link to={img.link} className=" font-bold text-secondary !text-sm text-center uppercase">
+                   {img.link.replace('/layout-detail/', '')}
+                    </Link>
+                  </div>
                     </SwiperSlide>
                   ))}
                 </Swiper>
