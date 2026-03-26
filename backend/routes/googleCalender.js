@@ -11,6 +11,18 @@ const cron = require('node-cron');
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: false });
 const chatId = process.env.TELEGRAM_CHAT_ID;
 // --- Configuration ---
+// ✅ TEST ROUTE (Isse exact check karein)
+router.get("/test-bot", async (req, res) => {
+    console.log("Test-bot route hit!"); // Live logs mein check karne ke liye
+    try {
+        // const chatId = process.env.TELEGRAM_CHAT_ID;
+        // await bot.sendMessage(chatId, "👋 Live Server Test: Bot is working!");
+        res.send("<h1>Check your Telegram! Message sent from Live Server.</h1>");
+    } catch (err) {
+        console.error("Bot Error:", err.message);
+        res.status(500).send("Bot Error: " + err.message);
+    }
+});
 const oauth2Client = new google.auth.OAuth2(
     process.env.CALENDER_CLIENTID,
     process.env.CALENDER_CLIENT_SECRET,
@@ -76,15 +88,7 @@ router.get("/status", async (req, res) => {
         res.json({ loggedIn: false });
     }
 });
-router.get("/test-bot", async (req, res) => {
-    // console.log("click")
-    try {
-        // await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
-        res.send("<h1>Check your Telegram! Message sent.</h1>");
-    } catch (err) {
-        res.status(500).send("Error: " + err.message);
-    }
-});
+
 // ✅ CREATE EVENT - FIXED VERSION
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
     try {
@@ -286,8 +290,6 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
         });
     }
 });
-// ✅ Test Route: Isse browser mein hit karein (e.g., localhost:5000/calendar/test-bot)
-
 
 cron.schedule('* * * * *', async () => {
     try {
@@ -323,10 +325,10 @@ cron.schedule('* * * * *', async () => {
                 const timeStr = eventStart.toFormat('hh:mm a');
 
                 const alertMsg = `🚨 **MEETING CALL!** 🚨\n\n` +
-                                 `📌 **Topic:** ${summary}\n` +
-                                 `⏰ **Time:** ${timeStr} (${HOST_TZ})\n` +
-                                 `🔗 **Link:** ${meetLink}\n\n` +
-                                 `Bhai jaldi utho, meeting 15 min mein start ho rahi hai!`;
+                    `📌 **Topic:** ${summary}\n` +
+                    `⏰ **Time:** ${timeStr} (${HOST_TZ})\n` +
+                    `🔗 **Link:** ${meetLink}\n\n` +
+                    `Bhai jaldi utho, meeting 15 min mein start ho rahi hai!`;
 
                 await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
                 console.log(`Telegram Alert Sent for: ${summary}`);
