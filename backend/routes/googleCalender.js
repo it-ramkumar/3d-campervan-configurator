@@ -280,9 +280,9 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
 });
 // ✅ Test Route: Isse browser mein hit karein (e.g., localhost:5000/calendar/test-bot)
 router.get("/test-bot", async (req, res) => {
-    console.log("click")
+    // console.log("click")
     try {
-        await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
+        // await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
         res.send("<h1>Check your Telegram! Message sent.</h1>");
     } catch (err) {
         res.status(500).send("Error: " + err.message);
