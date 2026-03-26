@@ -50,6 +50,9 @@ const VansForm = ({ setSelected }) => {
   const [galleryPreviews, setGalleryPreviews] = useState([]);
   const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
   const [mediaUrls, setMediaUrls] = useState([""]);
+  // Existing states ke saath ye add karein
+const [glbFile, setGlbFile] = useState(null);
+// const [textureFiles, setTextureFiles] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -129,12 +132,14 @@ if (editData.blocks) {
           interior_color: ""
         },
       },
+
       status: "available",
       gallery: [],
       detailed_features: [{ category: "", items: [""] }],
       media: [],
     });
-
+ setGlbFile(null),
+  // setTextureFiles([]),
     setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
@@ -145,25 +150,7 @@ if (editData.blocks) {
     dispatch(clearEditData());
   };
 
-  // const validateForm = () => {
-  //   // const newErrors = {};
-  //   // if (!formData.van_listing.title?.trim()) newErrors.title = "Title is required";
-  //   // if (!formData.van_listing.description?.trim()) newErrors.description = "Description is required";
-  //   // if (!formData.van_listing.roof?.trim()) newErrors.roof = "Roof is required";
-  //   // if (!formData.van_listing.price || Number(formData.van_listing.price) < 0) newErrors.price = "Valid price is required";
-  //   // if (!formData.van_listing.specifications.make_model?.trim()) newErrors.make_model = "Make/Model is required";
-  //   // if (!formData.van_listing.specifications.wheelbase?.trim()) newErrors.wheelbase = "Wheelbase is required";
-  //   // if (!formData.van_listing.specifications.drivetrain?.trim()) newErrors.drivetrain = "Drivetrain is required";
-  //   // if (!formData.van_listing.specifications.capacity.sits?.trim()) newErrors.sits = "Sits capacity is required";
-  //   // if (!formData.van_listing.specifications.capacity.sleeps?.trim()) newErrors.sleeps = "Sleeps capacity is required";
 
-  //   // if (features.length === 0) {
-  //   //   newErrors.features = "At least one feature category is required";
-  //   // }
-
-  //   // setErrors(newErrors);
-  //   // return Object.keys(newErrors).length === 0;
-  // };
 
   useEffect(() => {
     return () => {
@@ -240,7 +227,13 @@ const cleanedBlocks = (blocks || [])
     formToSend.append("galleryOrder", JSON.stringify(existingGallery));
     formToSend.append("insertAt", "0");
     galleryFiles.forEach((file) => formToSend.append("gallery", file));
+if (glbFile) {
+  formToSend.append("glbFile", glbFile); // Single file
+}
 
+// textureFiles.forEach((file) => {
+//   formToSend.append("textures", file); // Multiple files
+// });
     // 3. API Call (Route Slug base hai, toh slug bhejein)
     if (editData?._id) {
       console.log("Updating van via slug:", editData.slug);
@@ -494,7 +487,37 @@ const cleanedBlocks = (blocks || [])
             removedExistingGallery={removedExistingGallery}
             setRemovedExistingGallery={setRemovedExistingGallery}
           />
+{/* --- 3D Model Section --- */}
+<section className="border border-gray-300 rounded-lg p-6">
+  <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB & Textures)</h2>
 
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {/* GLB File Input */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">GLB Model File</label>
+      <input
+        type="file"
+        accept=".glb"
+        onChange={(e) => setGlbFile(e.target.files[0])}
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+      />
+      {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
+    </div>
+
+    {/* Textures Input */}
+    {/* <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">Texture Images (Optional)</label>
+      <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={(e) => setTextureFiles(Array.from(e.target.files))}
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+      />
+      <p className="text-xs text-gray-500 mt-1">{textureFiles.length} textures selected</p>
+    </div> */}
+  </div>
+</section>
           {/* Media URLs Section */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Media URLs</h2>

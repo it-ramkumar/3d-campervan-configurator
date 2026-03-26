@@ -7,7 +7,9 @@ const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.post('/', protect, adminOnly, upload.fields([
-  { name: "gallery", maxCount: 10 }
+  { name: "gallery", maxCount: 10 },
+  { name: "glbFile", maxCount: 1 },    // Sirf ek model file
+  // { name: "textures", maxCount: 20 }
 ]), async (req, res) => {
   try {
     // Parse JSON fields
@@ -48,6 +50,20 @@ router.post('/', protect, adminOnly, upload.fields([
       )
     );
 
+
+    // 2. Upload Single GLB File
+    let modelUrl = null;
+    if (req.files["glbFile"]?.[0]) {
+      const file = req.files["glbFile"][0];
+      modelUrl = await uploadToS3(file.buffer, "van/models", file.originalname, file.mimetype);
+    }
+
+    // 3. Upload Multiple Textures
+    // const textureUrls = await Promise.all(
+    //   (req.files["textures"] || []).map(async file =>
+    //     await uploadToS3(file.buffer, "van/textures", file.originalname, file.mimetype)
+    //   )
+    // );
     // Final van data object
     const vanData = {
       slug,
@@ -60,6 +76,8 @@ router.post('/', protect, adminOnly, upload.fields([
         } : undefined
       },
       status,
+      glbFile: modelUrl,    // Single string URL
+      // textures: textureUrls, // Array of string URLs
       gallery,
       detailed_features,
 
@@ -346,15 +364,27 @@ router.delete('/:slug', protect, adminOnly, async (req, res) => {
       return res.status(404).json({ message: 'Van not found' });
     }
 
-    // 🔹 Step 2: Delete all gallery images from S3
+    // 🔹 Step 2: Delete Gallery images from S3
     if (Array.isArray(van.gallery) && van.gallery.length > 0) {
       await Promise.all(van.gallery.map(url => deleteFromS3(url)));
-      console.log(`🧹 Deleted ${van.gallery.length} gallery images from S3`);
+      console.log(`🧹 Deleted ${van.gallery.length} gallery images`);
     }
 
-    // 🔹 Step 3: Response
+    // 🔹 Step 3: Delete GLB Model File from S3
+    if (van.glbFile) {
+      await deleteFromS3(van.glbFile);
+      console.log(`🧹 Deleted GLB model file`);
+    }
+
+    // 🔹 Step 4: Delete Texture images from S3
+    // if (Array.isArray(van.textures) && van.textures.length > 0) {
+    //   await Promise.all(van.textures.map(url => deleteFromS3(url)));
+    //   console.log(`🧹 Deleted ${van.textures.length} textures`);
+    // }
+
+    // 🔹 Final Response
     res.status(200).json({
-      message: '✅ Van deleted successfully and all S3 images removed',
+      message: '✅ Van, 3D Models, and all S3 assets deleted successfully',
       van
     });
 
@@ -366,7 +396,6 @@ router.delete('/:slug', protect, adminOnly, async (req, res) => {
     });
   }
 });
-
 
 
 module.exports = router;

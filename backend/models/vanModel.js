@@ -84,6 +84,16 @@ const vanSchema = new mongoose.Schema(
     },
     detailed_features: [detailedFeatureItemSchema],
 
+    // --- 3D Model Section ---
+    glbFile: {
+      type: String,
+      default: null
+    }, // Single GLB model file URL
+    textures: {
+      type: [String],
+      default: []
+    }, // Multiple texture images URLs
+
     // --- Dynamic Blocks ka Addition ---
     blocks: [contentBlockSchema],
 

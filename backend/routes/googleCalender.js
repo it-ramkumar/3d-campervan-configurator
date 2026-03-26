@@ -2,7 +2,14 @@ const express = require("express");
 const { google } = require("googleapis");
 const { DateTime } = require("luxon");
 const router = express.Router();
+// --- Telegram & Notification Logic ---
+const TelegramBot = require('node-telegram-bot-api');
+const cron = require('node-cron');
 
+
+// Bot aur Chat ID (.env se)
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: false });
+const chatId = process.env.TELEGRAM_CHAT_ID;
 // --- Configuration ---
 const oauth2Client = new google.auth.OAuth2(
     process.env.CALENDER_CLIENTID,
@@ -14,8 +21,6 @@ oauth2Client.setCredentials({
     refresh_token: process.env.REFRESH_TOKEN
 });
 
-// ✅ HOST TIMEZONE (jahan appointments hongi)
-const HOST_TIMEZONE = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
 
 // --- Middleware ---
 const ensureAuthenticated = async (req, res, next) => {
@@ -273,5 +278,61 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
         });
     }
 });
+// ✅ Test Route: Isse browser mein hit karein (e.g., localhost:5000/calendar/test-bot)
+router.get("/test-bot", async (req, res) => {
+    console.log("click")
+    try {
+        await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
+        res.send("<h1>Check your Telegram! Message sent.</h1>");
+    } catch (err) {
+        res.status(500).send("Error: " + err.message);
+    }
+});
+cron.schedule('* * * * *', async () => {
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+        const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
 
+        // Current time aur check range
+        const now = DateTime.now().setZone(HOST_TZ);
+
+        // Sirf agle 20 minutes ki meetings fetch karein
+        const response = await calendar.events.list({
+            calendarId: 'primary',
+            timeMin: now.toUTC().toISO(),
+            timeMax: now.plus({ minutes: 20 }).toUTC().toISO(),
+            singleEvents: true,
+            orderBy: 'startTime',
+        });
+
+        const events = response.data.items;
+        if (!events || events.length === 0) return;
+
+        for (const event of events) {
+            const startTimeStr = event.start.dateTime || event.start.date;
+            const eventStart = DateTime.fromISO(startTimeStr, { zone: HOST_TZ });
+
+            // Difference in minutes
+            const diffInMinutes = eventStart.diff(now, 'minutes').minutes;
+
+            // ✅ Agar meeting exact 15 minute door hai (14.5 se 15.5 ka buffer)
+            if (diffInMinutes > 14 && diffInMinutes <= 15) {
+                const summary = event.summary || "Upcoming Meeting";
+                const meetLink = event.hangoutLink || "No link";
+                const timeStr = eventStart.toFormat('hh:mm a');
+
+                const alertMsg = `🚨 **MEETING CALL!** 🚨\n\n` +
+                                 `📌 **Topic:** ${summary}\n` +
+                                 `⏰ **Time:** ${timeStr} (${HOST_TZ})\n` +
+                                 `🔗 **Link:** ${meetLink}\n\n` +
+                                 `Bhai jaldi utho, meeting 15 min mein start ho rahi hai!`;
+
+                await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
+                console.log(`Telegram Alert Sent for: ${summary}`);
+            }
+        }
+    } catch (error) {
+        console.error("❌ Cron Job Error:", error.message);
+    }
+});
 module.exports = router;
