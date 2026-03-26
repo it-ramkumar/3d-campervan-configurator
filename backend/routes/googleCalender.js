@@ -135,18 +135,7 @@ const attendees = [
     { email: 'zainikram704@gmail.com' } // Aapki dusri email (Permanent)
 ];
 
-// Agar koi aur additional emails bhi hain .env mein, toh wo bhi add ho jayengi
-if (process.env.ADDITIONAL_ATTENDEE_EMAILS) {
-    const additionalEmails = process.env.ADDITIONAL_ATTENDEE_EMAILS
-        .split(',')
-        .map(e => e.trim())
-        .filter(e => e && e !== 'zainikram704@gmail.com'); // Duplicate check
 
-    additionalEmails.forEach(additionalEmail => {
-        attendees.push({ email: additionalEmail });
-    });
-}
-        // ✅ Event create - HOST TIMEZONE MEIN
         // ✅ FIXED VERSION
         const event = {
             summary: summary || `Meeting with ${name}`,
