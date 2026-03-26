@@ -76,7 +76,15 @@ router.get("/status", async (req, res) => {
         res.json({ loggedIn: false });
     }
 });
-
+router.get("/test-bot", async (req, res) => {
+    // console.log("click")
+    try {
+        // await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
+        res.send("<h1>Check your Telegram! Message sent.</h1>");
+    } catch (err) {
+        res.status(500).send("Error: " + err.message);
+    }
+});
 // ✅ CREATE EVENT - FIXED VERSION
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
     try {
@@ -279,15 +287,8 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
     }
 });
 // ✅ Test Route: Isse browser mein hit karein (e.g., localhost:5000/calendar/test-bot)
-router.get("/test-bot", async (req, res) => {
-    // console.log("click")
-    try {
-        // await bot.sendMessage(chatId, "👋 Test Alert: Bot connect ho gaya hai!");
-        res.send("<h1>Check your Telegram! Message sent.</h1>");
-    } catch (err) {
-        res.status(500).send("Error: " + err.message);
-    }
-});
+
+
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
