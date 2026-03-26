@@ -99,10 +99,10 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         // ✅ CRITICAL: Event hamesha HOST timezone mein create karo
         const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
 
-        console.log("🔍 CREATE EVENT REQUEST:");
-        console.log("User timezone:", timezone);
-        console.log("HOST timezone (using for event):", HOST_TZ);
-        console.log("Start time from frontend:", startTime);
+        // console.log("🔍 CREATE EVENT REQUEST:");
+        // console.log("User timezone:", timezone);
+        // console.log("HOST timezone (using for event):", HOST_TZ);
+        // console.log("Start time from frontend:", startTime);
 
         // ✅ Frontend se aayi time ko pehle user timezone mein parse karo
         const userStart = DateTime.fromISO(startTime, { zone: timezone });
@@ -112,9 +112,9 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         const eventStart = userStart.setZone(HOST_TZ);
         const eventEnd = userEnd.setZone(HOST_TZ);
 
-        console.log("User time:", userStart.toISO());
-        console.log("HOST time:", eventStart.toISO());
-        console.log("UTC time:", eventStart.toUTC().toISO());
+        // console.log("User time:", userStart.toISO());
+        // console.log("HOST time:", eventStart.toISO());
+        // console.log("UTC time:", eventStart.toUTC().toISO());
 
         // Availability check
         const events = await calendar.events.list({
@@ -156,6 +156,16 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
                 timeZone: timezone           // ✅ User ka timezone
             },
             attendees: attendees,
+            // 🔔 Yahan Custom Reminders add ho rahe hain
+    reminders: {
+        useDefault: false, // Default settings ko band karke custom use karenge
+        overrides: [
+            // { method: 'email', minutes: 6 * 60 }, // 1 din pehle email
+            { method: 'popup', minutes: 30 },      // 30 minute pehle phone/browser notification
+            { method: 'popup', minutes: 15 },      // 15 minute pehle reminder
+            { method: 'popup', minutes: 5 },       // 5 minute pehle last reminder
+        ],
+    },
             conferenceData: {
                 createRequest: {
                     requestId: `meet-${Date.now()}`,
@@ -295,15 +305,13 @@ cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
         const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
-
-        // Current time aur check range
         const now = DateTime.now().setZone(HOST_TZ);
 
-        // Sirf agle 20 minutes ki meetings fetch karein
+        // Agle 16 minutes ki meetings fetch karein
         const response = await calendar.events.list({
             calendarId: 'primary',
             timeMin: now.toUTC().toISO(),
-            timeMax: now.plus({ minutes: 20 }).toUTC().toISO(),
+            timeMax: now.plus({ minutes: 16 }).toUTC().toISO(),
             singleEvents: true,
             orderBy: 'startTime',
         });
@@ -315,23 +323,25 @@ cron.schedule('* * * * *', async () => {
             const startTimeStr = event.start.dateTime || event.start.date;
             const eventStart = DateTime.fromISO(startTimeStr, { zone: HOST_TZ });
 
-            // Difference in minutes
-            const diffInMinutes = eventStart.diff(now, 'minutes').minutes;
+            // Difference in minutes (e.g., 15.0, 10.0, 5.0)
+            const diffInMinutes = Math.round(eventStart.diff(now, 'minutes').minutes);
 
-            // ✅ Agar meeting exact 15 minute door hai (14.5 se 15.5 ka buffer)
-            if (diffInMinutes > 14 && diffInMinutes <= 15) {
+            // ✅ Logic: Agar time 15, 10, ya 5 minute reh gaya ho
+            const reminderIntervals = [15, 10, 5];
+
+            if (reminderIntervals.includes(diffInMinutes)) {
                 const summary = event.summary || "Upcoming Meeting";
                 const meetLink = event.hangoutLink || "No link";
                 const timeStr = eventStart.toFormat('hh:mm a');
 
-                const alertMsg = `🚨 **MEETING CALL!** 🚨\n\n` +
-                    `📌 **Topic:** ${summary}\n` +
-                    `⏰ **Time:** ${timeStr} (${HOST_TZ})\n` +
-                    `🔗 **Link:** ${meetLink}\n\n` +
-                    `Bhai jaldi utho, meeting 15 min mein start ho rahi hai!`;
+                const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
+                                 `📌 **Topic:** ${summary}\n` +
+                                 `⏰ **Time:** ${timeStr} (${HOST_TZ})\n` +
+                                 `🔗 **Link:** ${meetLink}\n\n` +
+                                 `Bhai, meeting ${diffInMinutes} minute mein shuru ho rahi hai!`;
 
                 await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
-                console.log(`Telegram Alert Sent for: ${summary}`);
+                console.log(`Telegram Alert Sent (${diffInMinutes} min): ${summary}`);
             }
         }
     } catch (error) {
