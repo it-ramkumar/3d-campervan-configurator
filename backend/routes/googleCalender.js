@@ -22,90 +22,42 @@ router.get("/test-bot", async (req, res) => {
         res.status(500).send("Bot Error: " + err.message);
     }
 });
-
-// ✅ DEBUG ROUTE - Check karo events mil rahe hain ya nahi
-router.get("/debug-events", async (req, res) => {
+// ✅ Create event for 27 March 2026, 9:30 AM
+router.get("/create-event-930am", async (req, res) => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // Multiple timezones mein check karo
-        const timezones = [
-            'America/Los_Angeles',  // US West
-            'America/New_York',     // US East
-            'Asia/Karachi',         // Pakistan
-            'UTC'                   // UTC
-        ];
+        // ✅ 27 March 2026, 9:30 AM Pakistan time
+        const eventStart = DateTime.fromObject({
+            year: 2026,
+            month: 3,
+            day: 27,
+            hour: 9,
+            minute: 30,
+            second: 0
+        }, { zone: 'Asia/Karachi' });
 
-        const results = {};
+        const eventEnd = eventStart.plus({ minutes: 30 }); // 30 minute meeting
 
-        for (const tz of timezones) {
-            const now = DateTime.now().setZone(tz);
+        console.log(`📅 Creating event for 27 March 2026:`);
+        console.log(`Start: ${eventStart.toFormat('yyyy-MM-dd HH:mm:ss')} PKT`);
+        console.log(`Start UTC: ${eventStart.toUTC().toISO()}`);
+        console.log(`End: ${eventEnd.toFormat('yyyy-MM-dd HH:mm:ss')} PKT`);
 
-            console.log(`\n🔍 Checking in ${tz}:`);
-            console.log(`Current time: ${now.toFormat('yyyy-MM-dd HH:mm:ss')}`);
-
-            // Next 24 hours ki events dekho
-            const response = await calendar.events.list({
-                calendarId: 'primary',
-                timeMin: now.toUTC().toISO(),
-                timeMax: now.plus({ hours: 24 }).toUTC().toISO(),
-                singleEvents: true,
-                orderBy: 'startTime',
-            });
-
-            const events = response.data.items || [];
-
-            results[tz] = {
-                currentTime: now.toFormat('yyyy-MM-dd HH:mm:ss'),
-                eventsFound: events.length,
-                events: events.map(e => ({
-                    title: e.summary,
-                    start: e.start.dateTime || e.start.date,
-                    startInThisTZ: DateTime.fromISO(e.start.dateTime || e.start.date).setZone(tz).toFormat('yyyy-MM-dd HH:mm:ss')
-                }))
-            };
-
-            console.log(`Found ${events.length} events`);
-            events.forEach(e => {
-                console.log(`  - ${e.summary}: ${DateTime.fromISO(e.start.dateTime || e.start.date).setZone(tz).toFormat('yyyy-MM-dd HH:mm:ss')}`);
-            });
-        }
-
-        res.json(results);
-
-    } catch (error) {
-        console.error("Debug error:", error);
-        res.status(500).json({ error: error.message });
-    }
-});
-// ✅ CREATE TEST MEETING (Pakistan time mein)
-router.get("/create-test-meeting-pak", async (req, res) => {
-    try {
-        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
-
-        // Pakistan time mein 6 minute baad meeting banao
-        const pakTime = DateTime.now().setZone('Asia/Karachi');
-        const meetingStart = pakTime.plus({ minutes: 6 });
-        const meetingEnd = meetingStart.plus({ minutes: 30 });
-
-        console.log(`🧪 Creating test meeting (Pakistan time):`);
-        console.log(`Start: ${meetingStart.toFormat('yyyy-MM-dd HH:mm:ss')} PKT`);
-        console.log(`Start UTC: ${meetingStart.toUTC().toISO()}`);
-
-        const testEvent = {
-            summary: "🧪 TEST MEETING - Pakistan Time",
-            description: "Test meeting created in Pakistan timezone",
+        const event = {
+            summary: "📅 Manual Test Event - 9:30 AM",
+            description: "Test event created via route for 27 March 2026, 9:30 AM Pakistan time",
             start: {
-                dateTime: meetingStart.toISO(),
+                dateTime: eventStart.toISO(),
                 timeZone: 'Asia/Karachi'
             },
             end: {
-                dateTime: meetingEnd.toISO(),
+                dateTime: eventEnd.toISO(),
                 timeZone: 'Asia/Karachi'
             },
             conferenceData: {
                 createRequest: {
-                    requestId: `test-pak-${Date.now()}`,
+                    requestId: `manual-930am-${Date.now()}`,
                     conferenceSolutionKey: { type: "hangoutsMeet" }
                 }
             }
@@ -113,25 +65,41 @@ router.get("/create-test-meeting-pak", async (req, res) => {
 
         const response = await calendar.events.insert({
             calendarId: "primary",
-            resource: testEvent,
+            resource: event,
             conferenceDataVersion: 1
         });
 
+        // Calculate minutes until event
+        const now = DateTime.now().setZone('Asia/Karachi');
+        const minutesUntilEvent = Math.floor(eventStart.diff(now, 'minutes').minutes);
+
         res.json({
-            message: "✅ Test meeting created in Pakistan time!",
-            meetingTime: meetingStart.toFormat('yyyy-MM-dd HH:mm:ss'),
-            timezone: 'Asia/Karachi',
+            message: "✅ Event created for 27 March 2026, 9:30 AM!",
+            eventDetails: {
+                title: event.summary,
+                startTime: eventStart.toFormat('yyyy-MM-dd HH:mm:ss'),
+                timezone: 'Asia/Karachi',
+                minutesFromNow: minutesUntilEvent
+            },
             eventId: response.data.id,
             meetLink: response.data.hangoutLink,
-            note: "Wait 5 minutes for alert. Check /debug-events to see if it appears."
+            alertInfo: {
+                willAlert: minutesUntilEvent <= 16 && [15, 10, 5].includes(minutesUntilEvent),
+                nextAlertAt: minutesUntilEvent > 15 ? "15 minutes before (9:15 AM)" :
+                            minutesUntilEvent > 10 ? "10 minutes before (9:20 AM)" :
+                            minutesUntilEvent > 5 ? "5 minutes before (9:25 AM)" : "Event time passed"
+            },
+            note: "Alert will come 5 minutes before (at 9:25 AM Pakistan time)"
         });
 
     } catch (error) {
-        console.error("Test meeting creation error:", error);
-        res.status(500).json({ error: error.message });
+        console.error("Event creation error:", error);
+        res.status(500).json({
+            error: error.message,
+            note: "Make sure you're authenticated with Google Calendar"
+        });
     }
 });
-
 const oauth2Client = new google.auth.OAuth2(
     process.env.CALENDER_CLIENTID,
     process.env.CALENDER_CLIENT_SECRET,
@@ -401,92 +369,90 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
     }
 });
 
+
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // Multiple timezones mein check karo
-        const timezones = [
-            'America/Los_Angeles',  // Original HOST_TZ
-            'Asia/Karachi',         // Pakistan time
-            'UTC'                   // Universal
-        ];
+        // ✅ Simple: Current UTC time se search karo
+        const now = DateTime.utc();
 
-        let foundEvents = false;
+        // Har 5 minute mein log
+        const shouldLog = now.minute % 5 === 0;
 
-        for (const tz of timezones) {
-            const now = DateTime.now().setZone(tz);
+        if (shouldLog) {
+            console.log(`\n🔄 CRON CHECK: ${now.toFormat('yyyy-MM-dd HH:mm:ss')} UTC`);
+        }
 
-            // Har 5 minute mein log
-            const shouldLog = now.minute % 5 === 0;
+        // ✅ Next 16 minutes ki events fetch karo (UTC mein)
+        const response = await calendar.events.list({
+            calendarId: 'primary',
+            timeMin: now.toISO(),
+            timeMax: now.plus({ minutes: 16 }).toISO(),
+            singleEvents: true,
+            orderBy: 'startTime',
+        });
+
+        const events = response.data.items || [];
+
+        if (shouldLog) {
+            console.log(`📅 Found ${events.length} events in next 16 minutes`);
+        }
+
+        if (events.length === 0) {
+            if (shouldLog) {
+                console.log("No events found");
+            }
+            return;
+        }
+
+        for (const event of events) {
+            const startTimeStr = event.start.dateTime || event.start.date;
+            const eventStart = DateTime.fromISO(startTimeStr);
+
+            // ✅ Simple calculation: Event time - Current time
+            const diffInMinutes = Math.floor(eventStart.diff(now, 'minutes').minutes);
 
             if (shouldLog) {
-                console.log(`\n🔄 CRON CHECK (${tz}): ${now.toFormat('HH:mm:ss')}`);
+                console.log(`📊 "${event.summary}" - ${diffInMinutes} mins remaining`);
             }
 
-            const response = await calendar.events.list({
-                calendarId: 'primary',
-                timeMin: now.toUTC().toISO(),
-                timeMax: now.plus({ minutes: 16 }).toUTC().toISO(),
-                singleEvents: true,
-                orderBy: 'startTime',
-            });
+            // ✅ Alert conditions: 15, 10, 5 minutes before
+            const reminderIntervals = [15, 10, 5];
 
-            const events = response.data.items || [];
+            if (reminderIntervals.includes(diffInMinutes)) {
+                const alertKey = `${event.id}-${diffInMinutes}`;
 
-            if (shouldLog && events.length > 0) {
-                console.log(`📅 Found ${events.length} events in ${tz}`);
-            }
-
-            if (events.length > 0) {
-                foundEvents = true;
-            }
-
-            for (const event of events) {
-                const startTimeStr = event.start.dateTime || event.start.date;
-                const eventStart = DateTime.fromISO(startTimeStr);
-                const eventStartInThisTZ = eventStart.setZone(tz);
-
-                const diffInMinutes = Math.floor(eventStartInThisTZ.diff(now, 'minutes').minutes);
-
-                if (shouldLog) {
-                    console.log(`📊 "${event.summary}" - ${diffInMinutes} mins (${tz})`);
+                if (sentAlerts.has(alertKey)) {
+                    console.log(`⏭️ Alert already sent: ${event.summary} (${diffInMinutes} min)`);
+                    continue;
                 }
 
-                const reminderIntervals = [15, 10, 5];
+                console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
 
-                if (reminderIntervals.includes(diffInMinutes)) {
-                    const alertKey = `${event.id}-${diffInMinutes}`;
+                const summary = event.summary || "Upcoming Meeting";
+                const meetLink = event.hangoutLink || "No link";
 
-                    if (sentAlerts.has(alertKey)) {
-                        console.log(`⏭️ Alert already sent: ${event.summary} (${diffInMinutes} min)`);
-                        continue;
-                    }
+                // ✅ Event time ko readable format mein convert karo
+                const eventTimeReadable = eventStart.toFormat('hh:mm a');
 
-                    console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary} (${tz})`);
+                const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
+                                 `📌 **Topic:** ${summary}\n` +
+                                 `⏰ **Time:** ${eventTimeReadable}\n` +
+                                 `🔗 **Link:** ${meetLink}\n\n` +
+                                 `Meeting ${diffInMinutes} minute mein shuru ho rahi hai!`;
 
-                    const summary = event.summary || "Upcoming Meeting";
-                    const meetLink = event.hangoutLink || "No link";
-                    const timeStr = eventStartInThisTZ.toFormat('hh:mm a');
-
-                    const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
-                                     `📌 **Topic:** ${summary}\n` +
-                                     `⏰ **Time:** ${timeStr} (${tz})\n` +
-                                     `🔗 **Link:** ${meetLink}\n\n` +
-                                     `Meeting ${diffInMinutes} minute mein shuru ho rahi hai!`;
-
-                    try {
-                        await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
-                        sentAlerts.add(alertKey);
-                        console.log(`✅ Telegram Alert Sent Successfully!`);
-                    } catch (botError) {
-                        console.error(`❌ Bot send error:`, botError.message);
-                    }
+                try {
+                    await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
+                    sentAlerts.add(alertKey);
+                    console.log(`✅ Telegram Alert Sent Successfully!`);
+                } catch (botError) {
+                    console.error(`❌ Bot send error:`, botError.message);
                 }
             }
         }
 
-        // Cleanup
+        // Cleanup old alerts
         if (sentAlerts.size > 50) {
             sentAlerts.clear();
         }
