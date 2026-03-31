@@ -2,18 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Helmet } from "react-helmet-async";
-
-// Components
-import Navbar from '../Navbar/Navbar';
-import Footer from '../Footer/Footer';
 import HeroSection from '../HeroSection/HeroSection';
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
 import SystemOptions from "./SystemOptions";
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
-import Consultation from '../Consultation/Consultation';
 
 // Helpers
 import { generateDynamicSchema } from '../../schema/optionsSchema';
@@ -43,7 +37,7 @@ const PAGE_CONFIG = {
 export default function ExteriorChoicePage() {
   const { options } = useParams();
   const current = PAGE_CONFIG[options];
-
+console.log(options)
   const [dataState, setDataState] = useState({
     categories: [],
     activeSubCategoryMap: {},
@@ -150,7 +144,7 @@ const finalDesc = getDynamicMetaDesc();
 console.log(dataState,"dataState")
   return (
     <div className="bg-secondary min-h-screen font-body">
-     <Helmet>
+
   {/* Standard SEO */}
   <title>{`${current.title} | Big Bear Vans`}</title>
   <meta name="description" content={finalDesc} />
@@ -171,10 +165,9 @@ console.log(dataState,"dataState")
   <script type="application/ld+json">
     {JSON.stringify(generateDynamicSchema(options, current, dataState.categories))}
   </script>
-</Helmet>
 
 
-      <Navbar />
+
 
       {/* --- Hero Section with Overlay --- */}
       <section className="relative overflow-hidden">
@@ -236,8 +229,6 @@ console.log(dataState,"dataState")
           </section>
         )}
       </main>
-<Consultation/>
-      <Footer />
 
       {/* --- Custom Scoping Styles --- */}
       <style >{`

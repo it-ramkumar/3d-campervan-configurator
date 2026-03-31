@@ -29,7 +29,7 @@ import 'swiper/css/pagination';
 export default function CamperProjectsPage() {
   const { category } = useParams();
   const [searchParams, setSearchParams] = useSearchParams(); // URL params ke liye
-
+console.log(category)
   const [layouts, setLayouts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
