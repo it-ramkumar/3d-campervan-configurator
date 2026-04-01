@@ -4,23 +4,40 @@ import CamperProjectsClient from "../../../components/LayoutByCategory/LayoutByC
 // --- Dynamic Metadata ---
 export async function generateMetadata({ params }) {
   const { wheelbase } = await params;
-
-  // 144-ext ko "144 Extended" banane ka logic
   const formattedWB = wheelbase.replace(/-/g, '" ').toUpperCase();
 
   const title = `${formattedWB} Custom Van Layouts & Floor Plans | Big Bear Vans`;
-  const description = `Explore our collection of custom camper van layouts specifically designed for the ${formattedWB} wheelbase. High-quality 3D floor plans by Big Bear Vans.`;
+  const description = `Explore our collection of custom camper van layouts for the ${formattedWB}.`;
+
+  // Domain specify karein
+  const baseUrl = "https://bigbearvans.com";
 
   return {
+    metadataBase: new URL(baseUrl), // Yeh base URL set kar deta hai
     title,
     description,
     alternates: {
-      canonical: `https://bigbearvans.com/wheel-base/${wheelbase}`,
+      canonical: `/wheel-base/${wheelbase}`,
     },
     openGraph: {
       title,
       description,
-      images: ["/images/review.webp"], // Wheelbase specific image bhi de sakte hain
+      url: `/wheel-base/${wheelbase}`,
+      type: 'website',
+      images: [
+        {
+          url: "/images/review.webp", // Ab yeh automatic https://bigbearvans.com/images/review.webp ban jayega
+          width: 1200,
+          height: 630,
+          alt: `${formattedWB} Van Layout Preview`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/images/review.webp"],
     },
   };
 }

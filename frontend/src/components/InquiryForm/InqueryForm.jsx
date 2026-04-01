@@ -3,7 +3,6 @@ import { useState } from "react";
 import { submitInquiry } from "../../api/inquiry/submitInquiry"
 import { ArrowUpRight, X, ChevronLeft, ChevronRight, Check, Loader, ClipboardCheck, Info } from "lucide-react";
 import { formQuestions } from "../../DataUseInComp/InquiryFormData";
-import { generateInquirySchema } from "../../schema/inquerySchema";
 import { useRouter } from "next/navigation";
 import { Heading2,Heading1} from "../Common/Common";
 
@@ -186,33 +185,6 @@ export default function InquiryForm() {
 
   return (
     <>
-
-  {/* ✅ 1. Standard SEO Meta Tags */}
-  <title>Build Your Dream Van | Custom Van Configurator | Big Bear Vans</title>
-  <meta name="description" content="Use our custom van configurator to design your dream Mercedes Sprinter or Ford Transit build. Choose your layout, electrical systems, and get a custom quote today." />
-  <meta name="keywords" content="van build configurator, custom van conversion quote, sprinter van layout tool, campervan build cost, Big Bear Vans inquiry" />
-  <link rel="canonical" href="https://bigbearvans.com/inquiry" />
-
-  {/* ✅ 2. Open Graph (Facebook/WhatsApp/LinkedIn) */}
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Design Your Custom Van | Big Bear Vans Configurator" />
-  <meta property="og:description" content="Start your journey with Big Bear Vans. Configure your van layout, shower options, and off-grid power needs in minutes." />
-  <meta property="og:image" content="https://bigbearvans.com/images/w2.webp" />
-  <meta property="og:url" content="https://bigbearvans.com/inquiry" />
-
-  {/* ✅ 3. Twitter Card Tags (Added Missing Specifics) */}
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@bigbearvans" />
-  <meta name="twitter:title" content="Build Your Dream Van | Custom Configurator" />
-  <meta name="twitter:description" content="Configure your Mercedes Sprinter or Ford Transit layout and get an instant quote." />
-  <meta name="twitter:image" content="https://bigbearvans.com/images/w2.webp" />
-
-  {/* ✅ 4. JSON-LD (Service Schema - Crucial for Quotes/Business) */}
-  <script type="application/ld+json">
-    {JSON.stringify(generateInquirySchema())}
-  </script>
-
-
       <div className="bg-secondary min-h-screen py-20 px-4">
         <div className="max-w-6xl w-full mx-auto">
 
