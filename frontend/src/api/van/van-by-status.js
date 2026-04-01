@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 export async function vansByStatus(status, page = 1, limit = 9) {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/van/van-by-status`,
+      `${process.env.NEXT_PUBLIC_URL}/van/van-by-status`,
       {
         params: {
           status,
@@ -20,7 +20,7 @@ export async function vansByStatus(status, page = 1, limit = 9) {
 
  return {
   success: true,
-  data: response.data.data,   
+  data: response.data.data,
   hasMore: response.data.hasMore,
   total: response.data.total,
 };

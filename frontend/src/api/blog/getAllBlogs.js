@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 export async function getAllBlogs(page = 1, search = "") {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/test-blog?page=${page}&search=${encodeURIComponent(search)}`,
+      `${process.env.NEXT_PUBLIC_URL}/test-blog?page=${page}&search=${encodeURIComponent(search)}`,
       { withCredentials: true }
     );
 

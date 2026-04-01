@@ -2,7 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 export const deleteVan = async (slug) => {
   try {
-    const res = await axios.delete(`${import.meta.env.VITE_REACT_APP_API_URL}/van/${slug}`, {
+    const res = await axios.delete(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`, {
       withCredentials: true,
     });
 

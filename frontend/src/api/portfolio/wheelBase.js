@@ -11,7 +11,7 @@ export async function getByWheelBase(
 ) {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/wheel-base`,
+      `${process.env.NEXT_PUBLIC_URL}/portfolio/wheel-base`,
       {
         params: {
           wheelBase,

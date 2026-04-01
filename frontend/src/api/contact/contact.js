@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 export const contact = async (formData) => {
   try {
 
-    const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/contact`, formData, {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/contact`, formData, {
       withCredentials: true,
     })
         Swal.fire({

@@ -1,19 +1,14 @@
-// api.js
-import axios from "axios";
-import Swal from "sweetalert2";
 
+import axios from "axios";
 export const submitInquiry = async (formData) => {
   try {
-    const { data } = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/inquery`, formData, {
-      // withCredentials: true,
-    });
+    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_URL}/inquery`, formData);
     return { success: true, data };
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: error.response.data.message,
-    });
-
+    console.log(error.response)
+    return {
+      success: false,
+      error: error?.response?.data?.message || "Something went wrong",
+    };
   }
 };

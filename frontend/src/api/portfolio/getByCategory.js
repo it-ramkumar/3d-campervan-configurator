@@ -11,7 +11,7 @@ export async function getByCategory(
 ) {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/category`,
+      `${process.env.NEXT_PUBLIC_URL}/portfolio/category`,
       {
         params: {
           category,

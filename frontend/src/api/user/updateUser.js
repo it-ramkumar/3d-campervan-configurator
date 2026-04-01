@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export const updateUser = async (id, newStatus) => {
   try {
     const res = await axios.put(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/quote/${id}`,
+      `${process.env.NEXT_PUBLIC_URL}/quote/${id}`,
       { status: newStatus }
    , {
       withCredentials: true,

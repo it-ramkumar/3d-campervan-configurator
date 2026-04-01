@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState, useRef, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Html, Preload } from "@react-three/drei";
@@ -7,26 +8,26 @@ import InteriorCameraControls from "./VanInteriorCameraControls";
 import ExteriorCameraControls from "./VanExteriorCameraControl";
 import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
-import Navbar from "../../websiteComponents/components/Navbar/Navbar"
-import { ArrowBigDownDash, X, ChevronLeft, ChevronRight, Menu } from "lucide-react"
-import { configuratorSchema } from "../../websiteComponents/schema/configuratorSchema"
+import Navbar from "../Navbar/Navbar";
+import { ArrowBigDownDash, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { configuratorSchema } from "../../schema/configuratorSchema"
 import {
   addModelToScene,
-} from "../../customeHooks/addSceneToModel";
+} from "../../CustomHooks/addSceneToModel";
 import {
   getAddedQuantity,
-} from "../../customeHooks/addQuantityToModel";
+} from "../../CustomHooks/addQuantityToModel";
 import {
   removeModelFromScene,
-} from "../../customeHooks/removeModelFromScene";
-import { centerModelByBoundingBox } from "../../customeHooks/centerCanvas";
-import { cameraDirectionBack } from "../../customeHooks/interiorDirectionBack";
-import { interiorDirectionNext } from "../../customeHooks/interiorDirectionNext";
-import { useLeavePageConfirm } from "../../customeHooks/useLeavePageConfirm";
+} from "../../CustomHooks/removeModelFromScene";
+import { centerModelByBoundingBox } from "../../CustomHooks/centerCanvas";
+import { cameraDirectionBack } from "../../CustomHooks/interiorDirectionBack";
+import { interiorDirectionNext } from "../../CustomHooks/interiorDirectionNext";
+import { useLeavePageConfirm } from "../../CustomHooks/useLeavePageConfirm";
 import { useGLTF } from "@react-three/drei";
 import axios from "axios";
 import BaseVanModel from "./BaseVanModel";
-import Loader from "../../websiteComponents/components/Loader/Loader"
+import Loader from "../../components/Loader/Loader"
 function Van() {
   const [isSanta, setIsSanta] = useState(0)
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ function Van() {
     targetPos[2] + CAMERA_OFFSET,
   ];
 
-  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_URL;
 
   const fetchVans = async () => {
     try {
@@ -139,7 +140,7 @@ function Van() {
     );
   }
 
-  const jsonLd = configuratorSchema();
+
 
 
   // Mobile van selector modal
@@ -189,10 +190,7 @@ function Van() {
 
   return (
     <>
-      <title>3D Camper Van Configurator | Design Your Own Van | Big Bear Vans</title>
-      <meta name="description" content="Use our professional 3D Van Configurator to design your dream Mercedes Sprinter build. Customize layouts, colors, and features in real-time." />
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-
+     
       {showMobileMenu && <MobileVanSelector />}
 
       {/* Main Container */}

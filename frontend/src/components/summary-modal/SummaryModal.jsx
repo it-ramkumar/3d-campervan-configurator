@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAddedModels } from '../../redux/slices/addedModels.js'
 import Swal from "sweetalert2";
-import { handleGetQuote } from '../../customeHooks/handleQuote.js';
-import ImageWithSkeleton from '../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx';
+import { handleGetQuote } from '../../CustomHooks/handleQuote.js';
+import {ImageWithSkeleton} from "../Common/Common"
 
 export default function SummaryModal({
   SummaryModal,

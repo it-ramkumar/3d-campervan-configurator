@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export async function getnavWheel() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/portfolio/navWheel-bases`,
+      `${process.env.NEXT_PUBLIC_URL}/portfolio/navWheel-bases`,
       {
 
         withCredentials: true,

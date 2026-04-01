@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export const deleteBlog = async (id) => {
   try {
     const res = await axios.delete(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/test-blog/${id}`,
+      `${process.env.NEXT_PUBLIC_URL}/test-blog/${id}`,
       { withCredentials: true }
     );
 

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
  */
 export async function availableVans() {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/van/available`, {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/van/available`, {
       withCredentials: true,
     });
     return {
@@ -20,6 +20,6 @@ export async function availableVans() {
       title: "Error",
       text: err.response.data.message,
     });
-  
+
   }
 }

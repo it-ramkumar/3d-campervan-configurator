@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 export const createModel = async (formData) => {
   try {
-    const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/models/add`, formData, {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/models/add`, formData, {
       withCredentials: true,
     });
     Swal.fire({
@@ -26,7 +26,7 @@ export const createModel = async (formData) => {
 
 export const updateModel = async (editData, formData) => {
   try {
-    const res = await axios.put(`${import.meta.env.VITE_REACT_APP_API_URL}/models/edit/${editData._id}`, formData, {
+    const res = await axios.put(`${process.env.NEXT_PUBLIC_URL}/models/edit/${editData._id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data", // ✅ same reason as above
       },

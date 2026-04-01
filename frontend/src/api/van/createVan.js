@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 const createVan = async (formDataToSend) => {
 
   try {
-    const res = await axios.post(`${import.meta.env.VITE_REACT_APP_API_URL}/van`, formDataToSend, {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/van`, formDataToSend, {
       headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true,
 
@@ -36,7 +36,7 @@ const updateVan = async (editData, formDataToSend) => {
   try {
 
     const res = await axios.put(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/van/${editData}`,
+      `${process.env.NEXT_PUBLIC_URL}/van/${editData}`,
       formDataToSend,
       { withCredentials: true } // keep cookie session
     );

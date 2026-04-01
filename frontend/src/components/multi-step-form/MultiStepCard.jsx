@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { TYPE_DEPENDENCIES } from '../../customeHooks/typeDependencyData';
-import ImageWithSkeleton from '../../websiteComponents/components/Common/ImageWithSkeleton/ImageWithSkeleton.jsx';
+import { TYPE_DEPENDENCIES } from '../../CustomHooks/typeDependencyData';
+import {ImageWithSkeleton} from '../Common/Common';
 import { AlertCircle, Check, ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
 
 export default function ModelsCard({

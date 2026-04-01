@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export const getUser = async () => {
 
   try {
-    const res = await axios.get(`${import.meta.env.VITE_REACT_APP_API_URL}/quote/all-quotes`, {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/quote/all-quotes`, {
       withCredentials: true,
     });
     return res.data;

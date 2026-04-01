@@ -8,7 +8,7 @@ import axios from "axios";
 export async function getAllVans(page = 1, limit = 8, search = "") {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_REACT_APP_API_URL}/van?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
+      `${process.env.NEXT_PUBLIC_URL}/van?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`,
       { withCredentials: true }
     );
 

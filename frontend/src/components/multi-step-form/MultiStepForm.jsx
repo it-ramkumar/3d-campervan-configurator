@@ -1,20 +1,21 @@
+"use client";
 import { useState, useEffect, useMemo } from "react";
-import { toggleModelSelection } from "../../customeHooks/toogleModelSelection";
-import { isDependencyMet } from "../../customeHooks/isDependecyMet";
-import { StepDescriptions } from "../../customeHooks/stepDescription";
-import { groupByGroup } from "../../customeHooks/groupByGroup";
+import { toggleModelSelection } from "@/CustomHooks/toogleModelSelection";
+import { isDependencyMet } from "@/CustomHooks/isDependecyMet";
+import { StepDescriptions } from "@/CustomHooks/stepDescription";
+import { groupByGroup } from "@/CustomHooks/groupByGroup";
 import NextBackButton from "./MultiStepPaginationButtons";
 import TabButtons from "./MultiStepTabButtons";
 import ModelsCard from "./MultiStepCard";
-import { goToNextStep } from "../../customeHooks/goToNextStep.js"
-import { goToPrevStep } from "../../customeHooks/goToPrevStep.js"
+import { goToNextStep } from "@/CustomHooks/goToNextStep";
+import { goToPrevStep } from "@/CustomHooks/goToPrevStep"
 import SummaryModal from "../summary-modal/SummaryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInterior } from "../../api/model/modelInterior.js";
-import { fetchExterior } from "../../api/model/modelExterior.js";
-import { fetchSystem } from "../../api/model/modelSystem.js";
-import { handleGetQuote } from "../../customeHooks/handleQuote.js";
-import Loader from "../../websiteComponents/components/Loader/Loader.jsx"
+import { fetchInterior } from "@/api/model/modelInterior";
+import { fetchExterior } from "@/api/model/modelExterior";
+import { fetchSystem } from "@/api/model/modelSystem";
+import { handleGetQuote } from "@/CustomHooks/handleQuote.js";
+import Loader from "../Loader/Loader";
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
 
@@ -32,10 +33,9 @@ const MultiStepForm = ({
   const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
   const models = useSelector((state) => state.models || []);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
-  const interior = models?.interior?.data?.data;
-  const exterior = models?.exterior?.data?.data;
-  const system = models?.system?.data?.data;
-
+  const interior = models?.interior;
+  const exterior = models?.exterior?.data;
+  const system = models?.system?.data;
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
   const [summaryModal, setSummaryModal] = useState(false);
