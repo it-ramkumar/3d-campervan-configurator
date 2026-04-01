@@ -24,7 +24,7 @@ export const metadata = {
     images: [
       {
         // Space hata kar check karein (e.g., custom-build ya custom_build)
-        url: "/custom-build/configurator.jpg",
+        url: "/custom build/configurator.jpg",
         width: 1200,
         height: 630,
         alt: "Big Bear Vans 3D Configurator Preview",
@@ -36,7 +36,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "3D Camper Van Configurator | Big Bear Vans",
     description: "Design your dream camper van in 3D.",
-    images: ["/custom-build/configurator.jpg"],
+    images: ["/custom build/configurator.jpg"],
   },
 };
 
