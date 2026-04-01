@@ -23,16 +23,50 @@ const PAGE_CONFIG = {
   }
 };
 
-// --- Standard Metadata (Hydration error se bachne ke liye) ---
 export async function generateMetadata({ params }) {
   const { options } = await params;
   const current = PAGE_CONFIG[options];
-  if (!current) return { title: "Options" };
+
+  if (!current) return { title: "Options | Big Bear Vans" };
+
+  const title = `${current.title} | Big Bear Vans`;
+  const description = current.desc;
+  const canonical = `https://bigbearvans.com/van-options/${options}`;
+
+  // ✅ Har option ke liye specific image ya default image path
+  const ogImage = current.heroImage || "/images/default-van.webp";
 
   return {
-    title: `${current.title} | Big Bear Vans`,
-    description: current.desc,
-    alternates: { canonical: `https://bigbearvans.com/van-options/${options}` },
+    // 1. metadataBase lazmi hai (Iske bina WhatsApp/FB image pick nahi karte)
+    metadataBase: new URL("https://bigbearvans.com"),
+
+    title,
+    description,
+    alternates: { canonical },
+
+    // 2. Open Graph (Facebook, WhatsApp, LinkedIn)
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: "Big Bear Vans",
+      type: "website",
+      images: [
+        {
+          url: ogImage, // Agar current.image mein "/img.jpg" hai to ye poora URL bana dega
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+
+    // 3. Twitter Card
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
