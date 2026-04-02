@@ -27,7 +27,6 @@ export async function getByCategory(
         withCredentials: true
       }
     );
-    console.log("Response:", response.data,"filtered data");
 
     return {
       success: true,

@@ -60,7 +60,6 @@ function Van() {
 
   const fetchVans = async () => {
     try {
-      setLoading(true);
       const res = await axios.get(`${API_URL}/add-base-van`);
       if (res.data.success) {
         setVans(res.data.data);
@@ -68,7 +67,6 @@ function Van() {
     } catch (err) {
       console.error("Error fetching vans:", err);
     } finally {
-      setLoading(false);
     }
   };
   // Force rerender for BaseVanModel when URL changes
@@ -190,7 +188,7 @@ function Van() {
 
   return (
     <>
-     
+
       {showMobileMenu && <MobileVanSelector />}
 
       {/* Main Container */}
@@ -225,33 +223,33 @@ function Van() {
           {/* Desktop Van Info - Bottom Left */}
           <div className="hidden lg:block absolute bottom-8 left-4 z-40 w-full max-w-[320px]">
             <div
-              className="glass-panel-light rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:bg-black/5 shadow-lg"
+              className="glass-panel-light rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:bg-black/5 shadow-lg"
               onClick={() => setIsOpen(!isOpen)}
             >
               {/* Compact View */}
               <div className="p-3 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <span className="text-xl">🚐</span>
                   </div>
                   <div>
-                    <h1 className="text-sm font-bold text-black leading-tight">
+                    <h1 className="text-sm font-bold text-primary leading-tight">
                       {vans[isSanta]?.layout || "Loading..."}
                     </h1>
                     <p className="text-xs text-gray-500">
-                      {vans[isSanta]?.modelYear} • {vans[isSanta]?.spec?.wheelBase}" WB
+                       {vans[isSanta]?.spec?.wheelBase}" WB
                     </p>
                   </div>
                 </div>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isOpen ? "bg-black text-white rotate-180" : "bg-black/10 text-black"}`}>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${isOpen ? "bg-primary text-secondary rotate-180" : "bg-primary/10 text-primary"}`}>
                   <ArrowBigDownDash size={18} />
                 </div>
               </div>
 
               {/* Expanded View - With Tailwind Custom Scroll */}
               {isOpen && (
-                <div className="px-3 pb-3 border-t border-black/10 pt-3">
-                  <p className="text-[9px] font-black text-black/40 uppercase tracking-widest mb-2 ml-1">Select Model</p>
+                <div className="px-3 pb-3 border-t border-primary/10 pt-3">
+                  <p className="text-[9px] font-black text-primary/70 uppercase tracking-widest mb-2 ml-1">Select Model</p>
 
                   {/* Horizontal Scroll Container */}
                   <div className="flex gap-2 mb-4 overflow-x-auto pb-3 flex-nowrap custom-scrollbar">
@@ -262,9 +260,9 @@ function Van() {
                           e.stopPropagation();
                           setIsSanta(idx);
                         }}
-                        className={`flex-shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border ${isSanta === idx
-                          ? "bg-black text-white border-black shadow-md"
-                          : "bg-white text-gray-500 border-black/5 hover:border-black/20"
+                        className={`flex-shrink-0 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all border ${isSanta === idx
+                          ? "bg-primary text-secondary  border-primary shadow-md"
+                          : "bg-secondary text-primary border-primary hover:border-black/20"
                           }`}
                       >
                         {van?.layout}
@@ -274,17 +272,17 @@ function Van() {
 
                   {/* Specs Table (Grid) */}
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Wheelbase</p>
-                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.wheelBase}"</p>
+                    <div className="bg-primary bg-secondary rounded-lg p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-primary/70 uppercase font-bold mb-1">Wheelbase</p>
+                      <p className="text-[10px] font-black text-primary">{vans[isSanta]?.spec?.wheelBase}"</p>
                     </div>
-                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Drivetrain</p>
-                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.drivetrain}</p>
+                    <div className="bg-primary bg-secondary rounded-lg p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-primary/70 uppercase font-bold mb-1">Drivetrain</p>
+                      <p className="text-[10px] font-black text-primary">{vans[isSanta]?.spec?.drivetrain}</p>
                     </div>
-                    <div className="bg-black/5 rounded-xl p-2 text-center border border-black/5">
-                      <p className="text-[8px] text-gray-400 uppercase font-bold mb-1">Capacity</p>
-                      <p className="text-[10px] font-black text-black">{vans[isSanta]?.spec?.SitSleep} S</p>
+                    <div className="bg-primary bg-secondary rounded-lg p-2 text-center border border-black/5">
+                      <p className="text-[8px] text-primary/70 uppercase font-bold mb-1">Capacity</p>
+                      <p className="text-[10px] font-black text-primary">{vans[isSanta]?.spec?.SitSleep} S</p>
                     </div>
                   </div>
 
@@ -316,19 +314,29 @@ function Van() {
 
               <Preload all />
 
-              {/* Suspense wrapping Environment + Models */}
-              <Suspense fallback={<Html fullscreen><Loader /></Html>}>
-                <group ref={groupRef} position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}>
-
+              {/* Suspense wrapper */}
+              <Suspense
+                fallback={
+                  <Html fullscreen>
+                    <Loader />
+                  </Html>
+                }
+              >
+                <group
+                  ref={groupRef}
+                  position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}
+                  onAfterRender={() => setLoading(false)}
+                >
                   {/* HDR Environment */}
                   <Environment
                     files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
                     background={false}
                   />
+
                   {/* Base Van Model */}
                   {currentVanUrl && (
                     <BaseVanModel
-                      key={modelKey} // dynamic key ensures rerender on URL change
+                      key={modelKey}
                       url={currentVanUrl}
                       showExterior={showExterior}
                     />
@@ -356,28 +364,34 @@ function Van() {
                 />
               )}
             </Canvas>
+
+            {/* Optional: Overlay loader if Suspense hides too soon */}
+            {loading && (
+              <Loader />
+            )}
           </div>
 
           {/* View Toggle - Lower z-index */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2  lg:bottom-8">
-            <div className="glass-panel-light rounded-full p-1 flex gap-1">
+            <div className="glass-panel-light rounded-lg p-1 flex gap-1">
               <button
                 onClick={() => setIsIntView(false)}
-                className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${!isIntView
-                  ? "bg-black text-white shadow-[0_0_15px_rgba(0,0,0,0.2)]"
-                  : "text-gray-600 hover:text-black"
+                className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${!isIntView
+                  ? "bg-primary text-secondary shadow-[0_0_15px_rgba(0,0,0,0.2)]"
+                  : "text-primary/70 hover:text-primary"
                   }`}
               >
-                Interior
+
+                Exterior
               </button>
               <button
                 onClick={() => setIsIntView(true)}
-                className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${isIntView
-                  ? "bg-black text-white shadow-[0_0_15px_rgba(0,0,0,0.2)]"
-                  : "text-gray-600 hover:text-black"
+                className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${isIntView
+                  ? "bg-primary text-secondary shadow-[0_0_15px_rgba(0,0,0,0.2)]"
+                  : "text-primary/70 hover:text-primary"
                   }`}
               >
-                Exterior
+                Interior
               </button>
             </div>
           </div>

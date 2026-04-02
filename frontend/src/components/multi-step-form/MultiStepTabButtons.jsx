@@ -14,7 +14,7 @@ export default function TabButtons({
   ];
 
   return (
-    <div className="flex p-1 rounded-xl bg-gray-100 border border-black/10">
+    <div className="flex p-1 rounded-lg bg-secondary-100 border border-primary/10">
       {tabs.map((t) => {
         const Icon = t.icon;
         const isActive = activeTab === t.key;
@@ -32,8 +32,8 @@ export default function TabButtons({
             className={`
               flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium transition-all
               ${isActive
-                ? "bg-black text-white shadow-lg"
-                : "text-gray-600 hover:text-black hover:bg-black/5"
+                ? "bg-primary text-secondary shadow-lg"
+                : "text-primary hover:text-primary/70 hover:bg-primary/5"
               }
             `}
           >

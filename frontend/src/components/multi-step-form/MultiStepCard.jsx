@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { TYPE_DEPENDENCIES } from '../../CustomHooks/typeDependencyData';
-import {ImageWithSkeleton} from '../Common/Common';
+import {Heading3, Heading4, ImageWithSkeleton, PrimaryButton, RichParagraph, SecondaryButton} from '../Common/Common';
 import { AlertCircle, Check, ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
 
 export default function ModelsCard({
@@ -78,15 +78,16 @@ export default function ModelsCard({
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 border-b border-black/10">
           <div>
-            <h3 className="text-lg font-bold text-black">{model.label}</h3>
-            <p className="text-sm text-gray-500">Select Extensions</p>
+            <Heading3 text={model.label} />
+            <RichParagraph >Select Extensions</RichParagraph>
           </div>
-          <button
+          <PrimaryButton
+          label= {"X"}
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-black hover:bg-black/20 transition"
-          >
-            <X size={20} />
-          </button>
+            className="!px-3 !py-2 !rounded-full flex items-center justify-center"
+          />
+
+
         </div>
 
         {/* Extensions List */}
@@ -126,8 +127,8 @@ export default function ModelsCard({
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-base font-bold text-black mb-1">{ext.label}</h4>
-                  <p className="text-sm text-gray-500 mb-2">Extension Option</p>
+                  <Heading4 text={ext.label} />
+                  <RichParagraph className="text-sm text-gray-500 mb-2">Extension Option</RichParagraph>
                   <div className={`
                     inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium
                     ${isExtSelected
@@ -149,12 +150,13 @@ export default function ModelsCard({
 
         {/* Done Button */}
         <div className="p-4 border-t border-black/10 bg-gray-100">
-          <button
+          <PrimaryButton
+            label="Done"
             onClick={onClose}
             className="w-full py-3 bg-black hover:bg-gray-800 text-white font-bold rounded-xl transition"
-          >
-            Done
-          </button>
+          />
+
+
         </div>
       </div>
     );
@@ -201,24 +203,24 @@ export default function ModelsCard({
                     : undefined
                 }
                 className={`
-                  flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border-2
+                  flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all border-2
                   ${isSelected
-                    ? "bg-black/5 border-black/30"
-                    : "bg-gray-100 border-transparent hover:border-black/20"
+                    ? "bg-primary/5 border-primary/30"
+                    : "bg-secondary-100 border-transparent hover:border-primary/20"
                   }
                   ${isDisabled ? "opacity-50" : ""}
                 `}
               >
-                <div className="w-16 h-16 rounded-lg bg-white border border-black/10 flex-shrink-0">
-                  <ImageWithSkeleton src={model.image} alt={model.label} className="w-full h-full object-contain" />
+                <div className="w-16 h-16 rounded-lg bg-secondary border border-primary/10 flex-shrink-0">
+                  <ImageWithSkeleton src={model.image} alt={model.label} click={true} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h6 className="text-sm font-bold text-black truncate">{model.label}</h6>
-                  {model.description && <p className="text-xs text-gray-500 line-clamp-1">{model.description}</p>}
+                  <Heading3 text={model.label}  className='!text-base !capitalize text-primary mb-1 line-clamp-1'/>
+                  {model.description && <RichParagraph className="line-clamp-1 !text-sm text-primary/70">{model.description}</RichParagraph>}
                 </div>
                 <div className={`
-                  w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${isSelected ? "border-black bg-black text-white" : "border-gray-300"}
+                  w-6 h-6 rounded-lg border-2 flex items-center justify-center
+                  ${isSelected ? "border-primary bg-primary text-secondary" : "border-secondary-300"}
                 `}>
                   {isSelected && <Check size={14} strokeWidth={3} />}
                 </div>
@@ -228,7 +230,7 @@ export default function ModelsCard({
               {hasExtensions && (
                 <button
                   onClick={() => setShowExtensionModal(model)}
-                  className="ml-4 mt-2 text-xs text-black hover:text-gray-600 flex items-center gap-1"
+                  className="ml-4 mt-2 text-xs text-primary hover:text-primary-600 flex items-center gap-1"
                 >
                   <Plus size={12} /> {extensions.length} Extensions Available
                 </button>
@@ -307,7 +309,7 @@ export default function ModelsCard({
                         : undefined
                     }
                     className={`
-                      flex flex-row rounded-2xl overflow-hidden border-2 transition-all duration-300
+                      flex flex-row rounded-lg overflow-hidden border-2 transition-all duration-300
                       ${isSelected
                         ? "bg-gray-100 border-black/30 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
                         : "bg-white border-black/10"
@@ -321,36 +323,37 @@ export default function ModelsCard({
                       <ImageWithSkeleton
                         src={model.image}
                         alt={model.label}
+                        click={true}
                         className="max-w-full max-h-full object-contain"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black flex items-center justify-center">
+                        <div className="absolute top-2 right-2 w-6 h-6 rounded-lg bg-black flex items-center justify-center">
                           <Check className="text-white" size={14} strokeWidth={3} />
                         </div>
                       )}
                     </div>
 
                     {/* Content */}
-                    <div className="w-[60%] p-3 flex flex-col justify-between">
+                    <div className="w-[60%] p-2 flex flex-col justify-between">
                       <div>
-                        <h6 className="text-sm font-bold text-black mb-1 line-clamp-1">{model.label}</h6>
-                        <p className="text-xs text-gray-500 line-clamp-2">{model.description}</p>
+                        <Heading4 text={model.label} className=" text-primary mb-1 line-clamp-1" />
+                        {model.description && <RichParagraph className="line-clamp-1 !text-primary/70">{model.description}</RichParagraph>}
                       </div>
 
-                      <div className="mt-2">
+                      <div className="mt-1">
                         {isDisabled ? (
-                          <div className="px-2 py-1 rounded bg-gray-200 border border-gray-300 flex items-center gap-1">
-                            <AlertCircle size={10} className="text-gray-500" />
-                            <p className="text-[10px] text-gray-500">Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}</p>
+                          <div className="px-2 py-1 rounded-lg bg-gray-200 border border-gray-300 flex items-center gap-1">
+                            <AlertCircle size={10} className="text-primary" />
+                            <p className="!text-primary">Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}</p>
                           </div>
                         ) : isSelected ? (
-                          <div className="px-2 py-1 rounded bg-black/10 border border-black/20 flex items-center justify-center gap-1">
+                          <div className="px-2 py-1 rounded-lg bg-black/10 border border-black/20 flex items-center justify-center gap-1">
                             <Check size={12} className="text-black" />
-                            <p className="text-xs text-black font-bold">Selected</p>
+                            <p  className="!text-primary text-center">Selected</p>
                           </div>
                         ) : (
-                          <div className="px-2 py-1 rounded bg-gray-100 border border-black/10">
-                            <p className="text-xs text-gray-600 text-center">Tap to Select</p>
+                          <div className=" rounded-lg border border-black/10">
+                            <p className="!text-primary text-center">Tap to Select</p>
                           </div>
                         )}
                       </div>
@@ -364,7 +367,7 @@ export default function ModelsCard({
                         e.stopPropagation();
                         setShowExtensionModal(model);
                       }}
-                      className="w-full mt-2 py-2 px-3 rounded-xl bg-gray-100 border border-black/10 text-xs text-black font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition"
+                      className="w-full mt-2 py-2 px-3 rounded-lg bg-gray-100 border border-black/10 text-xs text-black font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition"
                     >
                       <Plus size={14} />
                       {extensions.length} Extension{extensions.length > 1 ? 's' : ''} Available
@@ -381,14 +384,14 @@ export default function ModelsCard({
               <button
                 onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
                 disabled={activeIndex === 0}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={() => scrollToCard(Math.min(regularModels.length - 1, activeIndex + 1))}
                 disabled={activeIndex === regularModels.length - 1}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
               >
                 <ChevronRight size={20} />
               </button>
@@ -404,7 +407,7 @@ export default function ModelsCard({
                 key={idx}
                 onClick={() => scrollToCard(idx)}
                 className={`
-                  h-1.5 rounded-full transition-all duration-300
+                  h-1.5 rounded-lg transition-all duration-300
                   ${idx === activeIndex
                     ? 'w-6 bg-black shadow-[0_0_8px_rgba(0,0,0,0.3)]'
                     : 'w-1.5 bg-gray-300'
