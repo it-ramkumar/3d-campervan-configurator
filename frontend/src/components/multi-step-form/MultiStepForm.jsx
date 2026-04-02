@@ -251,7 +251,7 @@ const MultiStepForm = ({
       {/* Quote Confirmation Modal */}
       {showQuoteConfirm && (
         <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl flex items-center justify-center p-4 lg:hidden">
-          <div className="w-full max-w-sm bg-gray-100 rounded-3xl border border-black/10 p-6">
+          <div className="w-full max-w-sm bg-gray-100 rounded-lg border border-black/10 p-6">
             <h3 className="text-xl font-bold text-primary mb-2">Get Your Quote</h3>
             <p className="text-sm text-primary/70 mb-6">
               You have {addedModels.length} items selected for {BaseVan?.layout || "your van"}.
