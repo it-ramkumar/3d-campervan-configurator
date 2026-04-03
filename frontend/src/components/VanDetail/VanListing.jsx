@@ -8,8 +8,7 @@ import {
   SecondaryButton, ShareButton, Breadcrumb, PrimaryButton
 } from '../Common/Common';
 import VanGallery from "./GallerySection"; // Naya Client Component
-
-// --- Theme Aware Icons ---
+// import VanCanvas from "./Models/VanCanvas";// --- Theme Aware Icons ---
 const SvgCheckmark = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 !text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>
@@ -27,7 +26,7 @@ const VanPage = ({ vanDetail }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
   const specs = vanDetail?.van_listing?.specifications;
-
+  // console.log(vanDetail, "data")
   const getFeatureIcon = (category) => {
     const icons = {
       "Insulation and Paneling": <ShieldCheck className="w-7 h-7" />,
@@ -238,7 +237,11 @@ const VanPage = ({ vanDetail }) => {
           </div>
         </section>
       )}
-
+      {/* {
+        vanDetail?.glbFile && (
+          <VanCanvas url={vanDetail.glbFile} />
+        )
+      } */}
       {/* FOOTER CTA */}
       <section className="py-24 bg-[#F5F5F0] text-center px-6 border-t border-primary/5">
         <div className="max-w-2xl mx-auto">

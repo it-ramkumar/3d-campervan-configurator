@@ -3,7 +3,8 @@ import VanPage from "../../../components/LayoutDetail/LayoutDetail";
 
 // --- Dynamic Metadata for SEO ---
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
+  const resolvedParams = await Promise.resolve(params);
+  const slug = resolvedParams?.slug;
 
   // Data fetch for metadata
   const data = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`)
@@ -36,16 +37,20 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { slug } = await params;
+  const resolvedParams = await Promise.resolve(params);
+  const slug = resolvedParams?.slug;
+
+  if (!slug) return { title: "Not Found" };
 
   const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`, {
     next: { revalidate: 3600 }
   }).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();
-
+  console.log(slug, "slug");
   // // --- JSON-LD Structured Data ---
   const jsonLd = {
+    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": vanDetail.data.van_listing?.title,
@@ -56,27 +61,19 @@ export default async function Page({ params }) {
       "name": "Big Bear Vans"
     },
     "offers": {
+
       "@type": "Offer",
+      "seller": {
+        "@type": "Organization",
+        "name": "Big Bear Vans"
+      },
       "url": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}`,
       "priceCurrency": "USD",
-      "price": vanDetail.data.van_listing?.price,
       "availability": vanDetail.data.status === "available"
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       "itemCondition": "https://schema.org/NewCondition"
-    },
-    "additionalProperty": [
-      {
-        "@type": "PropertyValue",
-        "name": "Chassis",
-        "value": vanDetail.data.van_listing?.specifications?.make_model
-      },
-      {
-        "@type": "PropertyValue",
-        "name": "Transmission",
-        "value": vanDetail.data.van_listing?.specifications?.transmission
-      }
-    ]
+    }
   };
   return (
     <>
