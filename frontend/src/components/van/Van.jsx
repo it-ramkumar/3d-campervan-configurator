@@ -10,7 +10,6 @@ import SpotLightCom from "./VanSpotsLight";
 import CameraAssigner from "../camara-assigner/CameraAssigner";
 import Navbar from "../Navbar/Navbar";
 import { ArrowBigDownDash, X, ChevronLeft, ChevronRight } from "lucide-react"
-import { configuratorSchema } from "../../schema/configuratorSchema"
 import {
   addModelToScene,
 } from "../../CustomHooks/addSceneToModel";

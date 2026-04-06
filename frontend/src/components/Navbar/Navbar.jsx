@@ -273,7 +273,7 @@ const slugify = (text) => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 bg-black/25 z-[1001]" onClick={() => setIsMobileMenuOpen(false)}>
           <div
-            className="fixed right-0 top-0 h-full w-[85%] p-6 overflow-y-auto transform transition-transform duration-300 will-change-transform bg-secondary text-primary"
+            className={`fixed right-0 top-0 h-full w-full p-6 overflow-y-auto transform transition-transform duration-300 will-change-transform bg-secondary text-primary`}
             onClick={e => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-8 border-b border-primary pb-4">
