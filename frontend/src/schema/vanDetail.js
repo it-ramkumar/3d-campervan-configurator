@@ -29,13 +29,13 @@ export const generateVanSchema = (van) => {
     "brand": {
       "@type": "Brand",
       "name": "Big Bear Vans",
-      "url": "https://bigbearvans.com"
+      "url": "https://www.bigbearvans.com"
     },
     "manufacturer": {
       "@type": "Organization",
       "name": "Big Bear Vans",
-      "url": "https://bigbearvans.com",
-      "logo": "https://bigbearvans.com/images/logo.png"
+      "url": "https://www.bigbearvans.com",
+      "logo": "https://www.bigbearvans.com/images/logo.png"
     },
     "category": "Recreational Vehicle",
     "vehicleConfiguration": "Van",
@@ -53,7 +53,7 @@ export const generateVanSchema = (van) => {
     "seller": {
       "@type": "Organization",
       "name": "Big Bear Vans",
-      "url": "https://bigbearvans.com"
+      "url": "https://www.bigbearvans.com"
     }
   };
 

@@ -7,14 +7,14 @@ export const metadata = {
   title: "Quick Links - Big Bear Vans | Official Resource Hub",
   description: "Access all official Big Bear Vans resources, social media channels, and contact links in one place.",
   alternates: {
-    canonical: "https://bigbearvans.com/quick-links",
+    canonical: "https://www.bigbearvans.com/quick-links",
   },
   openGraph: {
     title: "Quick Links - Big Bear Vans | Official Resource Hub",
     description: "Access all official Big Bear Vans resources, social media channels, and contact links in one place.",
-    url: "https://bigbearvans.com/quick-links",
+    url: "https://www.bigbearvans.com/quick-links",
     type: "website",
-    images: ["https://bigbearvans.com/images/blackLogo.jpg"],
+    images: ["https://www.bigbearvans.com/images/blackLogo.jpg"],
   },
 };
 
@@ -24,7 +24,7 @@ const generateQuickLinksSchema = (links) => ({
   "@type": "WebPage",
   "name": "Quick Links - Big Bear Vans",
   "description": "Official hub for all Big Bear Vans resources and social channels.",
-  "url": "https://bigbearvans.com/quick-links",
+  "url": "https://www.bigbearvans.com/quick-links",
   "mainEntity": {
     "@type": "ItemList",
     "numberOfItems": links.length,

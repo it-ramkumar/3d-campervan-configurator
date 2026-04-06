@@ -5,7 +5,7 @@ import { configuratorSchema } from "@/schema/configuratorSchema";
 // ✅ SEO Metadata (Next.js way)
 export const metadata = {
   // 1. metadataBase add karne se saare relative paths absolute ban jate hain
-  metadataBase: new URL("https://bigbearvans.com"),
+  metadataBase: new URL("https://www.bigbearvans.com"),
 
   title: "3D Camper Van Configurator | Design Your Own Van | Big Bear Vans",
   description:

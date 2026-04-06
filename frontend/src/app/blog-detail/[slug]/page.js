@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
     return {
       title,
       description,
-      alternates: { canonical: `https://bigbearvans.com/blog-detail/${slug}` },
+      alternates: { canonical: `https://www.bigbearvans.com/blog-detail/${slug}` },
       openGraph: {
         title,
         description,
@@ -52,7 +52,7 @@ export default async function page({ params }) {
 
   if (!blog) return <div className="py-20 text-center">Blog post not found</div>;
 
-  const currentUrl = `https://bigbearvans.com/blog-detail/${slug}`;
+  const currentUrl = `https://www.bigbearvans.com/blog-detail/${slug}`;
   const schemaData = generateBlogSchema(blog, currentUrl);
   const heroImage = blog.gallery?.[0] || "/heroSlider/bloghero.webp";
 

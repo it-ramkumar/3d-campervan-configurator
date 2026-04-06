@@ -50,7 +50,7 @@ const hasPrice = vanDetail?.van?.van_listing?.price;
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": vanDetail.van.van_listing?.title,
-    "image": vanDetail.van.gallery || ['https://bigbearvans.com/images/blackLogo.jpg'],
+    "image": vanDetail.van.gallery || ['https://www.bigbearvans.com/images/blackLogo.jpg'],
     "description": vanDetail.van.van_listing?.subtitle,
     "brand": {
       "@type": "Brand",

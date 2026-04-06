@@ -9,7 +9,7 @@ export const generateCategorizedLayoutsSchema = (layouts, categoryName, currentP
       .replace(/[^\w-]/g, "") // special characters remove karein
     : "all";
 
-  const baseUrl = "https://bigbearvans.com/layout-by-category";
+  const baseUrl = "https://www.bigbearvans.com/layout-by-category";
   const currentUrl = currentPage > 1
     ? `${baseUrl}/${categorySlug}?page=${currentPage}`
     : `${baseUrl}/${categorySlug}`;
@@ -35,7 +35,7 @@ export const generateCategorizedLayoutsSchema = (layouts, categoryName, currentP
           "item": {
             "@type": "Product",
             "name": layout.title,
-            "image": layout.gallery[0] || "https://bigbearvans.com/images/p2.webp",
+            "image": layout.gallery[0] || "https://www.bigbearvans.com/images/p2.webp",
             "url": `${baseUrl}/${categorySlug}/${layout.slug}`,
             "category": categoryName || "Camper Van Layout",
             "brand": { "@type": "Brand", "name": "Big Bear Vans" },

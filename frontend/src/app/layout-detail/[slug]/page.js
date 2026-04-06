@@ -47,7 +47,7 @@ export default async function Page({ params }) {
   }).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();
-  console.log(vanDetail, "vanDetail");
+  // console.log(vanDetail, "vanDetail");
   // // --- JSON-LD Structured Data ---
 const hasPrice = vanDetail?.data?.van_listing?.price;
 
@@ -56,7 +56,7 @@ const jsonLd = {
   "@context": "https://schema.org/",
   "@type": "Product",
   "name": vanDetail.data.van_listing?.title,
-  "image": vanDetail.data.gallery || ['https://bigbearvans.com/images/blackLogo.jpg'],
+  "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.jpg'],
   "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
   "brand": {
     "@type": "Brand",

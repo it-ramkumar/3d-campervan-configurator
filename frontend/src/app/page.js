@@ -10,14 +10,14 @@ export const metadata = {
   description: "Expertly crafted custom camper vans for off-grid living. We use 3D Scanning and CNC precision to build your dream Mercedes Sprinter or Ford Transit conversion.",
   keywords: ["custom camper vans", "van conversion USA", "big bear vans", "sprinter van conversion", "luxury motorhomes"],
   alternates: {
-    canonical: "https://bigbearvans.com",
+    canonical: "https://www.bigbearvans.com",
   },
   openGraph: {
     title: "Big Bear Vans | Premium Custom Builds & 3D Design",
     description: "From 3D renderings to the final build, we create high-end camper vans tailored to your lifestyle.",
-    url: "https://bigbearvans.com",
+    url: "https://www.bigbearvans.com",
     siteName: "Big Bear Vans",
-    images: [{ url: "https://bigbearvans.com/images/custom4.webp", width: 1200, height: 630 }],
+    images: [{ url: "https://www.bigbearvans.com/images/custom4.webp", width: 1200, height: 630 }],
     type: "website",
   },
 };

@@ -3,8 +3,8 @@ export const generateShowroomSchema = (heroImage) => ({
   "@type": "LocalBusiness",
   "name": "Big Bear Vans Showroom & Workshop",
   "image": heroImage,
-  "@id": "https://bigbearvans.com/showroom",
-  "url": "https://bigbearvans.com/showroom",
+  "@id": "https://www.bigbearvans.com/showroom",
+  "url": "https://www.bigbearvans.com/showroom",
   "telephone": "+1-951-441-9719",
    "address": {
         "@type": "PostalAddress",
@@ -33,7 +33,7 @@ export const generateShowroomSchema = (heroImage) => ({
       "closes": "16:00"
     }
   ],
-  "menu": "https://bigbearvans.com/vans-layout",
+  "menu": "https://www.bigbearvans.com/vans-layout",
   "description": "Experience luxury custom campervan builds in person. Our California showroom offers 3D design tours and workshop walkthroughs.",
  "sameAs": [
         "https://www.instagram.com/bigbearvans",

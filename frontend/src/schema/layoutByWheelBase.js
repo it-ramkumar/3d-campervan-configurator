@@ -9,7 +9,7 @@ export const generateWheelbaseLayoutsSchema = (layouts, wheelbase, currentPage =
         .replace(/[^\w-]/g, "")   // remove special characters
     : "all";
 
-  const baseUrl = "https://bigbearvans.com/layout-by-wheelbase";
+  const baseUrl = "https://www.bigbearvans.com/layout-by-wheelbase";
   const currentUrl = currentPage > 1
     ? `${baseUrl}/${wheelbaseSlug}?page=${currentPage}`
     : `${baseUrl}/${wheelbaseSlug}`;
@@ -35,7 +35,7 @@ export const generateWheelbaseLayoutsSchema = (layouts, wheelbase, currentPage =
           "item": {
             "@type": "Product",
             "name": project.van_listing?.title || project.title,
-            "image": project.gallery?.[0] || "https://bigbearvans.com/images/limage1.webp",
+            "image": project.gallery?.[0] || "https://www.bigbearvans.com/images/limage1.webp",
             "url": `${baseUrl}/${wheelbaseSlug}/${project.slug}`,
             "category": wheelbase || "Camper Van Layout",
             "brand": { "@type": "Brand", "name": "Big Bear Vans" },

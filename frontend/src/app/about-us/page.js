@@ -10,20 +10,20 @@ export const metadata = {
   description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
   keywords: "Big Bear Vans founders, custom van builders California, 5 person sleeper van, sprinter elevator bed conversion, CNC engineered campervans",
   alternates: {
-    canonical: "https://bigbearvans.com/about-us",
+    canonical: "https://www.bigbearvans.com/about-us",
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/about-us",
+    url: "https://www.bigbearvans.com/about-us",
     title: "About Big Bear Vans | Custom Van Builders California",
     description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
-    images: ["https://bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/images/mission.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "About Big Bear Vans | Custom Van Builders California",
     description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
-    images: ["https://bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/images/mission.webp"],
   },
 };
 

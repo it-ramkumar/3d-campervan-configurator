@@ -8,20 +8,20 @@ export const metadata = {
   description: "Schedule your free consultation with Big Bear Vans. Book a showroom visit, discuss financing, or start your custom 3D van design journey in Big Bear City, CA.",
   keywords: "book van consultation, campervan build inquiry, schedule showroom tour, Big Bear Vans contact, custom van building quote, Mercedes Sprinter conversion California",
   alternates: {
-    canonical: "https://bigbearvans.com/contact",
+    canonical: "https://www.bigbearvans.com/contact",
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/contact",
+    url: "https://www.bigbearvans.com/contact",
     title: "Ready to Start Your Adventure? | Big Bear Vans Consultation",
     description: "Talk to our experts about your dream rig. Schedule a call or visit our California workshop for a personalized tour.",
-    images: ["https://bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/images/mission.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Schedule Your Free Van Build Consultation",
     description: "From 15-year financing to 3D layouts, let's discuss your custom Sprinter build today.",
-    images: ["https://bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/images/mission.webp"],
   },
 };
 

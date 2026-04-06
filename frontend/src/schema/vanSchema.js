@@ -94,7 +94,7 @@ export const createItemListSchema = (name, vans, availability) => ({
       "seller": {
         "@type": "Organization",
         "name": "Big Bear Vans",
-        "url": "https://bigbearvans.com"
+        "url": "https://www.bigbearvans.com"
       }
     };
 
@@ -115,18 +115,18 @@ export const createItemListSchema = (name, vans, availability) => ({
       "item": {
         "@type": "Product",
         "name": details.title || details.name || `Custom ${specs.make_model || 'Campervan'}`,
-        "image": van.gallery?.[0] || van.heroImage || "https://bigbearvans.com/images/blackLogo.jpg",
+        "image": van.gallery?.[0] || van.heroImage || "https://www.bigbearvans.com/images/blackLogo.jpg",
         "description": details.description?.substring(0, 160) || `Custom built ${specs.make_model || 'Campervan'} by Big Bear Vans with premium features and quality craftsmanship.`,
-        "url": `https://bigbearvans.com/van-detail/${van.slug}`,
+        "url": `https://www.bigbearvans.com/van-detail/${van.slug}`,
         "brand": {
           "@type": "Brand",
           "name": "Big Bear Vans",
-          "url": "https://bigbearvans.com"
+          "url": "https://www.bigbearvans.com"
         },
         "manufacturer": {
           "@type": "Organization",
           "name": "Big Bear Vans",
-          "url": "https://bigbearvans.com"
+          "url": "https://www.bigbearvans.com"
         },
         "category": "Recreational Vehicle",
         "vehicleConfiguration": "Van",

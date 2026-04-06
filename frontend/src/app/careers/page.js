@@ -49,7 +49,7 @@ const jsonLd = {
   "@type": "CollectionPage",
   "name": "Careers at Big Bear Vans",
   "description": "Explore remote job opportunities and join the Big Bear Vans team.",
-  "url": "https://bigbearvans.com/careers",
+  "url": "https://www.bigbearvans.com/careers",
   "mainEntity": {
     "@type": "ItemList",
     "numberOfItems": initialJobs.length,
@@ -75,11 +75,11 @@ const jsonLd = {
         "hiringOrganization": {
           "@type": "Organization",
           "name": "Big Bear Vans",
-          "sameAs": "https://bigbearvans.com",
-          "logo": "https://bigbearvans.com/logo.png"
+          "sameAs": "https://www.bigbearvans.com",
+          "logo": "https://www.bigbearvans.com/logo.png"
         },
 
-        "url": "https://bigbearvans.com/careers"
+        "url": "https://www.bigbearvans.com/careers"
       }
     }))
   }

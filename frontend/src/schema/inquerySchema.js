@@ -3,24 +3,24 @@ export const generateInquirySchema = () => ({
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://bigbearvans.com/inquiry#webpage",
-      "url": "https://bigbearvans.com/inquiry",
+      "@id": "https://www.bigbearvans.com/inquiry#webpage",
+      "url": "https://www.bigbearvans.com/inquiry",
       "name": "Build Your Dream Van | Custom Van Configurator",
       "description": "Use our custom van configurator to design your dream Mercedes Sprinter or Ford Transit build. Choose your layout, electrical systems, and get a custom quote today.",
       "inLanguage": "en-US"
     },
     {
       "@type": "Service",
-      "@id": "https://bigbearvans.com/inquiry#service",
+      "@id": "https://www.bigbearvans.com/inquiry#service",
       "name": "Custom Van Configuration & Quote",
       "serviceType": "Campervan Conversion Design",
       "description": "Interactive tool to design custom van layouts and receive pricing estimates.",
       "provider": {
         "@type": "LocalBusiness",
-        "@id": "https://bigbearvans.com/#organization",
+        "@id": "https://www.bigbearvans.com/#organization",
         "name": "Big Bear Vans",
-        "url": "https://bigbearvans.com",
-        "logo": "https://bigbearvans.com/images/blackLogo.jpg",
+        "url": "https://www.bigbearvans.com",
+        "logo": "https://www.bigbearvans.com/images/blackLogo.jpg",
         "telephone": "+1-951-441-9719",
          "address": {
         "@type": "PostalAddress",
@@ -41,7 +41,7 @@ export const generateInquirySchema = () => ({
       "areaServed": "US",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://bigbearvans.com/inquiry"
+        "@id": "https://www.bigbearvans.com/inquiry"
       }
     }
   ]

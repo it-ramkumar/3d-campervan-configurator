@@ -9,11 +9,11 @@ export const metadata = {
   description: "Explore our transparent 5-month custom van build process. From 3D visualization and vehicle sourcing to complimentary LAX valet pickup and lifetime care.",
   keywords: "custom van build timeline, sprinter van conversion process, 3D van design, Mercedes Sprinter sourcing, Big Bear Vans warranty, fly in drive out van build",
   alternates: {
-    canonical: "https://bigbearvans.com/our-process",
+    canonical: "https://www.bigbearvans.com/our-process",
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/our-process",
+    url: "https://www.bigbearvans.com/our-process",
     title: "How We Build Your Dream Van | The Big Bear Process",
     description: "5 months. 3D precision. Lifetime care. See how we turn your vision into a high-end off-grid home.",
     images: ["/images2/op5.png"],

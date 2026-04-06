@@ -31,14 +31,14 @@ export async function generateMetadata({ params }) {
 
   const title = `${current.title} | Big Bear Vans`;
   const description = current.desc;
-  const canonical = `https://bigbearvans.com/van-options/${options}`;
+  const canonical = `https://www.bigbearvans.com/van-options/${options}`;
 
   // ✅ Har option ke liye specific image ya default image path
   const ogImage = current.heroImage || "/images/default-van.webp";
 
   return {
     // 1. metadataBase lazmi hai (Iske bina WhatsApp/FB image pick nahi karte)
-    metadataBase: new URL("https://bigbearvans.com"),
+    metadataBase: new URL("https://www.bigbearvans.com"),
 
     title,
     description,

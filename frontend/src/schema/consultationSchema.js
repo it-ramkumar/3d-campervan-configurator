@@ -3,15 +3,15 @@ export const generateConsultationSchema = () => ({
   "@graph": [
     {
       "@type": "ContactPage",
-      "@id": "https://bigbearvans.com/contact/#webpage",
-      "url": "https://bigbearvans.com/contact",
+      "@id": "https://www.bigbearvans.com/contact/#webpage",
+      "url": "https://www.bigbearvans.com/contact",
       "name": "Book a Free Custom Van Consultation | Big Bear Vans",
       "description": "Schedule a call with our experts in Big Bear City, California to discuss your custom camper van build, financing, or 3D design.",
       "potentialAction": {
         "@type": "ScheduleAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://bigbearvans.com/contact",
+          "urlTemplate": "https://www.bigbearvans.com/contact",
           "inLanguage": "en",
           "actionPlatform": [
             "http://schema.org/DesktopWebPlatform",
@@ -23,9 +23,9 @@ export const generateConsultationSchema = () => ({
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://bigbearvans.com/#organization",
+      "@id": "https://www.bigbearvans.com/#organization",
       "name": "Big Bear Vans",
-      "image": "https://bigbearvans.com/images/mission.webp",
+      "image": "https://www.bigbearvans.com/images/mission.webp",
       "telephone": "+1-951-441-9719",
       "priceRange": "$$$",
       "address": {

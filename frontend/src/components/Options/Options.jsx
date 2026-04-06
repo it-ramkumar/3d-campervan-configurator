@@ -14,8 +14,7 @@ import SystemOptions from "./SystemOptions";
 import ExteriorCTR from './ExteriorCTR';
 import Loader from "../Loader/Loader";
 
-// Helpers
-import { generateDynamicSchema } from '../../schema/optionsSchema';
+
 
 const PAGE_CONFIG = {
   "exterior-options": {
@@ -122,58 +121,11 @@ const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
   }, [options, current]);
 
   if (!current) return <Loader />;
-const canonicalUrl = `https://bigbearvans.com/options/${options}`;
-// Is logic ko return se pehle rakhein
-const getDynamicMetaDesc = () => {
-  if (dataState.categories && dataState.categories.length > 0) {
-    // 1. Saari sub-categories ke titles nikalna (e.g., Sink, Backsplash, Countertop)
-    const subCatTitles = dataState.categories.flatMap(cat =>
-      cat.subCategories.map(sub => sub.title)
-    ).join(", ");
 
-    // 2. Kuch prominent items ke naam uthana (Pehle 3-4 items)
-    const itemNames = dataState.categories.flatMap(cat =>
-      cat.subCategories.flatMap(sub => sub.items.slice(0, 2).map(item => item.title))
-    ).slice(0, 4).join(", ");
-
-    // 3. Aik unique summary banana
-    const finalString = `Explore our ${current.title}: Includes ${subCatTitles}. Featured products: ${itemNames}. Custom build your van with Big Bear Vans.`;
-
-    return finalString.substring(0, 160); // Meta description 160 characters se zyada nahi honi chahiye
-  }
-  return current.desc;
-};
-
-const finalDesc = getDynamicMetaDesc();
 
   return (
     <div className="bg-secondary min-h-screen font-body">
-
-  {/* Standard SEO */}
-  <title>{`${current.title} | Big Bear Vans`}</title>
-  <meta name="description" content={finalDesc} />
-  <meta name="keywords" content={current.keyword || "custom van options, campervan upgrades"} />
-  <link rel="canonical" href={canonicalUrl} />
-
-  {/* Open Graph */}
-  <meta property="og:title" content={`${current.title} | Big Bear Vans`} />
-  <meta property="og:description" content={finalDesc} />
-  <meta property="og:image" content={`https://bigbearvans.com${current.heroImage}`} />
-
-  {/* Twitter */}
-  <meta name="twitter:title" content={current.title} />
-  <meta name="twitter:description" content={finalDesc} />
-  <meta name="twitter:image" content={`https://bigbearvans.com${current.heroImage}`} />
-
-  {/* Schema Logic */}
-  <script type="application/ld+json">
-    {JSON.stringify(generateDynamicSchema(options, current, dataState.categories))}
-  </script>
-
-
-
       <Navbar />
-
       {/* --- Hero Section with Overlay --- */}
       <section className="relative overflow-hidden">
         <HeroSection

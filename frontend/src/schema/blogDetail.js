@@ -19,7 +19,7 @@ export const generateBlogSchema = (blog, currentUrl) => {
 
     "image": blog.gallery && blog.gallery.length > 0
       ? blog.gallery
-      : ["https://bigbearvans.com/images/blackLogo.jpg"],
+      : ["https://www.bigbearvans.com/images/blackLogo.jpg"],
 
     "datePublished": publishDate,
     "dateModified": modifiedDate,
@@ -27,7 +27,7 @@ export const generateBlogSchema = (blog, currentUrl) => {
     "author": {
       "@type": "Person",
       "name": "Artur & Anna",
-      "url": "https://bigbearvans.com/about-us"
+      "url": "https://www.bigbearvans.com/about-us"
     },
 
     "publisher": {
@@ -35,7 +35,7 @@ export const generateBlogSchema = (blog, currentUrl) => {
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://bigbearvans.com/images/blackLogo.jpg"
+        "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
       }
     },
 

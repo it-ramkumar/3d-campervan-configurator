@@ -3,19 +3,19 @@ export const generateAboutSchema = () => ({
   "@graph": [
     {
       "@type": "AboutPage",
-      "@id": "https://bigbearvans.com/about-us/#webpage",
-      "url": "https://bigbearvans.com/about-us",
+      "@id": "https://www.bigbearvans.com/about-us/#webpage",
+      "url": "https://www.bigbearvans.com/about-us",
       "name": "About Big Bear Vans | Our Story & Founders",
       "description": "Meet Artur and Anna, the founders of Big Bear Vans. Learn about our journey in building innovative, family-friendly custom campervans in California.",
-      "publisher": { "@id": "https://bigbearvans.com/#organization" }
+      "publisher": { "@id": "https://www.bigbearvans.com/#organization" }
     },
     {
       "@type": "LocalBusiness",
-      "@id": "https://bigbearvans.com/#organization",
+      "@id": "https://www.bigbearvans.com/#organization",
       "name": "Big Bear Vans",
-      "image": "https://bigbearvans.com/images/mission.webp",
+      "image": "https://www.bigbearvans.com/images/mission.webp",
       "description": "Specializing in family-friendly custom campervan builds with innovative space-saving solutions like elevator beds and compact aluminum bathrooms.",
-      "url": "https://bigbearvans.com",
+      "url": "https://www.bigbearvans.com",
       "telephone": "+1 951-441-9719",
       "address": {
         "@type": "PostalAddress",
@@ -35,13 +35,13 @@ export const generateAboutSchema = () => ({
           "@type": "Person",
           "name": "Artur",
           "jobTitle": "Co-Founder & Lead Engineer",
-          "image": "https://bigbearvans.com/images/anna.webp"
+          "image": "https://www.bigbearvans.com/images/anna.webp"
         },
         {
           "@type": "Person",
           "name": "Anna",
           "jobTitle": "Co-Founder & Design Lead",
-          "image": "https://bigbearvans.com/images/anna.webp"
+          "image": "https://www.bigbearvans.com/images/anna.webp"
         }
       ],
       "knowsAbout": [

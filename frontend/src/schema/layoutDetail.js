@@ -26,7 +26,7 @@ export const generateLayoutSchema = (van, currentUrl) => {
       "seller": {
         "@type": "Organization",
         "name": "Big Bear Vans",
-        "@id": "https://bigbearvans.com/#organization"
+        "@id": "https://www.bigbearvans.com/#organization"
       }
     },
     "additionalProperty": []

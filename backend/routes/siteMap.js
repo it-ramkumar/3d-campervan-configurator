@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
         // Static Pages
         staticPages.forEach(page => {
-            xml += `  <url><loc>https://bigbearvans.com${page}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+            xml += `  <url><loc>https://www.bigbearvans.com${page}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
         });
 
         // Helper function taake code ganda na ho aur crash se bachein
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
             links.forEach(item => {
                 // Safety Check: Agar updatedAt nahi hai toh aaj ki date use karein
                 const date = item.updatedAt ? item.updatedAt.toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
-                xml += `  <url><loc>https://bigbearvans.com/${path}/${item.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+                xml += `  <url><loc>https://www.bigbearvans.com/${path}/${item.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
             });
         };
     const wheelBase = (links, path) => {
@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
             uniqueWheelbases.add(wbValue);
 
             xml += `  <url>
-  <loc>https://bigbearvans.com/${path}/${wbValue}</loc>
+  <loc>https://www.bigbearvans.com/${path}/${wbValue}</loc>
   <lastmod>${date}</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.7</priority>

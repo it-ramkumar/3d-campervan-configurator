@@ -24,13 +24,13 @@ export async function generateMetadata({ searchParams }) {
     title,
     description,
     alternates: {
-      canonical: `https://bigbearvans.com/blog${currentPage > 1 ? `?page=${currentPage}` : ""}`,
+      canonical: `https://www.bigbearvans.com/blog${currentPage > 1 ? `?page=${currentPage}` : ""}`,
     },
     robots: searchTerm ? "noindex, follow" : "index, follow",
     openGraph: {
       title,
       description,
-      images: ["https://bigbearvans.com/heroSlider/custom_build.webp"],
+      images: ["https://www.bigbearvans.com/heroSlider/custom_build.webp"],
     },
   };
 }

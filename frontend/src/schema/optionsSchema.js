@@ -1,5 +1,5 @@
 export const generateDynamicSchema = (options, current, categories) => {
-  const baseUrl = "https://bigbearvans.com";
+  const baseUrl = "https://www.bigbearvans.com";
   const currentUrl = `${baseUrl}/van-options/${options}`;
 
   return {

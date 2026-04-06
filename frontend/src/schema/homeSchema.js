@@ -4,21 +4,21 @@ export const generateHomeSchema = (faqData) => {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://bigbearvans.com/#website",
-        "url": "https://bigbearvans.com",
+        "@id": "https://www.bigbearvans.com/#website",
+        "url": "https://www.bigbearvans.com",
         "name": "Big Bear Vans",
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://bigbearvans.com/search?q={search_term_string}",
+          "target": "https://www.bigbearvans.com/search?q={search_term_string}",
           "query-input": "required name=search_term_string"
         }
       },
       {
         "@type": "Organization",
-        "@id": "https://bigbearvans.com/#organization",
+        "@id": "https://www.bigbearvans.com/#organization",
         "name": "Big Bear Vans",
-        "url": "https://bigbearvans.com",
-        "logo": "https://bigbearvans.com/images/blackLogo.jpg",
+        "url": "https://www.bigbearvans.com",
+        "logo": "https://www.bigbearvans.com/images/blackLogo.jpg",
         "description": "Premium custom camper van conversions featuring 3D design and automated CNC manufacturing.",
         "sameAs": [
           "https://www.instagram.com/bigbearvans",
@@ -30,10 +30,10 @@ export const generateHomeSchema = (faqData) => {
       },
       {
         "@type": "LocalBusiness",
-        "@id": "https://bigbearvans.com/#localbusiness",
-        "parentOrganization": { "@id": "https://bigbearvans.com/#organization" },
+        "@id": "https://www.bigbearvans.com/#localbusiness",
+        "parentOrganization": { "@id": "https://www.bigbearvans.com/#organization" },
         "name": "Big Bear Vans",
-        "image": "https://bigbearvans.com/images/custom4.webp",
+        "image": "https://www.bigbearvans.com/images/custom4.webp",
         "priceRange": "$$$",
         "telephone": "+1-951-441-9719",
         "address": {

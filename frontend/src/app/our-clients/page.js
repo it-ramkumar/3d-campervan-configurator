@@ -19,7 +19,7 @@ export const metadata = {
   description: "Explore our custom campervan case studies. From pet-friendly sanctuaries and mobile offices to family-ready Sprinters with elevator beds. See how our clients live off-grid.",
   keywords: "custom van stories, pet friendly campervans, mobile office sprinter, moto van garage, retiree rv adventure, Big Bear Vans reviews",
   alternates: {
-    canonical: "https://bigbearvans.com/our-clients",
+    canonical: "https://www.bigbearvans.com/our-clients",
   },
   twitter: {
     card: "summary_large_image",
@@ -30,7 +30,7 @@ export const metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/our-clients",
+    url: "https://www.bigbearvans.com/our-clients",
     title: "Real Stories, Real Adventures | Big Bear Vans",
     description: "Explore our luxurious custom campervan conversions. Built for families, pets, and off-grid living.",
     images: ["/OurClients/blue2.jpeg"],

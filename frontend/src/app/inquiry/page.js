@@ -8,17 +8,17 @@ export const metadata = {
   description: 'Use our custom van configurator to design your dream Mercedes Sprinter or Ford Transit build. Choose your layout, electrical systems, and get a custom quote today.',
   keywords: ['van build configurator', 'custom van conversion quote', 'sprinter van layout tool', 'campervan build cost', 'Big Bear Vans inquiry'],
   alternates: {
-    canonical: 'https://bigbearvans.com/inquiry',
+    canonical: 'https://www.bigbearvans.com/inquiry',
   },
   // ✅ Open Graph (Facebook/LinkedIn)
   openGraph: {
     title: 'Design Your Custom Van | Big Bear Vans Configurator',
     description: 'Start your journey with Big Bear Vans. Configure your van layout, shower options, and off-grid power needs in minutes.',
-    url: 'https://bigbearvans.com/inquiry',
+    url: 'https://www.bigbearvans.com/inquiry',
     siteName: 'Big Bear Vans',
     images: [
       {
-        url: 'https://bigbearvans.com/images/w2.webp',
+        url: 'https://www.bigbearvans.com/images/w2.webp',
         width: 1200,
         height: 630,
       },
@@ -32,7 +32,7 @@ export const metadata = {
     title: 'Build Your Dream Van | Custom Configurator',
     description: 'Configure your Mercedes Sprinter or Ford Transit layout and get an instant quote.',
     site: '@bigbearvans',
-    images: ['https://bigbearvans.com/images/w2.webp'],
+    images: ['https://www.bigbearvans.com/images/w2.webp'],
   },
 }
 

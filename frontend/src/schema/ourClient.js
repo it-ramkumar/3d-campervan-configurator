@@ -3,7 +3,7 @@ export const schemaData =()=>( {
   "@type": "CollectionPage",
   "name": "Client Stories & Custom Build Gallery | Big Bear Vans",
   "description": "Explore our custom van builds: Lake Tahoe (Family), Blue Whale (6-Seater), Cusco (Pet-friendly), MotoVan (Adventure), and San Diego (Mobile Office).",
-  "url": "https://bigbearvans.com/our-clients",
+  "url": "https://www.bigbearvans.com/our-clients",
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": [

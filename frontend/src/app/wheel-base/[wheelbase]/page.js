@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
   const description = `Explore our collection of custom camper van layouts for the ${formattedWB}.`;
 
   // Domain specify karein
-  const baseUrl = "https://bigbearvans.com";
+  const baseUrl = "https://www.bigbearvans.com";
 
   return {
     metadataBase: new URL(baseUrl), // Yeh base URL set kar deta hai
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
       type: 'website',
       images: [
         {
-          url: "/images/review.webp", // Ab yeh automatic https://bigbearvans.com/images/review.webp ban jayega
+          url: "/images/review.webp", 
           width: 1200,
           height: 630,
           alt: `${formattedWB} Van Layout Preview`,
@@ -73,7 +73,7 @@ const jsonLd = {
   "@type": "CollectionPage",
   "name": `${wheelbase} Wheelbase Van Layouts`,
   "description": `Explore custom van layouts for ${wheelbase} wheelbase by Big Bear Vans.`,
-  "url": `https://bigbearvans.com/wheel-base/${wheelbase}${page > 1 ? `?page=${page}` : ""}`,
+  "url": `https://www.bigbearvans.com/wheel-base/${wheelbase}${page > 1 ? `?page=${page}` : ""}`,
   "mainEntity": {
     "@type": "ItemList",
     "numberOfItems": initialData.data.length,
@@ -83,7 +83,7 @@ const jsonLd = {
       "item": {
         "@type": "Product",
         "name": item.van_listing?.title,
-        "url": `https://bigbearvans.com/layout-detail/${item.slug}`,
+        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
         "image": item.gallery?.[0],
         "description": item.van_listing?.description?.substring(0, 160),
         "brand": {

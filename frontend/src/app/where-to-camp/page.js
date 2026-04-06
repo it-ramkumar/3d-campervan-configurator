@@ -8,14 +8,14 @@ export const metadata = {
   description: "Discover the best campgrounds and RV parks near Big Bear Lake. From Serrano's full hookups to Holcomb Valley's quiet escapes, find the perfect basecamp for your new campervan.",
   keywords: "Big Bear Lake camping, RV parks Big Bear, Serrano Campground, Pineknot Campground, campervan basecamp California, RV hookups Big Bear",
   alternates: {
-    canonical: "https://bigbearvans.com/where-to-camp",
+    canonical: "https://www.bigbearvans.com/where-to-camp",
   },
   openGraph: {
     title: "Best Big Bear Campgrounds for Your Van Adventure",
     description: "Picking up your van? Here is our curated list of the best lakeside retreats and alpine escapes in Big Bear.",
-    url: "https://bigbearvans.com/where-to-camp",
+    url: "https://www.bigbearvans.com/where-to-camp",
     type: "article",
-    images: ["https://bigbearvans.com/whereToCamp/Pineknot%20campground%202.png"],
+    images: ["https://www.bigbearvans.com/whereToCamp/Pineknot%20campground%202.png"],
   },
   twitter: {
     card: "summary_large_image",

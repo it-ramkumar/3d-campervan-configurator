@@ -1,6 +1,6 @@
 export const generateBlogListingSchema = (blogs, currentPage) => {
 
-  const baseUrl = "https://bigbearvans.com/blog";
+  const baseUrl = "https://www.bigbearvans.com/blog";
   const currentUrl = currentPage > 1 ? `${baseUrl}?page=${currentPage}` : baseUrl;
 
   return {
@@ -26,7 +26,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://bigbearvans.com/images/blackLogo.jpg"
+        "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
       }
     },
 
@@ -45,7 +45,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
 
       return {
         "@type": "BlogPosting",
-        "@id": `https://bigbearvans.com/blog-detail/${blog.slug}#blogposting`,
+        "@id": `https://www.bigbearvans.com/blog-detail/${blog.slug}#blogposting`,
 
         "headline": blog.title,
 
@@ -55,9 +55,9 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
 
         "image":
           blog.gallery?.[0] ||
-          "https://bigbearvans.com/heroSlider/custom_build.webp",
+          "https://www.bigbearvans.com/heroSlider/custom_build.webp",
 
-        "url": `https://bigbearvans.com/blog-detail/${blog.slug}`,
+        "url": `https://www.bigbearvans.com/blog-detail/${blog.slug}`,
 
         "datePublished": publishDate,
         "dateModified": modifiedDate,
@@ -72,13 +72,13 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
           "name": "Big Bear Vans",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://bigbearvans.com/images/blackLogo.jpg"
+            "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
           }
         },
 
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": `https://bigbearvans.com/blog-detail/${blog.slug}`
+          "@id": `https://www.bigbearvans.com/blog-detail/${blog.slug}`
         }
       };
     })

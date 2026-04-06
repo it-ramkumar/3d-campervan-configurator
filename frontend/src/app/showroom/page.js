@@ -10,11 +10,11 @@ export const metadata = {
   description: "Experience our luxury campervan builds in person. Visit the Big Bear Vans showroom in California for a 3D tour, workshop walkthrough, and expert consultation.",
   keywords: "van conversion showroom california, big bear vans workshop, sprinter van tour, LAX airport pickup van build, virtual van tour, custom campervan gallery",
   alternates: {
-    canonical: "https://bigbearvans.com/showroom",
+    canonical: "https://www.bigbearvans.com/showroom",
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/showroom",
+    url: "https://www.bigbearvans.com/showroom",
     title: "Experience Big Bear Vans | Showroom & Workshop Tour",
     description: "See our latest Sprinter and Transit builds. Schedule your visit to our California showroom today.",
     images: ["/heroSlider/Showroomhero.webp"], // Absolute path use karein agar possible ho

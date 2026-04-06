@@ -30,12 +30,12 @@ export async function generateMetadata({ params, searchParams }) {
     title,
     description,
     alternates: {
-      canonical: `https://bigbearvans.com/layout-by-category/${category}${page > 1 ? `?page=${page}` : ""}`,
+      canonical: `https://www.bigbearvans.com/layout-by-category/${category}${page > 1 ? `?page=${page}` : ""}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://bigbearvans.com/layout-by-category/${category}`,
+      url: `https://www.bigbearvans.com/layout-by-category/${category}`,
       type: "website",
       images: [
         {
@@ -83,7 +83,7 @@ export default async function CategoryPage({ params, searchParams }) {
     "@type": "CollectionPage",
     "name": `${formatTitle(actualCategoryName)} Van Layouts`,
     "description": `A curated collection of custom van conversion layouts for ${formatTitle(actualCategoryName)}.`,
-    "url": `https://bigbearvans.com/layout-by-category/${actualCategoryName}${page > 1 ? `?page=${page}` : ""}`,
+    "url": `https://www.bigbearvans.com/layout-by-category/${actualCategoryName}${page > 1 ? `?page=${page}` : ""}`,
     "mainEntity": {
       "@type": "ItemList",
       "numberOfItems": initialData.data.length,
@@ -95,7 +95,7 @@ export default async function CategoryPage({ params, searchParams }) {
           "name": item.van_listing?.title,
           "description": item.van_listing?.description?.substring(0, 150) + "...",
           "image": item.gallery?.[0],
-          "url": `https://bigbearvans.com/layout-detail/${item.slug}`,
+          "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
           "brand": {
             "@type": "Brand",
             "name": "Big Bear Vans"

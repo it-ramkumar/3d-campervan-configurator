@@ -71,7 +71,7 @@ export default async function VansForSale() {
       "item": {
         "@type": "Product", // Isse Google search mein "In Stock" ya price dikha sakta hai
         "name": van.van_listing.title,
-        "url": `https://bigbearvans.com/van/${van.slug}`,
+        "url": `https://www.bigbearvans.com/van/${van.slug}`,
         "image": van.gallery?.[0]  || "/images/default-van.webp",
         "description": van.excerpt || `Custom conversion build by Big Bear Vans.`,
         "brand": {

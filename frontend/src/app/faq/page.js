@@ -34,12 +34,12 @@ const faqData = [
 export const metadata = {
   title: "Frequently Asked Questions | Big Bear Vans",
   description: "Get answers to all your campervan questions. From custom builds to financing, locations to warranties.",
-  alternates: { canonical: "https://bigbearvans.com/faq" },
+  alternates: { canonical: "https://www.bigbearvans.com/faq" },
   openGraph: {
     title: "Frequently Asked Questions | Big Bear Vans",
     description: "Your Comprehensive Guide to Big Bear Vans builds and services.",
-    url: "https://bigbearvans.com/faq",
-    images: ["https://bigbearvans.com/images/w9.webp"],
+    url: "https://www.bigbearvans.com/faq",
+    images: ["https://www.bigbearvans.com/images/w9.webp"],
   },
 };
 

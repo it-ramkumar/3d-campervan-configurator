@@ -42,7 +42,7 @@ export default async function LayoutsPage() {
       "item": {
         "@type": "CreativeWork",
         "name": item.van_listing?.title || "Custom Layout",
-        "url": `https://bigbearvans.com/layout-detail/${item.slug}`,
+        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
         "description": `Custom wheelbase ${item?.specifications?.wheelbase || ''} floor plan by Big Bear Vans.`,
         "image": item.gallery?.[0]  || "/images2/layout2.webp"
       }

@@ -9,21 +9,21 @@ export const metadata = {
   description: "Explore flexible financing for your custom Mercedes Sprinter. From specialized 15-year RV loans through Trident Funding to all-in-one build loans. 20-30% down payment options available.",
   keywords: "sprinter van financing, trident funding rv, campervan loan california",
   alternates: {
-    canonical: "https://bigbearvans.com/financing",
+    canonical: "https://www.bigbearvans.com/financing",
   },
   twitter: {
     card: "summary_large_image",
     site: "@bigbearvans",
     title: "Financing Your Dream Campervan | Big Bear Vans",
     description: "Get pre-approved for specialized RV loans or all-in-one conversion financing. Flexible 15-year terms available.",
-    images: ["https://bigbearvans.com/heroSlider/limage2.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
   },
   openGraph: {
     type: "website",
-    url: "https://bigbearvans.com/financing",
+    url: "https://www.bigbearvans.com/financing",
     title: "Campervan Financing & RV Loans | Big Bear Vans",
     description: "Easy financing options for your custom van build. Partnered with Trident Funding & Mercedes-Benz Financial.",
-    images: ["https://bigbearvans.com/heroSlider/limage2.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
   },
 };
 
