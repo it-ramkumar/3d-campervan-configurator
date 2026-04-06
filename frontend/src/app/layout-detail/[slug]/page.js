@@ -47,34 +47,33 @@ export default async function Page({ params }) {
   }).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();
-  console.log(slug, "slug");
+  console.log(vanDetail, "vanDetail");
   // // --- JSON-LD Structured Data ---
-  const jsonLd = {
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    "name": vanDetail.data.van_listing?.title,
-    "image": vanDetail.data.gallery || [],
-    "description": vanDetail.data.van_listing?.subtitle,
-    "brand": {
-      "@type": "Brand",
-      "name": "Big Bear Vans"
-    },
-    "offers": {
+const hasPrice = vanDetail?.data?.van_listing?.price;
 
+const jsonLd = {
+  "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": vanDetail.data.van_listing?.title,
+  "image": vanDetail.data.gallery || ['https://bigbearvans.com/images/blackLogo.jpg'],
+  "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
+  "brand": {
+    "@type": "Brand",
+    "name": "Big Bear Vans"
+  },
+  ...(hasPrice && {
+    "offers": {
       "@type": "Offer",
-      "seller": {
-        "@type": "Organization",
-        "name": "Big Bear Vans"
-      },
-      "url": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}`,
+      "price": vanDetail?.data?.van_listing?.price,
       "priceCurrency": "USD",
       "availability": vanDetail.data.status === "available"
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       "itemCondition": "https://schema.org/NewCondition"
     }
-  };
+  })
+};
   return (
     <>
       <script
