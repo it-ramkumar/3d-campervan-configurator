@@ -55,7 +55,7 @@ export default async function LayoutsPage() {
 
   const LayoutText = {
     text: "Have a look at our completed projects...",
-    description: "Explore camper van layouts for 2-7 person setups. Luxury sprinter van layouts (144 & 170) and professional food van layouts.find your perfect floor plan today",
+    description: "Discover the ideal camper van layout for your 2-7 person build. From luxury sprinter van layouts (144 & 170) to professional food van layouts, browse our custom floor plans and start your conversion today.",
   };
 
   return (
