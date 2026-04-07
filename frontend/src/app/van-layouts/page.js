@@ -51,11 +51,11 @@ export default async function LayoutsPage() {
 
   const heroImage = "/images2/layout2.webp";
   const newTitleText = "Explore Layouts of Our Custom Vans";
-  const newDescriptionText = "Discover the various layouts we offer for our custom vans.";
+  const newDescriptionText = "Explore our camper van layout options for 2-7 person setups. From a luxury sprinter van layout (144 & 170) to a professional food van layout, find your perfect floor plan today.";
 
   const LayoutText = {
     text: "Have a look at our completed projects...",
-    description: "Browse to find inspiration for your dream campervan and to see our craftsmanship in every detail.",
+    description: "Explore camper van layouts for 2-7 person setups. Luxury sprinter van layouts (144 & 170) and professional food van layouts.find your perfect floor plan today",
   };
 
   return (
