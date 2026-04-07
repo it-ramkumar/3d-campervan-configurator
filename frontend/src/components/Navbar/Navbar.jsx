@@ -62,7 +62,7 @@ export default function Navbar({ forceMobile }) {
 
   const navLinks = useMemo(() => [
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
-    { name: 'vans-for-sale', label: 'Vans For Sale', path: '/vans-for-sale', hasDropdown: false },
+    { name: 'Camper Vans For Sale', label: 'Vans For Sale', path: '/camper-vans-for-sale', hasDropdown: false },
     { name: 'layout', label: 'Layouts', path: '/van-layouts', hasDropdown: true },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
@@ -452,7 +452,7 @@ const slugify = (text) => {
 
 //   const navLinks = useMemo(() => [
 //     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
-//     { name: 'vans-for-sale', label: 'Vans For Sale', path: '/vans-for-sale', hasDropdown: false },
+//     { name: 'vans-for-sale', label: 'Vans For Sale', path: '/camper-vans-for-sale', hasDropdown: false },
 //     { name: 'layout', label: 'Layouts', path: '/van-layouts', hasDropdown: true },
 //     { name: 'contact', label: 'Contact', path: '/contact', hasDropdown: false },
 //     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },

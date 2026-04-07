@@ -8,21 +8,17 @@ export async function generateMetadata() {
   const limit = 1;
 
   try {
-    // Parallel Fetching: Dono requests ek saath jayengi
     const [resAvail, resSold] = await Promise.all([
       vansByStatus("available", 1, limit),
       vansByStatus("sold", 1, limit)
     ]);
 
     const availCount = resAvail?.total || 0;
-    const soldCount = resSold?.total || 105; // Fallback agar sold count na mile
+    const soldCount = resSold?.total || 105;
 
-    // Dynamic Title Logic
-    // Example: "5 Available & 110+ Sold Custom Camper Vans | Big Bear Vans"
-    const title = `${availCount > 0 ? availCount + ' Available & ' : ''}${soldCount}0+ Sold Custom Camper Vans | Big Bear Vans`;
+    const title = `Camper Vans for Sale | ${availCount > 0 ? availCount + ' Available & ' : ''}${soldCount}+ Sold | Big Bear Vans`;
 
-    const description = `Explore our ${availCount || 'latest'} available builds and our gallery of ${soldCount}+ high-quality custom conversions. Trusted by van lifers across the country.`;
-
+    const description = `Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.`;
     return {
       title,
       description,
@@ -35,11 +31,11 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Custom Camper Vans for Sale | Big Bear Vans",
+      title: "Camper Vans for Sale | Big Bear Vans",
+      description: "Custom Mercedes Sprinter and Ford Transit camper vans for sale. High-quality conversions for 2-7 persons.",
     };
   }
 }
-
 export default async function VansForSale() {
   const limit = 9;
 
@@ -62,8 +58,8 @@ export default async function VansForSale() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Custom Camper Vans Inventory | Big Bear Vans",
-    "description": "Ready-to-go and upcoming custom Mercedes Sprinter and Ford Transit camper vans.",
+    "name": "Camper Vans Inventory | Big Bear Vans",
+    "description": "Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.",
     "numberOfItems": allActiveVans.length,
     "itemListElement": allActiveVans.map((van, index) => ({
       "@type": "ListItem",
@@ -98,8 +94,8 @@ export default async function VansForSale() {
       />
 
       <HeroSection
-        title="Camper Vans For Sale"
-        description="Buy our exclusive and ready-to-roll vans for sale Today."
+        title="Custom Camper Vans for Sale"
+        description="Find your dream sprinter van for sale or a rugged ford transit van for sale. From luxury mercedes sprinter camper van to versatile 4x4 vans, we offer expert craftsmanship for 2-7 person layouts. Join 111+ happy owners today"
         image="/images2/vfs.webp"
         link="/inquiry"
         buttonText="Get a Quote"

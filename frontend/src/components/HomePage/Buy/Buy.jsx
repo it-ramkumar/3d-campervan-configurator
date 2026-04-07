@@ -31,7 +31,7 @@ export default function Buy({ initialVans = [] }) {
         <div className="relative">
           <div className="flex items-center justify-between mb-5 border-b border-primary/10 pb-4">
             <CustomLink
-              href="/vans-for-sale"
+              href="/camper-vans-for-sale"
               text={
                 <span className="flex items-center gap-2">
                   Browse Full Inventory <span className="text-lg leading-none">→</span>

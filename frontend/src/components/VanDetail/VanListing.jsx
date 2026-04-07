@@ -59,7 +59,7 @@ const VanPage = ({ vanDetail }) => {
     <div className="bg-secondary font-body text-primary">
       <Breadcrumb
         customItems={[
-          { name: "vans for sale", href: "/vans-for-sale" },
+          { name: "vans for sale", href: "/camper-vans-for-sale" },
           { name: vanDetail?.van_listing?.title }
         ]}
       />

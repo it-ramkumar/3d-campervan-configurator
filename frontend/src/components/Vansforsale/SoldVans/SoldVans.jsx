@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {
   Heading2, RichParagraph, Heading3,
-  ImageWithSkeleton, SecondaryButton,CustomLink
+  ImageWithSkeleton, SecondaryButton, CustomLink
 } from '../../Common/Common';
 
 export default function SoldVans({
@@ -23,13 +23,15 @@ export default function SoldVans({
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
-               <span className="w-8 h-[2px] bg-hover opacity-30"></span>
-               <RichParagraph className="!text-hover uppercase  font-bold !text-xs italic">The Archive</RichParagraph>
+              <span className="w-8 h-[2px] bg-hover opacity-30"></span>
+              <RichParagraph className="!text-hover uppercase  font-bold !text-xs italic">The Archive</RichParagraph>
             </div>
             <Heading2 text={soldHeading} className="text-primary" />
             <div className="mt-4">
               <RichParagraph >
-                {soldDesc}
+                Take a look at our gallery of 111+ sold custom camper vans and recently completed projects. Our portfolio includes a wide range of specialised builds, from heavy-duty cargo vans to comfortable, spacious passenger vans.
+
+                We have successfully delivered high-quality work vans for sale and dedicated van for sale with work configurations for clients across the country. Whether it was a compact mini van for sale or a rugged 4 by 4 van for sale, our team ensures every Mercedes camper van for sale and ford van for sale meets the highest standards of safety and luxury. Even if you don't see your specific model available today, our past 4x4 vans for sale and passenger van for sale projects showcase the limitless possibilities of our custom sit and sleep layouts.
               </RichParagraph>
             </div>
           </div>
@@ -68,9 +70,9 @@ export default function SoldVans({
 
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[var(--color-primary)]/30 backdrop-blur-[2px]">
-                   <div className="bg-[var(--color-secondary)] text-[var(--color-primary)] px-5 py-2 font-bold text-xs uppercase tracking-widest shadow-2xl rounded-lg">
-                     View Build
-                   </div>
+                  <div className="bg-[var(--color-secondary)] text-[var(--color-primary)] px-5 py-2 font-bold text-xs uppercase tracking-widest shadow-2xl rounded-lg">
+                    View Build
+                  </div>
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)]/40 via-transparent to-transparent z-0" />
@@ -79,16 +81,16 @@ export default function SoldVans({
               {/* Info Bottom */}
               <div className="p-6">
                 <div className="mb-4">
-                   <Heading3 text={van?.van_listing?.title || "Signature Build"} className="text-[var(--color-primary)] text-lg mb-1" />
-                   <RichParagraph className=" uppercase">
-                      {van?.van_listing?.subtitle || "Premium Conversion"}
-                   </RichParagraph>
+                  <Heading3 text={van?.van_listing?.title || "Signature Build"} className="text-[var(--color-primary)] text-lg mb-1" />
+                  <RichParagraph className=" uppercase">
+                    {van?.van_listing?.subtitle || "Premium Conversion"}
+                  </RichParagraph>
                 </div>
 
                 <div className="h-[1px] w-full bg-[var(--color-secondary)] mb-4" />
 
                 <div className="flex items-center justify-between">
-                  <CustomLink  href={`/van-detail/${van.slug}`} text={"  Full Specs →"}/>
+                  <CustomLink href={`/van-detail/${van.slug}`} text={"  Full Specs →"} />
 
                   <div className="w-2 h-2 rounded-full bg-[var(--color-highlight)] group-hover:animate-ping" />
                 </div>

@@ -47,7 +47,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
             <Heading2 text='In-Stock Vans for sale' />
             <div className="mt-4">
               <RichParagraph>
-                Skip the build wait and hit the road in your van with premium features already installed.              </RichParagraph>
+              Whether you need a high roof cargo van for sale for extra standing space or a compact mini van for sale, we offer bespoke builds on 144, 148, and 170 wheelbases. Explore our latest Ford vans for sale and Mercedes-Benz Sprinter van for sale listings. Every sprinter camper van for sale and ford transit camper van for sale we build is designed for durability, comfort, and the ultimate van life experience.            </RichParagraph>
             </div>
           </div>
 

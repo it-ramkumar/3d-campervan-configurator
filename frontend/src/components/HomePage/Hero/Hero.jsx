@@ -20,7 +20,7 @@ const slides = [
       title: "Campervans For Sale.",
       desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
       btnText: "View Inventory",
-      link: "/vans-for-sale",
+      link: "/camper-vans-for-sale",
       type: "sale"
     },
     {

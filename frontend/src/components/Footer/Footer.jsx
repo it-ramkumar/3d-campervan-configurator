@@ -104,7 +104,7 @@ export default function Footer() {
             <Heading3 text="Quick Links" textColor="text-white mb-6 text-lg font-bold" />
             <ul className="grid grid-cols-2 lg:grid-cols-1" style={{ gap: 'var(--gap-xs)' }}>
               <FooterListItem href="/">Home</FooterListItem>
-              <FooterListItem href="/vans-for-sale">Vans For Sale</FooterListItem>
+              <FooterListItem href="/camper-vans-for-sale">Vans For Sale</FooterListItem>
               <FooterListItem href="/van-layouts">Layouts</FooterListItem>
               <FooterListItem href="/about-us">About Us</FooterListItem>
               <FooterListItem href="/careers">Careers</FooterListItem>
@@ -218,7 +218,7 @@ export default function Footer() {
           <p className="text-[12px] opacity-40 tracking-[0.2em] uppercase">
             © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
           </p>
-        
+
         </div>
       </div>
 

@@ -21,7 +21,7 @@ export const menuContent = {
     ],
 
   },
-  "vans-for-sale": { title: "Vans for Sale", link: "/vans-for-sale" },
+  "vans-for-sale": { title: "Vans for Sale", link: "/camper-vans-for-sale" },
   layout: {
     title: "Layouts by Big Bear Vans",
     sections: [

@@ -237,7 +237,7 @@ export default function Dashboard() {
              <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
 
             <Link href="/" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Home</Link>
-            <Link href="/vans-for-sale" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van For Sale</Link>
+            <Link href="/camper-vans-for-sale" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van For Sale</Link>
             <Link href="/van-layouts" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van Layouts</Link>
 
           </div>
