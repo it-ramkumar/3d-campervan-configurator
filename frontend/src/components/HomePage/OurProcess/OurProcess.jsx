@@ -42,7 +42,7 @@ const processSteps = [
     time: "2 Months",
     icon: <Cpu size={24} />,
     title: "Engineering & Precision Planning",
-    imageSrc: "/images2/op3.png",
+    imageSrc: "/images2/op3.webp",
     altText: "3D rendering of a van interior",
     details: [
       { subtitle: "Systems Optimization", description: "Engineers ensure electrical, storage, and weight distribution are optimized for safety and functionality." },
@@ -53,7 +53,7 @@ const processSteps = [
     time: "3-4 Months",
     icon: <Hammer size={24} />,
     title: "Build & Assembly",
-    imageSrc: "/images2/op5.png",
+    imageSrc: "/images2/op5.webp",
     altText: "A camper van being built in a workshop",
     details: [
       { subtitle: "Interior & Exterior Build", description: "Cabinetry, electrical, plumbing, and roof racks or solar panels are installed by experts." },

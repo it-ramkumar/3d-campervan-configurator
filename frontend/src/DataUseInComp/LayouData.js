@@ -44,7 +44,7 @@ export const vanLayoutsData = [
         link: "/layout-detail/mont-fort"
       },
       {
-        img: "/family/mon(2).png",
+        img: "/family/mon(2).webp",
         link: "/layout-detail/mont-fort"
       },
       {

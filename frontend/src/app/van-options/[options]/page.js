@@ -19,7 +19,7 @@ const PAGE_CONFIG = {
     api: "system",
     title: "Electrical & Water Systems",
     desc: "Reliable, high-performance electrical and water systems, installed in every custom van.",
-    heroImage: "/heroSlider/system.jpg"
+    heroImage: "/heroSlider/system.webp"
   }
 };
 
