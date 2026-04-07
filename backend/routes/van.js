@@ -242,7 +242,8 @@ router.put("/reorder", async (req, res) => {
 });
 
 router.put('/:slug', protect, adminOnly, upload.fields([
-  { name: "gallery", maxCount: 10 }
+  { name: "gallery", maxCount: 10 },
+  { name: "glbFile", maxCount: 1 } // ✅ GLB field add kiya
 ]), async (req, res) => {
   try {
     const { slug } = req.params;
@@ -252,7 +253,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       return res.status(404).json({ message: 'Van not found' });
     }
 
-    // Helper to parse JSON or fallback to existing
     const parseJSONField = (field, fallback) => {
       try {
         return field ? JSON.parse(field) : fallback;
@@ -261,56 +261,42 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       }
     };
 
-    // Parse JSON fields
+    // Existing fields parsing
     const van_listing = parseJSONField(req.body.van_listing, van.van_listing);
-    const detailed_features = parseJSONField(
-      req.body.detailed_features,
-      van.detailed_features
-    );
+    const detailed_features = parseJSONField(req.body.detailed_features, van.detailed_features);
     const media = parseJSONField(req.body.media, van.media);
-
-    // --- Naya: Dynamic Blocks parse karne ke liye ---
     const blocks = parseJSONField(req.body.blocks, van.blocks);
-
     const status = req.body.status !== undefined ? req.body.status : van.status;
-
-    // ✅ NEW: Parse gallery order (array of existing URLs in desired order)
     const galleryOrder = parseJSONField(req.body.galleryOrder, null);
 
-    // Validate status if provided
-    if (req.body.status) {
-      const validStatuses = ['available', 'sale_pending', 'sold', 'coming_soon'];
-      if (!validStatuses.includes(status)) {
-        return res.status(400).json({
-          message: 'Invalid status. Must be one of: available, sale_pending, sold, coming_soon'
-        });
-      }
+    // --- ✅ GLB Handle Logic ---
+    let modelUrl = van.glbFile; // Default purana wala rahega
+
+    if (req.files["glbFile"]?.[0]) {
+      const file = req.files["glbFile"][0];
+      // Nayi file upload hogi aur modelUrl update ho jayega
+      // Note: Agar aap S3 par purani file delete karna chahte hain toh deleteObject call karein,
+      // warna ye variable update hokar DB mein naya URL save kar dega.
+      modelUrl = await uploadToS3(file.buffer, "van/models", file.originalname, file.mimetype);
     }
 
-    // ✅ Handle gallery reordering and new uploads
+    // --- Handle gallery reordering and new uploads ---
     let updatedGallery = van.gallery || [];
-
-    // If galleryOrder is provided, reorder existing images
     if (galleryOrder && Array.isArray(galleryOrder)) {
       const validUrls = galleryOrder.filter(url => updatedGallery.includes(url));
       updatedGallery = validUrls;
     }
 
-    // Upload new gallery images
     const newGallery = await Promise.all(
       (req.files["gallery"] || []).map(async file =>
         await uploadToS3(file.buffer, "van/gallery", file.originalname)
       )
     );
 
-    // ✅ Parse insertAt index (where to insert new images)
-    const insertAt = req.body.insertAt !== undefined
-      ? parseInt(req.body.insertAt)
-      : updatedGallery.length;
-
-    // Insert new images at specified index
+    const insertAt = req.body.insertAt !== undefined ? parseInt(req.body.insertAt) : updatedGallery.length;
     updatedGallery.splice(insertAt, 0, ...newGallery);
 
+    // Update Van Object
     van.van_listing = {
       ...van.van_listing,
       ...van_listing,
@@ -318,10 +304,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       specifications: van_listing.specifications ? {
         ...van.van_listing.specifications,
         ...van_listing.specifications,
-        capacity: van_listing.specifications.capacity ? {
-          ...van.van_listing.specifications?.capacity,
-          ...van_listing.specifications.capacity
-        } : van.van_listing.specifications?.capacity
       } : van.van_listing.specifications
     };
 
@@ -329,11 +311,10 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     van.media = media;
     van.status = status;
     van.gallery = updatedGallery;
-
-    // --- Naya: Blocks update logic ---
     van.blocks = blocks;
+    van.glbFile = modelUrl; // ✅ DB mein naya ya purana URL assign kiya
 
-    // If title changed, generate new slug
+    // Slug update logic
     if (van_listing.title && van_listing.title !== van.van_listing.title) {
       van.slug = await Van.generateSlug(van_listing.title);
     }
@@ -346,10 +327,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     });
   } catch (error) {
     console.error('Error updating van:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message
-    });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 

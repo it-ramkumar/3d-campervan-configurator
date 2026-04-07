@@ -74,6 +74,28 @@ const VanPage = ({ vanDetail }) => {
 
           {/* RIGHT: STICKY INFO PANEL */}
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
+
+
+            {vanDetail?.van_listing?.title === "AWD Transit Santa Monica Charcoal" && (
+              <div className="relative flex overflow-x-hidden border-y border-primary/20 bg-primary/[0.03] py-3">
+                <div className="animate-marquee whitespace-nowrap flex">
+                  {/* First Set */}
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
+                    ✨ The build will be completed in April 2026
+                  </span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
+                    ✨ The build will be completed in April 2026
+                  </span>
+
+                  {/* Second Set (Duplicate for seamless looping) */}
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
+                    ✨ The build will be completed in April 2026
+                  </span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
+                    ✨ The build will be completed in April 2026
+                  </span>
+                </div>
+              </div>)}
             <div>
               <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary mb-4 !text-5xl" />
               <RichParagraph className="italic">{vanDetail?.van_listing?.subtitle}</RichParagraph>

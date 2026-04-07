@@ -23,7 +23,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   return (
     <div className="space-y-4">
       {/* Main Display */}
-      <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white aspect-[4/3] flex items-center justify-center">
+      <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white flex items-center justify-center">
         {gallery && gallery.length > 0 ? (
           <>
             <ImageWithSkeleton

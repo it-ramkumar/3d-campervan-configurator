@@ -60,7 +60,12 @@
     0%, 45% { opacity: 0; }
     55%, 100% { opacity: 1; }
   }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 
+  --animate-marquee: marquee 20s linear infinite;
   --animate-fade-loop-1: fade-loop 6s infinite alternate ease-in-out;
   --animate-fade-loop-2: fade-loop-reverse 6s infinite alternate ease-in-out;
 }

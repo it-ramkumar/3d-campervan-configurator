@@ -16,22 +16,45 @@ function Model({ url, doors }) {
     saved: false
   })
 
+  // Model ko center aur scale karne ke liye
+  useEffect(() => {
+    if (scene) {
+      // Bounding box calculate karo
+      const box = new THREE.Box3().setFromObject(scene)
+      const center = box.getCenter(new THREE.Vector3())
+      const size = box.getSize(new THREE.Vector3())
+
+      // Model ko center pe move karo
+      scene.position.sub(center)
+
+      // Consistent scale apply karo (sabse bada dimension 10 units ka ho)
+      const maxDimension = Math.max(size.x, size.y, size.z)
+      const targetSize = 10 // Ye value adjust kar sakte ho
+      const scale = targetSize / maxDimension
+      scene.scale.setScalar(scale)
+
+      // Initial positions save karo (scaled ke baad)
+      if (!initial.current.saved) {
+        if (nodes.side_door) {
+          initial.current.sideDoorZ = nodes.side_door.position.z
+        }
+        initial.current.saved = true
+      }
+    }
+  }, [scene, nodes])
+
   useFrame(() => {
     const speed = 0.15
 
     // 1. Side Slider Door
- // --- SIDE SLIDER DOOR ANIMATION (X and Z) ---
     if (nodes.side_door) {
-      // Agar door khula hai (openSlider: true)
-      // targetZ = peeche slide hona (-90 ya aapka coordinate)
-      // targetX = thoda bahar nikalna (e.g., -52.453)
+      const targetZ = doors.openSlider ? initial.current.sideDoorZ - 2 : initial.current.sideDoorZ
+      const targetX = doors.openSlider ? nodes.side_door.position.x + 0.5 : nodes.side_door.position.x
 
-      const targetZ = doors.openSlider ? -90 : initial.current.sideDoorZ;
-      const targetX = doors.openSlider ? -52.453 : -52.5; // 0 represents initial X position
-
-      // Dono axis ko smooth lerp ke saath update karein
       nodes.side_door.position.z = THREE.MathUtils.lerp(nodes.side_door.position.z, targetZ, speed)
-      nodes.side_door.position.x = THREE.MathUtils.lerp(nodes.side_door.position.x, targetX, speed)
+      if (doors.openSlider) {
+        nodes.side_door.position.x = THREE.MathUtils.lerp(nodes.side_door.position.x, targetX, speed)
+      }
     }
 
     // 2. Driver Door
@@ -52,7 +75,7 @@ function Model({ url, doors }) {
       nodes['back-door-Left'].rotation.y = THREE.MathUtils.lerp(nodes['back-door-Left'].rotation.y, targetRot, speed)
     }
 
-    // 5. Back Door Right (Isse fix kiya gaya hai)
+    // 5. Back Door Right
     if (nodes['Back-door-R']) {
       const targetRot = doors.openBackRight ? -Math.PI / 2 : initial.current.backDoorRot
       nodes['Back-door-R'].rotation.y = THREE.MathUtils.lerp(nodes['Back-door-R'].rotation.y, targetRot, speed)
@@ -60,7 +83,7 @@ function Model({ url, doors }) {
   })
 
   return (
-    <group ref={group} scale={0.05} dispose={null}>
+    <group ref={group} dispose={null}>
       <primitive object={scene} />
     </group>
   )
@@ -84,7 +107,7 @@ export default function VanCanvas({ url }) {
     openPassenger: false,
     openSlider: false,
     openBackLeft: false,
-    openBackRight: false // State add ki gayi
+    openBackRight: false
   })
 
   if (!url || url === "loading...") {
@@ -102,19 +125,35 @@ export default function VanCanvas({ url }) {
   return (
     <div className="flex h-screen w-full bg-[#FFFCFB] p-5 gap-6 font-sans">
       <div className="flex-[2] relative bg-slate-100 rounded-[20px] overflow-hidden shadow-inner border border-slate-200">
-        <Canvas shadows camera={{ position: [15, 10, 15], fov: 35 }}>
+
+        {/* FIXED CAMERA SETTINGS - Ab sab models same dikhenge */}
+        <Canvas
+          shadows
+          camera={{
+            position: [0, 5, 25], // Peeche hata diya, thoda upar
+            fov: 50,
+            far: 1000
+          }}
+        >
           <ambientLight intensity={0.8} />
-          <spotLight position={[20, 20, 10]} intensity={1.5} castShadow />
           <Suspense fallback={<Loader />}>
             <Model url={url} doors={doors} />
             <Environment preset="city" />
-            <ContactShadows position={[0, -1, 0]} opacity={0.4} scale={25} blur={2.5} far={10} />
           </Suspense>
-          <OrbitControls makeDefault minDistance={5} maxDistance={30} />
+
+          <OrbitControls
+            makeDefault
+            target={[0, 2, 0]} // Thoda upar focus karo
+            enablePan={true}
+            enableZoom={true}
+            enableRotate={true}
+            minDistance={15}
+            maxDistance={80}
+          />
         </Canvas>
 
         <div className="absolute bottom-6 left-6 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-[13px] text-gray-600 shadow-sm border border-white/50">
-           Drag to rotate • Scroll to zoom
+          Drag to rotate • Scroll to zoom
         </div>
       </div>
 
