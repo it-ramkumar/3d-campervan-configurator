@@ -15,7 +15,7 @@ const ambulanceImage = "/images/ambulance.webp";
 const prototypeImage = "/images/liftbed.webp";
 const blueWhaleImage = "/images/bluewhale.webp";
 const grayWolfImage = "/images/greywolf.webp";
-const ctaBgImage = "/heroSlider/long_van.jpg";
+const ctaBgImage = "/images2/vfs.webp";
 
 export default function AboutPage() {
   return (
