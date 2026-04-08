@@ -64,8 +64,11 @@ const VansForm = ({ setSelected }) => {
     { value: "coming_soon", label: "Coming Soon" },
   ];
 
+
   useEffect(() => {
+
     if (editData) {
+
       setFormData((prev) => ({
         ...prev,
         ...editData,
@@ -82,7 +85,7 @@ const VansForm = ({ setSelected }) => {
         media: editData.media || [],
         gallery: editData.gallery || [],
         status: editData.status || "available",
-        delivery_date: editData.delivery_date || "",
+        delivery_date: editData?.delivery_date,
       }));
 
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);

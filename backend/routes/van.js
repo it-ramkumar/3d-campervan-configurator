@@ -66,13 +66,6 @@ router.post('/', protect, adminOnly, upload.fields([
       modelUrl = await uploadToS3(file.buffer, "van/models", file.originalname, file.mimetype);
     }
 
-    // 3. Upload Multiple Textures
-    // const textureUrls = await Promise.all(
-    //   (req.files["textures"] || []).map(async file =>
-    //     await uploadToS3(file.buffer, "van/textures", file.originalname, file.mimetype)
-    //   )
-    // );
-    // Final van data object
     const vanData = {
       slug,
       van_listing: {
