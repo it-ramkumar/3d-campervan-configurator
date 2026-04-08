@@ -5,13 +5,7 @@ export default function Detail({ setIsopen, detail }) {
   const gallery = detail.gallery || [];
   const blocks = detail.blocks || []; // Dynamic blocks array
 
-  // const getYouTubeVideoId = (url) => {
-  //   try {
-  //     if (!url || typeof url !== "string") return null;
-  //     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-  //     return match ? match[1] : null;
-  //   } catch { return null; }
-  // };
+  // console.log(detail);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -56,7 +50,7 @@ export default function Detail({ setIsopen, detail }) {
                 </div>
               )}
               <ImageWithSkeleton
-                src={gallery[currentImageIndex]}
+                src={gallery[currentImageIndex] || "/images/blackLogo.jpg"}
                 alt="Main view"
                 className="w-full h-full object-cover"
               />

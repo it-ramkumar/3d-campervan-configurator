@@ -78,6 +78,7 @@ const vanSchema = new mongoose.Schema(
       enum: ['available', 'sale_pending', 'sold', 'coming_soon'],
       default: 'available'
     },
+    delivery_date: { type: String, trim: true },
     gallery: {
       type: [String],
       default: []

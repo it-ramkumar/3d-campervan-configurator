@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { createVan,updateVan } from "@/api/van/createVan";
+import { createVan, updateVan } from "@/api/van/createVan";
 import { useSelector, useDispatch } from "react-redux";
 import { clearEditData } from "@/redux/slices/editData";
 import { handleInputChange } from "@/CustomHooks/handlnput";
@@ -35,6 +35,7 @@ const VansForm = ({ setSelected }) => {
         interior_color: ""
       },
     },
+    deliveryDate: "",
     status: "available",
     gallery: [],
     media: [],
@@ -50,8 +51,8 @@ const VansForm = ({ setSelected }) => {
   const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
   const [mediaUrls, setMediaUrls] = useState([""]);
   // Existing states ke saath ye add karein
-const [glbFile, setGlbFile] = useState(null);
-// const [textureFiles, setTextureFiles] = useState([]);
+  const [glbFile, setGlbFile] = useState(null);
+  // const [textureFiles, setTextureFiles] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -81,28 +82,29 @@ const [glbFile, setGlbFile] = useState(null);
         media: editData.media || [],
         gallery: editData.gallery || [],
         status: editData.status || "available",
+        deliveryDate: editData.deliveryDate || "",
       }));
 
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);
       setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
-if (editData.blocks) {
-  const transformedBlocks = editData.blocks.map((block) => {
-    if (block.block_type === "list") {
-      return {
-        ...block,
-        list_items: (block.list_items || []).map((item) => ({
-          text: item?.text || "",
-          sub_items: item?.sub_items || []
-        }))
-      };
-    }
+      if (editData.blocks) {
+        const transformedBlocks = editData.blocks.map((block) => {
+          if (block.block_type === "list") {
+            return {
+              ...block,
+              list_items: (block.list_items || []).map((item) => ({
+                text: item?.text || "",
+                sub_items: item?.sub_items || []
+              }))
+            };
+          }
 
-    return block;
-  });
+          return block;
+        });
 
-  setBlocks(transformedBlocks);
-}
+        setBlocks(transformedBlocks);
+      }
 
       setFeatures(editData.detailed_features?.length > 0
         ? editData.detailed_features
@@ -131,15 +133,15 @@ if (editData.blocks) {
           interior_color: ""
         },
       },
-
+      deliveryDate: "",
       status: "available",
       gallery: [],
       detailed_features: [{ category: "", items: [""] }],
       media: [],
     });
- setGlbFile(null),
-  // setTextureFiles([]),
-    setGalleryFiles([]);
+    setGlbFile(null),
+      // setTextureFiles([]),
+      setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
     setRemovedExistingGallery([]);
@@ -159,103 +161,104 @@ if (editData.blocks) {
     };
   }, [galleryPreviews]);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // console.log(formData);
+    try {
+      const formToSend = new FormData();
 
-  try {
-    const formToSend = new FormData();
+      const cleanedBlocks = (blocks || [])
+        .map((block) => {
+          const b = { ...block };
 
-const cleanedBlocks = (blocks || [])
-  .map((block) => {
-    const b = { ...block };
+          // ✅ LIST BLOCK CLEANING
+          if (b.block_type === "list") {
+            b.list_items = (b.list_items || [])
+              .map((item) => {
+                if (!item || typeof item !== "object") return null;
 
-    // ✅ LIST BLOCK CLEANING
-    if (b.block_type === "list") {
-      b.list_items = (b.list_items || [])
-        .map((item) => {
-          if (!item || typeof item !== "object") return null;
+                const cleanedSubItems = (item.sub_items || [])
+                  .filter((sub) => sub && sub.trim() !== "");
 
-          const cleanedSubItems = (item.sub_items || [])
-            .filter((sub) => sub && sub.trim() !== "");
+                const mainText = item.text?.trim() || "";
 
-          const mainText = item.text?.trim() || "";
+                // Agar main text empty hai to pura item remove
+                if (!mainText) return null;
 
-          // Agar main text empty hai to pura item remove
-          if (!mainText) return null;
+                return {
+                  text: mainText,
+                  ...(cleanedSubItems.length > 0 && {
+                    sub_items: cleanedSubItems,
+                  }),
+                };
+              })
+              .filter(Boolean);
 
-          return {
-            text: mainText,
-            ...(cleanedSubItems.length > 0 && {
-              sub_items: cleanedSubItems,
-            }),
-          };
+            // Agar koi valid list item nahi bacha
+            if (!b.list_items.length) {
+              delete b.list_items;
+            }
+          }
+
+          // ✅ REMOVE EMPTY FIELDS
+          Object.keys(b).forEach((key) => {
+            const value = b[key];
+
+            if (
+              value === null ||
+              value === undefined ||
+              value === "" ||
+              (Array.isArray(value) && value.length === 0)
+            ) {
+              delete b[key];
+            }
+          });
+
+          return b;
         })
-        .filter(Boolean);
+        .filter((block) => Object.keys(block).length > 1);
 
-      // Agar koi valid list item nahi bacha
-      if (!b.list_items.length) {
-        delete b.list_items;
+      // 2. Append Data
+      formToSend.append("van_listing", JSON.stringify(formData.van_listing));
+      formToSend.append("delivery_date", JSON.stringify(formData.deliveryDate));
+      formToSend.append("status", formData.status);
+      formToSend.append("detailed_features", JSON.stringify(features));
+      formToSend.append("media", JSON.stringify(mediaUrls.filter(u => u && u.trim() !== "")));
+      formToSend.append("blocks", JSON.stringify(cleanedBlocks));
+      formToSend.append("galleryOrder", JSON.stringify(existingGallery));
+      formToSend.append("insertAt", "0");
+      galleryFiles.forEach((file) => formToSend.append("gallery", file));
+      if (glbFile) {
+        formToSend.append("glbFile", glbFile); // Single file
       }
-    }
 
-    // ✅ REMOVE EMPTY FIELDS
-    Object.keys(b).forEach((key) => {
-      const value = b[key];
-
-      if (
-        value === null ||
-        value === undefined ||
-        value === "" ||
-        (Array.isArray(value) && value.length === 0)
-      ) {
-        delete b[key];
+      // textureFiles.forEach((file) => {
+      //   formToSend.append("textures", file); // Multiple files
+      // });
+      // 3. API Call (Route Slug base hai, toh slug bhejein)
+      if (editData?._id) {
+        console.log("Updating van via slug:", editData.slug);
+        await updateVan(editData.slug, formToSend); // Parent ID ki jagah SLUG use karein
+      } else {
+        await createVan(formToSend);
       }
-    });
 
-    return b;
-  })
-  .filter((block) => Object.keys(block).length > 1);
+      Swal.fire("Success", "Van saved successfully", "success");
+      setSelected("Vans-listing");
+      resetForm();
 
-// 2. Append Data
-    formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-    formToSend.append("status", formData.status);
-    formToSend.append("detailed_features", JSON.stringify(features));
-    formToSend.append("media", JSON.stringify(mediaUrls.filter(u => u && u.trim() !== "")));
-    formToSend.append("blocks", JSON.stringify(cleanedBlocks));
-    formToSend.append("galleryOrder", JSON.stringify(existingGallery));
-    formToSend.append("insertAt", "0");
-    galleryFiles.forEach((file) => formToSend.append("gallery", file));
-if (glbFile) {
-  formToSend.append("glbFile", glbFile); // Single file
-}
-
-// textureFiles.forEach((file) => {
-//   formToSend.append("textures", file); // Multiple files
-// });
-    // 3. API Call (Route Slug base hai, toh slug bhejein)
-    if (editData?._id) {
-      console.log("Updating van via slug:", editData.slug);
-      await updateVan(editData.slug, formToSend); // Parent ID ki jagah SLUG use karein
-    } else {
-      await createVan(formToSend);
+    } catch (err) {
+      console.error("Submission Error Details:", err.response?.data || err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.error || "Check console for details",
+      });
+    } finally {
+      setLoading(false);
     }
-
-    Swal.fire("Success", "Van saved successfully", "success");
-    setSelected("Vans-listing");
-    resetForm();
-
-  } catch (err) {
-    console.error("Submission Error Details:", err.response?.data || err);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.response?.data?.error || "Check console for details",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-white py-8 px-4">
@@ -462,7 +465,14 @@ if (glbFile) {
               </div>
             </div>
           </section>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Date</label>
 
+          <input
+            name="deliveryDate"
+            value={formData.deliveryDate}
+            onChange={(e) => handleInputChange(e, "deliveryDate", setFormData)}
+            className={`w-full px-4 py-2 border rounded-lg `}
+          />
           {/* Detailed Features */}
           <div className="border border-gray-300 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Detailed Features</h3>
@@ -486,25 +496,25 @@ if (glbFile) {
             removedExistingGallery={removedExistingGallery}
             setRemovedExistingGallery={setRemovedExistingGallery}
           />
-{/* --- 3D Model Section --- */}
-<section className="border border-gray-300 rounded-lg p-6">
-  <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB & Textures)</h2>
+          {/* --- 3D Model Section --- */}
+          <section className="border border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB & Textures)</h2>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {/* GLB File Input */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">GLB Model File</label>
-      <input
-        type="file"
-        accept=".glb"
-        onChange={(e) => setGlbFile(e.target.files[0])}
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-      />
-      {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
-    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* GLB File Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">GLB Model File</label>
+                <input
+                  type="file"
+                  accept=".glb"
+                  onChange={(e) => setGlbFile(e.target.files[0])}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                />
+                {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
+              </div>
 
-    {/* Textures Input */}
-    {/* <div>
+              {/* Textures Input */}
+              {/* <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">Texture Images (Optional)</label>
       <input
         type="file"
@@ -515,8 +525,8 @@ if (glbFile) {
       />
       <p className="text-xs text-gray-500 mt-1">{textureFiles.length} textures selected</p>
     </div> */}
-  </div>
-</section>
+            </div>
+          </section>
           {/* Media URLs Section */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Media URLs</h2>

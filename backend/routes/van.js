@@ -16,6 +16,7 @@ router.post('/', protect, adminOnly, upload.fields([
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const detailed_features = JSON.parse(req.body.detailed_features || "[]");
     const media = JSON.parse(req.body.media || "[]");
+    const delivery_date = JSON.parse(req.body.delivery_date || null);
 
     // --- Naya Block Section Parse karne ke liye ---
     const blocks = JSON.parse(req.body.blocks || "[]");
@@ -80,6 +81,7 @@ router.post('/', protect, adminOnly, upload.fields([
       // textures: textureUrls, // Array of string URLs
       gallery,
       detailed_features,
+      delivery_date: req.body.delivery_date || null, // New field
 
       // --- Blocks ko yahan add kiya gaya hai ---
       blocks,
@@ -264,6 +266,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     // Existing fields parsing
     const van_listing = parseJSONField(req.body.van_listing, van.van_listing);
     const detailed_features = parseJSONField(req.body.detailed_features, van.detailed_features);
+    const delivery_date = parseJSONField(req.body.delivery_date, van.delivery_date);
     const media = parseJSONField(req.body.media, van.media);
     const blocks = parseJSONField(req.body.blocks, van.blocks);
     const status = req.body.status !== undefined ? req.body.status : van.status;
@@ -306,7 +309,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
         ...van_listing.specifications,
       } : van.van_listing.specifications
     };
-
+    van.delivery_date = delivery_date;
     van.detailed_features = detailed_features;
     van.media = media;
     van.status = status;
