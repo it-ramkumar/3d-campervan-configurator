@@ -76,23 +76,26 @@ const VanPage = ({ vanDetail }) => {
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
 
 
-            {vanDetail?.van_listing?.title === "AWD Transit Santa Monica Charcoal" && (
+            {vanDetail?.delivery_date && (
               <div className="relative flex overflow-x-hidden border-y border-primary/20 bg-primary/[0.03] py-3">
                 <div className="animate-marquee whitespace-nowrap flex">
                   {/* First Set */}
                   <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ The build will be completed in April 2026
+                    ✨ {vanDetail?.delivery_date}
                   </span>
                   <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ The build will be completed in April 2026
+                    ✨ {vanDetail?.delivery_date}
                   </span>
 
                   {/* Second Set (Duplicate for seamless looping) */}
                   <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ The build will be completed in April 2026
+                    ✨ {vanDetail?.delivery_date}
                   </span>
                   <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ The build will be completed in April 2026
+                    ✨ {vanDetail?.delivery_date}
+                  </span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
+                    ✨ {vanDetail?.delivery_date}
                   </span>
                 </div>
               </div>)}
