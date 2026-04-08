@@ -75,11 +75,11 @@ const VanPage = ({ vanDetail }) => {
 
           {/* RIGHT: STICKY INFO PANEL */}
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
-<marquee>
-✨ {vanDetail?.delivery_date}
-</marquee>
-
-
+{vanDetail?.delivery_date && (
+  <marquee>
+    ✨ {vanDetail?.delivery_date}
+  </marquee>
+)}
 
             <div>
               <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary mb-4 !text-5xl" />
