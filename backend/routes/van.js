@@ -16,9 +16,16 @@ router.post('/', protect, adminOnly, upload.fields([
     const van_listing = JSON.parse(req.body.van_listing || "{}");
     const detailed_features = JSON.parse(req.body.detailed_features || "[]");
     const media = JSON.parse(req.body.media || "[]");
-    const delivery_date = JSON.parse(req.body.delivery_date || null);
+    let delivery_date = req.body.delivery_date;
 
-    // --- Naya Block Section Parse karne ke liye ---
+    try {
+      if (delivery_date && (delivery_date.startsWith('"') || delivery_date.startsWith('{'))) {
+        delivery_date = JSON.parse(delivery_date);
+      }
+    } catch (e) {
+      console.log("Parsing failed, using raw string");
+    }
+
     const blocks = JSON.parse(req.body.blocks || "[]");
 
     const status = req.body.status || "sold";
@@ -81,7 +88,7 @@ router.post('/', protect, adminOnly, upload.fields([
       // textures: textureUrls, // Array of string URLs
       gallery,
       detailed_features,
-      delivery_date: req.body.delivery_date || null, // New field
+      delivery_date: delivery_date || null, // New field
 
       // --- Blocks ko yahan add kiya gaya hai ---
       blocks,
@@ -207,22 +214,24 @@ router.get("/", async (req, res) => {
 router.get('/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
+
+    // Explicitly check karein ke field select ho rahi hai
     const van = await Van.findOne({ slug });
 
     if (!van) {
       return res.status(404).json({ message: 'Van not found' });
     }
 
+    // Debugging ke liye yahan check karein
+    console.log("Full Van Object from DB:", van);
+    console.log("Delivery Date:", van.delivery_date);
+
     res.status(200).json({
       message: 'Van fetched successfully',
       van
     });
   } catch (error) {
-    console.error('Error fetching van:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message
-    });
+    // ... error handling
   }
 });
 
@@ -266,7 +275,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     // Existing fields parsing
     const van_listing = parseJSONField(req.body.van_listing, van.van_listing);
     const detailed_features = parseJSONField(req.body.detailed_features, van.detailed_features);
-    const delivery_date = parseJSONField(req.body.delivery_date, van.delivery_date);
+    const delivery_date = req.body.delivery_date;
     const media = parseJSONField(req.body.media, van.media);
     const blocks = parseJSONField(req.body.blocks, van.blocks);
     const status = req.body.status !== undefined ? req.body.status : van.status;

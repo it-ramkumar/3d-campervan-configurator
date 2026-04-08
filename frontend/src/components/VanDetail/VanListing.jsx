@@ -26,7 +26,7 @@ const VanPage = ({ vanDetail }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
   const specs = vanDetail?.van_listing?.specifications;
-  // console.log(vanDetail, "data")
+  console.log(vanDetail, "data")
   const getFeatureIcon = (category) => {
     const icons = {
       "Insulation and Paneling": <ShieldCheck className="w-7 h-7" />,
@@ -72,33 +72,15 @@ const VanPage = ({ vanDetail }) => {
             <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
           </div>
 
+
           {/* RIGHT: STICKY INFO PANEL */}
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
+<marquee>
+✨ {vanDetail?.delivery_date}
+</marquee>
 
 
-            {vanDetail?.delivery_date && (
-              <div className="relative flex overflow-x-hidden border-y border-primary/20 bg-primary/[0.03] py-3">
-                <div className="animate-marquee whitespace-nowrap flex">
-                  {/* First Set */}
-                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ {vanDetail?.delivery_date}
-                  </span>
-                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ {vanDetail?.delivery_date}
-                  </span>
 
-                  {/* Second Set (Duplicate for seamless looping) */}
-                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ {vanDetail?.delivery_date}
-                  </span>
-                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ {vanDetail?.delivery_date}
-                  </span>
-                  <span className="text-sm font-bold uppercase tracking-widest text-primary mx-4">
-                    ✨ {vanDetail?.delivery_date}
-                  </span>
-                </div>
-              </div>)}
             <div>
               <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary mb-4 !text-5xl" />
               <RichParagraph className="italic">{vanDetail?.van_listing?.subtitle}</RichParagraph>

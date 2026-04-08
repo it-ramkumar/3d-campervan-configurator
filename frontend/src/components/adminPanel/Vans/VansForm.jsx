@@ -35,7 +35,7 @@ const VansForm = ({ setSelected }) => {
         interior_color: ""
       },
     },
-    deliveryDate: "",
+    delivery_date: "",
     status: "available",
     gallery: [],
     media: [],
@@ -82,7 +82,7 @@ const VansForm = ({ setSelected }) => {
         media: editData.media || [],
         gallery: editData.gallery || [],
         status: editData.status || "available",
-        deliveryDate: editData.deliveryDate || "",
+        delivery_date: editData.delivery_date || "",
       }));
 
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);
@@ -133,7 +133,7 @@ const VansForm = ({ setSelected }) => {
           interior_color: ""
         },
       },
-      deliveryDate: "",
+      delivery_date: "",
       status: "available",
       gallery: [],
       detailed_features: [{ category: "", items: [""] }],
@@ -221,7 +221,7 @@ const VansForm = ({ setSelected }) => {
 
       // 2. Append Data
       formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("delivery_date", JSON.stringify(formData.deliveryDate));
+      formToSend.append("delivery_date", formData.delivery_date);
       formToSend.append("status", formData.status);
       formToSend.append("detailed_features", JSON.stringify(features));
       formToSend.append("media", JSON.stringify(mediaUrls.filter(u => u && u.trim() !== "")));
@@ -468,9 +468,9 @@ const VansForm = ({ setSelected }) => {
           <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Date</label>
 
           <input
-            name="deliveryDate"
-            value={formData.deliveryDate}
-            onChange={(e) => handleInputChange(e, "deliveryDate", setFormData)}
+            name="delivery_date"
+            value={formData.delivery_date}
+            onChange={(e) => handleInputChange(e, "delivery_date", setFormData)}
             className={`w-full px-4 py-2 border rounded-lg `}
           />
           {/* Detailed Features */}

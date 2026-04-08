@@ -42,10 +42,9 @@ export default async function Page({ params }) {
   const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`, {
     next: { revalidate: 3600 }
   }).then(res => res.json()).catch(() => null);
-
   if (!vanDetail?.van) return notFound();
+
 const hasPrice = vanDetail?.van?.van_listing?.price;
-  // --- JSON-LD Structured Data ---
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
