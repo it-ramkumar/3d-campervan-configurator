@@ -103,6 +103,7 @@ export default function SoldVans({
         <div className="flex flex-col items-center mt-20">
           <div className="w-12 h-[3px] bg-[var(--color-highlight)] mb-8 rounded-full" />
           <SecondaryButton
+          aria-label="Load more posts"
             onClick={onLoadMore}
             disabled={loading || !hasMore}
             label={

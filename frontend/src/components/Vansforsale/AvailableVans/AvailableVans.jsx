@@ -151,6 +151,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
         <div className="mt-20 flex flex-col items-center">
           <div className="w-20 h-[1px] bg-[var(--color-primary)]/20 mb-8" />
           <SecondaryButton
+          aria-label="Load more posts"
             onClick={onLoadMore}
             disabled={loading || !hasMore}
             label={loading ? "Refreshing Inventory..." : !hasMore ? "End of Listing" : "View More Available Vans"}
