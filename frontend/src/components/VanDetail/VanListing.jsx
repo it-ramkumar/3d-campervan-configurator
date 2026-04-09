@@ -26,7 +26,7 @@ const VanPage = ({ vanDetail }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
   const specs = vanDetail?.van_listing?.specifications;
-  console.log(vanDetail, "data")
+  // console.log(vanDetail, "data")
   const getFeatureIcon = (category) => {
     const icons = {
       "Insulation and Paneling": <ShieldCheck className="w-7 h-7" />,

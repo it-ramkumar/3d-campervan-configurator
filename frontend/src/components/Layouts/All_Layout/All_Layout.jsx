@@ -72,12 +72,14 @@ const finalLink = formatCategoryLink(link);
           </div>
           <div className="flex gap-2">
             <PrimaryButton
+              aria-label="Previous slide"
               onClick={() => swiper?.slidePrev()}
               label={<ArrowBigLeftDash size={20} />}
             >
 
             </PrimaryButton>
             <PrimaryButton
+              aria-label="Next slide"
               onClick={() => swiper?.slideNext()}
               label={<ArrowBigRightDash size={20} />
               }

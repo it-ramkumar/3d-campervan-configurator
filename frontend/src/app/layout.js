@@ -16,12 +16,12 @@ export default function RootLayout({ children }) {
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="6pOfSpraP52vmd3qvXHD0w"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </head>
       <body className="min-h-full flex flex-col">
         {/* Google Tag Manager (GTM) */}
-        <Script id="google-tag-manager" strategy="afterInteractive">
+        <Script id="google-tag-manager" strategy="lazyOnload">
           {`
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];

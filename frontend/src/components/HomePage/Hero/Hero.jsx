@@ -15,7 +15,7 @@ import { SecondaryButton, PrimaryButton, ImageWithSkeleton, Heading1, RichParagr
 const slides = [
     {
       id: 1,
-      image: "/heroSlider/long_van.jpg",
+      image: "/images2/vfs.webp",
       tag: "Vans For Sale",
       title: "Campervans For Sale.",
       desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
@@ -61,13 +61,13 @@ export default function Hero() {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id} className="relative">
-            {/* Background Image with Ken Burns Effect */}
+            {/* Background Image with Optimized Ken Burns */}
             <div className="absolute inset-0 overflow-hidden">
               <ImageWithSkeleton
                 src={slide.image}
                 alt={slide.title}
                 priority={index === 0}
-                className="w-full h-full object-cover transform scale-110 animate-ken-burns"
+                className="w-full h-full object-cover transform animate-ken-burns"
               />
             </div>
 
@@ -79,7 +79,7 @@ export default function Hero() {
             <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-6 md:px-12 lg:px-20">
               <div className="max-w-4xl space-y-4 md:space-y-6">
 
-                {/* Animated Tagline - Using Hover color as accent */}
+                {/* Animated Tagline */}
                 <div className="flex items-center gap-sm animate-fade-in-up">
                   <span className="w-8 h-[2px] bg-hover"></span>
                   <RichParagraph className="!text-hover uppercase font-bold !text-sm !tracking-wider">
@@ -109,7 +109,7 @@ export default function Hero() {
                     link={slide.link}
                   />
                   <PrimaryButton
-                    label="ORDER CUSTOM BUILd"
+                    label="ORDER CUSTOM BUILD"
                     link="/contact"
                   />
                 </div>
@@ -120,53 +120,58 @@ export default function Hero() {
         ))}
       </Swiper>
 
-      {/* Modern Minimal Controls - Using Secondary & Hover interaction */}
+      {/* Modern Minimal Controls - Added aria-labels for Accessibility */}
       <div className="absolute bottom-12 right-6 md:right-12 z-30 flex items-center gap-[var(--gap-sm)]">
         <button
           onClick={() => swiper?.slidePrev()}
+          aria-label="Previous slide"
           className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
         >
           <ChevronLeft size={24} />
         </button>
         <button
           onClick={() => swiper?.slideNext()}
+          aria-label="Next slide"
           className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
         >
           <ChevronRight size={24} />
         </button>
       </div>
 
-      {/* Progress Indicator Line - Using Theme Hover color */}
+      {/* Progress Indicator Line - Optimized with scaleX */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-secondary/10 z-30">
-        <div className="h-full bg-hover animate-slide-progress"></div>
+        <div className="h-full w-full bg-hover origin-left animate-slide-progress"></div>
       </div>
 
-      {/* Custom Keyframe Animations */}
+      {/* Custom Keyframe Animations - Optimized for Performance */}
       <style>{`
         @keyframes ken-burns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.15); }
+          0% { transform: scale(1) translateZ(0); }
+          100% { transform: scale(1.15) translateZ(0); }
         }
         .animate-ken-burns {
           animation: ken-burns 10s ease-out forwards;
+          will-change: transform;
         }
         @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(30px) translateZ(0); }
+          to { opacity: 1; transform: translateY(0) translateZ(0); }
         }
         .animate-fade-in-up {
           animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: transform, opacity;
         }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
 
         @keyframes slide-progress {
-          from { width: 0%; }
-          to { width: 100%; }
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
         }
         .animate-slide-progress {
           animation: slide-progress 6s linear infinite;
+          will-change: transform;
         }
       `}</style>
     </div>

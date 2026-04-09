@@ -3,12 +3,15 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
-import Model from "./canvas"; // apna model component yahan import karo
+import { Model } from "./canvas"; // apna model component yahan import karo
 
 export default function Scene() {
     return (
         <div className="w-full h-screen">
-            <Canvas camera={{ position: [0, 2, 5], fov: 50 }}  shadows={{ type: 'basic' }}>
+            <Canvas camera={{
+                position: [20, 10, 20], fov: 50,
+                far: 1000
+            }} shadows={{ type: 'basic' }}>
                 {/* Lights */}
                 <ambientLight intensity={0.5} />
                 <directionalLight
@@ -18,7 +21,7 @@ export default function Scene() {
                 />
 
                 <Suspense fallback={null}>
-                    <Model scale={1} position={[0, 0, 0]} />
+                    <Model scale={0.005}  />
                 </Suspense>
 
                 {/* Controls */}

@@ -40,13 +40,17 @@ export default function Buy({ initialVans = [] }) {
             />
             <div className="flex gap-2">
               <SecondaryButton
+
                 label={<ArrowBigLeftDash />}
                 onClick={() => swiper?.slidePrev()}
+                aria-label="Previous slide"
                 className="!rounded-lg !px-3 !py-2"
               />
               <PrimaryButton
+
                 label={<ArrowBigRightDash />}
                 onClick={() => swiper?.slideNext()}
+                  aria-label="Next slide"
                 className="!rounded-lg !px-3 !py-2"
               />
             </div>

@@ -37,7 +37,7 @@ export default function ConditionalLayout({ children }) {
     };
   }, []);
 
-const exactHideLayoutPaths = ["/van", "/configurator", "/admin"];
+const exactHideLayoutPaths = ["/van", "/configurator", "/dashboard"];
   const exactHideConsultationPaths = ["/inquiry", "/thank-you"];
 
   // 2. Dynamic check (Check if path STARTS with certain string)

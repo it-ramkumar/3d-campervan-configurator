@@ -14,7 +14,7 @@ export async function generateMetadata() {
     ]);
 
     const availCount = resAvail?.total || 0;
-    const soldCount = resSold?.total || 105;
+    const soldCount = 105;
 
     const title = `Camper Vans for Sale | ${availCount > 0 ? availCount + ' Available & ' : ''}${soldCount}+ Sold | Big Bear Vans`;
 
