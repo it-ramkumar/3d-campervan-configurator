@@ -367,29 +367,134 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
         });
     }
 });
+router.get("/california-events", async (req, res) => {
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+        // ✅ California time use karo
+        const californiaTime = new Date().toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        const now = new Date(californiaTime);
+        const tomorrow = new Date(now.getTime() + (24 * 60 * 60 * 1000));
+
+        console.log(`\n`);
+        console.log(`Current: ${now}`);
+        console.log(`Date: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`);
+        console.log(`Time: ${now.getHours()}:${now.getMinutes()}`);
+
+        const response = await calendar.events.list({
+            calendarId: 'primary',
+            timeMin: now.toISOString(),
+            timeMax: tomorrow.toISOString(),
+            singleEvents: true,
+            orderBy: 'startTime',
+        });
+
+        const events = response.data.items || [];
+
+        console.log(`\n=== EVENTS (California Time) ===`);
+        console.log(`Total Events: ${events.length}`);
+
+        const eventList = events.map((event, index) => {
+            const startTime = event.start.dateTime || event.start.date;
+
+            // ✅ Event time ko California time mein convert karo
+            const eventInCalifornia = new Date(startTime).toLocaleString("en-US", {
+                timeZone: "America/Los_Angeles",
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const eventDate = new Date(eventInCalifornia);
+
+            console.log(`\n${index + 1}. ${event.summary}`);
+            console.log(`   Raw: ${startTime}`);
+            console.log(`   California: ${eventInCalifornia}`);
+            console.log(`   Parsed: ${eventDate}`);
+            console.log(`   Hour: ${eventDate.getHours()}, Minute: ${eventDate.getMinutes()}`);
+
+            return {
+                title: event.summary,
+                rawTime: startTime,
+                californiaTime: eventInCalifornia,
+                parsedTime: eventDate.toString(),
+                hour: eventDate.getHours(),
+                minute: eventDate.getMinutes()
+            };
+        });
+
+        res.json({
+            californiaCurrentTime: now.toString(),
+            totalEvents: events.length,
+            events: eventList
+        });
+
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+// ✅ ADD THIS BEFORE CRON JOB
+const sendTelegramWithRetry = async (chatId, message, retries = 3) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            await bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+            console.log(`✅ Telegram Alert Sent Successfully!`);
+            return true;
+        } catch (error) {
+            console.error(`❌ Bot send error (attempt ${i + 1}):`, error.message);
+
+            if (i === retries - 1) {
+                console.error(`❌ Failed after ${retries} attempts`);
+                return false;
+            }
+
+            // Wait 2 seconds before retry
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+    }
+};
 
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ Current time - simple digits (no timezone conversion)
-        const now = new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth() + 1; // 0-based to 1-based
-        const currentDate = now.getDate();
+        const californiaTimeStr = new Date().toLocaleString("en-US", {
+            timeZone: "America/Los_Angeles",
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        const now = new Date(californiaTimeStr);
         const currentHour = now.getHours();
         const currentMinute = now.getMinutes();
 
-        // Har 5 minute mein log
         const shouldLog = currentMinute % 5 === 0;
 
         if (shouldLog) {
-            console.log(`\n🔄 SIMPLE CHECK: ${currentDate}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+            console.log(`\n🔄 CALIFORNIA TIME: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
         }
 
-        // ✅ Aaj ki saari events fetch karo
-        const todayStart = new Date(currentYear, currentMonth - 1, currentDate, 0, 0, 0);
-        const todayEnd = new Date(currentYear, currentMonth - 1, currentDate, 23, 59, 59);
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
 
         const response = await calendar.events.list({
             calendarId: 'primary',
@@ -401,41 +506,42 @@ cron.schedule('* * * * *', async () => {
 
         const events = response.data.items || [];
 
-        if (shouldLog) {
-            console.log(`📅 Found ${events.length} events today`);
-        }
-
         for (const event of events) {
-            const startTimeStr = event.start.dateTime || event.start.date;
+            const startTime = event.start.dateTime || event.start.date;
 
-            // ✅ Event time ko simple digits mein convert karo
-            const eventDate = new Date(startTimeStr);
-            const eventYear = eventDate.getFullYear();
-            const eventMonth = eventDate.getMonth() + 1;
-            const eventDay = eventDate.getDate();
+            const eventInCaliforniaStr = new Date(startTime).toLocaleString("en-US", {
+                timeZone: "America/Los_Angeles",
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+
+            const eventDate = new Date(eventInCaliforniaStr);
             const eventHour = eventDate.getHours();
             const eventMinute = eventDate.getMinutes();
 
-            // ✅ Simple digit comparison
-            const isSameDate = (eventYear === currentYear &&
-                              eventMonth === currentMonth &&
-                              eventDay === currentDate);
+            const isSameDate = (
+                eventDate.getFullYear() === now.getFullYear() &&
+                eventDate.getMonth() === now.getMonth() &&
+                eventDate.getDate() === now.getDate()
+            );
 
-            if (!isSameDate) continue; // Skip if not today
+            if (!isSameDate) continue;
 
-            // ✅ Time difference in minutes (simple math)
             const eventTotalMinutes = (eventHour * 60) + eventMinute;
             const currentTotalMinutes = (currentHour * 60) + currentMinute;
             const diffInMinutes = eventTotalMinutes - currentTotalMinutes;
 
             if (shouldLog) {
                 console.log(`📊 "${event.summary}"`);
-                console.log(`   Event: ${eventDay}/${eventMonth}/${eventYear} ${eventHour}:${eventMinute.toString().padStart(2, '0')}`);
-                console.log(`   Current: ${currentDate}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+                console.log(`   Event (CA): ${eventDate.getDate()}/${eventDate.getMonth() + 1} ${eventHour}:${eventMinute.toString().padStart(2, '0')}`);
+                console.log(`   Current (CA): ${now.getDate()}/${now.getMonth() + 1} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
                 console.log(`   Difference: ${diffInMinutes} minutes`);
             }
 
-            // ✅ Alert conditions: 15, 10, 5 minutes before
             if ([15, 10, 5].includes(diffInMinutes)) {
                 const alertKey = `${event.id}-${diffInMinutes}`;
 
@@ -449,27 +555,36 @@ cron.schedule('* * * * *', async () => {
                 const summary = event.summary || "Upcoming Meeting";
                 const meetLink = event.hangoutLink || "No link";
 
-                // ✅ Simple readable time
-                const eventTimeReadable = `${eventHour}:${eventMinute.toString().padStart(2, '0')} ${eventHour >= 12 ? 'PM' : 'AM'}`;
+                // ✅ FIXED: Proper 12-hour format
+                const formatTime12Hour = (hour, minute) => {
+                    if (hour === 0) {
+                        return `12:${minute.toString().padStart(2, '0')} AM`;
+                    } else if (hour < 12) {
+                        return `${hour}:${minute.toString().padStart(2, '0')} AM`;
+                    } else if (hour === 12) {
+                        return `12:${minute.toString().padStart(2, '0')} PM`;
+                    } else {
+                        return `${hour - 12}:${minute.toString().padStart(2, '0')} PM`;
+                    }
+                };
+
+                const eventTimeReadable = formatTime12Hour(eventHour, eventMinute);
 
                 const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
                                  `📌 **Topic:** ${summary}\n` +
-                                 `⏰ **Time:** ${eventTimeReadable}\n` +
-                                 `📅 **Date:** ${eventDay}/${eventMonth}/${eventYear}\n` +
+                                 `⏰ **Time:** ${eventTimeReadable} (California Time)\n` +
+                                 `📅 **Date:** ${eventDate.getDate()}/${eventDate.getMonth() + 1}/${eventDate.getFullYear()}\n` +
                                  `🔗 **Link:** ${meetLink}\n\n` +
                                  `Meeting will start in ${diffInMinutes} minutes!`;
 
-                try {
-                    await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
+                // ✅ RETRY mechanism
+                const success = await sendTelegramWithRetry(chatId, alertMsg);
+                if (success) {
                     sentAlerts.add(alertKey);
-                    console.log(`✅ Telegram Alert Sent Successfully!`);
-                } catch (botError) {
-                    console.error(`❌ Bot send error:`, botError.message);
                 }
             }
         }
 
-        // Cleanup
         if (sentAlerts.size > 50) {
             sentAlerts.clear();
         }

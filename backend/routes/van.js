@@ -216,8 +216,8 @@ router.get('/:slug', async (req, res) => {
     }
 
     // Debugging ke liye yahan check karein
-    console.log("Full Van Object from DB:", van);
-    console.log("Delivery Date:", van.delivery_date);
+    // console.log("Full Van Object from DB:", van);
+    // console.log("Delivery Date:", van.delivery_date);
 
     res.status(200).json({
       message: 'Van fetched successfully',
@@ -230,7 +230,7 @@ router.get('/:slug', async (req, res) => {
 
 router.put("/reorder", async (req, res) => {
   try {
-    console.log("Reorder request body:", req.body);
+    // console.log("Reorder request body:", req.body);
     const { newOrder } = req.body; // Array of objects: [{_id: "...", order: 1}, ...]
 
     const updatePromises = newOrder.map((item) =>
@@ -350,13 +350,13 @@ router.delete('/:slug', protect, adminOnly, async (req, res) => {
     // 🔹 Step 2: Delete Gallery images from S3
     if (Array.isArray(van.gallery) && van.gallery.length > 0) {
       await Promise.all(van.gallery.map(url => deleteFromS3(url)));
-      console.log(`🧹 Deleted ${van.gallery.length} gallery images`);
+      // console.log(`🧹 Deleted ${van.gallery.length} gallery images`);
     }
 
     // 🔹 Step 3: Delete GLB Model File from S3
     if (van.glbFile) {
       await deleteFromS3(van.glbFile);
-      console.log(`🧹 Deleted GLB model file`);
+      // console.log(`🧹 Deleted GLB model file`);
     }
 
     // 🔹 Step 4: Delete Texture images from S3
