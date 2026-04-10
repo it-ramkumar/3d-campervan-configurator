@@ -6,11 +6,30 @@ const router = express.Router();
 const TelegramBot = require('node-telegram-bot-api');
 const cron = require('node-cron');
 const sentAlerts = new Set();
+const fs = require("fs");
+const USERS_FILE = "users.json";
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: false });
-const chatId = process.env.TELEGRAM_CHAT_ID;
-// --- Configuration ---
-// ✅ TEST ROUTE (Isse exact check karein)
+function loadUsers() {
+    if (!fs.existsSync(USERS_FILE)) return [];
+    return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+}
+
+
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+function saveUsers(users) {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+bot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    const users = loadUsers();
+    if (!users.includes(chatId)) {
+        users.push(chatId);
+        saveUsers(users);
+    }
+    bot.sendMessage(chatId, "✅ Aap join ho gaye! Ab aapko meeting reminders milenge 🔔");
+});
 router.get("/test-bot", async (req, res) => {
     console.log("Test-bot route hit!"); // Live logs mein check karne ke liye
     try {
@@ -86,8 +105,8 @@ router.get("/create-event-930am", async (req, res) => {
             alertInfo: {
                 willAlert: minutesUntilEvent <= 16 && [15, 10, 5].includes(minutesUntilEvent),
                 nextAlertAt: minutesUntilEvent > 15 ? "15 minutes before (9:15 AM)" :
-                            minutesUntilEvent > 10 ? "10 minutes before (9:20 AM)" :
-                            minutesUntilEvent > 5 ? "5 minutes before (9:25 AM)" : "Event time passed"
+                    minutesUntilEvent > 10 ? "10 minutes before (9:20 AM)" :
+                        minutesUntilEvent > 5 ? "5 minutes before (9:25 AM)" : "Event time passed"
             },
             note: "Alert will come 5 minutes before (at 9:25 AM Pakistan time)"
         });
@@ -204,11 +223,11 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         }
 
         // ✅ Build attendees list
-    // ✅ Build attendees list
-const attendees = [
-    { email: email }, // User ki email (jo book kar raha hai)
-    // { email: 'sales.bigbearvans@gmail.com' } // Aapki dusri email (Permanent)
-];
+        // ✅ Build attendees list
+        const attendees = [
+            { email: email }, // User ki email (jo book kar raha hai)
+            // { email: 'sales.bigbearvans@gmail.com' } // Aapki dusri email (Permanent)
+        ];
 
 
         // ✅ FIXED VERSION
@@ -225,15 +244,15 @@ const attendees = [
             },
             attendees: attendees,
             // 🔔 Yahan Custom Reminders add ho rahe hain
-    reminders: {
-        useDefault: false, // Default settings ko band karke custom use karenge
-        overrides: [
-            // { method: 'email', minutes: 6 * 60 }, // 1 din pehle email
-            { method: 'popup', minutes: 30 },      // 30 minute pehle phone/browser notification
-            { method: 'popup', minutes: 15 },      // 15 minute pehle reminder
-            { method: 'popup', minutes: 5 },       // 5 minute pehle last reminder
-        ],
-    },
+            reminders: {
+                useDefault: false, // Default settings ko band karke custom use karenge
+                overrides: [
+                    // { method: 'email', minutes: 6 * 60 }, // 1 din pehle email
+                    { method: 'popup', minutes: 30 },      // 30 minute pehle phone/browser notification
+                    { method: 'popup', minutes: 15 },      // 15 minute pehle reminder
+                    { method: 'popup', minutes: 5 },       // 5 minute pehle last reminder
+                ],
+            },
             conferenceData: {
                 createRequest: {
                     requestId: `meet-${Date.now()}`,
@@ -468,7 +487,6 @@ const sendTelegramWithRetry = async (chatId, message, retries = 3) => {
     }
 };
 
-// ✅ SIMPLE CRON JOB - No complex date parsing
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
@@ -567,14 +585,22 @@ cron.schedule('* * * * *', async () => {
                 console.log(`🔍 DEBUG: Final time = ${eventTimeReadable}`);
 
                 const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
-                                 `📌 **Topic:** ${summary}\n` +
-                                 `⏰ **Time:** ${eventTimeReadable} (California Time)\n` +
-                                 `📅 **Date:** ${eventDate}/${eventMonth}/${eventYear}\n` +
-                                 `🔗 **Link:** ${meetLink}\n\n` +
-                                 `Meeting will start in ${diffInMinutes} minutes!`;
+                    `📌 **Topic:** ${summary}\n` +
+                    `⏰ **Time:** ${eventTimeReadable} (California Time)\n` +
+                    `📅 **Date:** ${eventDate}/${eventMonth}/${eventYear}\n` +
+                    `🔗 **Link:** ${meetLink}\n\n` +
+                    `Meeting will start in ${diffInMinutes} minutes!`;
 
-                const success = await sendTelegramWithRetry(chatId, alertMsg);
-                if (success) {
+                // Sab joined users ko bhejo
+                const users = loadUsers(); // users.json se
+                let anySuccess = false;
+
+                for (const userId of users) {
+                    const success = await sendTelegramWithRetry(userId, alertMsg);
+                    if (success) anySuccess = true;
+                }
+
+                if (anySuccess) {
                     sentAlerts.add(alertKey);
                 }
             }
