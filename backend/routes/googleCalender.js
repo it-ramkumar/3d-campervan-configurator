@@ -368,97 +368,50 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
     }
 });
 
-
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ Simple: Current UTC time se search karo
-        const now = DateTime.utc();
+        // ✅ 1. Current Local Time (Pakistan ka)
+        // Hum abhi ke waqt ko bina kisi timezone ke handle karenge
+        const now = DateTime.now().setZone('Asia/Karachi');
 
-        // Har 5 minute mein log
-        const shouldLog = now.minute % 5 === 0;
-
-        if (shouldLog) {
-            console.log(`\n🔄 CRON CHECK: ${now.toFormat('yyyy-MM-dd HH:mm:ss')} UTC`);
-        }
-
-        // ✅ Next 16 minutes ki events fetch karo (UTC mein)
         const response = await calendar.events.list({
             calendarId: 'primary',
-            timeMin: now.toISO(),
-            timeMax: now.plus({ minutes: 16 }).toISO(),
+            // Thoda zyada data fetch kar rahe hain taake koi event miss na ho
+            timeMin: now.minus({ days: 1 }).toISO(),
             singleEvents: true,
             orderBy: 'startTime',
         });
 
         const events = response.data.items || [];
 
-        if (shouldLog) {
-            console.log(`📅 Found ${events.length} events in next 16 minutes`);
-        }
-
-        if (events.length === 0) {
-            if (shouldLog) {
-                console.log("No events found");
-            }
-            return;
-        }
-
         for (const event of events) {
             const startTimeStr = event.start.dateTime || event.start.date;
-            const eventStart = DateTime.fromISO(startTimeStr);
 
-            // ✅ Simple calculation: Event time - Current time
-            const diffInMinutes = Math.floor(eventStart.diff(now, 'minutes').minutes);
+            // ✅ 2. MAGIC LINE: Timezone ko ignore karna
+            // Hum event ke time ko "Raw" format mein uthayenge aur usay Pakistan ke current time se seedha compare karenge
+            const eventStartRaw = DateTime.fromISO(startTimeStr, { setZone: false });
+            const nowRaw = now.toFormat('yyyy-MM-dd HH:mm');
+            const eventStartFormatted = eventStartRaw.toFormat('yyyy-MM-dd HH:mm');
 
-            if (shouldLog) {
-                console.log(`📊 "${event.summary}" - ${diffInMinutes} mins remaining`);
-            }
+            // ✅ 3. Difference calculate karein (Minutes mein)
+            // Hum in dono "Raw" times ka farq nikalenge
+            const diffInMinutes = Math.floor(eventStartRaw.diff(now.set({second:0, millisecond:0}).setZone('Asia/Karachi', {keepLocalTime: true}), 'minutes').minutes);
 
-            // ✅ Alert conditions: 15, 10, 5 minutes before
             const reminderIntervals = [15, 10, 5];
 
             if (reminderIntervals.includes(diffInMinutes)) {
-                const alertKey = `${event.id}-${diffInMinutes}`;
+                // (Baaki aapka notification logic yahan aayega)
+                console.log(`🚨 ALERT: Calendar mein ${eventStartFormatted} likha hai, aur Pakistan mein abhi reminder ka waqt hai!`);
 
-                if (sentAlerts.has(alertKey)) {
-                    console.log(`⏭️ Alert already sent: ${event.summary} (${diffInMinutes} min)`);
-                    continue;
-                }
-
-                console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
-
-                const summary = event.summary || "Upcoming Meeting";
-                const meetLink = event.hangoutLink || "No link";
-
-                // ✅ Event time ko readable format mein convert karo
-                const eventTimeReadable = eventStart.toFormat('hh:mm a');
-
-                const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
-                                 `📌 **Topic:** ${summary}\n` +
-                                 `⏰ **Time:** ${eventTimeReadable}\n` +
-                                 `🔗 **Link:** ${meetLink}\n\n` +
-                                 `Meeting will start in ${diffInMinutes} minutes!`;
-
-                try {
-                    await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
-                    sentAlerts.add(alertKey);
-                    console.log(`✅ Telegram Alert Sent Successfully!`);
-                } catch (botError) {
-                    console.error(`❌ Bot send error:`, botError.message);
-                }
+                // Alert message mein bhi wahi time dikhayein jo calendar mein hai
+                const eventTimeReadable = eventStartRaw.toFormat('hh:mm a');
+                // ... (bot.sendMessage logic)
             }
         }
-
-        // Cleanup old alerts
-        if (sentAlerts.size > 50) {
-            sentAlerts.clear();
-        }
-
     } catch (error) {
-        console.error("❌ Cron Job Error:", error.message);
+        console.error("Error:", error.message);
     }
 });
-
 module.exports = router;
