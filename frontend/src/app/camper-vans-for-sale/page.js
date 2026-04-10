@@ -2,7 +2,7 @@ import React from 'react';
 import { vansByStatus } from "@/api/van/van-by-status";
 import HeroSection from "@/components/HeroSection/HeroSection";
 import VanListClient from "../../components/Vansforsale/VanListClient"
-
+export const dynamic = 'force-dynamic';
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
   const limit = 1;

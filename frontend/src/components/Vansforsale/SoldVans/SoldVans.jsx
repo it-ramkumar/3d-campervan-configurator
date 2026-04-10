@@ -28,11 +28,12 @@ export default function SoldVans({
             </div>
             <Heading2 text={soldHeading} className="text-primary" />
             <div className="mt-4">
-              <RichParagraph >
-                Take a look at our gallery of 111+ sold custom camper vans and recently completed projects. Our portfolio includes a wide range of specialised builds, from heavy-duty cargo vans to comfortable, spacious passenger vans.
+             {vans.status === "sold" && (
+                <RichParagraph >
+                  Take a look at our gallery of 111+ sold custom camper vans and recently completed projects. Our portfolio includes a wide range of specialised builds, from heavy-duty cargo vans to comfortable, spacious passenger vans.
 
                 We have successfully delivered high-quality work vans for sale and dedicated van for sale with work configurations for clients across the country. Whether it was a compact mini van for sale or a rugged 4 by 4 van for sale, our team ensures every Mercedes camper van for sale and ford van for sale meets the highest standards of safety and luxury. Even if you don't see your specific model available today, our past 4x4 vans for sale and passenger van for sale projects showcase the limitless possibilities of our custom sit and sleep layouts.
-              </RichParagraph>
+              </RichParagraph>)}
             </div>
           </div>
 

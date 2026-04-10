@@ -28,7 +28,7 @@ bot.onText(/\/start/, (msg) => {
         users.push(chatId);
         saveUsers(users);
     }
-    bot.sendMessage(chatId, "✅ Aap join ho gaye! Ab aapko meeting reminders milenge 🔔");
+    bot.sendMessage(chatId, "✅ You're joined! You will now receive meeting reminders 🔔");
 });
 router.get("/test-bot", async (req, res) => {
     console.log("Test-bot route hit!"); // Live logs mein check karne ke liye
