@@ -207,7 +207,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
     // ✅ Build attendees list
 const attendees = [
     { email: email }, // User ki email (jo book kar raha hai)
-    { email: 'sales.bigbearvans@gmail.com' } // Aapki dusri email (Permanent)
+    // { email: 'sales.bigbearvans@gmail.com' } // Aapki dusri email (Permanent)
 ];
 
 
@@ -270,12 +270,10 @@ const attendees = [
 });
 
 // ✅ SLOTS ENDPOINT - FIXED VERSION
+// ✅ SLOTS ENDPOINT - FIXED VERSION (Next Day Only)
 router.get("/slots", ensureAuthenticated, async (req, res) => {
     try {
-        // ✅ CRITICAL: User timezone ignore karo, HOST timezone use karo
-        const { date, timezone } = req.query; // User ka timezone receive karo but use mat karo slots generate karne ke liye
-
-        // ✅ HOST TIMEZONE (jahan business operate hoti hai)
+        const { date, timezone } = req.query;
         const HOST_TZ = process.env.HOST_TIMEZONE || 'America/Los_Angeles';
 
         console.log("🔍 SLOTS REQUEST:");
@@ -283,10 +281,21 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
         console.log("User timezone:", timezone);
         console.log("HOST timezone (using for slots):", HOST_TZ);
 
+        // ✅ NEW: Date validation - only allow next day onwards
+        const requestedDate = DateTime.fromISO(date, { zone: HOST_TZ });
+        const today = DateTime.now().setZone(HOST_TZ).startOf('day');
+        const tomorrow = today.plus({ days: 1 });
+
+        if (requestedDate < tomorrow) {
+            return res.status(400).json({
+                message: "Meetings can only be scheduled from tomorrow onwards",
+                earliestDate: tomorrow.toISODate() // Send tomorrow's date to frontend
+            });
+        }
+
         const startHour = 9, endHour = 17, durationMinutes = 30;
         const slots = [];
 
-        // ✅ HOST timezone mein din ki shuruaat (9 AM California time)
         let start = DateTime.fromISO(date, { zone: HOST_TZ })
             .set({ hour: startHour, minute: 0, second: 0, millisecond: 0 });
 
@@ -301,7 +310,6 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
 
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ Booked events fetch (UTC mein)
         const events = await calendar.events.list({
             calendarId: "primary",
             timeMin: start.toUTC().toISO(),
@@ -309,7 +317,6 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             singleEvents: true,
         });
 
-        // ✅ Booked times ko HOST timezone mein convert
         const bookedTimes = events.data.items.map(ev => {
             const startTimeStr = ev.start.dateTime || ev.start.date + 'T00:00:00';
             const endTimeStr = ev.end.dateTime || ev.end.date + 'T23:59:59';
@@ -320,22 +327,16 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             };
         });
 
-        // ✅ Current time in HOST timezone
-        const now = DateTime.now().setZone(HOST_TZ);
+        // ✅ REMOVED: Current time check since we're only allowing future dates anyway
+        // const now = DateTime.now().setZone(HOST_TZ);
 
-        // ✅ Slots generate (HOST timezone mein)
         while (start < end) {
             const slotStart = start;
             const slotEnd = start.plus({ minutes: durationMinutes });
 
             let available = true;
 
-            // Past time check (HOST timezone mein)
-            if (slotStart < now) {
-                available = false;
-            }
-
-            // Booked check
+            // Only check for booking conflicts (no past time check needed)
             if (bookedTimes.some(booked =>
                 slotStart < booked.end && slotEnd > booked.start
             )) {
@@ -343,8 +344,6 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             }
 
             slots.push({
-                // ✅ CRITICAL: Slots ko user ke timezone mein convert karke bhejo
-                // Taake frontend pe user ko apne local time mein dikhe
                 start: timezone
                     ? slotStart.setZone(timezone).toISO()
                     : slotStart.toISO(),
@@ -357,7 +356,7 @@ router.get("/slots", ensureAuthenticated, async (req, res) => {
             start = slotEnd;
         }
 
-        console.log(`✅ Generated ${slots.length} slots (HOST TZ: ${HOST_TZ})`);
+        console.log(`✅ Generated ${slots.length} slots for ${date} (HOST TZ: ${HOST_TZ})`);
         res.json(slots);
 
     } catch (err) {
@@ -440,7 +439,7 @@ cron.schedule('* * * * *', async () => {
                                  `📌 **Topic:** ${summary}\n` +
                                  `⏰ **Time:** ${eventTimeReadable}\n` +
                                  `🔗 **Link:** ${meetLink}\n\n` +
-                                 `Meeting ${diffInMinutes} minute mein shuru ho rahi hai!`;
+                                 `Meeting will start in ${diffInMinutes} minutes!`;
 
                 try {
                     await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });

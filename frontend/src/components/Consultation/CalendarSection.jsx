@@ -14,8 +14,10 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   // Your existing functions remain the same...
-  const getTodayDate = () => {
+  // ✅ FIXED: Get tomorrow's date instead of today
+  const getTomorrowDate = () => {
     const now = new Date();
+    now.setDate(now.getDate() + 1); // Add 1 day
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: userTimeZone };
     const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
@@ -25,7 +27,8 @@ export default function BookingPage() {
     return `${year}-${month}-${day}`;
   };
 
-  const [selectedDate, setSelectedDate] = useState(getTodayDate());
+  // ✅ Update default state to tomorrow
+  const [selectedDate, setSelectedDate] = useState(getTomorrowDate());
   const [bookingStep, setBookingStep] = useState(1);
   const [meetLink, setMeetLink] = useState("");
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -144,7 +147,7 @@ export default function BookingPage() {
 
   const resetBooking = () => {
     setSelectedSlot(null);
-    setSelectedDate(getTodayDate());
+    setSelectedDate(getTomorrowDate());
     setFormData({
       name: "",
       email: "",
@@ -168,7 +171,7 @@ export default function BookingPage() {
     const daysInMonth = getDaysInMonth(currentMonth);
     const firstDay = getFirstDayOfMonth(currentMonth);
     const calendar = [];
-    const todayString = getTodayDate();
+    const todayString = getTomorrowDate();
 
     for (let i = 0; i < firstDay; i++) {
       calendar.push(null);
@@ -332,8 +335,7 @@ export default function BookingPage() {
                           key={i}
                           onClick={() => d && handleDateSelect(d)}
                           disabled={!d || d.isPast || d.isSunday}
-                          className={`h-10 rounded-lg text-xs font-bold transition-all ${
-                            !d
+                          className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
                               ? 'invisible'
                               : d.isSelected
                                 ? 'bg-[#001F3D] text-white shadow-lg'
@@ -342,7 +344,7 @@ export default function BookingPage() {
                                   : d.isToday
                                     ? 'bg-[#ED985F]/20 text-[#ED985F] hover:bg-[#ED985F] hover:text-white'
                                     : 'hover:bg-[#ED985F] hover:text-white text-[#001F3D] bg-white'
-                          }`}
+                            }`}
                         >
                           {d?.day}
                         </button>
@@ -382,12 +384,11 @@ export default function BookingPage() {
                         {slots.filter(s => s.available !== false).map((s, i) => (
                           <button
                             key={i}
-                            onClick={() => {setSelectedSlot(s); setBookingStep(3)}}
-                            className={`p-4 border rounded-lg font-bold text-xs transition-all ${
-                              selectedSlot?.start === s.start
+                            onClick={() => { setSelectedSlot(s); setBookingStep(3) }}
+                            className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot?.start === s.start
                                 ? 'border-[#ED985F] bg-[#ED985F]/10 text-[#ED985F]'
                                 : 'border-[#001F3D]/10 hover:border-[#ED985F] hover:text-[#ED985F] bg-[#F5F5F0]/30 text-[#001F3D]'
-                            }`}
+                              }`}
                           >
                             {formatTimeSlot(s.start)}
                           </button>
@@ -572,7 +573,7 @@ export default function BookingPage() {
                 <div className="text-center py-12 animate-in fade-in zoom-in">
                   <div className="w-20 h-20 bg-[#ED985F]/10 text-[#ED985F] rounded-lg flex items-center justify-center mx-auto mb-6">
                     <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <Heading3 text="Booking Confirmed!" />

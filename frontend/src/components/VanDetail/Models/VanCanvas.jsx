@@ -10,23 +10,25 @@ function Model({ url, doors }) {
   const { actions } = useAnimations(animations, group)
 
   // Pichli state ko track karne ke liye ref
+// console.log("Animation Names:", Object.keys(actions));
   const prevDoors = useRef(doors)
 
   useEffect(() => {
     const handleAnimation = (actionName, isNowOpen, wasOpen) => {
       const action = actions[actionName]
-      if (!action) return
+      if (!action) {
+        console.warn(`Animation "${actionName}" nahi mili!`);
+        return
+      }
 
-      // Sirf tab chalao jab state change hui ho
       if (isNowOpen !== wasOpen) {
-        action.stop() // Pehle se chal rahi clip ko reset karein
+        action.stop()
         action.clampWhenFinished = true
         action.setLoop(THREE.LoopOnce, 1)
 
-        // Direction set karein
+        // Speed aur Direction
         action.timeScale = isNowOpen ? 1 : -1
 
-        // Agar band karna hai toh clip ke end se start karein
         if (!isNowOpen) {
           action.time = action.getClip().duration
         }
@@ -36,11 +38,26 @@ function Model({ url, doors }) {
       }
     }
 
-    // Individual checks for each door
+    // --- 5 Animations ko Control Panel ki keys se map karein ---
+
+    // 1. Front Right Door (Passenger)
+    handleAnimation("door_front_RAction", doors.openPassenger, prevDoors.current.openPassenger)
+
+    // 2. Front Right Glass (Shayad door ke saath hi khulna chahiye?)
+    handleAnimation("door_front_R_GlassAction", doors.openPassenger, prevDoors.current.openPassenger)
+
+    // 3. Side Slider Door
+    handleAnimation("side_doorAction", doors.openSlider, prevDoors.current.openSlider)
+
+    // 4. Rear Door Right
     handleAnimation("rare door-RAction", doors.openBackRight, prevDoors.current.openBackRight)
+
+    // 5. Rear Door Left
     handleAnimation("rare-door_LAction", doors.openBackLeft, prevDoors.current.openBackLeft)
 
-    // Current state ko save karein agli bar check karne ke liye
+    // Note: Driver door ki animation aapki list mein nahi hai,
+    // agar uska naam mil jaye toh wo bhi add kar dein.
+
     prevDoors.current = doors
   }, [doors, actions])
 
@@ -96,13 +113,13 @@ export default function VanCanvas({ url }) {
     <div className="flex h-screen w-full bg-[#FFFCFB] p-5 gap-6 font-sans">
       {/* 3D Viewport */}
       <div className="flex-[2] relative bg-slate-100 rounded-[20px] overflow-hidden shadow-inner border border-slate-200">
-        <Canvas shadows camera={{ position: [20, 10, 20], fov: 50 }}>
+        <Canvas shadows camera={{ position: [20, 30, 20], fov: 50 }}>
           <ambientLight intensity={1.5} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
           <Suspense fallback={<Loader />}>
             <Model url={url} doors={doors} />
           </Suspense>
-          <OrbitControls enablePan={false} />
+          <OrbitControls enablePan={false} target={[0, 4, 0]}/>
         </Canvas>
         <div className="absolute bottom-6 left-6 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-[13px] text-gray-600 shadow-sm">
           Interactive 3D Preview
@@ -124,7 +141,7 @@ export default function VanCanvas({ url }) {
           <DoorButton label="Back Door (Right)" isActive={doors.openBackRight} onClick={() => toggleDoor('openBackRight')} />
 
           <h3 className="text-[13px] uppercase tracking-widest text-slate-500 font-semibold mt-4">Other Actions</h3>
-          <DoorButton label="Driver Door" isActive={doors.openDriver} onClick={() => toggleDoor('openDriver')} />
+          {/* <DoorButton label="Driver Door" isActive={doors.openDriver} onClick={() => toggleDoor('openDriver')} /> */}
           <DoorButton label="Passenger Door" isActive={doors.openPassenger} onClick={() => toggleDoor('openPassenger')} />
           <DoorButton label="Side Slider Door" isActive={doors.openSlider} onClick={() => toggleDoor('openSlider')} />
         </div>
