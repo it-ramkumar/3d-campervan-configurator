@@ -448,6 +448,7 @@ router.get("/california-events", async (req, res) => {
     }
 });
 // ✅ ADD THIS BEFORE CRON JOB
+// ✅ ADD THIS FUNCTION BEFORE CRON JOB
 const sendTelegramWithRetry = async (chatId, message, retries = 3) => {
     for (let i = 0; i < retries; i++) {
         try {
@@ -462,39 +463,37 @@ const sendTelegramWithRetry = async (chatId, message, retries = 3) => {
                 return false;
             }
 
-            // Wait 2 seconds before retry
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
 };
 
+// ✅ SIMPLE CRON JOB - No complex date parsing
 cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        const californiaTimeStr = new Date().toLocaleString("en-US", {
-            timeZone: "America/Los_Angeles",
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
+        // ✅ SIMPLE: Get current UTC time
+        const nowUTC = new Date();
 
-        const now = new Date(californiaTimeStr);
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
+        // California is UTC-7 (PDT) - manually subtract 7 hours
+        const californiaTime = new Date(nowUTC.getTime() - (7 * 60 * 60 * 1000));
+
+        const currentHour = californiaTime.getUTCHours();
+        const currentMinute = californiaTime.getUTCMinutes();
+        const currentDate = californiaTime.getUTCDate();
+        const currentMonth = californiaTime.getUTCMonth() + 1;
+        const currentYear = californiaTime.getUTCFullYear();
 
         const shouldLog = currentMinute % 5 === 0;
 
         if (shouldLog) {
-            console.log(`\n🔄 CALIFORNIA TIME: ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+            console.log(`\n🔄 CALIFORNIA TIME: ${currentDate}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
         }
 
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-        const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+        // Today's events (California date)
+        const todayStart = new Date(californiaTime.getUTCFullYear(), californiaTime.getUTCMonth(), californiaTime.getUTCDate(), 0, 0, 0);
+        const todayEnd = new Date(californiaTime.getUTCFullYear(), californiaTime.getUTCMonth(), californiaTime.getUTCDate(), 23, 59, 59);
 
         const response = await calendar.events.list({
             calendarId: 'primary',
@@ -509,25 +508,18 @@ cron.schedule('* * * * *', async () => {
         for (const event of events) {
             const startTime = event.start.dateTime || event.start.date;
 
-            const eventInCaliforniaStr = new Date(startTime).toLocaleString("en-US", {
-                timeZone: "America/Los_Angeles",
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
+            // ✅ SIMPLE: Parse event time and convert to California
+            const eventUTC = new Date(startTime);
+            const eventCalifornia = new Date(eventUTC.getTime() - (7 * 60 * 60 * 1000));
 
-            const eventDate = new Date(eventInCaliforniaStr);
-            const eventHour = eventDate.getHours();
-            const eventMinute = eventDate.getMinutes();
+            const eventHour = eventCalifornia.getUTCHours();
+            const eventMinute = eventCalifornia.getUTCMinutes();
+            const eventDate = eventCalifornia.getUTCDate();
+            const eventMonth = eventCalifornia.getUTCMonth() + 1;
+            const eventYear = eventCalifornia.getUTCFullYear();
 
-            const isSameDate = (
-                eventDate.getFullYear() === now.getFullYear() &&
-                eventDate.getMonth() === now.getMonth() &&
-                eventDate.getDate() === now.getDate()
-            );
+            // Same date check
+            const isSameDate = (eventYear === currentYear && eventMonth === currentMonth && eventDate === currentDate);
 
             if (!isSameDate) continue;
 
@@ -537,8 +529,8 @@ cron.schedule('* * * * *', async () => {
 
             if (shouldLog) {
                 console.log(`📊 "${event.summary}"`);
-                console.log(`   Event (CA): ${eventDate.getDate()}/${eventDate.getMonth() + 1} ${eventHour}:${eventMinute.toString().padStart(2, '0')}`);
-                console.log(`   Current (CA): ${now.getDate()}/${now.getMonth() + 1} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+                console.log(`   Event (CA): ${eventDate}/${eventMonth} ${eventHour}:${eventMinute.toString().padStart(2, '0')}`);
+                console.log(`   Current (CA): ${currentDate}/${currentMonth} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
                 console.log(`   Difference: ${diffInMinutes} minutes`);
             }
 
@@ -551,33 +543,36 @@ cron.schedule('* * * * *', async () => {
                 }
 
                 console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
+                console.log(`🔍 DEBUG: eventHour=${eventHour}, eventMinute=${eventMinute}`);
 
                 const summary = event.summary || "Upcoming Meeting";
                 const meetLink = event.hangoutLink || "No link";
 
-                // ✅ FIXED: Proper 12-hour format
-                const formatTime12Hour = (hour, minute) => {
-                    if (hour === 0) {
-                        return `12:${minute.toString().padStart(2, '0')} AM`;
-                    } else if (hour < 12) {
-                        return `${hour}:${minute.toString().padStart(2, '0')} AM`;
-                    } else if (hour === 12) {
-                        return `12:${minute.toString().padStart(2, '0')} PM`;
-                    } else {
-                        return `${hour - 12}:${minute.toString().padStart(2, '0')} PM`;
-                    }
-                };
+                // ✅ FIXED: 12-hour format conversion
+                let displayHour = eventHour;
+                let period = 'AM';
 
-                const eventTimeReadable = formatTime12Hour(eventHour, eventMinute);
+                if (eventHour === 0) {
+                    displayHour = 12; // 0 = 12 AM
+                } else if (eventHour === 12) {
+                    displayHour = 12; // 12 = 12 PM
+                    period = 'PM';
+                } else if (eventHour > 12) {
+                    displayHour = eventHour - 12; // 13+ = 1+ PM
+                    period = 'PM';
+                }
+                // else: 1-11 stays same with AM
+
+                const eventTimeReadable = `${displayHour}:${eventMinute.toString().padStart(2, '0')} ${period}`;
+                console.log(`🔍 DEBUG: Final time = ${eventTimeReadable}`);
 
                 const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
                                  `📌 **Topic:** ${summary}\n` +
                                  `⏰ **Time:** ${eventTimeReadable} (California Time)\n` +
-                                 `📅 **Date:** ${eventDate.getDate()}/${eventDate.getMonth() + 1}/${eventDate.getFullYear()}\n` +
+                                 `📅 **Date:** ${eventDate}/${eventMonth}/${eventYear}\n` +
                                  `🔗 **Link:** ${meetLink}\n\n` +
                                  `Meeting will start in ${diffInMinutes} minutes!`;
 
-                // ✅ RETRY mechanism
                 const success = await sendTelegramWithRetry(chatId, alertMsg);
                 if (success) {
                     sentAlerts.add(alertKey);
