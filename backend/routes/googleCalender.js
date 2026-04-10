@@ -372,46 +372,110 @@ cron.schedule('* * * * *', async () => {
     try {
         const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-        // ✅ 1. Current Local Time (Pakistan ka)
-        // Hum abhi ke waqt ko bina kisi timezone ke handle karenge
-        const now = DateTime.now().setZone('Asia/Karachi');
+        // ✅ Current time - simple digits (no timezone conversion)
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1; // 0-based to 1-based
+        const currentDate = now.getDate();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // Har 5 minute mein log
+        const shouldLog = currentMinute % 5 === 0;
+
+        if (shouldLog) {
+            console.log(`\n🔄 SIMPLE CHECK: ${currentDate}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+        }
+
+        // ✅ Aaj ki saari events fetch karo
+        const todayStart = new Date(currentYear, currentMonth - 1, currentDate, 0, 0, 0);
+        const todayEnd = new Date(currentYear, currentMonth - 1, currentDate, 23, 59, 59);
 
         const response = await calendar.events.list({
             calendarId: 'primary',
-            // Thoda zyada data fetch kar rahe hain taake koi event miss na ho
-            timeMin: now.minus({ days: 1 }).toISO(),
+            timeMin: todayStart.toISOString(),
+            timeMax: todayEnd.toISOString(),
             singleEvents: true,
             orderBy: 'startTime',
         });
 
         const events = response.data.items || [];
 
+        if (shouldLog) {
+            console.log(`📅 Found ${events.length} events today`);
+        }
+
         for (const event of events) {
             const startTimeStr = event.start.dateTime || event.start.date;
 
-            // ✅ 2. MAGIC LINE: Timezone ko ignore karna
-            // Hum event ke time ko "Raw" format mein uthayenge aur usay Pakistan ke current time se seedha compare karenge
-            const eventStartRaw = DateTime.fromISO(startTimeStr, { setZone: false });
-            const nowRaw = now.toFormat('yyyy-MM-dd HH:mm');
-            const eventStartFormatted = eventStartRaw.toFormat('yyyy-MM-dd HH:mm');
+            // ✅ Event time ko simple digits mein convert karo
+            const eventDate = new Date(startTimeStr);
+            const eventYear = eventDate.getFullYear();
+            const eventMonth = eventDate.getMonth() + 1;
+            const eventDay = eventDate.getDate();
+            const eventHour = eventDate.getHours();
+            const eventMinute = eventDate.getMinutes();
 
-            // ✅ 3. Difference calculate karein (Minutes mein)
-            // Hum in dono "Raw" times ka farq nikalenge
-            const diffInMinutes = Math.floor(eventStartRaw.diff(now.set({second:0, millisecond:0}).setZone('Asia/Karachi', {keepLocalTime: true}), 'minutes').minutes);
+            // ✅ Simple digit comparison
+            const isSameDate = (eventYear === currentYear &&
+                              eventMonth === currentMonth &&
+                              eventDay === currentDate);
 
-            const reminderIntervals = [15, 10, 5];
+            if (!isSameDate) continue; // Skip if not today
 
-            if (reminderIntervals.includes(diffInMinutes)) {
-                // (Baaki aapka notification logic yahan aayega)
-                console.log(`🚨 ALERT: Calendar mein ${eventStartFormatted} likha hai, aur Pakistan mein abhi reminder ka waqt hai!`);
+            // ✅ Time difference in minutes (simple math)
+            const eventTotalMinutes = (eventHour * 60) + eventMinute;
+            const currentTotalMinutes = (currentHour * 60) + currentMinute;
+            const diffInMinutes = eventTotalMinutes - currentTotalMinutes;
 
-                // Alert message mein bhi wahi time dikhayein jo calendar mein hai
-                const eventTimeReadable = eventStartRaw.toFormat('hh:mm a');
-                // ... (bot.sendMessage logic)
+            if (shouldLog) {
+                console.log(`📊 "${event.summary}"`);
+                console.log(`   Event: ${eventDay}/${eventMonth}/${eventYear} ${eventHour}:${eventMinute.toString().padStart(2, '0')}`);
+                console.log(`   Current: ${currentDate}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute.toString().padStart(2, '0')}`);
+                console.log(`   Difference: ${diffInMinutes} minutes`);
+            }
+
+            // ✅ Alert conditions: 15, 10, 5 minutes before
+            if ([15, 10, 5].includes(diffInMinutes)) {
+                const alertKey = `${event.id}-${diffInMinutes}`;
+
+                if (sentAlerts.has(alertKey)) {
+                    console.log(`⏭️ Alert already sent: ${event.summary} (${diffInMinutes} min)`);
+                    continue;
+                }
+
+                console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
+
+                const summary = event.summary || "Upcoming Meeting";
+                const meetLink = event.hangoutLink || "No link";
+
+                // ✅ Simple readable time
+                const eventTimeReadable = `${eventHour}:${eventMinute.toString().padStart(2, '0')} ${eventHour >= 12 ? 'PM' : 'AM'}`;
+
+                const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
+                                 `📌 **Topic:** ${summary}\n` +
+                                 `⏰ **Time:** ${eventTimeReadable}\n` +
+                                 `📅 **Date:** ${eventDay}/${eventMonth}/${eventYear}\n` +
+                                 `🔗 **Link:** ${meetLink}\n\n` +
+                                 `Meeting will start in ${diffInMinutes} minutes!`;
+
+                try {
+                    await bot.sendMessage(chatId, alertMsg, { parse_mode: 'Markdown' });
+                    sentAlerts.add(alertKey);
+                    console.log(`✅ Telegram Alert Sent Successfully!`);
+                } catch (botError) {
+                    console.error(`❌ Bot send error:`, botError.message);
+                }
             }
         }
+
+        // Cleanup
+        if (sentAlerts.size > 50) {
+            sentAlerts.clear();
+        }
+
     } catch (error) {
-        console.error("Error:", error.message);
+        console.error("❌ Cron Job Error:", error.message);
     }
 });
 module.exports = router;
