@@ -178,13 +178,13 @@ function Model({ url, doors }) {
     // console.log('🔄 Door states changed:', doors)/;
 
     // Front Right Door - Door first, then glass
-    playAnimation("door_front_RAction", doors.openFrontRight, "openFrontRight", 0);
-    playAnimation("door_front_R_GlassAction", doors.openFrontRight, "openFrontRightGlass", 100); // 100ms delay
+    playAnimation("Door_Front_R", doors.openFrontRight, "openFrontRight", 0);
+    playAnimation("Door_Front_L", doors.openFrontRight, "openFrontRightGlass", 100); // 100ms delay
 
     // Other doors
-    playAnimation("side_doorAction", doors.openSlider, "openSlider");
-    playAnimation("rare door-RAction", doors.openBackRight, "openBackRight");
-    playAnimation("rare-door_LAction", doors.openBackLeft, "openBackLeft");
+    playAnimation("Slide_Door", doors.openSlider, "openSlider");
+    playAnimation("Rare_Door_R", doors.openBackRight, "openBackRight");
+    playAnimation("Rare_Door_L", doors.openBackRight, "openBackLeft");
 
   }, [doors, actions]);
 
@@ -433,7 +433,7 @@ export default function VanCanvas({ url }) {
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">Component Controls</p>
           <ControlBtn label="Front Right Door" active={doors.openFrontRight} onClick={() => toggleDoor('openFrontRight')} />
           <ControlBtn label="Slider Door" active={doors.openSlider} onClick={() => toggleDoor('openSlider')} />
-          <ControlBtn label="Rear Left Door" active={doors.openBackLeft} onClick={() => toggleDoor('openBackLeft')} />
+          {/* <ControlBtn label="Rear Left Door" active={doors.openBackLeft} onClick={() => toggleDoor('openBackLeft')} /> */}
           <ControlBtn label="Rear Right Door" active={doors.openBackRight} onClick={() => toggleDoor('openBackRight')} />
         </div>
       </div>
