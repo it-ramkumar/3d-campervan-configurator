@@ -72,11 +72,7 @@ const VanPage = ({ vanDetail }) => {
           <div className="lg:col-span-7">
 
             <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
-              {
-        vanDetail?.glbFile && (
-          <VanCanvas url={vanDetail.glbFile} />
-        )
-      }
+
           </div>
 
 
@@ -109,6 +105,11 @@ const VanPage = ({ vanDetail }) => {
             </div>
 
             <div className="flex flex-col gap-4 pt-4">
+                 {
+        vanDetail?.glbFile && (
+          <VanCanvas url={vanDetail.glbFile} />
+        )
+      }
               <SecondaryButton label="Secure This Build" link="/inquiry" className="w-full" />
               <ShareButton title={vanDetail?.van_listing?.title} />
               <RichParagraph className="text-center !text-hover !text-xs uppercase font-bold">Limited 2026 Build Slots</RichParagraph>

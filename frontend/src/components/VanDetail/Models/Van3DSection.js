@@ -24,15 +24,15 @@ export default function Van3DSection({ url, title }) {
   return (
     <>
       {/* Launch */}
-      <div className="my-10 px-4">
-        <div className="max-w-xl mx-auto text-center">
+
+
           <PrimaryButton
+
             label="Launch 3D Configurator"
             onClick={() => setIsOpen(true)}
           />
-        </div>
-      </div>
 
+  
       {/* FULL SCREEN */}
       {isOpen && (
         <div className="fixed inset-0 z-[99999] bg-white">
