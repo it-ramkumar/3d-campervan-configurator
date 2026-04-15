@@ -1,17 +1,14 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Zap, X } from "lucide-react"
+import { X, MousePointer2, Move } from "lucide-react"
+import { PrimaryButton } from '@/components/Common/Common'
 
-// Dynamic import for performance
 const VanCanvas = dynamic(() => import("../Models/VanCanvas"), {
   ssr: false,
   loading: () => (
-    <div className="h-full w-full flex items-center justify-center bg-slate-50">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-[#ED3500] border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Loading 3D Engine...</p>
-      </div>
+    <div className="absolute inset-0 flex items-center justify-center bg-[#FCFCFB]">
+      <div className="w-10 h-10 border-2 border-[#ED3500] border-t-transparent rounded-full animate-spin" />
     </div>
   )
 })
@@ -19,55 +16,63 @@ const VanCanvas = dynamic(() => import("../Models/VanCanvas"), {
 export default function Van3DSection({ url, title }) {
   const [isOpen, setIsOpen] = useState(false)
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset'
+    return () => (document.body.style.overflow = 'unset')
+  }, [isOpen])
+
   return (
     <>
-      {/* 3D Entry Button */}
-      <div className="my-12 px-6">
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-[30px] shadow-sm border border-primary/5 text-center">
-          <h2 className="text-3xl font-bold text-primary mb-3">Interactive 3D Experience</h2>
-          <p className="text-slate-500 mb-8 max-w-lg mx-auto italic">
-            Step inside your future van. Open the doors, explore the layout, and see the craftsmanship in detail.
-          </p>
-          <button
+      {/* Launch */}
+      <div className="my-10 px-4">
+        <div className="max-w-xl mx-auto text-center">
+          <PrimaryButton
+            label="Launch 3D Configurator"
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 bg-[#ED3500] text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-black transition-all shadow-xl hover:scale-105 active:scale-95 mx-auto"
-          >
-            <Zap className="w-6 h-6 fill-current group-hover:animate-pulse" />
-            Launch 3D Viewer
-          </button>
+          />
         </div>
       </div>
 
-      {/* Full-Screen Modal */}
+      {/* FULL SCREEN */}
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] bg-white flex flex-col overflow-hidden animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[99999] bg-white">
+
           {/* Header */}
-          <div className="flex justify-between items-center px-8 py-4 border-b border-slate-100">
-            <div>
-              <h3 className="font-black text-primary uppercase text-xl">{title}</h3>
-              <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold italic">Interactive Build Preview</p>
+          <div className="absolute top-0 left-0 right-0 z-20 flex justify-between p-6 pointer-events-none">
+            <div className="pointer-events-auto bg-white/80 backdrop-blur p-4 rounded-xl">
+              <h2 className="font-black uppercase">{title}</h2>
             </div>
+
             <button
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 bg-slate-900 text-white px-6 py-2 rounded-full hover:bg-[#ED3500] transition-all font-bold group"
+              className="pointer-events-auto p-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
             >
-              EXIT 3D <X className="w-4 h-4 group-hover:rotate-90 transition-transform" />
+              <X />
             </button>
           </div>
 
-          {/* Model Canvas */}
-          <div className="flex-1 relative bg-[#F8F9FA]">
+          {/* CANVAS AREA */}
+          <div className="absolute inset-0 bg-[#FCFCFB]">
             <VanCanvas url={url} />
           </div>
 
-          {/* Footer Guide */}
-          <div className="bg-white py-3 px-8 flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-            <span>Left Click: Rotate</span>
-            <span>Scroll: Zoom</span>
-            <span>Right Click: Pan</span>
+          {/* Controls Info */}
+          <div className="absolute bottom-6 left-6 space-y-2 z-10">
+            <ControlBadge Icon={MousePointer2} label="Click + Drag to Look" />
+            <ControlBadge Icon={Move} label="Buttons: Forward/Back" />
           </div>
+
         </div>
       )}
     </>
+  )
+}
+
+function ControlBadge({ Icon, label }) {
+  return (
+    <div className="flex items-center gap-2 bg-white/90 backdrop-blur px-3 py-2 rounded-lg shadow-sm">
+      <Icon className="w-3 h-3 text-[#ED3500]" />
+      <span className="text-[10px] font-bold uppercase">{label}</span>
+    </div>
   )
 }

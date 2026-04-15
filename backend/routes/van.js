@@ -247,7 +247,7 @@ router.put("/reorder", async (req, res) => {
 
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 },
-  { name: "glbFile", maxCount: 1 } // ✅ GLB field add kiya
+  { name: "glbFile", maxCount: 1 }
 ]), async (req, res) => {
   try {
     const { slug } = req.params;
@@ -274,18 +274,40 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     const status = req.body.status !== undefined ? req.body.status : van.status;
     const galleryOrder = parseJSONField(req.body.galleryOrder, null);
 
-    // --- ✅ GLB Handle Logic ---
-    let modelUrl = van.glbFile; // Default purana wala rahega
+
+    let newSlug = van.slug; // Default current slug
+    if (van_listing.title && van_listing.title !== van.van_listing.title) {
+      newSlug = await Van.generateSlug(van_listing.title);
+    }
+
+    console.log(van.glbFile,"glb")
+    // ✅ GLB File Handling with Deletion
+    let modelUrl = van.glbFile;
+
+    if (req.body.removeGlbFile === "true" && van.glbFile) {
+      try {
+        await deleteFromS3(van.glbFile);
+        modelUrl = null;
+      } catch (deleteError) {
+        console.error('Error deleting GLB from S3:', deleteError);
+      }
+    }
 
     if (req.files["glbFile"]?.[0]) {
       const file = req.files["glbFile"][0];
-      // Nayi file upload hogi aur modelUrl update ho jayega
-      // Note: Agar aap S3 par purani file delete karna chahte hain toh deleteObject call karein,
-      // warna ye variable update hokar DB mein naya URL save kar dega.
+
+      if (van.glbFile && req.body.removeGlbFile !== "true") {
+        try {
+          await deleteFromS3(van.glbFile);
+        } catch (deleteError) {
+          console.error('Error deleting old GLB:', deleteError);
+        }
+      }
+
       modelUrl = await uploadToS3(file.buffer, "van/models", file.originalname, file.mimetype);
     }
 
-    // --- Handle gallery reordering and new uploads ---
+    // Handle gallery reordering and new uploads
     let updatedGallery = van.gallery || [];
     if (galleryOrder && Array.isArray(galleryOrder)) {
       const validUrls = galleryOrder.filter(url => updatedGallery.includes(url));
@@ -301,7 +323,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     const insertAt = req.body.insertAt !== undefined ? parseInt(req.body.insertAt) : updatedGallery.length;
     updatedGallery.splice(insertAt, 0, ...newGallery);
 
-    // Update Van Object
+    // ✅ AB VAN UPDATE KARO
     van.van_listing = {
       ...van.van_listing,
       ...van_listing,
@@ -311,18 +333,15 @@ router.put('/:slug', protect, adminOnly, upload.fields([
         ...van_listing.specifications,
       } : van.van_listing.specifications
     };
+
     van.delivery_date = delivery_date;
     van.detailed_features = detailed_features;
     van.media = media;
     van.status = status;
     van.gallery = updatedGallery;
     van.blocks = blocks;
-    van.glbFile = modelUrl; // ✅ DB mein naya ya purana URL assign kiya
-
-    // Slug update logic
-    if (van_listing.title && van_listing.title !== van.van_listing.title) {
-      van.slug = await Van.generateSlug(van_listing.title);
-    }
+    van.glbFile = modelUrl;
+    van.slug = newSlug; // ✅ SLUG ASSIGN KARO
 
     const updatedVan = await van.save();
 
@@ -335,7 +354,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
 
 router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {

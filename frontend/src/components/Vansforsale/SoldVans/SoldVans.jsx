@@ -14,7 +14,7 @@ export default function SoldVans({
   onLoadMore
 }) {
   if (!vans || vans.length === 0) return null;
-  console.log(vans)
+  // console.log(vans)
   return (
     <section className="bg-secondary py-16 md:py-24 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">

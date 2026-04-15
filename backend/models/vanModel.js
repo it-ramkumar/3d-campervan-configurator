@@ -86,10 +86,7 @@ const vanSchema = new mongoose.Schema(
     detailed_features: [detailedFeatureItemSchema],
 
     // --- 3D Model Section ---
-    glbFile: {
-      type: String,
-      default: null
-    }, // Single GLB model file URL
+    glbFile: { type: String, default: null }, // Aisa hona chahiye
     textures: {
       type: [String],
       default: []

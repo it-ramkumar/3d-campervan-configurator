@@ -226,7 +226,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
         // ✅ Build attendees list
         const attendees = [
             { email: email }, // User ki email (jo book kar raha hai)
-            // { email: 'sales.bigbearvans@gmail.com' } // Aapki dusri email (Permanent)
+            { email: 'sales.bigbearvans@gmail.com' }         // Aapki dusri email (Permanent)
         ];
 
 

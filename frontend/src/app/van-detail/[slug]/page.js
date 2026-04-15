@@ -39,12 +39,13 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = await params;
 
+  // Page Component ke andar fetch ko aese update karein:
   const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`, {
-    next: { revalidate: 3600 }
+    cache: 'no-store' // Ye browser ke 'force-refresh' ki tarah kaam karega
   }).then(res => res.json()).catch(() => null);
   if (!vanDetail?.van) return notFound();
-
-const hasPrice = vanDetail?.van?.van_listing?.price;
+  console.log(vanDetail.van, "detail page ")
+  const hasPrice = vanDetail?.van?.van_listing?.price;
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -55,17 +56,17 @@ const hasPrice = vanDetail?.van?.van_listing?.price;
       "@type": "Brand",
       "name": "Big Bear Vans"
     },
-     ...(hasPrice && {
-    "offers": {
-      "@type": "Offer",
-      "price": vanDetail?.van?.van_listing?.price,
-      "priceCurrency": "USD",
-      "availability": vanDetail?.van?.status === "available"
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition"
-    }
-  }),
+    ...(hasPrice && {
+      "offers": {
+        "@type": "Offer",
+        "price": vanDetail?.van?.van_listing?.price,
+        "priceCurrency": "USD",
+        "availability": vanDetail?.van?.status === "available"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "itemCondition": "https://schema.org/NewCondition"
+      }
+    }),
     "additionalProperty": [
       {
         "@type": "PropertyValue",

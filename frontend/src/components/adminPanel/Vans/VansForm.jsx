@@ -52,6 +52,8 @@ const VansForm = ({ setSelected }) => {
   const [mediaUrls, setMediaUrls] = useState([""]);
   // Existing states ke saath ye add karein
   const [glbFile, setGlbFile] = useState(null);
+  const [existingGlbFile, setExistingGlbFile] = useState(null); // ✅ Add this
+  const [removeGlbFile, setRemoveGlbFile] = useState(false); // ✅ Add this
   // const [textureFiles, setTextureFiles] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -87,7 +89,9 @@ const VansForm = ({ setSelected }) => {
         status: editData.status || "available",
         delivery_date: editData?.delivery_date,
       }));
-
+      // ✅ Add GLB handling
+      setExistingGlbFile(editData.glbFile || null);
+      setRemoveGlbFile(false);
       setExistingGallery(editData.gallery ? [...editData.gallery] : []);
       setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
@@ -143,8 +147,9 @@ const VansForm = ({ setSelected }) => {
       media: [],
     });
     setGlbFile(null),
-      // setTextureFiles([]),
-      setGalleryFiles([]);
+      setExistingGlbFile(null); // ✅ Add this
+    setRemoveGlbFile(false); // ✅ Add this
+    setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
     setRemovedExistingGallery([]);
@@ -232,14 +237,15 @@ const VansForm = ({ setSelected }) => {
       formToSend.append("galleryOrder", JSON.stringify(existingGallery));
       formToSend.append("insertAt", "0");
       galleryFiles.forEach((file) => formToSend.append("gallery", file));
-      if (glbFile) {
-        formToSend.append("glbFile", glbFile); // Single file
+      // ✅ Handle GLB file logic
+      if (removeGlbFile) {
+        formToSend.append("removeGlbFile", "true");
       }
 
-      // textureFiles.forEach((file) => {
-      //   formToSend.append("textures", file); // Multiple files
-      // });
-      // 3. API Call (Route Slug base hai, toh slug bhejein)
+      if (glbFile) {
+        formToSend.append("glbFile", glbFile);
+      }
+
       if (editData?._id) {
         console.log("Updating van via slug:", editData.slug);
         await updateVan(editData.slug, formToSend); // Parent ID ki jagah SLUG use karein
@@ -501,33 +507,59 @@ const VansForm = ({ setSelected }) => {
           />
           {/* --- 3D Model Section --- */}
           <section className="border border-gray-300 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB & Textures)</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB)</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* GLB File Input */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">GLB Model File</label>
-                <input
-                  type="file"
-                  accept=".glb"
-                  onChange={(e) => setGlbFile(e.target.files[0])}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                />
-                {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
-              </div>
+            <div className="space-y-4">
+              {/* Show existing GLB file */}
+              {existingGlbFile && !removeGlbFile && (
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">Current GLB File:</p>
+                      <p className="text-xs text-gray-500 truncate max-w-md">
+                        {existingGlbFile.split('/').pop()}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setRemoveGlbFile(true)}
+                      className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              )}
 
-              {/* Textures Input */}
-              {/* <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">Texture Images (Optional)</label>
-      <input
-        type="file"
-        multiple
-        accept="image/*"
-        onChange={(e) => setTextureFiles(Array.from(e.target.files))}
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-      />
-      <p className="text-xs text-gray-500 mt-1">{textureFiles.length} textures selected</p>
-    </div> */}
+              {/* Show removal confirmation */}
+              {removeGlbFile && existingGlbFile && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-sm text-red-700 mb-2">GLB file will be deleted on save.</p>
+                  <button
+                    type="button"
+                    onClick={() => setRemoveGlbFile(false)}
+                    className="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700"
+                  >
+                    Undo
+                  </button>
+                </div>
+              )}
+
+              {/* GLB File Input - show when no existing file or when removing */}
+              {(!existingGlbFile || removeGlbFile) && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {removeGlbFile ? "Upload New GLB File" : "GLB Model File"}
+                  </label>
+                  <input
+                    type="file"
+                    accept=".glb"
+                    onChange={(e) => setGlbFile(e.target.files[0])}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  />
+                  {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
+                </div>
+              )}
             </div>
           </section>
           {/* Media URLs Section */}

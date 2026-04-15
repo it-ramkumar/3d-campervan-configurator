@@ -9,7 +9,7 @@ import {
 } from '../Common/Common';
 import VanGallery from "./GallerySection"; // Naya Client Component
 
-// import VanCanvas from "./Models/Van3DSection"; // 3D Model Viewer
+import VanCanvas from "./Models/Van3DSection"; // 3D Model Viewer
 const SvgCheckmark = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 !text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>
@@ -70,7 +70,13 @@ const VanPage = ({ vanDetail }) => {
 
           {/* LEFT: GALLERY (Ab ye Client Component hai) */}
           <div className="lg:col-span-7">
+
             <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
+              {
+        vanDetail?.glbFile && (
+          <VanCanvas url={vanDetail.glbFile} />
+        )
+      }
           </div>
 
 
@@ -245,11 +251,7 @@ const VanPage = ({ vanDetail }) => {
           </div>
         </section>
       )}
-      {/* {
-        vanDetail?.glbFile && (
-          <VanCanvas url={vanDetail.glbFile} />
-        )
-      } */}
+
       {/* FOOTER CTA */}
       <section className="py-24 bg-[#F5F5F0] text-center px-6 border-t border-primary/5">
         <div className="max-w-2xl mx-auto">
