@@ -5,38 +5,29 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF, useAnimations, Html, Environment, PerspectiveCamera } from '@react-three/drei'
 import { PrimaryButton, SecondaryButton } from '@/components/Common/Common'
 
-
 const InteriorCameraControls = ({ isActive, cameraZ, cameraHeight }) => {
   const controlsRef = useRef();
   const cameraRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
 
-  // ✅ Ye values camera ko smooth banayengi
   const currentPos = useRef(new THREE.Vector3(0, cameraHeight, cameraZ));
   const currentTarget = useRef(new THREE.Vector3(0, cameraHeight, cameraZ - 0.5));
 
-  // ✅ useFrame har frame par chalega (60fps smoothness)
   useFrame((state, delta) => {
     if (!isActive || !cameraRef.current || !controlsRef.current) return;
 
-    // 1. Target Position calculate karein
     const targetY = cameraHeight;
     const targetZ = cameraZ;
 
-    // 2. LERP (Linear Interpolation) use karein smooth movement ke liye
-    // 0.1 ka matlab hai har frame par 10% distance cover karna
     currentPos.current.y = THREE.MathUtils.lerp(currentPos.current.y, targetY, 0.1);
     currentPos.current.z = THREE.MathUtils.lerp(currentPos.current.z, targetZ, 0.1);
 
-    // 3. Camera position update karein - X axis ko preserve rakhein for left/right rotation
     const currentX = cameraRef.current.position.x;
     cameraRef.current.position.set(currentX, currentPos.current.y, currentPos.current.z);
 
-    // 4. OrbitControls ka target bhi smooth rakhein (agar drag nahi kar rahe)
     if (!isDragging) {
       currentTarget.current.y = THREE.MathUtils.lerp(currentTarget.current.y, targetY, 0.1);
       currentTarget.current.z = THREE.MathUtils.lerp(currentTarget.current.z, targetZ - 0.5, 0.1);
-      // Target ka X bhi preserve rakhein
       const currentTargetX = controlsRef.current.target.x;
       controlsRef.current.target.set(currentTargetX, currentTarget.current.y, currentTarget.current.z);
     }
@@ -44,7 +35,6 @@ const InteriorCameraControls = ({ isActive, cameraZ, cameraHeight }) => {
     controlsRef.current.update();
   });
 
-  // Drag logic handling
   useEffect(() => {
     const controls = controlsRef.current;
     if (!controls || !isActive) return;
@@ -61,7 +51,6 @@ const InteriorCameraControls = ({ isActive, cameraZ, cameraHeight }) => {
     };
   }, [isActive]);
 
-  // ✅ Cursor style
   useEffect(() => {
     const canvas = document.querySelector('canvas');
     if (!canvas || !isActive) return;
@@ -85,36 +74,33 @@ const InteriorCameraControls = ({ isActive, cameraZ, cameraHeight }) => {
         rotateSpeed={0.5}
         enableZoom={false}
         enablePan={false}
-        minPolarAngle={Math.PI / 4}     // Up look
-        maxPolarAngle={Math.PI / 1.3}   // Down look
-        minAzimuthAngle={-Math.PI / 3}   // left limit (90°)
-        maxAzimuthAngle={Math.PI / 3}    // right limit (90°)    // ✅ Full right rotation
+        minPolarAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI / 1.3}
+        minAzimuthAngle={-Math.PI / 3}
+        maxAzimuthAngle={Math.PI / 3}
         enableDamping={true}
         dampingFactor={0.05}
       />
     </>
   );
 };
-// ✅ Fixed Model with separate glass animation handling
+
 function Model({ url, doors }) {
   const group = useRef()
   const { scene, animations } = useGLTF(url)
   const { actions } = useAnimations(animations, group)
 
-  // ✅ Separate tracking for door and glass animations
   const animationStates = useRef({
     openFrontRight: false,
-    openFrontRightGlass: false, // Separate glass state
+    openFrontRightGlass: false,
     openSlider: false,
     openBackLeft: false,
     openBackRight: false
   });
 
-  // ✅ Debug
   useEffect(() => {
     if (animations && animations.length > 0) {
       console.log('🎬 Available animations:', animations.map(anim => anim.name));
-      // console.log('🎭 Available actions:', Object.keys(actions));
     }
   }, [animations, actions]);
 
@@ -134,11 +120,9 @@ function Model({ url, doors }) {
 
         const playAnimationWithDelay = () => {
           try {
-            // Stop and reset
             action.stop();
             action.reset();
 
-            // Configure
             action.setLoop(THREE.LoopOnce, 1);
             action.clampWhenFinished = true;
             action.enabled = true;
@@ -153,10 +137,7 @@ function Model({ url, doors }) {
               console.log(`◀️ Closing ${actionName}`);
             }
 
-            // Update state immediately
             animationStates.current[stateKey] = shouldOpen;
-
-            // Play
             action.play();
 
             console.log(`✅ ${actionName} started successfully`);
@@ -174,21 +155,15 @@ function Model({ url, doors }) {
       }
     };
 
-    // ✅ Play animations - Glass with slight delay for realistic effect
-    // console.log('🔄 Door states changed:', doors)/;
-
-    // Front Right Door - Door first, then glass
     playAnimation("Door_Front_R", doors.openFrontRight, "openFrontRight", 0);
-    playAnimation("Door_Front_L", doors.openFrontRight, "openFrontRightGlass", 100); // 100ms delay
+    playAnimation("Door_Front_L", doors.openFrontRight, "openFrontRightGlass", 100);
 
-    // Other doors
     playAnimation("Slide_Door", doors.openSlider, "openSlider");
     playAnimation("Rare_Door_R", doors.openBackRight, "openBackRight");
     playAnimation("Rare_Door_L", doors.openBackRight, "openBackLeft");
 
   }, [doors, actions]);
 
-  // ✅ Initialize animations
   useEffect(() => {
     if (actions && Object.keys(actions).length > 0) {
       console.log('🔧 Initializing animations...');
@@ -200,7 +175,6 @@ function Model({ url, doors }) {
           action.enabled = true;
           action.paused = true;
 
-          // Special handling for glass animation
           if (actionName === "door_front_R_GlassAction") {
             console.log(`🪟 Glass animation initialized: ${actionName}`);
           }
@@ -235,11 +209,23 @@ export default function VanCanvas({ url }) {
   })
   const [isInterior, setIsInterior] = useState(false)
   const [cameraZ, setCameraZ] = useState(0.5);
-  const [cameraHeight, setCameraHeight] = useState(2.7); // ✅ Height state add kiya
+  const [cameraHeight, setCameraHeight] = useState(2.7);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const moveForward = () => setCameraZ(prev => Math.max(-3, prev - 0.3));
   const moveBackward = () => setCameraZ(prev => Math.min(6, prev + 0.3));
-  const moveUp = () => setCameraHeight(prev => Math.min(4, prev + 0.2)); // ✅ Height controls
+  const moveUp = () => setCameraHeight(prev => Math.min(4, prev + 0.2));
   const moveDown = () => setCameraHeight(prev => Math.max(1, prev - 0.2));
   const resetCamera = () => {
     setCameraZ(0.5);
@@ -247,21 +233,21 @@ export default function VanCanvas({ url }) {
   };
 
   useEffect(() => {
-    if (!isInterior) return;
+    if (!isInterior || isMobile) return; // Disable keyboard on mobile
 
     const handleKeyPress = (e) => {
       switch (e.key.toLowerCase()) {
         case 'w': moveForward(); break;
         case 's': moveBackward(); break;
-        case 'q': moveUp(); break;    // ✅ Q for up
-        case 'e': moveDown(); break;  // ✅ E for down
+        case 'q': moveUp(); break;
+        case 'e': moveDown(); break;
         case 'r': resetCamera(); break;
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isInterior]);
+  }, [isInterior, isMobile]);
 
   const toggleDoor = (doorKey) => {
     console.log(`🚪 Toggling door: ${doorKey}`);
@@ -280,8 +266,9 @@ export default function VanCanvas({ url }) {
   }
 
   return (
-    <div className="flex h-screen w-full bg-[#FCFCFB] p-5 gap-6">
-      <div className="flex-[2] relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-100">
+    <div className="flex flex-col lg:flex-row h-screen w-full bg-[#FCFCFB] p-2 md:p-5 gap-3 md:gap-6">
+      {/* Canvas Area */}
+      <div className="flex-1 lg:flex-[2] relative bg-slate-50 rounded-xl lg:rounded-2xl overflow-hidden border border-slate-100 min-h-[50vh] lg:min-h-0">
         <Canvas shadows>
           <ambientLight intensity={1.5} />
           <pointLight position={[0, 2, 0]} intensity={2} />
@@ -297,7 +284,7 @@ export default function VanCanvas({ url }) {
               <InteriorCameraControls
                 isActive={isInterior}
                 cameraZ={cameraZ}
-                cameraHeight={cameraHeight} // ✅ Height prop pass kiya
+                cameraHeight={cameraHeight}
               />
             ) : (
               <>
@@ -308,90 +295,104 @@ export default function VanCanvas({ url }) {
           </Suspense>
         </Canvas>
 
-        <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-slate-100 shadow-sm">
-          <p className="text-[10px] font-black uppercase tracking-widest text-[#30364F]">
+        {/* Mode Badge */}
+        <div className="absolute top-3 md:top-6 left-3 md:left-6 bg-white/80 backdrop-blur-md px-2 md:px-4 py-1 md:py-2 rounded-full border border-slate-100 shadow-sm">
+          <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-[#30364F]">
             Mode: {isInterior ? "Interior View" : "Exterior View"}
           </p>
         </div>
 
+        {/* Position Info - Interior Mode */}
         {isInterior && (
-          <div className="absolute top-6 right-6 bg-black/80 text-white p-3 rounded-lg text-xs">
+          <div className="absolute top-3 md:top-6 right-3 md:right-6 bg-black/80 text-white p-2 md:p-3 rounded-lg text-[10px] md:text-xs">
             <div>Position: Z = {cameraZ.toFixed(1)}</div>
-            <div>Height: Y = {cameraHeight.toFixed(1)}</div> {/* ✅ Height display */}
-            <div className="mt-1 text-gray-300">
+            <div>Height: Y = {cameraHeight.toFixed(1)}</div>
+            <div className="mt-1 text-gray-300 hidden md:block">
               {cameraZ < 0 ? "Front Area" : cameraZ > 1 ? "Back Area" : "Center Area"}
             </div>
           </div>
         )}
 
-        {isInterior && (
-          <div className="absolute bottom-6 left-6 bg-black/80 text-white p-3 rounded-lg text-xs">
+        {/* Keyboard Controls Info - Desktop Only */}
+        {isInterior && !isMobile && (
+          <div className="absolute bottom-6 left-6 bg-black/80 text-white p-3 rounded-lg text-xs hidden lg:block">
             <div className="font-bold mb-2">Controls:</div>
             <div>W: Move Forward</div>
             <div>S: Move Backward</div>
-            <div>Q: Move Up</div>     {/* ✅ New controls */}
-            <div>E: Move Down</div>   {/* ✅ New controls */}
+            <div>Q: Move Up</div>
+            <div>E: Move Down</div>
             <div>R: Reset to Center</div>
             <div className="mt-2 text-gray-300">Mouse: Look Around</div>
           </div>
         )}
       </div>
 
-      <div className="flex-[0.6] bg-primary p-8 rounded-lg text-secondary shadow-2xl overflow-y-auto">
-        <h2 className="text-2xl font-black mb-6 uppercase italic">Big Bear <span className="text-secondary">Vans</span></h2>
+      {/* Controls Panel */}
+      <div className="flex-1 lg:flex-[0.6] bg-primary p-4 md:p-8 rounded-lg text-secondary shadow-2xl overflow-y-auto max-h-[50vh] lg:max-h-none">
+        <h2 className="text-lg md:text-2xl font-black mb-4 md:mb-6 uppercase italic">
+          Big Bear <span className="text-secondary">Vans</span>
+        </h2>
 
         <SecondaryButton
           label={isInterior ? "← Exit to Exterior" : "Explore Interior"}
           onClick={() => setIsInterior(!isInterior)}
-          className={`w-full uppercase ${isInterior ? '!bg-white !text-black' : '!bg-hover !text-white shadow-lg shadow-[#ED3500]/20'}`}
+          className={`w-full uppercase text-sm md:text-base ${
+            isInterior ? '!bg-white !text-black' : '!bg-hover !text-white shadow-lg shadow-[#ED3500]/20'
+          }`}
         />
 
+        {/* Interior Movement Controls */}
         {isInterior && (
-          <div className="mb-8 p-4 bg-primary rounded-lg mt-6">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Interior Movement</p>
+          <div className="mb-6 md:mb-8 p-3 md:p-4 bg-primary rounded-lg mt-4 md:mt-6">
+            <p className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 md:mb-4">
+              Interior Movement
+            </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2 md:space-y-3">
               <button
                 onClick={moveForward}
                 disabled={cameraZ <= -10}
-                className="w-full p-3 bg-hover/30 rounded-lg text-sm hover:bg-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-full p-2 md:p-3 bg-hover/30 rounded-lg text-xs md:text-sm hover:bg-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                ↑ Move Forward (W)
+                ↑ Move Forward {!isMobile && '(W)'}
               </button>
 
-              <div className="grid grid-cols-2 gap-2"> {/* ✅ Height controls */}
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={moveUp}
                   disabled={cameraHeight >= 4}
-                  className="p-3 bg-blue-600/30 rounded-lg text-sm hover:bg-blue-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-2 md:p-3 bg-blue-600/30 rounded-lg text-xs md:text-sm hover:bg-blue-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  ↗ Up (Q)
+                  ↗ Up {!isMobile && '(Q)'}
                 </button>
                 <button
                   onClick={moveDown}
                   disabled={cameraHeight <= 1}
-                  className="p-3 bg-blue-600/30 rounded-lg text-sm hover:bg-blue-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-2 md:p-3 bg-blue-600/30 rounded-lg text-xs md:text-sm hover:bg-blue-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  ↘ Down (E)
+                  ↘ Down {!isMobile && '(E)'}
                 </button>
               </div>
 
-              <button onClick={resetCamera} className="w-full p-3 bg-red-600 rounded-lg text-sm hover:bg-red-500 transition-colors">
-                ⌂ Reset to Center (R)
+              <button
+                onClick={resetCamera}
+                className="w-full p-2 md:p-3 bg-red-600 rounded-lg text-xs md:text-sm hover:bg-red-500 transition-colors"
+              >
+                ⌂ Reset to Center {!isMobile && '(R)'}
               </button>
 
               <button
                 onClick={moveBackward}
                 disabled={cameraZ >= 6}
-                className="w-full p-3 bg-hover/30 rounded-lg text-sm hover:bg-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-full p-2 md:p-3 bg-hover/30 rounded-lg text-xs md:text-sm hover:bg-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                ↓ Move Backward (S)
+                ↓ Move Backward {!isMobile && '(S)'}
               </button>
             </div>
 
-            {/* Z Position Slider */}
-            <div className="mt-4">
-              <label className="text-xs text-slate-300 block mb-2">
+            {/* Position Sliders */}
+            <div className="mt-3 md:mt-4">
+              <label className="text-[10px] md:text-xs text-slate-300 block mb-2">
                 Z Position: {cameraZ.toFixed(1)}
               </label>
               <input
@@ -401,13 +402,12 @@ export default function VanCanvas({ url }) {
                 step="0.1"
                 value={cameraZ}
                 onChange={(e) => setCameraZ(parseFloat(e.target.value))}
-                className="w-full"
+                className="w-full h-2 md:h-auto"
               />
             </div>
 
-            {/* ✅ Height Slider */}
-            <div className="mt-4">
-              <label className="text-xs text-slate-300 block mb-2">
+            <div className="mt-3 md:mt-4">
+              <label className="text-[10px] md:text-xs text-slate-300 block mb-2">
                 Height: {cameraHeight.toFixed(1)}
               </label>
               <input
@@ -417,24 +417,54 @@ export default function VanCanvas({ url }) {
                 step="0.1"
                 value={cameraHeight}
                 onChange={(e) => setCameraHeight(parseFloat(e.target.value))}
-                className="w-full"
+                className="w-full h-2 md:h-auto"
               />
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <button onClick={() => setCameraZ(-10)} className="p-2 bg-slate-700 rounded text-xs hover:bg-slate-600">Max Front</button>
-              <button onClick={() => setCameraZ(0.5)} className="p-2 bg-slate-700 rounded text-xs hover:bg-slate-600">Center</button>
-              <button onClick={() => setCameraZ(6)} className="p-2 bg-slate-700 rounded text-xs hover:bg-slate-600">Max Back</button>
+            {/* Quick Position Buttons */}
+            <div className="mt-3 md:mt-4 grid grid-cols-3 gap-1 md:gap-2">
+              <button
+                onClick={() => setCameraZ(-10)}
+                className="p-1 md:p-2 bg-slate-700 rounded text-[10px] md:text-xs hover:bg-slate-600"
+              >
+                Max Front
+              </button>
+              <button
+                onClick={() => setCameraZ(0.5)}
+                className="p-1 md:p-2 bg-slate-700 rounded text-[10px] md:text-xs hover:bg-slate-600"
+              >
+                Center
+              </button>
+              <button
+                onClick={() => setCameraZ(6)}
+                className="p-1 md:p-2 bg-slate-700 rounded text-[10px] md:text-xs hover:bg-slate-600"
+              >
+                Max Back
+              </button>
             </div>
           </div>
         )}
 
-        <div className="space-y-4">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">Component Controls</p>
-          <ControlBtn label="Front Right Door" active={doors.openFrontRight} onClick={() => toggleDoor('openFrontRight')} />
-          <ControlBtn label="Slider Door" active={doors.openSlider} onClick={() => toggleDoor('openSlider')} />
-          {/* <ControlBtn label="Rear Left Door" active={doors.openBackLeft} onClick={() => toggleDoor('openBackLeft')} /> */}
-          <ControlBtn label="Rear Right Door" active={doors.openBackRight} onClick={() => toggleDoor('openBackRight')} />
+        {/* Door Controls */}
+        <div className="space-y-3 md:space-y-4">
+          <p className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">
+            Component Controls
+          </p>
+          <ControlBtn
+            label="Front Right Door"
+            active={doors.openFrontRight}
+            onClick={() => toggleDoor('openFrontRight')}
+          />
+          <ControlBtn
+            label="Slider Door"
+            active={doors.openSlider}
+            onClick={() => toggleDoor('openSlider')}
+          />
+          <ControlBtn
+            label="Rear Right Door"
+            active={doors.openBackRight}
+            onClick={() => toggleDoor('openBackRight')}
+          />
         </div>
       </div>
     </div>
@@ -443,8 +473,14 @@ export default function VanCanvas({ url }) {
 
 function ControlBtn({ label, active, onClick }) {
   return (
-    <PrimaryButton label={`${label}${active ? '(Closed)' : '(Open)'}`} onClick={onClick} className={`w-full ${active ? 'bg-[#ED3500] border-transparent' : 'bg-transparent border-slate-700 hover:border-slate-500'
-      }`} />
-
+    <PrimaryButton
+      label={`${label} ${active ? '(Close)' : '(Open)'}`}
+      onClick={onClick}
+      className={`w-full text-xs md:text-sm ${
+        active
+          ? 'bg-[#ED3500] border-transparent'
+          : 'bg-transparent border-slate-700 hover:border-slate-500'
+      }`}
+    />
   )
 }
