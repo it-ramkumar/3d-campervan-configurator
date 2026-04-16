@@ -44,7 +44,7 @@ export default async function Page({ params }) {
     cache: 'no-store' // Ye browser ke 'force-refresh' ki tarah kaam karega
   }).then(res => res.json()).catch(() => null);
   if (!vanDetail?.van) return notFound();
-  console.log(vanDetail.van, "detail page ")
+  // console.log(vanDetail.van, "detail page ")
   const hasPrice = vanDetail?.van?.van_listing?.price;
   const jsonLd = {
     "@context": "https://schema.org/",

@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF, useAnimations, Html, Environment, PerspectiveCamera } from '@react-three/drei'
 import { PrimaryButton, SecondaryButton } from '@/components/Common/Common'
+import Loader from "../../Loader/Loader"
 
 const InteriorCameraControls = ({ isActive, cameraZ, cameraHeight }) => {
   const controlsRef = useRef();
@@ -273,7 +274,7 @@ export default function VanCanvas({ url }) {
           <ambientLight intensity={1.5} />
           <pointLight position={[0, 2, 0]} intensity={2} />
 
-          <Suspense fallback={<Html center>Loading 3D...</Html>}>
+          <Suspense fallback={<Html center><Loader/></Html>}>
             <Model url={url} doors={doors} />
             <Environment
               files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"

@@ -72,7 +72,7 @@ const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
 
           if (!categoryMap[cat._id]) {
             categoryMap[cat._id] = { ...cat, subCategories: {}, items: [] };
-            initialExpanded[cat._id] = true;
+            initialExpanded[cat._id] = false;
             initialShowFullMap[cat._id] = false;
           }
 

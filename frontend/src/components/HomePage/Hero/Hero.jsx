@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import gsap from "gsap";
+
+// Swiper Styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -10,108 +13,111 @@ import "swiper/css/effect-fade";
 
 // Aapke Custom Components
 import Paragraph from "../../Common/Paragraph/HeroParagraph";
-import { SecondaryButton, PrimaryButton, ImageWithSkeleton, Heading1, RichParagraph } from '../../Common/Common'
-
-const slides = [
-    {
-      id: 1,
-      image: "/images2/vfs.webp",
-      tag: "Vans For Sale...",
-      title: "Campervans For Sale.",
-      desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
-      btnText: "View Inventory",
-      link: "/camper-vans-for-sale",
-      type: "sale"
-    },
-    {
-      id: 2,
-      image: "/heroSlider/heroimg2.webp",
-      tag: "Bespoke Service",
-      title: "Custom Van Builds",
-      desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
-      btnText: "Build Your Own",
-      link: "/inquiry",
-      type: "custom"
-    },
-    {
-      id: 3,
-      image: "/images2/contact.webp",
-      tag: "Our Layouts",
-      title: "Previous Layouts",
-      desc: "Explore our past projects and get inspired by our signature craftsmanship.",
-      btnText: "Browse Gallery",
-      link: "/van-layouts",
-      type: "portfolio"
-    }
-  ];
+import { SecondaryButton, PrimaryButton, ImageWithSkeleton, Heading1, RichParagraph } from '../../Common/Common';
+import { slides } from "@/DataUseInComp/homeSlider";
 
 export default function Hero() {
   const [swiper, setSwiper] = useState(null);
+
+  // --- GSAP Animation Engine ---
+  const animateSlideContent = (s) => {
+    if (!s || !s.slides) return;
+
+    // 1. Current Active Slide element ko target karna
+    const activeSlide = s.slides[s.activeIndex];
+    if (!activeSlide) return;
+
+    // 2. Elements ko select karna (Classes wahi hain jo humne niche return mein di hain)
+    const tag = activeSlide.querySelector(".gsap-tag");
+    const title = activeSlide.querySelector(".gsap-title");
+    const desc = activeSlide.querySelector(".gsap-desc");
+    const btns = activeSlide.querySelectorAll(".gsap-btn");
+    const img = activeSlide.querySelector("img");
+
+    // 3. Pehle se chal rahi animations ko kill karna (for performance)
+    gsap.killTweensOf([tag, title, desc, btns, img]);
+
+    // 4. Initial Hidden State (Reset)
+    gsap.set([tag, title, desc, btns], { opacity: 0, y: 50 });
+    if (img) gsap.set(img, { scale: 1.2 });
+
+    // 5. Timeline Creation
+    const tl = gsap.timeline({
+      defaults: { ease: "power4.out", duration: 1.2 }
+    });
+
+    tl.to(tag, { opacity: 1, y: 0, delay: 0.4 })
+      .to(title, { opacity: 1, y: 0 }, "-=0.9")
+      .to(desc, { opacity: 1, y: 0 }, "-=0.9")
+      .to(btns, { opacity: 1, y: 0, stagger: 0.15 }, "-=0.9")
+      .to(img, { scale: 1, duration: 8, ease: "sine.out" }, 0); // Background zoom-out effect
+  };
+
+  // Pehli slide trigger karne ke liye
+  useEffect(() => {
+    if (swiper) {
+      animateSlideContent(swiper);
+    }
+  }, [swiper]);
 
   return (
     <div className="relative w-full h-[85vh] md:h-[95vh] overflow-hidden bg-black">
       <Swiper
         onSwiper={setSwiper}
+        onSlideChange={(s) => animateSlideContent(s)}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
-        speed={1200}
+        speed={1400} // Smooth transition between slides
         loop={true}
-        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        autoplay={{ delay: 7000, disableOnInteraction: false }}
         className="w-full h-full"
       >
         {slides.map((slide, index) => (
-          <SwiperSlide key={slide.id} className="relative">
-            {/* Background Image with Optimized Ken Burns */}
-            <div className="absolute inset-0 overflow-hidden">
+          <SwiperSlide key={slide.id} className="relative overflow-hidden">
+            {/* Background Image Container */}
+            <div className="absolute inset-0 z-0">
               <ImageWithSkeleton
                 src={slide.image}
                 alt={slide.title}
                 priority={index === 0}
-                className="w-full h-full object-cover transform animate-ken-burns"
+                className="w-full h-full object-cover"
               />
             </div>
 
-            {/* Cinematic Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+            {/* Cinematic Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10" />
 
-            {/* Content Container */}
+            {/* Main Content Area */}
             <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-6 md:px-12 lg:px-20">
               <div className="max-w-4xl space-y-4 md:space-y-6">
 
-                {/* Animated Tagline */}
-                <div className="flex items-center gap-sm animate-fade-in-up">
+                {/* Tagline */}
+                <div className="gsap-tag flex items-center gap-2">
                   <span className="w-8 h-[2px] bg-hover"></span>
                   <RichParagraph className="!text-hover uppercase font-bold !text-sm !tracking-wider">
                     {slide.tag}
                   </RichParagraph>
                 </div>
 
-                {/* Heading Component */}
-                <div className="max-w-4/6 animate-fade-in-up delay-100 ">
-                  <Heading1
-                    text={slide.title}
-                  />
+                {/* Title */}
+                <div className="gsap-title">
+                  <Heading1 text={slide.title} />
                 </div>
 
-                {/* Paragraph Component */}
-                <div className="max-w-4/6 animate-fade-in-up delay-200">
-                  <Paragraph
-                    text={slide.desc}
-                    className="text-secondary/70"
-                  />
+                {/* Description */}
+                <div className="gsap-desc max-w-2xl">
+                  <Paragraph text={slide.desc} className="text-secondary/70" />
                 </div>
 
-                {/* Button Components */}
-                <div className="flex flex-wrap gap-[var(--gap-sm)] pt-4 md:pt-6 animate-fade-in-up delay-300">
-                  <SecondaryButton
-                    label={slide.btnText}
-                    link={slide.link}
-                  />
-                  <PrimaryButton
-                    label="ORDER CUSTOM BUILD"
-                    link="/contact"
-                  />
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-4 pt-4 md:pt-6">
+                  <div className="gsap-btn">
+                    <SecondaryButton label={slide.btnText} link={slide.link} />
+                  </div>
+                  <div className="gsap-btn">
+                    <PrimaryButton label="ORDER CUSTOM BUILD" link="/contact" />
+                  </div>
                 </div>
 
               </div>
@@ -120,58 +126,35 @@ export default function Hero() {
         ))}
       </Swiper>
 
-      {/* Modern Minimal Controls - Added aria-labels for Accessibility */}
-      <div className="absolute bottom-12 right-6 md:right-12 z-30 flex items-center gap-[var(--gap-sm)]">
+      {/* Navigation Controls */}
+      <div className="absolute bottom-12 right-6 md:right-12 z-30 flex items-center gap-4">
         <button
           onClick={() => swiper?.slidePrev()}
-          aria-label="Previous slide"
-          className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
+          className="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:border-hover hover:text-black transition-all duration-500"
         >
-          <ChevronLeft size={24} />
+          <ChevronLeft size={28} />
         </button>
         <button
           onClick={() => swiper?.slideNext()}
-          aria-label="Next slide"
-          className="w-12 h-12 flex items-center justify-center rounded-lg border border-secondary/20 text-secondary hover:bg-hover hover:border-hover hover:text-primary transition-all duration-300"
+          className="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:border-hover hover:text-black transition-all duration-500"
         >
-          <ChevronRight size={24} />
+          <ChevronRight size={28} />
         </button>
       </div>
 
-      {/* Progress Indicator Line - Optimized with scaleX */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-secondary/10 z-30">
-        <div className="h-full w-full bg-hover origin-left animate-slide-progress"></div>
+      {/* Custom Progress Line (GSAP Driven) */}
+      <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/10 z-30">
+        <div
+          className="h-full bg-hover origin-left"
+          id="hero-progress-bar"
+          style={{ width: '0%' }}
+        ></div>
       </div>
 
-      {/* Custom Keyframe Animations - Optimized for Performance */}
-      <style>{`
-        @keyframes ken-burns {
-          0% { transform: scale(1) translateZ(0); }
-          100% { transform: scale(1.15) translateZ(0); }
-        }
-        .animate-ken-burns {
-          animation: ken-burns 10s ease-out forwards;
-          will-change: transform;
-        }
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(30px) translateZ(0); }
-          to { opacity: 1; transform: translateY(0) translateZ(0); }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      {/* Extra Modern Touch: Global Style for smooth font rendering */}
+      <style jsx global>{`
+        .gsap-title, .gsap-tag, .gsap-desc {
           will-change: transform, opacity;
-        }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-
-        @keyframes slide-progress {
-          from { transform: scaleX(0); }
-          to { transform: scaleX(1); }
-        }
-        .animate-slide-progress {
-          animation: slide-progress 6s linear infinite;
-          will-change: transform;
         }
       `}</style>
     </div>

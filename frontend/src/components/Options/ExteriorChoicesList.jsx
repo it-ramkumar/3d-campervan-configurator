@@ -222,7 +222,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
             const activeItems = isShowingFull ? allActiveItems : allActiveItems.slice(0, MAX_INITIAL_ITEMS);
 
             const activeItem = activeItemMap?.[cat._id] || activeItems[0] || null;
-            const isExpanded = expandedCategories?.[cat._id] || false;
+            const isExpanded = expandedCategories?.[cat._id] || true;
             const isEven = index % 2 === 0;
 
             return (

@@ -16,7 +16,7 @@ export default function SoldVans({
   if (!vans || vans.length === 0) return null;
   // console.log(vans)
   return (
-    <section className="bg-secondary py-16 md:py-24 px-6 overflow-hidden">
+    <section className="bg-secondary py-16 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
 
         {/* --- Section Header --- */}
