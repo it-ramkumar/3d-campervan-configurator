@@ -27,7 +27,7 @@ export default function Van3DSection({ url, title }) {
       <div className="my-6 md:my-10 px-4">
         <div className="max-w-xl mx-auto text-center">
           <PrimaryButton
-            label="Launch 3D Configurator"
+            label="Launch 3D Model"
             onClick={() => setIsOpen(true)}
           />
         </div>

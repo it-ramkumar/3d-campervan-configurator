@@ -30,7 +30,7 @@ const Breadcrumb = ({ customItems }) => {
   ];
 
   return (
-    <div className="bg-[#F5F5F0] border-b border-[#001F3D]/5">
+    <div className="">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <nav className="flex items-center text-sm text-[#001F3D]/60">
           {breadcrumbs.map((crumb, index) => (

@@ -29,9 +29,9 @@ export default function All_Titles_Client({ initialData }) {
       if (res.success) {
         const newData = res.data?.data || [];
         setPortfolios((prev) => {
-           const combined = [...prev, ...newData];
-           // Unique ID check
-           return combined.filter((v, i, a) => a.findIndex(t => t._id === v._id) === i);
+          const combined = [...prev, ...newData];
+          // Unique ID check
+          return combined.filter((v, i, a) => a.findIndex(t => t._id === v._id) === i);
         });
         setPage(nextPage);
         setHasMore(nextPage < res.data?.pages);
@@ -77,15 +77,23 @@ export default function All_Titles_Client({ initialData }) {
                   <div
                     onMouseEnter={() => setHoveredId(item._id)}
                     onMouseLeave={() => setHoveredId(null)}
-                    className={`relative p-5 rounded-lg border-2 transition-all duration-300 flex items-center justify-between ${
-                      isActive
+                    className={`relative p-5 rounded-lg border-2 transition-all duration-300 flex items-center justify-between ${isActive
                         ? "bg-primary border-primary shadow-xl translate-y-[-2px] text-white"
                         : "bg-white border-[#F5F5F0] hover:border-[#ED985F]/30 hover:shadow-lg"
-                    }`}
+                      }`}
                   >
                     <div className="flex flex-col ">
-                      <RichParagraph className={`uppercase mb-1 !text-xs font-bold ${isActive ? 'text-white' : '!text-primary'}`}>
-                        {item?.van_listing?.specifications?.wheelbase || "Custom"}
+                      <RichParagraph className={`uppercase mb-1 !text-xs ${isActive ? 'text-white' : '!text-primary'}`}>
+                        {(() => {
+                          const wb = item?.van_listing?.specifications?.wheelbase;
+                          const wheelbaseMap = {
+                            "144": "144 Mercedes Sprinter",
+                            "170": "170 Mercedes Sprinter",
+                            "159": "159 RAM Promaster",
+                            "148": "148 Ford Transit"
+                          };
+                          return wheelbaseMap[wb] || "Custom Wheelbase";
+                        })()}
                       </RichParagraph>
                       <RichParagraph className={`font-bold truncate pr-4 ${isActive ? 'text-white' : '!text-primary'}`}>
                         {item?.van_listing?.title || "Untitled Build"}

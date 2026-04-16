@@ -58,13 +58,19 @@ const VanPage = ({ vanDetail }) => {
 
   return (
     <div className="bg-secondary font-body text-primary">
-      <Breadcrumb
-        customItems={[
-          { name: "vans for sale", href: "/camper-vans-for-sale" },
-          { name: vanDetail?.van_listing?.title }
-        ]}
-      />
-
+      <div className="flex justify-between bg-secondary">
+        <Breadcrumb
+          customItems={[
+            { name: "vans for sale", href: "/camper-vans-for-sale" },
+            { name: vanDetail?.van_listing?.title }
+          ]}
+        />
+        <PrimaryButton
+          label={"Call us"}
+          link={"/contact"}
+          className="!p-2 !my-3 !my-lg-4 !mr-6" // !mr-6 ya !me-6 use karein
+        />
+      </div>
       <div className="max-w-7xl mx-auto pt-10 pb-20 px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
@@ -72,21 +78,21 @@ const VanPage = ({ vanDetail }) => {
           <div className="lg:col-span-7">
 
             <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
-              {
-        vanDetail?.glbFile && (
-          <VanCanvas url={vanDetail.glbFile} />
-        )
-      }
+            {
+              vanDetail?.glbFile && (
+                <VanCanvas url={vanDetail.glbFile} />
+              )
+            }
           </div>
 
 
           {/* RIGHT: STICKY INFO PANEL */}
           <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-8">
-{vanDetail?.delivery_date && (
-  <marquee>
-    ✨ {vanDetail?.delivery_date}
-  </marquee>
-)}
+            {vanDetail?.delivery_date && (
+              <marquee>
+                ✨ {vanDetail?.delivery_date}
+              </marquee>
+            )}
 
             <div>
               <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary mb-4 !text-5xl" />
@@ -96,8 +102,16 @@ const VanPage = ({ vanDetail }) => {
             {vanDetail.status === "available" && (
               <div className="p-6 bg-white rounded-lg border border-primary/5 shadow-sm">
                 <RichParagraph className="!text-hover uppercase font-bold">Total Listing Price</RichParagraph>
-                <Heading3 text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`} className="font-bold text-primary mt-1" />
-              </div>
+{Number(vanDetail.van_listing.price) > 99 ? (
+  <Heading3
+    text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+    className="font-bold text-primary mt-1"
+  />
+) : (
+  <p className="font-bold text-primary mt-1">
+Inquire for Price
+  </p>
+)}              </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
