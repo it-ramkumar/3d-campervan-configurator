@@ -9,7 +9,7 @@ import {
 } from '../Common/Common';
 import VanGallery from "./GallerySection"; // Naya Client Component
 
-import VanCanvas from "./Models/Van3DSection"; // 3D Model Viewer
+import VanCanvas from "./Models/Van3DUi"; // 3D Model Viewer
 const SvgCheckmark = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 !text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>

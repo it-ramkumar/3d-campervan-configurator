@@ -1,51 +1,46 @@
 "use client"
-import React, { useRef } from 'react'
-import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { useRef, useLayoutEffect } from 'react'
+import { PerspectiveCamera, OrbitControls } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
 
-const MidCamera = ({ isActive }) => {
+export default function InteriorCamera({
+  active,
+  position,
+  target,
+  fov = 75
+}) {
+  const { camera } = useThree()
   const controlsRef = useRef()
-  const cameraRef = useRef()
 
-  // Camera settings constants
-  const MID_POSITION = [0, 1.6, 0.5] // Van ke beech ki position [X, Y, Z]
-  const LOOK_AT = [0, 1.6, 0]      // Camera kahan dekh raha hai
+  useLayoutEffect(() => {
+    if (active && camera) {
+      // 1. Camera ki position set karein
+      camera.position.set(...position)
 
-  useFrame(() => {
-    if (isActive && controlsRef.current) {
-      controlsRef.current.update()
+      // 2. Controls ka target set karein
+      if (controlsRef.current) {
+        controlsRef.current.target.set(...target)
+
+        // INTERIOR FIX: Distance limits ko chota rakhein
+        // Taake camera jump karke wapas 0 (midpoint) pe na jaye
+        controlsRef.current.minDistance = 0.01
+        controlsRef.current.maxDistance = 0.5
+
+        controlsRef.current.update()
+      }
     }
-  })
-
-  if (!isActive) return null
+  }, [active, position, target, camera])
 
   return (
     <>
-      <PerspectiveCamera
-        ref={cameraRef}
+      <PerspectiveCamera makeDefault position={position} fov={fov} />
+      <OrbitControls
+        ref={controlsRef}
         makeDefault
-        fov={75}
-        position={MID_POSITION}
-        near={0.1}
-        far={100}
+        enablePan={false}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI * 0.9}
       />
-     <OrbitControls
-  ref={controlsRef}
-  target={LOOK_AT}
-  enableZoom={false}
-  enablePan={false}
-  enableDamping={true}
-
-  // Vertical movement allow karo (upar/neeche)
-  minPolarAngle={Math.PI / 2 - 0.5} // thoda upar dekh sakay
-  maxPolarAngle={Math.PI / 2 + 0.5} // thoda neeche dekh sakay
-
-  maxDistance={0.1}
-  minDistance={0.1}
-/>
     </>
   )
 }
-
-export default MidCamera

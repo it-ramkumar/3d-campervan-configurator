@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { X, MousePointer2, Move } from "lucide-react"
 import { PrimaryButton } from '@/components/Common/Common'
 
-const VanCanvas = dynamic(() => import("../Models/VanCanvas"), {
+const VanCanvas = dynamic(() => import("./VanCanvas"), {
   ssr: false,
   loading: () => (
     <div className="absolute inset-0 flex items-center justify-center bg-[#FCFCFB]">
