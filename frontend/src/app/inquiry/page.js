@@ -35,15 +35,15 @@ export const metadata = {
     images: ['https://www.bigbearvans.com/images/w2.webp'],
   },
 }
-
+const schemaData = generateInquirySchema();
 export default function Page() {
   // JSON-LD Schema Data
   return (
     <div>
       {/* ✅ JSON-LD Schema Script */}
-      <script
+     <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(generateInquirySchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
 
       <InquiryForm />

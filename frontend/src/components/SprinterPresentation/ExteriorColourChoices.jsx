@@ -4,13 +4,14 @@
 import React, { useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ImageWithSkeleton } from '../Common/Common';
+import { ImageWithSkeleton, RichParagraph } from '../Common/Common';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-
+import { Heading2, Heading3, Heading4 } from '../Common/Common';
+// import { Heading3 } from '../Common/Common';
 // --- ICONS (Keeping for completeness) ---
 const StepIcon = () => (
   <svg className="w-[45px] h-[45px] text-zinc-800" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -103,10 +104,10 @@ const colors = [
 
 // --- Color Definitions (Keeping for completeness) ---
 const sectionBgLight = '#F3F4F6';
-const cardBgDark = '#20232B';
+const cardBgDark = '#001F3D';
 const cardBorderAccent = '#4A5064';
 const iconBgLight = '#E0E0E0';
-const veryDarkCharcoal = '#1C1F26';
+const veryDarkCharcoal = '#343A44';
 
 // Modal Component (Slightly reduced font sizes/padding)
 const ColorModal = ({ color, isOpen, onClose }) => {
@@ -144,9 +145,8 @@ const ColorModal = ({ color, isOpen, onClose }) => {
 
             {/* Color Name on Image - REDUCED LG FONT SIZE */}
             <div className="absolute bottom-3 left-3 lg:bottom-6 lg:left-6">
-              <h2 className="font-serif text-3xl sm:text-4xl lg:text-4xl font-bold text-white mb-1.5">
-                {color.name}
-              </h2>
+              <Heading2 text={color.name} className='text-secondary!'/>
+              
               <div className="w-12 h-1 bg-white/80 rounded-full lg:w-16"></div>
             </div>
           </div>
@@ -157,21 +157,18 @@ const ColorModal = ({ color, isOpen, onClose }) => {
               {/* Description */}
               <div>
                 {/* REDUCED LG FONT SIZE */}
-                <h3 className="font-serif text-xl sm:text-xl lg:text-xl font-semibold text-white mb-2">
-                  Color Description
-                </h3>
+                <Heading4 text={"Color Description"} className='text-secondary! mb-2'/>
+                
                 {/* REDUCED LG FONT SIZE */}
-                <p className="text-gray-300 text-sm sm:text-base lg:text-base leading-relaxed">
-                  {color.description}
-                </p>
+                <RichParagraph className='text-secondary!'> {color.description}</RichParagraph>
+                
               </div>
 
               {/* Features */}
               <div>
                 {/* REDUCED LG FONT SIZE */}
-                <h3 className="font-serif text-xl sm:text-xl lg:text-xl font-semibold text-white mb-3">
-                  Key Features
-                </h3>
+                <Heading4 text={"Key Features"} className='text-secondary! mb-2'/>
+                
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {color.features.map((feature, index) => (
                     <div
@@ -233,16 +230,14 @@ export default function ExteriorColourChoices() {
       <div className="container mx-auto px-4 py-10 md:py-16">
         {/* Main Title - REDUCED DESKTOP FONT SIZE */}
         <div className="text-center mb-4 sm:mb-5">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-4xl font-bold text-black">
-            Key Features & Upgrades
-          </h2>
+          <Heading2 text={"Key Features & Upgrades"}/>
+          
         </div>
 
         {/* Subtitle - REDUCED MARGIN: mb-16 (from mb-24/mb-32) and REDUCED DESKTOP FONT SIZE */}
         <div className="text-center mb-24 md:mb-20">
-          <h3 className="font-serif text-xl sm:text-xl md:text-xl font-normal text-gray-700">
-            Rear Steps, Hitch Options, & Towing Capacity
-          </h3>
+          <Heading3 text={"Rear Steps, Hitch Options, & Towing Capacity"}/>
+          
         </div>
 
         {/* Features Card Grid - REDUCED VERTICAL GAP: gap-y-16 (from gap-y-28/gap-y-24) */}
@@ -270,18 +265,21 @@ export default function ExteriorColourChoices() {
               <StepIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Rear Steps</h4>
+            <Heading4 text={"Rear Steps"} className='text-secondary!'/>
+            {/* <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Rear Steps</h4> */}
             <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
             <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <p>Factory rear steps available on 2025 Sprinter models.</p>
-              <p>Step height ranges from <strong>21 to 25 inches</strong>, depending on model.</p>
-              <p>Example: Cargo Van 2500 and 3500 variants.</p>
-              <p className="mt-3">Aftermarket rear steps also available:</p>
+              <RichParagraph className='text-secondary!'> Factory rear steps available on 2025 Sprinter models.</RichParagraph>
+              <RichParagraph className='text-secondary!'> Step height ranges from <strong>21 to 25 inches</strong>, depending on model.</RichParagraph>
+              <RichParagraph className='text-secondary!'> Example: Cargo Van 2500 and 3500 variants.</RichParagraph>
+              <RichParagraph className='text-secondary! !mt-4 '> Aftermarket rear steps also available:</RichParagraph>
+              
               {/* REDUCED DESKTOP FONT SIZE */}
               <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li>Improve <strong>accessibility</strong>.</li>
-                <li>Offer added convenience for cargo loading and unloading.</li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Improve <strong>accessibility</strong>.</RichParagraph></li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Offer added convenience for cargo loading and unloading.</RichParagraph></li>
+                {/* <li>Offer added convenience for cargo loading and unloading.</li> */}
               </ul>
             </div>
           </div>
@@ -307,21 +305,25 @@ export default function ExteriorColourChoices() {
               <HitchIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Hitch Options</h4>
-            <hr className="my-2 border-white/20" />
+            <Heading4 text={"Hitch Options"} className='text-secondary!'/>
+                        <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
             <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <p><strong>Class III Hitch</strong>:</p>
+              <RichParagraph className='text-secondary!'><strong>Class III Hitch</strong>:</RichParagraph>
+              
               {/* REDUCED DESKTOP FONT SIZE */}
               <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li>Available for Cargo Van 2500 models.</li>
-                <li>Maximum tongue weight: <strong>500 lbs</strong>.</li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Available for Cargo Van 2500 models.</RichParagraph></li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Maximum tongue weight: <strong>500 lbs</strong>.</RichParagraph></li>
+                
               </ul>
-              <p className="mt-3"><strong>Class IV Hitch</strong>:</p>
+              <RichParagraph className='text-secondary! mt-3'><strong>Class IV Hitch</strong>:</RichParagraph>
+              
               {/* REDUCED DESKTOP FONT SIZE */}
               <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li>Available for 3500, 3500XD, and 4500 models.</li>
-                <li>Maximum tongue weight: <strong>750 lbs</strong>.</li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Available for 3500, 3500XD, and 4500 models.</RichParagraph></li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Maximum tongue weight: <strong>750 lbs</strong>.</RichParagraph></li>
+                
               </ul>
             </div>
           </div>
@@ -347,19 +349,24 @@ export default function ExteriorColourChoices() {
               <TowingIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Towing Capacity</h4>
+            <Heading4 text={"Towing Capacity"} className='text-secondary!'/>
+            
             <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
             <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <p>Cargo Van 2500:</p>
+              <RichParagraph className='text-secondary! '><strong>Cargo Van 2500:</strong></RichParagraph>
+              
               {/* REDUCED DESKTOP FONT SIZE */}
               <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li>Towing capacity: Up to <strong>5,000 lbs</strong>.</li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Towing capacity: Up to <strong>5,000 lbs</strong>.</RichParagraph></li>
+                
               </ul>
-              <p className="mt-3">Cargo Van 3500, 3500XD, and 4500:</p>
+              <RichParagraph className='text-secondary! mt-4'><strong>Cargo Van 3500, 3500XD, and 4500:</strong></RichParagraph>
+             
               {/* REDUCED DESKTOP FONT SIZE */}
               <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li>Towing capacity: Up to <strong>7,500 lbs</strong>.</li>
+                <li><RichParagraph className='text-secondary! !text-[14px]'>Towing capacity: Up to <strong>7,500 lbs</strong>.</RichParagraph></li>
+                
               </ul>
             </div>
           </div>
@@ -368,13 +375,14 @@ export default function ExteriorColourChoices() {
 
       {/* --- SECTION 2: EXTERIOR COLORS (Dark Showcase Section) --- */}
       {/* REDUCED VERTICAL PADDING: md:py-16 (from md:py-24) */}
-      <div className="w-full py-12 md:py-16" style={{ backgroundColor: veryDarkCharcoal }}>
+      <div className="w-full py-12 md:py-16" style={{ backgroundColor: cardBgDark }}>
         <div className="container mx-auto px-4">
           {/* Section Title - REDUCED DESKTOP FONT SIZE */}
           <div className="text-center mb-8 sm:mb-10">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-4xl font-bold text-white">
+            <Heading2 text={"Exterior Color Choices"} className='text-secondary!'/>
+            {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-4xl font-bold text-white">
               Exterior Color Choices
-            </h2>
+            </h2> */}
           </div>
 
           {/* Color Swiper */}
@@ -441,9 +449,10 @@ export default function ExteriorColourChoices() {
                   </div>
                   {/* Text part - REDUCED PADDING/FONT SIZE */}
                   <div className="p-3 rounded-b-xl" style={{ backgroundColor: veryDarkCharcoal }}>
-                    <h3 className="font-serif font-medium text-xl sm:text-2xl text-white text-center">
+                    <Heading4 text={color.name} className='text-secondary! text-center'/>
+                    {/* <h3 className="font-serif font-medium text-xl sm:text-2xl text-white text-center">
                       {color.name}
-                    </h3>
+                    </h3> */}
                   </div>
                 </div>
               </SwiperSlide>

@@ -485,3 +485,229 @@ function ControlBtn({ label, active, onClick }) {
     />
   )
 }
+
+
+// "use client"
+// import React, { Suspense, useState, useRef, useEffect } from 'react'
+// import * as THREE from 'three'
+// import { Canvas, useFrame } from '@react-three/fiber'
+// import { OrbitControls, useGLTF, useAnimations, Html, Environment, PerspectiveCamera } from '@react-three/drei'
+// import { PrimaryButton } from '@/components/Common/Common'
+// import { easing } from 'maath'
+// import Loader from "../../Loader/Loader"
+
+// const cameraViews = {
+//   "Door_Front_R": { position: [-20, 4, 6], target: [2, 0, 0] },
+//   "Door_Front_L": { position: [20, 4, -6], target: [-2, 0, 0] },
+//   "Slide_Door": { position: [-20, 2, 0], target: [2, 0, 0] },
+//   "Rare_Door_R": { position: [0, 2, -20], target: [0, 0, -4] },
+//   "Rare_Door_L": { position: [0, 2, -20], target: [0, 0, -4] },
+//   "default": { position: [15, 15, 15], target: [0, 0, 0] }
+// };
+
+// // Combined door groups
+// const doorGroups = {
+//   "Front Doors": ["Door_Front_R", "Door_Front_L"],
+//   "Rear Doors": ["Rare_Door_R", "Rare_Door_L"],
+//   "Slide Door": ["Slide_Door"]
+// };
+
+
+// function CameraRig({ view }) {
+//   const [isManual, setIsManual] = useState(false);
+//   const lastView = useRef(view);
+
+//   useEffect(() => {
+//     if (view !== lastView.current) {
+//       setIsManual(false);
+//       lastView.current = view;
+//     }
+//   }, [view]);
+
+//   useFrame((state, delta) => {
+//     if (isManual) return;
+
+//     const distanceToTarget = state.camera.position.distanceTo(new THREE.Vector3(...view.position));
+//     if (distanceToTarget < 0.1) {
+//       setIsManual(true);
+//       return;
+//     }
+
+//     easing.damp3(state.camera.position, view.position, 0.4, delta);
+//     easing.damp3(state.controls.target, view.target, 0.4, delta);
+//   });
+
+//   return null;
+// }
+
+// function Model({ url, setAvailableAnimations, activeAnims }) {
+//   const group = useRef()
+//   const { scene, animations } = useGLTF(url)
+//   const { actions } = useAnimations(animations, group)
+//   const [ready, setReady] = useState(false)
+
+//   useEffect(() => {
+//     if (actions && Object.keys(actions).length > 0) {
+//       setAvailableAnimations(Object.keys(actions));
+//       Object.values(actions).forEach(action => {
+//         action.stop().reset();
+//         action.clampWhenFinished = true;
+//         action.setLoop(THREE.LoopOnce, 1);
+//       });
+//     }
+//   }, [actions, setAvailableAnimations]);
+
+//   useEffect(() => {
+//     Object.keys(activeAnims).forEach((name) => {
+//       const action = actions[name];
+//       if (!action) return;
+//       action.paused = false;
+//       action.timeScale = activeAnims[name] ? 1 : -1;
+//       action.play();
+//     });
+//   }, [activeAnims, actions]);
+
+//   useEffect(() => {
+//     if (scene) {
+//       const box = new THREE.Box3().setFromObject(scene);
+//       const center = box.getCenter(new THREE.Vector3());
+//       scene.position.x += (scene.position.x - center.x);
+//       scene.position.z += (scene.position.z - center.z);
+//       setTimeout(() => setReady(true), 150);
+//     }
+//   }, [scene]);
+
+//   return (
+//     <group ref={group} visible={ready} position={[0, -3, 0]}>
+//       <primitive object={scene} scale={0.004} />
+//     </group>
+//   )
+// }
+
+// export default function VanCanvas({ url }) {
+//   const [animState, setAnimState] = useState({});
+//   const [availableAnimations, setAvailableAnimations] = useState([]);
+//   const [currentView, setCurrentView] = useState(cameraViews.default);
+
+//   // Group toggle function
+//   const toggleDoorGroup = (groupName, animNames) => {
+//     // Check if any door in group is open
+//     const anyOpen = animNames.some(name => animState[name]);
+
+//     // Toggle all doors in group to opposite state
+//     const newState = { ...animState };
+//     animNames.forEach(name => {
+//       newState[name] = !anyOpen;
+//     });
+//     setAnimState(newState);
+
+//     // Set camera view (use first animation's camera view)
+//     if (cameraViews[animNames[0]]) {
+//       setCurrentView(cameraViews[animNames[0]]);
+//     }
+//   };
+
+//   // Get grouped buttons
+//   const getGroupedButtons = () => {
+//     const buttons = [];
+
+//     Object.entries(doorGroups).forEach(([groupName, animNames]) => {
+//       // Check if all animations in group are available
+//       const allAvailable = animNames.every(name => availableAnimations.includes(name));
+
+//       if (allAvailable) {
+//         // Check if any door in group is open
+//         const anyOpen = animNames.some(name => animState[name]);
+
+//         buttons.push({
+//           key: groupName,
+//           label: groupName,
+//           active: anyOpen,
+//           onClick: () => toggleDoorGroup(groupName, animNames)
+//         });
+//       }
+//     });
+
+//     // Add individual buttons for animations not in groups
+//     availableAnimations.forEach(name => {
+//       const isInGroup = Object.values(doorGroups).some(group => group.includes(name));
+//       if (!isInGroup) {
+//         buttons.push({
+//           key: name,
+//           label: name.replace(/_/g, ' '),
+//           active: !!animState[name],
+//           onClick: () => {
+//             setAnimState(prev => ({ ...prev, [name]: !prev[name] }));
+//             if (cameraViews[name]) setCurrentView(cameraViews[name]);
+//           }
+//         });
+//       }
+//     });
+
+//     return buttons;
+//   };
+
+//   if (!url || url === "loading...") return <div className="h-screen flex items-center justify-center">Loading...</div>;
+
+//   return (
+//     <div className="flex flex-col lg:flex-row h-screen w-full bg-[#FCFCFB] p-2 md:p-5 gap-3 md:gap-6">
+//       {/* Canvas Area */}
+//       <div className="flex-1 lg:flex-[2] relative bg-slate-50 rounded-xl lg:rounded-2xl overflow-hidden border border-slate-100 min-h-[50vh] lg:min-h-0">
+//         <Canvas shadows camera={{ position: [15, 15, 15], fov: 50 }}>
+//           <ambientLight intensity={1.5} />
+//           <pointLight position={[0, 2, 0]} intensity={2} />
+//           <Suspense fallback={<Html center><Loader /></Html>}>
+//             <CameraRig view={currentView} />
+//             <Model url={url} setAvailableAnimations={setAvailableAnimations} activeAnims={animState} />
+//             <Environment preset="city" />
+//             <OrbitControls
+//               makeDefault
+//               enableDamping
+//               dampingFactor={0.05}
+//               minDistance={5}
+//               maxDistance={50}
+//             />
+//           </Suspense>
+//         </Canvas>
+//       </div>
+
+//       {/* Controls Panel */}
+//       <div className="flex-1 lg:flex-[0.6] bg-primary p-4 md:p-8 rounded-lg text-secondary shadow-2xl overflow-y-auto max-h-[50vh] lg:max-h-none">
+//         <h2 className="text-lg md:text-2xl font-black mb-4 md:mb-6 uppercase italic">
+//           Big Bear <span className="text-secondary">Vans</span>
+//         </h2>
+
+//         <div className="space-y-3 md:space-y-4">
+//           <p className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">
+//             Component Controls
+//           </p>
+
+//           {getGroupedButtons().map((button) => (
+//             <ControlBtn
+//               key={button.key}
+//               label={button.label}
+//               active={button.active}
+//               onClick={button.onClick}
+//             />
+//           ))}
+
+//           <PrimaryButton
+//             label="Reset View"
+//             onClick={() => setCurrentView(cameraViews.default)}
+//             className="w-full mt-4 border-dashed border-slate-500 opacity-50 hover:opacity-100"
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// function ControlBtn({ label, active, onClick }) {
+//   return (
+//     <PrimaryButton
+//       label={`${label} ${active ? '(Close)' : '(Open)'}`}
+//       onClick={onClick}
+//       className={`w-full text-xs md:text-sm ${active ? 'bg-[#ED3500] border-transparent' : 'bg-transparent border-slate-700 hover:border-slate-500'}`}
+//     />
+//   )
+// }

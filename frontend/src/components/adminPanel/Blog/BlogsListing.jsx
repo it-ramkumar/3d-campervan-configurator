@@ -223,7 +223,6 @@ export default function BlogsListing({ setSelected }) {
             <button
               onClick={() => {
                 setPage(1);
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="px-8 py-3 bg-slate-50 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-100 transition-all"
             >

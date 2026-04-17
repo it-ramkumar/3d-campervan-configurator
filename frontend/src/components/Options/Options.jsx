@@ -116,7 +116,6 @@ const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
       }
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     fetchCategories();
   }, [options, current]);
 

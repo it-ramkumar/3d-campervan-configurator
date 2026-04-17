@@ -2,6 +2,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Heading2, Heading3, Heading4 } from "../Common/Common";
+import { RichParagraph } from "../Common/Common";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -105,10 +107,11 @@ export default function Table() {
       <section className="anim-section container mx-auto px-4 sm:px-6 pt-6 md:pt-8 mt-0 pb-12 md:pb-16">
         <div className="text-center mb-6 sm:mb-8 pt-4">
           {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3 mt-0">
-            Cargo Van vs Crew Van
-          </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-[#364153] via-gray-600 to-[#364153] mx-auto rounded-full"></div>
+          <Heading3 text={"Cargo Van vs Crew Van"}/>
+          {/* // <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3 mt-0">
+          //   Cargo Van vs Crew Van
+          // </h2> */}
+          <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
         </div>
 
         <div className="max-w-5xl mx-auto">
@@ -116,12 +119,15 @@ export default function Table() {
             {/* Table Header Wrapper */}
             <div className="bg-gradient-to-r from-gray-900 via-[#364153] to-gray-800 p-0.5">
               <table className="w-full table-fixed border-collapse">
-                <thead className="bg-gradient-to-r from-gray-900 to-[#364153] text-white">
+                <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Feature</th>
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Cargo Van</th>
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Crew Van</th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Feature"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Cargo Van"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Crew Van"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Feature</th> */}
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Cargo Van</th> */}
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Crew Van</th> */}
                   </tr>
                 </thead>
               </table>
@@ -179,10 +185,11 @@ export default function Table() {
 
           <div className="mb-8">
             {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black mb-3 text-white drop-shadow-lg">
+            <Heading3 text={"2500 Vs 3500 & Dually"}  className="!text-[var(--color-secondary)]" />
+            {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black mb-3 text-white drop-shadow-lg">
               2500 Vs 3500 & Dually
-            </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-white via-gray-300 to-white mx-auto rounded-full"></div>
+            </h2> */}
+            <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
           </div>
 
           {/* REDUCED MAX WIDTH: max-w-2xl (from max-w-3xl) */}
@@ -202,9 +209,9 @@ export default function Table() {
 
             {/* Card 1: 2500 - Rotating Weights */}
             <div className="group bg-gradient-to-br from-white to-gray-50 text-gray-800 rounded-xl shadow-lg p-4 flex flex-col items-center transform transition-all duration-500 hover:scale-[1.03] hover:shadow-xl border border-[#364153] relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#364153] to-gray-700"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)]"></div>
               {/* REDUCED ICON SIZE */}
-              <div className="w-12 h-12 bg-gradient-to-br from-[#364153] to-gray-700 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
                 {/* Scale Base */}
                 <div className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-white/80 rounded-full"></div>
                 {/* Scale Stand */}
@@ -217,20 +224,27 @@ export default function Table() {
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-3 h-0.5 bg-white/60"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) */}
-              <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">2500</h3>
+              <Heading4 text={"2500"}/>
+              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">2500</h3> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-xs (from text-xs) and reduced margin */}
-              <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(We Usually Build On These)</p>
+              <RichParagraph className="!text-[12px] mb-2">
+                (We Usually Build On These)
+              </RichParagraph>
+              {/* <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(We Usually Build On These)</p> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
+              <RichParagraph className="!text-[13px]">
                 Lighter GVWR, Gross Vehicle Weight Rating (9,050 lbs), suitable for standard builds.
-              </p>
+              </RichParagraph>
+              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
+                Lighter GVWR, Gross Vehicle Weight Rating (9,050 lbs), suitable for standard builds.
+              </p> */}
             </div>
 
             {/* Card 2: 3500 - Pulsing Heavy Weights */}
             <div className="group bg-gradient-to-br from-white to-gray-50 text-gray-800 rounded-xl shadow-lg p-4 flex flex-col items-center transform transition-all duration-500 hover:scale-[1.03] hover:shadow-xl border border-[#364153] relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#364153] to-gray-700"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)]"></div>
               {/* REDUCED ICON SIZE */}
-              <div className="w-12 h-12 bg-gradient-to-br from-[#364153] to-gray-700 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
                 {/* Scale Base */}
                 <div className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-white/80 rounded-full"></div>
                 {/* Scale Stand */}
@@ -243,18 +257,22 @@ export default function Table() {
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-white/60"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) and reduced margin */}
-              <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-3 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">3500</h3>
+              <Heading4 text={"3500"}/>
+              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-3 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">3500</h3> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700 mt-auto">
+              <RichParagraph className=" !text-[13px] mt-7">
                 Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
-              </p>
+              </RichParagraph>
+              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700 mt-auto">
+                Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
+              </p> */}
             </div>
 
             {/* Card 3: Dually - Rotating Wheels */}
             <div className="group bg-gradient-to-br from-white to-gray-50 text-gray-800 rounded-xl shadow-lg p-4 flex flex-col items-center transform transition-all duration-500 hover:scale-[1.03] hover:shadow-xl border border-[#364153] relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#364153] to-gray-700"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)]"></div>
               {/* REDUCED ICON SIZE */}
-              <div className="w-12 h-12 bg-gradient-to-br from-[#364153] to-gray-700 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] group-hover:from-[var(--color-hover)] group-hover:to-[var(--color-hover)] rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md relative">
                 {/* Axle */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-0.5 bg-white/80 rounded-full"></div>
                 {/* Rotating Wheel 1 */}
@@ -271,13 +289,20 @@ export default function Table() {
                 <div className="dually-wheel-4 absolute top-1/2 right-1 transform -translate-y-1/2 w-1.5 h-1.5 bg-white/90 rounded-full"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) */}
-              <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">Dually</h3>
+              <Heading4 text={"Dually"} className="!text-[18px]"/>
+              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">Dually</h3> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-xs (from text-xs) and reduced margin */}
-              <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(Dual Rear Wheels)</p>
+              <RichParagraph className="!text-[12px] mb-2">
+                (Dual Rear Wheels)
+              </RichParagraph>
+              {/* <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(Dual Rear Wheels)</p> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
+              <RichParagraph className="!text-[13px]" >
+                Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
+              </RichParagraph>
+              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
                 Enhanced stability for towing/heavy loads. The wheels can not be upgraded to R17 bigger radius in the future
-              </p>
+              </p> */}
             </div>
 
           </div>
@@ -290,23 +315,27 @@ export default function Table() {
       <section className="anim-section container mx-auto px-4 sm:px-6 py-12 md:py-16">
         <div className="text-center mb-6 sm:mb-8">
           {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3">
+          <Heading3 text={"Manual Vs Electric Sliding Door"}/>
+          {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3">
             Manual Vs Electric Sliding Door
-          </h2>
-          <div className="w-20 h-1.5 bg-gradient-to-r from-[#364153] via-gray-600 to-[#364153] mx-auto rounded-full"></div>
+          </h2> */}
+          <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
         </div>
 
         <div className="max-w-5xl mx-auto">
           <div className="bg-white rounded-xl shadow-xl border border-[#364153] overflow-hidden transform hover:shadow-2xl transition-all duration-500">
             {/* Table Header Wrapper */}
-            <div className="bg-gradient-to-r from-gray-900 via-[#364153] to-gray-800 p-0.5">
+            <div className="bg-gradient-to-r from-[var(--color-primary)]  to-[var(--color-primary)] p-0.5">
               <table className="w-full table-fixed border-collapse">
-                <thead className="bg-gradient-to-r from-gray-900 to-[#364153] text-white">
+                <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Aspect</th>
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Manual Sliding Doors</th>
-                    <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Electric Sliding Doors</th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Aspect"} className="!text-[var(--color-secondary)]"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Manual Sliding Door"} className="!text-[var(--color-secondary)] "/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Electric Sliding Doors"} className="!text-[var(--color-secondary)]"/></th>
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Aspect</th> */}
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Manual Sliding Doors</th> */}
+                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Electric Sliding Doors</th> */}
                   </tr>
                 </thead>
               </table>

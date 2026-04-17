@@ -50,9 +50,10 @@ export default function SprinterPage() {
           title={newTitleText}
           description={newDescriptionText}
           image={heroImage}
+          showButton= {false}
         />
       </div>
-
+    <div className="space-y-20">
       <div className="tour-van-config">
         <VanConfig />
       </div>
@@ -87,6 +88,7 @@ export default function SprinterPage() {
 
       <div className="tour-custom-build">
         <CustomBuild />
+      </div>
       </div>
     </>
   );

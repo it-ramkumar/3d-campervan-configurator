@@ -63,7 +63,7 @@ const sections = [
       { text: "We have several <strong>3D scanners</strong> for precise measurements.", icon: <Scan size={18} /> },
     ],
     outro: "The result? A fully custom campervan, exactly the way you want.",
-    images: ["/images/w5.webp", "/images/w6.webp"],
+    images: ["/images2/cnc1.webp", "/images2/cnc2.webp"],
     isReverse: false,
   },
   {
@@ -126,16 +126,14 @@ const WhyChoose = () => {
               <div key={index} className={`flex flex-col lg:flex-row items-center gap-[var(--gap-xl)] xl:gap-[var(--gap-2xl)] ${section.isReverse ? 'lg:flex-row-reverse' : ''}`}>
 
 {/* Image Composition - Parent Container */}
-<div className="w-full lg:w-1/2 relative group">
+<div className="w-full lg:w-1/2 relative group mb-12 lg:mb-0"> {/* Mobile pe thoda margin diya niche */}
 
   {/* Primary Image Container */}
   <div
     className={`
       relative aspect-[4/5] md:aspect-video lg:aspect-[4/3] rounded-lg overflow-hidden shadow-2xl
       transition-all duration-500 ease-in-out
-      /* Default state: Peeche */
       z-20
-      /* Primary pe hover karne se ye sabse upar aa jayegi */
       hover:z-50 hover:scale-[1.02]
     `}
   >
@@ -150,17 +148,17 @@ const WhyChoose = () => {
   {/* Floating Secondary Image */}
   <div
     className={`
-      absolute -bottom-10 hidden md:block w-64 h-48 rounded-lg overflow-hidden
+      absolute -bottom-6 md:-bottom-10
+      /* 'hidden' ko hata kar 'block' kar diya */
+      block
+      w-40 h-32 md:w-64 md:h-48
+      rounded-lg overflow-hidden
       shadow-2xl transition-all duration-500 ease-in-out
       cursor-pointer
-
-      /* Default state: Shuru mein ye upar hai */
       z-30
+      /* Mobile par thoda chota rakha hai (w-40 h-32) aur bade screens par w-64 h-48 */
 
-      /* Jab Primary Image (Parent Group) pe hover ho, to ye peeche chali jaye */
-
-
-      ${section.isReverse ? '-left-10' : '-right-10'}
+      ${section.isReverse ? '-left-4 md:-left-10' : '-right-4 md:-right-10'}
     `}
   >
     <ImageWithSkeleton

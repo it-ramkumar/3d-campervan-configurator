@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Search, ChevronDown, ChevronUp, Zap, Shield, Droplets, Sun, Grid, Palette, X, ArrowRight, Star, Sparkles, Download, Maximize2, Minus, Plus } from "lucide-react";
-import ScrollFromTop from "../../../../components/ScrollFromTop/ScrollFromTop";
 // Fabric data with colors and images (Data is unchanged, kept for completeness)
 const fabricData = {
   "Chenille Fleece": {
@@ -722,7 +721,6 @@ export default function CushionCatalog() {
 
   return (
     <div className="min-h-screen bg-white">
-      <ScrollFromTop/>
       {/* Enhanced Hero Section */}
       <section className="relative pt-12 sm:pt-16 md:pt-20 lg:pt-24 pb-6 sm:pb-8 md:pb-10 lg:pb-12 bg-white overflow-hidden">
         {/* Sophisticated Background Pattern */}

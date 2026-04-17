@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import { Heading2, Heading3, Heading4, RichParagraph } from "../Common/Common";
 // Register ScrollTrigger for scroll-based animations
 gsap.registerPlugin(ScrollTrigger);
 
@@ -315,25 +315,27 @@ const getGraphicForContent = (content) => {
 // Individual Feature Card Component (Mobile Optimized - No Change)
 const FeatureCard = ({ title, description }) => {
     return (
-        <div className="group relative bg-black/40 backdrop-blur-lg rounded-lg p-2.5 border border-white/15 hover:border-white/30 transition-all duration-300 hover:shadow-lg">
+        <div className="group relative bg-black/20 backdrop-blur-lg rounded-lg p-2.5 border border-white/25 hover:border-white/30 transition-all duration-300 hover:shadow-lg">
             {/* Content */}
             <div className="relative z-10">
-                <h3 className="font-serif font-semibold text-xs text-white mb-1.5 group-hover:text-emerald-100 transition-colors duration-300 leading-tight line-clamp-2">
+                <Heading4 text={title} className="!text-white !text-base"/>
+                {/* <h3 className="font-serif font-semibold text-xs text-white mb-1.5 group-hover:text-emerald-100 transition-colors duration-300 leading-tight line-clamp-2">
                     {title}
-                </h3>
+                </h3> */}
 
                 <ul className="space-y-1">
                     {description.map((line, lineIndex) => (
                         <li
                             key={lineIndex}
-                            className="flex items-start gap-1 text-gray-200 group-hover:text-gray-100 transition-colors duration-300 group/item p-1 rounded hover:bg-white/5 transition-all duration-200"
+                            className="flex items-start gap-2 text-white/90 group-hover:text-gray-100 transition-colors duration-300 group/item p-1 rounded hover:bg-white/5 transition-all duration-200"
                         >
-                            <div className="content-graphic flex-shrink-0 mt-0.5">
+                            <div className="content-graphic flex-shrink-0 mt-[2px]">
                                 {getGraphicForContent(line)}
                             </div>
-                            <span className="flex-1 leading-relaxed font-serif text-[10px]">
+                            <RichParagraph className="text-secondary! !text-xs">{line}</RichParagraph>
+                            {/* <span className="flex-1 leading-relaxed font-serif text-[10px]">
                                 {line}
-                            </span>
+                            </span> */}
                         </li>
                     ))}
                 </ul>
@@ -442,12 +444,14 @@ export default function SprinterUpgrade() {
     const SectionTitle = ({ title, subtitle, className = "" }) => (
         <div className={`text-center max-w-4xl mx-auto mb-4 px-3 ${className}`}>
             {/* Reduced title font size: md:text-2xl (from md:text-3xl) */}
-            <h2 className="section-title font-serif font-bold text-lg md:text-2xl text-white leading-snug mb-1.5">
+            <Heading3 text={title} className="text-secondary!"/>
+            {/* <h2 className="section-title font-serif font-bold text-lg md:text-2xl text-white leading-snug mb-1.5">
                 {title}
-            </h2>
-            <p className="section-subtitle font-serif font-normal text-xs md:text-sm text-white/80 leading-relaxed px-2">
+            </h2> */}
+            <RichParagraph className="text-secondary!">{subtitle}</RichParagraph>
+            {/* <p className="section-subtitle font-serif font-normal text-xs md:text-sm text-white/80 leading-relaxed px-2">
                 {subtitle}
-            </p>
+            </p> */}
         </div>
     );
 

@@ -136,7 +136,6 @@ export default function InquiryForm() {
     if (unfilled.length > 0) return setValidationMessage("⚠️ Please select an option to continue.");
     setValidationMessage(null);
     setCurrentStep((s) => Math.min(s + 1, formQuestions.length - 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handlePrevious = () => {

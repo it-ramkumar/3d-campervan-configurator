@@ -222,7 +222,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
             const activeItems = isShowingFull ? allActiveItems : allActiveItems.slice(0, MAX_INITIAL_ITEMS);
 
             const activeItem = activeItemMap?.[cat._id] || activeItems[0] || null;
-            const isExpanded = expandedCategories?.[cat._id] || true;
+            const isExpanded = expandedCategories?.[cat._id] || false;
             const isEven = index % 2 === 0;
 
             return (
@@ -250,7 +250,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                 </div>
 
                 <AnimatePresence>
-                  {isExpanded && (
+                  {!isExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -324,7 +324,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                   <div className="relative z-10 overflow-hidden rounded-lg border-4 border-white shadow-2xl mx-auto bg-gray-100">
                                     <ImageWithSkeleton
                                       src={activeItem.images?.[0]}
-                                      alt={activeItem.title}
+                                      alt={activeItem.title || "Van interior options"}
                                       className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
                                     />
                                   </div>
