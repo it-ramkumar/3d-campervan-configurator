@@ -52,5 +52,5 @@ TestblogSchema.pre("save", async function (next) {
   }
   next();
 });
-
+TestblogSchema.index({ "$**": "text" });
 module.exports = mongoose.models.TestBlog || mongoose.model("TestBlog", TestblogSchema);

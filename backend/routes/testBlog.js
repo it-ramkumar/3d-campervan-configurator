@@ -95,9 +95,7 @@ router.post(
 );
 
 
-/* ---------------------------------------
-   🔵 GET ALL BLOGS
---------------------------------------- */
+
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -105,17 +103,14 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
     const search = req.query.search || "";
 
-    const query = search
-      ? {
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { description: { $regex: search, $options: "i" } },
-        ],
-      }
-      : {};
+    // Define the query
+    // If searching, use $text. If not, use an empty object to fetch all.
+    const query = search ? { $text: { $search: search } } : {};
 
+    // Execute query
     const blogs = await Blog.find(query)
-      .sort({ createdAt: -1 })
+      // If searching, sort by text relevance score. Otherwise, sort by date.
+      .sort(search ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skip)
       .limit(limit);
 

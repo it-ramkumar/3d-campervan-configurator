@@ -280,7 +280,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       newSlug = await Van.generateSlug(van_listing.title);
     }
 
-    console.log(van.glbFile,"glb")
+    // console.log(van.glbFile,"glb")
     // ✅ GLB File Handling with Deletion
     let modelUrl = van.glbFile;
 
