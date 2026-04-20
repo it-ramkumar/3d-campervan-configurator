@@ -202,7 +202,7 @@ router.put("/:id", protect, adminOnly, async (req, res) => {
     res.status(500).json({ message: "Server error while updating quote." });
   }
 });
-router.delete("/delete-quote/:id", protect, adminOnly, async (req, res) => {
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
 
