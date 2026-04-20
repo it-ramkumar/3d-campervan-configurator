@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageWithSkeleton from "../../Common/ImageWithSkeleton/ImageWithSkeleton";
 import { Search, ChevronDown, ChevronUp, Zap, Shield, Droplets, Sun, Grid, Palette, X, ArrowRight, Star, Sparkles, Download, Maximize2, Minus, Plus } from "lucide-react";
+import { RichParagraph, Heading2, Heading3, Heading4 } from "@/components/Common/Common";
 // Fabric data with colors and images (Data is unchanged, kept for completeness)
 const fabricData = {
   "Chenille Fleece": {
@@ -189,7 +190,7 @@ useEffect(() => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-lg"
+      className="fixed inset-x-0 top-16 bottom-0 z-[100] flex items-center justify-center pt-24 p-2 sm:p-4 bg-black/80 backdrop-blur-lg"
       onClick={onClose}
     >
       <motion.div
@@ -201,15 +202,15 @@ useEffect(() => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
-          <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white ">
+          <div className="flex items-center gap-3 sm:gap-4 ">
             <div
               className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl border-2 sm:border-3 border-gray-300 shadow-lg"
               style={{ backgroundColor: color.code }}
             />
             <div>
-              <h2 className="font-bold text-lg sm:text-xl md:text-2xl text-gray-900">{color.name}</h2>
-              <p className="text-gray-600 font-mono text-xs sm:text-sm">{color.code}</p>
+              <Heading3 text={color.name}/>
+              <RichParagraph>{color.code}</RichParagraph>
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -232,7 +233,8 @@ useEffect(() => {
           {/* Image Section */}
           <div className="lg:w-1/2 p-3 sm:p-4 md:p-6 flex flex-col">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="font-semibold text-gray-900 text-base sm:text-lg">Fabric Preview</h3>
+              <Heading4 text={"Fabric Preview"} className="text-gray-900"/>
+              {/* <h3 className="font-semibold text-gray-900 text-base sm:text-lg">Fabric Preview</h3> */}
               <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   onClick={handleZoomOut}
@@ -281,24 +283,26 @@ useEffect(() => {
             <div className="space-y-4 sm:space-y-6">
               {/* Fabric Info */}
               <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
-                <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-2 sm:mb-3">Fabric Information</h3>
+                <Heading4 text={"Fabric Information"}className="mb-2" />
+                {/* <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-2 sm:mb-3">Fabric Information</h3> */}
                 <div className="space-y-2 sm:space-y-3">
                   <div>
-                    <span className="text-xs sm:text-sm text-gray-500 font-medium">Fabric Type</span>
-                    <p className="font-semibold text-gray-900 text-sm sm:text-base">{fabricName}</p>
+                    <Heading4 text={"Fabric Type"} className="!text-sm !text-gray-500"/>
+                    <RichParagraph className="font-semibold">{fabricName}</RichParagraph>
                   </div>
                   <div>
-                    <span className="text-xs sm:text-sm text-gray-500 font-medium">Description</span>
-                    <p className="text-gray-700 leading-relaxed text-sm sm:text-base">{fabricDescription}</p>
+                    <Heading4 text={"Description"} className="!text-sm !text-gray-500"/>
+                    <RichParagraph>{fabricDescription}</RichParagraph>
                   </div>
                   <div>
-                    <span className="text-xs sm:text-sm text-gray-500 font-medium">Color Family</span>
+                    <Heading4 text={"Color Family"} className="!text-sm !text-gray-500"/>
                     <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-2">
                       <div
                         className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-2 border-gray-300 shadow-md"
                         style={{ backgroundColor: color.code }}
                       />
-                      <span className="font-medium text-gray-900 text-sm sm:text-base">{color.name}</span>
+                       <Heading4 text={color.name} className="!text-sm "/>
+                      {/* <span className="font-medium text-gray-900 text-sm sm:text-base">{color.name}</span> */}
                     </div>
                   </div>
                 </div>
@@ -306,22 +310,28 @@ useEffect(() => {
 
               {/* Color Properties */}
               <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
-                <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-3 sm:mb-4">Color Properties</h3>
+                <Heading4 text={"Color Properties"} className="mb-2" />
+                {/* <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-3 sm:mb-4">Color Properties</h3> */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
-                    <span className="text-xs sm:text-sm text-gray-500 block mb-1">Hex Code</span>
-                    <span className="font-mono font-bold text-gray-900 text-sm sm:text-base">{color.code}</span>
+                    <Heading4 text={"Hex Code"} className="!text-sm !text-gray-500 mb-2"/>
+                    <Heading4 text={color.code} className="!text-base "/>
+                    {/* <span className="text-xs sm:text-sm text-gray-500 block mb-1">Hex Code</span> */}
+                    {/* <span className="font-mono font-bold text-gray-900 text-sm sm:text-base">{color.code}</span> */}
                   </div>
                   <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
-                    <span className="text-xs sm:text-sm text-gray-500 block mb-1">Color Name</span>
-                    <span className="font-semibold text-gray-900 text-sm sm:text-base">{color.name}</span>
+                    <Heading4 text={"Color Name"} className="!text-sm !text-gray-500 mb-2"/>
+                    <Heading4 text={color.name} className="!text-base "/>
+                    {/* <span className="text-xs sm:text-sm text-gray-500 block mb-1">Color Name</span>
+                    <span className="font-semibold text-gray-900 text-sm sm:text-base">{color.name}</span> */}
                   </div>
                 </div>
               </div>
 
               {/* Fabric Features */}
               <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200">
-                <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-3 sm:mb-4">Fabric Features</h3>
+                <Heading4 text={"Fabric Featuress"} className="mb-2" />
+                {/* <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-3 sm:mb-4">Fabric Features</h3> */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div className="flex items-center gap-2 sm:gap-3">
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-lg sm:rounded-xl flex items-center justify-center">
@@ -363,24 +373,30 @@ useEffect(() => {
               </div>
 
               {/* Perfect For Section */}
-              <div className="bg-gradient-to-br from-black to-gray-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
-                <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Perfect For</h4>
+              <div className="bg-gradient-to-br from-primary to-gray-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
+                <Heading4 text={"Perfect For"} className="!font-bold  text-secondary mb-4"/>
+
+                {/* <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Perfect For</h4> */}
                 <ul className="space-y-1 sm:space-y-2">
                   <li className="flex items-center gap-2 sm:gap-3">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                    <span className="text-sm sm:text-base">Dinette bench cushions</span>
+                    <RichParagraph className="text-white">{"Dinette bench cushions"}</RichParagraph>
+                    {/* <span className="text-sm sm:text-base">Dinette bench cushions</span> */}
                   </li>
                   <li className="flex items-center gap-2 sm:gap-3">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                    <span className="text-sm sm:text-base">Van conversion interiors</span>
+                    <RichParagraph className="text-white">{"Van conversion interiors"}</RichParagraph>
+                    {/* <span className="text-sm sm:text-base">Van conversion interiors</span> */}
                   </li>
                   <li className="flex items-center gap-2 sm:gap-3">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                    <span className="text-sm sm:text-base">RV furniture upholstery</span>
+                    <RichParagraph className="text-white">{"RV furniture upholstery"}</RichParagraph>
+                    {/* <span className="text-sm sm:text-base">RV furniture upholstery</span> */}
                   </li>
                   <li className="flex items-center gap-2 sm:gap-3">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />
-                    <span className="text-sm sm:text-base">Custom cushion projects</span>
+                    <RichParagraph className="text-white">{"Custom cushion projects"}</RichParagraph>
+                    {/* <span className="text-sm sm:text-base">Custom cushion projects</span> */}
                   </li>
                 </ul>
               </div>
@@ -518,7 +534,7 @@ function ColorSwatch({ color, index, isSelected, onClick, onViewDetails, fabricN
         {/* Enhanced Text Information */}
         <div className="p-2 sm:p-3 md:p-4 lg:p-6 bg-white border-t border-gray-100">
           <div className="flex items-center justify-between mb-1 sm:mb-2 md:mb-3">
-            <p className="font-bold text-gray-900 text-xs sm:text-sm md:text-lg truncate flex-1 mr-1 sm:mr-2">{color.name}</p>
+            <RichParagraph className="!font-bold !text-base">{color.name}</RichParagraph>
             <div className="flex items-center gap-1 sm:gap-2">
               <div
                 className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-md sm:rounded-lg md:rounded-xl border-2 border-gray-300 shadow-md ring-1 ring-gray-200"
@@ -527,6 +543,7 @@ function ColorSwatch({ color, index, isSelected, onClick, onViewDetails, fabricN
             </div>
           </div>
           <div className="flex items-center justify-between">
+
             <p className="text-gray-600 text-xs sm:text-sm font-mono bg-gray-100 px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg">{color.code}</p>
             <motion.div
               whileHover={{ scale: 1.1 }}
@@ -568,24 +585,25 @@ function FabricSection({ fabricName, fabricInfo, isExpanded, onToggle, selectedC
         onClick={handleToggle}
       >
         {/* Background Accent */}
-        <div className="absolute top-0 left-0 w-1.5 sm:w-2 h-full bg-gradient-to-b from-black to-gray-700" />
+        <div className="absolute top-0 left-0 w-1.5 sm:w-2 h-full bg-gradient-to-b from-primary to-primary" />
 
         <div className="flex items-start justify-between ml-1.5 sm:ml-2 md:ml-4">
           <div className="flex-1">
             {/* RESTRUCTURED for better mobile layout */}
             <div className="flex items-start gap-2 sm:gap-3 md:gap-4 lg:gap-6">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-black to-gray-800 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg sm:shadow-xl">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-primary to-primary rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg sm:shadow-xl">
                 <Palette className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-900 mb-1 sm:mb-2 truncate">{fabricName}</h3>
+                <Heading2 text={fabricName}/>
+                {/* <h3 className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-900 mb-1 sm:mb-2 truncate">{fabricName}</h3> */}
                 <div className="flex items-center flex-wrap gap-1 sm:gap-2 md:gap-3 mt-1 sm:mt-2">
-                  <span className="bg-black text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold">
+                  <span className="bg-hover text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold">
                     {fabricInfo.colors.length} colors
                   </span>
-                  <span className="text-gray-600 text-xs sm:text-sm">• Tap to {isExpanded ? 'collapse' : 'expand'}</span>
+                  <span className="text-hover text-xs sm:text-sm">• Tap to {isExpanded ? 'collapse' : 'expand'}</span>
                 </div>
-                <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed max-w-5xl mt-2 sm:mt-3 md:mt-4">{fabricInfo.description}</p>
+                <RichParagraph className="!text-lg mt-4">{fabricInfo.description}</RichParagraph>
               </div>
             </div>
           </div>
@@ -738,7 +756,7 @@ export default function CushionCatalog() {
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-black to-gray-800 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-5 md:mb-6 shadow-xl sm:shadow-2xl relative"
+              className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-hover to-hover rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-5 md:mb-6 shadow-xl sm:shadow-2xl relative"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl sm:rounded-3xl" />
               <Palette className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 text-white" />
@@ -756,7 +774,7 @@ export default function CushionCatalog() {
               className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-900 mb-3 sm:mb-4 leading-tight tracking-tight"
             >
               Cushion Fabric
-              <span className="block bg-gradient-to-r from-black via-gray-800 to-gray-700 bg-clip-text text-transparent mt-1 sm:mt-2">
+              <span className="block bg-gradient-to-r from-black via-gray-800 to-gray-700 bg-clip-text text-transparent mt-1 mb-4 sm:mt-2">
                 Catalog
               </span>
             </motion.h1>
@@ -765,7 +783,8 @@ export default function CushionCatalog() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light mb-4 sm:mb-5 md:mb-6"
+              // className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-light mb-4 sm:mb-5 md:mb-6"
+              className="Richparagraph text-xl text-gray-600 mt-4 text-medium"
             >
               Premium fabrics for dinette bench cushions
             </motion.p>
@@ -781,12 +800,12 @@ export default function CushionCatalog() {
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-gray-400 rounded-full flex justify-center"
+                className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-hover rounded-full flex justify-center"
               >
                 <motion.div
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  className="w-1.5 h-3 bg-gray-600 rounded-full mt-1.5 sm:mt-2"
+                  className="w-1.5 h-3 bg-hover rounded-full mt-1.5 sm:mt-2"
                 />
               </motion.div>
             </motion.div>
@@ -806,7 +825,8 @@ export default function CushionCatalog() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 mb-6 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-5xl mx-auto font-light px-2"
+              // className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 mb-6 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-5xl mx-auto font-light px-2"
+              className="Richparagraph mb-12 text-xl"
             >
               Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night.
               At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors.
@@ -824,14 +844,15 @@ export default function CushionCatalog() {
                   className="bg-white p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg sm:shadow-xl border border-gray-300 text-center group hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
                 >
                   {/* Background Gradient Accent */}
-                  <div className="absolute top-0 left-0 w-full h-1.5 sm:h-2 bg-gradient-to-r from-black to-gray-700" />
+                  <div className="absolute top-0 left-0 w-full h-1.5 sm:h-2 bg-gradient-to-r from-primary to-primary" />
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-black to-gray-800 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg sm:shadow-xl relative z-10">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary to-primary rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg sm:shadow-xl relative z-10">
                     <feature.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg mb-2 sm:mb-3 md:mb-4 relative z-10">{feature.title}</h3>
-                  <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed relative z-10">{feature.description}</p>
+                  <Heading4 text={feature.title} className="relative z-10 mb-4"/>
+                  <RichParagraph>{feature.description}</RichParagraph>
+
                 </motion.div>
               ))}
             </div>
@@ -852,14 +873,10 @@ export default function CushionCatalog() {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <motion.h2
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-900 mb-6 sm:mb-8 md:mb-10 lg:mb-12"
-            >
-              Cushion Thickness
-              <span className="block text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 mt-1 sm:mt-2 md:mt-3 font-light">Options</span>
-            </motion.h2>
+          <Heading2 text={"Cushion Thickness"}/>
+
+              <Heading3 text={"Options"} className="!text-gray-600"/>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-2">
               <motion.div
@@ -871,15 +888,13 @@ export default function CushionCatalog() {
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-black to-gray-700 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-primary to-primary rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
                 >
                   <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">3"</span>
                 </motion.div>
-                <h3 className="font-bold text-lg sm:text-xl md:text-2xl text-gray-900 mb-3 sm:mb-4 md:mb-5 relative z-10">3-Inch Thickness</h3>
-                <p className="text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base lg:text-lg relative z-10">
-                  For the family-friendly vans, a 3-inch-thick cushion is recommended so the people
-                  sleeping in the lower bunk have more air and headspace.
-                </p>
+                <Heading3 text={"3-Inch Thickness"} className=" relative z-10 mb-4"/>
+                <RichParagraph className="!text-lg">{"For the family-friendly vans, a 3-inch-thick cushion is recommended so the people sleeping in the lower bunk have more air and headspace."}</RichParagraph>
+
               </motion.div>
 
               <motion.div
@@ -891,15 +906,13 @@ export default function CushionCatalog() {
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: -5 }}
-                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-gray-700 to-black rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-primary to-primary rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
                 >
                   <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">4"</span>
                 </motion.div>
-                <h3 className="font-bold text-lg sm:text-xl md:text-2xl text-gray-900 mb-3 sm:mb-4 md:mb-5 relative z-10">4-Inch Thickness</h3>
-                <p className="text-gray-700 leading-relaxed text-xs sm:text-sm md:text-base lg:text-lg relative z-10">
-                  A 4-inch-thick cushion is for solo travelers and couples who want to enjoy
-                  a more comfortable sitting experience.
-                </p>
+                <Heading3 text={"4-Inch Thickness"} className=" relative z-10 mb-4"/>
+                <RichParagraph className="!text-lg">{"A 4-inch-thick cushion is for solo travelers and couples who want to enjoy a more comfortable sitting experience."}</RichParagraph>
+
               </motion.div>
             </div>
           </motion.div>
@@ -921,14 +934,9 @@ export default function CushionCatalog() {
             >
               Fabric Collection
             </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-light px-2"
-            >
-              Discover our premium fabric options
-            </motion.p>
+
+            <RichParagraph className="!text-lg !text-gray-600">{"Discover our premium fabric options"}</RichParagraph>
+
           </motion.div>
 
           {/* Premium Search Bar */}
@@ -974,8 +982,8 @@ export default function CushionCatalog() {
               <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gray-200 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-5 md:mb-6 shadow-lg sm:shadow-xl">
                 <Search className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 text-gray-500" />
               </div>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-1 sm:mb-2">No fabrics found</p>
-              <p className="text-xs sm:text-sm md:text-base text-gray-500">Try adjusting your search terms</p>
+              <RichParagraph className="!text-gray-600 !text-base">{"No fabrics found"}</RichParagraph>
+              <RichParagraph className="!text-gray-600 !text-lg">{"Try adjusting your search terms"}</RichParagraph>
             </motion.div>
           )}
         </div>
@@ -1015,8 +1023,8 @@ export default function CushionCatalog() {
                 style={{ backgroundColor: selectedColor.code }}
               />
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-gray-900 text-sm sm:text-base md:text-lg truncate mb-0.5 sm:mb-1">{selectedColor.name}</p>
-                <p className="text-gray-600 text-xs sm:text-sm font-mono truncate">{selectedColor.code}</p>
+                <RichParagraph className="font-bold">{selectedColor.name}</RichParagraph>
+                <RichParagraph className="text-gray-600 ">{selectedColor.code}</RichParagraph>
               </div>
             </div>
             <button
