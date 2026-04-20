@@ -12,6 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full antialiased">
       <head>
+        <meta name="yandex-verification" content="94c87c5e22615ea1" />
         {/* Ahrefs Analytics - Strategy 'afterInteractive' use karein */}
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
