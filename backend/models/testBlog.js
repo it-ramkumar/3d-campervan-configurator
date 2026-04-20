@@ -52,19 +52,5 @@ TestblogSchema.pre("save", async function (next) {
   }
   next();
 });
-// Add this in your Testblog.js model file
-TestblogSchema.index(
-  {
-    title: "text",
-    description: "text",
-    "content.text": "text"
-  },
-  {
-    weights: {
-      title: 10,        // Title is 10x more important
-      description: 5,   // Description is 5x more important
-      "content.text": 1 // Rest of the content is normal
-    },
-    name: "BlogTextIndex"
-  }
-);module.exports = mongoose.models.TestBlog || mongoose.model("TestBlog", TestblogSchema);
+TestblogSchema.index({ "$**": "text" });
+module.exports = mongoose.models.TestBlog || mongoose.model("TestBlog", TestblogSchema);

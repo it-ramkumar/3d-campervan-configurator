@@ -95,7 +95,9 @@ router.post(
 );
 
 
-
+/* ---------------------------------------
+   🔵 GET ALL BLOGS
+--------------------------------------- */
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -103,23 +105,18 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
     const search = req.query.search || "";
 
-    let query = {};
-    let sortOptions = { createdAt: -1 }; // Default sort: Newest first
+    // Define the query
+    // If searching, use $text. If not, use an empty object to fetch all.
+    const query = search ? { $text: { $search: search } } : {};
 
-    if (search) {
-      // 1. Use $text search
-      query = { $text: { $search: search } };
-
-      // 2. Sort by "textScore" so the most relevant TOPICS come first
-      sortOptions = { score: { $meta: "textScore" } };
-    }
-
-    const blogs = await TestBlog.find(query, { score: { $meta: "textScore" } }) // Project the score
-      .sort(sortOptions)
+    // Execute query
+    const blogs = await Blog.find(query)
+      // If searching, sort by text relevance score. Otherwise, sort by date.
+      .sort(search ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const totalBlogs = await TestBlog.countDocuments(query);
+    const totalBlogs = await Blog.countDocuments(query);
 
     res.json({
       success: true,
