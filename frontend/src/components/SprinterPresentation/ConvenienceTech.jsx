@@ -5,9 +5,9 @@ import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
 import { Heading2, Heading3 } from "../Common/Common";
 // import SwivelCard from "./SwivelCard";
 // Placeholder image URLs for the tech section
-const MBUX_IMAGE = "/sprinter/Rectangle 160.jpg";
-const CAMERA_IMAGE = "/sprinter/pp3.png";
-const BENEFITS_IMAGE = "/sprinter/Rectangle160.jpg";
+const MBUX_IMAGE = "/sprinter/Rectangle 160.webp";
+const CAMERA_IMAGE = "/sprinter/pp3.webp";
+const BENEFITS_IMAGE = "/sprinter/Rectangle160.webp";
 
 // MODIFIED: Further reduced padding, font sizes, and number indicator size.
 const SwivelCard = ({ title, description,  index }) => (

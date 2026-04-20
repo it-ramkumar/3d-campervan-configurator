@@ -8,9 +8,9 @@ import { Heading2, Heading3, Heading4, RichParagraph } from "../Common/Common";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- PLACEHOLDER IMAGES ---
-const bgImageTechSafety = "/sprinter/image22.jpg";
-const bgImagePackages = "/sprinter/pp.png";
-const bgImageeSprinter = "/sprinter/pp1.png";
+const bgImageTechSafety = "/sprinter/image22.webp";
+const bgImagePackages = "/sprinter/pp.webp";
+const bgImageeSprinter = "/sprinter/pp1.webp";
 
 // --- CONTENT STRUCTURE DEFINITIONS (No Change) ---
 const techSafetyContent = [

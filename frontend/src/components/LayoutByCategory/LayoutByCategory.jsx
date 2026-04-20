@@ -51,7 +51,7 @@ export default function CamperProjectsClient({ category, initialData, currentPar
   };
 
   const formattedCategory = category?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
+// console.log(availableFilters,"filter")
   return (
     <main className="bg-secondary min-h-screen">
       <HeroSection
@@ -104,7 +104,14 @@ export default function CamperProjectsClient({ category, initialData, currentPar
                     className="w-full px-4 py-3 bg-secondary border-none rounded-md text-sm text-primary font-medium cursor-pointer focus:ring-2 focus:ring-hover"
                   >
                     <option value="">All {f.label}s</option>
-                    {f.options?.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
+
+                    {/* ✅ Remove duplicates here using [...new Set()] */}
+                {f.options && [...new Set(f.options.map(opt => opt.trim()))].map((opt, i) => (
+  <option key={i} value={opt}>
+    {opt}
+  </option>
+))}
+
                   </select>
                 </div>
               ))}

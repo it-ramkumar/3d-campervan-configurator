@@ -98,7 +98,7 @@ export default function VanConfig() {
       id: "swb",
       title: 'SWB (Short): 144"',
       shortLabel: 'SWB (144")',
-      image: "/sprinter/11.png",
+      image: "/sprinter/11.webp",
       description: "SWB (Short wheelbase)\n144” wb (19.4 ft long)",
       features: ["Urban", "Easy Park", "Efficient"],
       dimensions: { length: "19.4 ft", cargoVolume: "319 cu ft" },
@@ -107,7 +107,7 @@ export default function VanConfig() {
       id: "lwb",
       title: 'LWB (Long): 170"',
       shortLabel: 'LWB (170")',
-      image: "/sprinter/11.png",
+      image: "/sprinter/11.webp",
       description: "LWB (Long wheelbase)\n170” wb (22.5 ft long)",
       features: ["Balanced", "Family", "Spacious"],
       dimensions: { length: "22.5 ft", cargoVolume: "489 cu ft" },
@@ -117,7 +117,7 @@ export default function VanConfig() {
       // MODIFIED TITLE: Reduced font size for better fit
       title: 'ELWB (Extra-Long): 170" Ext.',
       shortLabel: 'ELWB (170" Ext)',
-      image: "/sprinter/11.png",
+      image: "/sprinter/11.webp",
       description:
         "ELWB (Extra Long Wheelbase) 170” wb with a longer rear tail part (24.2 ft long)",
       features: ["Max Space", "Full Build", "Large"],
@@ -130,7 +130,7 @@ export default function VanConfig() {
       id: "h1",
       title: "H1 (Standard)",
       shortLabel: "H1 (Standard)",
-      image: "/sprinter/Untitled design (17) 1.png",
+      image: "/sprinter/Untitled design (17) 1.webp",
       description: "68.5” interior - Limited standing room",
       features: ["Budget", "Garage", "MPG"],
       dimensions: { interiorHeight: "68.5 inches" },
@@ -139,7 +139,7 @@ export default function VanConfig() {
       id: "h2",
       title: "H2 (High)",
       shortLabel: "H2 (High Roof)",
-      image: "/sprinter/Untitled design (18) 1.png",
+      image: "/sprinter/Untitled design (18) 1.webp",
       description: "79.9” interior - Comfortable for most users",
       features: ["Comfort", "Popular", "Balance"],
       dimensions: { interiorHeight: "79.9 inches" },
@@ -148,7 +148,7 @@ export default function VanConfig() {
       id: "h3",
       title: "H3 (Super High)",
       shortLabel: "H3 (Super High)",
-      image: "/sprinter/image 5.png",
+      image: "/sprinter/image 5.webp",
       description: '89" Interior - Ample headroom for tall builds',
       features: ["Tall", "Luxury", "Max Room"],
       dimensions: { interiorHeight: "89 inches" },
@@ -158,7 +158,7 @@ export default function VanConfig() {
   const vanTypes = [
     {
       id: "cargo",
-      image: "/sprinter/image 13.jpg",
+      image: "/sprinter/image 13.webp",
       title: "Cargo Van",
       shortLabel: "Cargo Van",
       description:
@@ -168,7 +168,7 @@ export default function VanConfig() {
     },
     {
       id: "crew",
-      image: "/sprinter/image 14.jpg",
+      image: "/sprinter/image 14.webp",
       title: "Crew Van",
       shortLabel: "Crew Van",
       description:

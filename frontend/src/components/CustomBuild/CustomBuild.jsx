@@ -104,7 +104,7 @@ const CustomBuild = () => {
 
             <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
               <div className="rounded-lg overflow-hidden">
-                <Image src={`${imgPath}interior-layout.JPG`} alt="Interior Layout" className="w-full object-cover" width={800} height={600} />
+                <Image src={`${imgPath}interior-layout.webp`} alt="Interior Layout" className="w-full object-cover" width={800} height={600} />
               </div>
               <div className="space-y-6">
                 <Heading3 text="Customize Interior Layouts" className="uppercase"/>
@@ -124,7 +124,7 @@ const CustomBuild = () => {
             {/* Premium Materials & Tech */}
             <div className="grid md:grid-cols-2 gap-16 mb-24">
               <div className="space-y-6">
-                <Image src={`${imgPath}IMG_9845.jpg`} alt="Materials" className="w-full h-[400px] object-cover rounded-lg" width={800} height={600} />
+                <Image src={`${imgPath}IMG_9845.webp`} alt="Materials" className="w-full h-[400px] object-cover rounded-lg" width={800} height={600} />
                 <Heading3 text="Premium, Client-Selected Materials" className=" uppercase"/>
                 <RichParagraph >
                   At Big Bear Vans, each component of our campervans is premium. You can choose from our curated selection of sustainable hardwoods, custom cabinetry, multi-functional furniture, and high-end exterior accessories. Beneath the surface, we install only the best systems: reliable self-heating Lithium batteries, advanced Glycol or Diesel heating, high-performance insulation, and fully integrated water systems. Every choice is high-quality and built to last.
@@ -171,7 +171,7 @@ const CustomBuild = () => {
                 <SecondaryButton link="/configurator" label={"Try 3D Configurator"} />
 
               </div>
-              <Image src={`${imgPath}configurator.png`} alt="Configurator" className="rounded-lg w-full h-70 border border-white/10" width={800} height={600} />
+              <Image src={`${imgPath}configurator.webp`} alt="Configurator" className="rounded-lg w-full h-70 border border-white/10" width={800} height={600} />
             </div>
           </div>
         </section>

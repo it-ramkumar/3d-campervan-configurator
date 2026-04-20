@@ -25,7 +25,7 @@ const packagesData = [
       "Better grip in snow, ice, or rough terrain.",
       "Supports towing (5,000-7,500 lbs) with stability.",
     ],
-    image: "/sprinter/Rectangle 161.jpg",
+    image: "/sprinter/Rectangle 161.webp",
   },
   {
     id: "COOPKG",
@@ -47,7 +47,7 @@ const packagesData = [
       "Factory-integrated, safety-compliant.",
       "Cost-effective vs. premium options.",
     ],
-    image: "/sprinter/Rectangle 161 (1).jpg",
+    image: "/sprinter/Rectangle 161 (1).webp",
   },
   {
     id: "C01PKG",
@@ -137,7 +137,7 @@ const packagesData = [
       "Adds comfort with premium steering.",
       "Seamless C03 integration.",
     ],
-    image: "/sprinter/Rectangle 161 (5).jpg",
+    image: "/sprinter/Rectangle 161 (5).webp",
   },
   {
     id: "X13PKG",
@@ -158,7 +158,7 @@ const packagesData = [
       "Enhances safety with better lighting.",
       "Modernizes look, boosts confidence.",
     ],
-    image: "/sprinter/Rectangle 161 (6).jpg",
+    image: "/sprinter/Rectangle 161 (6).webp",
   },
   {
     id: "X4ZPKG",
@@ -180,7 +180,7 @@ const packagesData = [
       "Ideal for van conversions.",
       "Durable, factory-integrated.",
     ],
-    image: "/sprinter/Rectangle 161 (7).jpg",
+    image: "/sprinter/Rectangle 161 (7).webp",
   },
   {
     id: "X67PKG",
@@ -201,7 +201,7 @@ const packagesData = [
       "Durable, weather-resistant finish.",
       "Pairs well with X13PKG.",
     ],
-    image: "/sprinter/Rectangle 161 (8).jpg",
+    image: "/sprinter/Rectangle 161 (8).webp",
   },
 ];
 

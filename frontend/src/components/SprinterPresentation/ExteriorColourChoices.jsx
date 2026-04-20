@@ -42,61 +42,61 @@ const CloseIcon = () => (
 const colors = [
   {
     name: 'Arctic White',
-    img: '/sprinter/Arctic White.png',
+    img: '/sprinter/Arctic White.webp',
     description: 'A pristine, brilliant white that reflects sunlight to keep the interior cooler. Perfect for hot climates and professional fleets.',
     features: ['Heat reflective', 'Easy maintenance', 'Professional appearance', 'High visibility']
   },
   {
     name: 'Pebble Grey',
-    img: '/sprinter/pebblegrey.png',
+    img: '/sprinter/pebblegrey.webp',
     description: 'A sophisticated light grey with subtle warm undertones. Hides minor scratches and dust exceptionally well.',
     features: ['Scratch masking', 'Elegant finish', 'Dust camouflage', 'Modern aesthetic']
   },
   {
     name: 'Obsidian Black',
-    img: '/sprinter/obsidianblack.png',
+    img: '/sprinter/obsidianblack.webp',
     description: 'Deep, luxurious black with a mirror-like finish. Creates a commanding presence on the road.',
     features: ['Premium gloss', 'Luxury appearance', 'Deep shine', 'Professional look']
   },
   {
     name: 'Tenorite Grey',
-    img: '/sprinter/tenoritegrey.png',
+    img: '/sprinter/tenoritegrey.webp',
     description: 'A medium grey with cool blue undertones. Offers excellent dirt and water spot concealment.',
     features: ['Water spot hiding', 'Urban sophisticated', 'Easy cleaning', 'Contemporary style']
   },
   {
     name: 'Graphite Grey',
-    img: '/sprinter/graphitegrey.png',
+    img: '/sprinter/graphitegrey.webp',
     description: 'Dark charcoal grey that combines elegance with practicality. Ideal for both commercial and personal use.',
     features: ['All-purpose', 'Stain resistant', 'Timeless appeal', 'Versatile application']
   },
   {
     name: 'Jet Black',
-    img: '/sprinter/jetblack.png',
+    img: '/sprinter/jetblack.webp',
     description: 'The deepest black available with intense pigmentation. Creates a sleek, monolithic appearance.',
     features: ['Maximum depth', 'Ultimate sleekness', 'Rich color', 'Bold statement']
   },
   {
     name: 'Iridium Silver',
-    img: '/sprinter/iridiumsilver.png',
+    img: '/sprinter/iridiumsilver.webp',
     description: 'Metallic silver with high reflectivity. Maintains its showroom appearance for years.',
     features: ['Long-lasting shine', 'Scratch resistant', 'Value retention', 'Modern metallic']
   },
   {
     name: 'Selenite Grey',
-    img: '/sprinter/selenitegrey.png',
+    img: '/sprinter/selenitegrey.webp',
     description: 'A light metallic grey with pearlescent qualities. Changes appearance in different lighting conditions.',
     features: ['Pearlescent effect', 'Light responsive', 'Premium metallic', 'Dynamic appearance']
   },
   {
     name: 'Black Blue',
-    img: '/sprinter/blackblue.png',
+    img: '/sprinter/blackblue.webp',
     description: 'A sophisticated dark blue that appears almost black in low light. Reveals rich blue tones in sunlight.',
     features: ['Color shifting', 'Sophisticated tone', 'Sunlight reactive', 'Executive style']
   },
   {
     name: 'Blue Grey',
-    img: '/sprinter/bluegrey.png',
+    img: '/sprinter/bluegrey.webp',
     description: 'A unique blend of grey and blue that creates a calm, professional appearance suitable for any application.',
     features: ['Calming hue', 'Professional blend', 'Weather resistant', 'Universal appeal']
   },

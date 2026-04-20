@@ -6,7 +6,8 @@
                     name: "Serrano Campground",
                     desc: "Located in the San Bernardino mountains, Serrano is the most popular campground for enjoying the scenic views of Big Bear Lake. At a walking distance from Big Bear Lake, this campground offers you access to multiple outdoor activities.",
                     images: [
-                        "/whereToCamp/Serrano campground.webp"
+                        "/whereToCamp/Serrano campground.webp",
+                         "/whereToCamp/Serrano.webp"
 
                     ],
                     table: [

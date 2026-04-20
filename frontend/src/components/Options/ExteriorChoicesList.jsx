@@ -274,7 +274,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                   label={
                                     <div>
                                       <Heading4
-                                        className={`font-bold transition-colors ${isActive ? "text-secondary" : "text-primary group-hover:!text-hover"}`}
+                                        className={`font-bold transition-colors ${isActive ? "text-primary" : "text-primary group-hover:!text-hover"}`}
                                         text={sub.title}
                                       />
                                       {sub.description && (

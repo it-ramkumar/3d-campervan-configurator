@@ -301,7 +301,7 @@ export default function DecisionFactors() {
       <section className="anim-section w-full relative py-8 md:py-16 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat fixed-bg"
-          style={{ backgroundImage: "url('/sprinter/image 15.jpg')" }}
+          style={{ backgroundImage: "url('/sprinter/image 15.webp')" }}
         >
           {/* NEUTRAL OVERLAY: Natural Black/Gray */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-gray-900/75 to-black/85"></div>
@@ -440,7 +440,7 @@ export default function DecisionFactors() {
       <section className="anim-section w-full relative h-[180px] md:h-[300px] flex items-center justify-center overflow-hidden mt-4">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-          style={{ backgroundImage: "url('/sprinter/s3 - Copy.png')" }}
+          style={{ backgroundImage: "url('/sprinter/s3 - Copy.webp')" }}
         >
           {/* Neutral Dark Overlay */}
           <div className="absolute inset-0 bg-black/60"></div>

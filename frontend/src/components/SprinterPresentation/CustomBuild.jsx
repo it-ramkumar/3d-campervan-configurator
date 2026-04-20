@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 const STEP_DATA = {
   step1: {
     title: "Vehicle Sourcing",
-    image: "/sprinter/i1.png",
+    image: "/sprinter/i1.webp",
     duration: "Immediate",
     description:
       "We take the hassle out of finding the perfect base for your build. Whether you have an existing van or need a new one, we handle the logistics.",
@@ -30,7 +30,7 @@ const STEP_DATA = {
   },
   step2: {
     title: "Collaborative Design",
-    image: "/sprinter/i2.png",
+    image: "/sprinter/i2.webp",
     duration: "1 Month",
     description:
       "This is where your dream takes shape. We sit down (virtually or in-person) to map out every inch of your future home on wheels.",
@@ -42,7 +42,7 @@ const STEP_DATA = {
   },
   step3: {
     title: "Engineering & Planning",
-    image: "/sprinter/i3.png",
+    image: "/sprinter/i3.webp",
     duration: "2 Months",
     description:
       "Before a single screw is turned, our engineers ensure weight distribution, electrical load, and plumbing systems are calculated for safety.",
@@ -54,7 +54,7 @@ const STEP_DATA = {
   },
   step4: {
     title: "Build & Assembly",
-    image: "/sprinter/i4.png",
+    image: "/sprinter/i4.webp",
     duration: "3-4 Months",
     description:
       "Our master craftsmen get to work. From insulation to cabinetry, every component is hand-built and installed with automotive-grade precision.",
@@ -66,7 +66,7 @@ const STEP_DATA = {
   },
   step5: {
     title: "Delivery & Beyond",
-    image: "/sprinter/i5.png",
+    image: "/sprinter/i5.webp",
     duration: "Complete",
     description:
       "The keys are yours. We provide a comprehensive training session so you know exactly how to operate your solar, water, and heating systems.",

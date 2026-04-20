@@ -1,7 +1,7 @@
  export const data = [
          {
             title: "Water Pump",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "",
@@ -12,7 +12,7 @@
         },
           {
             title: "Fresh Water Tank",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: ": Stores clean water for drinking, cooking, and washing. You can choose to install:",
@@ -23,7 +23,7 @@
         },
          {
             title: "greywater",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: ": Stores clean water for drinking, cooking, and washing. You can choose to install:",
@@ -34,7 +34,7 @@
         },
            {
             title: "Heaters",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "",
@@ -45,7 +45,7 @@
         },
           {
             title: "12V Refrigerator",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "In our campervans, we use Vankea’s compressor-based 12V fridge with a separate freezer. You can choose to have a fridge with 3.3 cu ft or 4.4 cu ft capacity. You can easily place a small refrigerator under the kitchen countertop and a tall one beside the bathroom of your campervan. ",
@@ -56,7 +56,7 @@
         },
           {
             title: "Induction Cooktop",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "An induction cooktop is an energy-efficient cooking option for a camper van, running off the battery system or shore power. It requires an inverter and a strong battery setup to function properly. ",
@@ -67,7 +67,7 @@
         },
            {
             title: "Microwave or Oven",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "Microwave requires a powerful inverter, while an oven can be propane- or electric-powered (the latter being more power-intensive). A microwave is usually built-in in a wall-mounted cabinet behind the driver's side and sometimes over the countertop cabinet. The Ninja oven is placed under the countertop. ",
@@ -78,7 +78,7 @@
         },
          {
             title: "Ceiling Lights",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "For the lights of your ceiling, you can choose between: ",
@@ -89,7 +89,7 @@
         },
  {
             title: "Reading Lights",
-            image: "/images/blackLogo.jpg",
+            image: "/images/blackLogo.webp",
             link: "",
             data: {
                 desc: "We also install 12V reading lights for the elevator and dinette bed system. These lights go directly into the batteries, so you can use them without turning on the inverter. You can choose the colour from:",

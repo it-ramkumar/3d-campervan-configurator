@@ -779,7 +779,7 @@ export default function SeatOption() {
           {/* REDUCED GAP AND MARGIN */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-16">
             <InfoCard
-              image="/sprinter/Mask group-1.jpg"
+              image="/sprinter/Mask group-1.webp"
               title="Cargo Van"
               items={[
                 "Typically seats 2–3 people",
@@ -788,7 +788,7 @@ export default function SeatOption() {
               ]}
             />
             <InfoCard
-              image="/sprinter/Mask group-2.jpg"
+              image="/sprinter/Mask group-2.webp"
               title="Crew Van"
               items={[
                 "Hybrid of cargo and passenger van",
@@ -798,7 +798,7 @@ export default function SeatOption() {
               ]}
             />
             <InfoCard
-              image="/sprinter/Mask group.jpg"
+              image="/sprinter/Mask group.webp"
               title="Passenger Van"
               items={[
                 "Designed primarily for transporting people",
@@ -821,7 +821,7 @@ export default function SeatOption() {
           {/* REDUCED GAP */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
             <InfoCard
-              image="/sprinter/Mask group-3.jpg"
+              image="/sprinter/Mask group-3.webp"
               title="Comfort & Durability"
               items={[
                 "Made with high-quality materials",
@@ -831,7 +831,7 @@ export default function SeatOption() {
               ]}
             />
             <InfoCard
-              image="/sprinter/Mask group-4.jpg"
+              image="/sprinter/Mask group-4.webp"
               title="Functionality"
               items={[
                 "Aftermarket options for specific uses",
@@ -842,7 +842,7 @@ export default function SeatOption() {
               ]}
             />
             <InfoCard
-              image="/sprinter/Mask group-5.jpg"
+              image="/sprinter/Mask group-5.webp"
               title="Customization"
               items={[
                 "Wide variety of seat styles available",
@@ -894,7 +894,7 @@ export default function SeatOption() {
                 <div className="p-1.5 flex items-center justify-center order-1 lg:order-2">
                   <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image">
                     <ImageWithSkeleton
-                      src="/sprinter/Rectangle 153.jpg"
+                      src="/sprinter/Rectangle 153.webp"
                       alt="Van with roof tracks"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-105"
                     />
@@ -912,7 +912,7 @@ export default function SeatOption() {
                 <div className="p-1.5 flex items-center justify-center">
                   <div className="relative overflow-hidden rounded-xl w-full h-56 sm:h-64 lg:h-80 group/image">
                     <ImageWithSkeleton
-                      src="/sprinter/Rectangle 154.jpg"
+                      src="/sprinter/Rectangle 154.webp"
                       alt="Van with 180-degree rear door hinges"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-105"
                     />

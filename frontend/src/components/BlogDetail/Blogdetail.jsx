@@ -240,7 +240,7 @@ export default function BlogContentUI({ blog }) {
     <div className="max-w-[1400px] mx-auto px-4 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
 
       {/* Sidebar Left */}
-      <aside className="hidden lg:block lg:col-span-1">
+      {/* <aside className="hidden lg:block lg:col-span-1">
         <div className="sticky top-32 flex flex-col items-center gap-8">
           <div className="w-px h-20 bg-primary/10" />
           <button onClick={handleShare} className="p-4 bg-white rounded-full shadow-sm hover:shadow-xl hover:!text-hover transition-all border border-primary/5">
@@ -248,7 +248,7 @@ export default function BlogContentUI({ blog }) {
           </button>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] rotate-90 mt-10 whitespace-nowrap text-primary/30">Share Article</p>
         </div>
-      </aside>
+      </aside> */}
 
       {/* Main Body */}
       <main className="lg:col-span-8 bg-white p-8 lg:p-20 rounded-[var(--radius-lg)] shadow-sm border border-primary/5">
@@ -299,24 +299,7 @@ export default function BlogContentUI({ blog }) {
           )}
 
           {/* Stats Box */}
-          <div className="bg-primary text-white p-8 rounded-[var(--radius-md)] shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10 -mr-4 -mt-4"><FileText size={100} /></div>
-            <p className="!text-hover font-black text-[10px] tracking-widest uppercase mb-6">Article Summary</p>
-            <div className="space-y-5 relative z-10 font-sans">
-              <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                <span className="text-white/50 text-[10px] uppercase tracking-wider">Depth</span>
-                <span className="font-bold text-sm">{blog.content?.length} Sections</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                <span className="text-white/50 text-[10px] uppercase tracking-wider">Media</span>
-                <span className="font-bold text-sm">{blog.content?.filter(b => b.type === 'image').length} Photos</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-white/50 text-[10px] uppercase tracking-wider">Topic</span>
-                <span className="font-bold text-sm truncate ml-4">Van Conversion</span>
-              </div>
-            </div>
-          </div>
+
         </div>
       </aside>
     </div>

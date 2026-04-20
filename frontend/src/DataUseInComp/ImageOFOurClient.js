@@ -1,11 +1,11 @@
 // Image Data
 export const imageData = {
   vermont: [
-    "/OurClients/v1.jpg",
-    "/OurClients/v2.jpg",
-    "/OurClients/v3.jpg",
-    "/OurClients/v4.jpg",
-    "/OurClients/v5.jpg",
+    "/OurClients/v1.webp",
+    "/OurClients/v2.webp",
+    "/OurClients/v3.webp",
+    "/OurClients/v4.webp",
+    "/OurClients/v5.webp",
   ],
   blueWhale: [
     "/OurClients/blue1.jpg",
@@ -14,9 +14,9 @@ export const imageData = {
   ],
   cusco: ["/OurClients/c1.jpg", "/OurClients/c2.jpg", "/OurClients/c3.jpg"],
   lakeTahoe: [
-    "/OurClients/lt1.jpg",
-    "/OurClients/lt2.jpg",
-    "/OurClients/lt3.jpg",
+    "/OurClients/lt1.webp",
+    "/OurClients/lt2.webp",
+    "/OurClients/lt3.webp",
   ],
   motovan: [
     "/OurClients/mv1.jpg",

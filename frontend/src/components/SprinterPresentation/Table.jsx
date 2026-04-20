@@ -176,7 +176,7 @@ export default function Table() {
       <section className="anim-section w-full relative py-12 md:py-16 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/sprinter/image 15.jpg')" }}
+          style={{ backgroundImage: "url('/sprinter/image 15.webp')" }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-[#364153]/70"></div>
         </div>
