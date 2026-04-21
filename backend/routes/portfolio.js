@@ -163,6 +163,68 @@ router.get("/", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch vans" });
   }
 });
+router.get("/titles-only", async (req, res) => {
+  try {
+    let { page = 1, limit = 12, search } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 12;
+
+    const filter = {};
+    if (search && search.trim() !== "") {
+      filter["van_listing.title"] = { $regex: search, $options: "i" };
+    }
+
+    // 1. Pehle Total count nikalein (Pagination ke liye zaroori hai)
+    const total = await PortfolioVan.countDocuments(filter);
+
+    // 2. Aggregation Pipeline
+    const vans = await PortfolioVan.aggregate([
+      { $match: filter },
+      {
+        $addFields: {
+          hasRendering: {
+            $gt: [{ $size: { $ifNull: ["$rendering", []] } }, 0],
+          },
+        },
+      },
+      {
+        $sort: {
+          hasRendering: -1, // Rendering wale pehle
+          createdAt: -1,    // Phir latest wale
+        },
+      },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+      {
+        $project: {
+          _id: 1,
+          slug: 1,
+          rendering: 1,
+          category: 1,
+          "van_listing.title": 1,
+          "van_listing.description": 1,
+          "van_listing.specifications.wheelbase": 1,
+        },
+      },
+    ]);
+
+    // Response structure jo frontend expect kar raha hai
+    res.json({
+      success: true,
+      total,                  // Total items in DB
+      page,                   // Current page
+      pages: Math.ceil(total / limit), // Total pages available
+      data: vans,             // Current page ka data
+    });
+  } catch (err) {
+    console.error("Backend Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err.message
+    });
+  }
+});
 router.get("/category", async (req, res) => {
   try {
     let { category, page = 1, limit = 10, search, model, sit, sleep, bedType, bathroomType } = req.query;

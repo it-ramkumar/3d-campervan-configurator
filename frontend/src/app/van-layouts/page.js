@@ -71,7 +71,7 @@ export default async function LayoutsPage() {
       </div>
 
       {/* Client Component for Pagination */}
-      <All_Titles_Client initialData={initialData} />
+      <All_Titles_Client/>
 
       {/* Static/Constant Layouts from Local File */}
       {vanLayoutsData.map((item) => (
