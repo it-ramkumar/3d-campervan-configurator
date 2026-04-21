@@ -68,7 +68,7 @@ app.use("/api/inquery", inquery)
 app.use("/api/contact", contactUs);
 app.use("/api/quote", quoteRoutes);
 app.use("/api/models", modelsRoute);
-// app.use("/api/calendar", ZohoToken)
+app.use("/api/calendar", ZohoToken)
 app.use("/api", InteriorCategory)
 app.use("/api", InteriorChoices)
 app.use("/api", InteriorSubCategory)
