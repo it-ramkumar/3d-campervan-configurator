@@ -48,7 +48,7 @@ router.post(
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-// 3. Upload rendering images to S3
+      // 3. Upload rendering images to S3
       const rendering = await Promise.all(
         (req.files["rendering"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/renderings", file.originalname)
@@ -122,10 +122,32 @@ router.get("/", async (req, res) => {
 
     const total = await PortfolioVan.countDocuments(filter);
 
-    const vans = await PortfolioVan.find(filter)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+    const vans = await PortfolioVan.aggregate([
+      { $match: filter },
+
+      {
+        $addFields: {
+          hasRendering: {
+            $gt: [{ $size: { $ifNull: ["$rendering", []] } }, 0],
+          },
+        },
+      },
+
+      {
+        $sort: {
+          hasRendering: -1,   // 👈 rendering wale first
+          createdAt: -1,      // then latest
+        },
+      },
+
+      {
+        $skip: (page - 1) * limit,
+      },
+
+      {
+        $limit: limit,
+      },
+    ]);
 
 
     res.json({
@@ -143,7 +165,7 @@ router.get("/", async (req, res) => {
 });
 router.get("/category", async (req, res) => {
   try {
-    let { category, page = 1, limit = 10, search, model, sit, sleep,bedType, bathroomType } = req.query;
+    let { category, page = 1, limit = 10, search, model, sit, sleep, bedType, bathroomType } = req.query;
 
     if (!category) {
       return res.status(400).json({ success: false, message: "Category parameter is required" });
@@ -179,8 +201,8 @@ router.get("/category", async (req, res) => {
     // Get all vans in this category for filters
     const allCategoryVans = await PortfolioVan.find({ category: { $in: categoryArray } });
 
-    const availableSits = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a,b) => parseInt(a)-parseInt(b));
-    const availableSleeps = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a,b) => parseInt(a)-parseInt(b));
+    const availableSits = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a, b) => parseInt(a) - parseInt(b));
+    const availableSleeps = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a, b) => parseInt(a) - parseInt(b));
     const availableModels = [...new Set(allCategoryVans.map(v => v.van_listing?.specifications?.make_model).filter(Boolean))].sort();
     const availableBedTypes = [...new Set(allCategoryVans.map(v => v.van_listing?.bedType).filter(Boolean))].sort();
     const availableBathroomTypes = [...new Set(allCategoryVans.map(v => v.van_listing?.bathroomType).filter(Boolean))].sort();
@@ -296,8 +318,8 @@ router.get("/wheel-base", async (req, res) => {
     // -----------------------------------------
     const allVans = await PortfolioVan.find({});
 
-    const sits = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a,b)=>a-b);
-    const sleeps = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a,b)=>a-b);
+    const sits = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sits).filter(Boolean))].sort((a, b) => a - b);
+    const sleeps = [...new Set(allVans.map(v => v?.van_listing?.specifications?.capacity?.sleeps).filter(Boolean))].sort((a, b) => a - b);
     const models = [...new Set(allVans.map(v => v?.van_listing?.specifications?.make_model).filter(Boolean))].sort();
     const bedTypes = [...new Set(allVans.map(v => v?.van_listing?.bedType).filter(Boolean))].sort();
     const bathroomTypes = [...new Set(allVans.map(v => v?.van_listing?.bathroomType).filter(Boolean))].sort();
