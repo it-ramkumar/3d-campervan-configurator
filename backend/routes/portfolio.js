@@ -12,6 +12,7 @@ router.post(
   adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
+    { name: "rendering", maxCount: 10 },
   ]),
   async (req, res) => {
     try {
@@ -47,7 +48,12 @@ router.post(
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-
+// 3. Upload rendering images to S3
+      const rendering = await Promise.all(
+        (req.files["rendering"] || []).map(file =>
+          uploadToS3(file.buffer, "portfolio/renderings", file.originalname)
+        )
+      );
       // ✅ Multi-category support
       let category = req.body.category;
       if (typeof category === "string") {
@@ -79,6 +85,7 @@ router.post(
         sold,
         category,
         gallery,
+        rendering,
         detailed_features,
         media,
       });
@@ -352,6 +359,7 @@ router.put(
   adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
+    { name: "rendering", maxCount: 10 }, // 1. Added rendering to upload fields
   ]),
   async (req, res) => {
     try {
@@ -381,27 +389,30 @@ router.put(
         }
       }
 
-      // 3. ✅ GALLERY REORDERING & UPLOAD LOGIC
-      // Frontend se hume 'existingGallery' mein sorted URLs mil rahe hain
-      let finalGalleryOrder = [];
-      if (req.body.existingGallery) {
-        finalGalleryOrder = JSON.parse(req.body.existingGallery);
-      } else {
-        finalGalleryOrder = portfolio.gallery || [];
-      }
+      // 3. GALLERY REORDERING & UPLOAD LOGIC
+      let finalGalleryOrder = req.body.existingGallery ? JSON.parse(req.body.existingGallery) : portfolio.gallery || [];
 
-      // Nayi images upload karo
       const newGalleryUploads = await Promise.all(
         (req.files["gallery"] || []).map(file =>
           uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
         )
       );
-
-      // ✅ Nayi images ko last mein append karo ya logic ke hisaab se handle karo
-      // Final array = [Sorted Existing Images] + [New Uploaded Images]
       const updatedGallery = [...finalGalleryOrder, ...newGalleryUploads];
 
-      // 4. Update portfolio fields
+      // 4. ✅ RENDERING REORDERING & UPLOAD LOGIC
+      // Frontend se 'existingRendering' mein sorted URLs milenge
+      let finalRenderingOrder = req.body.existingRendering ? JSON.parse(req.body.existingRendering) : portfolio.rendering || [];
+
+      // Nayi rendering images upload karo
+      const newRenderingUploads = await Promise.all(
+        (req.files["rendering"] || []).map(file =>
+          uploadToS3(file.buffer, "portfolio/renderings", file.originalname)
+        )
+      );
+      // Final array = [Sorted Existing Renderings] + [New Uploaded Renderings]
+      const updatedRendering = [...finalRenderingOrder, ...newRenderingUploads];
+
+      // 5. Update portfolio fields
       portfolio.van_listing = {
         ...portfolio.van_listing,
         ...van_listing,
@@ -418,7 +429,8 @@ router.put(
 
       portfolio.category = category;
       portfolio.sold = sold;
-      portfolio.gallery = updatedGallery; // ✅ Ye ab ordered gallery hai
+      portfolio.gallery = updatedGallery;
+      portfolio.rendering = updatedRendering; // ✅ Save updated rendering array
       portfolio.detailed_features = detailed_features;
       portfolio.media = media;
 
@@ -444,6 +456,7 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
   try {
     // 1️⃣ Find the portfolio first
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+
     if (!portfolio) {
       return res.status(404).json({
         success: false,
@@ -451,20 +464,26 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
       });
     }
 
-    // 2️⃣ Delete gallery images from S3
-    if (portfolio.gallery && portfolio.gallery.length > 0) {
-      await Promise.all(portfolio.gallery.map((url) => deleteFromS3(url)));
-      console.log(`🧹 Deleted ${portfolio.gallery.length} gallery images from S3`);
+    // 2️⃣ Combine all images to delete (Gallery + Renderings)
+    const allImages = [
+      ...(portfolio.gallery || []),
+      ...(portfolio.rendering || []) // 🆕 Added renderings
+    ];
+
+    // 3️⃣ Delete all collected images from S3
+    if (allImages.length > 0) {
+      await Promise.all(allImages.map((url) => deleteFromS3(url)));
+      console.log(`🧹 Deleted ${allImages.length} total images (Gallery & Renderings) from S3`);
     }
 
-    // 3️⃣ Delete portfolio document from MongoDB
+    // 4️⃣ Delete portfolio document from MongoDB
     const deletedPortfolio = await PortfolioVan.findOneAndDelete({
       slug: req.params.slug,
     });
 
     res.json({
       success: true,
-      message: "Portfolio van deleted successfully",
+      message: "Portfolio van and all associated media deleted successfully",
       data: deletedPortfolio,
     });
   } catch (err) {

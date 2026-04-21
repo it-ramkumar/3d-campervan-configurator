@@ -32,6 +32,12 @@ export default function PortfolioForm({ setSelected }) {
   const [category, setCategory] = useState([]);
   const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
   const [loading, setLoading] = useState(false);
+  // Add these to your state declarations
+  const [renderingFiles, setRenderingFiles] = useState([]);
+  const [renderingPreviews, setRenderingPreviews] = useState([]);
+  const [existingRendering, setExistingRendering] = useState([]);
+  const [removedExistingRendering, setRemovedExistingRendering] = useState([]);
+
 
   const clearForm = () => {
     setGalleryFiles([]);
@@ -49,6 +55,11 @@ export default function PortfolioForm({ setSelected }) {
     setFeatures([{ category: "", items: [""] }]);
     setMediaUrls([""]);
     setCategory([]);
+    // ... your existing clear logic
+    setRenderingFiles([]);
+    setRenderingPreviews([]);
+    setExistingRendering([]);
+    setRemovedExistingRendering([]);
   };
 
   useEffect(() => {
@@ -83,7 +94,7 @@ export default function PortfolioForm({ setSelected }) {
         : [""]
       );
       setExistingGallery(editData.gallery || []);
-
+      setExistingRendering(editData.rendering || []);
     } else {
       clearForm();
     }
@@ -107,6 +118,10 @@ export default function PortfolioForm({ setSelected }) {
       existingGallery, // Ye pass karna zaroori hai
       galleryOrder: existingGallery, // Backend ko ordered array bhej raha hai
       removedExistingGallery,
+      renderingFiles,           // New
+      existingRendering,         // New
+      removedExistingRendering,  // New
+      setRemovedExistingRendering,
       features,
       mediaUrls,
       sold,
@@ -138,7 +153,7 @@ export default function PortfolioForm({ setSelected }) {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">
         {editData ? "Edit Portfolio Van" : "Create Portfolio Van"}
       </h2>
-   <form onSubmit={onSubmit} className="space-y-8">
+      <form onSubmit={onSubmit} className="space-y-8">
 
         {/* BASIC INFO */}
         <div className="border border-gray-300 rounded-lg p-6">
@@ -397,18 +412,36 @@ export default function PortfolioForm({ setSelected }) {
             + Add Media URL
           </button>
         </div>
-
+        {/* RENDERINGS UPLOAD (Layout Images) */}
+        <div className="border border-gray-300 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Layout Renderings</h3>
+          <GalleryUploader
+            id="renderings"
+            title="Layout Renderings"
+            galleryFiles={renderingFiles}
+            setGalleryFiles={setRenderingFiles}
+            galleryPreviews={renderingPreviews}
+            setGalleryPreviews={setRenderingPreviews}
+            existingGallery={existingRendering}
+            setExistingGallery={setExistingRendering}
+            removedExistingGallery={removedExistingRendering}
+            setRemovedExistingGallery={setRemovedExistingRendering}
+          />
+          <p className="text-sm text-gray-500 mt-2">Upload 3D renderings or layout floorplans here.</p>
+        </div>
         {/* GALLERY UPLOAD */}
-  <GalleryUploader
-  galleryFiles={galleryFiles}
-  setGalleryFiles={setGalleryFiles}
-  galleryPreviews={galleryPreviews}
-  setGalleryPreviews={setGalleryPreviews}
-  existingGallery={existingGallery}
-  setExistingGallery={setExistingGallery}
-  removedExistingGallery={removedExistingGallery}
-  setRemovedExistingGallery={setRemovedExistingGallery}
-/>
+        <GalleryUploader
+          id="main-gallery"
+          title="Gallery Images"
+          galleryFiles={galleryFiles}
+          setGalleryFiles={setGalleryFiles}
+          galleryPreviews={galleryPreviews}
+          setGalleryPreviews={setGalleryPreviews}
+          existingGallery={existingGallery}
+          setExistingGallery={setExistingGallery}
+          removedExistingGallery={removedExistingGallery}
+          setRemovedExistingGallery={setRemovedExistingGallery}
+        />
 
         <div className="flex justify-end">
           <button

@@ -1,15 +1,14 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link"; // Next.js Link
+import Link from "next/link";
 import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 import { SparklesIcon, LayoutTemplateIcon, ArrowRightIcon, Layers } from "lucide-react";
-import { Heading2, RichParagraph, SecondaryButton } from '../../Common/Common';
+import { Heading2, RichParagraph, SecondaryButton, ImageWithSkeleton } from '../../Common/Common';
 
 export default function All_Titles_Client({ initialData }) {
   const LIMIT = 12;
 
-  // Server se aaye huye data se state initialize karein
   const [portfolios, setPortfolios] = useState(initialData?.data || []);
   const [page, setPage] = useState(initialData?.page || 1);
   const [hasMore, setHasMore] = useState(initialData?.page < initialData?.pages);
@@ -18,9 +17,19 @@ export default function All_Titles_Client({ initialData }) {
 
   const pathname = usePathname();
 
+  // --- LOGIC: Renderings wale items pehle dikhana ---
+  const sortedPortfolios = useMemo(() => {
+    return [...portfolios].sort((a, b) => {
+      const aHasRendering = a.rendering && a.rendering.length > 0;
+      const bHasRendering = b.rendering && b.rendering.length > 0;
+      if (aHasRendering && !bHasRendering) return -1;
+      if (!aHasRendering && bHasRendering) return 1;
+      return 0;
+    });
+  }, [portfolios]);
+
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
     const nextPage = page + 1;
 
@@ -30,7 +39,6 @@ export default function All_Titles_Client({ initialData }) {
         const newData = res.data?.data || [];
         setPortfolios((prev) => {
           const combined = [...prev, ...newData];
-          // Unique ID check
           return combined.filter((v, i, a) => a.findIndex(t => t._id === v._id) === i);
         });
         setPage(nextPage);
@@ -65,43 +73,93 @@ export default function All_Titles_Client({ initialData }) {
       </div>
 
       {/* --- GRID --- */}
-      {portfolios.length > 0 ? (
+      {sortedPortfolios.length > 0 ? (
         <div className="space-y-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {portfolios.map((item) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {sortedPortfolios.map((item) => {
               const path = `/layout-detail/${item.slug}`;
               const isActive = pathname === path;
+              const hasRenderings = item.rendering && item.rendering.length > 0;
+
+              // Hover pe 2nd rendering, warna 1st rendering
+              const displayImage = (hoveredId === item._id && item.rendering?.length > 1)
+                ? item.rendering[1]
+                : item.rendering?.[0];
 
               return (
                 <Link key={item._id} href={path} className="block group">
                   <div
                     onMouseEnter={() => setHoveredId(item._id)}
                     onMouseLeave={() => setHoveredId(null)}
-                    className={`relative p-5 rounded-lg border-2 transition-all duration-300 flex items-center justify-between ${isActive
-                        ? "bg-primary border-primary shadow-xl translate-y-[-2px] text-white"
-                        : "bg-white border-[#F5F5F0] hover:border-[#ED985F]/30 hover:shadow-lg"
+                    className={`relative rounded-lg border-2 overflow-hidden transition-all duration-500 flex flex-col ${isActive
+                      ? "bg-primary border-primary shadow-xl translate-y-[-4px] text-white"
+                      : "bg-white border-[#F5F5F0] hover:border-[#ED985F]/30 hover:shadow-2xl hover:translate-y-[-4px]"
                       }`}
                   >
-                    <div className="flex flex-col ">
-                      <RichParagraph className={`uppercase mb-1 !text-xs ${isActive ? 'text-white' : '!text-primary'}`}>
-                        {(() => {
-                          const wb = item?.van_listing?.specifications?.wheelbase;
-                          const wheelbaseMap = {
-                            "144": "144 Mercedes Sprinter",
-                            "170": "170 Mercedes Sprinter",
-                            "159": "159 RAM Promaster",
-                            "148": "148 Ford Transit"
-                          };
-                          return wheelbaseMap[wb] || "Custom Wheelbase";
-                        })()}
-                      </RichParagraph>
-                      <RichParagraph className={`font-bold truncate pr-4 ${isActive ? 'text-white' : '!text-primary'}`}>
-                        {item?.van_listing?.title || "Untitled Build"}
-                      </RichParagraph>
+                    {/* --- IMAGE SECTION --- */}
+                    {/* --- IMAGE SECTION --- */}
+                    <div className="relative h-48 w-full overflow-hidden bg-[#F5F5F0]">
+                      {hasRenderings ? (
+                        <ImageWithSkeleton
+                          src={displayImage}
+                          alt={item.van_listing?.title}
+                          className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110"
+                          style={{ filter: hoveredId === item._id ? 'brightness(1.1)' : 'brightness(1)' }}
+                        />
+                      ) : (
+                        // ✅ Renderings empty hone par "Coming Soon" placeholder
+                        <div className="flex flex-col items-center justify-center h-full bg-[#F9F9F7] border-b border-[#F5F5F0]">
+                          <LayoutTemplateIcon size={32} className="text-[#001F3D]/10 mb-2" />
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#001F3D]/30">
+                            Renderings Coming Soon
+                          </span>
+                          {/* Decorative pulse effect */}
+                          <div className="absolute bottom-4 flex gap-1">
+                            <span className="w-1 h-1 rounded-lg bg-[#ED985F]/20 animate-pulse"></span>
+                            <span className="w-1 h-1 rounded-lg bg-[#ED985F]/40 animate-pulse delay-75"></span>
+                            <span className="w-1 h-1 rounded-lg bg-[#ED985F]/20 animate-pulse delay-150"></span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Active Indicator Overlay */}
+                      {isActive && (
+                        <div className="absolute inset-0 bg-primary/20 backdrop-blur-[2px]" />
+                      )}
                     </div>
 
-                    <div className={`transition-all duration-300 ${isActive ? "text-white opacity-100" : "text-[#ED985F]"} ${hoveredId === item._id ? "translate-x-1 opacity-100" : "opacity-0"}`}>
-                      <ArrowRightIcon size={18} />
+                    {/* --- TEXT CONTENT --- */}
+                    <div className="p-5 flex items-center justify-between">
+                      <div className="flex flex-col min-w-0">
+                        <RichParagraph className={`uppercase mb-1 !text-[10px] tracking-tighter ${isActive ? 'text-white/80' : '!text-primary/60'}`}>
+                          {(() => {
+
+                            const wb = item?.van_listing?.specifications?.wheelbase;
+
+                            const wheelbaseMap = {
+
+                              "144": "144 Mercedes Sprinter",
+
+                              "170": "170 Mercedes Sprinter",
+
+                              "159": "159 RAM Promaster",
+
+                              "148": "148 Ford Transit"
+
+                            };
+
+                            return wheelbaseMap[wb] || "Custom Wheelbase";
+
+                          })()}
+                        </RichParagraph>
+                        <RichParagraph className={`font-bold truncate text-sm ${isActive ? 'text-white' : '!text-primary'}`}>
+                          {item?.van_listing?.title || "Untitled Build"}
+                        </RichParagraph>
+                      </div>
+
+                      <div className={`transition-all duration-300 ${isActive ? "text-white opacity-100" : "text-[#ED985F]"} ${hoveredId === item._id ? "translate-x-1 opacity-100" : "opacity-40"}`}>
+                        <ArrowRightIcon size={18} />
+                      </div>
                     </div>
                   </div>
                 </Link>

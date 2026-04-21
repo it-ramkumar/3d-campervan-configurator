@@ -7,6 +7,8 @@ import { removeExistingGalleryImage } from "../../../CustomHooks/removeExistingG
 import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
 
 const GalleryUploader = ({
+  id = "gallery", // Unique ID for DragDrop
+  title = "Gallery Images", // Section title
   galleryFiles,
   setGalleryFiles,
   galleryPreviews,
@@ -17,25 +19,21 @@ const GalleryUploader = ({
   setRemovedExistingGallery,
 }) => {
 
-  // Drag end hone par order update karne ka function
   const onDragEnd = (result) => {
     if (!result.destination) return;
-
     const items = Array.from(existingGallery);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-
     setExistingGallery(items);
   };
 
   return (
     <section className="border border-gray-300 rounded-lg p-6 bg-white shadow-sm">
       <div className="flex flex-col mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Gallery Images</h2>
+        <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
         <p className="text-sm text-gray-500">Drag images to change their display order.</p>
       </div>
 
-      {/* File Input */}
       <div className="mb-6">
         <input
           type="file"
@@ -46,13 +44,13 @@ const GalleryUploader = ({
         />
       </div>
 
-      {/* Existing Images with Drag and Drop */}
       {existingGallery.length > 0 && (
         <div className="mb-8">
           <h3 className="text-md font-medium text-gray-700 mb-4">Saved Photos (Draggable)</h3>
 
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="gallery-grid" direction="horizontal">
+            {/* 🚩 Unique Droppable ID */}
+            <Droppable droppableId={`${id}-grid`} direction="horizontal">
               {(provided) => (
                 <div
                   {...provided.droppableProps}
@@ -71,7 +69,7 @@ const GalleryUploader = ({
                           <div className={`overflow-hidden rounded-lg border-2 ${snapshot.isDragging ? "border-blue-500" : "border-transparent"}`}>
                             <ImageWithSkeleton
                               src={url}
-                              alt={`existing-${index}`}
+                              alt={`${id}-existing-${index}`}
                               className="w-full h-32 object-cover transform transition-transform group-hover:scale-105"
                             />
                           </div>
@@ -95,7 +93,7 @@ const GalleryUploader = ({
         </div>
       )}
 
-      {/* New Previews (New uploads are usually added to the end) */}
+      {/* New Previews Logic... same as before */}
       {galleryPreviews.length > 0 && (
         <div>
           <h3 className="text-md font-medium text-gray-700 mb-4">New Uploads (Preview)</h3>
@@ -105,7 +103,7 @@ const GalleryUploader = ({
                 <div className="overflow-hidden rounded-lg border-2 border-dashed border-gray-300">
                   <ImageWithSkeleton
                     src={previewUrl}
-                    alt={`preview-${index}`}
+                    alt={`${id}-preview-${index}`}
                     className="w-full h-32 object-cover opacity-80"
                   />
                 </div>
@@ -119,13 +117,6 @@ const GalleryUploader = ({
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {existingGallery.length === 0 && galleryPreviews.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-          <p className="text-gray-400">No images yet. Select files to upload.</p>
         </div>
       )}
     </section>

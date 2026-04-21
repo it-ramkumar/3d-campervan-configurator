@@ -35,7 +35,7 @@ const vanListingSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-   bathroomType: {  
+   bathroomType: {
     type: String,
     trim: true
   },
@@ -113,6 +113,10 @@ const portfolioVanSchema = new mongoose.Schema({
 
   gallery: [{
     type: String,
+    trim: true
+  }],
+  rendering:[{
+     type: String,
     trim: true
   }],
 

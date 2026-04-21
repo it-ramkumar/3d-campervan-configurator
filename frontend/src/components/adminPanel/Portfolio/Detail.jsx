@@ -6,6 +6,7 @@ export default function Detail({ setIsopen, detail }) {
     const [gallery, setGallery] = useState(detail.gallery || []);
     const [isMounted, setIsMounted] = useState(false);
 
+    console.log(detail,"detail data ")
     // Trigger slide-in animation on mount
     useEffect(() => {
         setIsMounted(true);

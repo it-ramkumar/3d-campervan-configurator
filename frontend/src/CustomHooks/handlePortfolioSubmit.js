@@ -8,14 +8,18 @@ export const handlePortfolioSubmit = async ({
   title,
   category,
   galleryFiles,
-  existingGallery, // Ye ab hamara naya order hai
+  existingGallery,
   removedExistingGallery,
+  renderingFiles,           // 🆕 Added
+  existingRendering,         // 🆕 Added
+  removedExistingRendering,  // 🆕 Added
   features,
   mediaUrls,
   sold,
   van_listing,
   setLoading,
   setRemovedExistingGallery,
+  setRemovedExistingRendering, // 🆕 Added
   clearForm,
   setSelected,
 }) => {
@@ -34,10 +38,12 @@ export const handlePortfolioSubmit = async ({
   try {
     setLoading(true);
 
-    // 1️⃣ Delete removed images from S3
-    if (removedExistingGallery.length > 0) {
+    // 1️⃣ Delete removed images from S3 (Both Gallery & Renderings)
+    const imagesToDelete = [...removedExistingGallery, ...removedExistingRendering];
+
+    if (imagesToDelete.length > 0) {
       await Promise.all(
-        removedExistingGallery.map((url) =>
+        imagesToDelete.map((url) =>
           axios.post(
             `${process.env.NEXT_PUBLIC_URL}/delete-image`,
             { imageUrl: url }
@@ -49,35 +55,26 @@ export const handlePortfolioSubmit = async ({
     // 2️⃣ Prepare FormData
     const formDataToSend = new FormData();
 
-    // New gallery uploads (Files)
-    galleryFiles.forEach((file) =>
-      formDataToSend.append("gallery", file)
-    );
-
-    // ✅ REORDER LOGIC:
-    // existingGallery mein images already waisi hain jaisi user ne drag ki hain.
-    // Hum bas ye ensure kar rahe hain ki deleted images isme na hon.
+    // --- GALLERY LOGIC ---
+    galleryFiles.forEach((file) => formDataToSend.append("gallery", file));
     const finalOrderedGallery = existingGallery.filter(
       (url) => !removedExistingGallery.includes(url)
     );
+    formDataToSend.append("existingGallery", JSON.stringify(finalOrderedGallery));
 
-    // Hum ise "galleryOrder" ya "existingGallery" ke naam se bhej sakte hain
-    // Aapka backend jo bhi key expect kar raha ho (standard usually existingGallery hi rehta hai)
-    formDataToSend.append(
-      "existingGallery",
-      JSON.stringify(finalOrderedGallery)
+    // --- RENDERING LOGIC (New) ---
+    renderingFiles.forEach((file) => formDataToSend.append("rendering", file));
+    const finalOrderedRendering = existingRendering.filter(
+      (url) => !removedExistingRendering.includes(url)
     );
+    formDataToSend.append("existingRendering", JSON.stringify(finalOrderedRendering));
 
-    // Van listing
+    // --- OTHER FIELDS ---
     formDataToSend.append("van_listing", JSON.stringify(van_listing));
-
-    // Sold status
     formDataToSend.append("sold", sold.toString());
-
-    // Category
     formDataToSend.append("category", JSON.stringify(category));
 
-    // Detailed features
+    // Detailed features cleanup
     const cleanedFeatures = features
       .map((feature) => ({
         ...feature,
@@ -87,10 +84,9 @@ export const handlePortfolioSubmit = async ({
         (feature) =>
           feature.category.trim() !== "" || (feature.items && feature.items.length > 0)
       );
-
     formDataToSend.append("detailed_features", JSON.stringify(cleanedFeatures));
 
-    // Media URLs
+    // Media URLs cleanup
     const cleanedMediaUrls = mediaUrls.filter((url) => url.trim() !== "");
     formDataToSend.append("media", JSON.stringify(cleanedMediaUrls));
 
@@ -101,9 +97,11 @@ export const handlePortfolioSubmit = async ({
       await createPortfolio(formDataToSend);
     }
 
+    // Cleanup and Reset
     clearForm();
     setSelected("portfolio-listing");
     setRemovedExistingGallery([]);
+    setRemovedExistingRendering([]); // 🆕 Reset renderings removal list
 
     Swal.fire({
       icon: "success",
