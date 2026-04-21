@@ -28,28 +28,32 @@ export default function All_Titles_Client({ initialData }) {
     });
   }, [portfolios]);
 
-  const handleLoadMore = async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    const nextPage = page + 1;
+const handleLoadMore = async () => {
+  if (loading || !hasMore) return;
+  setLoading(true);
 
-    try {
-      const res = await getAllPortfolio(nextPage, LIMIT, "");
-      if (res.success) {
-        const newData = res.data?.data || [];
-        setPortfolios((prev) => {
-          const combined = [...prev, ...newData];
-          return combined.filter((v, i, a) => a.findIndex(t => t._id === v._id) === i);
-        });
-        setPage(nextPage);
-        setHasMore(nextPage < res.data?.pages);
-      }
-    } catch (error) {
-      console.error("Load more error:", error);
-    } finally {
-      setLoading(false);
+  const nextPage = page + 1;
+
+  try {
+    // Next.js standard fetch based function call
+    const res = await getAllPortfolio(nextPage, LIMIT, "");
+
+    if (res.success) {
+      const newData = res.data?.data || [];
+      setPortfolios((prev) => {
+        // Duplicate check ke saath merge
+        const combined = [...prev, ...newData];
+        return combined.filter((v, i, a) => a.findIndex(t => t._id === v._id) === i);
+      });
+      setPage(nextPage);
+      setHasMore(nextPage < res.data?.pages);
     }
-  };
+  } catch (error) {
+    console.error("Load more error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="bg-white rounded-lg p-8 border border-[#001F3D]/10 shadow-sm transition-all duration-500 hover:shadow-md container mx-auto my-10">
