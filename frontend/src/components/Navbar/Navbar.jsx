@@ -10,19 +10,46 @@ import { getnavWheel } from "../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu"
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
-import { Heading4, ImageWithSkeleton } from '../Common/Common'
+import { Heading4 } from '../Common/Common'
 import Image from "next/image";
 
 // --- Sub Components ---
 // NOTE: FooterListItem ke andar 'to' ko 'href' mein badalna hoga agar wo Link use kar raha hai
 const NavListItem = ({ href, children, isActive, onClick }) => (
- <FooterListItem
-    href={href} // Dono jagah 'href' use karein
+  <FooterListItem
+    href={href}
     onClick={onClick}
     className={`block py-1 ${isActive ? "text-primary font-semibold" : "text-primary hover:!text-hover"} transition-colors font-body tracking-tight text-[14px]`}
   >
     {children}
   </FooterListItem>
+);
+
+
+const CategoryCard = ({ image, title, href, onClick }) => (
+  <div className="flex flex-col items-center group text-center">
+    <Link
+      href={href}
+      onClick={onClick}
+      className="w-full no-underline"
+    >
+      {/* Image Container */}
+      <div className="w-full mb-4 overflow-hidden">
+        <Image
+          src={image}
+          alt={title}
+          width={300}
+          height={200}
+          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+
+      {/* Title Section */}
+      <span className="block px-2 text-[14px] font-body font-semibold uppercase tracking-[0.1em] text-primary group-hover:text-hover transition-colors">
+        {title}
+      </span>
+    </Link>
+  </div>
 );
 
 const BlogListItem = ({ href, children, onClick }) => (
@@ -68,19 +95,19 @@ export default function Navbar({ forceMobile }) {
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
 
-const slugify = (text) => {
-  if (!text) return "";
+  // const slugify = (text) => {
+  //   if (!text) return "";
 
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[\u2013\u2014]/g, '-') // Lambe dashes ko normal dash banayein
-    .replace(/\s+/g, '-')           // Spaces ko dash (-) banayein
-    .replace(/[^\w\s-()]/g, '')     // IMPORTANT: Yahan '(' aur ')' ko allow kar diya
-    .replace(/-+/g, '-')            // Double dashes ko single karein
-    .replace(/^-+|-+$/g, '');       // Start/End ke dashes saaf karein
-};
+  //   return text
+  //     .toString()
+  //     .toLowerCase()
+  //     .trim()
+  //     .replace(/[\u2013\u2014]/g, '-') // Lambe dashes ko normal dash banayein
+  //     .replace(/\s+/g, '-')           // Spaces ko dash (-) banayein
+  //     .replace(/[^\w\s-()]/g, '')     // IMPORTANT: Yahan '(' aur ')' ko allow kar diya
+  //     .replace(/-+/g, '-')            // Double dashes ko single karein
+  //     .replace(/^-+|-+$/g, '');       // Start/End ke dashes saaf karein
+  // };
   // Fix 1: Safer Active Check
   const isParentActive = useCallback((key) => {
     const routeList = routes?.[key];
@@ -97,7 +124,7 @@ const slugify = (text) => {
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-        document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+      document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
     }
   }, [isMobileMenuOpen]);
 
@@ -116,7 +143,6 @@ const slugify = (text) => {
     };
     loadData();
   }, []);
-
   // --- GSAP Animation Logic (Same as before) ---
   useEffect(() => {
     if (!megaMenuRef.current || forceMobile) return;
@@ -167,22 +193,41 @@ const slugify = (text) => {
       );
     }
 
-    if (section?.title === "Explore Layout Options") {
-      const displayCats = isMobile ? data?.categories?.slice(0, 4) : data?.categories;
-      return (
-        <>
-          {displayCats?.map((cat, i) => (
-            <NavListItem key={i} href={`/layout-by-category/${slugify(cat)}`} onClick={closeMobile}>
-              {cat} →
-            </NavListItem>
+  if (section?.title === "Explore Layout Options") {
+  return (
+    <div className="flex flex-col w-full">
+      {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
+        {data?.categories
+          ?.filter(cat => cat.rendering?.length)
+          .slice(0, 6)
+          .map((cat, i) => (
+            <CategoryCard
+              key={i}
+              href={`${'/layout-detail'}/${cat.slug}`}
+              onClick={closeMobile}
+              image={cat.rendering[0]}
+              title={cat.van_listing.title}
+            />
           ))}
-          {isMobile && data?.categories?.length > 4 && (
-            <ViewAllLink href="/van-layouts" onClick={closeMobile}>View All Categories</ViewAllLink>
-          )}
-        </>
-      );
-    }
+      </div>
 
+      {/* 2. End Link: Jo poore section ke neechay center ya left align ho */}
+      <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
+        <Link
+          href="/van-layouts"
+          onClick={closeMobile}
+          className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+        >
+          View All Layout Options
+          <span className="transform transition-transform group-hover:translate-x-2">
+            →
+          </span>
+        </Link>
+      </div>
+    </div>
+  );
+}
     if (section?.title === "Van Models Options") {
       return data?.wheelBases?.map((base, i) => (
         <NavListItem key={i} href={`/wheel-base/${base}`} onClick={closeMobile}>
@@ -251,22 +296,34 @@ const slugify = (text) => {
       {/* --- Desktop Mega Menu --- */}
       <div
         ref={megaMenuRef}
-        className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary"
+        className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
         style={{
           top: "65px",
           display: desktopMenu && !forceMobile ? 'block' : 'none',
-          contain: 'layout style paint'
+          contain: 'layout style paint',
         }}
-        onMouseEnter={() => !forceMobile && handleHover(desktopMenu)}
+        onMouseEnter={() => !forceMobile && clearTimeout(timeoutRef.current)}
         onMouseLeave={() => !forceMobile && handleMouseLeave()}
       >
-        <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-2 gap-10">
-          {menuContent[desktopMenu]?.sections?.map((sec, idx) => (
-            <div key={idx} className={idx === 0 ? "border-r pr-10 border-primary" : ""}>
-              <Heading4 text={sec.title} textColor="text-primary" />
-              <ul className="space-y-1 font-body mt-4">{renderSectionItems(sec)}</ul>
-            </div>
-          ))}
+        <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-10 gap-10 min-h-fit">
+          {menuContent[desktopMenu]?.sections?.map((sec, idx) => {
+            const isExplore = sec.title === "Explore Layout Options";
+            const isVanModels = sec.title === "Van Models Options";
+
+            return (
+              <div
+                key={idx}
+                className={`
+            ${isExplore ? "col-span-7 border-r-1 border-primary" : isVanModels ? "col-span-3" : "col-span-5 border-r-1 border-primary"}
+          `}
+              >
+                <Heading4 text={sec.title} textColor="text-primary" />
+                <ul className="space-y-1 font-body mt-4">
+                  {renderSectionItems(sec)}
+                </ul>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -279,7 +336,7 @@ const slugify = (text) => {
           >
             <div className="flex justify-between items-center mb-8 border-b border-primary pb-4">
               <Link href={"/"} onClick={() => setIsMobileMenuOpen(false)}>
-                <ImageWithSkeleton src="/images/logoo.webp" alt="Logo" className="w-32" priority={true} />
+                <Image src="/images/logoo.webp" alt="Logo" width={200} height={100} priority={true} />
               </Link>
               <X className="w-6 h-6 cursor-pointer hover:scale-110 transition-transform" onClick={() => setIsMobileMenuOpen(false)} />
             </div>
