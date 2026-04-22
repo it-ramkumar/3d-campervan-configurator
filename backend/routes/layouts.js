@@ -458,7 +458,7 @@ router.put(
       }
 
       // Folder Path determine karein (Existing slug use karenge)
-      const folderPath = `portfolio/${portfolio.slug}`;
+      const folderPath = `layouts/${portfolio.slug}`;
 
       // 1. Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || JSON.stringify(portfolio.van_listing));
