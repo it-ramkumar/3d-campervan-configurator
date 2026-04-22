@@ -16,11 +16,9 @@ router.post(
   ]),
   async (req, res) => {
     try {
-      // Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || "{}");
-      // console.log("Parsed van_listing:", van_listing);
       const detailed_features = JSON.parse(req.body.detailed_features || "[]");
-      const media = JSON.parse(req.body.media || "[]"); // ✅ Simple string array for URLs
+      const media = JSON.parse(req.body.media || "[]");
       const sold = req.body.sold === "true";
 
       if (!van_listing || !van_listing.title) {
@@ -30,10 +28,9 @@ router.post(
         });
       }
 
-      // Generate slug
+      // 1. Generate slug pehle hi karlein taake folder name mil jaye
       let slug = req.body.slug || await PortfolioVan.generateSlug(van_listing.title);
 
-      // Check if slug exists
       const existingVan = await PortfolioVan.findOne({ slug });
       if (existingVan) {
         return res.status(409).json({
@@ -42,29 +39,35 @@ router.post(
         });
       }
 
-      // Upload gallery images
+      // 2. Folder Path Define Karein
+      // Ab path hoga: portfolio/slug-name/gallery/...
+      const galleryPath = `layouts/${slug}/gallery`;
+      const renderingPath = `layouts/${slug}/renderings`;
+
+      // 3. Upload gallery images to specific folder
       const gallery = await Promise.all(
         (req.files["gallery"] || []).map(file =>
-          uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
+          uploadToS3(file.buffer, galleryPath, file.originalname)
         )
       );
-      // 3. Upload rendering images to S3
+
+      // 4. Upload rendering images to specific folder
       const rendering = await Promise.all(
         (req.files["rendering"] || []).map(file =>
-          uploadToS3(file.buffer, "portfolio/renderings", file.originalname)
+          uploadToS3(file.buffer, renderingPath, file.originalname)
         )
       );
-      // ✅ Multi-category support
+
+      // Category logic
       let category = req.body.category;
       if (typeof category === "string") {
         try {
-          category = JSON.parse(category); // Convert JSON string to array
+          category = JSON.parse(category);
         } catch (e) {
-          category = [category]; // Single string fallback
+          category = [category];
         }
       }
 
-      // Validate category array
       if (!Array.isArray(category) || category.length === 0) {
         return res.status(400).json({
           success: false,
@@ -443,19 +446,19 @@ router.put(
   adminOnly,
   upload.fields([
     { name: "gallery", maxCount: 10 },
-    { name: "rendering", maxCount: 10 }, // 1. Added rendering to upload fields
+    { name: "rendering", maxCount: 10 },
   ]),
   async (req, res) => {
     try {
-      const { slug } = req.params;
+      const { slug: paramsSlug } = req.params;
+      const portfolio = await PortfolioVan.findOne({ slug: paramsSlug });
 
-      const portfolio = await PortfolioVan.findOne({ slug });
       if (!portfolio) {
-        return res.status(404).json({
-          success: false,
-          message: "Portfolio not found"
-        });
+        return res.status(404).json({ success: false, message: "Portfolio not found" });
       }
+
+      // Folder Path determine karein (Existing slug use karenge)
+      const folderPath = `portfolio/${portfolio.slug}`;
 
       // 1. Parse JSON fields
       const van_listing = JSON.parse(req.body.van_listing || JSON.stringify(portfolio.van_listing));
@@ -463,73 +466,65 @@ router.put(
       const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media));
       const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
 
-      // 2. Multi-category support
-      let category = req.body.category || portfolio.category;
-      if (typeof category === "string") {
-        try {
-          category = JSON.parse(category);
-        } catch (e) {
-          category = [category];
-        }
-      }
+      // 2. GALLERY LOGIC (Reordering + Specific Folder Upload + S3 Cleanup)
+      let oldGallery = portfolio.gallery || [];
+      let finalGalleryOrder = req.body.existingGallery ? JSON.parse(req.body.existingGallery) : oldGallery;
 
-      // 3. GALLERY REORDERING & UPLOAD LOGIC
-      let finalGalleryOrder = req.body.existingGallery ? JSON.parse(req.body.existingGallery) : portfolio.gallery || [];
+      // Un images ko dhundo jo delete kardi gayi hain
+      const deletedGalleryImages = oldGallery.filter(url => !finalGalleryOrder.includes(url));
 
       const newGalleryUploads = await Promise.all(
         (req.files["gallery"] || []).map(file =>
-          uploadToS3(file.buffer, "portfolio/gallery", file.originalname)
+          uploadToS3(file.buffer, `${folderPath}/gallery`, file.originalname)
         )
       );
       const updatedGallery = [...finalGalleryOrder, ...newGalleryUploads];
 
-      // 4. ✅ RENDERING REORDERING & UPLOAD LOGIC
-      // Frontend se 'existingRendering' mein sorted URLs milenge
-      let finalRenderingOrder = req.body.existingRendering ? JSON.parse(req.body.existingRendering) : portfolio.rendering || [];
+      // 3. RENDERING LOGIC (Reordering + Specific Folder Upload + S3 Cleanup)
+      let oldRendering = portfolio.rendering || [];
+      let finalRenderingOrder = req.body.existingRendering ? JSON.parse(req.body.existingRendering) : oldRendering;
 
-      // Nayi rendering images upload karo
+      // Un images ko dhundo jo delete kardi gayi hain
+      const deletedRenderingImages = oldRendering.filter(url => !finalRenderingOrder.includes(url));
+
       const newRenderingUploads = await Promise.all(
         (req.files["rendering"] || []).map(file =>
-          uploadToS3(file.buffer, "portfolio/renderings", file.originalname)
+          uploadToS3(file.buffer, `${folderPath}/renderings`, file.originalname)
         )
       );
-      // Final array = [Sorted Existing Renderings] + [New Uploaded Renderings]
       const updatedRendering = [...finalRenderingOrder, ...newRenderingUploads];
 
-      // 5. Update portfolio fields
+      // 4. PERFORM S3 DELETION (Async cleanup)
+      const allImagesToDelete = [...deletedGalleryImages, ...deletedRenderingImages];
+      allImagesToDelete.forEach(url => deleteFromS3(url));
+
+      // 5. Update portfolio data
       portfolio.van_listing = {
         ...portfolio.van_listing,
         ...van_listing,
         price: van_listing.price ? String(van_listing.price) : portfolio.van_listing.price,
-        specifications: van_listing.specifications ? {
-          ...portfolio.van_listing.specifications,
-          ...van_listing.specifications,
-          capacity: van_listing.specifications.capacity ? {
-            ...portfolio.van_listing.specifications?.capacity,
-            ...van_listing.specifications.capacity
-          } : portfolio.van_listing.specifications?.capacity
-        } : portfolio.van_listing.specifications
       };
 
-      portfolio.category = category;
-      portfolio.sold = sold;
       portfolio.gallery = updatedGallery;
-      portfolio.rendering = updatedRendering; // ✅ Save updated rendering array
+      portfolio.rendering = updatedRendering;
+      portfolio.sold = sold;
       portfolio.detailed_features = detailed_features;
       portfolio.media = media;
 
-      // Title/Slug logic
+      // Slug logic (if title changed)
       if (van_listing.title && van_listing.title !== portfolio.van_listing.title) {
         portfolio.slug = await PortfolioVan.generateSlug(van_listing.title);
+        // Note: Folder name wahi rahega jo pehle tha taake links break na hon.
       }
 
       const updatedPortfolio = await portfolio.save();
 
       res.json({
         success: true,
-        message: "Portfolio van updated successfully",
+        message: "Portfolio updated and cleaned up successfully",
         data: updatedPortfolio,
       });
+
     } catch (err) {
       console.error("Error updating portfolio:", err);
       res.status(500).json({ success: false, message: "Update failed" });

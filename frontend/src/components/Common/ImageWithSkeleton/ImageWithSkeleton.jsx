@@ -2,15 +2,14 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
-// Props mein 'priority' add karein (default false rakhein)
+
 export default function ImageWithSkeleton({
   src,
   alt,
   className = "",
   click = false,
-  priority = false,// 🟢 New Prop
+  priority = false,
   sizes,
-
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -20,45 +19,58 @@ export default function ImageWithSkeleton({
 
   return (
     <>
-      {/* ======= Thumbnail Image ======= */}
-      <Image
-        src={finalSrc}
-        alt={alt}
-        // 🟢 Priority instructions
-        fetchPriority={priority ? "high" : "low"}
-        loading={priority ? "eager" : "lazy"}
-        decoding={priority ? "sync" : "async"}
+      {/* Container to hold Image + Overlay */}
+      <div className="relative w-full h-full group overflow-hidden rounded-md">
 
-        onLoad={() => setLoaded(true)}
-        onError={() => setError(true)}
-        onClick={() => !click && setIsModalOpen(true)}
-unoptimized
-        className={`
-    ${className}
-    border border-gray-300 rounded-md object-cover
-    transition-all duration-300 ease-in-out
-    ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
-    ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
-  `}
-        sizes={sizes}
-        width={800}
-        height={600}
-      />
+        {/* ======= Thumbnail Image ======= */}
+        <Image
+          src={finalSrc}
+          alt={alt}
+          fetchPriority={priority ? "high" : "low"}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+          onClick={() => !click && setIsModalOpen(true)}
+          unoptimized
+          className={`
+            ${className}
+            w-full h-full border border-gray-300 object-cover
+            transition-all duration-500 ease-in-out
+            ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
+            ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
+          `}
+          sizes={sizes}
+          width={800}
+          height={600}
+        />
 
-      {/* ======= True Fullscreen Modal (via Portal) ======= */}
+        {/* ======= ✅ Aesthetic Black Overlay ======= */}
+        {/* Is layer se image par neeche se halka black gradient aayega */}
+        <div
+          className="absolute inset-0 pointer-events-none
+          bg-gradient-to-t from-black/50 via-black/10 to-transparent
+          opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+        />
+
+        {/* Optional: Agar aapko bilkul halki black layer chahiye poori image pe */}
+        <div className="absolute inset-0 pointer-events-none bg-black/5 mix-blend-multiply" />
+      </div>
+
+      {/* ======= Fullscreen Modal (No changes here) ======= */}
       {!click && isModalOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md"
             onClick={() => setIsModalOpen(false)}
           >
             <div
-              className="relative w-full h-full bg-black flex items-center justify-center"
+              className="relative w-full h-full flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-6 right-8 text-white text-4xl font-bold hover:text-gray-400 z-10"
+                className="absolute top-6 right-8 text-white text-4xl font-light hover:text-gray-400 z-10"
               >
                 ✕
               </button>
@@ -67,8 +79,8 @@ unoptimized
                 src={finalSrc}
                 alt={alt}
                 unoptimized
-                className="max-w-[95%] max-h-[90%] object-contain rounded-xl shadow-2xl transition-transform duration-300 hover:scale-105"
-                 width={1200} // 🔹 Modal me bigger size
+                className="max-w-[95%] max-h-[90%] object-contain rounded-xl shadow-2xl"
+                width={1200}
                 height={900}
               />
             </div>

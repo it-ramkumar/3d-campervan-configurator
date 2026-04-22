@@ -10,11 +10,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB
 });
 
-/*
-@route   POST /api/applications/apply
-@desc    Apply for job
-@access  Public
-*/
+
 router.post(
   "/apply",
   upload.fields([{ name: "resume", maxCount: 1 }]),

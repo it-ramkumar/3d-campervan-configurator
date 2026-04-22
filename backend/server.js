@@ -8,15 +8,15 @@ const corsMiddleware = require("./middleware/corsMiddleware");
 // const { globalLimiter } = require("./middleware/rateLimiting");
 const { morganMiddleware, logger } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
-const quoteRoutes = require("./routes/qouteRoute");
-const modelsRoute = require("./routes/modelsRoute");
+const ConfiguratorLeads = require("./routes/configuratorLeads");
+const ConfiguratorModels = require("./routes/configuratorModels");
 const van = require('./routes/van')
-const portfolio = require('./routes/portfolio')
+const layouts = require('./routes/layouts')
 const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
 // const Export = require("./routes/exportModel");
 const userRoute = require("./routes/authRoute");
-const TestBlog = require("./routes/testBlog")
+const blog = require("./routes/blog")
 const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
 const ZohoToken = require("./routes/googleCalender")
 const InteriorCategory = require("./routes/interiorCategory")
@@ -25,7 +25,7 @@ const InteriorSubCategory = require("./routes/interiorSubCategory")
 const ExteriorCategory = require("./routes/exteriorCat");
 const ExteriorSubCategory = require("./routes/exteriorSubCat")
 const ExteriorRoute = require("./routes/exteriorR")
-const LeadEmailsRoute = require("./routes/leadsEmail");
+const ReceiveLeadsEmail = require("./routes/receiveLeadsEmail");
 const Job = require("./routes/job");
 const Application = require("./routes/application");
 const QuickLinks = require("./routes/quickLinks")
@@ -59,15 +59,15 @@ app.set("trust proxy", 1);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", DelelteImageFromS3);
-app.use("/api/test-blog", TestBlog)
-app.use("/api/portfolio", portfolio)
+app.use("/api/test-blog", blog)
+app.use("/api/portfolio", layouts)
 // app.use("/api", Export)
 app.use("/api/van", van)
 app.use("/api", userRoute);
 app.use("/api/inquery", inquery)
 app.use("/api/contact", contactUs);
-app.use("/api/quote", quoteRoutes);
-app.use("/api/models", modelsRoute);
+app.use("/api/quote", ConfiguratorLeads);
+app.use("/api/models", ConfiguratorModels);
 app.use("/api/calendar", ZohoToken)
 app.use("/api", InteriorCategory)
 app.use("/api", InteriorChoices)
@@ -78,7 +78,7 @@ app.use("/api", ExteriorSubCategory)
 app.use("/api", SystemCategory)
 app.use("/api", SystemRoute)
 app.use("/api", SystemSubCategory)
-app.use("/api", LeadEmailsRoute)
+app.use("/api", ReceiveLeadsEmail)
 app.use("/api/jobs", Job);
 app.use("/api/applications", Application);
 app.use("/api/quick-links", QuickLinks);

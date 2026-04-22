@@ -137,26 +137,22 @@ async function uploadToS3(fileBuffer, folderName, fileName, mimetype) {
 
 // --------------------- Delete from S3 ---------------------
 async function deleteFromS3(fileUrl) {
-  if (!fileUrl) return;
+  if (!fileUrl || typeof fileUrl !== 'string') return;
 
   try {
-    let key;
-    if (fileUrl.includes(".amazonaws.com/")) {
-      key = fileUrl.split(".amazonaws.com/")[1];
-    } else if (fileUrl.includes(process.env.CLOUDFRONT_URL)) {
-      key = fileUrl.split(`${process.env.CLOUDFRONT_URL}/`)[1];
-    }
-    if (key && key.includes("?")) key = key.split("?")[0];
-    if (!key) return;
+    // URL parsing taake domain name se farq na paray
+    const urlObj = new URL(fileUrl);
+    // pathname se shuru ka "/" hatane ke liye
+    const key = urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
 
     await s3.deleteObject({
       Bucket: process.env.VITE_REACT_APP_AWS_S3_BUCKET_NAME,
       Key: key,
     }).promise();
 
-    console.log("✅ Deleted from S3:", key);
+    console.log("✅ S3 Cleanup Done:", key);
   } catch (err) {
-    console.error("❌ Delete failed:", err);
+    console.error("❌ S3 Delete Error:", err.message);
   }
 }
 

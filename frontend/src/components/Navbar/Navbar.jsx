@@ -11,6 +11,7 @@ import { menuContent } from "../../DataUseInComp/MegaMenu"
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
 import { Heading4, ImageWithSkeleton } from '../Common/Common'
+import Image from "next/image";
 
 // --- Sub Components ---
 // NOTE: FooterListItem ke andar 'to' ko 'href' mein badalna hoga agar wo Link use kar raha hai
@@ -204,7 +205,7 @@ const slugify = (text) => {
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {!forceMobile && (
             <Link href="/">
-              <ImageWithSkeleton src="/images/logoo.webp" alt="BBV logo" className="w-[170px] h-[30px] object-contain border-none" priority={true} click={true} />
+              <Image src="/images/logoo.webp" alt="BBV logo" width={200} height={100} className="object-contain border-none" priority={true} />
             </Link>
           )}
 
