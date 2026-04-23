@@ -173,7 +173,7 @@ export default function Navbar({ forceMobile }) {
   }, []);
 
   const getWheelbaseLabel = useCallback((base) => {
-    const labels = { "144": "Sprinter 144", "170": "Sprinter 170", "148": "Transit 148" };
+    const labels = { "144": "Mercedes Sprinter 144", "170": "Mercedes Sprinter 170", "148": "Ford Transit 148" };
     return labels[base] || `RAM Promaster ${base}`;
   }, []);
 
