@@ -3,7 +3,7 @@ import FAQs from "../Faqs/Faqs";
 import HeroSection from "../HeroSection/HeroSection";
 import OurProcess from "../HomePage/OurProcess/OurProcess"
 import Image from "next/image";
-import { RichParagraph,Heading2, Heading3, Heading4,SecondaryButton,PrimaryButton } from "../Common/Common";
+import { RichParagraph, Heading2, Heading3, Heading4, SecondaryButton, PrimaryButton } from "../Common/Common";
 
 const CustomBuild = () => {
   const imgPath = "/custom build/";
@@ -51,7 +51,7 @@ const CustomBuild = () => {
 
         {/* ================= INTRO ================= */}
         <section className="py-24 border-b border-secondary">
-          <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+          <div className=" mx-auto px-4 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
               <RichParagraph >
                 Our team manages everything in-house, from electrical and plumbing to cabinetry and painting, so your van is truly yours at the end. This is the essence of a Big Bear Vans custom build. Let us tell you more about our process:
@@ -64,26 +64,26 @@ const CustomBuild = () => {
               </RichParagraph>
             </div>
             <div className="rounded-lg overflow-hidden shadow-2xl">
-              <Image src={`/images2/159.webp`} alt="Big Bear Vans Exterior" className="w-full h-90 object-cover" width={800} height={600}  />
+              <Image src={`/images2/159.webp`} alt="Big Bear Vans Exterior" className="w-full h-90 object-cover" width={800} height={600} />
             </div>
           </div>
         </section>
 
         {/* ================= HOW WE DO IT ================= */}
         <section className="py-24 bg-secondary">
-          <div className="max-w-6xl mx-auto px-6">
-            <Heading3 text="his is exactly how we do it:" className=" uppercase mb-12  text-center italic"/>
+          <div className=" mx-auto px-4 max-w-7xl px-6">
+            <Heading3 text="This is exactly how we do it:" className=" uppercase mb-12  text-center italic" />
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-white p-10 rounded-lg border border-gray-100">
-                <Heading4 text="Start with an Empty Van" className="uppercase mb-4 "/>
+                <Heading4 text="Start with an Empty Van" className="uppercase mb-4 " />
                 <RichParagraph >We begin with an empty van. There are no pre-built parts to work around.</RichParagraph>
               </div>
               <div className="bg-white p-10 rounded-lg border border-gray-100">
-                <Heading4 text="Zero Restrictions" className="uppercase mb-4"/>
+                <Heading4 text="Zero Restrictions" className="uppercase mb-4" />
                 <RichParagraph >Instead of restricting you to a few preset floor plans or feature packages, we listen to your ideas, vision, and create a 3D render for you.</RichParagraph>
               </div>
               <div className="bg-white p-10 rounded-lg border border-gray-100">
-                <Heading4 text="You Control Every Detail" className=" uppercase mb-4"/>
+                <Heading4 text="You Control Every Detail" className=" uppercase mb-4" />
                 <RichParagraph >You will see your van virtually and select every detail to your liking. From the components of your electrical system to the design for your cabinets, you make all the final choices.</RichParagraph>
               </div>
             </div>
@@ -93,12 +93,15 @@ const CustomBuild = () => {
             </div>
           </div>
         </section>
-
+        {/* Our Process */}
+        <section className="py-24">
+          <OurProcess />
+        </section>
         {/* ================= WHY CHOOSE US & LAYOUTS ================= */}
         <section className="py-24">
-          <div className="max-w-6xl mx-auto px-6">
+          <div className=" mx-auto px-4 max-w-7xl">
             <div className="mb-16">
-              <Heading2 text="Why Choose Our Custom Vans?" className="uppercase  mb-6"/>
+              <Heading2 text="Why Choose Our Custom Vans?" className="uppercase  mb-6" />
               <RichParagraph >Big Bear Vans is a high-tech, true custom build company. Here’s why you should choose us to customize your dream campervan:</RichParagraph>
             </div>
 
@@ -107,7 +110,7 @@ const CustomBuild = () => {
                 <Image src={`${imgPath}interior-layout.webp`} alt="Interior Layout" className="w-full object-cover" width={800} height={600} />
               </div>
               <div className="space-y-6">
-                <Heading3 text="Customize Interior Layouts" className="uppercase"/>
+                <Heading3 text="Customize Interior Layouts" className="uppercase" />
                 <RichParagraph >
                   At Big Bear Vans, you decide the floor plan of your campervan, and we bring it to life. Our expert team of engineers and renderers works closely with you, keeping you updated at every step. You'll see your van in a detailed 3D render long before we pick up a tool. We design custom vans according to your lifestyle and preferences.
                 </RichParagraph >
@@ -125,14 +128,14 @@ const CustomBuild = () => {
             <div className="grid md:grid-cols-2 gap-16 mb-24">
               <div className="space-y-6">
                 <Image src={`${imgPath}IMG_9845.webp`} alt="Materials" className="w-full h-[400px] object-cover rounded-lg" width={800} height={600} />
-                <Heading3 text="Premium, Client-Selected Materials" className=" uppercase"/>
+                <Heading3 text="Premium, Client-Selected Materials" className=" uppercase" />
                 <RichParagraph >
                   At Big Bear Vans, each component of our campervans is premium. You can choose from our curated selection of sustainable hardwoods, custom cabinetry, multi-functional furniture, and high-end exterior accessories. Beneath the surface, we install only the best systems: reliable self-heating Lithium batteries, advanced Glycol or Diesel heating, high-performance insulation, and fully integrated water systems. Every choice is high-quality and built to last.
                 </RichParagraph>
               </div>
               <div className="space-y-6">
-                <Image src={'/images/w5.webp'} alt="CNC" className="w-full h-[400px] object-cover rounded-lg" width={800} height={600} />
-                <Heading3 text="CNC Technology" className="uppercase "/>
+                <Image src={'/images2/cnc1.webp'} alt="CNC" className="w-full h-[400px] object-cover rounded-lg" width={800} height={600} />
+                <Heading3 text="CNC Technology" className="uppercase " />
                 <RichParagraph >
                   At Big Bear Vans, we use high-tech equipment like CAD/CAM software, 3D Scanners, and CNC routers. Every cabinet in your campervan is designed in CAD and cut to the millimeter by our CNC machines, and measured with 3D scanners. You can expect a top level of precision in our craftsmanship.
                 </RichParagraph>
@@ -142,7 +145,7 @@ const CustomBuild = () => {
             {/* Post Build Support */}
             <div className="grid md:grid-cols-2 gap-16 items-center">
               <div className="space-y-6">
-                <Heading3 text="Post-build support" className=" uppercase "/>
+                <Heading3 text="Post-build support" className=" uppercase " />
                 <RichParagraph >
                   A major concern for custom buyers is what happens after pickup. We offer a 1-Year Standard Warranty (and the 3-Year Extended Warranty) on our craftsmanship. We also provide remote assistance, future maintenance, and upgrades at our workshop.
                 </RichParagraph>
@@ -152,13 +155,11 @@ const CustomBuild = () => {
             </div>
           </div>
         </section>
-        <section className="py-24">
-          <OurProcess />
-        </section>
+
         {/* ================= 3D CONFIGURATOR ================= */}
         <section className="py-24">
-          <div className="max-w-6xl mx-auto px-6">
-            <Heading2 text="Our 3D Configurator" className="uppercase  mb-12"/>
+          <div className=" mx-auto px-4 max-w-7xl">
+            <Heading2 text="Our 3D Configurator" className="uppercase  mb-12" />
             <div className="grid md:grid-cols-2 gap-16 items-start">
               <div className="space-y-8">
                 <RichParagraph>
@@ -178,15 +179,15 @@ const CustomBuild = () => {
 
         {/* ================= PORTFOLIO ================= */}
         <section className="py-24">
-          <div className="max-w-6xl mx-auto px-6">
-            <Heading2 text="Our Portfolio" className=" uppercase  mb-8"/>
-            <RichParagraph>
+          <div className=" mx-auto px-4 max-w-7xl">
+            <Heading2 text="Our Portfolio" className=" uppercase  mb-8" />
+            <RichParagraph className="my-2">
               At Big Bear Vans, we have successfully customized 105+ campervans with a consistent five-star rating. Each van is designed for a specific person with different requirements. Check our past custom builds:
             </RichParagraph>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <Image src={`/images2/op4.webp`} alt="Portfolio 1" className="rounded-lg h-[400px] w-full object-cover" width={800} height={600} />
               <div className="bg-gray-50 rounded-lg p-12 flex flex-col justify-center items-center text-center">
-              <PrimaryButton link="/van-layouts" label={"View Portfolio"} />
+                <PrimaryButton link="/van-layouts" label={"View Portfolio"} />
               </div>
             </div>
           </div>
@@ -194,7 +195,7 @@ const CustomBuild = () => {
 
         {/* ================= OUR CLIENTS (No Image Solution) ================= */}
         <section className="py-24 bg-secondary ">
-          <div className="max-w-6xl mx-auto px-6">
+          <div className=" mx-auto px-4 max-w-7xl">
             <div className="grid lg:grid-cols-2 gap-20 items-start">
               <div className="space-y-8">
                 <div>
@@ -204,7 +205,7 @@ const CustomBuild = () => {
                 <RichParagraph>
                   We’ve designed custom campervans for clients from various backgrounds with different preferences. And we cater to everyone’s needs and choices. So far, we’ve built campervans for families, couples, pet-owners, bikers, full-time van lifers, etc. Whatever specific layout you have in mind, you can always come to us to discuss, and we will turn your crazy idea into a spectacular reality.
                 </RichParagraph>
-               < PrimaryButton link="/our-clients" label={"See Client Stories"} />
+                < PrimaryButton link="/our-clients" label={"See Client Stories"} />
               </div>
               {/* Typography Grid as Image Replacement */}
               <div className="grid grid-cols-2 gap-4">
@@ -220,7 +221,7 @@ const CustomBuild = () => {
 
         {/* ================= SHOWROOM ================= */}
         <section className="py-24">
-          <div className="max-w-6xl mx-auto px-6">
+          <div className=" mx-auto px-4 max-w-7xl">
             <Heading2 text="Our Showroom" className="uppercase mb-12 text-center" />
             <Image src={`${imgPath}40279.webp`} alt="Showroom" className="w-full h-[500px] object-cover rounded-lg mb-12" width={800} height={600} />
             <div className="grid md:grid-cols-2 gap-16">
@@ -239,17 +240,16 @@ const CustomBuild = () => {
 
         {/* ================= MEET THE BUILDERS ================= */}
         <section className="py-24 bg-black text-white">
-          <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+          <div className=" mx-auto px-4 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
             <div className="rounded-lg overflow-hidden border-8 border-white/5">
               <Image src={`/images/anna.webp`} alt="Artur and Anna" className="w-full" width={800} height={600} />
             </div>
             <div className="space-y-8">
-              <Heading2 text="Meet the Builders" className=" text-secondary uppercase tracking-tighter" />
+              <Heading2 text="Meet the Founders" className=" text-secondary uppercase tracking-tighter" />
               <RichParagraph className="text-secondary italic">
-                As lifelong van lovers, we (Artur and Anna) started Big Bear Vans as a family business for a simple reason: to build the vans we wished existed.
-              </RichParagraph>
+                As lifelong van enthusiasts, we (Artur and Anna) started Big Bear Vans as a family business with a simple purpose: to build the vans we always wished existed.              </RichParagraph>
               <RichParagraph className="text-secondary">
-                Before founding Big Bear Vans, we lived on the road, traveling through Europe and the USA while converting our own RVs. That hands-on experience taught us what truly matters in a mobile home. Driven by that genuine passion, we’ve grown from building in our own backyard into operating a full-fledged workshop here in Big Bear. Every van we create is built with the travelers’ insights, for travelers.
+                Before founding Big Bear Vans, we lived on the road, traveling through Europe and the USA while converting our own RVs. That hands-on experience taught us what truly matters in a mobile home. Driven by that genuine passion, we’ve grown from building in our own backyard into operating a full-fledged workshop in Big Bear. Every van we create is shaped by real traveler experience and built for life on the road.
               </RichParagraph>
               <SecondaryButton link="/about-us" label={"Learn More About Us"} />
             </div>
