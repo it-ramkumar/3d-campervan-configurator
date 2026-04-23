@@ -193,47 +193,61 @@ export default function Navbar({ forceMobile }) {
       );
     }
 
-  if (section?.title === "Explore Layout Options") {
-  return (
-    <div className="flex flex-col w-full">
-      {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
-        {data?.categories
-          ?.filter(cat => cat.rendering?.length)
-          .slice(0, 6)
-          .map((cat, i) => (
-            <CategoryCard
-              key={i}
-              href={`${'/layout-detail'}/${cat.slug}`}
-              onClick={closeMobile}
-              image={cat.rendering[0]}
-              title={cat.van_listing.title}
-            />
-          ))}
-      </div>
+    if (section?.title === "Explore Layout Options") {
+      return (
+        <div className="flex flex-col w-full">
+          {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
+            {data?.categories
+              ?.filter(cat => cat.rendering?.length)
+              .slice(0, 6)
+              .map((cat, i) => (
+                <CategoryCard
+                  key={i}
+                  href={`${'/layout-detail'}/${cat.slug}`}
+                  onClick={closeMobile}
+                  image={cat.rendering[0]}
+                  title={cat.van_listing.title}
+                />
+              ))}
+          </div>
 
-      {/* 2. End Link: Jo poore section ke neechay center ya left align ho */}
-      <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
-        <Link
-          href="/van-layouts"
-          onClick={closeMobile}
-          className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
-        >
-          View All Layout Options
-          <span className="transform transition-transform group-hover:translate-x-2">
-            →
-          </span>
-        </Link>
-      </div>
-    </div>
-  );
-}
+          {/* 2. End Link: Jo poore section ke neechay center ya left align ho */}
+          <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
+            <Link
+              href="/van-layouts"
+              onClick={closeMobile}
+              className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+            >
+              View All Layout Options
+              <span className="transform transition-transform group-hover:translate-x-2">
+                →
+              </span>
+            </Link>
+          </div>
+        </div>
+      );
+    }
     if (section?.title === "Van Models Options") {
-      return data?.wheelBases?.map((base, i) => (
-        <NavListItem key={i} href={`/wheel-base/${base}`} onClick={closeMobile}>
-          {getWheelbaseLabel(base)} →
-        </NavListItem>
-      ));
+      return (
+        <>
+          {/* Pehle wheelbases ki list map hogi */}
+          {data?.wheelBases?.map((base, i) => (
+            <NavListItem key={i} href={`/wheel-base/${base}`} onClick={closeMobile}>
+              {getWheelbaseLabel(base)} →
+            </NavListItem>
+          ))}
+<Heading4 text="Built for Every Journey Size" className="my-4"/>
+          {/* Uske foran baad ye items nazar aayenge */}
+          <NavListItem href={`/layout-by-category/flagship-short-van-santa-monica`} onClick={closeMobile}>
+            Ideal for small families (2–3 people)
+          </NavListItem>
+          <NavListItem href={`/layout-by-category/layouts-for-families-(3-9-people)`} onClick={closeMobile}>
+            Perfect for larger families (4+ passengers)
+          </NavListItem>
+
+        </>
+      );
     }
 
     return section?.items?.map((item, i) => (
