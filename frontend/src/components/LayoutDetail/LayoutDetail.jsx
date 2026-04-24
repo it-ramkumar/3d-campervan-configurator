@@ -137,8 +137,9 @@ export default function LayoutDetail({van}) {
 
                 <div className="flex flex-col gap-4 pt-4">
                   <SecondaryButton
-                    label="Secure This Build"
-                    link={"/contact"} />
+                    label="ORDER THIS BUILD"
+                    link={"/contact"}
+                    className="!w-full"/>
                   <ShareButton
                     title={van?.van_listing?.title}
                   />

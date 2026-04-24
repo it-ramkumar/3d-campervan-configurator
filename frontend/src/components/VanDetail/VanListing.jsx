@@ -102,16 +102,16 @@ const VanPage = ({ vanDetail }) => {
             {vanDetail.status === "available" && (
               <div className="p-6 bg-white rounded-lg border border-primary/5 shadow-sm">
                 <RichParagraph className="!text-hover uppercase font-bold">Total Listing Price</RichParagraph>
-{Number(vanDetail.van_listing.price) > 99 ? (
-  <Heading3
-    text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-    className="font-bold text-primary mt-1"
-  />
-) : (
-  <p className="font-bold text-primary mt-1">
-Inquire for Price
-  </p>
-)}              </div>
+                {Number(vanDetail.van_listing.price) > 99 ? (
+                  <Heading3
+                    text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+                    className="font-bold text-primary mt-1"
+                  />
+                ) : (
+                  <p className="font-bold text-primary mt-1">
+                    Inquire for Price
+                  </p>
+                )}              </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">

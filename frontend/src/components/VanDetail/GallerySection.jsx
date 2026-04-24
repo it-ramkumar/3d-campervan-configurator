@@ -2,65 +2,133 @@
 
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ImageWithSkeleton } from '../Common/Common';
 import Image from "next/image";
 
 const VanGallery = ({ gallery = [], title = "" }) => {
   const [activeImage, setActiveImage] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const currentImage = gallery?.[activeImage] || "";
+
+  // NEXT
   const nextImage = () => {
-    if (gallery.length > 0) {
-      setActiveImage((prev) => (prev + 1) % gallery.length);
-    }
+    if (!gallery.length) return;
+    setActiveImage((prev) => (prev + 1) % gallery.length);
   };
 
+  // PREV
   const prevImage = () => {
-    if (gallery.length > 0) {
-      setActiveImage((prev) => (prev - 1 + gallery.length) % gallery.length);
-    }
+    if (!gallery.length) return;
+    setActiveImage((prev) => (prev - 1 + gallery.length) % gallery.length);
   };
 
   return (
     <div className="space-y-4">
-      {/* Main Display */}
-      <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white flex items-center justify-center">
-        {gallery && gallery.length > 0 ? (
-          <>
-            <ImageWithSkeleton
-              src={gallery[activeImage]}
-              alt={title}
-              className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-            />
-            <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all z-10">
-              <ChevronLeft size={24} />
-            </button>
-            <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white text-primary shadow-md transition-all z-10">
-              <ChevronRight size={24} />
-            </button>
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center text-gray-400">
-            <span className="text-lg font-medium">Image Coming Soon</span>
-          </div>
-        )}
+
+      {/* MAIN IMAGE */}
+      <div className="h-[700px] relative flex items-center justify-center overflow-hidden bg-white rounded-lg">
+
+        {/* BACKGROUND IMAGE (fills empty space) */}
+        <Image
+          src={currentImage}
+          fill
+          alt={title}
+          className="object-cover blur-2xl scale-110 opacity-50"
+        />
+
+        {/* FOREGROUND IMAGE (actual clean image) */}
+        <Image
+          src={currentImage}
+          width={1000}
+          height={800}
+          alt={title}
+          onClick={() => setIsFullscreen(true)}
+          className="relative z-10 max-h-full w-auto object-contain cursor-zoom-in"
+        />
+
+        {/* PREV */}
+        <button
+          onClick={prevImage}
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow z-20"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        {/* NEXT */}
+        <button
+          onClick={nextImage}
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow z-20"
+        >
+          <ChevronRight size={20} />
+        </button>
+
       </div>
 
-      {/* Thumbnails */}
-      {gallery && gallery.length > 1 && (
+      {/* THUMBNAILS */}
+      {gallery.length > 1 && (
         <div className="grid grid-cols-5 gap-3">
           {gallery.map((img, i) => (
             <div
               key={i}
               onClick={() => setActiveImage(i)}
-              className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                activeImage === i ? 'border-[#ED3500]' : 'border-transparent opacity-60 hover:opacity-100'
-              }`}
+              className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${activeImage === i
+                  ? "border-[#ED3500]"
+                  : "border-transparent opacity-60 hover:opacity-100"
+                }`}
             >
-              <Image src={img} unoptimized  className="w-full h-full object-cover" alt={`Thumbnail ${i}`} width={80} height={80} />
+              <Image
+                src={img}
+                width={120}
+                height={120}
+                alt={`Thumbnail ${i}`}
+                className="w-full h-full object-cover"
+              />
             </div>
           ))}
         </div>
       )}
+
+      {/* FULLSCREEN */}
+      {isFullscreen && (
+        <div className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center">
+
+          {/* IMAGE (KEY FIX FOR INSTANT UPDATE) */}
+          <Image
+            key={currentImage}
+            src={currentImage}
+            width={1400}
+            height={1000}
+            alt={title}
+            className="max-h-[90vh] w-auto object-contain"
+          />
+
+          {/* CLOSE */}
+          <button
+            onClick={() => setIsFullscreen(false)}
+            className="absolute top-5 right-5 text-white text-3xl"
+          >
+            ✕
+          </button>
+
+          {/* PREV */}
+          <button
+            onClick={prevImage}
+            className="absolute left-5 top-1/2 -translate-y-1/2 bg-white/20 text-white p-3 rounded-full"
+          >
+            <ChevronLeft size={32} />
+          </button>
+
+          {/* NEXT */}
+          <button
+            onClick={nextImage}
+            className="absolute right-5 top-1/2 -translate-y-1/2 bg-white/20 text-white p-3 rounded-full"
+          >
+            <ChevronRight size={32} />
+          </button>
+
+        </div>
+      )}
+
     </div>
   );
 };

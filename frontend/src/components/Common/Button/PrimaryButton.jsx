@@ -15,7 +15,7 @@ export default function PrimaryButton({
 const baseClasses = `
     inline-flex items-center justify-center
     text-secondary font-bold uppercase tracking-[0.15em]
-    rounded-lg transition-all duration-300 ease-in-out
+    !rounded-lg transition-all duration-300 ease-in-out
     text-[11px] sm:text-[12px]
     py-3 px-6 md:py-3.5 md:px-8
   `;
