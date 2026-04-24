@@ -1,6 +1,6 @@
 import React from "react";
 import HeroSection from "@/components/HeroSection/HeroSection";
-import { schemaData } from "@/schema/ourClient";
+import { ClientschemaData } from "@/schema/ourClient";
 import { Heading2, RichParagraph } from '@/components/Common/Common';
 import YoutubeSection from "@/components/OurClients/Clientdetail/YoutubeSection";
 import CTRSection from "@/components/OurClients/Clientdetail/CTRSection";

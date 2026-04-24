@@ -1,4 +1,4 @@
-export const schemaData =()=>( {
+export const ClientschemaData =()=>( {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Client Stories & Custom Build Gallery | Big Bear Vans",
