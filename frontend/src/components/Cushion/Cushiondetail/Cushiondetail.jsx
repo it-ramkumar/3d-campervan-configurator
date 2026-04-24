@@ -766,8 +766,9 @@ export default function CushionCatalog() {
                 className="absolute inset-1.5 sm:inset-2 border-2 border-white/20 rounded-2xl sm:rounded-3xl"
               />
             </motion.div>
-
-            <motion.h1
+            <Heading2 text={"Cushion Fabric"}/>
+            <Heading2 text={"Catalog"} className="mb-4"/>
+            {/* <motion.h1
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -777,9 +778,9 @@ export default function CushionCatalog() {
               <span className="block bg-gradient-to-r from-black via-gray-800 to-gray-700 bg-clip-text text-transparent mt-1 mb-4 sm:mt-2">
                 Catalog
               </span>
-            </motion.h1>
-
-            <motion.p
+            </motion.h1> */}
+            <RichParagraph className="!text-xl">{"Premium fabrics for dinette bench cushions"}</RichParagraph>
+            {/* <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -787,9 +788,10 @@ export default function CushionCatalog() {
               className="Richparagraph text-xl text-gray-600 mt-4 text-medium"
             >
               Premium fabrics for dinette bench cushions
-            </motion.p>
+            </motion.p> */}
 
             {/* Enhanced Scroll Indicator */}
+            
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -816,20 +818,21 @@ export default function CushionCatalog() {
       {/* Enhanced Introduction Section */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-16 bg-white relative">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+          {/* <RichParagraph>{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors."}</RichParagraph> */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16"
           >
+            
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
               // className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 mb-6 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-5xl mx-auto font-light px-2"
-              className="Richparagraph mb-12 text-xl"
+              className="mb-12 text-xl"
             >
-              Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night.
-              At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors.
+              <RichParagraph className="!text-xl">{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors."}</RichParagraph>
             </motion.p>
 
             {/* Premium Features Grid */}
@@ -874,8 +877,7 @@ export default function CushionCatalog() {
             className="text-center"
           >
           <Heading2 text={"Cushion Thickness"}/>
-
-              <Heading3 text={"Options"} className="!text-gray-600"/>
+          <Heading3 text={"Options"} className="!text-gray-600 mb-4"/>
 
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-2">
@@ -886,11 +888,13 @@ export default function CushionCatalog() {
                 className="bg-white p-4 sm:p-5 md:p-6 lg:p-8 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg sm:shadow-xl border border-gray-300 text-center group hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-primary to-primary rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
                 >
-                  <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">3"</span>
+                  <RichParagraph className="text-secondary !text-[32px]">{"3\""}</RichParagraph>
+                  {/* <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">3"</span> */}
                 </motion.div>
                 <Heading3 text={"3-Inch Thickness"} className=" relative z-10 mb-4"/>
                 <RichParagraph className="!text-lg">{"For the family-friendly vans, a 3-inch-thick cushion is recommended so the people sleeping in the lower bunk have more air and headspace."}</RichParagraph>
@@ -908,7 +912,8 @@ export default function CushionCatalog() {
                   whileHover={{ scale: 1.1, rotate: -5 }}
                   className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-primary to-primary rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-3 sm:mb-4 md:mb-5 lg:mb-6 shadow-lg sm:shadow-xl relative z-10"
                 >
-                  <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">4"</span>
+                  <RichParagraph className="text-secondary !text-[32px]">{"4\""}</RichParagraph>
+                  {/* <span className="text-white font-bold text-xl sm:text-2xl md:text-3xl">4"</span> */}
                 </motion.div>
                 <Heading3 text={"4-Inch Thickness"} className=" relative z-10 mb-4"/>
                 <RichParagraph className="!text-lg">{"A 4-inch-thick cushion is for solo travelers and couples who want to enjoy a more comfortable sitting experience."}</RichParagraph>
@@ -927,14 +932,7 @@ export default function CushionCatalog() {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-12"
           >
-            <motion.h2
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-gray-900 mb-3 sm:mb-4 md:mb-5 lg:mb-6"
-            >
-              Fabric Collection
-            </motion.h2>
-
+            <Heading2 text={"Fabric Collection"}/>
             <RichParagraph className="!text-lg !text-gray-600">{"Discover our premium fabric options"}</RichParagraph>
 
           </motion.div>
@@ -1009,7 +1007,8 @@ export default function CushionCatalog() {
             className={`fixed ${isScrolled ? 'bottom-3 sm:bottom-4 md:bottom-6' : 'bottom-3 sm:bottom-4 md:bottom-6'} right-3 sm:right-4 md:right-6 lg:right-8 bg-white rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl border-2 md:border-3 border-gray-400 p-2 sm:p-3 md:p-4 lg:p-5 max-w-xs sm:max-w-sm z-50 backdrop-blur-md bg-white/95`}
           >
             <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4">
-              <h3 className="font-bold text-sm sm:text-base md:text-lg text-gray-900">Selected Color</h3>
+              <Heading4 text={"Selected Color"}/>
+              {/* <h3 className="font-bold text-sm sm:text-base md:text-lg text-gray-900">Selected Color</h3> */}
               <button
                 onClick={() => setSelectedColor(null)}
                 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-gray-200 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center hover:bg-gray-300 transition-colors shadow-md sm:shadow-lg"
@@ -1029,7 +1028,7 @@ export default function CushionCatalog() {
             </div>
             <button
               onClick={() => setSelectedColor(null)}
-              className="w-full bg-black text-white py-1.5 sm:py-2 md:py-3 rounded-xl sm:rounded-2xl hover:bg-gray-800 transition-all duration-300 font-semibold text-xs sm:text-sm md:text-base shadow-lg sm:shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
+              className="w-full bg-primary text-white py-1.5 sm:py-2 md:py-3 rounded-xl sm:rounded-2xl hover:bg-gray-800 transition-all duration-300 font-semibold text-xs sm:text-sm md:text-base shadow-lg sm:shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
             >
               Clear Selection
             </button>
