@@ -41,12 +41,13 @@ export default function OurClients() {
   const heroImage = "/images2/about.webp";
   const newTitleText = "Our Clients at Big Bear Vans";
 
+  const OurClientSchema = ClientschemaData()
   return (
     <>
       {/* ✅ 2. JSON-LD Schema (Server-side) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(OurClientSchema) }}
       />
       <main>
         <div className="tour-hero">
