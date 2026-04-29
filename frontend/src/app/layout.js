@@ -19,24 +19,18 @@ export default function RootLayout({ children }) {
           data-key="6pOfSpraP52vmd3qvXHD0w"
           strategy="lazyOnload"
         />
-      {/* Apollo Tracker - Inline Script correctly formatted */}
-        <Script id="apollo-tracker" strategy="afterInteractive">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Z1310D2000"
+          strategy="afterInteractive"
+        />
+
+        <Script id="ga4" strategy="afterInteractive">
           {`
-            function initApollo(){
-              var n=Math.random().toString(36).substring(7),
-              o=document.createElement("script");
-              o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n;
-              o.async=!0;
-              o.defer=!0;
-              o.onload=function(){
-                if(window.trackingFunctions) {
-                  window.trackingFunctions.onLoad({appId:"69e9d6e771c73800119bcfc0"});
-                }
-              };
-              document.head.appendChild(o);
-            }
-            initApollo();
-          `}
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z1310D2000');
+        `}
         </Script>
       </head>
       <body className="min-h-full flex flex-col">
