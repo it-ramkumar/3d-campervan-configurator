@@ -221,6 +221,4 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
   }
 });
 
-
-
 module.exports = router;

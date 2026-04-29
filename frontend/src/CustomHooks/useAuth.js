@@ -1,4 +1,4 @@
-// src/hooks/useAuth.js
+"use client";
 import { useState, useEffect } from "react";
 
 export const useAuth = () => {

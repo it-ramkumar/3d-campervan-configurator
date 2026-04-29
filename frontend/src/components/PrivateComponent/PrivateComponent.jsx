@@ -1,12 +1,14 @@
-import { Navigate } from "react-router-dom";
+"use client";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../CustomHooks/useAuth";
 import Loader from "../Loader/Loader";
 import Swal from "sweetalert2";
 
 export const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
+  const router = useRouter();
 
-  if (loading) return <Loader />; 
+  if (loading) return <Loader />;
 
   if (!isAuthenticated) {
     // ✅ Swal message
@@ -18,7 +20,8 @@ export const PrivateRoute = ({ children }) => {
       showConfirmButton: false,
     });
 
-    return <Navigate to="/login" replace />; // redirect to login
+    router.push("/login"); // redirect to login
+    return null;
   }
 
   return children;

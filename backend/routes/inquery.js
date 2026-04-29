@@ -104,7 +104,7 @@ router.post("/", async (req, res) => {
 
 
 // 🟢 GET ALL INQUIRIES (for dashboard)
-router.get("/", protect, adminOnly, async (req, res) => {
+router.get("/",  async (req, res) => {
   try {
     const leads = await Inquery.find().sort({ createdAt: -1 }); // newest first
     res.status(200).json({ success: true, data: leads });
@@ -116,7 +116,7 @@ router.get("/", protect, adminOnly, async (req, res) => {
 
 
 // 🟢 UPDATE STATUS (Admin marks as contacted, etc.)
-router.put("/:id/status", protect, adminOnly, async (req, res) => {
+router.put("/:id/status", async (req, res) => {
   try {
     const { status } = req.body;
     const allowedStatuses = ["New", "Contacted", "In Progress", "Closed"];

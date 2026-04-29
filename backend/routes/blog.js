@@ -94,10 +94,6 @@ router.post(
   }
 );
 
-
-/* ---------------------------------------
-   🔵 GET ALL BLOGS
---------------------------------------- */
 router.get("/", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -133,7 +129,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 router.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params
@@ -148,7 +143,6 @@ router.get("/:slug", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch blog" });
   }
 });
-
 
 router.put(
   "/:id", protect, adminOnly,
@@ -258,7 +252,6 @@ router.put(
     }
   }
 );
-
 
 router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {

@@ -1,13 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Job = require("../models/job");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-
-/*
-@route   POST /api/jobs
-@desc    Create new job (Admin)
-*/
-router.post("/", async (req, res) => {
+router.post("/", protect, adminOnly, async (req, res) => {
   try {
     const payload = {
       ...req.body,
@@ -38,11 +34,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-/*
-@route   GET /api/jobs
-@desc    Get all jobs (Public)
-@query   ?status=active
-*/
+
 router.get("/", async (req, res) => {
   try {
     const filter = {};
@@ -60,10 +52,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/*
-@route   GET /api/jobs/:id
-@desc    Get single job
-*/
+
 router.get("/:id", async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
@@ -79,11 +68,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/*
-@route   PUT /api/jobs/:id
-@desc    Update job (Admin)
-*/
-router.put("/:id", async (req, res) => {
+
+router.put("/:id",protect, adminOnly, async (req, res) => {
   try {
     const updateData = {
       ...req.body,
@@ -115,11 +101,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-/*
-@route   DELETE /api/jobs/:id
-@desc    Delete job (Admin)
-*/
-router.delete("/:id", async (req, res) => {
+
+router.delete("/:id",protect, adminOnly, async (req, res) => {
   try {
     const job = await Job.findByIdAndDelete(req.params.id);
 

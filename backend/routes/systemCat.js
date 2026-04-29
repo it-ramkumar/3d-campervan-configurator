@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const ExteriorCategory = require("../models/systemCategory");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
+
 
 // POST: Create Category
-router.post("/system/category", async (req, res) => {
+router.post("/system/category", protect, adminOnly, async (req, res) => {
   try {
     const { title, description } = req.body;
 
@@ -42,7 +44,7 @@ router.get("/system/category", async (req, res) => {
 });
 
 // DELETE: Delete a Category by ID
-router.delete("/system/category/:id", async (req, res) => {
+router.delete("/system/category/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
 

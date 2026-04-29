@@ -228,7 +228,7 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
-router.put("/reorder", async (req, res) => {
+router.put("/reorder",protect, adminOnly, async (req, res) => {
   try {
     // console.log("Reorder request body:", req.body);
     const { newOrder } = req.body; // Array of objects: [{_id: "...", order: 1}, ...]

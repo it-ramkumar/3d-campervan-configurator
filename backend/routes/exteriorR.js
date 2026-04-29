@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const slugify = require("slugify");
+const {protect, adminOnly} = require("../middleware/authMiddleware");
 
 const InteriorChoice = require("../models/ExteriorRoute");
 const InteriorCategory = require("../models/ExteriorCategory");
@@ -11,7 +12,7 @@ const { uploadToS3,deleteFromS3 } = require("../services/s3");
 
 
 // --- POST ROUTE ---
-router.post("/exterior", upload.array("images"), async (req, res) => {
+router.post("/exterior", protect, adminOnly, upload.array("images"), async (req, res) => {
   try {
     console.log("hello")
     const data = JSON.parse(req.body.data || "{}");
@@ -83,7 +84,7 @@ router.get("/exterior", async (req, res) => {
   }
 });
 
-router.put('/exterior/:id', upload.array("images"), async (req, res) => {
+router.put('/exterior/:id', protect, adminOnly, upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
     const description = JSON.parse(req.body.description || "[]");
@@ -133,7 +134,7 @@ router.put('/exterior/:id', upload.array("images"), async (req, res) => {
 });
 
 // 🟢 Delete an InteriorChoice
-router.delete("/exterior/:id", async (req, res) => {
+router.delete("/exterior/:id", protect, adminOnly, async (req, res) => {
   try {
     console.log("hello delte")
     const interior = await InteriorChoice.findById(req.params.id);

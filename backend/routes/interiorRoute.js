@@ -4,6 +4,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const slugify = require("slugify");
 const mongoose = require("mongoose");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 const InteriorChoice = require("../models/InteriorChoices");
 const InteriorCategory = require("../models/InteriorCategory");
@@ -12,7 +13,7 @@ const { uploadToS3,deleteFromS3 } = require("../services/s3");
 
 
 // --- POST ROUTE ---
-router.post("/interior", upload.array("images"), async (req, res) => {
+router.post("/interior", protect, adminOnly, upload.array("images"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data || "{}");
     const description = JSON.parse(req.body.description || "[]");
@@ -83,8 +84,7 @@ router.get("/interior", async (req, res) => {
   }
 });
 
-
-router.put('/interior/:id', upload.array("images"), async (req, res) => {
+router.put('/interior/:id', protect, adminOnly, upload.array("images"), async (req, res) => {
   try {
 
     const data = JSON.parse(req.body.data || "{}");
@@ -134,9 +134,7 @@ router.put('/interior/:id', upload.array("images"), async (req, res) => {
   }
 });
 
-
-// 🟢 Delete an InteriorChoice
-router.delete("/interior/:id", async (req, res) => {
+router.delete("/interior/:id", protect, adminOnly, async (req, res) => {
   try {
     const interior = await InteriorChoice.findById(req.params.id);
     if (!interior) return res.status(404).json({ success: false, message: "InteriorChoice not found" });

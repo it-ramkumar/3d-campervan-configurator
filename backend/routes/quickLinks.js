@@ -7,7 +7,7 @@ const { protect, adminOnly } = require("../middleware/authMiddleware");
 const QuickLink = require('../models/quickLinks'); // MongoDB schema
 
 // Create a new quick link
-router.post('/', upload.fields([
+router.post('/',protect, adminOnly, upload.fields([
   { name: "icon", maxCount: 1 } // single optional image per link
 ]), async (req, res) => {
   try {
@@ -72,6 +72,8 @@ router.get('/', async (req, res) => {
 
 router.put(
   "/reorder",
+  protect,
+  adminOnly,
   async (req, res) => {
     try {
       const { links } = req.body;
@@ -104,7 +106,7 @@ router.put(
   }
 );
 // Edit a quick link
-router.put('/:id', upload.fields([
+router.put('/:id', protect, adminOnly, upload.fields([
   { name: "icon", maxCount: 1 }
 ]), async (req, res) => {
   try {
@@ -158,7 +160,7 @@ router.put('/:id', upload.fields([
 
 
 // Delete a quick link
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', protect, adminOnly, async (req, res) => {
   try {
     const linkId = req.params.id;
 

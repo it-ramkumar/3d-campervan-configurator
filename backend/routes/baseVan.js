@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const BaseVan = require("../models/baseVan"); // Aapka BaseVan schema path
 const { uploadToS3,deleteFromS3 } = require("../services/s3"); // Aapka S3 helper function
-// const { protect, adminOnly } = require("../middleware/authMiddleware");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 const multer = require("multer");
 
 // Multer storage setup (Memory storage as per your buffer requirement)
@@ -11,6 +11,8 @@ const upload = multer({ storage });
 
 router.post(
   "/add-base-van",
+  protect,
+  adminOnly,
   upload.fields([{ name: "image", maxCount: 1 }, { name: "glbFile", maxCount: 1 }]),
   async (req, res) => {
     try {
@@ -70,8 +72,6 @@ router.post(
   }
 );
 
-// @route   GET /api/base-vans
-// @desc    Get all base vans with optional search
 router.get("/add-base-van", async (req, res) => {
   try {
     const { search, layout } = req.query;
@@ -100,9 +100,7 @@ router.get("/add-base-van", async (req, res) => {
   }
 });
 
-// @route   GET /api/base-vans/:id
-// @desc    Get single base van details
-router.get("/add-base-van/:id", async (req, res) => {
+router.get("/add-base-van/:id", protect, adminOnly, async (req, res) => {
   try {
     const baseVan = await BaseVan.findById(req.params.id);
 
@@ -119,9 +117,8 @@ router.get("/add-base-van/:id", async (req, res) => {
   }
 });
 
-// @route   DELETE /api/base-vans/:id
-// @desc    Delete Base Van and its files from S3
-router.delete("/add-base-van/:id", async (req, res) => {
+
+router.delete("/add-base-van/:id", protect, adminOnly, async (req, res) => {
   try {
     // 1. Pehle check karein ke van exist karti hai
     const van = await BaseVan.findById(req.params.id);

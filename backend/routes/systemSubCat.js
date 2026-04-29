@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const ExteriorSubCategory = require("../models/systemSubCategory");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 // POST: Create SubCategory
-router.post("/system/subcategory", async (req, res) => {
+router.post("/system/subcategory", protect, adminOnly, async (req, res) => {
   try {
     const { title, categoryId, description } = req.body;
 
@@ -43,7 +44,7 @@ router.get("/system/subcategory", async (req, res) => {
     });
   }
 });
-router.delete("/system/subcategory/:id", async (req, res) => {
+router.delete("/system/subcategory/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
 

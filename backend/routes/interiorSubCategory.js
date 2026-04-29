@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const InteriorSubCategory = require("../models/InteriorSubCategory");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 // POST: Create SubCategory
-router.post("/interior/subcategory", async (req, res) => {
+router.post("/interior/subcategory", protect, adminOnly, async (req, res) => {
   try {
     const { title, categoryId, description } = req.body;
 
@@ -44,7 +45,7 @@ router.get("/interior/subcategory", async (req, res) => {
   }
 });
 // DELETE: Delete SubCategory by ID
-router.delete("/interior/subcategory/:id", async (req, res) => {
+router.delete("/interior/subcategory/:id", protect, adminOnly, async (req, res) => {
   try {
     const { id } = req.params;
 

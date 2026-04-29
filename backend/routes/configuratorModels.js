@@ -68,8 +68,6 @@ router.post(
   }
 );
 
-
-
 router.get("/interior", async (req, res) => {
   try {
     const data = await InteriorModel.find();

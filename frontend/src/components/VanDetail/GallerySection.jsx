@@ -26,7 +26,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
     <div className="space-y-4">
 
       {/* MAIN IMAGE */}
-      <div className="h-[700px] relative flex items-center justify-center overflow-hidden bg-white rounded-lg">
+      <div className="relative flex items-center justify-center overflow-hidden bg-white rounded-lg">
 
         {/* BACKGROUND IMAGE (fills empty space) */}
         <Image

@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const Application = require("../models/jobApp");
 const { uploadToS3 } = require("../services/s3");
+const {protect, adminOnly} = require("../middleware/authMiddleware");
 
 /* ---------- MULTER (MEMORY STORAGE) ---------- */
 const upload = multer({
@@ -58,10 +59,6 @@ router.post(
   }
 );
 
-/*
-@route   GET /api/applications
-@desc    Get all applications
-*/
 router.get("/", async (req, res) => {
   try {
     const applications = await Application.find()
@@ -75,12 +72,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-/*
-@route   DELETE /api/applications/:id
-@desc    Delete an application
-@access  Admin
-*/
-router.delete("/:id", async (req, res) => {
+
+router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const application = await Application.findByIdAndDelete(req.params.id);
 
@@ -95,10 +88,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-/*
-@route   GET /api/applications/:id
-@desc    Get single application
-*/
+
 router.get("/:id", async (req, res) => {
   try {
     const application = await Application.findById(req.params.id)
