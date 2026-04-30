@@ -108,62 +108,120 @@ router.post(
 );
 router.get("/", async (req, res) => {
   try {
-    let { page = 1, limit = 50, category, sold, search } = req.query;
-    page = Number(page);
-    limit = Number(limit);
+    let {
+      page = 1,
+      limit = 12,
+      category,
+      wheelbase,
+      sold,
+      search,
+      model,
+      sit,
+      sleep,
+      bedType,
+      bathroomType
+    } = req.query;
+
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+    const skip = (pageNum - 1) * limitNum;
+
 
     const filter = {};
+   if (category) {
+  const categories = category.split(",").map((c) => c.trim());
 
-    if (category) filter.category = category;
+  filter["category"] = { $in: categories };
+}
     if (sold !== undefined) filter.sold = sold === "true";
+    if (wheelbase) {
+      filter["van_listing.specifications.wheelbase"] = wheelbase;
+    }
+    if (sit) filter["van_listing.specifications.capacity.sits"] = { $in: [sit] };
+    if (sleep) filter["van_listing.specifications.capacity.sleeps"] = { $in: [sleep] };
+    if (model) filter["van_listing.specifications.make_model"] = { $in: [model] };
+    if (bedType) filter["van_listing.bedType"] = { $in: [bedType] };
+    if (bathroomType) filter["van_listing.bathroomType"] = { $in: [bathroomType] };
 
-    // ✅ Search by nested title
     if (search && search.trim() !== "") {
-      const regex = new RegExp(search, "i");
-      filter["van_listing.title"] = regex;
+      const regex = new RegExp(search.split(" ").join(".*"), "i");
+      filter.$or = [
+        { "van_listing.title": { $regex: regex } },
+        { "van_listing.description": { $regex: regex } }
+      ];
     }
 
-    const total = await PortfolioVan.countDocuments(filter);
-
-    const vans = await PortfolioVan.aggregate([
+    // 🔥 SINGLE AGGREGATION (data + filters)
+    const result = await PortfolioVan.aggregate([
       { $match: filter },
 
       {
-        $addFields: {
-          hasRendering: {
-            $gt: [{ $size: { $ifNull: ["$rendering", []] } }, 0],
-          },
-        },
-      },
+        $facet: {
+          data: [
+            {
+              $addFields: {
+                hasRendering: {
+                  $gt: [{ $size: { $ifNull: ["$rendering", []] } }, 0],
+                },
+              },
+            },
+            {
+              $sort: { hasRendering: -1, createdAt: -1 },
+            },
+            { $skip: skip },
+            { $limit: limitNum },
+          ],
 
-      {
-        $sort: {
-          hasRendering: -1,   // 👈 rendering wale first
-          createdAt: -1,      // then latest
-        },
-      },
+          totalCount: [
+            { $count: "total" }
+          ],
 
-      {
-        $skip: (page - 1) * limit,
-      },
-
-      {
-        $limit: limit,
-      },
+         filters: [
+  { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
+  {
+    $group: {
+      _id: null,
+      category: { $addToSet: "$category" },
+      wheelbase: { $addToSet: "$van_listing.specifications.wheelbase" },
+      sits: { $addToSet: "$van_listing.specifications.capacity.sits" },
+      sleeps: { $addToSet: "$van_listing.specifications.capacity.sleeps" },
+      models: { $addToSet: "$van_listing.specifications.make_model" },
+      bedType: { $addToSet: "$van_listing.bedType" },
+      bathroomType: { $addToSet: "$van_listing.bathroomType" },
+    }
+  }
+]
+        }
+      }
     ]);
 
+    const data = result[0].data;
+    const total = result[0].totalCount[0]?.total || 0;
+    const filtersRaw = result[0].filters[0] || {};
+
+    const filters = {
+      category: (filtersRaw.category || []).filter(Boolean).sort(),
+      wheelbase: (filtersRaw.wheelbase || []).filter(Boolean).sort(),
+      sits: (filtersRaw.sits || []).filter(Boolean).sort(),
+      sleeps: (filtersRaw.sleeps || []).filter(Boolean).sort(),
+      models: (filtersRaw.models || []).filter(Boolean).sort(),
+      bedType: (filtersRaw.bedType || []).filter(Boolean).sort(),
+      bathroomType: (filtersRaw.bathroomType || []).filter(Boolean).sort(),
+    };
 
     res.json({
       success: true,
       total,
-      page,
-      pages: Math.ceil(total / limit),
-      limit,
-      data: vans,
+      page: pageNum,
+      pages: Math.ceil(total / limitNum),
+      limit: limitNum,
+      data,
+      filters
     });
+
   } catch (err) {
-    console.error("Error fetching vans with pagination:", err);
-    res.status(500).json({ success: false, message: "Failed to fetch vans" });
+    console.error(err);
+    res.status(500).json({ success: false });
   }
 });
 router.get("/titles-only", async (req, res) => {
