@@ -23,29 +23,9 @@ export default function All_Layout({ layout, LayoutText, text }) {
 
   if (images.length === 0) return null;
 // 1. Function ko define karein (Sahi logic ke sath)
-const formatCategoryLink = (fullPath) => {
-  if (!fullPath) return "/";
 
-  // 1. Link ko do hisson mein torein
-  const parts = fullPath.split('/');
-  const categoryName = parts.pop(); // Aakhri hissa: "Layouts for Families (3–9 People)"
-  const basePath = parts.join('/'); // Shuru wala rasta: "/layout-by-category"
-
-  // 2. Category name ko clean karein (Lekin Case aur Brackets rakhein)
-  const cleanCategory = categoryName
-    .trim()
-    .replace(/[\u2013\u2014]/g, '-') // Special lambe dash ko normal (-) karein taake 3-9 sahi rahe
-    .replace(/\s+/g, '-')           // Spaces ko dash (-) mein badlein
-    .replace(/[^\w\s-()]/g, '')     // Sirf brackets, numbers, letters aur dash allow karein
-    .replace(/-+/g, '-')            // Double dashes ko single karein
-    .replace(/^-+|-+$/g, '');       // Start/End ke dashes saaf karein
-
-  // 3. Donon ko wapas jor dein
-  return `${basePath}/${cleanCategory}`;
-};
 
 // Component mein aise use karein:
-const finalLink = formatCategoryLink(link);
   return (
     <section className="bg-secondary text-primary py-20 px-6 lg:px-12 overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -128,7 +108,7 @@ const finalLink = formatCategoryLink(link);
         <div className="mt-16 flex justify-center">
           <SecondaryButton
             label="Explore This Layout"
-            link={finalLink}
+            link={link}
           />
         </div>
       </div>

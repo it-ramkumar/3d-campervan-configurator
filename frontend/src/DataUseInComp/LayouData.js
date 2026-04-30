@@ -92,7 +92,7 @@ export const vanLayoutsData = [
         link: "/layout-detail/santa-cruz"
       },
     ],
-    link: "/layout-by-category/layouts-for-families-(3-9-people)",
+    link: "/van-layouts?category=Layouts+for+Families+%283–9+People%29",
     showIntro: true
   },
   {
@@ -131,7 +131,7 @@ export const vanLayoutsData = [
         img: "/cauple/santab3.jpg",
         link: "/layout-detail/santa-barbara"
       },
-    ], link: "/layout-by-category/layouts-for-solo-couple-travelers"
+    ], link: "/van-layouts?category=Layouts+for+Solo+%26+Couple+Travelers"
   },
   {
     id: "short-vans",
@@ -169,7 +169,7 @@ export const vanLayoutsData = [
         img: "/short/santab2.jpg",
  link: "/layout-detail/santa-barbara"
       },],
-    link: "/layout-by-category/flagship-short-van-santa-monica"
+    link: "/van-layouts?category=Flagship+Short+Van+—+Santa+Monica"
   },
   {
     id: "long-vans",
@@ -237,7 +237,7 @@ export const vanLayoutsData = [
       },
 
     ],
-    link: "/layout-by-category/flagship-long-van-montreal"
+    link: "/van-layouts?category=Flagship+Long+Van+—+Montreal"
   },
   {
     id: "custom-build",
@@ -276,6 +276,6 @@ export const vanLayoutsData = [
       link: "/layout-detail/san-clemente"
       },
     ],
-    link: "/layout-by-category/portfolio-of-custom-builds"
+    link: "/van-layouts?category=Portfolio+of+Custom+Builds"
   }
 ];

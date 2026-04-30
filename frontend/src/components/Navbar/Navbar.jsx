@@ -91,24 +91,10 @@ export default function Navbar({ forceMobile }) {
   const navLinks = useMemo(() => [
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
     { name: 'Camper Vans For Sale', label: 'Vans For Sale', path: '/camper-vans-for-sale', hasDropdown: false },
-    { name: 'layout', label: 'Layouts', path: '/van-layouts', hasDropdown: true },
+    { name: 'layout', label: 'Layouts', path: '/layout-by-category', hasDropdown: true },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
 
-  // const slugify = (text) => {
-  //   if (!text) return "";
-
-  //   return text
-  //     .toString()
-  //     .toLowerCase()
-  //     .trim()
-  //     .replace(/[\u2013\u2014]/g, '-') // Lambe dashes ko normal dash banayein
-  //     .replace(/\s+/g, '-')           // Spaces ko dash (-) banayein
-  //     .replace(/[^\w\s-()]/g, '')     // IMPORTANT: Yahan '(' aur ')' ko allow kar diya
-  //     .replace(/-+/g, '-')            // Double dashes ko single karein
-  //     .replace(/^-+|-+$/g, '');       // Start/End ke dashes saaf karein
-  // };
-  // Fix 1: Safer Active Check
   const isParentActive = useCallback((key) => {
     const routeList = routes?.[key];
     if (!routeList || !pathname) return false;
@@ -215,11 +201,11 @@ export default function Navbar({ forceMobile }) {
           {/* 2. End Link: Jo poore section ke neechay center ya left align ho */}
           <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
             <Link
-              href="/van-layouts"
+              href="/layout-by-category"
               onClick={closeMobile}
               className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
             >
-              View All Layout Options
+              View All Layout By Category
               <span className="transform transition-transform group-hover:translate-x-2">
                 →
               </span>
@@ -231,21 +217,37 @@ export default function Navbar({ forceMobile }) {
     if (section?.title === "Van Models Options") {
       return (
         <>
-          {/* Pehle wheelbases ki list map hogi */}
-          {data?.wheelBases?.map((base, i) => (
-            <NavListItem key={i} href={`/wheel-base/${base}`} onClick={closeMobile}>
-              {getWheelbaseLabel(base)} →
-            </NavListItem>
-          ))}
-<Heading4 text="Built for Every Journey Size" className="my-4"/>
+
+          <NavListItem href={`/van-layouts?wheelbase=144`} onClick={closeMobile}>
+            Mercedes Sprinter 144 →
+          </NavListItem>
+          <NavListItem href={`/van-layouts?wheelbase=170`} onClick={closeMobile}>
+            Mercedes Sprinter 170 →
+          </NavListItem> <NavListItem href={`/van-layouts?wheelbase=148`} onClick={closeMobile}>
+            Ford Transit 148 →
+          </NavListItem> <NavListItem href={`/van-layouts?wheelbase=159`} onClick={closeMobile}>
+            Ram ProMaster 159 →
+          </NavListItem>
+          <Heading4 text="Built for Every Journey Size" className="my-4" />
           {/* Uske foran baad ye items nazar aayenge */}
-          <NavListItem href={`/layout-by-category/flagship-short-van-santa-monica`} onClick={closeMobile}>
+          <NavListItem href={`/van-layouts?category=Flagship+Long+Van+—+Montreal`} onClick={closeMobile}>
             Ideal for small families (2–3 people)
           </NavListItem>
-          <NavListItem href={`/layout-by-category/layouts-for-families-(3-9-people)`} onClick={closeMobile}>
+          <NavListItem href={`/van-layouts?category=Layouts+for+Families+%283–9+People%29`} onClick={closeMobile}>
             Perfect for larger families (4+ passengers)
           </NavListItem>
-
+  <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
+            <Link
+              href="/van-layouts"
+              onClick={closeMobile}
+              className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+            >
+              View All Layout Options
+              <span className="transform transition-transform group-hover:translate-x-2">
+                →
+              </span>
+            </Link>
+          </div>
         </>
       );
     }
