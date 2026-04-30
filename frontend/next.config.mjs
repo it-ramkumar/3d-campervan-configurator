@@ -19,6 +19,26 @@ const nextConfig = {
         destination: "/camper-vans-for-sale",
         permanent: true, // Iska matlab hai 301 Permanent Redirect (SEO ke liye best)
       },
+      {
+        source: '/wheel-base/148',
+        destination: '/van-layouts?wheelbase=148',
+        permanent: true,
+      },
+      {
+        source: '/wheel-base/144',
+        destination: '/van-layouts?wheelbase=144',
+        permanent: true,
+      },
+      {
+        source: '/wheel-base/159',
+        destination: '/van-layouts?wheelbase=159',
+        permanent: true,
+      },
+      {
+        source: '/wheel-base/170',
+        destination: '/van-layouts?wheelbase=170',
+        permanent: true,
+      },
     ];
   },
 };

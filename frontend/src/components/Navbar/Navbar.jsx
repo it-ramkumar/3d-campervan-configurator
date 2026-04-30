@@ -6,7 +6,6 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { gsap } from "gsap";
 import { getAllBlogs } from "../../api/blog/getAllBlogs"
 import { getNavCat } from "../../api/portfolio/navBarCat";
-import { getnavWheel } from "../../api/portfolio/navWheelBase";
 import { menuContent } from "../../DataUseInComp/MegaMenu"
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
@@ -120,7 +119,6 @@ export default function Navbar({ forceMobile }) {
         const [b, c, w] = await Promise.all([
           getAllBlogs()?.catch(() => ({ data: [] })),
           getNavCat()?.catch(() => ({ data: [] })),
-          getnavWheel()?.catch(() => ({ data: [] }))
         ]);
         setData({ blogs: b?.data || [], categories: c?.data || [], wheelBases: w?.data || [] });
       } catch (err) {

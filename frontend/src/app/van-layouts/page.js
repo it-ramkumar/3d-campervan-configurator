@@ -6,17 +6,29 @@ export async function generateMetadata() {
   const res = await getAllPortfolio({ page: 1, limit: 1 });
   const totalBuilds = res?.data?.total || 105;
 
-  const title = `Browse Our ${totalBuilds}+ Custom Camper Van Layouts | Big Bear Vans`;
-  const description = `Explore ${totalBuilds}+ 3D designed floor plans and custom camper van layouts.`;
+  const title = `Browse ${totalBuilds}+ Custom Camper Van Layouts & Floor Plans | Big Bear Vans`;
+
+  const description = `Explore ${totalBuilds}+ custom camper van layouts including Sprinter, Transit, and family van conversions. View detailed 3D floor plans and find the perfect setup for your next adventure.`;
 
   return {
     title,
     description,
+    keywords: [
+      "camper van layouts",
+      "van conversion floor plans",
+      "sprinter van layouts",
+      "custom camper vans",
+      "van build layouts"
+    ],
     openGraph: {
       title,
       description,
       images: ["/images2/layout2.webp"],
+      type: "website"
     },
+    alternates: {
+      canonical: "https://www.bigbearvans.com/van-layouts"
+    }
   };
 }
 
@@ -42,23 +54,28 @@ export default async function LayoutsPage({ searchParams }) {
     ? res.data
     : { data: [], pages: 0, page: 1, total: 0, filters: {} };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Custom Camper Van Layouts",
-    "numberOfItems": initialData.total,
-    "itemListElement": (initialData.data || []).map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "CreativeWork",
-        "name": item.van_listing?.title || "Custom Layout",
-        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
-        "description": "Custom camper van floor plan",
-        "image": item.gallery?.[0] || "/images2/layout2.webp"
+ const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Custom Camper Van Layouts",
+  "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
+  "numberOfItems": initialData.total,
+  "itemListElement": (initialData.data || []).map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Product",
+      "name": item.van_listing?.title || "Custom Camper Van Layout",
+      "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
+      "image": item.gallery?.[0] || "/images2/layout2.webp",
+      "description": item.van_listing?.description || "Custom camper van floor plan",
+      "brand": {
+        "@type": "Brand",
+        "name": "Big Bear Vans"
       }
-    }))
-  };
+    }
+  }))
+};
 
   return (
     <main>
