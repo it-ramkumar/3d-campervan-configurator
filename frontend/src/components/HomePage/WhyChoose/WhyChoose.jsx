@@ -69,7 +69,7 @@ const sections = [
   {
     title: "Family-friendly Layouts",
     intro: (<span>While others are built for couples, ours are for the whole crew. We’re proud to have built several
-      <CustomLink href={"/layout-by-category/Layouts%20for%20Families%20(3–9%20People)"} text={" family-friendly campervans "} />  In our family layouts, you can:</span>),
+      <CustomLink href={"/van-layouts?category=Layouts+for+Families+%283–9+People%29"} text={" family-friendly campervans "} />  In our family layouts, you can:</span>),
     features: [
       { text: "Sit, sleep, and travel safely with <strong>4 or even 9 people.</strong>", icon: <Users size={18} /> },
       { text: "Enjoy outdoors in the rear <strong>foldable patio and roof deck.</strong>", icon: <TentTree size={18} /> },
