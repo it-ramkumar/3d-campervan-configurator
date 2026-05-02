@@ -15,7 +15,7 @@ function loadUsers() {
 }
 
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: false });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
 function saveUsers(users) {
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
@@ -563,8 +563,16 @@ cron.schedule('* * * * *', async () => {
                 console.log(`🚨 SENDING ${diffInMinutes} MIN ALERT: ${event.summary}`);
                 console.log(`🔍 DEBUG: eventHour=${eventHour}, eventMinute=${eventMinute}`);
 
-                const summary = event.summary || "Upcoming Meeting";
-                const meetLink = event.hangoutLink || "No link";
+                // --- DATA EXTRACTION START ---
+                // Description se Name aur Email nikalne ke liye (Regex use kar rahe hain)
+                const desc = event.description || "";
+                const nameMatch = desc.match(/Name:\s*(.*)/);
+                const emailMatch = desc.match(/Email:\s*(.*)/);
+
+                const clientName = nameMatch ? nameMatch[1] : "Not provided";
+                const clientEmail = emailMatch ? emailMatch[1] : "Not provided";
+                const meetLink = event.hangoutLink || "No Link Available";
+                // --- DATA EXTRACTION END ---
 
                 // ✅ FIXED: 12-hour format conversion
                 let displayHour = eventHour;
@@ -584,13 +592,12 @@ cron.schedule('* * * * *', async () => {
                 const eventTimeReadable = `${displayHour}:${eventMinute.toString().padStart(2, '0')} ${period}`;
                 console.log(`🔍 DEBUG: Final time = ${eventTimeReadable}`);
 
-                const alertMsg = `🔔 **REMINDER: Meeting in ${diffInMinutes} mins!**\n\n` +
-                    `📌 **Topic:** ${summary}\n` +
-                    `⏰ **Time:** ${eventTimeReadable} (California Time)\n` +
-                    `📅 **Date:** ${eventDate}/${eventMonth}/${eventYear}\n` +
-                    `🔗 **Link:** ${meetLink}\n\n` +
-                    `Meeting will start in ${diffInMinutes} minutes!`;
-
+                const alertMsg = `🔔 *REMINDER: Meeting in ${diffInMinutes} mins!*\n\n` +
+                    `👤 *Client:* ${clientName}\n` +
+                    `📧 *Email:* ${clientEmail}\n` +
+                    `📌 *Topic:* ${event.summary || "No Title"}\n` +
+                    `⏰ *Time:* ${eventTimeReadable} (CA Time)\n` +
+                    `🔗 *Join Meeting:* [Click Here to Join](${meetLink})`;
                 // Sab joined users ko bhejo
                 const users = loadUsers(); // users.json se
                 let anySuccess = false;
