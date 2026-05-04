@@ -86,7 +86,10 @@ export default function AdminForms() {
       await axios.post(`${process.env.NEXT_PUBLIC_URL}/exterior/category`, {
         title: categoryForm.title,
         description: categoryForm.description
-      });
+      },
+        {
+          withCredentials: true // This allows cookies to be sent/received
+        });
       alert("Category Created Successfully!");
       setCategoryForm({ title: "", description: "" });
       fetchCategories();
@@ -108,7 +111,10 @@ export default function AdminForms() {
         title: subCategoryForm.title,
         description: subCategoryForm.description,
         categoryId: subCategoryForm.categoryId
-      });
+      },
+        {
+          withCredentials: true // This allows cookies to be sent/received
+        });
       alert("SubCategory Created Successfully!");
       setSubCategoryForm({ title: "", description: "", categoryId: "" });
       fetchSubCategories();
@@ -143,106 +149,111 @@ export default function AdminForms() {
     setInteriorForm(prev => ({ ...prev, images: [...e.target.files] }));
   };
 
-const handleExteriorSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleExteriorSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    // 1. Blocks cleaning logic - DEEP COPY banao
-    const cleanedBlocks = interiorForm.blocks
-      .map((block) => {
-        // ✅ Deep copy banao instead of shallow copy
-        let b = JSON.parse(JSON.stringify(block));
-        delete b._id; // New object ke liye _id hatana sahi hai
+    try {
+      // 1. Blocks cleaning logic - DEEP COPY banao
+      const cleanedBlocks = interiorForm.blocks
+        .map((block) => {
+          // ✅ Deep copy banao instead of shallow copy
+          let b = JSON.parse(JSON.stringify(block));
+          delete b._id; // New object ke liye _id hatana sahi hai
 
-        if (b.block_type === "heading" || b.block_type === "subheading") {
-          delete b.content; delete b.list_items; delete b.table_data;
-        } else if (b.block_type === "paragraph") {
-          delete b.title; delete b.list_items; delete b.table_data;
-        } else if (b.block_type === "list") {
-          delete b.content; delete b.table_data;
-          if (b.list_items) {
-            b.list_items = b.list_items
-              .map(item => ({
-                text: item.text ? item.text.trim() : "",
-                sub_items: item.sub_items ? item.sub_items.filter(sub => sub && sub.trim() !== "").map(sub => sub.trim()) : []
-              }))
-              .filter(item => item.text !== "");
+          if (b.block_type === "heading" || b.block_type === "subheading") {
+            delete b.content; delete b.list_items; delete b.table_data;
+          } else if (b.block_type === "paragraph") {
+            delete b.title; delete b.list_items; delete b.table_data;
+          } else if (b.block_type === "list") {
+            delete b.content; delete b.table_data;
+            if (b.list_items) {
+              b.list_items = b.list_items
+                .map(item => ({
+                  text: item.text ? item.text.trim() : "",
+                  sub_items: item.sub_items ? item.sub_items.filter(sub => sub && sub.trim() !== "").map(sub => sub.trim()) : []
+                }))
+                .filter(item => item.text !== "");
+            }
+          } else if (b.block_type === "table") {
+            delete b.content; delete b.list_items;
+            if (b.table_data && b.table_data.rows) {
+              // ✅ New array banao, original modify mat karo
+              b.table_data = {
+                ...b.table_data,
+                rows: b.table_data.rows.filter(row => row.some(cell => cell && cell.trim() !== ""))
+              };
+            }
           }
-        } else if (b.block_type === "table") {
-          delete b.content; delete b.list_items;
-          if (b.table_data && b.table_data.rows) {
-            // ✅ New array banao, original modify mat karo
-            b.table_data = {
-              ...b.table_data,
-              rows: b.table_data.rows.filter(row => row.some(cell => cell && cell.trim() !== ""))
-            };
-          }
+          return b;
+        })
+        .filter((block) => {
+          return block.title?.trim() || block.content?.trim() || (block.block_type === "list" && block.list_items?.length > 0) || (block.block_type === "table" && block.table_data?.rows.length > 0);
+        });
+
+      // 2. Check if it's edit or create
+      const isEdit = editData && editData._id && Object.keys(editData).length > 0;
+
+      // 3. FormData Preparation
+      const formData = new FormData();
+      formData.append("data", JSON.stringify({
+        title: interiorForm.title,
+        categoryId: interiorForm.categoryId,
+        subCategoryId: interiorForm.subCategoryId,
+        link: interiorForm.link
+      }));
+
+      const validDescriptions = interiorForm.descriptions.filter(d => d.trim() !== "");
+      formData.append("description", JSON.stringify(validDescriptions));
+      formData.append("blocks", JSON.stringify(cleanedBlocks));
+
+      // Images append logic - Only new files for both create and edit
+      interiorForm.images.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file);
         }
-        return b;
-      })
-      .filter((block) => {
-        return block.title?.trim() || block.content?.trim() || (block.block_type === "list" && block.list_items?.length > 0) || (block.block_type === "table" && block.table_data?.rows.length > 0);
       });
 
-    // 2. Check if it's edit or create
-    const isEdit = editData && editData._id && Object.keys(editData).length > 0;
-
-    // 3. FormData Preparation
-    const formData = new FormData();
-    formData.append("data", JSON.stringify({
-      title: interiorForm.title,
-      categoryId: interiorForm.categoryId,
-      subCategoryId: interiorForm.subCategoryId,
-      link: interiorForm.link
-    }));
-
-    const validDescriptions = interiorForm.descriptions.filter(d => d.trim() !== "");
-    formData.append("description", JSON.stringify(validDescriptions));
-    formData.append("blocks", JSON.stringify(cleanedBlocks));
-
-    // Images append logic - Only new files for both create and edit
-    interiorForm.images.forEach((file) => {
-      if (file instanceof File) {
-        formData.append("images", file);
+      // 4. API Call - Create or Edit
+      if (isEdit) {
+        // PUT request for edit
+        await axios.put(
+          `${process.env.NEXT_PUBLIC_URL}/exterior/${editData._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
+            withCredentials: true // Cookies allow karne ke liye yahan add karein
+          }
+        );
+        alert("Updated Successfully!");
+      } else {
+        // POST request for create
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_URL}/exterior`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        alert("Created Successfully!");
       }
-    });
 
-    // 4. API Call - Create or Edit
-    if (isEdit) {
-      // PUT request for edit
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_URL}/exterior/${editData._id}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      alert("Updated Successfully!");
-    } else {
-      // POST request for create
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_URL}/exterior`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      alert("Created Successfully!");
+      // 5. Reset Form & Clear Edit State
+      setInteriorForm({
+        title: "", categoryId: "", subCategoryId: "",
+        descriptions: [""], images: [], link: "", blocks: []
+      });
+
+      // Clear Redux edit state
+      dispatch({ type: 'CLEAR_EDIT_DATA' });
+
+    } catch (err) {
+      console.error("Submission Error:", err);
+      alert(err.response?.data?.message || "Error saving data");
+    } finally {
+      setLoading(false);
     }
-
-    // 5. Reset Form & Clear Edit State
-    setInteriorForm({
-      title: "", categoryId: "", subCategoryId: "",
-      descriptions: [""], images: [], link: "", blocks: []
-    });
-
-    // Clear Redux edit state
-    dispatch({ type: 'CLEAR_EDIT_DATA' });
-
-  } catch (err) {
-    console.error("Submission Error:", err);
-    alert(err.response?.data?.message || "Error saving data");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const filteredSubCategories = subCategories.filter(
     (sc) => sc.categoryId?._id === interiorForm.categoryId || String(sc.categoryId?._id) === interiorForm.categoryId

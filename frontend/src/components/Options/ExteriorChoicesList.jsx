@@ -325,7 +325,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                     <ImageWithSkeleton
                                       src={activeItem.images?.[0]}
                                       alt={activeItem.title || "Van interior options"}
-                                      className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                                      className=" transform group-hover:scale-105 transition-transform duration-700"
                                     />
                                   </div>
                                 </div>

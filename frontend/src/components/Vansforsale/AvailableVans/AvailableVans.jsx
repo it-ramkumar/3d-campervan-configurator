@@ -34,6 +34,15 @@ const FEATURES = [
 ];
 
 export default function AvailableVans({ availableVans, hasMore, loading, onLoadMore }) {
+
+  const filteredVans = availableVans?.filter((van) => {
+  const title = van?.van_listing?.title?.toLowerCase();
+
+  return ![
+    "santa monica white",
+    "ford transit t-350 2026..",
+  ].includes(title);
+})
   return (
     <section className="bg-secondary py-16 md:py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto  px-6">
@@ -62,9 +71,9 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
         </div>
 
         {/* --- Main Inventory Grid --- */}
-        {availableVans && availableVans.length > 0 ? (
+        {filteredVans && filteredVans.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
-            {availableVans.map((van) => (
+            {filteredVans.map((van) => (
               <div
                 key={van._id}
                 className="group relative flex flex-col bg-white overflow-hidden transition-all duration-500 hover:shadow-2xl"
