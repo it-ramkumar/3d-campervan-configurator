@@ -144,7 +144,63 @@ const ensureAuthenticated = async (req, res, next) => {
         });
     }
 };
+// ✅ Route: Create a test meeting 15 minutes from now (California Time)
+router.get("/test-15min-meeting", ensureAuthenticated, async (req, res) => {
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
+        // 1. California ka current time lo aur usme 15 mins add karo
+        const HOST_TZ = 'America/Los_Angeles';
+        const startTime = DateTime.now().setZone(HOST_TZ).plus({ minutes: 15 }).startOf('minute');
+        const endTime = startTime.plus({ minutes: 30 }); // 30 min duration
+
+        console.log(`🚀 Creating Test Meeting for: ${startTime.toISO()}`);
+
+        const event = {
+            summary: "🔥 Test Alert Meeting (15 Mins)",
+            description: "Name: Test User\nEmail: test@example.com\nPhone: 123456789\n\nThis is a test event for telegram alerts.",
+            start: {
+                dateTime: startTime.toISO(),
+                timeZone: HOST_TZ,
+            },
+            end: {
+                dateTime: endTime.toISO(),
+                timeZone: HOST_TZ,
+            },
+            conferenceData: {
+                createRequest: {
+                    requestId: `test-${Date.now()}`,
+                    conferenceSolutionKey: { type: "hangoutsMeet" }
+                }
+            },
+            // Google reminders (Optional, as you have your own Cron)
+            reminders: {
+                useDefault: false,
+                overrides: [
+                    { method: 'popup', minutes: 15 },
+                ],
+            },
+        };
+
+        const response = await calendar.events.insert({
+            calendarId: "primary",
+            resource: event,
+            conferenceDataVersion: 1,
+        });
+
+        res.json({
+            message: "✅ Meeting scheduled 15 minutes from now!",
+            startTime_CA: startTime.toFormat('hh:mm a'),
+            date: startTime.toFormat('yyyy-MM-dd'),
+            meetLink: response.data.hangoutLink,
+            note: "Ab 1-2 minute wait karein, Cron job check karke Telegram alert bhej degi."
+        });
+
+    } catch (error) {
+        console.error("❌ Test Route Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
 // Step 1: Generate Auth URL
 router.get("/auth/url", (req, res) => {
     const scopes = ["https://www.googleapis.com/auth/calendar"];
