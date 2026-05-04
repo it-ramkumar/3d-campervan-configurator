@@ -19,14 +19,14 @@ export default function RootLayout({ children }) {
           data-key="6pOfSpraP52vmd3qvXHD0w"
           strategy="lazyOnload"
         />
-      
+
 
 
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-16677332528"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads-script" strategy="afterInteractive">
+strategy="lazyOnload"
+  />
+        <Script id="google-ads-script" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
