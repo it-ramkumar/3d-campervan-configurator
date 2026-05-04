@@ -24,8 +24,8 @@ export default function RootLayout({ children }) {
 
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-16677332528"
-strategy="lazyOnload"
-  />
+          strategy="lazyOnload"
+        />
         <Script id="google-ads-script" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
