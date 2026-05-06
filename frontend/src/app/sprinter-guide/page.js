@@ -28,7 +28,7 @@ export const metadata = {
 };
 
 export default function SprinterPage() {
-  const heroImage = "/sprinter/sphero.jpg";
+  const heroImage = "/sprinter/sphero.webp";
   const newTitleText = "Choosing The Right Sprinter Van For Custom Conversion";
   const newDescriptionText =
     "Learn how to choose the ideal Sprinter van model and features to create your dream custom conversion.";

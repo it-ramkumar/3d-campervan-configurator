@@ -25,7 +25,7 @@ export default function QuickLinksClient({ initialLinks }) {
             animate={{ scale: 1, opacity: 1 }}
             className="p-1 border-2 border-[#001F3D] rounded-full mb-8"
           >
-            <Image src="/images/logoo.webp" alt="Logo" className="w-20 h-20 object-contain grayscale" width={80} height={80}  />
+            <Image src="/images/logoo.webp" alt="Logo" className="object-contain grayscale" width={80} height={80}  />
           </motion.div>
 
           <motion.h1
