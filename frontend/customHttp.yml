@@ -1,0 +1,40 @@
+# customHttp.yml
+customHeaders:
+  # ✅ Images - 1 saal cache
+  - pattern: "**/*.webp"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  - pattern: "**/*.jpg"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  - pattern: "**/*.png"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  - pattern: "**/*.svg"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  # ✅ Fonts - 1 saal cache
+  - pattern: "**/*.woff2"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  # ✅ Next.js static chunks (JS/CSS) - 1 saal cache
+  - pattern: "/_next/static/**"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, immutable"
+
+  # ✅ HTML pages - 1 ghanta cache (fresh content chahiye)
+  - pattern: "**/*.html"
+    headers:
+      - key: "Cache-Control"
+        value: "public, max-age=3600, must-revalidate"

@@ -23,7 +23,7 @@ export const metadata = {
     images: [
       {
         // Space ko %20 se replace kiya hai taaki URL break na ho
-        url: "https://www.bigbearvans.com/images2/fp.png",
+        url: "https://www.bigbearvans.com/images2/fp.webp",
       },
     ],
   },
@@ -32,7 +32,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "3D Camper Van Configurator | Big Bear Vans",
     description: "Design your dream camper van in 3D.",
-    images: ["https://www.bigbearvans.com/images2/fp.png"],
+    images: ["https://www.bigbearvans.com/images2/fp.webp"],
   },
 };
 export default function Page() {
