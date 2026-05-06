@@ -3,7 +3,7 @@ export const slides = [
       id: 1,
       image: "/images2/vfs.webp",
       tag: "Vans For Sale.",
-      title: "Campervans For Sale.",
+      title: "Campervans For Sale..",
       desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
       btnText: "View Inventory",
       link: "/camper-vans-for-sale",
