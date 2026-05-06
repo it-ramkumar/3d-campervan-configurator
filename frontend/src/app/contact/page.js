@@ -15,18 +15,18 @@ export const metadata = {
     url: "https://www.bigbearvans.com/contact",
     title: "Ready to Start Your Adventure? | Big Bear Vans Consultation",
     description: "Talk to our experts about your dream rig. Schedule a call or visit our California workshop for a personalized tour.",
-    images: ["https://www.bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/bloghero.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Schedule Your Free Van Build Consultation",
     description: "From 15-year financing to 3D layouts, let's discuss your custom Sprinter build today.",
-    images: ["https://www.bigbearvans.com/images/mission.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/bloghero.webp"],
   },
 };
 
 export default function Contact() {
-  const heroImage = "/images2/contact.webp";
+  const heroImage = "/heroSlider/bloghero.webp";
   const newTitleText = "Contact Us | Custom Van Builders in Big Bear City, CA";
   const newDescriptionText = "Contact Big Bear Vans today for your custom van conversion. Our team of expert van builders in Big Bear City, California, is ready to help you begin your dream van life.";
 

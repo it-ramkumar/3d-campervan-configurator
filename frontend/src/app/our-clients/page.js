@@ -26,14 +26,14 @@ export const metadata = {
     site: "@bigbearvans",
     title: "Custom Campervan Stories | Big Bear Vans",
     description: "From pet sanctuaries to mobile offices—see how we build dream rigs for our clients.",
-   images: ["/OurClients/blue2.jpeg"],
+   images: ["https://www.bigbearvans.com/images2/about.webp"],
   },
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/our-clients",
     title: "Real Stories, Real Adventures | Big Bear Vans",
     description: "Explore our luxurious custom campervan conversions. Built for families, pets, and off-grid living.",
-    images: ["/OurClients/blue2.jpeg"],
+    images: ["https://www.bigbearvans.com/images2/about.webp"],
   },
 };
 

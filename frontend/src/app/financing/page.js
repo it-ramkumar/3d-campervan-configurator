@@ -28,7 +28,7 @@ export const metadata = {
 };
 
 export default function FinancingPage() {
-  const heroImage = "/images2/finance.webp";
+  const heroImage = "/heroSlider/limage2.webp";
   const newTitleText = "Financing For Your Campervan";
   const newDescriptionText = "Get flexible financing options and take home your dream campervan with ease.";
 

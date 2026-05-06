@@ -55,7 +55,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
 
         "image":
           blog.gallery?.[0] ||
-          "https://www.bigbearvans.com/heroSlider/custom_build.webp",
+          "https://www.bigbearvans.com/heroSlider/bloghero.webp",
 
         "url": `https://www.bigbearvans.com/blog-detail/${blog.slug}`,
 

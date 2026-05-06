@@ -43,7 +43,7 @@ export default async function LayoutsPage({ searchParams }) {
       Array.isArray(v) ? v[0] : v
     ])
   );
-
+// console.log("Received searchParams in page component:", params);
   // ✅ API CALL
   const res = await getAllPortfolio({
     ...cleanParams,
@@ -76,7 +76,38 @@ export default async function LayoutsPage({ searchParams }) {
     }
   }))
 };
+const wheelbaseData = {
+  "144": {
+    title: "Compact 144\" Wheelbase",
+    image: "/heroSlider/144.webp",
+    desc: "Perfect for city driving and easy parking."
+  },
+  "148": {
+    title: "Standard 148\" Wheelbase",
+    image: "/heroSlider/148.webp",
+    desc: "The balanced choice for comfort and space."
+  },
+  "159": {
+    title: "Extended 159\" Wheelbase",
+    image: "/heroSlider/159.webp",
+    desc: "Maximum storage for long-haul adventures."
+  },
+  "170": {
+    title: "Extra Long 170\" Wheelbase",
+    image: "/heroSlider/170.webp",
+    desc: "The ultimate spacious layout for full-time living."
+  },
+  "default": {
+    title: "Explore Layouts of Our Custom Vans",
+    image: "/images2/layout2.webp",
+    desc: "Explore our camper van layout options."
+  }
+};
+// 2. Wheelbase nikalen (yahan array check bhi kar lete hain safety ke liye)
+  const wb = Array.isArray(params.wheelbase) ? params.wheelbase[0] : params.wheelbase;
 
+  // 3. Content select karein
+  const currentContent = wheelbaseData[wb] || wheelbaseData.default;
   return (
     <main>
       <script
@@ -85,9 +116,9 @@ export default async function LayoutsPage({ searchParams }) {
       />
 
       <HeroSection
-        title="Explore Layouts of Our Custom Vans"
-        description="Explore our camper van layout options."
-        image="/images2/layout2.webp"
+        title={currentContent.title}
+        description={currentContent.desc}
+        image={currentContent.image }
         showButton={false}
       />
 

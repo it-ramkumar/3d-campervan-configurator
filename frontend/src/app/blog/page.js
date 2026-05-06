@@ -30,7 +30,7 @@ export async function generateMetadata({ searchParams }) {
     openGraph: {
       title,
       description,
-      images: ["https://www.bigbearvans.com/heroSlider/custom_build.webp"],
+      images: ["https://www.bigbearvans.com/heroSlider/bloghero.webp"],
     },
   };
 }

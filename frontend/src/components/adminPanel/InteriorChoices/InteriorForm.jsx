@@ -77,10 +77,12 @@ export default function AdminForms() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_URL}/interior/category`, {
-        title: categoryForm.title,
-        description: categoryForm.description
-      });
+      await axios.post(`${process.env.NEXT_PUBLIC_URL}/interior/category`,
+        // Cookies allow karne ke liye yahan add karein
+        {
+          title: categoryForm.title,
+          description: categoryForm.description
+        }, { withCredentials: true },);
       alert("Category Created Successfully!");
       setCategoryForm({ title: "", description: "" });
       fetchCategories();
@@ -100,7 +102,7 @@ export default function AdminForms() {
         title: subCategoryForm.title,
         description: subCategoryForm.description,
         categoryId: subCategoryForm.categoryId
-      });
+      }, { withCredentials: true });
       alert("SubCategory Created Successfully!");
       setSubCategoryForm({ title: "", description: "", categoryId: "" });
       fetchSubCategories();
@@ -204,7 +206,7 @@ export default function AdminForms() {
         await axios.put(
           `${process.env.NEXT_PUBLIC_URL}/interior/${editData._id}`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
         alert("Updated Successfully!");
       } else {
@@ -212,7 +214,7 @@ export default function AdminForms() {
         await axios.post(
           `${process.env.NEXT_PUBLIC_URL}/interior`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
         alert("Created Successfully!");
       }

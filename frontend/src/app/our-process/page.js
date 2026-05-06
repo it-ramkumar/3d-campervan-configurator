@@ -16,13 +16,13 @@ export const metadata = {
     url: "https://www.bigbearvans.com/our-process",
     title: "How We Build Your Dream Van | The Big Bear Process",
     description: "5 months. 3D precision. Lifetime care. See how we turn your vision into a high-end off-grid home.",
-    images: ["/images2/op5.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
     },
   twitter: {
     card: "summary_large_image",
     title: "Your Custom Van Journey | Big Bear Vans",
     description: "From the first 3D sketch to your first campout. Learn about our 5-month build process and airport valet service.",
-    images: ["/images2/op5.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
   },
 };
 

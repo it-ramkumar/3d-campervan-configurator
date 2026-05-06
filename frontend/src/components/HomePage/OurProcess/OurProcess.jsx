@@ -64,7 +64,7 @@ const processSteps = [
     time: "Pickup",
     icon: <KeyRound size={24} />,
     title: "Delivery & Beyond",
-    imageSrc: "/heroSlider/contact.webp",
+    imageSrc: "/heroSlider/bloghero.webp",
     altText: "A converted camper van in a scenic location",
     details: [
       { subtitle: "Walkthrough & Test Drive", description: "Learn every feature with our team to ensure you're ready for the road." },

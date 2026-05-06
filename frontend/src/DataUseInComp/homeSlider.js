@@ -21,7 +21,7 @@ export const slides = [
     },
     {
       id: 3,
-      image: "/images2/contact.webp",
+      image: "/heroSlider/bloghero.webp",
       tag: "Our Layouts",
       title: "Previous Layouts",
       desc: "Explore our past projects and get inspired by our signature craftsmanship.",

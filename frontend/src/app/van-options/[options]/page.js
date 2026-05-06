@@ -13,7 +13,7 @@ const PAGE_CONFIG = {
     api: "interior",
     title: "Premium Interior Finishes",
     desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
-    heroImage: "/heroSlider/interiorHero.png"
+    heroImage: "/heroSlider/interiorHero.webp"
   },
   "system-options": {
     api: "system",
