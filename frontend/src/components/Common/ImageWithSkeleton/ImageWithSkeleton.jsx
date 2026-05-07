@@ -19,44 +19,33 @@ export default function ImageWithSkeleton({
 
   return (
     <>
-      {/* Container to hold Image + Overlay */}
-      <div className="relative w-full h-full group overflow-hidden rounded-md">
-
-        {/* ======= Thumbnail Image ======= */}
+      <div className="relative w-full h-full group overflow-hidden rounded-md bg-gray-100">
         <Image
           src={finalSrc}
           alt={alt}
+          // LCP Optimization: Priority images should load immediately
           fetchPriority={priority ? "high" : "low"}
           loading={priority ? "eager" : "lazy"}
           decoding={priority ? "sync" : "async"}
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}
           onClick={() => !click && setIsModalOpen(true)}
+          // IMPORTANT: Agar images external hain to 'unoptimized' sahi hai,
+          // lekin agar local hain to ise hata dein taaki Next.js compress kar sake.
           unoptimized
           className={`
             ${className}
-            w-full h-full border border-gray-300 object-cover
-            transition-all duration-500 ease-in-out
-            ${!loaded && !priority ? "bg-gray-200 animate-pulse" : ""}
+            w-full h-full object-cover transition-opacity duration-700
             ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
           `}
-          sizes={sizes}
+          sizes={sizes || (priority ? "100vw" : "(max-width: 768px) 100vw, 50vw")}
           width={800}
           height={600}
         />
 
-        {/* ======= ✅ Aesthetic Black Overlay ======= */}
-        {/* Is layer se image par neeche se halka black gradient aayega */}
-        <div
-          className="absolute inset-0 pointer-events-none
-          bg-gradient-to-t from-black/50 via-black/10 to-transparent
-          opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-        />
-
-        {/* Optional: Agar aapko bilkul halki black layer chahiye poori image pe */}
-        <div className="absolute inset-0 pointer-events-none bg-black/5 mix-blend-multiply" />
+        {/* Aesthetic Overlays - Pointer events none taaki Swiper drag ho sake */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
       </div>
-
       {/* ======= Fullscreen Modal (No changes here) ======= */}
       {!click && isModalOpen &&
         createPortal(
