@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "../../components/Common/HeroSectionNew/HeroSectionNew";
 import Mission from "../../components/AboutUs/Mission/Mission";
 import Adventure from "../../components/AboutUs/Adventure/Adventure";
 import { generateAboutSchema } from "@/schema/about";

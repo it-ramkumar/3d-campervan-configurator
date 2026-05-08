@@ -1,6 +1,6 @@
 import React from "react";
 import Flist from "../../components/Financing/Flist/Flist";
-import HeroSection from "../../components/HeroSection/HeroSection";
+import HeroSection from "../../components/Common/HeroSectionNew/HeroSectionNew";
 import { generateFinancingSchema } from "../../schema/financing";
 
 // ✅ 1, 2, 3. Standard, Twitter, and Open Graph Metadata

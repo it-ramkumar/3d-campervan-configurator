@@ -13,23 +13,26 @@ const images = [
 
 export default function Portfolio() {
 
-  const PortfolioImage = ({ img, className, priority = false }) => (
-    <div className={`group relative rounded-lg overflow-hidden border-2 border-white shadow-sm transition-all duration-500 hover:shadow-xl ${className}`}>
+const PortfolioImage = ({ img, className }) => {
+  return (
+    <div
+      className={`group relative overflow-hidden rounded-lg border-2 border-white shadow-sm transition-all duration-500 hover:shadow-xl ${className}`}
+    >
       <ImageWithSkeleton
         src={img.src}
         alt={img.alt}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-        priority={priority}
+
+
       />
-      {/* Overlay on Hover using theme colors */}
+
       <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-         <span className="text-secondary text-[10px] font-black uppercase tracking-[0.2em] bg-hover px-3 py-1.5 rounded-lg shadow-lg">
-            {img.tag}
-         </span>
+        <span className="text-secondary text-[10px] font-black uppercase tracking-[0.2em] bg-hover px-3 py-1.5 rounded-lg shadow-lg">
+          {img.tag}
+        </span>
       </div>
     </div>
   );
-
+};
   return (
     // Background secondary (#F5F5F0) use kiya hai taake sequence barkarar rahe
     <section className="w-full py-20 bg-secondary antialiased">
@@ -50,7 +53,7 @@ export default function Portfolio() {
         <div className="hidden lg:grid grid-cols-12 gap-[var(--gap-sm)] h-[750px]">
           {/* Main Large Image */}
           <div className="col-span-5 h-full">
-             <PortfolioImage img={images[0]} className="h-full" priority={true} />
+             <PortfolioImage img={images[0]} className="h-full" />
           </div>
 
           {/* Right Side Complex Grid */}
@@ -60,7 +63,7 @@ export default function Portfolio() {
                 <PortfolioImage img={images[1]} className="h-full" />
              </div>
              {/* Bottom Three Small Images */}
-             <div className="row-span-5 grid grid-cols-3 gap-[var(--gap-sm)]">
+             <div className="row-span-5 grid grid-cols-3 gap-sm">
                 {images.slice(2).map((img) => (
                    <PortfolioImage key={img.id} img={img} className="h-full" />
                 ))}
@@ -69,7 +72,7 @@ export default function Portfolio() {
         </div>
 
         {/* --- MOBILE VIEW --- */}
-        <div className="flex flex-col gap-[var(--gap-sm)] lg:hidden">
+        <div className="flex flex-col gap-sm lg:hidden">
           {images.slice(0, 4).map((img) => (
             <div key={img.id} className="w-full relative h-[250px]">
               <PortfolioImage img={img} className="w-full h-full" />

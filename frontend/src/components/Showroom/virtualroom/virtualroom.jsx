@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import { Globe, Camera, Users, Zap, MapPin, ArrowUpRight } from "lucide-react";
 import AirService from "../../AirService/AirService";
 import { Heading2, RichParagraph, Heading3, Heading4, ImageWithSkeleton, SecondaryButton } from '../../Common/Common'
@@ -13,9 +13,7 @@ export default function ShowroomAndTours() {
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
           <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+            <div
               className="flex items-center gap-4 mb-4"
             >
               <span className="w-8 h-[2px] bg-hover"></span>
@@ -23,7 +21,7 @@ export default function ShowroomAndTours() {
                 Remote Design Studio
               </RichParagraph>
 
-            </motion.div>
+            </div>
             <Heading2 text="Virtual Tours For Distant Clients" className="text-primary" />
           </div>
           <div className="max-w-md">
@@ -40,36 +38,26 @@ export default function ShowroomAndTours() {
         <div className="grid lg:grid-cols-12 gap-12 items-stretch">
 
           {/* Main Showcase Image */}
-         <motion.div
+         <div
   className="lg:col-span-7 relative group"
-  initial={{ opacity: 0, scale: 0.95 }}
-  whileInView={{ opacity: 1, scale: 1 }}
+
 >
   <div className="sticky top-10 w-full rounded-lg overflow-hidden shadow-2xl border border-primary/5 bg-[#001F3D]">
-    {/* 1. h-auto aur aspect-video use karne se landscape gif kabhi crop nahi hogi.
-      2. Agar image portrait (1080x1920) hai toh aspect-square ya aspect-[9/16] use karein.
-    */}
+
     <div className="relative w-full aspect-video">
-      <ImageWithSkeleton
+      <Image
         src="/images2/Client.webp"
         alt="Virtual Session"
-        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+        width={1000}
+        height={720}
+        className="w object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
       />
     </div>
 
     <div className="absolute inset-0 bg-gradient-to-t from-[#001F3D]/40 to-transparent pointer-events-none"></div>
 
-    {/* Floating Action Badge */}
-    {/* <div className="absolute top-6 right-6">
-      <motion.div
-        whileHover={{ rotate: 45 }}
-        className="w-16 h-16 bg-[#E1D9BC] rounded-lg flex items-center justify-center text-[#001F3D] cursor-pointer shadow-xl"
-      >
-        <ArrowUpRight size={28} />
-      </motion.div>
-    </div> */}
   </div>
-</motion.div>
+</div>
 
           {/* Feature Cards Stack */}
           <div className="lg:col-span-5 flex flex-col gap-8">
@@ -82,10 +70,9 @@ export default function ShowroomAndTours() {
                   { icon: Globe, title: "Material Close-ups", desc: "High-def views of countertops, flooring, and fabric textures." },
                   { icon: Users, title: "Expert Consultation", desc: "Face-to-face time with our lead engineers and project managers." }
                 ].map((item, idx) => (
-                  <motion.div
+                  <div
                     key={idx}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    initial={{ opacity: 0, y: 20 }}
+
                     className="group flex gap-6"
                   >
                     <div className="w-14 h-14 shrink-0 bg-white rounded-lg flex items-center justify-center text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
@@ -95,7 +82,7 @@ export default function ShowroomAndTours() {
                       <Heading4 text={item.title} className="!mb-0" />
                       <RichParagraph >{item.desc}</RichParagraph>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -119,11 +106,13 @@ export default function ShowroomAndTours() {
 
       {/* --- Section 3: The Big Bear Journey --- */}
       <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="relative rounded-lg overflow-hidden group min-h-[500px] flex items-center">
-          <ImageWithSkeleton
+        <div className="relative rounded-lg overflow-hidden group flex items-center">
+          <Image
             src="/images/virtuaal1.webp"
             alt="Big Bear Destination"
-            className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
+              width={1000}
+        height={720}
+            className="absolute inset-0 object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm lg:backdrop-blur-none lg:bg-transparent lg:bg-gradient-to-r lg:from-primary lg:via-primary/60 lg:to-transparent" />
 

@@ -67,10 +67,8 @@ export default function Showroom() {
 
         {/* --- Header Section --- */}
         <div className="text-center mb-24 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <div
+
             className="space-y-6"
           >
             <RichParagraph className="!!text-hover !text-sm font-bold tracking-wider uppercase ">
@@ -86,37 +84,33 @@ export default function Showroom() {
 <CustomLink href="/our-process" text={" build process."}/>
 
             </RichParagraph>
-          </motion.div>
+          </div>
         </div>
 
         {/* --- Card Sections --- */}
         <div className="space-y-20">
           {cardData.map((card, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
+
             >
               <Customize
                 sectionTitle={card.sectiontitle}
                 descriptionList={card.descriptionList}
-                image={card.image}
+                image={card}
                 showButton={false}
                 isReversed={card.isReversed}
                 lastText={card.lastText}
                 // Ensuring internal styles of Customize match BBV
                 className="rounded-lg overflow-hidden"
               />
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* --- Design Session CTA (Optional but recommended) --- */}
-        <motion.div
+        <div
            className="mt-32 bg-primary rounded-lg p-10 md:p-16 text-secondary text-center relative overflow-hidden"
-           whileHover={{ scale: 1.01 }}
         >
           <div className="relative z-10 space-y-6">
             <Coffee className="mx-auto !text-hover" size={48} />
@@ -131,7 +125,7 @@ export default function Showroom() {
           </div>
           {/* Subtle decoration */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32" />
-        </motion.div>
+        </div>
 
       </div>
     </section>

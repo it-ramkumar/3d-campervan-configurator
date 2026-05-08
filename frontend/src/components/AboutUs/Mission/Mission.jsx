@@ -53,7 +53,7 @@ export default function Mission() {
             {/* Design Element: Decorative border box */}
             <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-primary/20 rounded-lg -z-10 group-hover:-bottom-2 group-hover:-right-2 transition-all duration-500"></div>
 
-            <div className="p-2 bg-white rounded-lg shadow-xl">
+            <div className="p-2 aspect-[4/5] bg-white rounded-lg shadow-xl">
               <ImageWithSkeleton
                 src="/images/mission.webp"
                 alt="Cozy interior of a custom campervan"

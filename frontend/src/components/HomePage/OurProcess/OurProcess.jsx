@@ -119,11 +119,11 @@ export default function OurProcess() {
 
                 {/* Image Side */}
                 <div className="w-full lg:w-[45%]">
-                  <div className="relative group overflow-hidden rounded-lg shadow-xl border-4 border-white transition-transform duration-700 hover:scale-[1.02]">
+                  <div className="relative group aspect-[8/5]  overflow-hidden rounded-lg shadow-xl border-4 border-white transition-transform duration-700 hover:scale-[1.02]">
                     <ImageWithSkeleton
                       src={step.imageSrc}
                       alt={step.altText}
-                      className="w-full h-full aspect-[6/4] object-cover"
+                      className="object-center"
                     />
                     {/* Time Badge */}
                     <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg flex items-center gap-[var(--gap-sm)] border border-primary/5">

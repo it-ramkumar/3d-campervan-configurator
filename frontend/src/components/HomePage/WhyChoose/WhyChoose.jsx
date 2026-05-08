@@ -25,7 +25,7 @@ import {
   Sun,
   Plus
 } from 'lucide-react';
-import { Heading2, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton, CustomLink } from '../../Common/Common'
+import { Heading2, RichParagraph, Heading3, SecondaryButton, ImageWithSkeleton, CustomLink } from '../../Common/Common'
 
 
 const sections = [
@@ -51,7 +51,7 @@ const sections = [
       { text: "<strong>1-year or 3-year extended warranty</strong> on our craftsmanship.", icon: <ShieldCheck size={18} /> },
       { text: "<strong>Servicing and installing upgrades</strong> in our workshop.", icon: <Wrench size={18} /> },
     ],
-      images: ["/images2/wcu3.webp", "/images2/wcu4.webp"],
+    images: ["/images2/wcu3.webp", "/images2/wcu4.webp"],
     isReverse: true,
   },
   {
@@ -125,33 +125,31 @@ const WhyChoose = () => {
             return (
               <div key={index} className={`flex flex-col lg:flex-row items-center gap-[var(--gap-xl)] xl:gap-[var(--gap-2xl)] ${section.isReverse ? 'lg:flex-row-reverse' : ''}`}>
 
-{/* Image Composition - Parent Container */}
-<div className="w-full lg:w-1/2 relative group mb-12 lg:mb-0"> {/* Mobile pe thoda margin diya niche */}
+                {/* Image Composition - Parent Container */}
+                <div className="w-full lg:w-1/2 relative group mb-12 lg:mb-0"> {/* Mobile pe thoda margin diya niche */}
 
-  {/* Primary Image Container */}
-  <div
-    className={`
-      relative aspect-[4/5] md:aspect-video lg:aspect-[4/3] rounded-lg overflow-hidden shadow-2xl
+                  {/* Primary Image Container */}
+                  <div
+                    className={`
+      relative aspect-[8/5] rounded-lg overflow-hidden shadow-2xl
       transition-all duration-500 ease-in-out
       z-20
       hover:z-50 hover:scale-[1.02]
     `}
-  >
-    <ImageWithSkeleton
-      src={section.images[0]}
-      alt={section.title}
-      className="w-full h-full object-cover transition-transform duration-700"
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
-  </div>
+                  >
+                    <ImageWithSkeleton
+                      src={section.images[0]}
+                      alt={section.title}
+                      zoom
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none"></div>  </div>
 
-  {/* Floating Secondary Image */}
-  <div
-    className={`
+                  {/* Floating Secondary Image */}
+                  <div
+                    className={`
       absolute -bottom-6 md:-bottom-10
-      /* 'hidden' ko hata kar 'block' kar diya */
       block
-      w-40 h-32 md:w-64 md:h-48
+      w-40 h-32 sm:hidden md:block md:w-64 md:h-48
       rounded-lg overflow-hidden
       shadow-2xl transition-all duration-500 ease-in-out
       cursor-pointer
@@ -160,14 +158,14 @@ const WhyChoose = () => {
 
       ${section.isReverse ? '-left-4 md:-left-10' : '-right-4 md:-right-10'}
     `}
-  >
-    <ImageWithSkeleton
-      src={section.images[1]}
-      alt="Detail view"
-      className="w-full h-full object-cover"
-    />
-  </div>
-</div>
+                  >
+                    <ImageWithSkeleton
+                      src={section.images[1]}
+                      alt="Detail view"
+                      zoom
+                    />
+                  </div>
+                </div>
                 {/* Text Content */}
                 <div className="w-full lg:w-1/2 space-y-8">
                   <div className="inline-flex items-center gap-2 !text-hover !text-xs font-bold uppercase ">

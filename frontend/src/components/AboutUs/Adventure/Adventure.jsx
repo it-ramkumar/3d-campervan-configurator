@@ -26,13 +26,13 @@ export default function AboutPage() {
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           <div className="w-full lg:w-1/2 relative">
             {/* Design Element: Simple Primary Border Box */}
-            <div className="absolute -top-6 -left-6 w-full h-full border-2 border-primary/20 rounded-lg -z-10 hidden md:block"></div>
+<div className="aspect-[4/5]">
 
             <ImageWithSkeleton
               src={ownersImage}
               alt="Artur and Anna"
-              className="w-full h-[500px] object-cover rounded-lg shadow-xl relative z-10"
-            />
+              />
+              </div>
           </div>
 
           <div className="w-full lg:w-1/2 space-y-8">
@@ -64,8 +64,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Wide Card 1 */}
             <div className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="h-80 overflow-hidden relative">
-                <ImageWithSkeleton src={ambulanceImage} alt={"ambulance custom build"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="aspect-[8/5] overflow-hidden relative">
+                  <ImageWithSkeleton src={ambulanceImage} alt={"ambulance custom build"} />
                 <div className="absolute top-4 left-4 bg-primary text-secondary px-4 py-1 rounded-lg text-xs font-bold uppercase">Build 01</div>
               </div>
               <div className="p-10">
@@ -78,7 +78,7 @@ export default function AboutPage() {
 
             {/* Small Card 2 */}
             <div className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="h-80 overflow-hidden relative">
+              <div className="aspect-[8/5] overflow-hidden relative">
                 <ImageWithSkeleton src={prototypeImage} alt={"prototype custom build"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
               <div className="p-10">
@@ -91,7 +91,7 @@ export default function AboutPage() {
 
             {/* Small Card 3 */}
             <div className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="h-80 overflow-hidden">
+              <div className="aspect-[8/5] overflow-hidden">
                 <ImageWithSkeleton src={blueWhaleImage} alt={"blue whale custom build"} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <div className="p-10">
@@ -104,7 +104,7 @@ export default function AboutPage() {
 
             {/* Wide Card 4 */}
             <div className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="h-80 overflow-hidden">
+              <div className="aspect-[8/5] overflow-hidden">
                 <ImageWithSkeleton src={grayWolfImage} alt={"gray wolf custom build"} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
               </div>
               <div className="p-10">
@@ -121,8 +121,8 @@ export default function AboutPage() {
       {/* SECTION 3: Minimalist CTA */}
       <section className="relative py-32 lg:py-48 flex items-center justify-center overflow-hidden">
         {/* Background Image with Overlay */}
-        <div className="absolute inset-0 z-0">
-          <Image src={ctaBgImage} className="w-full h-full object-cover" alt="Adventure" width={1920} height={1080} />
+        <div className="absolute aspect-[9/5] inset-0 z-0">
+          <ImageWithSkeleton src={ctaBgImage} alt="Adventure" width={1920} height={1080} />
           <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm"></div>
         </div>
 

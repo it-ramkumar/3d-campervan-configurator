@@ -5,16 +5,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 
+
 // Swiper Styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton } from '../Common/Common'
+    import { Heading2, RichParagraph, SecondaryButton,ImageWithSkeleton } from '../Common/Common'
 
 export default function Customize({
   sectionTitle = "Personalize Your Build",
-  // 'image' can be a String or an Array of Strings
   image = "",
   descriptionList = [],
   orderButtonLabel = "Order Custom Build",
@@ -26,8 +26,7 @@ export default function Customize({
   // Logic: Agar array hai aur length > 1 hai, tabhi slider chalayen
   const isSlider = Array.isArray(image) && image.length > 1;
 
-  // Single image source nikalne ke liye logic
-  const singleImageSrc = Array.isArray(image) ? image[0] : image;
+const singleImageSrc = typeof image === "string" ? image : image?.image || image?.img;
 
   return (
     <section className={`bg-secondary py-8 antialiased overflow-hidden ${className}`}>
@@ -59,29 +58,27 @@ export default function Customize({
                   autoplay={{ delay: 3000, disableOnInteraction: false }}
                   className="h-full w-full custom-swiper"
                 >
-                  {image.map((img, index) => (
-                    <SwiperSlide key={index}>
-                      <ImageWithSkeleton
-                        src={img.img}
-                        alt={`Customization ${index + 1}`}
-                        className="w-full h-full object-contain object-center transition-transform duration-700 group-hover:scale-105"
-                      />
-                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/80 to-transparent p-6">
-                    <Link href={img.link} className=" font-bold text-secondary !text-sm text-center uppercase">
-                   {img.link.replace('/layout-detail/', '')}
-                    </Link>
-                  </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              ) : (
-                /* CASE 2: SINGLE IMAGE (STATIC) */
+{image.map((img, index) => (
+              <SwiperSlide key={index}>
                 <ImageWithSkeleton
-                  src={singleImageSrc}
-                  alt="Customization"
-                  className="w-full h-full object-contain object-center transition-transform duration-700 "
+                  src={img?.img || img} // Handle array of objects or strings
+                  alt={`Customization ${index + 1}`}
                 />
-              )}
+                {img.link && (
+                  <div className="absolute ...">
+                     <Link href={img.link}>...</Link>
+                  </div>
+                )}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          /* SINGLE IMAGE CASE */
+          <ImageWithSkeleton
+            src={singleImageSrc} // Call the helper function
+            alt={sectionTitle}
+          />
+        )}
 
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none z-10"></div>

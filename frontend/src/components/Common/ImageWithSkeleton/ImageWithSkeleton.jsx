@@ -1,76 +1,89 @@
 "use client";
+
 import Image from "next/image";
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 
 export default function ImageWithSkeleton({
   src,
-  alt,
+  alt = "big bear vans",
   className = "",
-  click = false,
+  zoom = false,
   priority = false,
   sizes,
+  overlay = true,
+  skeleton = true,
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const finalSrc = error ? "/no-image.png" : src;
+  const finalSrc = error ? "/images/blackLogo.jpg" : src;
+  // console.log(src,"scr")
 
   return (
     <>
-      <div className="relative w-full h-full group overflow-hidden rounded-md bg-gray-100">
+      {/* Main Image */}
+      <div
+        className="relative w-full h-full overflow-hidden bg-gray-100"
+        onClick={() => zoom && setIsModalOpen(true)}
+      >
+        {/* Skeleton */}
+        {skeleton && !loaded && (
+          <div className="absolute inset-0 animate-pulse bg-gray-200" />
+        )}
+
         <Image
-          src={finalSrc}
+          src={finalSrc || src}
           alt={alt}
-          // LCP Optimization: Priority images should load immediately
-          fetchPriority={priority ? "high" : "low"}
+          fill
+          priority={priority}
           loading={priority ? "eager" : "lazy"}
-          decoding={priority ? "sync" : "async"}
+          sizes={sizes || "(max-width: 768px) 100vw, 50vw"}
+          className={`
+            object-cover object-center
+            transition-opacity duration-500
+            ${loaded ? "opacity-100" : "opacity-0"}
+            ${zoom ? "cursor-zoom-in" : ""}
+            ${className}
+          `}
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}
-          onClick={() => !click && setIsModalOpen(true)}
-          // IMPORTANT: Agar images external hain to 'unoptimized' sahi hai,
-          // lekin agar local hain to ise hata dein taaki Next.js compress kar sake.
-          unoptimized
-          className={`
-            ${className}
-            w-full h-full object-cover transition-opacity duration-700
-            ${priority ? "opacity-100" : (loaded ? "opacity-100" : "opacity-0")}
-          `}
-          sizes={sizes || (priority ? "100vw" : "(max-width: 768px) 100vw, 50vw")}
-          width={800}
-          height={600}
         />
 
-        {/* Aesthetic Overlays - Pointer events none taaki Swiper drag ho sake */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+        {/* Optional Overlay */}
+        {overlay && (
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        )}
       </div>
-      {/* ======= Fullscreen Modal (No changes here) ======= */}
-      {!click && isModalOpen &&
+
+      {/* Modal */}
+      {zoom &&
+        isModalOpen &&
         createPortal(
           <div
-            className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-[99999] bg-black/90 flex items-center justify-center"
             onClick={() => setIsModalOpen(false)}
           >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-5 right-6 text-white text-4xl z-10"
+            >
+              ✕
+            </button>
+
+            {/* Fullscreen Image */}
             <div
-              className="relative w-full h-full flex items-center justify-center"
+              className="relative w-[95vw] h-[95vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-6 right-8 text-white text-4xl font-light hover:text-gray-400 z-10"
-              >
-                ✕
-              </button>
-
               <Image
-                src={finalSrc}
+                src={finalSrc || src}
                 alt={alt}
-                unoptimized
-                className="max-w-[95%] max-h-[90%] object-contain rounded-xl shadow-2xl"
-                width={1200}
-                height={900}
+                fill
+                className="object-contain"
+                sizes="100vw"
               />
             </div>
           </div>,

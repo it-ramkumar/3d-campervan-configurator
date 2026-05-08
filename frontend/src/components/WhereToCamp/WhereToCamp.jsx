@@ -1,6 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
-
+import HeroSection from "../Common/HeroSectionNew/HeroSectionNew";
 import {
     Heading2,
     Heading3,
@@ -19,7 +18,7 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
                 {/* Left: Image Stack */}
                 <div className="lg:w-1/2 p-4 flex flex-col gap-4 bg-[#F5F5F0]">
                     {loc.images.map((img, index) => (
-                        <div key={index} className="relative rounded-lg overflow-hidden shadow-sm">
+                        <div key={index} className="relative rounded-lg overflow-hidden shadow-sm aspect-[8/5]">
                             <ImageWithSkeleton
                                 src={img}
                                 alt={`${loc.name} view ${index + 1}`}

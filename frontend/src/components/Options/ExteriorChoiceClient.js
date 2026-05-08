@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from 'react';
-import HeroSection from '../HeroSection/HeroSection';
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import ExteriorChoicesList from './ExteriorChoicesList';
 import AdditionalAccessories from './ExteriorAccessories';
 import SystemOptions from "./SystemOptions";

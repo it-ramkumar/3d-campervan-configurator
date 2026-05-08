@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, ChevronDown, Sparkles, Tag, Search, Truck, Filter, X, CheckCircle2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Heading2, RichParagraph, Heading3, Heading4, ImageWithSkeleton, SecondaryButton, PrimaryButton } from '../Common/Common';
-
+import Image from "next/image";
 const MAX_INITIAL_ITEMS = 50;
 
 // --- 1. RenderBlocks: Updated to show Titles correctly ---
@@ -322,10 +322,12 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                 <div className={`relative group w-full ${isEven ? "lg:order-1" : "lg:order-2"}`}>
                                   <div className="absolute inset-0 bg-primary/5 rounded-lg blur-3xl group-hover:bg-primary transition-all duration-700" />
                                   <div className="relative z-10 overflow-hidden rounded-lg border-4 border-white shadow-2xl mx-auto bg-gray-100">
-                                    <ImageWithSkeleton
+                                    <Image
                                       src={activeItem.images?.[0]}
                                       alt={activeItem.title || "Van interior options"}
-                                      className=" transform group-hover:scale-105 transition-transform duration-700"
+                                      width={600}
+                                      height={400}
+                                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                                     />
                                   </div>
                                 </div>

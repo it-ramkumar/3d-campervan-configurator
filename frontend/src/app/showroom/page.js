@@ -1,7 +1,7 @@
 import React from "react";
 import Visitshowroom from "../../components/Showroom/Visitshowroom/Visitshowroom";
 import Virtualroom from "../../components/Showroom/virtualroom/virtualroom";
-import HeroSection from "../../components/HeroSection/HeroSection";
+import HeroSection from "../../components/Common/HeroSectionNew/HeroSectionNew";
 import { generateShowroomSchema } from "../../schema/showroom";
 
 // ✅ Next.js Metadata API for SEO

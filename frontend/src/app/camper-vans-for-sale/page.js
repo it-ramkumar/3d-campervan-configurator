@@ -1,7 +1,6 @@
 import React from 'react';
 import { vansByStatus } from "@/api/van/van-by-status";
-import HeroSection from "@/components/HeroSection/HeroSection";
-import VanListClient from "../../components/Vansforsale/VanListClient"
+import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew'; import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
@@ -93,7 +92,7 @@ export default async function VansForSale() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <HeroSection
+      <HeroImage
         title="Custom Camper Vans for Sale"
         description="Find your dream sprinter van for sale or a rugged ford transit van for sale. From luxury mercedes sprinter camper van to versatile 4x4 vans, we offer expert craftsmanship for 2-7 person layouts. Join 111+ happy owners today"
         image="/images2/vfs.webp"

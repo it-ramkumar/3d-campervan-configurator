@@ -1,5 +1,5 @@
 import { getAllBlogs } from "@/api/blog/getAllBlogs";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import BlogSearchUI from "../../components/Blogs/Blogs"; // Client part
 import { generateBlogListingSchema } from "@/schema/blogPage";
 import {

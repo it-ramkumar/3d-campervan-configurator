@@ -1,4 +1,4 @@
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import Van_layout from "@/components/van_layout/Van_layout";
 import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 

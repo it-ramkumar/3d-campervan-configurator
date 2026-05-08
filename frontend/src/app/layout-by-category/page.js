@@ -1,5 +1,5 @@
 import React from 'react'
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import Family from "@/components/Layouts/All_Layout/All_Layout";
 import All_Titles_Client from "@/components/Layouts/All_Titles/All_Titles";
 import { vanLayoutsData } from "@/DataUseInComp/LayouData";

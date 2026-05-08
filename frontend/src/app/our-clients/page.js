@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import { ClientschemaData } from "@/schema/ourClient";
 import { Heading2, RichParagraph } from '@/components/Common/Common';
 import YoutubeSection from "@/components/OurClients/Clientdetail/YoutubeSection";
