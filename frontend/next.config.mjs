@@ -2,6 +2,21 @@
 const nextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
+  async headers() {
+    return [
+      {
+        // Public folder ki images aur static assets ko target karein
+        source: '/(.*).(jpg|jpeg|png|webp|svg|ico|gif)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            // 1 saal ka cache (31,536,000 seconds)
+            value: 'public, max-age=31536000, must-revalidate',
+          },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

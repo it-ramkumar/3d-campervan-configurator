@@ -39,7 +39,7 @@ export default function ImageWithSkeleton({
           fill
           priority={priority}
           loading={priority ? "eager" : "lazy"}
-          sizes={sizes || "(max-width: 768px) 100vw, 50vw"}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className={`
             object-cover object-center
             transition-opacity duration-500
@@ -47,6 +47,7 @@ export default function ImageWithSkeleton({
             ${zoom ? "cursor-zoom-in" : ""}
             ${className}
           `}
+          quality={60}
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}
         />
