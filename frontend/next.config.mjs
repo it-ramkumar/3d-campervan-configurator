@@ -2,19 +2,19 @@
 const nextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
-  async headers() {
-    return [
-      {
-        source: '/(.*).(jpg|jpeg|png|webp|svg|ico|gif)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, must-revalidate',
-          },
-        ],
-      },
-    ];
-  },
+ async headers() {
+  return [
+    {
+      source: '/:all*(jpg|jpeg|png|webp|svg|ico|gif)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
+  ];
+},
   images: {
         formats: ["image/avif", "image/webp"],
     remotePatterns: [
