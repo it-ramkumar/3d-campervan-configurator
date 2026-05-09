@@ -1,34 +1,26 @@
-"use client";
+// "use client";
 
-import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+// import { useState } from "react";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+// import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import HeroImage from "@/components/Common/HeroSectionNew/HeroSectionNew";
-
-import {
-  SecondaryButton,
-  PrimaryButton,
-  Heading1,
-  RichParagraph,
-} from "../../Common/Common";
-
-import Paragraph from "../../Common/Paragraph/HeroParagraph";
+// import Paragraph from "../../Common/Paragraph/HeroParagraph";
 import { slides } from "@/DataUseInComp/homeSlider";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/effect-fade";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/effect-fade";
 
 export default function Hero() {
-  const [swiper, setSwiper] = useState(null);
+  // const [swiper, setSwiper] = useState(null);
 
   return (
     <div className="relative w-full h-[60vh] sm:h-[75vh] md:h-[95vh] overflow-hidden bg-black">
 
-      <Swiper
+      {/* <Swiper
         onSwiper={setSwiper}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
@@ -37,24 +29,23 @@ export default function Hero() {
         autoplay={{ delay: 6000, disableOnInteraction: false }}
         className="w-full h-full"
       >
-        {slides.map((slide, index) => (
-          <SwiperSlide key={index} className="relative">
 
+      </Swiper> */}
+      {slides.map((slide, index) => (
+        <div key={index}>
           <HeroImage
-  image={slide.image}
-  alt={slide.title}
-  title={slide.title}
-  description={slide.desc}
-  buttonText={slide.btnText}
-  buttonLink={slide.link}
-  showButton={true}
-/>
+            image={slide.image}
+            alt={slide.title}
+            title={slide.title}
+            description={slide.desc}
+            buttonText={slide.btnText}
+            buttonLink={slide.link}
+            showButton={true} />
+        </div>
+      ))}
 
-          </SwiperSlide>
-        ))}
-      </Swiper>
 
-      {/* NAVIGATION */}
+      {/* NAVIGATION
       <div className="absolute bottom-12 right-6 md:right-12 z-30 flex items-center gap-4">
 
         <button
@@ -73,10 +64,10 @@ export default function Hero() {
           <ChevronRight size={28} />
         </button>
 
-      </div>
+      </div> */}
 
       {/* SIMPLE CSS ANIMATION */}
-      <style jsx>{`
+      {/* <style jsx>{`
         .animate-fade-up {
           animation: fadeUp 0.8s ease forwards;
         }
@@ -104,7 +95,7 @@ export default function Hero() {
             transform: translateY(0);
           }
         }
-      `}</style>
+      `}</style> */}
 
     </div>
   );
