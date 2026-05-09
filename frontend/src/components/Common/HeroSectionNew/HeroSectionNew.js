@@ -10,15 +10,21 @@ import {
 export default function HeroImage({
   image,
   alt = "Big Bear Vans",
+
+  // CONTENT
   title,
   description,
+
+  // BUTTON
   buttonText,
   buttonLink = "/",
   showButton = true,
 
+  // OVERLAY
   overlay = true,
   overlayOpacity = "bg-black/40",
 
+  // IMAGE
   priority = true,
   className = "",
 }) {
@@ -43,12 +49,27 @@ export default function HeroImage({
         src={finalImage}
         alt={alt}
         fill
+
+        // PERFORMANCE
         priority={priority}
         fetchPriority={priority ? "high" : "auto"}
         loading={priority ? "eager" : "lazy"}
-        quality={75}
-        sizes="100vw"
+
+        // IMAGE OPTIMIZATION
+        quality={70}
+
+        // RESPONSIVE SIZES
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+        // MODERN OPTIMIZATION
+        placeholder="blur"
+        blurDataURL="/images/blackLogo.jpg"
+
         className="object-cover object-center"
+
+        // MOBILE GPU HELP
+        style={{
+          objectFit: "cover",
+        }}
       />
 
       {/* OVERLAY */}

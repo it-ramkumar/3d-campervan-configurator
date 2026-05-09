@@ -5,12 +5,10 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Public folder ki images aur static assets ko target karein
         source: '/(.*).(jpg|jpeg|png|webp|svg|ico|gif)',
         headers: [
           {
             key: 'Cache-Control',
-            // 1 saal ka cache (31,536,000 seconds)
             value: 'public, max-age=31536000, must-revalidate',
           },
         ],
@@ -18,6 +16,7 @@ const nextConfig = {
     ];
   },
   images: {
+        formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -32,7 +31,7 @@ const nextConfig = {
       {
         source: "/vans-for-sale",
         destination: "/camper-vans-for-sale",
-        permanent: true, // Iska matlab hai 301 Permanent Redirect (SEO ke liye best)
+        permanent: true,
       },
       {
         source: '/wheel-base/148',
