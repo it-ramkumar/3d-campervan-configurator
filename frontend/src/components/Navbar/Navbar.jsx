@@ -4,8 +4,7 @@ import Link from "next/link"; // Next.js Link
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { gsap } from "gsap";
-import { getAllBlogs } from "../../api/blog/getAllBlogs"
-import { getNavCat } from "../../api/portfolio/navBarCat";
+import { linksForNavbar } from "../../api/blog/linksForNavbar";
 import { menuContent } from "../../DataUseInComp/MegaMenu"
 import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
@@ -25,6 +24,12 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
 );
 
 
+const layoutCategories = [
+  { name: "Santa Monica", slug: "/van-layouts?search=santa+monica", image: ["/renderings/sm.webp", "/renderings/sm1.webp"] },
+  { name: "Montreal", slug: "/van-layouts?search=montreal", image: ["/renderings/montreal.webp", "/renderings/montreal1.webp"] },
+  { name: "Imperial", slug: "/van-layouts?search=imperial", image: ["/renderings/imperial.webp", "/renderings/imperial1.webp"] },
+  { name: "Santa Barbara", slug: "/van-layouts?search=santa+barbara", image: ["/renderings/santaBarbara.webp", "/renderings/santaBarbara1.webp"] },
+];
 const CategoryCard = ({ image, title, href, onClick }) => (
   <div className="flex flex-col items-center group text-center">
     <Link
@@ -113,20 +118,25 @@ export default function Navbar({ forceMobile }) {
     }
   }, [isMobileMenuOpen]);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [b, c, w] = await Promise.all([
-          getAllBlogs()?.catch(() => ({ data: [] })),
-          getNavCat()?.catch(() => ({ data: [] })),
-        ]);
-        setData({ blogs: b?.data || [], categories: c?.data || [], wheelBases: w?.data || [] });
-      } catch (err) {
-        setData({ blogs: [], categories: [], wheelBases: [] });
-      }
-    };
-    loadData();
-  }, []);
+useEffect(() => {
+  const loadData = async () => {
+    // 1. Function call karein
+    const res = await linksForNavbar();
+
+    // 2. Response check karein (linksForNavbar hamesha object bhejega)
+    if (res && res.success) {
+      // Yahan apna state update karein
+      setData(res.data);
+    } else {
+      console.log("Kuch ghalat hua:", res.message);
+      // Default empty state set karein
+      setData({ blogs: [] });
+    }
+  };
+
+  loadData();
+}, []);
+
   // --- GSAP Animation Logic (Same as before) ---
   useEffect(() => {
     if (!megaMenuRef.current || forceMobile) return;
@@ -156,19 +166,14 @@ export default function Navbar({ forceMobile }) {
     timeoutRef.current = setTimeout(() => setDesktopMenu(null), 200);
   }, []);
 
-  const getWheelbaseLabel = useCallback((base) => {
-    const labels = { "144": "Mercedes Sprinter 144", "170": "Mercedes Sprinter 170", "148": "Ford Transit 148" };
-    return labels[base] || `RAM Promaster ${base}`;
-  }, []);
-
   const renderSectionItems = useCallback((section, isMobile = false) => {
     const closeMobile = () => isMobile && setIsMobileMenuOpen(false);
 
     if (section.title === "Blog") {
       return (
         <>
-          {data.blogs.slice(0, 4).map(b => (
-            <BlogListItem key={b._id} href={`/blog-detail/${b.slug}`} onClick={closeMobile}>
+          {data.map(b => (
+            <BlogListItem key={b.slug} href={`/blog-detail/${b.slug}`} onClick={closeMobile}>
               {b.title}
             </BlogListItem>
           ))}
@@ -182,16 +187,14 @@ export default function Navbar({ forceMobile }) {
         <div className="flex flex-col w-full">
           {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
-            {data?.categories
-              ?.filter(cat => cat.rendering?.length)
-              .slice(0, 6)
+            {layoutCategories
               .map((cat, i) => (
                 <CategoryCard
                   key={i}
-                  href={`${'/layout-detail'}/${cat.slug}`}
+                  href={`${cat.slug}`}
                   onClick={closeMobile}
-                  image={cat.rendering[0]}
-                  title={cat.van_listing.title}
+                  image={cat.image[0]}
+                  title={cat.name}
                 />
               ))}
           </div>
@@ -234,7 +237,7 @@ export default function Navbar({ forceMobile }) {
           <NavListItem href={`/van-layouts?category=Layouts+for+Families+%283–9+People%29`} onClick={closeMobile}>
             Perfect for larger families (4+ passengers)
           </NavListItem>
-  <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
+          <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
             <Link
               href="/van-layouts"
               onClick={closeMobile}
@@ -255,7 +258,7 @@ export default function Navbar({ forceMobile }) {
         {item?.label}
       </NavListItem>
     ));
-  }, [data, pathname, getWheelbaseLabel]);
+  }, [data, pathname]);
 
   return (
     <>

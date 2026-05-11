@@ -128,7 +128,22 @@ router.get("/", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch blogs" });
   }
 });
+router.get("/blog-links", async (req, res) => {
+  try {
+    console.log("Fetching blog links...");
+    const latestBlogs = await Blog.find({}, "title slug -_id")
+      .sort({ createdAt: -1 })
+      .limit(5);
 
+    res.json({
+      success: true,
+      data: latestBlogs
+    });
+  } catch (err) {
+    console.error("Error fetching latest blogs:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch blogs" });
+  }
+});
 router.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params
