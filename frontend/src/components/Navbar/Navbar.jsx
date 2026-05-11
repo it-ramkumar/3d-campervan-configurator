@@ -172,7 +172,7 @@ useEffect(() => {
     if (section.title === "Blog") {
       return (
         <>
-          {data.map(b => (
+          {data?.map(b => (
             <BlogListItem key={b.slug} href={`/blog-detail/${b.slug}`} onClick={closeMobile}>
               {b.title}
             </BlogListItem>
@@ -188,7 +188,7 @@ useEffect(() => {
           {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
             {layoutCategories
-              .map((cat, i) => (
+              ?.map((cat, i) => (
                 <CategoryCard
                   key={i}
                   href={`${cat.slug}`}
