@@ -199,7 +199,6 @@ useEffect(() => {
               ))}
           </div>
 
-          {/* 2. End Link: Jo poore section ke neechay center ya left align ho */}
           <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
             <Link
               href="/layout-by-category"
@@ -267,7 +266,7 @@ useEffect(() => {
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {!forceMobile && (
             <Link href="/">
-              <Image src="/images/logoo.webp" alt="BBV logo" width={200} height={100} className="object-contain border-none" priority={true} />
+              <Image src="/images/logoo.webp" alt="BBV logo" width={200} height={100} className="object-contain border-none"/>
             </Link>
           )}
 

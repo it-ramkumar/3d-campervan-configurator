@@ -149,7 +149,7 @@ router.get("/blog-card", async (req, res) => {
     console.log("Fetching blog details...");
     const blogDetails = await Blog.find({}, "title description slug gallery -_id")
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(4);
 
     res.json({
       success: true,
