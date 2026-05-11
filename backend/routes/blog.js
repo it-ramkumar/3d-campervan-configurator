@@ -144,6 +144,25 @@ router.get("/blog-links", async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch blogs" });
   }
 });
+router.get("/blog-card", async (req, res) => {
+  try {
+    console.log("Fetching blog details...");
+    const blogDetails = await Blog.find({}, "title description slug gallery -_id")
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    res.json({
+      success: true,
+      data: blogDetails
+    });
+  } catch (err) {
+    console.error("Error fetching blog details:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch blog details"
+    });
+  }
+});
 router.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params
