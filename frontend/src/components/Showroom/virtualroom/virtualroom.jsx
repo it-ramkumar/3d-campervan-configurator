@@ -38,26 +38,26 @@ export default function ShowroomAndTours() {
         <div className="grid lg:grid-cols-12 gap-12 items-stretch">
 
           {/* Main Showcase Image */}
-         <div
-  className="lg:col-span-7 relative group"
+          <div
+            className="lg:col-span-7 relative group"
 
->
-  <div className="sticky top-10 w-full rounded-lg overflow-hidden shadow-2xl border border-primary/5 bg-[#001F3D]">
+          >
+            <div className="sticky top-10 w-full rounded-lg overflow-hidden shadow-2xl border border-primary/5 bg-[#001F3D]">
 
-    <div className="relative w-full aspect-video">
-      <Image
-        src="/images2/Client.webp"
-        alt="Virtual Session"
-        width={1000}
-        height={720}
-        className="w object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
-      />
-    </div>
+              <div className="relative w-full aspect-video">
+                <Image
+                  src="/images2/Client.webp"
+                  alt="Virtual Session"
+                  width={1000}
+                  height={720}
+                  className="w object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700"
+                />
+              </div>
 
-    <div className="absolute inset-0 bg-gradient-to-t from-[#001F3D]/40 to-transparent pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#001F3D]/40 to-transparent pointer-events-none"></div>
 
-  </div>
-</div>
+            </div>
+          </div>
 
           {/* Feature Cards Stack */}
           <div className="lg:col-span-5 flex flex-col gap-8">
@@ -94,7 +94,7 @@ export default function ShowroomAndTours() {
                 <RichParagraph className="mb-8 text-secondary">
                   Book a personalized Zoom session and let's bring your vision to life.
                 </RichParagraph>
-                <SecondaryButton label="Schedule Your Tour" link={"/contact"}/>
+                <SecondaryButton label="Schedule Your Tour" link={"/contact"} />
 
 
               </div>
@@ -110,8 +110,8 @@ export default function ShowroomAndTours() {
           <Image
             src="/images/virtuaal1.webp"
             alt="Big Bear Destination"
-              width={1000}
-        height={720}
+            width={1920}
+            height={1080}
             className="absolute inset-0 object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm lg:backdrop-blur-none lg:bg-transparent lg:bg-gradient-to-r lg:from-primary lg:via-primary/60 lg:to-transparent" />

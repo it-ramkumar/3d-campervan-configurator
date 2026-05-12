@@ -23,15 +23,46 @@ export default function Van3DSection({ url, title }) {
 
   return (
     <>
-      {/* Launch */}
-      <div className="my-6 md:my-10 px-4">
-        <div className="max-w-xl mx-auto text-center">
-          <PrimaryButton
-            label="Launch 3D Model"
-            onClick={() => setIsOpen(true)}
-          />
-        </div>
-      </div>
+<PrimaryButton
+  onClick={() => setIsOpen(true)}
+  className='w-full'
+  label={
+    <div className="flex items-center justify-center gap-2">
+      {/* 3D Cube Icon jo gol ghoomega */}
+      <svg
+        className="w-6 h-6 animate-spin-3d"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+        <path d="M12 12l8-4.5" />
+        <path d="M12 12v9" />
+        <path d="M12 12L4 7.5" />
+      </svg>
+
+      <span className="font-semibold uppercase tracking-wider">
+        Launch 3D Model
+      </span>
+
+      {/* Rotating Animation Style */}
+      <style>{`
+        @keyframes spin-3d {
+          from { transform: rotateY(0deg); }
+          to { transform: rotateY(360deg); }
+        }
+        .animate-spin-3d {
+          /* perspective icon ko real 3D depth dega ghumte waqt */
+          animation: spin-3d 3s linear infinite;
+          transform-style: preserve-3d;
+        }
+      `}</style>
+    </div>
+  }
+/>
 
       {/* FULL SCREEN */}
       {isOpen && (

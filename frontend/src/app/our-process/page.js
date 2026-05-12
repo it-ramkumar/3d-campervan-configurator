@@ -54,15 +54,9 @@ export default function OurProcess() {
         </div>
 
         <div className="tour-processlist">
-          {/* Note: Agar Processlist ke andar animations (Framer Motion) hain,
-             toh Processlist file ke upar "use client" likha hona chahiye.
-          */}
           <Processlist />
         </div>
 
-        <div className="tour-consultation">
-          {/* Consultation content yahan aayega */}
-        </div>
       </main>
     </>
   );

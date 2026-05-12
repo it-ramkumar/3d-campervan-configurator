@@ -96,6 +96,7 @@ export default function Navbar({ forceMobile }) {
     { name: 'CustomBuild', label: 'Custom Build', path: '/custom-build', hasDropdown: true },
     { name: 'Camper Vans For Sale', label: 'Vans For Sale', path: '/camper-vans-for-sale', hasDropdown: false },
     { name: 'layout', label: 'Layouts', path: '/layout-by-category', hasDropdown: true },
+    { name: 'Shop', label: 'Shop', path: 'https://vanpartsoutlet.com/', hasDropdown: false },
     { name: 'discover', label: 'Discover', path: '#', hasDropdown: true },
   ], []);
 

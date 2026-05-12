@@ -15,7 +15,7 @@ import {
 // --- SUB-COMPONENT: IMAGE GRID ---
 const ProjectImages = ({ images, alt }) => {
   const hasMultiple = images?.length > 1;
-  const displayImages = images?.length > 0 ? images : ["/placeholder.jpg"];
+  const displayImages = images?.length > 0 ? images : ["/images/blockLogo.jpg"];
 
   return (
     <div className="group relative w-full h-[300px] md:h-[450px] flex gap-2 p-2 overflow-hidden bg-gray-100 rounded-xl">
@@ -57,7 +57,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
   // API DATA
   const { data: layouts, pages: totalPages, page: currentPage, filters } = layout;
-  console.log("LAYOUT", filters);
+  // console.log("LAYOUT", filters);
 
   // search sync safe
   const [searchTerm, setSearchTerm] = useState("");

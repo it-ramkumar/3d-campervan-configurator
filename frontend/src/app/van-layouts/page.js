@@ -31,10 +31,57 @@ export async function generateMetadata() {
     }
   };
 }
-
+// Is object ko component ke bahar (import ke niche) rakhein
+const dynamicHeroData = {
+  "imperial": {
+    title: "Spacious Family Van Layouts",
+    image: "/heroSlider/144.webp",
+    desc: "Designed for comfort with the whole crew."
+  },
+  "adventure-ready": {
+    title: "Off-Grid Adventure Layouts",
+    image: "/heroSlider/adventure.webp",
+    desc: "Rugged designs for the wild."
+  },
+  "144": {
+    title: "Compact 144\" Wheelbase Designs",
+    image: "/heroSlider/144.webp",
+    desc: "Perfect for city driving and agile travel."
+  },
+  "170": {
+    title: "Extra Long 170\" Wheelbase Plans",
+    image: "/heroSlider/170.webp",
+    desc: "The ultimate space for full-time van life."
+  },
+  "default": {
+    title: "Explore Custom Van Layouts",
+    image: "/images2/layout2.webp",
+    desc: "Find the perfect floor plan for your dream build."
+  }
+};
 export default async function LayoutsPage({ searchParams }) {
 
   const params = await searchParams;
+  // 1. Saare params ko extract karein
+  // 1. Safety ke liye values ko normalize karein (string banayein)
+// 1. Params normalize karein
+const category = Array.isArray(params?.category) ? params.category[0] : params?.category;
+const wheelbase = Array.isArray(params?.wheelbase) ? params.wheelbase[0] : params?.wheelbase;
+const searchQuery = Array.isArray(params?.search) ? params.search[0] : params?.search;
+
+// 2. Updated Priority Logic
+let activeKey = "default";
+
+if (category && dynamicHeroData[category]) {
+  activeKey = category;
+}
+else if (wheelbase && dynamicHeroData[wheelbase]) {
+  activeKey = wheelbase;
+}
+// ✅ Yeh naya hissa add karein:
+else if (searchQuery && dynamicHeroData[searchQuery.toLowerCase()]) {
+  activeKey = searchQuery.toLowerCase();
+}
 
   // optional: normalize values (important for backend stability)
   const cleanParams = Object.fromEntries(
@@ -43,7 +90,7 @@ export default async function LayoutsPage({ searchParams }) {
       Array.isArray(v) ? v[0] : v
     ])
   );
-// console.log("Received searchParams in page component:", params);
+  // console.log("Received searchParams in page component:", params);
   // ✅ API CALL
   const res = await getAllPortfolio({
     ...cleanParams,
@@ -54,60 +101,33 @@ export default async function LayoutsPage({ searchParams }) {
     ? res.data
     : { data: [], pages: 0, page: 1, total: 0, filters: {} };
 
- const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Custom Camper Van Layouts",
-  "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
-  "numberOfItems": initialData.total,
-  "itemListElement": (initialData.data || []).map((item, index) => ({
-    "@type": "ListItem",
-    "position": index + 1,
-    "item": {
-      "@type": "Product",
-      "name": item.van_listing?.title || "Custom Camper Van Layout",
-      "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
-      "image": item.gallery?.[0] || "/images2/layout2.webp",
-      "description": item.van_listing?.description || "Custom camper van floor plan",
-      "brand": {
-        "@type": "Brand",
-        "name": "Big Bear Vans"
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Custom Camper Van Layouts",
+    "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
+    "numberOfItems": initialData.total,
+    "itemListElement": (initialData.data || []).map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Product",
+        "name": item.van_listing?.title || "Custom Camper Van Layout",
+        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
+        "image": item.gallery?.[0] || "/images2/layout2.webp",
+        "description": item.van_listing?.description || "Custom camper van floor plan",
+        "brand": {
+          "@type": "Brand",
+          "name": "Big Bear Vans"
+        }
       }
-    }
-  }))
-};
-const wheelbaseData = {
-  "144": {
-    title: "Compact 144\" Wheelbase",
-    image: "/heroSlider/144.webp",
-    desc: "Perfect for city driving and easy parking."
-  },
-  "148": {
-    title: "Standard 148\" Wheelbase",
-    image: "/heroSlider/148.webp",
-    desc: "The balanced choice for comfort and space."
-  },
-  "159": {
-    title: "Extended 159\" Wheelbase",
-    image: "/heroSlider/159.webp",
-    desc: "Maximum storage for long-haul adventures."
-  },
-  "170": {
-    title: "Extra Long 170\" Wheelbase",
-    image: "/heroSlider/170.webp",
-    desc: "The ultimate spacious layout for full-time living."
-  },
-  "default": {
-    title: "Explore Layouts of Our Custom Vans",
-    image: "/images2/layout2.webp",
-    desc: "Explore our camper van layout options."
-  }
-};
-// 2. Wheelbase nikalen (yahan array check bhi kar lete hain safety ke liye)
-  const wb = Array.isArray(params.wheelbase) ? params.wheelbase[0] : params.wheelbase;
-
-  // 3. Content select karein
-  const currentContent = wheelbaseData[wb] || wheelbaseData.default;
+    }))
+  };
+const currentContent = dynamicHeroData[activeKey];// Title handle karein
+  const displayTitle = searchQuery
+    ? `Search Results for: "${searchQuery}"`
+    : currentContent.title;
+    console.log(currentContent,"content")
   return (
     <main>
       <script
@@ -115,12 +135,14 @@ const wheelbaseData = {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <HeroSection
-        title={currentContent.title}
+    <HeroSection
+        key={activeKey + searchQuery} // Key change hote hi React image swap kar dega
+        title={displayTitle}
         description={currentContent.desc}
-        image={currentContent.image }
+        image={currentContent.image}
         showButton={false}
       />
+
 
       {/* ✅ IMPORTANT: pass cleanParams not raw searchParams */}
       <Van_layout

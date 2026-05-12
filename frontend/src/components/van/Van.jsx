@@ -303,9 +303,9 @@ function Van() {
               {/* Lights */}
               {isIntView ? (
                 <>
-                  <SpotLightCom position={[0.6, -0.1, 1.1]} />
-                  <SpotLightCom position={[0, -0.1, 1.1]} />
-                  <SpotLightCom position={[-0.6, 0.3, 1.1]} />
+                  {/* <SpotLightCom position={[0.6, -0.1, 1.1]} /> */}
+                  {/* <SpotLightCom position={[0, -0.1, 1.1]} />
+                  <SpotLightCom position={[-0.6, 0.3, 1.1]} /> */}
                 </>
               ) : (
                 <ambientLight intensity={0.25} />

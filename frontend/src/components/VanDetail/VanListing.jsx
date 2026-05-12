@@ -78,11 +78,7 @@ const VanPage = ({ vanDetail }) => {
           <div className="lg:col-span-7">
 
             <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
-            {
-              vanDetail?.glbFile && (
-                <VanCanvas url={vanDetail.glbFile} />
-              )
-            }
+
           </div>
 
 
@@ -113,7 +109,11 @@ const VanPage = ({ vanDetail }) => {
                   </p>
                 )}              </div>
             )}
-
+  {
+              vanDetail?.glbFile && (
+                <VanCanvas url={vanDetail.glbFile} />
+              )
+            }
             <div className="grid grid-cols-2 gap-4">
               <HeroSpecItem label="Chassis" value={specs?.make_model} />
               <HeroSpecItem label="Wheelbase" value={specs?.wheelbase} />
