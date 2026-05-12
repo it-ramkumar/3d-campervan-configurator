@@ -109,10 +109,12 @@ const VanPage = ({ vanDetail }) => {
                   </p>
                 )}              </div>
             )}
-  {
+            {
               vanDetail?.glbFile && (
-                <VanCanvas url={vanDetail.glbFile} />
-              )
+
+                <div className="relative z-[99999999]">
+                  <VanCanvas url={vanDetail.glbFile} />
+                </div>)
             }
             <div className="grid grid-cols-2 gap-4">
               <HeroSpecItem label="Chassis" value={specs?.make_model} />

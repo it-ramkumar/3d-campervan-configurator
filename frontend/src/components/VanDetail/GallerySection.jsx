@@ -43,7 +43,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
           height={800}
           alt={title}
           onClick={() => setIsFullscreen(true)}
-          className="relative z-10 max-h-full w-auto object-contain cursor-zoom-in"
+          className="relative max-h-full w-auto object-contain cursor-zoom-in"
         />
 
         {/* PREV */}
