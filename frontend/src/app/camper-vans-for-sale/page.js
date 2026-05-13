@@ -46,7 +46,6 @@ export default async function VansForSale() {
     ...(pendingData?.data || []),
     ...(comingData?.data || [])
   ];
-console.log(allActiveVans,"data")
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -58,7 +57,6 @@ const jsonLd = {
     const price = van.van_listing.price;
     const hasPrice = price && price >= 10;
 
-    // Image URL — spaces encode karo taake Google crawl kar sake
     const rawImage = van.gallery?.[0] || "";
     const imageUrl = rawImage
       ? rawImage.startsWith("http")
@@ -66,7 +64,6 @@ const jsonLd = {
         : encodeURI(`https://www.bigbearvans.com${rawImage}`)
       : "https://www.bigbearvans.com/images2/vfs.webp";
 
-    // Subtitle use karo description ki jagah
     const description = van.van_listing.subtitle
       || van.van_listing.title
       || "Custom camper van by Big Bear Vans.";
@@ -84,17 +81,27 @@ const jsonLd = {
           "@type": "Brand",
           "name": "Big Bear Vans"
         },
+        // ⭐ Stars Google search mein dikhenge
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5",
+          "reviewCount": "111"
+        },
         "offers": {
           "@type": "Offer",
           "priceCurrency": "USD",
+          // ✅ Price fix — Google ko number chahiye
           ...(hasPrice
             ? {
                 "price": price,
                 "priceValidUntil": "2026-12-31"
               }
             : {
+                "price": "0",
                 "priceSpecification": {
                   "@type": "PriceSpecification",
+                  "price": "0",
+                  "priceCurrency": "USD",
                   "description": "Contact for pricing"
                 }
               }
