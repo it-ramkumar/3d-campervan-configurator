@@ -16,8 +16,9 @@ const nextConfig = {
   ];
 },
   images: {
-        formats: ["image/avif", "image/webp"],
-    remotePatterns: [
+      unoptimized: true,
+  formats: ["image/avif", "image/webp"],
+  remotePatterns: [
       {
         protocol: "https",
         hostname: "dsbl2e3mrs2k7.cloudfront.net", // Aapka image source

@@ -4,18 +4,11 @@ import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew'; impor
 export const dynamic = 'force-dynamic';
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
-  const limit = 1;
 
   try {
-    const [resAvail, resSold] = await Promise.all([
-      vansByStatus("available", 1, limit),
-      vansByStatus("sold", 1, limit)
-    ]);
 
-    const availCount = resAvail?.total || 0;
-    const soldCount = 100;
 
-    const title = `Camper Vans for Sale | ${availCount > 0 ? availCount + ' Available & ' : ''}${soldCount}+ Sold | Big Bear Vans`;
+    const title = `Custom Camper Vans for Sale | Mercedes Sprinter & Ford Transit | Big Bear Vans`;
 
     const description = `Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.`;
     return {
@@ -30,8 +23,8 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Camper Vans for Sale | Big Bear Vans",
-      description: "Custom Mercedes Sprinter and Ford Transit camper vans for sale. High-quality conversions for 2-7 persons.",
+      title: "Custom Camper Vans for Sale | Mercedes Sprinter & Ford Transit | Big Bear Vans",
+      description: "Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.",
     };
   }
 }
@@ -53,37 +46,74 @@ export default async function VansForSale() {
     ...(pendingData?.data || []),
     ...(comingData?.data || [])
   ];
+console.log(allActiveVans,"data")
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Custom Camper Vans for Sale | Big Bear Vans",
+  "description": "Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available.",
+  "numberOfItems": allActiveVans.length,
+  "itemListElement": allActiveVans.map((van, index) => {
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Camper Vans Inventory | Big Bear Vans",
-    "description": "Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.",
-    "numberOfItems": allActiveVans.length,
-    "itemListElement": allActiveVans.map((van, index) => ({
+    const price = van.van_listing.price;
+    const hasPrice = price && price >= 10;
+
+    // Image URL — spaces encode karo taake Google crawl kar sake
+    const rawImage = van.gallery?.[0] || "";
+    const imageUrl = rawImage
+      ? rawImage.startsWith("http")
+        ? encodeURI(rawImage)
+        : encodeURI(`https://www.bigbearvans.com${rawImage}`)
+      : "https://www.bigbearvans.com/images2/vfs.webp";
+
+    // Subtitle use karo description ki jagah
+    const description = van.van_listing.subtitle
+      || van.van_listing.title
+      || "Custom camper van by Big Bear Vans.";
+
+    return {
       "@type": "ListItem",
       "position": index + 1,
       "item": {
-        "@type": "Product", // Isse Google search mein "In Stock" ya price dikha sakta hai
+        "@type": "Product",
         "name": van.van_listing.title,
         "url": `https://www.bigbearvans.com/van/${van.slug}`,
-        "image": van.gallery?.[0]  || "/images/default-van.webp",
-        "description": van.excerpt || `Custom conversion build by Big Bear Vans.`,
+        "image": imageUrl,
+        "description": description,
         "brand": {
           "@type": "Brand",
           "name": "Big Bear Vans"
         },
         "offers": {
           "@type": "Offer",
+          "priceCurrency": "USD",
+          ...(hasPrice
+            ? {
+                "price": price,
+                "priceValidUntil": "2026-12-31"
+              }
+            : {
+                "priceSpecification": {
+                  "@type": "PriceSpecification",
+                  "description": "Contact for pricing"
+                }
+              }
+          ),
           "availability": van.status === "available"
             ? "https://schema.org/InStock"
+            : van.status === "sale_pending"
+            ? "https://schema.org/SoldOut"
             : "https://schema.org/PreOrder",
-          "priceCurrency": "USD",
-          "price": van.van_listing.price || "0" // Agar price backend mein hai toh wo dikhayega
+          "url": `https://www.bigbearvans.com/van/${van.slug}`,
+          "seller": {
+            "@type": "Organization",
+            "name": "Big Bear Vans"
+          }
         }
       }
-    }))
-  };
+    };
+  })
+};
   return (
     <main>
       {/* --- SEO Script --- */}
