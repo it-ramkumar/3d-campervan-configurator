@@ -6,9 +6,9 @@ export async function generateMetadata() {
   const res = await getAllPortfolio({ page: 1, limit: 1 });
   const totalBuilds = res?.data?.total || 105;
 
-  const title = `Browse ${totalBuilds}+ Custom Camper Van Layouts & Floor Plans | Big Bear Vans`;
+  const title = `Custom Camper Van Layouts & Floor Plans | Big Bear Vans`;
 
-  const description = `Explore ${totalBuilds}+ custom camper van layouts including Sprinter, Transit, and family van conversions. View detailed 3D floor plans and find the perfect setup for your next adventure.`;
+  const description = `Browse ${totalBuilds}+ Sprinter & Transit floor plans with detailed 3D views. Find the perfect layout for 2-7 people — families, couples, and full-time van lifers. Built in California.`;
 
   return {
     title,
@@ -101,28 +101,38 @@ else if (searchQuery && dynamicHeroData[searchQuery.toLowerCase()]) {
     ? res.data
     : { data: [], pages: 0, page: 1, total: 0, filters: {} };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Custom Camper Van Layouts",
-    "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
-    "numberOfItems": initialData.total,
-    "itemListElement": (initialData.data || []).map((item, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": item.van_listing?.title || "Custom Camper Van Layout",
-        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
-        "image": item.gallery?.[0] || "/images2/layout2.webp",
-        "description": item.van_listing?.description || "Custom camper van floor plan",
-        "brand": {
-          "@type": "Brand",
-          "name": "Big Bear Vans"
-        }
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Custom Camper Van Layouts",
+  "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
+  "numberOfItems": initialData.total,
+  "itemListElement": (initialData.data || []).map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "item": {
+      "@type": "Product",
+      "name": item.van_listing?.title || "Custom Camper Van Layout",
+      "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
+      "image": item.gallery?.[0]
+        ? item.gallery[0].startsWith("http")
+          ? encodeURI(item.gallery[0])
+          : `https://www.bigbearvans.com${item.gallery[0]}`
+        : "https://www.bigbearvans.com/images2/layout2.webp",
+      "description": item.van_listing?.description || "Custom camper van floor plan",
+      "brand": {
+        "@type": "Brand",
+        "name": "Big Bear Vans"
+      },
+      // ✅ Sahi jagah — Product ke andar
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": "111"
       }
-    }))
-  };
+    }
+  }))
+};
 const currentContent = dynamicHeroData[activeKey];// Title handle karein
   const displayTitle = searchQuery
     ? `Search Results for: "${searchQuery}"`

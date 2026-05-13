@@ -4,15 +4,20 @@ import { generateBlogSchema } from "@/schema/blogDetail";
 import { Heading1, ImageWithSkeleton } from '@/components/Common/Common';
 import { CalendarDays, Clock, BookOpen } from "lucide-react";
 
-// ✅ 1. Metadata Generation (SEO)
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   try {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/test-blog/${slug}`);
     const blog = res.data.data;
 
-    const title = `${blog.title} | Big Bear Vans Journal`;
-    const description = blog.description || "Expert van conversion guides.";
+    const title = `${blog.title} | Big Bear Vans`;
+
+    // HTML tags hata ke clean text lo, phir 155 chars tak cut karo
+    const rawDesc = blog.description?.replace(/<[^>]*>/g, "") || "";
+    const description = rawDesc.length > 155
+      ? rawDesc.slice(0, 155).trim() + "..."
+      : rawDesc || "Expert camper van guides by Big Bear Vans.";
+
     const image = blog.gallery?.[0] || "/heroSlider/bloghero.webp";
 
     return {
@@ -49,7 +54,6 @@ export default async function page({ params }) {
   } catch (err) {
     console.error("Fetch error:", err);
   }
-
   if (!blog) return <div className="py-20 text-center">Blog post not found</div>;
 
   const currentUrl = `https://www.bigbearvans.com/blog-detail/${slug}`;

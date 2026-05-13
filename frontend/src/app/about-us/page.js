@@ -4,10 +4,9 @@ import Mission from "../../components/AboutUs/Mission/Mission";
 import Adventure from "../../components/AboutUs/Adventure/Adventure";
 import { generateAboutSchema } from "@/schema/about";
 
-// ✅ 1, 2, 3. Metadata API (Standard way for Server Components)
 export const metadata = {
-  title: "About Big Bear Vans | Custom Van Builders California",
-  description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
+  title: "Custom Camper Van Builders in California | Big Bear Vans",
+  description: "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
   keywords: "Big Bear Vans founders, custom van builders California, 5 person sleeper van, sprinter elevator bed conversion, CNC engineered campervans",
   alternates: {
     canonical: "https://www.bigbearvans.com/about-us",
@@ -15,14 +14,14 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/about-us",
-    title: "About Big Bear Vans | Custom Van Builders California",
-    description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
+    title: "Custom Camper Van Builders in California | Big Bear Vans",
+    description: "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
     images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Big Bear Vans | Custom Van Builders California",
-    description: "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.",
+    title: "Custom Camper Van Builders in California | Big Bear Vans",
+    description: "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
     images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
   },
 };
