@@ -10,7 +10,7 @@ export async function generateMetadata() {
 
     const title = `Custom Camper Vans for Sale | Mercedes Sprinter & Ford Transit | Big Bear Vans`;
 
-    const description = `Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.`;
+    const description = `Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.`;
     return {
       title,
       description,
@@ -24,7 +24,7 @@ export async function generateMetadata() {
     console.error("Metadata fetch error:", error);
     return {
       title: "Custom Camper Vans for Sale | Mercedes Sprinter & Ford Transit | Big Bear Vans",
-      description: "Find premium camper vans for sale. We offer bespoke 2-7 person layouts on Mercedes Sprinter & Ford Transit chassis.",
+      description: `Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.`,
     };
   }
 }
@@ -50,7 +50,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Custom Camper Vans for Sale | Big Bear Vans",
-  "description": "Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available.",
+  "description": "`Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.",
   "numberOfItems": allActiveVans.length,
   "itemListElement": allActiveVans.map((van, index) => {
 
