@@ -19,7 +19,7 @@ import Image from "next/image";
 
 export default function BlogContentUI({ blog }) {
   const [currentGalleryImage, setCurrentGalleryImage] = useState(0);
-
+  console.log(blog);
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -50,23 +50,37 @@ export default function BlogContentUI({ blog }) {
 
   const formatRichText = (text) => {
     if (!text) return null;
-    if (text.includes(":") && (text.includes("\n") || text.split(":").length > 1)) {
-      const parts = text.split(":");
-      const introText = parts[0];
-      const listItems = parts[1]
-        .split(/[,\n•]/)
+
+    // Check if it's a list (either contains ":" with following items OR starts with bullet points)
+    const hasColonList = text.includes(":") && (text.includes("\n") || text.split(":").length > 1);
+    const hasBulletPoints = text.includes("\n•") || text.includes("\n-") || text.startsWith("•") || text.startsWith("-");
+
+    if (hasColonList || hasBulletPoints) {
+      let introText = "";
+      let listPart = text;
+
+      if (hasColonList) {
+        const parts = text.split(":");
+        introText = parts[0] + ":";
+        listPart = parts.slice(1).join(":"); // Handle multiple colons
+      }
+
+      const listItems = listPart
+        .split(/[,\n•\-\*]/) // Splitting by comma, newline, or common bullet symbols
         .map(item => item.trim())
         .filter(item => item.length > 0);
 
-      if (listItems.length > 1) {
+      if (listItems.length > 0) {
         return (
           <>
-            <p className="mb-4 text-primary/90 font-medium">{formatBoldTags(introText + ":")}</p>
-            <ul className="space-y-3 ml-2">
+            {introText && (
+              <p className="mb-4 text-primary/90 font-semibold">{formatBoldTags(introText)}</p>
+            )}
+            <ul className="space-y-4 ml-2 mb-6">
               {listItems.map((item, idx) => (
-                <li key={idx} className="flex gap-3 items-start text-primary/80">
-                  <span className="!text-hover font-black mt-1.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
-                  <span className="leading-relaxed">{formatBoldTags(item)}</span>
+                <li key={idx} className="flex gap-4 items-start text-primary/80">
+                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
+                  <span className="leading-relaxed text-lg">{formatBoldTags(item)}</span>
                 </li>
               ))}
             </ul>
@@ -76,7 +90,6 @@ export default function BlogContentUI({ blog }) {
     }
     return formatBoldTags(text);
   };
-
   // --- AAPKE ORIGINAL BLOCKS (Design intact) ---
   const renderSingleBlock = (block, index) => {
     switch (block.type) {
@@ -99,9 +112,10 @@ export default function BlogContentUI({ blog }) {
       case "paragraph":
         return (
           <div key={index} className="mb-8 p-0 lg:pr-12">
-            <RichParagraph className="!text-primary/80 !leading-[1.8] !text-lg">
+            {/* Paragraph wraps formatRichText which now handles lists internally */}
+            <div className="text-primary/80 leading-[1.8] text-lg font-sans">
               {formatRichText(block.text)}
-            </RichParagraph>
+            </div>
           </div>
         );
 
@@ -114,7 +128,19 @@ export default function BlogContentUI({ blog }) {
             {block.caption && <p className="text-center text-sm text-primary/40 mt-4 italic">{block.caption}</p>}
           </div>
         );
-
+      case "list":
+        return (
+          <div key={index} className="mb-8 p-0 lg:pr-12">
+            <ul className="space-y-4 ml-2">
+              {block.items?.map((item, idx) => (
+                <li key={idx} className="flex gap-4 items-start text-primary/80">
+                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
+                  <span className="leading-relaxed text-lg">{formatBoldTags(item)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
       case "proscons":
         return (
           <div key={index} className="my-16 grid grid-cols-1 md:grid-cols-2 gap-0 rounded-[var(--radius-lg)] overflow-hidden shadow-xl border border-primary/5">
@@ -221,11 +247,11 @@ export default function BlogContentUI({ blog }) {
         elements.push(
           <div key={i} className="my-20 flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-1/2">
-               <p className="!text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Deep Dive</p>
-               <Heading2 text={block.text} className="!text-left !text-primary !mb-0" />
+              <p className="!text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Deep Dive</p>
+              <Heading2 text={block.text} className="!text-left !text-primary !mb-0" />
             </div>
             <div className="w-full lg:w-1/2 rounded-[var(--radius-lg)] overflow-hidden shadow-xl border border-primary/5">
-               <Image src={nextBlock.image} alt={block.text} className="w-full h-full object-cover aspect-video" width={800} height={600} />
+              <Image src={nextBlock.image} alt={block.text} className="w-full h-full object-cover aspect-video" width={800} height={600} />
             </div>
           </div>
         );
@@ -238,18 +264,6 @@ export default function BlogContentUI({ blog }) {
 
   return (
     <div className="max-w-[1400px] mx-auto px-4 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
-
-      {/* Sidebar Left */}
-      {/* <aside className="hidden lg:block lg:col-span-1">
-        <div className="sticky top-32 flex flex-col items-center gap-8">
-          <div className="w-px h-20 bg-primary/10" />
-          <button onClick={handleShare} className="p-4 bg-white rounded-full shadow-sm hover:shadow-xl hover:!text-hover transition-all border border-primary/5">
-             <Share2 size={20} />
-          </button>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] rotate-90 mt-10 whitespace-nowrap text-primary/30">Share Article</p>
-        </div>
-      </aside> */}
-
       {/* Main Body */}
       <main className="lg:col-span-8 bg-white p-8 lg:p-20 rounded-[var(--radius-lg)] shadow-sm border border-primary/5">
         <div className="prose prose-lg max-w-none">
@@ -259,7 +273,7 @@ export default function BlogContentUI({ blog }) {
         {/* Bottom Share */}
         <div className="mt-24 pt-12 border-t border-secondary flex flex-col items-center text-center">
           <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mb-6">
-             <Share2 size={24} className="!text-hover" />
+            <Share2 size={24} className="!text-hover" />
           </div>
           <Heading3 text="Found this helpful?" className="!mb-2" />
           <p className="text-primary/50 text-sm mb-8 font-sans">Spread the knowledge with your fellow van-lifers.</p>
@@ -278,7 +292,7 @@ export default function BlogContentUI({ blog }) {
           {blog.gallery?.length > 0 && (
             <div className="bg-white p-6 rounded-[var(--radius-md)] shadow-sm border border-primary/5">
               <div className="flex items-center gap-2 mb-6 border-b border-secondary pb-4">
-                <ImageIcon size={16} className="!text-hover"/>
+                <ImageIcon size={16} className="!text-hover" />
                 <p className="text-[10px] font-black uppercase tracking-widest text-primary">Visual Gallery</p>
               </div>
               <div className="rounded-[var(--radius-sm)] overflow-hidden aspect-square mb-4 border border-secondary">
