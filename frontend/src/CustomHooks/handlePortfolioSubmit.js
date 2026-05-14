@@ -46,7 +46,8 @@ export const handlePortfolioSubmit = async ({
         imagesToDelete.map((url) =>
           axios.post(
             `${process.env.NEXT_PUBLIC_URL}/delete-image`,
-            { imageUrl: url }
+            { imageUrl: url },
+             { withCredentials: true }
           )
         )
       );

@@ -7,7 +7,6 @@ const createPortfolio = async (formDataToSend) => {
     try {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/portfolio`, formDataToSend, {
             headers: { "Content-Type": "multipart/form-data" },
-
             withCredentials: true,
 
         });

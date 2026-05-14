@@ -5,7 +5,7 @@ import { ImageWithSkeleton } from '@/components/Common/Common';
 export default function Detail({ setIsopen, detail }) {
     const [isMounted, setIsMounted] = useState(false);
     const gallery = detail.gallery || [];
-
+console.log(detail,"data blog");
     useEffect(() => {
         setIsMounted(true);
     }, []);

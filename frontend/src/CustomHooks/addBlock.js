@@ -19,6 +19,10 @@ export const addBlock = (type, setBlocks, insertIndex = null) => {
       newBlock.pros = [""];
       newBlock.cons = [""];
       break;
+    // ✅ Yeh naya case add karein
+    case "list":
+      newBlock.items = [""]; // ✅ Yeh line hona zaroori hai
+      break;
     default:
       break;
   }

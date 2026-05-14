@@ -12,6 +12,7 @@ import { addProsOrCons } from "@/CustomHooks/addProsOrCons";
 import { ImageWithSkeleton } from "@/components/Common/Common";
 import { addMediaLinkBlock } from "@/CustomHooks/mediaLinkInblock";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
+
 export default function BlogForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
   const [title, setTitle] = useState("");
@@ -74,7 +75,6 @@ export default function BlogForm({ setSelected }) {
         setBlocks([]);
       }
     } else {
-      // Reset form when not editing
       clearForm();
     }
   }, [editData]);
@@ -92,7 +92,7 @@ export default function BlogForm({ setSelected }) {
   };
 
   // ✅ FIXED: Submit form - Proper image handling for blocks and new gallery
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim()) {
@@ -118,20 +118,13 @@ const handleSubmit = async (e) => {
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("description", description);
-
-      // ============================================================
-      // ✅ Blocks Cleanup aur Filtering Logic
-      // ============================================================
       let imageIndex = 0;
       const cleanedBlocks = blocks
         .map((block) => {
           let b = { ...block };
-
-          // Temporary ID delete karein
           delete b._id;
 
           if (b.type === "image") {
-            // Sirf image-related fields rakhein, baqi uda dein
             const imgBlock = { type: "image" };
             if (b.file) {
               imgBlock.imageField = `image_${imageIndex}`;
@@ -142,11 +135,10 @@ const handleSubmit = async (e) => {
               imgBlock.image = b.url;
               return imgBlock;
             }
-            return null; // Image removed case
+            return null;
           }
 
           if (b.type === "heading" || b.type === "subheading" || b.type === "paragraph") {
-            // Unwanted keys delete karein
             delete b.image;
             delete b.url;
             delete b.rows;
@@ -155,7 +147,19 @@ const handleSubmit = async (e) => {
             delete b.file;
             return b.text?.trim() ? b : null;
           }
-
+          // ... existing code in handleSubmit ...
+          if (b.type === "list") {
+            delete b.text;
+            delete b.image;
+            delete b.rows;
+            delete b.pros;
+            delete b.cons;
+            delete b.url;
+            // Khali items nikaal dein
+            b.items = b.items?.filter(item => item.trim() !== "");
+            return b.items?.length > 0 ? b : null;
+          }
+          // ... rest of the blocks ...
           if (b.type === "table") {
             delete b.text;
             delete b.image;
@@ -202,9 +206,7 @@ const handleSubmit = async (e) => {
       const remainingGalleryUrls = existingGallery.filter(
         (url) => !removedExistingGallery.includes(url)
       );
-      formDataToSend.append("existingGallery", JSON.stringify(remainingGalleryUrls));
-
-      // 3. Create/update blog
+        // // 3. Create/update blog
       if (isEditMode) {
         await updateBlog(editData._id, formDataToSend);
         setSelected("Blogs-listing");
@@ -355,6 +357,74 @@ const handleSubmit = async (e) => {
                     </p>
                   </div>
                 )}
+              </div>
+            )}
+            {/* List Block */}
+            {/* Form.jsx mein list rendering part */}
+            {/* List Block */}
+            {block.type === "list" && (
+              <div className="space-y-3 w-full"> {/* space-y-3 vertical spacing ke liye */}
+                <h4 className="font-semibold text-gray-700">List Items</h4>
+
+                {(Array.isArray(block.items) ? block.items : []).map((item, idx) => (
+                  <div key={idx} className="flex gap-2 items-center w-full group">
+                    {/* Numbering: whitespace-nowrap zaroori hai taaki number apni jagah na chhode */}
+                    <span className="text-gray-400 font-medium min-w-[25px] whitespace-nowrap">
+                      {idx + 1}.
+                    </span>
+
+                    {/* Input: flex-1 aur w-full isse poori line lene par majboor karenge */}
+                    <input
+                      type="text"
+                      placeholder="Enter list item..."
+                      value={item || ""}
+                      onChange={(e) =>
+                        handleBlockChange(i, "items", e.target.value, idx, null, setBlocks)
+                      }
+                      className="flex-1 w-full border border-gray-300 p-2 rounded-md outline-none focus:border-blue-500 transition-all"
+                    />
+
+                    {/* Remove Button: Sirf tab dikhe jab 1 se zyada item hon */}
+                    {block.items.length > 1 && (
+                      <button
+                        type="button"
+                       onClick={() => {
+  setBlocks((prevBlocks) => {
+    // 1. Poore array ki copy
+    const newBlocks = [...prevBlocks];
+
+    // 2. Us specific block ki bhi copy banayein jise edit kar rahe hain (Reference break karne ke liye)
+    const targetBlock = { ...newBlocks[i] };
+
+    // 3. Items ko filter karke naya array banayein
+    targetBlock.items = targetBlock.items.filter((_, itemIdx) => itemIdx !== idx);
+
+    // 4. Naya block wapis array mein daalein
+    newBlocks[i] = targetBlock;
+
+    return newBlocks; // Ab React ko naya reference milega aur wo foran remove kar dega
+  });
+}}
+                        className="text-red-400 hover:text-red-600 px-2 transition-colors"
+                        title="Remove item"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const updated = [...blocks];
+                    updated[i].items = [...(updated[i].items || []), ""];
+                    setBlocks(updated);
+                  }}
+                  className="mt-2 px-4 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded shadow-sm text-sm font-medium transition-colors"
+                >
+                  + Add New Item
+                </button>
               </div>
             )}
             {block.type === "table" && (
@@ -526,6 +596,14 @@ const handleSubmit = async (e) => {
               >
                 + Media Link
               </button>
+              {/* End of blocks aur block ke darmiyan dono jagah ye button add karein */}
+              <button
+                onClick={() => addBlock("list", setBlocks, i)}
+                type="button"
+                className="text-xs bg-yellow-600 text-white px-2 py-1 rounded"
+              >
+                + List
+              </button>
             </div>
           </div>
         ))}
@@ -580,6 +658,14 @@ const handleSubmit = async (e) => {
             className="text-xs bg-gray-600 text-white px-2 py-1 rounded"
           >
             + Media Link
+          </button>
+          {/* End of blocks aur block ke darmiyan dono jagah ye button add karein */}
+          <button
+            onClick={() => addBlock("list", setBlocks)}
+            type="button"
+            className="text-xs bg-yellow-600 text-white px-2 py-1 rounded"
+          >
+            + List
           </button>
         </div>
 

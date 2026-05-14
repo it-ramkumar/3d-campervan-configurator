@@ -42,15 +42,15 @@ const singleImageSrc = typeof image === "string" ? image : image?.image || image
                 <Swiper
                   modules={[Navigation, Pagination, Autoplay]}
                   spaceBetween={10}
-                  slidesPerView={1}
+                  slidesPerView={1.1}
                   breakpoints={{
                     // Jab screen 768px (Tablet/Desktop) ya us se bari ho
                     768: {
-                      slidesPerView: 2,
+                      slidesPerView: 2.1,
                     },
                     // Agar aap mazeed bari screen par 3 dikhana chahte hain
                     1024: {
-                      slidesPerView: 2, // Ya 3, jaisa aapko behtar lage
+                      slidesPerView: 2.1, // Ya 3, jaisa aapko behtar lage
                     }
                   }}
                   navigation

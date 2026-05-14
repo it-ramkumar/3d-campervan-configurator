@@ -66,7 +66,7 @@ const GalleryUploader = ({
                           {...provided.dragHandleProps}
                           className={`relative group ${snapshot.isDragging ? "z-50 shadow-2xl" : ""}`}
                         >
-                          <div className={`overflow-hidden rounded-lg border-2 ${snapshot.isDragging ? "border-blue-500" : "border-transparent"}`}>
+                          <div className={`overflow-hidden rounded-lg border-2 aspect-[2/2] ${snapshot.isDragging ? "border-blue-500" : "border-transparent"}`}>
                             <ImageWithSkeleton
                               src={url}
                               alt={`${id}-existing-${index}`}
@@ -100,7 +100,7 @@ const GalleryUploader = ({
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {galleryPreviews.map((previewUrl, index) => (
               <div key={index} className="relative">
-                <div className="overflow-hidden rounded-lg border-2 border-dashed border-gray-300">
+                <div className="overflow-hidden rounded-lg border-2 border-dashed aspect-[2/2] border-gray-300">
                   <ImageWithSkeleton
                     src={previewUrl}
                     alt={`${id}-preview-${index}`}

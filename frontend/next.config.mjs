@@ -2,38 +2,53 @@
 const nextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
- async headers() {
-  return [
-    {
-      source: '/:all*(jpg|jpeg|png|webp|svg|ico|gif)',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
-        },
-      ],
-    },
-  ];
-},
+
+  async headers() {
+    return [
+      {
+        source: '/:all*(jpg|jpeg|png|webp|svg|ico|gif)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
+
   images: {
-      unoptimized: true,
-  formats: ["image/avif", "image/webp"],
-  remotePatterns: [
+    unoptimized: true, // Core Web Vitals ke liye agar CDN (Cloudfront) use kar rahe hain toh theek hai
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
       {
         protocol: "https",
-        hostname: "dsbl2e3mrs2k7.cloudfront.net", // Aapka image source
+        hostname: "dsbl2e3mrs2k7.cloudfront.net",
       },
     ],
   },
 
-  // 301 Redirect yahan add karein
   async redirects() {
     return [
+      // 1. Non-WWW to WWW Redirect (Canonicalization)
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'bigbearvans.com',
+          },
+        ],
+        destination: 'https://www.bigbearvans.com/:path*',
+        permanent: true,
+      },
+      // 2. Page Specific Redirects
       {
         source: "/vans-for-sale",
         destination: "/camper-vans-for-sale",
         permanent: true,
       },
+      // 3. Wheelbase Redirects (Query parameters focus)
       {
         source: '/wheel-base/148',
         destination: '/van-layouts?wheelbase=148',

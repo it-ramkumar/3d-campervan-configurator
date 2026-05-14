@@ -6,7 +6,7 @@ const router = require('express').Router();
 
 router.get('/', async (req, res) => {
     try {
-        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/van-options/system-options', '/sprinter-guide', '/van-layouts', '/layout-by-category', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/camper-vans-for-sale', '/where-to-camp','/layout-by-category'];
+        const staticPages = ['', '/custom-build', '/configurator', '/inquiry', '/van-options/exterior-options', '/van-options/interior-options', '/van-options/system-options', '/sprinter-guide', '/van-layouts', '/layout-by-category', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/camper-vans-for-sale', '/where-to-camp'];
 
         // Data fetch karein
         const [VansLink, PortfolioLink, BlogLink] = await Promise.all([
@@ -33,29 +33,6 @@ router.get('/', async (req, res) => {
                 xml += `  <url><loc>https://www.bigbearvans.com/${path}/${item.slug}</loc><lastmod>${date}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
             });
         };
-//     const wheelBase = (links, path) => {
-//     const uniqueWheelbases = new Set();
-
-//     links.forEach(item => {
-//         const date = item.updatedAt
-//             ? new Date(item.updatedAt).toISOString().split('T')[0]
-//             : new Date().toISOString().split('T')[0];
-
-//         const wbValue = item?.van_listing?.specifications?.wheelbase;
-
-//         if (wbValue && !uniqueWheelbases.has(wbValue)) {
-//             uniqueWheelbases.add(wbValue);
-
-//             xml += `  <url>
-//   <loc>https://www.bigbearvans.com/${path}/${wbValue}</loc>
-//   <lastmod>${date}</lastmod>
-//   <changefreq>monthly</changefreq>
-//   <priority>0.7</priority>
-// </url>\n`;
-//         }
-//     });
-// };
-
 
         addLinks(VansLink, 'van-detail');
         addLinks(PortfolioLink, 'layout-detail');
