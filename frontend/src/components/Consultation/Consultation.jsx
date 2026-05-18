@@ -4,7 +4,7 @@ import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 import { contact } from "../../api/contact/contact";
-import { Heading2, RichParagraph } from '../Common/Common'
+import { Heading2, RichParagraph } from "../Common/Common";
 
 export default function Consultation() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,11 @@ export default function Consultation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim()
+    ) {
       return;
     }
 
@@ -30,6 +34,11 @@ export default function Consultation() {
     try {
       const result = await contact(formData);
       if (result.success) {
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "Lead", {
+            source: "consultation",
+          });
+        }
         setFormData({ name: "", email: "", phone: "", message: "" });
       }
     } catch (error) {
@@ -43,11 +52,14 @@ export default function Consultation() {
     <div className="bg-secondary min-h-screen py-20 flex flex-col items-center space-y-16">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl">
-        <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">Connect With Us</RichParagraph>
+        <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">
+          Connect With Us
+        </RichParagraph>
         <Heading2 text="Schedule Your Free Consultation Call" />
         <div className="w-16 h-1 bg-hover rounded-lg"></div>
         <RichParagraph className="">
-          Talk with our experts in Big Bear, California, about financing, test drives, and personalized upgrades.
+          Talk with our experts in Big Bear, California, about financing, test
+          drives, and personalized upgrades.
         </RichParagraph>
       </div>
 
