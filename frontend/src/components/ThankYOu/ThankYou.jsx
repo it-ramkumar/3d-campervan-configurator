@@ -1,27 +1,30 @@
 "use client";
 import { usePathname } from "next/navigation";
-import {
-  Heading1,
-  RichParagraph,
-  SecondaryButton,
-} from "../Common/Common";
-
+import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
+import { useEffect } from "react";
 const ThankYou = () => {
   const location = usePathname();
-
-
   const email = location.state?.email || "user@van-life.com";
+  const searchParams = useSearchParams();
+  const source = searchParams.get("source") || "unknown";
+  useEffect(() => {
+    if (window.__META_LEAD_FIRED__) return;
+    window.__META_LEAD_FIRED__ = true;
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "Lead", {
+        source: source,
+      });
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
       {/* Main Container */}
       <div className="relative w-full max-w-2xl bg-white border-2 border-secondary rounded-lg shadow-xl overflow-hidden">
-
         {/* Top Accent */}
         <div className="h-2 bg-primary w-full" />
 
         <div className="p-8 md:p-12">
-
           {/* Header */}
           <div className="flex flex-col items-center mb-10">
             <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center border-2 border-[#30364F] mb-6 shadow-inner">
@@ -37,7 +40,6 @@ const ThankYou = () => {
           {/* Info Box */}
           <div className="space-y-4 mb-10">
             <div className="bg-primary text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden">
-
               {/* Grid Overlay */}
               <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(rgba(245,245,240,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,240,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
@@ -66,7 +68,8 @@ const ThankYou = () => {
             <RichParagraph className="text-primary text-center italic text-sm leading-relaxed">
               Thank you for reaching out to us. We’ve successfully received your
               inquiry and sent all the details to your email address.
-              <br /><br />
+              <br />
+              <br />
               Please check your inbox (and spam folder just in case). Our team
               will review your request and get back to you shortly.
             </RichParagraph>
@@ -74,11 +77,7 @@ const ThankYou = () => {
 
           {/* Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <SecondaryButton
-              label="Back to Home"
-              link="/"
-            />
-
+            <SecondaryButton label="Back to Home" link="/" />
           </div>
         </div>
 
@@ -90,10 +89,10 @@ const ThankYou = () => {
           </div>
 
           <span className="text-[9px] font-mono text-secondary uppercase tracking-widest">
-            Reference ID: {Math.random().toString(36).substring(7).toUpperCase()}
+            Reference ID:{" "}
+            {Math.random().toString(36).substring(7).toUpperCase()}
           </span>
         </div>
-
       </div>
     </div>
   );
