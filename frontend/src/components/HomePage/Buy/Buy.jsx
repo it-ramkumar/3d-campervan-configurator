@@ -10,7 +10,7 @@ import Image from 'next/image';
 // initialVans prop receive karein
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
-// console.log(initialVans)
+console.log(initialVans)
   // loading aur useEffect ki ab zaroorat nahi kyunki data server se aa raha hai
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
