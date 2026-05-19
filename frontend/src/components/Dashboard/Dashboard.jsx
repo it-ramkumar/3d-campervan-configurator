@@ -29,7 +29,10 @@ import QuickLinks from "../adminPanel/Linktree/QuickLinks";
 import AddQuickLink from "../adminPanel/Linktree/AddQuickLink";
 import BaseVanForm from "../adminPanel/BaseVan/BaseVanForm";
 import BaseVanListing from "../adminPanel/BaseVan/BaseVanListing";
-
+import VanPartsManager from "../adminPanel/VanParts/PartsManager";
+import VanParts from "../adminPanel/VanParts/VanParts";
+import VariantList from "../adminPanel/VanVariant/VanVariant";
+import VariantBuilder from "../adminPanel/VanVariant/VanVariantForm";
 export default function Dashboard() {
   const [selected, setSelected] = useState("portfolio-listing");
   const [isCollapsed, setIsCollapsed] = useState(true); // Control sidebar width
@@ -114,7 +117,7 @@ export default function Dashboard() {
       desc: "Manage 3D configurator options.",
       icon: "⚙️"
     },
-     {
+    {
       id: "BaseVanListing",
       label: "Base Vans",
       desc: "Manage base van configurations.",
@@ -125,7 +128,21 @@ export default function Dashboard() {
       label: "Config Clients",
       desc: "Manage system users and access.",
       icon: "👥"
-    }
+    },
+    {
+      id: "VanPartsManager",
+      label: "Van Parts",
+      desc: "Manage 3D models and images for van parts.",
+      icon: "🔧"
+    },
+    {
+      id: "VariantList",
+      label: "Variants",
+      desc: "Manage van variants.",
+      icon: "🏷️"
+    },
+
+
   ];
 
   const handleLogout = async () => {
@@ -133,9 +150,10 @@ export default function Dashboard() {
       await fetch(`${process.env.NEXT_PUBLIC_URL}/logout`, { method: "POST", credentials: "include" });
       localStorage.clear();
       navigate("/login");
-    } catch (error) { navigate("/login")
+    } catch (error) {
+      navigate("/login")
       console.error("Error:", error);
-     }
+    }
 
   };
 
@@ -166,6 +184,11 @@ export default function Dashboard() {
       case "addQuickLink": return <AddQuickLink setSelected={setSelected} />;
       case "BaseVan": return <BaseVanForm setSelected={setSelected} />;
       case "BaseVanListing": return <BaseVanListing setSelected={setSelected} />;
+      case "VanPartsManager": return <VanPartsManager setSelected={setSelected} />;
+      case "VanParts": return <VanParts setSelected={setSelected} />;
+      case "VariantList": return <VariantList setSelected={setSelected} />;
+      case "VariantBuilder": return <VariantBuilder setSelected={setSelected} />;
+
       default: return <PortfolioListing setSelected={setSelected} />;
     }
   };
@@ -234,13 +257,13 @@ export default function Dashboard() {
         <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0">
           <h2 className="text-xl font-bold text-slate-800 tracking-tight capitalize">
             {/* {menuItems.find(i => i.id === selected)?.label} */}
-             <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+            <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
 
-            <Link href="/" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Home</Link>
-            <Link href="/camper-vans-for-sale" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van For Sale</Link>
-            <Link href="/van-layouts" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van Layouts</Link>
+              <Link href="/" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Home</Link>
+              <Link href="/camper-vans-for-sale" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van For Sale</Link>
+              <Link href="/van-layouts" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Van Layouts</Link>
 
-          </div>
+            </div>
           </h2>
 
           <div className="flex items-center space-x-4 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">

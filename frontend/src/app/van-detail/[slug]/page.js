@@ -39,11 +39,19 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = await params;
 
-  // Page Component ke andar fetch ko aese update karein:
-  const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`, {
-    cache: 'no-store' // Ye browser ke 'force-refresh' ki tarah kaam karega
-  }).then(res => res.json()).catch(() => null);
+ const vanDetail = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/van/${slug}`,
+    { cache: "no-store" }
+  ).then(res => res.json()).catch(() => null);
+
+
   if (!vanDetail?.van) return notFound();
+
+    const variantsData = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/variants?vanSlug=${slug}`,
+    { cache: "no-store" }
+  ).then(res => res.json()).catch(() => null);
+
   // console.log(vanDetail.van, "detail page ")
   const hasPrice = vanDetail?.van?.van_listing?.price;
   const jsonLd = {
@@ -88,7 +96,10 @@ export default async function Page({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <VanPage vanDetail={vanDetail.van} />
+      <VanPage
+        vanDetail={vanDetail.van}
+        variants={variantsData?.variants || []}
+      />
     </>
   );
 }

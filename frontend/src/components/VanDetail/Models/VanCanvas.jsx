@@ -1,254 +1,333 @@
 "use client"
-import React, { Suspense, useState, useRef, useEffect } from 'react'
-import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Html, Environment } from '@react-three/drei'
-import { PrimaryButton } from '@/components/Common/Common'
-import { easing } from 'maath'
-import InteriorCamera from './MidCamera'
-import { cameraViews, doorGroups } from './cameraViews'
-import ControlBtn from './ControllBtn'
-import Model from './Model'
+import React, { Suspense, useState, useRef, useEffect } from "react"
+import { Canvas, useFrame } from "@react-three/fiber"
+import { OrbitControls, Html, Environment } from "@react-three/drei"
+import { easing } from "maath"
+import { X } from "lucide-react"
+import InteriorCamera from "./MidCamera"
+import { cameraViews } from "./cameraViews"
+import ControlBtn from "./ControllBtn"
+import Model from "./Model"
+import { PrimaryButton } from "@/components/Common/Common"
+import PartModel from "./Parts"
 
 function CameraRig({ view }) {
-  const [isUserInteracting, setIsUserInteracting] = useState(false);
-  const lastView = useRef(view);
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
 
-  // Jab bhi naya view (button click) aaye, animation ko dobara allow karein
   useEffect(() => {
-    setIsUserInteracting(false);
-    lastView.current = view;
-  }, [view]);
+    setIsUserInteracting(false)
+  }, [view])
 
   useFrame((state, delta) => {
-    // Agar user khud orbit kar raha hai, toh auto-camera animation rok do
-    if (isUserInteracting) return;
+    if (isUserInteracting) return
 
-    // Camera aur Target ko smoothly move karein
-    easing.damp3(state.camera.position, view.position, 0.4, delta);
+    easing.damp3(state.camera.position, view.position, 0.4, delta)
 
     if (state.controls) {
-      easing.damp3(state.controls.target, view.target, 0.4, delta);
-      state.controls.update();
-
-      // Check karein: Agar camera target ke bahut kareeb pahunch gaya hai,
-      // toh animation mode off kar sakte hain (optional)
-      const dist = state.camera.position.distanceTo(new THREE.Vector3(...view.position));
-      if (dist < 0.01) {
-        // Animation finished
-      }
+      easing.damp3(state.controls.target, view.target, 0.4, delta)
+      state.controls.update()
     }
-  });
+  })
 
-  // OrbitControls ke events ko monitor karne ke liye
   useEffect(() => {
-    const controls = document.querySelector('canvas'); // Base listener
-    const handleStart = () => setIsUserInteracting(true);
+    const handleStart = () => setIsUserInteracting(true)
 
-    // Jab user click/touch start kare, tab interaction true kar do
-    window.addEventListener('mousedown', handleStart);
-    window.addEventListener('touchstart', handleStart);
+    window.addEventListener("mousedown", handleStart)
+    window.addEventListener("touchstart", handleStart)
 
     return () => {
-      window.removeEventListener('mousedown', handleStart);
-      window.removeEventListener('touchstart', handleStart);
-    };
-  }, []);
+      window.removeEventListener("mousedown", handleStart)
+      window.removeEventListener("touchstart", handleStart)
+    }
+  }, [])
 
-  return null;
+  return null
 }
 
+export default function VanCanvas({ url, variants, setIsOpen,isOpen }) {
+  const [currentView, setCurrentView] = useState(cameraViews.default)
+  const [activeVariant, setActiveVariant] = useState(null)
+  const [activeParts, setActiveParts] = useState([])
+  const [interiorMode, setInteriorMode] = useState(false)
 
-export default function VanCanvas({ url }) {
-  const [animState, setAnimState] = useState({});
-  const [availableAnimations, setAvailableAnimations] = useState([]);
-  const [currentView, setCurrentView] = useState(cameraViews.default);
-  // VanCanvas ke andar
-  const [interiorMode, setInteriorMode] = useState(false);
-  // interiorConfig se 'y' remove kar diya, lekin ek default fixed height (e.g., 2.2) rakhenge
   const [interiorConfig, setInteriorConfig] = useState({
     x: 0,
-    z: 7,      // Forward/Backward
-    targetY: 1.8 // Isse aap upar/neeche dekh kar height adjust feel kar sakte hain
-  });
-  // Helper function
+    z: 7,
+    targetY: 4,
+  })
+
   const updateConfig = (key, val) => {
-    setInteriorConfig(prev => ({ ...prev, [key]: parseFloat(val) }));
-  };
+    setInteriorConfig((prev) => ({
+      ...prev,
+      [key]: parseFloat(val),
+    }))
+  }
 
-  // Group toggle function
-  const toggleDoorGroup = (groupName, animNames) => {
-    // Check if any door in group is open
-    const anyOpen = animNames.some(name => animState[name]);
+  const handleVariantClick = (variant) => {
+    setActiveVariant(variant)
+    setActiveParts(variant.parts || [])
+  }
 
-    // Toggle all doors in group to opposite state
-    const newState = { ...animState };
-    animNames.forEach(name => {
-      newState[name] = !anyOpen;
-    });
-    setAnimState(newState);
+  useEffect(() => {
+    setActiveParts([])
+  }, [])
 
-    // Set camera view (use first animation's camera view)
-    if (cameraViews[animNames[0]]) {
-      setCurrentView(cameraViews[animNames[0]]);
-    }
-  };
-
-  // Get grouped buttons
-  const getGroupedButtons = () => {
-    const buttons = [];
-
-    Object.entries(doorGroups).forEach(([groupName, animNames]) => {
-      // Check if all animations in group are available
-      const allAvailable = animNames.every(name => availableAnimations.includes(name));
-
-      if (allAvailable) {
-        // Check if any door in group is open
-        const anyOpen = animNames.some(name => animState[name]);
-
-        buttons.push({
-          key: groupName,
-          label: groupName,
-          active: anyOpen,
-          onClick: () => toggleDoorGroup(groupName, animNames)
-        });
-      }
-    });
-
-    // Add individual buttons for animations not in groups
-    availableAnimations.forEach(name => {
-      const isInGroup = Object.values(doorGroups).some(group => group.includes(name));
-      if (!isInGroup) {
-        buttons.push({
-          key: name,
-          label: name.replace(/_/g, ' '),
-          active: !!animState[name],
-          onClick: () => {
-            setAnimState(prev => ({ ...prev, [name]: !prev[name] }));
-            if (cameraViews[name]) setCurrentView(cameraViews[name]);
-          }
-        });
-      }
-    });
-
-    return buttons;
-  };
-
-  if (!url || url === "loading...") return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  if (!url || url === "loading...") {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#FCFCFB]">
+        <div className="text-primary text-lg font-semibold animate-pulse">
+          Loading Experience...
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen w-full bg-[#FCFCFB] p-2 md:p-5 gap-3 md:gap-6">
-      {/* Canvas Area */}
-      <div className="flex-1 lg:flex-[2] relative bg-slate-50 rounded-xl lg:rounded-2xl overflow-hidden border border-slate-100 min-h-[50vh] lg:min-h-0">
-        <Canvas shadows camera={{ position: [15, 15, 15], fov: 50 }}>
-          <ambientLight intensity={1.5} />
-          <pointLight position={[0, 2, 0]} intensity={2} />
+    <div className="h-screen w-full bg-secondary p-3 md:p-5 overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_420px] gap-4 h-full">
 
-          <Suspense fallback={<Html center>Loading 3D</Html>}>
+        {/* 3D VIEWER */}
+        <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
 
-            {/* CONDITIONALLY SWITCH BETWEEN EXTERIOR AND INTERIOR */}
-            {!interiorMode ? (
-              <>
-                {/* Exterior Mode: Rig + Default OrbitControls */}
-                <CameraRig view={currentView} />
-                <OrbitControls
-                  makeDefault
-                  enableDamping
-                  dampingFactor={0.05}
-                  minDistance={5}
-                  maxDistance={50}
-                />
-              </>
-            ) : (
-              <InteriorCamera
-                active={true}
-                // Y (height) ko humne 2.2 pe fix kar diya hai, baaki sliders se aayenge
-                position={[interiorConfig.x, 2.2, interiorConfig.z]}
-                // Target hamesha camera se 5 units aage rahega taake "Forward" sahi chale
-                target={[interiorConfig.x, interiorConfig.targetY, interiorConfig.z - 5]}
-              />
-            )}
-
-            <Model url={url} setAvailableAnimations={setAvailableAnimations} activeAnims={animState} />
-            <Environment preset="city" />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      {/* Controls Panel */}
-      <div className="flex-1 lg:flex-[0.6] bg-primary p-4 md:p-8 rounded-lg text-secondary shadow-2xl overflow-y-auto">
-        <h2 className="text-lg md:text-2xl font-black mb-4 uppercase italic">Big Bear Vans</h2>
-
-        <div className="space-y-6">
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2 mb-4">
-              View Mode
-            </p>
-            <ControlBtn
-              label={interiorMode ? "Exit Interior" : "Enter Interior"}
-              active={interiorMode}
-              onClick={() => setInteriorMode(!interiorMode)}
-            />
-          </div>
-
-          {interiorMode && (
-            <div className="bg-slate-800/50 p-4 rounded-xl space-y-4 border border-slate-700 mt-4">
-              <p className="text-[10px] font-bold text-secondary uppercase tracking-wider">
-                Interior Navigation
+          {/* Top Overlay */}
+          <div className="absolute top-0 left-0 z-20 w-full p-5 hidden md:block flex items-start justify-between pointer-events-none">
+            <div className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-lg px-5 py-4 shadow-lg">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-bold">
+                Premium Configurator
               </p>
 
-              {/* FORWARD / BACKWARD (Z) */}
-              <div className="space-y-1">
-                <label className="text-[10px] flex justify-between text-slate-300">
-                  Forward / Back (Z): <span>{interiorConfig.z}m</span>
-                </label>
-                <input
-                  type="range" min="1.5" max="9" step="0.1"
-                  value={interiorConfig.z}
-                  onChange={(e) => updateConfig('z', e.target.value)}
-                  className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-secondary"
+              <h2 className="text-2xl md:text-3xl font-black italic text-primary mt-1">
+                Big Bear Vans
+              </h2>
+            </div>
+
+            <div className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-lg px-4 py-3 shadow-lg">
+              <p className="text-xs text-slate-500 font-medium">
+                {interiorMode ? "Interior View" : "Exterior View"}
+              </p>
+            </div>
+          </div>
+
+          <Canvas shadows camera={{ position: [15, 15, 15], fov: 50 }}>
+            <ambientLight intensity={1.5} />
+            <pointLight position={[0, 2, 0]} intensity={2} />
+
+            <Suspense
+              fallback={
+                <Html center>
+                  <div className="px-4 py-2 rounded-lg bg-white shadow-xl text-primary font-semibold">
+                    Loading 3D...
+                  </div>
+                </Html>
+              }
+            >
+              {!interiorMode ? (
+                <>
+                  <CameraRig view={currentView} />
+
+                  <OrbitControls
+                    makeDefault
+                    enableDamping
+                    dampingFactor={0.05}
+                    minDistance={5}
+                    maxDistance={50}
+                  />
+                </>
+              ) : (
+                <InteriorCamera
+                  active={true}
+                  position={[interiorConfig.x, 2.2, interiorConfig.z]}
+                  target={[
+                    interiorConfig.x,
+                    interiorConfig.targetY,
+                    interiorConfig.z - 5,
+                  ]}
                 />
+              )}
+
+              <Model url={url} />
+
+              {activeParts.length > 0 &&
+                activeParts.map((part) => (
+                  <PartModel
+                    key={part._id}
+                    url={part.model}
+                    position={[0, -2, 0]}
+                    rotation={part.rotation || [0, 0, 0]}
+                  />
+                ))}
+
+              <Environment preset="city" />
+            </Suspense>
+          </Canvas>
+        </div>
+
+        {/* SIDEBAR */}
+        <div className="h-full overflow-hidden rounded-lg bg-primary text-secondary border border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+
+          <div className="h-full overflow-y-auto px-5 md:px-6 py-6">
+
+            {/* HEADER */}
+            <div className="mb-8">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-bold">
+                Custom Build Studio
+              </p>
+<button
+  onClick={() => setIsOpen(false)}
+  className="
+    absolute top-7 right-7 z-50
+    w-11 h-11
+    flex items-center justify-center
+    rounded-full
+    bg-white/80
+    backdrop-blur-xl
+    border border-white/40
+    shadow-lg
+    text-primary
+    hover:bg-red-500
+    hover:text-white
+    transition-all duration-300
+    pointer-events-auto
+  "
+>
+  <X size={18} />
+</button>
+              <h1 className="text-3xl font-black italic mt-2 leading-none">
+                Configure
+                <br />
+                Your Van
+              </h1>
+            </div>
+
+            {/* VIEW MODE */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                  View Mode
+                </p>
+
+                <div className="h-[1px] flex-1 bg-slate-700 ml-4"></div>
               </div>
 
-              {/* LEFT / RIGHT (X) */}
-              <div className="space-y-1">
-                <label className="text-[10px] flex justify-between text-slate-300">
-                  Left / Right (X): <span>{interiorConfig.x}m</span>
-                </label>
-                <input
-                  type="range" min="-1.5" max="1.5" step="0.1"
-                  value={interiorConfig.x}
-                  onChange={(e) => updateConfig('x', e.target.value)}
-                  className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-secondary"
-                />
-              </div>
-
-              {/* TILT VIEW (LOOK UP/DOWN) */}
-              <div className="space-y-1">
-                <label className="text-[10px] flex justify-between text-slate-300">
-                  Tilt View: <span>{interiorConfig.targetY}m</span>
-                </label>
-                <input
-                  type="range" min="1.8" max="3.3" step="0.1"
-                  value={interiorConfig.targetY}
-                  onChange={(e) => updateConfig('targetY', e.target.value)}
-                  className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-secondary"
+              <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+                <ControlBtn
+                  label={
+                    interiorMode ? "Exit Interior View" : "Enter Interior View"
+                  }
+                  active={interiorMode}
+                  onClick={() => setInteriorMode(!interiorMode)}
                 />
               </div>
             </div>
-          )}
 
-          {/* Door Controls */}
-          <div className="space-y-3">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700 pb-2">Component Controls</p>
-            {getGroupedButtons().map((button) => (
-              <ControlBtn key={button.key} label={button.label} active={button.active} onClick={button.onClick} />
-            ))}
+            {/* INTERIOR CONTROLS */}
+            {interiorMode && (
+              <div className="mb-8 bg-slate-900/40 border border-slate-700 rounded-lg p-5 backdrop-blur-xl">
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">
+                    Interior Navigation
+                  </p>
+
+                  <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                </div>
+
+                <div className="space-y-5">
+
+                  {/* Z */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2 text-slate-300">
+                      <span>Forward / Back</span>
+                      <span>{interiorConfig.z}m</span>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="1.5"
+                      max="9"
+                      step="0.1"
+                      value={interiorConfig.z}
+                      onChange={(e) => updateConfig("z", e.target.value)}
+                      className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-secondary bg-slate-700"
+                    />
+                  </div>
+
+                  {/* X */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2 text-slate-300">
+                      <span>Left / Right</span>
+                      <span>{interiorConfig.x}m</span>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="-1.5"
+                      max="1.5"
+                      step="0.1"
+                      value={interiorConfig.x}
+                      onChange={(e) => updateConfig("x", e.target.value)}
+                      className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-secondary bg-slate-700"
+                    />
+                  </div>
+
+                  {/* TARGET */}
+                  <div>
+                    <div className="flex justify-between text-xs mb-2 text-slate-300">
+                      <span>Tilt View</span>
+                      <span>{interiorConfig.targetY}m</span>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="3"
+                      max="5.8"
+                      step="0.1"
+                      value={interiorConfig.targetY}
+                      onChange={(e) =>
+                        updateConfig("targetY", e.target.value)
+                      }
+                      className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-secondary bg-slate-700"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* VARIANTS */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
+                  Van Variants
+                </p>
+
+                <div className="h-[1px] flex-1 bg-slate-700 ml-4"></div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {variants.map((v) => (
+                  <PrimaryButton
+                    key={v._id}
+                    onClick={() => handleVariantClick(v)}
+                    label={v.name}
+                    className={`
+                      !rounded-lg
+                      !py-3
+                      !text-sm
+                      border
+                      transition-all
+                      duration-300
+                      ${
+                        activeVariant?._id === v._id
+                          ? "bg-secondary text-primary border-secondary shadow-xl scale-[1.02]"
+                          : "bg-slate-900/40 text-secondary border-slate-700 hover:border-secondary/50 hover:bg-slate-800"
+                      }
+                    `}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-
