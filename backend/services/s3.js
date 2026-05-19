@@ -41,12 +41,6 @@ async function compressGLBWithGltfpack(originalBuffer, originalName) {
   fs.writeFileSync(inputPath, originalBuffer);
 
   return new Promise((resolve) => {
-    // Full compression for non-Draco models
-    // -cc: Draco mesh compression
-    // -tc: Texture compression (KTX2/Basis)
-    // -tp: Texture power-of-2 resize
-    // -tq 7: Texture quality (1-10)
-    // -si 0.7: Simplification (keep 70% vertices)
     const cmd = `"${gltfpackBinary}" -i "${inputPath}" -o "${outputPath}" -cc -tc -tp -tq 7 -si 0.7`;
 
     console.log(`🔧 Compressing non-Draco model: ${originalName}`);

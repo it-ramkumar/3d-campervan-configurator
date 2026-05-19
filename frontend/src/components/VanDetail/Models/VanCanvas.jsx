@@ -89,7 +89,6 @@ export default function VanCanvas({ url, variants, setIsOpen,isOpen }) {
         {/* 3D VIEWER */}
         <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-white shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
 
-          {/* Top Overlay */}
           <div className="absolute top-0 left-0 z-20 w-full p-5 hidden md:block flex items-start justify-between pointer-events-none">
             <div className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-lg px-5 py-4 shadow-lg">
               <p className="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-bold">
