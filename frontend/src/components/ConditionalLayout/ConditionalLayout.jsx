@@ -6,6 +6,7 @@ import Footer from "@/components/Footer/Footer";
 import Consultation from "@/components/Consultation/Consultation";
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
 import Loader from "@/components/Loader/Loader";
+import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -49,12 +50,14 @@ const exactHideLayoutPaths = ["/van", "/configurator", "/dashboard"];
 
   return (
     <>
+    <SmoothScroll>
       {loading && <Loader />}
       {!hideLayout && <Navbar />}
       <SideShareBar />
       <main className="flex-1">{children}</main>
       {!hideLayout && !hideConsultation && <Consultation />}
       {!hideLayout && <Footer />}
+    </SmoothScroll>
     </>
   );
 }
