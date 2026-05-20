@@ -1,6 +1,7 @@
 import "./globals.css";
 import Providers from "@/components/Providers/Providers";
 import ConditionalLayout from "@/components/ConditionalLayout/ConditionalLayout";
+import AnalyticsInit from "@/components/AnalyticsInit/AnalyticsInit";
 import Script from "next/script";
 
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <ConditionalLayout>{children}</ConditionalLayout>
         </Providers>
+        <AnalyticsInit />
 
         {/* ✅ Script tags body ke baad, <head> se bahar */}
         <Script

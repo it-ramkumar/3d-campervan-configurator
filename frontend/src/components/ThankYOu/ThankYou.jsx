@@ -9,13 +9,11 @@ const ThankYou = () => {
   const email = searchParams.get("email") || "user@van-life.com";
   const source = searchParams.get("source") || "unknown";
   useEffect(() => {
-    console.log("META SOURCE:", source);
-    if (window.__META_LEAD_FIRED__) return;
-    window.__META_LEAD_FIRED__ = true;
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "Lead", {
-        source: source,
-      });
+    if (window.__LEAD_CONVERSION_FIRED__) return;
+    window.__LEAD_CONVERSION_FIRED__ = true;
+    if (typeof window !== "undefined") {
+      if (window.fbq) window.fbq("track", "Lead", { source });
+      if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-16677332528" });
     }
   }, [source]);
 

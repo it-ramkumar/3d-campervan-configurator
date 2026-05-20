@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import axios from "axios";
 // SweetAlert dynamic import
 const Swal = async () => (await import('sweetalert2')).default;
 import Link from "next/link";
@@ -21,7 +22,9 @@ export default function Footer() {
 
   const handleSubscribe = async () => {
     const MySwal = await Swal();
-    if (!email.trim()) {
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
       MySwal.fire({
         icon: "warning",
         title: "Email Required",
@@ -31,14 +34,33 @@ export default function Footer() {
       return;
     }
 
-    MySwal.fire({
-      icon: "success",
-      title: "Subscribed!",
-      text: "You'll receive notifications and updates soon 🎉",
-      confirmButtonColor: "var(--color-primary)",
-    });
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_URL}/emails`, { email: trimmedEmail });
 
-    setEmail("");
+      MySwal.fire({
+        icon: "success",
+        title: "Subscribed!",
+        text: "You'll receive notifications and updates soon 🎉",
+        confirmButtonColor: "var(--color-primary)",
+      });
+
+      setEmail("");
+
+      if (typeof window !== "undefined") {
+        if (window.fbq) window.fbq("track", "Subscribe");
+        if (window.gtag) window.gtag("event", "sign_up", { method: "newsletter" });
+      }
+    } catch (error) {
+      const isDuplicate = error?.response?.status === 400;
+      MySwal.fire({
+        icon: isDuplicate ? "info" : "error",
+        title: isDuplicate ? "Already Subscribed" : "Error",
+        text: isDuplicate
+          ? "This email is already on our list!"
+          : "Something went wrong. Please try again.",
+        confirmButtonColor: "var(--color-primary)",
+      });
+    }
   };
 
   return (

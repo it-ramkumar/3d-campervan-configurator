@@ -193,7 +193,10 @@ export default function InquiryForm() {
     try {
       const result = await submitInquiry(formData);
       if (result.success) {
-        // setMessage({ type: "success", text: "Your van inquiry has been received! Our team will contact you soon." });
+        if (typeof window !== "undefined") {
+          if (window.fbq) window.fbq("track", "Lead");
+          if (window.gtag) window.gtag("event", "generate_lead", { currency: "USD" });
+        }
         setFormData({});
         setCurrentStep(0);
         navigate.push(
