@@ -196,9 +196,9 @@ export default function InquiryForm() {
         // setMessage({ type: "success", text: "Your van inquiry has been received! Our team will contact you soon." });
         setFormData({});
         setCurrentStep(0);
-        navigate.push("/thank-you", {
-          state: { email: formData.email, source: "inquiry" },
-        });
+        navigate.push(
+          `/thank-you?email=${encodeURIComponent(formData.email)}&source=inquiry`,
+        );
       } else {
         console.log(result.error);
         console.log(result);

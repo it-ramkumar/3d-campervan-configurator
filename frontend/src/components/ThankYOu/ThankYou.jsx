@@ -1,13 +1,15 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
 import { useEffect } from "react";
 const ThankYou = () => {
-  const location = usePathname();
-  const email = location.state?.email || "user@van-life.com";
+  // const location = usePathname();
+  // const email = location.state?.email || "user@van-life.com";
   const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "user@van-life.com";
   const source = searchParams.get("source") || "unknown";
   useEffect(() => {
+    console.log("META SOURCE:", source);
     if (window.__META_LEAD_FIRED__) return;
     window.__META_LEAD_FIRED__ = true;
     if (typeof window !== "undefined" && window.fbq) {
@@ -15,7 +17,7 @@ const ThankYou = () => {
         source: source,
       });
     }
-  }, []);
+  }, [source]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
