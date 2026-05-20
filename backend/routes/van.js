@@ -106,13 +106,33 @@ router.post('/', protect, adminOnly, upload.fields([
 
 router.get('/available', async (req, res) => {
   try {
-    const vans = await Van.find({ status: 'available' })
-      .sort({ order: 1 });
+
+    const vans = await Van.find(
+      { status: 'available' },
+      {
+        _id: 1,
+        slug: 1,
+        'van_listing.title': 1,
+        'van_listing.subtitle': 1,
+        'van_listing.price': 1,
+        gallery: { $slice: 1 }, // sirf first image
+      }
+    ).sort({ order: 1 });
+
+    const formatted = vans.map(v => ({
+      id: v._id,
+      slug: v.slug,
+      title: v.van_listing?.title,
+      subtitle: v.van_listing?.subtitle,
+      price: v.van_listing?.price,
+      image: v.gallery?.[0] || null
+    }));
 
     res.status(200).json({
-      count: vans.length,
-      vans
+      count: formatted.length,
+      vans: formatted
     });
+
   } catch (err) {
     res.status(500).json({
       message: 'Server error',
@@ -120,7 +140,6 @@ router.get('/available', async (req, res) => {
     });
   }
 });
-
 router.get('/van-by-status', async (req, res) => {
   try {
     const {

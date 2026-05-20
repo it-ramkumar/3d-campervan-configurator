@@ -4,10 +4,9 @@ import Family from "@/components/Layouts/All_Layout/All_Layout";
 import All_Titles_Client from "@/components/Layouts/All_Titles/All_Titles";
 import { vanLayoutsData } from "@/DataUseInComp/LayouData";
 export async function generateMetadata() {
-  const totalLayouts = vanLayoutsData.length;
 
-  const title = `Browse ${totalLayouts}+ Camper Van Layout Categories | Big Bear Vans`;
-  const description = `Explore ${totalLayouts}+ camper van layout categories including family vans, luxury builds, and custom conversions. Find the perfect layout for your next adventure.`;
+  const title = `Browse 40+ Camper Van Layout Categories | Big Bear Vans`;
+  const description = `Explore 40+ camper van layout categories including family vans, luxury builds, and custom conversions. Find the perfect layout for your next adventure.`;
 
   return {
     title,
@@ -15,12 +14,30 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      images: ["/images2/layout2.webp"],
+      url: "https://www.bigbearvans.com/layout-by-category",
+      type: "website",
+      images: [
+        {
+          url: "https://www.bigbearvans.com/images2/layout2.webp",
+          width: 1200,
+          height: 630,
+          alt: "Camper Van Layout Categories | Big Bear Vans",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["https://www.bigbearvans.com/images2/layout2.webp"],
+    },
+    alternates: {
+      canonical: "https://www.bigbearvans.com/layout-by-category",
     },
   };
 }
 export default function page() {
-  const heroImage = "/images2/layout2.webp";
+  const heroImage = "https://www.bigbearvans.com/images2/layout2.webp";
   const newTitleText = "Explore Layouts of Our Custom Vans";
   const newDescriptionText = "Explore our camper van layout options for 2-7 person setups. From a luxury sprinter van layout (144 & 170) to a professional food van layout, find your perfect floor plan today.";
   const LayoutText = {
@@ -40,7 +57,7 @@ export default function page() {
       "@type": "CollectionPage",
       "name": item.title,
       "url": `https://www.bigbearvans.com${item.link}`,
-      "image": item.images?.[0]?.url || "/images2/layout2.webp",
+      "image": item.images?.[0]?.url || "https://www.bigbearvans.com/images2/layout2.webp",
       "description": item.title
     }
   }))

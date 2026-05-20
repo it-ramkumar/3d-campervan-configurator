@@ -10,7 +10,7 @@ import Image from 'next/image';
 // initialVans prop receive karein
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
-
+// console.log(initialVans)
   // loading aur useEffect ki ab zaroorat nahi kyunki data server se aa raha hai
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
@@ -23,9 +23,6 @@ export default function Buy({ initialVans = [] }) {
           </RichParagraph>
           <Heading2 text="Build or Buy Your Dream Van" />
         </div>
-
-        {/* --- Info Cards --- */}
-        {/* ... (Same as before) */}
 
         {/* --- Slider Section --- */}
         <div className="relative">
@@ -74,10 +71,10 @@ export default function Buy({ initialVans = [] }) {
 
                   {/* Image */}
                   <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
-                    {van?.gallery?.[0] ? (
+                    {van?.image ? (
                       <Image
-                        src={van.gallery[0]}
-                        alt={van?.van_listing?.title || "Van"}
+                        src={van.image}
+                        alt={van?.title || "Van"}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         width={800}
                         height={600}
@@ -92,11 +89,11 @@ export default function Buy({ initialVans = [] }) {
                   {/* Content */}
                   <div className="p-5 flex flex-col flex-grow">
                     <Heading3
-                      text={van?.van_listing?.title || "New Build"}
+                      text={van ?.title || "New Build"}
                       className="truncate block"
                     />
                     <RichParagraph className="mt-2 mb-6 line-clamp-2 h-12">
-                      {van?.van_listing?.description || "High-end craftsmanship meeting rugged durability."}
+                      {van?.subtitle || "High-end craftsmanship meeting rugged durability."}
                     </RichParagraph>
 
                     <div className="mt-auto flex gap-3">

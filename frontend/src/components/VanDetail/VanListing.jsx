@@ -23,11 +23,12 @@ const HeroSpecItem = ({ label, value }) => (
   </div>
 );
 
-const VanPage = ({ vanDetail }) => {
+const VanPage = ({ vanDetail, variants }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
+
+
   const specs = vanDetail?.van_listing?.specifications;
-  // console.log(vanDetail, "data")
   const getFeatureIcon = (category) => {
     const icons = {
       "Insulation and Paneling": <ShieldCheck className="w-7 h-7" />,
@@ -109,12 +110,17 @@ const VanPage = ({ vanDetail }) => {
                   </p>
                 )}              </div>
             )}
+
             {
               vanDetail?.glbFile && (
 
                 <div className="relative z-[99999999]">
-                  <VanCanvas url={vanDetail.glbFile} />
-                </div>)
+                  <VanCanvas
+                    url={vanDetail?.glbFile}
+                    variants={variants}
+                  />
+                  </div>
+                  )
             }
             <div className="grid grid-cols-2 gap-4">
               <HeroSpecItem label="Chassis" value={specs?.make_model} />

@@ -10,14 +10,14 @@ export default async function Blog() {
   try {
     // Naye route ka istemal
     const result = await blogCard();
-  
+
     blogs = result?.data || [];
   } catch (error) {
     console.error("Failed to fetch blog details on server:", error);
   }
 
   if (blogs.length === 0) return null;
-
+console.log(blogs, "blog page pe details")
   return (
     <section className="w-full py-20 bg-secondary overflow-hidden antialiased">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -44,7 +44,7 @@ export default async function Blog() {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <ImageWithSkeleton
                   // Naye route mein gallery field aa rahi hai
-                  src={post?.gallery?.[0]}
+                  src={post?.gallery[0] || "/images/blackLogo.jpg"} // Agar gallery nahi hai toh default image
                   alt={post?.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

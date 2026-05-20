@@ -14,7 +14,6 @@ const van = require('./routes/van')
 const layouts = require('./routes/layouts')
 const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
-// const Export = require("./routes/exportModel");
 const userRoute = require("./routes/authRoute");
 const blog = require("./routes/blog")
 const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
@@ -34,6 +33,8 @@ const SystemRoute = require("./routes/systemR");
 const SystemCategory =require("./routes/systemCat");
 const SystemSubCategory = require("./routes/systemSubCat")
 const BaseVanRoute = require("./routes/baseVan");
+const VanPart3dModel = require("./routes/vanPart3dModel");
+const VariantRoute = require("./routes/vanVariant");
 
 
 const app = express();
@@ -84,8 +85,8 @@ app.use("/api/applications", Application);
 app.use("/api/quick-links", QuickLinks);
 app.use("/sitemap.xml", Sitemap);
 app.use("/api", BaseVanRoute);
-
-
+app.use("/api", VanPart3dModel);
+app.use("/api", VariantRoute);
 
 
 

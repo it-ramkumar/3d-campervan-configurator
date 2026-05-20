@@ -91,7 +91,6 @@ const vanSchema = new mongoose.Schema(
       type: [String],
       default: []
     }, // Multiple texture images URLs
-
     // --- Dynamic Blocks ka Addition ---
     blocks: [contentBlockSchema],
 

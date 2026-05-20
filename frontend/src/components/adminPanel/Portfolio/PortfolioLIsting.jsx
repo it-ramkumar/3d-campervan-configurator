@@ -22,24 +22,30 @@ export default function PortfolioListing({ setSelected }) {
     fetchData(page, search);
   }, [page]);
 
-  const fetchData = async (pageNum = 1, searchQuery = "") => {
-    setLoading(true);
-    try {
-      const res = await getAllPortfolio(pageNum, 9, searchQuery);
-      if (res.success && Array.isArray(res.data?.data)) {
-        setPortfolios(res.data.data);
-        setPages(res.data.pages);
-      } else {
-        setPortfolios([]);
-        setPages(1);
-      }
-    } catch (err) {
-      console.error("Error fetching portfolios:", err);
+const fetchData = async (pageNum = 1, searchQuery = "") => {
+  setLoading(true);
+  try {
+    // ✅ Sahi Tariqa: Poora data ek hi object ke andar wrap kar ke bhejein
+    const res = await getAllPortfolio({
+      page: pageNum,
+      limit: 9,
+      search: searchQuery // Agar aapka backend search query accept karta hai
+    });
+
+    if (res.success && Array.isArray(res.data?.data)) {
+      setPortfolios(res.data.data);
+      setPages(res.data.pages);
+    } else {
       setPortfolios([]);
-    } finally {
-      setLoading(false);
+      setPages(1);
     }
-  };
+  } catch (err) {
+    console.error("Error fetching portfolios:", err);
+    setPortfolios([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSearch = () => {
     setPage(1);

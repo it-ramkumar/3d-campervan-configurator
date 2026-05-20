@@ -1,48 +1,24 @@
-import React,{useState,useEffect,useRef} from 'react'
-import {useGLTF, useAnimations } from '@react-three/drei'
-import * as THREE from 'three'
+import React, { useState, useEffect, useRef } from 'react'
+import { useGLTF } from '@react-three/drei'
 
 
 
-export default function Model({ url, setAvailableAnimations, activeAnims }) {
+export default function Model({ url }) {
   const group = useRef()
-  const { scene, animations } = useGLTF(url)
-  const { actions } = useAnimations(animations, group)
+  const { scene } = useGLTF(url)
   const [ready, setReady] = useState(false)
 
-  useEffect(() => {
-    if (actions && Object.keys(actions).length > 0) {
-      setAvailableAnimations(Object.keys(actions));
-      Object.values(actions).forEach(action => {
-        action.stop().reset();
-        action.clampWhenFinished = true;
-        action.setLoop(THREE.LoopOnce, 1);
-      });
-    }
-  }, [actions, setAvailableAnimations]);
+useEffect(() => {
+  if (scene) {
+    // Model ki position ko chhere bina, bas thoda sa delay de kar ready state true kar dein
+    const timer = setTimeout(() => setReady(true), 150);
 
-  useEffect(() => {
-    Object.keys(activeAnims).forEach((name) => {
-      const action = actions[name];
-      if (!action) return;
-      action.paused = false;
-      action.timeScale = activeAnims[name] ? 1 : -1;
-      action.play();
-    });
-  }, [activeAnims, actions]);
-
-  useEffect(() => {
-    if (scene) {
-      const box = new THREE.Box3().setFromObject(scene);
-      const center = box.getCenter(new THREE.Vector3());
-      scene.position.x += (scene.position.x - center.x);
-      scene.position.z += (scene.position.z - center.z);
-      setTimeout(() => setReady(true), 150);
-    }
-  }, [scene]);
+    return () => clearTimeout(timer); // Cleanup function taake memory leak na ho
+  }
+}, [scene]);
 
   return (
-    <group ref={group} visible={ready} position={[0, -3, 0]}>
+    <group ref={group} visible={ready} position={[0, -2, 0]}>
       <primitive object={scene} scale={0.004} />
     </group>
   )

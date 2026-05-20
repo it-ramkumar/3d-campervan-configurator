@@ -6,18 +6,34 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
 
   try {
-
-
     const title = `Custom Camper Vans for Sale | Mercedes Sprinter & Ford Transit | Big Bear Vans`;
-
     const description = `Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.`;
+
     return {
       title,
       description,
       openGraph: {
         title,
         description,
-        images: ["/images2/vfs.webp"],
+        url: "https://www.bigbearvans.com/camper-vans-for-sale",
+        type: "website",
+        images: [
+          {
+            url: "https://www.bigbearvans.com/images2/vfs.webp",
+            width: 1200,
+            height: 630,
+            alt: "Custom Camper Vans for Sale | Big Bear Vans",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ["https://www.bigbearvans.com/images2/vfs.webp"],
+      },
+      alternates: {
+        canonical: "https://www.bigbearvans.com/camper-vans-for-sale",
       },
     };
   } catch (error) {
@@ -40,63 +56,63 @@ export default async function VansForSale() {
     vansByStatus("coming_soon", 1, limit),
   ]);
 
-// Saari active categories ko combine karke ek list banayenge
+  // Saari active categories ko combine karke ek list banayenge
   const allActiveVans = [
     ...(availableData?.data || []),
     ...(pendingData?.data || []),
     ...(comingData?.data || [])
   ];
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Custom Camper Vans for Sale | Big Bear Vans",
-  "description": "`Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.",
-  "numberOfItems": allActiveVans.length,
-  "itemListElement": allActiveVans.map((van, index) => {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Custom Camper Vans for Sale | Big Bear Vans",
+    "description": "Shop ready-to-buy custom camper vans built on Mercedes Sprinter & Ford Transit. Layouts for 2-7 people, AWD options available. 100+ sold.",
+    "numberOfItems": allActiveVans.length,
+    "itemListElement": allActiveVans.map((van, index) => {
 
-    const price = van.van_listing.price;
-    const hasPrice = price && price >= 10;
+      const price = van.van_listing.price;
+      const hasPrice = price && price >= 10;
 
-    const rawImage = van.gallery?.[0] || "";
-    const imageUrl = rawImage
-      ? rawImage.startsWith("http")
-        ? encodeURI(rawImage)
-        : encodeURI(`https://www.bigbearvans.com${rawImage}`)
-      : "https://www.bigbearvans.com/images2/vfs.webp";
+      const rawImage = van.gallery?.[0] || "";
+      const imageUrl = rawImage
+        ? rawImage.startsWith("http")
+          ? encodeURI(rawImage)
+          : encodeURI(`https://www.bigbearvans.com${rawImage}`)
+        : "https://www.bigbearvans.com/images2/vfs.webp";
 
-    const description = van.van_listing.subtitle
-      || van.van_listing.title
-      || "Custom camper van by Big Bear Vans.";
+      const description = van.van_listing.subtitle
+        || van.van_listing.title
+        || "Custom camper van by Big Bear Vans.";
 
-    return {
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "Product",
-        "name": van.van_listing.title,
-        "url": `https://www.bigbearvans.com/van/${van.slug}`,
-        "image": imageUrl,
-        "description": description,
-        "brand": {
-          "@type": "Brand",
-          "name": "Big Bear Vans"
-        },
-        // ⭐ Stars Google search mein dikhenge
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "111"
-        },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "USD",
-          // ✅ Price fix — Google ko number chahiye
-          ...(hasPrice
-            ? {
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "Product",
+          "name": van.van_listing.title,
+          "url": `https://www.bigbearvans.com/van/${van.slug}`,
+          "image": imageUrl,
+          "description": description,
+          "brand": {
+            "@type": "Brand",
+            "name": "Big Bear Vans"
+          },
+          // ⭐ Stars Google search mein dikhenge
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "reviewCount": "111"
+          },
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            // ✅ Price fix — Google ko number chahiye
+            ...(hasPrice
+              ? {
                 "price": price,
                 "priceValidUntil": "2026-12-31"
               }
-            : {
+              : {
                 "price": "0",
                 "priceSpecification": {
                   "@type": "PriceSpecification",
@@ -105,22 +121,22 @@ const jsonLd = {
                   "description": "Contact for pricing"
                 }
               }
-          ),
-          "availability": van.status === "available"
-            ? "https://schema.org/InStock"
-            : van.status === "sale_pending"
-            ? "https://schema.org/SoldOut"
-            : "https://schema.org/PreOrder",
-          "url": `https://www.bigbearvans.com/van/${van.slug}`,
-          "seller": {
-            "@type": "Organization",
-            "name": "Big Bear Vans"
+            ),
+            "availability": van.status === "available"
+              ? "https://schema.org/InStock"
+              : van.status === "sale_pending"
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/PreOrder",
+            "url": `https://www.bigbearvans.com/van/${van.slug}`,
+            "seller": {
+              "@type": "Organization",
+              "name": "Big Bear Vans"
+            }
           }
         }
-      }
-    };
-  })
-};
+      };
+    })
+  };
   return (
     <main>
       {/* --- SEO Script --- */}
