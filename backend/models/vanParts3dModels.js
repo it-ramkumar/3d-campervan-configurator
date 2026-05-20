@@ -7,7 +7,7 @@ const vanPart3dModelSchema = new mongoose.Schema({
 
   category: {
     type: String,
-    enum: ["kitchen", "bed", "table", "bathroom", "storage"],
+    enum: ["kitchen", "bed", "table", "bathroom", "storage","flooring","seating","electrical","other"],
     required: true
   },
 

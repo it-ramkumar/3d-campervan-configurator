@@ -40,7 +40,7 @@ const SideShareBar = ({ url }) => {
       {/* Toggle Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed left-0 top-[40%] transform -translate-y-1/2 z-50 p-2 rounded-r-lg shadow-lg transition-all"
+        className="fixed left-0 top-[90%] transform -translate-y-1/2 z-50 p-2 rounded-r-lg shadow-lg transition-all"
         style={{
           backgroundColor: '#001F3D',
           color: '#F5F5F0'

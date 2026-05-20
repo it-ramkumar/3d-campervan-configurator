@@ -154,6 +154,11 @@ export default function VanParts() {
         <option value="bed">Bed</option>
         <option value="table">Table</option>
         <option value="bathroom">Bathroom</option>
+        <option value="flooring">Flooring</option>
+        <option value="storage">Storage</option>
+        <option value="seating">Seating</option>
+        <option value="electrical">Electrical</option>
+        <option value="other">Other</option>
       </select>
 
       {/* Existing Preview */}
