@@ -6,7 +6,7 @@ export default function ControlBtn({ label, active, onClick }) {
     <PrimaryButton
       label={`${label} ${active ? '(Close)' : '(Open)'}`}
       onClick={onClick}
-      className={`w-full text-xs md:text-sm ${active ? 'bg-[#ED3500] border-transparent' : 'bg-transparent border-slate-700 hover:border-slate-500'}`}
+      className={`w-full ${active ? '!bg-[#ED3500] !border-transparent' : '!bg-transparent !border-slate-700 hover:!border-slate-500'}`}
     />
   )
 }
