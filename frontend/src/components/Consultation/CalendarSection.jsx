@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Link from "next/link";
-import PrimaryButton from "../Common/Button/PrimaryButton"
-import { Heading4, Heading3, RichParagraph } from '../Common/Common'
+import PrimaryButton from "../Common/Button/PrimaryButton";
+import { Heading4, Heading3, RichParagraph } from "../Common/Common";
 import Image from "next/image";
 
 export default function BookingPage() {
@@ -19,11 +19,18 @@ export default function BookingPage() {
     const now = new Date();
     now.setDate(now.getDate() + 1); // Add 1 day
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: userTimeZone };
-    const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(now);
-    const year = dateParts.find(p => p.type === 'year').value;
-    const month = dateParts.find(p => p.type === 'month').value;
-    const day = dateParts.find(p => p.type === 'day').value;
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: userTimeZone,
+    };
+    const dateParts = new Intl.DateTimeFormat("en-US", options).formatToParts(
+      now,
+    );
+    const year = dateParts.find((p) => p.type === "year").value;
+    const month = dateParts.find((p) => p.type === "month").value;
+    const day = dateParts.find((p) => p.type === "day").value;
     return `${year}-${month}-${day}`;
   };
 
@@ -45,11 +52,13 @@ export default function BookingPage() {
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/auth/url`)
       .then((res) => res.json())
-      .then((data) => setAuthUrl(data.url)).catch((err) => console.error("Error fetching Auth URL:", err));
+      .then((data) => setAuthUrl(data.url))
+      .catch((err) => console.error("Error fetching Auth URL:", err));
 
     fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/status`)
       .then((res) => res.json())
-      .then((data) => setIsLoggedIn(data.loggedIn)).catch((err) => console.error("Error fetching Status:", err));
+      .then((data) => setIsLoggedIn(data.loggedIn))
+      .catch((err) => console.error("Error fetching Status:", err));
   }, []);
 
   const handleLogin = () => {
@@ -67,7 +76,7 @@ export default function BookingPage() {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      timeZone: userTimeZone
+      timeZone: userTimeZone,
     });
   };
 
@@ -75,7 +84,9 @@ export default function BookingPage() {
     if (isLoggedIn && selectedDate) {
       const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`)
+      fetch(
+        `${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`,
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -99,7 +110,6 @@ export default function BookingPage() {
 
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-
     const bookingData = {
       ...formData,
       startTime: selectedSlot.start,
@@ -109,14 +119,16 @@ export default function BookingPage() {
       description: formData.description || "",
     };
 
-
     setSubmitting(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/create-event`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/calendar/create-event`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bookingData),
+        },
+      );
 
       const data = await res.json();
 
@@ -129,9 +141,20 @@ export default function BookingPage() {
 
       setMeetLink(data.meetLink);
       setBookingStep(5);
-      setSlots(slots.map(s => s.start === selectedSlot.start ? { ...s, available: false } : s));
+      if (typeof window !== "undefined" && window.fbq) {
+        console.log("META LEAD FIRED");
+        window.fbq("track", "Lead", {
+          source: "calendar-booking consultation",
+          name: formData.name,
+          email: formData.email,
+        });
+      }
+      setSlots(
+        slots.map((s) =>
+          s.start === selectedSlot.start ? { ...s, available: false } : s,
+        ),
+      );
       setSubmitting(false);
-
     } catch (err) {
       console.error("❌ Network error:", err);
       alert("Network error - check console");
@@ -140,9 +163,10 @@ export default function BookingPage() {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(meetLink)
+    navigator.clipboard
+      .writeText(meetLink)
       .then(() => alert("Meeting link copied to clipboard!"))
-      .catch(err => console.error("Failed to copy: ", err));
+      .catch((err) => console.error("Failed to copy: ", err));
   };
 
   const resetBooking = () => {
@@ -179,12 +203,16 @@ export default function BookingPage() {
 
     for (let day = 1; day <= daysInMonth; day++) {
       const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-      const dateString = date.toLocaleDateString('en-CA', {
+      const date = new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth(),
+        day,
+      );
+      const dateString = date.toLocaleDateString("en-CA", {
         timeZone: userTimeZone,
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       });
 
       const isToday = dateString === todayString;
@@ -198,7 +226,7 @@ export default function BookingPage() {
         isToday,
         isSelected,
         isPast,
-        isSunday
+        isSunday,
       });
     }
 
@@ -206,7 +234,13 @@ export default function BookingPage() {
   };
 
   const navigateMonth = (direction) => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
+    setCurrentMonth(
+      new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() + direction,
+        1,
+      ),
+    );
   };
 
   const handleDateSelect = (date) => {
@@ -217,52 +251,63 @@ export default function BookingPage() {
   };
 
   const formatDate = (dateString) => {
-    const [year, month, day] = dateString.split('-');
+    const [year, month, day] = dateString.split("-");
     const date = new Date(year, month - 1, day);
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      timeZone: userTimeZone
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: userTimeZone,
     });
   };
 
   const calendar = generateCalendar();
   const days = [
-    { id: 1, label: 'Sun' },
-    { id: 2, label: 'Mon' },
-    { id: 3, label: 'Tue' },
-    { id: 4, label: 'Wed' },
-    { id: 5, label: 'Thu' },
-    { id: 6, label: 'Fri' },
-    { id: 7, label: 'Sat' }
+    { id: 1, label: "Sun" },
+    { id: 2, label: "Mon" },
+    { id: 3, label: "Tue" },
+    { id: 4, label: "Wed" },
+    { id: 5, label: "Thu" },
+    { id: 6, label: "Fri" },
+    { id: 7, label: "Sat" },
   ];
 
   return (
     <div className="flex bg-[#F5F5F0] min-h-screen justify-center items-center p-4">
       {/* Main Container */}
       <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-2xl overflow-hidden min-h-[700px] border border-[#001F3D]/5">
-
         {/* Sidebar: Navy Theme */}
         <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-white p-10 flex-col justify-between relative">
           <div>
-
-
-            <Heading3 text="Consultation Call" textColor="text-white" className="mb-8" />
+            <Heading3
+              text="Consultation Call"
+              textColor="text-white"
+              className="mb-8"
+            />
 
             {/* Step Indicators */}
             <div className="space-y-6 relative">
               <div className="absolute left-[15px] top-2 bottom-2 w-px bg-white/10"></div>
               {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex items-center gap-4 relative z-10">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? 'bg-[#ED985F] text-[#001F3D]' : 'bg-white/10 text-white/30'}`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? "bg-[#ED985F] text-[#001F3D]" : "bg-white/10 text-white/30"}`}
+                  >
                     {s}
                   </div>
-                  <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? 'text-white' : 'text-white/30'}`}>
-                    {s === 1 ? 'Date' : s === 2 ? 'Time' : s === 3 ? 'Details' : 'Review'}
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? "text-white" : "text-white/30"}`}
+                  >
+                    {s === 1
+                      ? "Date"
+                      : s === 2
+                        ? "Time"
+                        : s === 3
+                          ? "Details"
+                          : "Review"}
                   </span>
                 </div>
               ))}
@@ -270,7 +315,9 @@ export default function BookingPage() {
           </div>
 
           <div className="bg-white/5 p-4 rounded-lg border border-white/10">
-            <p className="text-[10px] uppercase font-bold tracking-widest text-[#ED985F] mb-1">Support Line</p>
+            <p className="text-[10px] uppercase font-bold tracking-widest text-[#ED985F] mb-1">
+              Support Line
+            </p>
             <p className="text-sm font-medium">+1 (951) 441-9719</p>
           </div>
         </div>
@@ -281,24 +328,33 @@ export default function BookingPage() {
             <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
               <div className="text-center">
                 <Heading3 text="Welcome Back" />
-                <RichParagraph>Please sign in with Google to manage your bookings.</RichParagraph>
+                <RichParagraph>
+                  Please sign in with Google to manage your bookings.
+                </RichParagraph>
               </div>
               <button
                 onClick={handleLogin}
                 className="flex items-center gap-4 px-8 py-4 bg-[#F5F5F0] border border-[#001F3D]/10 rounded-lg font-bold hover:bg-[#ED985F] hover:text-white transition-all shadow-sm"
               >
-                <Image src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5" alt="google" width={20} height={20} />
+                <Image
+                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                  className="w-5"
+                  alt="google"
+                  width={20}
+                  height={20}
+                />
                 Continue with Google
               </button>
             </div>
           ) : (
             <div className="max-w-md mx-auto">
-
               {/* Step 1: Date Selection */}
               {bookingStep === 1 && (
                 <div className="animate-in slide-in-from-right-4 duration-500">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Schedule</span>
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                      Schedule
+                    </span>
                     <Heading4 text="Select a Date" />
                   </header>
 
@@ -311,7 +367,10 @@ export default function BookingPage() {
                         ←
                       </button>
                       <h3 className="font-bold text-sm uppercase tracking-widest text-[#001F3D]">
-                        {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                        {currentMonth.toLocaleString("default", {
+                          month: "long",
+                          year: "numeric",
+                        })}
                       </h3>
                       <button
                         onClick={() => navigateMonth(1)}
@@ -322,8 +381,11 @@ export default function BookingPage() {
                     </div>
 
                     <div className="grid grid-cols-7 gap-1 mb-2">
-                      {days.map(d => (
-                        <div key={d.id} className="text-center text-[10px] font-bold text-[#001F3D]/30 py-2">
+                      {days.map((d) => (
+                        <div
+                          key={d.id}
+                          className="text-center text-[10px] font-bold text-[#001F3D]/30 py-2"
+                        >
                           {d.label}
                         </div>
                       ))}
@@ -335,16 +397,17 @@ export default function BookingPage() {
                           key={i}
                           onClick={() => d && handleDateSelect(d)}
                           disabled={!d || d.isPast || d.isSunday}
-                          className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
-                              ? 'invisible'
+                          className={`h-10 rounded-lg text-xs font-bold transition-all ${
+                            !d
+                              ? "invisible"
                               : d.isSelected
-                                ? 'bg-[#001F3D] text-white shadow-lg'
+                                ? "bg-[#001F3D] text-white shadow-lg"
                                 : d.isPast || d.isSunday
-                                  ? 'text-gray-300 cursor-not-allowed bg-gray-50'
+                                  ? "text-gray-300 cursor-not-allowed bg-gray-50"
                                   : d.isToday
-                                    ? 'bg-[#ED985F]/20 text-[#ED985F] hover:bg-[#ED985F] hover:text-white'
-                                    : 'hover:bg-[#ED985F] hover:text-white text-[#001F3D] bg-white'
-                            }`}
+                                    ? "bg-[#ED985F]/20 text-[#ED985F] hover:bg-[#ED985F] hover:text-white"
+                                    : "hover:bg-[#ED985F] hover:text-white text-[#001F3D] bg-white"
+                          }`}
                         >
                           {d?.day}
                         </button>
@@ -358,19 +421,35 @@ export default function BookingPage() {
               {bookingStep === 2 && (
                 <div className="animate-in slide-in-from-right-4">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Time</span>
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                      Time
+                    </span>
                     <Heading4 text="Available Slots" />
-                    <p className="text-xs font-bold text-[#001F3D]/60 mt-2">{formatDate(selectedDate)}</p>
+                    <p className="text-xs font-bold text-[#001F3D]/60 mt-2">
+                      {formatDate(selectedDate)}
+                    </p>
                   </header>
 
                   {slots.length === 0 ? (
                     <div className="text-center py-12">
                       <div className="w-16 h-16 bg-[#F5F5F0] rounded-lg flex items-center justify-center mx-auto mb-4">
-                        <svg className="w-8 h-8 text-[#001F3D]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <svg
+                          className="w-8 h-8 text-[#001F3D]/30"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
                         </svg>
                       </div>
-                      <p className="text-sm text-[#001F3D]/60 mb-4">No slots available for this date</p>
+                      <p className="text-sm text-[#001F3D]/60 mb-4">
+                        No slots available for this date
+                      </p>
                       <button
                         onClick={() => setBookingStep(1)}
                         className="text-[#ED985F] font-bold text-xs uppercase tracking-widest hover:underline"
@@ -381,18 +460,24 @@ export default function BookingPage() {
                   ) : (
                     <>
                       <div className="grid grid-cols-2 gap-3 mb-8">
-                        {slots.filter(s => s.available !== false).map((s, i) => (
-                          <button
-                            key={i}
-                            onClick={() => { setSelectedSlot(s); setBookingStep(3) }}
-                            className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot?.start === s.start
-                                ? 'border-[#ED985F] bg-[#ED985F]/10 text-[#ED985F]'
-                                : 'border-[#001F3D]/10 hover:border-[#ED985F] hover:text-[#ED985F] bg-[#F5F5F0]/30 text-[#001F3D]'
+                        {slots
+                          .filter((s) => s.available !== false)
+                          .map((s, i) => (
+                            <button
+                              key={i}
+                              onClick={() => {
+                                setSelectedSlot(s);
+                                setBookingStep(3);
+                              }}
+                              className={`p-4 border rounded-lg font-bold text-xs transition-all ${
+                                selectedSlot?.start === s.start
+                                  ? "border-[#ED985F] bg-[#ED985F]/10 text-[#ED985F]"
+                                  : "border-[#001F3D]/10 hover:border-[#ED985F] hover:text-[#ED985F] bg-[#F5F5F0]/30 text-[#001F3D]"
                               }`}
-                          >
-                            {formatTimeSlot(s.start)}
-                          </button>
-                        ))}
+                            >
+                              {formatTimeSlot(s.start)}
+                            </button>
+                          ))}
                       </div>
                       <button
                         onClick={() => setBookingStep(1)}
@@ -409,7 +494,9 @@ export default function BookingPage() {
               {bookingStep === 3 && (
                 <div className="animate-in slide-in-from-right-4 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Details</span>
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                      Details
+                    </span>
                     <Heading4 text="Meeting Information" />
                   </header>
 
@@ -507,45 +594,73 @@ export default function BookingPage() {
               {bookingStep === 4 && (
                 <div className="animate-in zoom-in-95 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">Review</span>
+                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                      Review
+                    </span>
                     <Heading4 text="Confirm Details" />
                   </header>
 
                   <div className="bg-[#F5F5F0] rounded-lg p-6 border border-[#001F3D]/5 space-y-4">
                     <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Date</span>
-                      <span className="text-sm font-bold text-[#001F3D]">{formatDate(selectedDate)}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                        Date
+                      </span>
+                      <span className="text-sm font-bold text-[#001F3D]">
+                        {formatDate(selectedDate)}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Time</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                        Time
+                      </span>
                       <span className="text-sm font-bold text-[#001F3D]">
                         {selectedSlot && formatTimeSlot(selectedSlot.start)}
                       </span>
                     </div>
                     <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Name</span>
-                      <span className="text-sm font-bold text-[#001F3D]">{formData.name}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                        Name
+                      </span>
+                      <span className="text-sm font-bold text-[#001F3D]">
+                        {formData.name}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Email</span>
-                      <span className="text-sm font-bold text-[#001F3D]">{formData.email}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                        Email
+                      </span>
+                      <span className="text-sm font-bold text-[#001F3D]">
+                        {formData.email}
+                      </span>
                     </div>
                     {formData.phone && (
                       <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">Phone</span>
-                        <span className="text-sm font-bold text-[#001F3D]">{formData.phone}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                          Phone
+                        </span>
+                        <span className="text-sm font-bold text-[#001F3D]">
+                          {formData.phone}
+                        </span>
                       </div>
                     )}
                     {formData.summary && (
                       <div className="border-b border-[#001F3D]/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">Topic</span>
-                        <span className="text-sm text-[#001F3D]">{formData.summary}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">
+                          Topic
+                        </span>
+                        <span className="text-sm text-[#001F3D]">
+                          {formData.summary}
+                        </span>
                       </div>
                     )}
                     {formData.description && (
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">Notes</span>
-                        <span className="text-sm text-[#001F3D]">{formData.description}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">
+                          Notes
+                        </span>
+                        <span className="text-sm text-[#001F3D]">
+                          {formData.description}
+                        </span>
                       </div>
                     )}
                   </div>
@@ -572,13 +687,24 @@ export default function BookingPage() {
               {bookingStep === 5 && (
                 <div className="text-center py-12 animate-in fade-in zoom-in">
                   <div className="w-20 h-20 bg-[#ED985F]/10 text-[#ED985F] rounded-lg flex items-center justify-center mx-auto mb-6">
-                    <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-10 h-10"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   </div>
                   <Heading3 text="Booking Confirmed!" />
                   <p className="text-sm text-[#001F3D]/60 mb-8 max-w-sm mx-auto">
-                    Your consultation is confirmed. Check your email for calendar invite and meeting details.
+                    Your consultation is confirmed. Check your email for
+                    calendar invite and meeting details.
                   </p>
 
                   {meetLink && (
@@ -610,7 +736,6 @@ export default function BookingPage() {
                   </div>
                 </div>
               )}
-
             </div>
           )}
         </div>
