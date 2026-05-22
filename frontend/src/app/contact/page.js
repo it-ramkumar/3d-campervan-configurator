@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import { generateConsultationSchema } from "@/schema/consultationSchema";
 
 // ✅ 1, 2, 3. Metadata API (SEO aur Social Media Tags)
