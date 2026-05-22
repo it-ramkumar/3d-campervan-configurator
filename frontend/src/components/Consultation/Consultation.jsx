@@ -33,9 +33,13 @@ export default function Consultation() {
 
     setLoading(true);
     try {
+      console.log("FORM SUBMIT STARTED");
       const result = await contact(formData);
+      console.log("CONTACT RESULT:", result); // TEMPORARY TEST
       if (typeof window !== "undefined" && window.fbq) {
+        console.log("META PIXEL FIRED");
         window.fbq("track", "Lead", { source: "consultation" });
+        console.log("META PIXEL FIRED SUCCESS");
       }
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
