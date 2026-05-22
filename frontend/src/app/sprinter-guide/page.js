@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew"
 import VanConfig from "@/components/SprinterPresentation/VanConfig";
 import Table from "@/components/SprinterPresentation/Table";
 import ExteriorColourChoices from "@/components/SprinterPresentation/ExteriorColourChoices";

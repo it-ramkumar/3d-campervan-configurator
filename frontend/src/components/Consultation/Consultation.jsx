@@ -21,7 +21,7 @@ export default function Consultation() {
   };
 
   const handleSubmit = async (e) => {
-    alert("HANDLE SUBMIT RUNNING");
+    // alert("HANDLE SUBMIT RUNNING");
     e.preventDefault();
     if (
       !formData.name.trim() ||
@@ -35,11 +35,11 @@ export default function Consultation() {
     try {
       console.log("FORM SUBMIT STARTED");
       const result = await contact(formData);
-      console.log("CONTACT RESULT:", result); // TEMPORARY TEST
+      // console.log("CONTACT RESULT:", result); // TEMPORARY TEST
       if (typeof window !== "undefined" && window.fbq) {
         console.log("META PIXEL FIRED");
         window.fbq("track", "Lead", { source: "consultation" });
-        console.log("META PIXEL FIRED SUCCESS");
+        // console.log("META PIXEL FIRED SUCCESS");
       }
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {

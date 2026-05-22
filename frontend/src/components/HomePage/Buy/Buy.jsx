@@ -110,6 +110,13 @@ export default function Buy({ initialVans = [] }) {
                         Inquire
                       </Link>
                     </div>
+                     {van?.slug && (
+                                  <PrimaryButton
+                                    label="Launch 3D Mode"
+                                    link={`/camper-vans-for-sale/${van.slug}/configure`}
+                                    className="w-full mt-4"
+                                  />
+                                )}
                   </div>
 
                 </div>

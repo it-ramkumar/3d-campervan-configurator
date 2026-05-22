@@ -276,11 +276,11 @@ export default function BookingPage() {
   ];
 
   return (
-    <div className="flex bg-[#F5F5F0] min-h-screen justify-center items-center p-4">
+    <div className="flex bg-secondary min-h-screen justify-center items-center p-4">
       {/* Main Container */}
       <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-2xl overflow-hidden min-h-[700px] border border-[#001F3D]/5">
         {/* Sidebar: Navy Theme */}
-        <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-white p-10 flex-col justify-between relative">
+        <div className="hidden lg:flex lg:w-1/3 bg-primary text-secondary p-10 flex-col justify-between relative">
           <div>
             <Heading3
               text="Consultation Call"
@@ -290,7 +290,7 @@ export default function BookingPage() {
 
             {/* Step Indicators */}
             <div className="space-y-6 relative">
-              <div className="absolute left-[15px] top-2 bottom-2 w-px bg-white/10"></div>
+              <div className="absolute left-[15px] top-2 bottom-2 w-px bg-primary/10"></div>
               {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex items-center gap-4 relative z-10">
                   <div
@@ -299,7 +299,7 @@ export default function BookingPage() {
                     {s}
                   </div>
                   <span
-                    className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? "text-white" : "text-white/30"}`}
+                    className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? "text-secondary" : "text-secondary/30"}`}
                   >
                     {s === 1
                       ? "Date"
@@ -314,8 +314,8 @@ export default function BookingPage() {
             </div>
           </div>
 
-          <div className="bg-white/5 p-4 rounded-lg border border-white/10">
-            <p className="text-[10px] uppercase font-bold tracking-widest text-[#ED985F] mb-1">
+          <div className="bg-whisecondaryte/5 p-4 rounded-lg border border-secondary/10">
+            <p className="text-[10px] uppercase font-bold tracking-widest text-hover mb-1">
               Support Line
             </p>
             <p className="text-sm font-medium">+1 (951) 441-9719</p>
@@ -323,7 +323,7 @@ export default function BookingPage() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-8 md:p-12 overflow-y-auto bg-white">
+        <div className="flex-1 p-8 md:p-12 overflow-y-auto bg-secondary">
           {!isLoggedIn ? (
             <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
               <div className="text-center">
@@ -334,7 +334,7 @@ export default function BookingPage() {
               </div>
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-4 px-8 py-4 bg-[#F5F5F0] border border-[#001F3D]/10 rounded-lg font-bold hover:bg-[#ED985F] hover:text-white transition-all shadow-sm"
+                className="flex items-center gap-4 px-8 py-4 bg-secondary border border-primary/10 rounded-lg font-bold hover:bg-hover hover:text-secondary transition-all shadow-sm"
               >
                 <Image
                   src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -352,21 +352,21 @@ export default function BookingPage() {
               {bookingStep === 1 && (
                 <div className="animate-in slide-in-from-right-4 duration-500">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
                       Schedule
                     </span>
                     <Heading4 text="Select a Date" />
                   </header>
 
-                  <div className="bg-[#F5F5F0]/50 p-6 rounded-lg border border-[#001F3D]/5">
+                  <div className="bg-secondary/50 p-6 rounded-lg border border-primary/5">
                     <div className="flex justify-between items-center mb-6">
                       <button
                         onClick={() => navigateMonth(-1)}
-                        className="p-2 hover:bg-white rounded-lg transition-all text-[#001F3D] hover:text-[#ED985F]"
+                        className="p-2 hover:bg-white rounded-lg transition-all text-primary hover:text-hover"
                       >
                         ←
                       </button>
-                      <h3 className="font-bold text-sm uppercase tracking-widest text-[#001F3D]">
+                      <h3 className="font-bold text-sm uppercase tracking-widest text-primary">
                         {currentMonth.toLocaleString("default", {
                           month: "long",
                           year: "numeric",
@@ -374,7 +374,7 @@ export default function BookingPage() {
                       </h3>
                       <button
                         onClick={() => navigateMonth(1)}
-                        className="p-2 hover:bg-white rounded-lg transition-all text-[#001F3D] hover:text-[#ED985F]"
+                        className="p-2 hover:bg-secondary rounded-lg transition-all text-primary hover:text-hover"
                       >
                         →
                       </button>
@@ -384,7 +384,7 @@ export default function BookingPage() {
                       {days.map((d) => (
                         <div
                           key={d.id}
-                          className="text-center text-[10px] font-bold text-[#001F3D]/30 py-2"
+                          className="text-center text-[10px] font-bold text-primary/30 py-2"
                         >
                           {d.label}
                         </div>
@@ -401,12 +401,12 @@ export default function BookingPage() {
                             !d
                               ? "invisible"
                               : d.isSelected
-                                ? "bg-[#001F3D] text-white shadow-lg"
+                                ? "bg-primary text-white shadow-lg"
                                 : d.isPast || d.isSunday
-                                  ? "text-gray-300 cursor-not-allowed bg-gray-50"
+                                  ? "text-secondary-300 cursor-not-allowed bg-secondary-50"
                                   : d.isToday
-                                    ? "bg-[#ED985F]/20 text-[#ED985F] hover:bg-[#ED985F] hover:text-white"
-                                    : "hover:bg-[#ED985F] hover:text-white text-[#001F3D] bg-white"
+                                    ? "bg-secondary/20 text-hover hover:bg-secondary hover:text-secondary"
+                                    : "hover:bg-hover hover:text-secondary text-primary bg-secondary"
                           }`}
                         >
                           {d?.day}
@@ -425,16 +425,16 @@ export default function BookingPage() {
                       Time
                     </span>
                     <Heading4 text="Available Slots" />
-                    <p className="text-xs font-bold text-[#001F3D]/60 mt-2">
+                    <p className="text-xs font-bold text-primary/60 mt-2">
                       {formatDate(selectedDate)}
                     </p>
                   </header>
 
                   {slots.length === 0 ? (
                     <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-[#F5F5F0] rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-secondaryrounded-lg flex items-center justify-center mx-auto mb-4">
                         <svg
-                          className="w-8 h-8 text-[#001F3D]/30"
+                          className="w-8 h-8 text-primary/30"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -447,12 +447,12 @@ export default function BookingPage() {
                           />
                         </svg>
                       </div>
-                      <p className="text-sm text-[#001F3D]/60 mb-4">
+                      <p className="text-sm text-primary/60 mb-4">
                         No slots available for this date
                       </p>
                       <button
                         onClick={() => setBookingStep(1)}
-                        className="text-[#ED985F] font-bold text-xs uppercase tracking-widest hover:underline"
+                        className="text-hover font-bold text-xs uppercase tracking-widest hover:underline"
                       >
                         Choose Different Date
                       </button>
@@ -471,8 +471,8 @@ export default function BookingPage() {
                               }}
                               className={`p-4 border rounded-lg font-bold text-xs transition-all ${
                                 selectedSlot?.start === s.start
-                                  ? "border-[#ED985F] bg-[#ED985F]/10 text-[#ED985F]"
-                                  : "border-[#001F3D]/10 hover:border-[#ED985F] hover:text-[#ED985F] bg-[#F5F5F0]/30 text-[#001F3D]"
+                                  ? "border-hover bg-primary/10 text-hover"
+                                  : "border-primary/10 hover:border-hover hover:text-hover bg-secondary/30 text-primary"
                               }`}
                             >
                               {formatTimeSlot(s.start)}
@@ -481,7 +481,7 @@ export default function BookingPage() {
                       </div>
                       <button
                         onClick={() => setBookingStep(1)}
-                        className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/40 hover:text-[#001F3D] transition-colors"
+                        className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-primary/40 hover:text-primary transition-colors"
                       >
                         Change Date
                       </button>
@@ -494,7 +494,7 @@ export default function BookingPage() {
               {bookingStep === 3 && (
                 <div className="animate-in slide-in-from-right-4 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
                       Details
                     </span>
                     <Heading4 text="Meeting Information" />
@@ -502,7 +502,7 @@ export default function BookingPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1 mb-2 block">
                         Full Name *
                       </label>
                       <input
@@ -510,13 +510,13 @@ export default function BookingPage() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Enter your full name"
-                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        className="w-full p-4 bg-secondary rounded-lg border border-transparent focus:border-hover outline-none text-sm font-medium placeholder-hover/30"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1 mb-2 block">
                         Email Address *
                       </label>
                       <input
@@ -525,13 +525,13 @@ export default function BookingPage() {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="your.email@example.com"
-                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        className="w-full p-4 bg-secondary rounded-lg border border-transparent focus:border-hover outline-none text-sm font-medium placeholder-primary/30"
                         required
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1 mb-2 block">
                         Phone Number
                       </label>
                       <input
@@ -540,12 +540,12 @@ export default function BookingPage() {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+1 (555) 123-4567"
-                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        className="w-full p-4 bg-secondary rounded-lg border border-transparent focus:border-hover outline-none text-sm font-medium placeholder-primary/30"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1 mb-2 block">
                         Meeting Topic
                       </label>
                       <input

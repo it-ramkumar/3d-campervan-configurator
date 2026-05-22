@@ -37,7 +37,7 @@ export default function HeroSection() {
   };
 
   if (validSlides.length === 0) {
-    return <div className="min-h-screen bg-[#080A0B]" />;
+    return <div className="min-h-screen bg-primary" />;
   }
 
   const activeSlide = validSlides[currentSlide];
