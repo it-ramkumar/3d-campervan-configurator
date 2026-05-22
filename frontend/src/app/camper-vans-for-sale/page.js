@@ -147,7 +147,7 @@ export default async function VansForSale() {
 
       <HeroImage
         title="Custom Camper Vans for Sale"
-        description="Find your dream sprinter van for sale or a rugged ford transit van for sale. From luxury mercedes sprinter camper van to versatile 4x4 vans, we offer expert craftsmanship for 2-7 person layouts. Join 111+ happy owners today"
+        description="At Big Bear Vans, we turn Mercedes Sprinter and Ford Transit vans into fully custom camper vans. From off-grid setups to luxury travel homes, everything is designed around how you want to live and travel. We’re proud to have 111+ happy owners across the US."
         image="/images2/vfs.webp"
         link="/inquiry"
         buttonText="Get a Quote"
