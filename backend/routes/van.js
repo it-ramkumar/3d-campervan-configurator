@@ -116,6 +116,7 @@ router.get('/available', async (req, res) => {
         'van_listing.subtitle': 1,
         'van_listing.price': 1,
         gallery: { $slice: 1 }, // sirf first image
+        glbFile: 1,
       }
     ).sort({ order: 1 });
 
@@ -125,7 +126,8 @@ router.get('/available', async (req, res) => {
       title: v.van_listing?.title,
       subtitle: v.van_listing?.subtitle,
       price: v.van_listing?.price,
-      image: v.gallery?.[0] || null
+      image: v.gallery?.[0] || null,
+      glb: v.glbFile || null
     }));
 
     res.status(200).json({

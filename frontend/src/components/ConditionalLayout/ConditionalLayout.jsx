@@ -1,63 +1,44 @@
 "use client";
-import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+
+import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import Consultation from "@/components/Consultation/Consultation";
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
-import Loader from "@/components/Loader/Loader";
 import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
-  // Loader ke liye useEffect
-  useEffect(() => {
-    const handleStart = () => setLoading(true);
-    const handleComplete = () => setLoading(false);
-
-    // App Router me routeChangeStart/Complete direct events nahi hote
-    // Lekin client-side navigation me Link click se turant loader show karne ke liye:
-    const handleLinkClick = (e) => {
-      const link = e.target.closest("a");
-      if (link && link.href && !link.target) {
-        handleStart();
-      }
-    };
-
-    document.addEventListener("click", handleLinkClick);
-
-    // Optional: loader 3s me auto hide agar SSR slow ho
-    const timeout = setTimeout(() => setLoading(false), 3000);
-
-    return () => {
-      document.removeEventListener("click", handleLinkClick);
-      clearTimeout(timeout);
-    };
-  }, []);
-
-const exactHideLayoutPaths = ["/van", "/configurator", "/dashboard"];
+  // 1. Exact paths jahan sab kuch hide karna hai
+  const exactHideLayoutPaths = ["/van", "/configurator", "/dashboard"];
   const exactHideConsultationPaths = ["/inquiry", "/thank-you"];
 
-  // 2. Dynamic check (Check if path STARTS with certain string)
+  // 2. Dynamic checks (Jo paths variable elements contain karte hain)
   const isQuotePreview = pathname.startsWith("/quote/preview/");
 
-  // Final Logic
-  const hideLayout = exactHideLayoutPaths.includes(pathname) || isQuotePreview;
-  const hideConsultation = exactHideConsultationPaths.includes(pathname) || isQuotePreview;
+  // Naya Check: Agar URL /configure par end ho raha ho (e.g., /camper-vans-for-sale/my-van/configure)
+  const isConfiguratorPage = pathname.endsWith("/configure");
+
+  // Final Logic Toggles
+  const hideLayout = exactHideLayoutPaths.includes(pathname) || isQuotePreview || isConfiguratorPage;
+  const hideConsultation = exactHideConsultationPaths.includes(pathname) || isQuotePreview || isConfiguratorPage;
+  const hideShareBar = isConfiguratorPage;
 
   return (
     <>
-    <SmoothScroll>
-      {loading && <Loader />}
-      {!hideLayout && <Navbar />}
-      <SideShareBar />
-      <main className="flex-1">{children}</main>
-      {!hideLayout && !hideConsultation && <Consultation />}
-      {!hideLayout && <Footer />}
-    </SmoothScroll>
+      <SmoothScroll>
+        {/* Cleaned: Client side loader events completely removed */}
+
+        {!hideLayout && <Navbar />}
+
+        {!hideShareBar && <SideShareBar />}
+
+        <main className="flex-1">{children}</main>
+
+        {!hideLayout && !hideConsultation && <Consultation />}
+        {!hideLayout && <Footer />}
+      </SmoothScroll>
     </>
   );
 }

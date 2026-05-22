@@ -75,7 +75,42 @@
 }
 
 
+html {
+  /* ⚡ Browser ka native smooth scroll optimized tarike se trigger hoga */
+  scroll-behavior: smooth;
 
+  /* Over-scrolling bounce effects ko control karne ke liye */
+  overscroll-behavior-y: auto;
+
+  /* Height updates automatically standard browser flow me rahengi */
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  overflow-x: hidden;
+
+  /* Text aur graphics hardware acceleration optimization */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 🎨 Premium Modern Scrollbar UI */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f5f0; /* bg-secondary */
+}
+::-webkit-scrollbar-thumb {
+  background: #2b2b24; /* text-primary */
+  border-radius: 99px;
+  border: 2px solid #f5f5f0; /* Margin layout effect */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ED3500; /* Van brand color choice */
+}
 /* SweetAlert Premium Theme */
 .premium-swal-popup {
   background: #001F3D !important;

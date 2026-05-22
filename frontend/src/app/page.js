@@ -2,7 +2,6 @@ import Hero from "@/components/HomePage/Hero/Hero";
 import { CustomLink } from "@/components/Common/Common";
 import { generateHomeSchema } from "../schema/homeSchema";
 import dynamic from 'next/dynamic';
-import { Suspense } from "react";
 import { availableVans } from "@/api/van/availableVans";
 
 export const metadata = {
@@ -30,12 +29,6 @@ const OurProcess = dynamic(() => import("@/components/HomePage/OurProcess/OurPro
 const Testimonials = dynamic(() => import("@/components/HomePage/Testimonials/Testimonials"));
 const Blog = dynamic(() => import("@/components/HomePage/Blog/Blog"));
 const FAQs = dynamic(() => import("@/components/Faqs/Faqs"));
-
-const SectionSkeleton = ({ height = "400px" }) => (
-  <div style={{ height }} className="bg-gray-100 flex items-center justify-center w-full">
-    <div className="animate-pulse text-gray-400">Loading...</div>
-  </div>
-);
 
 export default async function Home() {
   // Data Logic
@@ -105,13 +98,11 @@ export default async function Home() {
       <main>
         <Hero />
 
-        <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-32">
+        <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-20">
 
-          <Suspense fallback={<SectionSkeleton height="300px" />}>
+
             <Buy initialVans={readyToGoVans} />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="500px" />}>
             <section className="tour-customizer bg-secondary py-16 md:py-24">
               <Customize
                 mainTitle={maintitle}
@@ -124,33 +115,20 @@ export default async function Home() {
                 lastText="Start by filling out our TEST for a real estimate."
               />
             </section>
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="600px" />}>
             <Portfolio />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="400px" />}>
             <WhyChoose />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="500px" />}>
             <OurProcess />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="400px" />}>
             <Testimonials />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="400px" />}>
             <Blog />
-          </Suspense>
 
-          <Suspense fallback={<SectionSkeleton height="400px" />}>
             <section className="tour-Faqs">
               <FAQs faqs={faqs} />
             </section>
-          </Suspense>
         </div>
       </main>
     </>

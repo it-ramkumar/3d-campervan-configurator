@@ -1,7 +1,7 @@
 export const slides = [
     {
       id: 1,
-      image: "/images2/vfs.webp",
+      image: "/renderings/montreal1.webp",
       tag: "Vans For Sale.",
       title: "Campervans For Sale",
       desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
@@ -11,7 +11,7 @@ export const slides = [
     },
     {
       id: 2,
-      image: "/heroSlider/heroimg2.webp",
+      image: "/renderings/imperial.webp",
       tag: "Bespoke Service",
       title: "Custom Van Builds",
       desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
@@ -21,7 +21,7 @@ export const slides = [
     },
     {
       id: 3,
-      image: "/heroSlider/bloghero.webp",
+      image: "/renderings/sm.webp",
       tag: "Our Layouts",
       title: "Previous Layouts",
       desc: "Explore our past projects and get inspired by our signature craftsmanship.",

@@ -37,7 +37,9 @@ const BaseVanListing = ({setSelected}) => {
 
     try {
       setDeletingId(id);
-      const res = await axios.delete(`${API_URL}/add-base-van/${id}`);
+     const res = await axios.delete(`${API_URL}/add-base-van/${id}`, {
+  withCredentials: true
+});
 
       if (res.data.success) {
         // UI se remove karein

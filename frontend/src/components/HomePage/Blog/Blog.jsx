@@ -17,7 +17,6 @@ export default async function Blog() {
   }
 
   if (blogs.length === 0) return null;
-console.log(blogs, "blog page pe details")
   return (
     <section className="w-full py-20 bg-secondary overflow-hidden antialiased">
       <div className="container mx-auto px-4 max-w-7xl">

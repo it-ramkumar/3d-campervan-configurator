@@ -10,42 +10,43 @@ import ControlBtn from "./ControllBtn"
 import Model from "./Model"
 import { PrimaryButton } from "@/components/Common/Common"
 import PartModel from "./Parts"
-import Loader from "@/components/Loader/Loader"
+import { useRouter } from "next/navigation"
 
-function CameraRig({ view }) {
-  const [isUserInteracting, setIsUserInteracting] = useState(false)
+// function CameraRig({ view }) {
+//   const [isUserInteracting, setIsUserInteracting] = useState(false)
 
-  useEffect(() => {
-    setIsUserInteracting(false)
-  }, [view])
+//   useEffect(() => {
+//     setIsUserInteracting(false)
+//   }, [view])
 
-  useFrame((state, delta) => {
-    if (isUserInteracting) return
-    easing.damp3(state.camera.position, view.position, 0.4, delta)
-    if (state.controls) {
-      easing.damp3(state.controls.target, view.target, 0.4, delta)
-      state.controls.update()
-    }
-  })
+//   useFrame((state, delta) => {
+//     if (isUserInteracting) return
+//     easing.damp3(state.camera.position, view.position, 0.4, delta)
+//     if (state.controls) {
+//       easing.damp3(state.controls.target, view.target, 0.4, delta)
+//       state.controls.update()
+//     }
+//   })
 
-  useEffect(() => {
-    const handleStart = () => setIsUserInteracting(true)
-    window.addEventListener("mousedown", handleStart)
-    window.addEventListener("touchstart", handleStart)
-    return () => {
-      window.removeEventListener("mousedown", handleStart)
-      window.removeEventListener("touchstart", handleStart)
-    }
-  }, [])
+//   useEffect(() => {
+//     const handleStart = () => setIsUserInteracting(true)
+//     window.addEventListener("mousedown", handleStart)
+//     window.addEventListener("touchstart", handleStart)
+//     return () => {
+//       window.removeEventListener("mousedown", handleStart)
+//       window.removeEventListener("touchstart", handleStart)
+//     }
+//   }, [])
 
-  return null
-}
+//   return null
+// }
 
-export default function VanCanvas({ url, variants, setIsOpen }) {
-  const [currentView, setCurrentView] = useState(cameraViews.default)
+export default function VanCanvas({ url, variants }) {
+  // const [currentView, setCurrentView] = useState(cameraViews.default)
   const [activeVariant, setActiveVariant] = useState(null)
   const [activeParts, setActiveParts] = useState([])
   const [interiorMode, setInteriorMode] = useState(false)
+  const router = useRouter()
 
   // === NEW STATE: sequential load control karne k liye ===
   const [isMainModelLoaded, setIsMainModelLoaded] = useState(false)
@@ -126,14 +127,14 @@ export default function VanCanvas({ url, variants, setIsOpen }) {
               fallback={
                 <Html center>
                   <div className="px-4 py-2 rounded-lg bg-white shadow-xl text-primary font-semibold">
-              <Loader/>
+                    Loading Experience
                   </div>
                 </Html>
               }
             >
               {!interiorMode ? (
                 <>
-                  <CameraRig view={currentView} />
+                  {/* <CameraRig view={currentView} /> */}
                   <OrbitControls
                     makeDefault
                     enableDamping
@@ -183,7 +184,7 @@ export default function VanCanvas({ url, variants, setIsOpen }) {
                 Custom Build Studio
               </p>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => router.back()}
                 className="absolute top-7 right-7 z-50 w-11 h-11 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-xl border border-white/40 shadow-lg text-primary hover:bg-red-500 hover:text-white transition-all duration-300 pointer-events-auto"
               >
                 <X size={18} />

@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection/HeroSection";
+import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import Processlist from "../../components/OurProcess/ProcessList/Processlist";
 import { generateProcessSchema } from "@/schema/ourProcess";
 

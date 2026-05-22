@@ -7,9 +7,8 @@ import {
   Heading2, Heading3, Heading1, RichParagraph,
   SecondaryButton, ShareButton, Breadcrumb, PrimaryButton
 } from '../Common/Common';
-import VanGallery from "./GallerySection"; // Naya Client Component
-
-import VanCanvas from "./Models/Van3DUi"; // 3D Model Viewer
+import VanGallery from "./GallerySection";
+import BackButton from "../Common/BackButton/BackButton";
 const SvgCheckmark = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 !text-hover flex-shrink-0 mt-1 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>
@@ -23,11 +22,11 @@ const HeroSpecItem = ({ label, value }) => (
   </div>
 );
 
-const VanPage = ({ vanDetail, variants }) => {
+const VanPage = ({ vanDetail }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
 
-
+  // console.log(vanDetail)
   const specs = vanDetail?.van_listing?.specifications;
   const getFeatureIcon = (category) => {
     const icons = {
@@ -59,19 +58,17 @@ const VanPage = ({ vanDetail, variants }) => {
 
   return (
     <div className="bg-secondary font-body text-primary">
-      <div className="flex justify-between bg-secondary">
-        <Breadcrumb
-          customItems={[
-            { name: "vans for sale", href: "/camper-vans-for-sale" },
-            { name: vanDetail?.van_listing?.title }
-          ]}
-        />
-        <PrimaryButton
-          label={"Call us"}
-          link={"/contact"}
-          className="!p-2 !my-3 !my-lg-4 !mr-6" // !mr-6 ya !me-6 use karein
-        />
-      </div>
+<div className="flex justify-between items-center bg-secondary px-4 md:px-8 py-4 w-full border-b border-primary/5">
+    {/* Left Side: Back Button without hardcoded positions */}
+    <BackButton className="!static !mt-0" />
+
+    {/* Right Side: Call Us Button */}
+    <PrimaryButton
+      label={"Call us"}
+      link={"/contact"}
+      className="!py-2.5 !px-5"
+    />
+  </div>
       <div className="max-w-7xl mx-auto pt-10 pb-20 px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
@@ -111,17 +108,13 @@ const VanPage = ({ vanDetail, variants }) => {
                 )}              </div>
             )}
 
-            {
-              vanDetail?.glbFile && (
-
-                <div className="relative z-[99999999]">
-                  <VanCanvas
-                    url={vanDetail?.glbFile}
-                    variants={variants}
-                  />
-                  </div>
-                  )
-            }
+            {vanDetail?.slug && (
+              <PrimaryButton
+                label="Launch 3D Configurator"
+                link={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
+                className="w-full"
+              />
+            )}
             <div className="grid grid-cols-2 gap-4">
               <HeroSpecItem label="Chassis" value={specs?.make_model} />
               <HeroSpecItem label="Wheelbase" value={specs?.wheelbase} />

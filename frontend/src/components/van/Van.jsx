@@ -236,7 +236,7 @@ function Van() {
                       {vans[isSanta]?.layout || "Loading..."}
                     </h1>
                     <p className="text-xs text-gray-500">
-                       {vans[isSanta]?.spec?.wheelBase}" WB
+                      {vans[isSanta]?.spec?.wheelBase}" WB
                     </p>
                   </div>
                 </div>
@@ -316,8 +316,10 @@ function Van() {
               {/* Suspense wrapper */}
               <Suspense
                 fallback={
-                  <Html fullscreen>
-                    <Loader />
+                  <Html center>
+                    <div className="px-4 py-2 rounded-lg bg-white shadow-xl text-primary font-semibold">
+                      Loading Experience
+                    </div>
                   </Html>
                 }
               >

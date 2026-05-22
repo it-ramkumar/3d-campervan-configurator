@@ -41,9 +41,14 @@ const AddBaseVanForm = () => {
     if (files.glbFile) data.append("glbFile", files.glbFile);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/add-base-van`, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+     const response = await axios.post(
+  `${process.env.NEXT_PUBLIC_URL}/add-base-van`,
+  data,
+  {
+    headers: { "Content-Type": "multipart/form-data" },
+    withCredentials: true // Same colon syntax ke sath yahan append hoga
+  }
+);
       alert("Base Van Added Successfully!");
     } catch (err) {
       console.error(err);

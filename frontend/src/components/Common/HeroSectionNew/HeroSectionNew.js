@@ -6,6 +6,7 @@ import {
   RichParagraph,
   SecondaryButton,
 } from "../Common";
+import BackButton from "../BackButton/BackButton";
 
 export default function HeroImage({
   image,
@@ -43,6 +44,11 @@ export default function HeroImage({
         ${className}
       `}
     >
+
+      {/* 🛠️ BACK BUTTON WITH ABSOLUTE POSITION AND HIGH Z-INDEX */}
+      <div className="">
+        <BackButton variant="default" label="Go Back" />
+      </div>
 
       {/* HERO IMAGE */}
       <Image
