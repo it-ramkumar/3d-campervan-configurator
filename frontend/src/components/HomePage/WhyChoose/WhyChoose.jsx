@@ -221,12 +221,6 @@ const WhyChoose = () => {
           })}
         </div>
 
-        {/* --- Global CTA --- */}
-        <div className="mt-32 text-center bg-primary p-12 md:p-20 rounded-lg shadow-2xl relative overflow-hidden group">
-          <Heading3 text="Uncompromising Quality. Infinite Possibilities." className="text-secondary mb-4" />
-          <RichParagraph className="mb-10 max-w-xl mx-auto text-secondary ">Ready to build a van that's as unique as your journey? Let's talk engineering.</RichParagraph>
-          <SecondaryButton label={"Request a Custom Build"} link={"/inquiry"} />
-        </div>
 
       </div>
     </section>

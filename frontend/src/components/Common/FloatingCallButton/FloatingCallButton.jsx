@@ -64,14 +64,14 @@ export default function FloatingCallButton() {
 
       {/* 1. OPTIONS MENU */}
       <div
-        className={`flex flex-col gap-2 mb-2 transition-all duration-300 transform ${
+        className={`flex flex-col gap-2 mb-2 transition-all duration-300 bg-white transform ${
           isMenuOpen
-            ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
-            : "opacity-0 translate-y-4 scale-95 pointer-events-none"
+            ? "opacity-100 translate-y-0 scale-100 pointer-events-auto bg-white"
+            : "opacity-0 translate-y-4 scale-95 pointer-events-none bg-white"
         }`}
       >
         <a
-          href="tel:+923001234567"
+          href="tel:+1 (951) 441-9719"
           onClick={() => setIsMenuOpen(false)}
           className="flex items-center gap-3 bg-primary border border-white/10 text-white/90 px-4 py-3 rounded-xl shadow-lg hover:border-hover/40 hover:text-hover transition-all group"
         >
@@ -121,54 +121,31 @@ export default function FloatingCallButton() {
       {/* 3. CONTACT FORM MODAL */}
       {isFormOpen && (
         /* CRITICAL FIX: z-[10000] completely cuts through everything else */
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md transition-all">
 
-          <div className="relative w-full max-w-2xl  border border-white/10 rounded-2xl p-4 md:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto injector-style">
+          <div className="relative w-full max-w-2xl bg-white  border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto injector-style">
 
             <button
               onClick={() => setIsFormOpen(false)}
-              className="absolute top-5 right-5 text-white/50 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5 z-30"
+              className="absolute top-5 right-5 text-primary hover:text-white transition-colors rounded-lg hover:bg-white/5 z-30"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <div className="pt-4">
+
               <ContactForm
                 formData={formData}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
                 loading={loading}
               />
-            </div>
+           
           </div>
         </div>
       )}
 
-      <style jsx global>{`
-        .injector-style .bg-white {
-          background-color: transparent !important;
-          border: none !important;
-          box-shadow: none !important;
-          padding: 1rem 0rem !important;
-        }
-        .injector-style h2, .injector-style .text-primary {
-          color: #ffffff !important;
-        }
-        .injector-style p, .injector-style label {
-          color: rgba(255, 255, 255, 0.6) !important;
-        }
-        .injector-style input, .injector-style textarea {
-          background-color: rgba(255, 255, 255, 0.03) !important;
-          border: 1px solid rgba(255, 255, 255, 0.08) !important;
-          color: white !important;
-        }
-        .injector-style input:focus, .injector-style textarea:focus {
-          border-color: #D4A843 !important;
-          background-color: rgba(255, 255, 255, 0.05) !important;
-        }
-      `}</style>
 
     </div>
   );

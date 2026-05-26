@@ -7,11 +7,9 @@ import { ArrowBigRightDash, ArrowBigLeftDash } from 'lucide-react';
 import 'swiper/css';
 import Image from 'next/image';
 
-// initialVans prop receive karein
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
-// console.log(initialVans)
-  // loading aur useEffect ki ab zaroorat nahi kyunki data server se aa raha hai
+
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -37,17 +35,15 @@ export default function Buy({ initialVans = [] }) {
             />
             <div className="flex gap-2">
               <SecondaryButton
-
                 label={<ArrowBigLeftDash />}
                 onClick={() => swiper?.slidePrev()}
                 aria-label="Previous slide"
                 className=" !px-3 !py-2"
               />
               <PrimaryButton
-
                 label={<ArrowBigRightDash />}
                 onClick={() => swiper?.slideNext()}
-                  aria-label="Next slide"
+                aria-label="Next slide"
                 className=" !px-3 !py-2"
               />
             </div>
@@ -64,13 +60,18 @@ export default function Buy({ initialVans = [] }) {
             }}
             className="!overflow-visible"
           >
-            {/* initialVans map karein */}
             {initialVans.map((van, i) => (
               <SwiperSlide key={i} className="h-auto">
                 <div className="bg-white rounded-lg overflow-hidden border border-primary/5 shadow-sm group h-full flex flex-col transition-all duration-500 hover:shadow-xl">
 
-                  {/* Image */}
+                  {/* Image Container */}
                   <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
+
+                    {/* --- Available for Sale Tag --- */}
+                    <div className="absolute top-4 left-4 z-10 bg-primary/90 border border-white/10 backdrop-blur-sm text-hover text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded shadow-md pointer-events-none transition-transform duration-300 group-hover:scale-105">
+                      Available for Sale
+                    </div>
+
                     {van?.image ? (
                       <Image
                         src={van.image}
@@ -89,7 +90,7 @@ export default function Buy({ initialVans = [] }) {
                   {/* Content */}
                   <div className="p-5 flex flex-col flex-grow">
                     <Heading3
-                      text={van ?.title || "New Build"}
+                      text={van?.title || "New Build"}
                       className="truncate block"
                     />
                     <RichParagraph className="mt-2 mb-6 line-clamp-2 h-12">
@@ -110,13 +111,13 @@ export default function Buy({ initialVans = [] }) {
                         Inquire
                       </Link>
                     </div>
-                     {van?.slug && (
-                                  <PrimaryButton
-                                    label="Launch 3D Mode"
-                                    link={`/camper-vans-for-sale/${van.slug}/configure`}
-                                    className="w-full mt-4"
-                                  />
-                                )}
+                    {van?.slug && (
+                      <PrimaryButton
+                        label="Launch 3D Mode"
+                        link={`/camper-vans-for-sale/${van.slug}/configure`}
+                        className="w-full mt-4"
+                      />
+                    )}
                   </div>
 
                 </div>

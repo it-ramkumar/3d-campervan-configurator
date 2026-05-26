@@ -62,14 +62,9 @@ const VanPage = ({ vanDetail }) => {
     {/* Left Side: Back Button without hardcoded positions */}
     <BackButton className="!static !mt-0" />
 
-    {/* Right Side: Call Us Button */}
-    <PrimaryButton
-      label={"Call us"}
-      link={"/contact"}
-      className="!py-2.5 !px-5"
-    />
+
   </div>
-      <div className="max-w-7xl mx-auto pt-10 pb-20 px-6 md:px-12">
+      <div className="max-w-7xl mx-auto pt-4 pb-20 px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
           {/* LEFT: GALLERY (Ab ye Client Component hai) */}
