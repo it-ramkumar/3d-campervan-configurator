@@ -13,7 +13,7 @@ export default function ContactForm({ formData, handleChange, handleSubmit, load
 
       <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--gap-sm)]">
-          {["name", "email", "phone"].map((field) => (
+          {["name", "email", "phone"]?.map((field) => (
             <div key={field} className="flex flex-col">
               <label className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
                 {field}

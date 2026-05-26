@@ -264,7 +264,7 @@ useEffect(() => {
   return (
     <>
       {/* --- Main Navigation Bar --- */}
-      <nav className={`sticky top-0 w-full font-body z-[1000] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary shadow-md h-[65px]"}`}>
+      <nav className={`sticky top-0 w-full font-body z-[100] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary shadow-md h-[65px]"}`}>
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {!forceMobile && (
             <Link href="/">

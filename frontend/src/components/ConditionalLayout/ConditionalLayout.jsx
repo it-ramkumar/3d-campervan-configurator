@@ -6,6 +6,7 @@ import Footer from "@/components/Footer/Footer";
 import Consultation from "@/components/Consultation/Consultation";
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
 import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
+import FloatingCallButton from "../Common/FloatingCallButton/FloatingCallButton";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -33,7 +34,7 @@ export default function ConditionalLayout({ children }) {
         {!hideLayout && <Navbar />}
 
         {!hideShareBar && <SideShareBar />}
-
+<FloatingCallButton/>
         <main className="flex-1">{children}</main>
 
         {!hideLayout && !hideConsultation && <Consultation />}
