@@ -18,7 +18,7 @@ export default function HeroImage({
 
   // BUTTON
   buttonText,
-  buttonLink = "/",
+  link = "/",
   showButton = true,
 
   // OVERLAY
@@ -104,7 +104,7 @@ export default function HeroImage({
           {/* BUTTON */}
           {showButton && buttonText && (
             <SecondaryButton
-              link={buttonLink}
+              link={link}
               label={buttonText}
             />
           )}
