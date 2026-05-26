@@ -25,10 +25,11 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
 
 
 const layoutCategories = [
-  { name: "Santa Monica", slug: "/van-layouts?search=santa+monica", image: ["/renderings/sm.webp", "/renderings/sm1.webp"] },
-  { name: "Montreal", slug: "/van-layouts?search=montreal", image: ["/renderings/montreal.webp", "/renderings/montreal1.webp"] },
-  { name: "Imperial", slug: "/van-layouts?search=imperial", image: ["/renderings/imperial.webp", "/renderings/imperial1.webp"] },
-  { name: "Santa Barbara", slug: "/van-layouts?search=santa+barbara", image: ["/renderings/santaBarbara.webp", "/renderings/santaBarbara1.webp"] },
+  { name: "Santa Monica", slug: "/van-layouts?search=santa+monica", image: ["/renderings/sm.webp"] },
+  { name: "Montreal", slug: "/van-layouts?search=montreal", image: ["/renderings/montreal.webp"] },
+  { name: "Imperial", slug: "/van-layouts?search=imperial", image: ["/renderings/imperial.webp"] },
+  { name: "Santa Barbara", slug: "/van-layouts?search=santa+barbara", image: ["/renderings/santaBarbara.webp"] },
+    { name: "Cusco", slug: "/layout-detail/cusco-campervan", image: ["/renderings/cusco (1).webp"] },
 ];
 const CategoryCard = ({ image, title, href, onClick }) => (
   <div className="flex flex-col items-center group text-center">
