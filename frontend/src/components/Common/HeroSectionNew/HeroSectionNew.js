@@ -10,8 +10,8 @@ export default function HeroImage({
   alt = "Big Bear Vans",
 
   // CONTENT
-  title,
   slogan,
+  title,
   description,
 
   // BUTTON
@@ -90,13 +90,13 @@ object-cover object-center
       {/* CONTENT */}
       <div className="relative z-[2] h-full flex items-center">
         <div className="container px-6 md:px-12 lg:px-20 max-w-4xl text-white space-y-6">
-          {/* TITLE */}
-          {title && <Heading1 text={title} />}
           {slogan && (
             <p className="text-hover text-lg md:text-xl font-semibold italic mt-4 mb-4 tracking-wide">
               {slogan}
             </p>
           )}
+          {/* TITLE */}
+          {title && <Heading1 text={title} />}
 
           {/* DESCRIPTION */}
           {description && (

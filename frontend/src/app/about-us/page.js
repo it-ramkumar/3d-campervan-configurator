@@ -50,8 +50,8 @@ export default function AboutUs() {
       <main>
         <div className="tour-hero">
           <HeroSection
-            title={newTitleText}
             slogan={newSloganText}
+            title={newTitleText}
             description={newDescriptionText}
             image={heroImage}
             showButton={false}

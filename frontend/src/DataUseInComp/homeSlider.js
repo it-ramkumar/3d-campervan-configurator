@@ -1,7 +1,7 @@
 export const slides = [
   {
     id: 1,
-    image: "/renderings/montreal1.webp",
+    image: "/renderings/montreal.webp",
     tag: "Vans For Sale.",
     title: "Campervans For Sale",
     slogan: "You Dream It. We Build It.",

@@ -70,6 +70,10 @@ export default function HeroSection() {
           animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
         }`}
       >
+        {/* slogan */}
+        <p className="text-hover text-[16px] md:text-[22px] italic tracking-[0.03em] mb-2 md:mb-3 font-normal">
+          {activeSlide.slogan}
+        </p>
         {/* heading */}
         <h1 className="text-[clamp(34px,5.5vw,68px)] font-black italic uppercase leading-[1.0] tracking-tight mb-4 lg:mb-5">
           {renderTitle(activeSlide.title)}
@@ -77,10 +81,7 @@ export default function HeroSection() {
 
         {/* accent line */}
         <div className="w-11 h-0.5 bg-hover rounded-full mb-4 lg:mb-5" />
-        {/* slogan */}
-        <p className="text-hover text-[15px] md:text-[18px] font-semibold italic tracking-wide mb-4">
-          {activeSlide.slogan}
-        </p>
+
         {/* description */}
         <p className="text-sm leading-[1.85] text-white/80 max-w-sm mb-6 lg:mb-9 min-h-[auto] lg:min-h-[60px]">
           {activeSlide.desc}
