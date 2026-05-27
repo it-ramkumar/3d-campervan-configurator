@@ -1,32 +1,34 @@
 export const slides = [
-    {
-      id: 1,
-      image: "/renderings/montreal1.webp",
-      tag: "Vans For Sale.",
-      title: "Campervans For Sale",
-      desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
-      btnText: "View Inventory",
-      link: "/camper-vans-for-sale",
-      type: "sale"
-    },
-    {
-      id: 2,
-      image: "/renderings/imperial.webp",
-      tag: "Bespoke Service",
-      title: "Custom Van Builds",
-      desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
-      btnText: "Build Your Own",
-      link: "/inquiry",
-      type: "custom"
-    },
-    {
-      id: 3,
-      image: "/renderings/sm.webp",
-      tag: "Our Layouts",
-      title: "Previous Layouts",
-      desc: "Explore our past projects and get inspired by our signature craftsmanship.",
-      btnText: "Browse Gallery",
-      link: "/van-layouts",
-      type: "portfolio"
-    }
-  ];
+  {
+    id: 1,
+    image: "/renderings/montreal1.webp",
+    tag: "Vans For Sale.",
+    title: "Campervans For Sale",
+    slogan: "You Dream It. We Build It.",
+    desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
+    btnText: "View Inventory",
+    link: "/camper-vans-for-sale",
+    type: "sale",
+  },
+  {
+    id: 2,
+    image: "/renderings/imperial.webp",
+    tag: "Bespoke Service",
+    title: "Custom Van Builds",
+    desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
+    btnText: "Build Your Own",
+    link: "/inquiry",
+    type: "custom",
+  },
+  {
+    id: 3,
+    image: "/renderings/sm.webp",
+    tag: "Our Layouts",
+    title: "Previous Layouts",
+    slogan: "You Dream It. We Build It.",
+    desc: "Explore our past projects and get inspired by our signature craftsmanship.",
+    btnText: "Browse Gallery",
+    link: "/van-layouts",
+    type: "portfolio",
+  },
+];
