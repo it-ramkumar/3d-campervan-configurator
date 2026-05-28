@@ -1,11 +1,18 @@
 "use client";
-import React, { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
-import { Heading2, Heading3, RichParagraph, PrimaryButton, SecondaryButton, CustomLink } from '../../Common/Common';
-import { ArrowBigRightDash, ArrowBigLeftDash } from 'lucide-react';
-import 'swiper/css';
-import Image from 'next/image';
+import {
+  Heading2,
+  Heading3,
+  RichParagraph,
+  PrimaryButton,
+  SecondaryButton,
+  CustomLink,
+} from "../../Common/Common";
+import { ArrowBigRightDash, ArrowBigLeftDash } from "lucide-react";
+import "swiper/css";
+import Image from "next/image";
 
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
@@ -13,13 +20,16 @@ export default function Buy({ initialVans = [] }) {
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
       <div className="container mx-auto px-4 max-w-7xl">
-
         {/* --- Header Section --- */}
         <div className="text-center mb-4">
           <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase mb-3">
             Premium Builds
           </RichParagraph>
-          <Heading2 text="Build or Buy Your Dream Van" />
+          <Heading2 text="Explore Premium Van Builds" />
+          <RichParagraph className="mt-4 max-w-3xl mx-auto">
+            Reserve one of our premium camper van builds and customize it for
+            your next adventure.
+          </RichParagraph>
         </div>
 
         {/* --- Slider Section --- */}
@@ -29,7 +39,8 @@ export default function Buy({ initialVans = [] }) {
               href="/camper-vans-for-sale"
               text={
                 <span className="flex items-center gap-2">
-                  Browse Full Inventory <span className="text-lg leading-none">→</span>
+                  Explore All Builds{" "}
+                  <span className="text-lg leading-none">→</span>
                 </span>
               }
             />
@@ -54,7 +65,7 @@ export default function Buy({ initialVans = [] }) {
             spaceBetween={16}
             slidesPerView={1.1}
             breakpoints={{
-              640:  { slidesPerView: 2.2 },
+              640: { slidesPerView: 2.2 },
               1024: { slidesPerView: 3.2 },
               1280: { slidesPerView: 3.2 },
             }}
@@ -63,13 +74,11 @@ export default function Buy({ initialVans = [] }) {
             {initialVans.map((van, i) => (
               <SwiperSlide key={i} className="h-auto">
                 <div className="bg-white rounded-lg overflow-hidden border border-primary/5 shadow-sm group h-full flex flex-col transition-all duration-500 hover:shadow-xl">
-
                   {/* Image Container */}
                   <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
-
                     {/* --- Available for Sale Tag --- */}
                     <div className="absolute top-4 left-4 z-10 bg-primary/90 border border-white/10 backdrop-blur-sm text-hover text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded shadow-md pointer-events-none transition-transform duration-300 group-hover:scale-105">
-                      Available for Sale
+                      Available for Order
                     </div>
 
                     {van?.image ? (
@@ -94,7 +103,8 @@ export default function Buy({ initialVans = [] }) {
                       className="truncate block"
                     />
                     <RichParagraph className="mt-2 mb-6 line-clamp-2 h-12">
-                      {van?.subtitle || "High-end craftsmanship meeting rugged durability."}
+                      {van?.subtitle ||
+                        "High-end craftsmanship meeting rugged durability."}
                     </RichParagraph>
 
                     <div className="mt-auto flex gap-3">
@@ -108,18 +118,17 @@ export default function Buy({ initialVans = [] }) {
                         href="/inquiry"
                         className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300 shadow-lg shadow-primary/10"
                       >
-                        Inquire
+                        Start Your Build
                       </Link>
                     </div>
                     {van?.slug && (
                       <PrimaryButton
-                        label="Launch 3D Mode"
+                        label="Explore in 3D"
                         link={`/camper-vans-for-sale/${van.slug}/configure`}
                         className="w-full mt-4"
                       />
                     )}
                   </div>
-
                 </div>
               </SwiperSlide>
             ))}
