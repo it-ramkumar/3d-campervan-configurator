@@ -33,7 +33,7 @@ export default function Buy({ initialVans = [] }) {
         </div>
 
         {/* --- Slider Section --- */}
-        <div className="relative">
+        <div className="relative ml-12 md:ml-18">
           <div className="flex items-center justify-between mb-5 border-b border-primary/10 pb-4">
             <CustomLink
               href="/camper-vans-for-sale"
