@@ -60,7 +60,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-screen bg-primary text-secondary overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center px-6 md:px-16 gap-8 lg:gap-6 pt-24 pb-20 lg:pt-0 lg:pb-0">
+    <section className="relative w-full min-h-screen bg-primary text-secondary overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center px-6 md:px-16 gap-8 lg:gap-6 pt-12 pb-20 lg:pt-0 lg:pb-0">
       {/* dot grid pattern */}
       <div className="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
 
@@ -71,7 +71,7 @@ export default function HeroSection() {
         }`}
       >
         {/* slogan */}
-        <p className="text-hover text-[16px] md:text-[22px] italic tracking-[0.03em] mb-2 md:mb-3 font-normal">
+        <p className="text-hover text-[13px] md:text-[18px] italic tracking-[0.03em] mb-2 md:mb-3 font-normal">
           {activeSlide.slogan}
         </p>
         {/* heading */}
