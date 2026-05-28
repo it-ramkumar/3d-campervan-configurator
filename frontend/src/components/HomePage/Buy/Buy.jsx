@@ -25,10 +25,10 @@ export default function Buy({ initialVans = [] }) {
           <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase mb-3">
             Premium Builds
           </RichParagraph>
-          <Heading2 text="Explore Premium Van Builds" />
+          <Heading2 text="Premium Camper Vans Ready for Adventure" />
           <RichParagraph className="mt-4 max-w-3xl mx-auto">
-            Reserve one of our premium camper van builds and customize it for
-            your next adventure.
+            Fully built premium camper vans available now — skip the wait and
+            start your adventure today.
           </RichParagraph>
         </div>
 
@@ -39,7 +39,7 @@ export default function Buy({ initialVans = [] }) {
               href="/camper-vans-for-sale"
               text={
                 <span className="flex items-center gap-2">
-                  Explore All Builds{" "}
+                  Browse Full Inventory{" "}
                   <span className="text-lg leading-none">→</span>
                 </span>
               }
@@ -78,7 +78,7 @@ export default function Buy({ initialVans = [] }) {
                   <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
                     {/* --- Available for Sale Tag --- */}
                     <div className="absolute top-4 left-4 z-10 bg-primary/90 border border-white/10 backdrop-blur-sm text-hover text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded shadow-md pointer-events-none transition-transform duration-300 group-hover:scale-105">
-                      Available for Order
+                      Available for Sale
                     </div>
 
                     {van?.image ? (
@@ -115,10 +115,10 @@ export default function Buy({ initialVans = [] }) {
                         Details
                       </Link>
                       <Link
-                        href="/inquiry"
+                        href="/contact"
                         className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300 shadow-lg shadow-primary/10"
                       >
-                        Start Your Build
+                        Get This Build
                       </Link>
                     </div>
                     {van?.slug && (
