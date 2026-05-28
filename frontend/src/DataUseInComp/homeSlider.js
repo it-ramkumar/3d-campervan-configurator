@@ -15,6 +15,7 @@ export const slides = [
     image: "/renderings/imperial.webp",
     tag: "Bespoke Service",
     title: "Custom Van Builds",
+    slogan: "You Dream It. We Build It.",
     desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
     btnText: "Build Your Own",
     link: "/inquiry",
