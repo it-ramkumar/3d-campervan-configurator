@@ -8,7 +8,7 @@ import NextBackButton from "./MultiStepPaginationButtons";
 import TabButtons from "./MultiStepTabButtons";
 import ModelsCard from "./MultiStepCard";
 import { goToNextStep } from "@/CustomHooks/goToNextStep";
-import { goToPrevStep } from "@/CustomHooks/goToPrevStep"
+import { goToPrevStep } from "@/CustomHooks/goToPrevStep";
 import SummaryModal from "../summary-modal/SummaryModal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInterior } from "@/api/model/modelInterior";
@@ -18,7 +18,12 @@ import { handleGetQuote } from "@/CustomHooks/handleQuote.js";
 import Loader from "../Loader/Loader";
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
-import { Heading2, PrimaryButton, RichParagraph, SecondaryButton } from "../Common/Common";
+import {
+  Heading2,
+  PrimaryButton,
+  RichParagraph,
+  SecondaryButton,
+} from "../Common/Common";
 
 const MultiStepForm = ({
   addModelToScene,
@@ -28,7 +33,7 @@ const MultiStepForm = ({
   cameraRef,
   modelRefs,
   orbitControlsRef,
-  BaseVan
+  BaseVan,
 }) => {
   const dispatch = useDispatch();
   const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
@@ -50,7 +55,7 @@ const MultiStepForm = ({
         await Promise.all([
           dispatch(fetchInterior()),
           dispatch(fetchExterior()),
-          dispatch(fetchSystem())
+          dispatch(fetchSystem()),
         ]);
       } catch (err) {
         console.error("Error fetching initial data:", err);
@@ -63,7 +68,11 @@ const MultiStepForm = ({
 
   useEffect(() => {
     if (!loading) {
-      const allData = [...(interior || []), ...(exterior || []), ...(system || [])];
+      const allData = [
+        ...(interior || []),
+        ...(exterior || []),
+        ...(system || []),
+      ];
       allData.forEach((model) => {
         if (model?.glbFile) {
           try {
@@ -77,14 +86,24 @@ const MultiStepForm = ({
   }, [loading, interior, exterior, system]);
 
   const steps = useMemo(() => {
-    if (activeTab === "interior") return Object.entries(groupByGroup(interior || []));
-    if (activeTab === "exterior") return Object.entries(groupByGroup(exterior || []));
+    if (activeTab === "interior")
+      return Object.entries(groupByGroup(interior || []));
+    if (activeTab === "exterior")
+      return Object.entries(groupByGroup(exterior || []));
     return Object.entries(groupByGroup(system || []));
   }, [activeTab, interior, exterior, system]);
 
-  const progressPercent = Math.round(((currentStep + 1) / (steps.length || 1)) * 100);
+  const progressPercent = Math.round(
+    ((currentStep + 1) / (steps.length || 1)) * 100,
+  );
 
-  if (loading || !steps || steps.length === 0 || !steps[currentStep] || BaseVan?.layout === null) {
+  if (
+    loading ||
+    !steps ||
+    steps.length === 0 ||
+    !steps[currentStep] ||
+    BaseVan?.layout === null
+  ) {
     return (
       <div className="h-full flex items-center justify-center bg-slate-900">
         {/* <Loader /> */}
@@ -94,7 +113,6 @@ const MultiStepForm = ({
 
   return (
     <div className="h-full flex flex-col bg-secondary text-primary overflow-hidden relative">
-
       {/* Fixed Header */}
       <div className="flex-shrink-0 p-3 border-b border-primary bg-secondary z-10">
         <TabButtons
@@ -113,25 +131,27 @@ const MultiStepForm = ({
             />
           </div>
           <div className="flex justify-between mt-1 text-[10px] text-gray-500">
-            <span>Step {currentStep + 1} of {steps.length}</span>
+            <span>
+              Step {currentStep + 1} of {steps.length}
+            </span>
             <span className="text-primary font-medium">{progressPercent}%</span>
           </div>
         </div>
 
         {/* Title */}
         <div className="mt-1 flex items-center justify-between">
-           <div>
-    <div className="flex items-center gap-1">
-      <Sparkles size={14} className="text-primary block" />
-      <Heading2
-        text={steps[currentStep][0].replace(/-/g, " ")}
-        className="!text-base  text-primary capitalize"
-      />
-    </div>
-    <RichParagraph className="!text-sm  text-primary/70  line-clamp-1">
-      {StepDescriptions[steps[currentStep][0]]}
-    </RichParagraph>
-  </div>
+          <div>
+            <div className="flex items-center gap-1">
+              <Sparkles size={14} className="text-primary block" />
+              <Heading2
+                text={steps[currentStep][0].replace(/-/g, " ")}
+                className="!text-base  text-primary capitalize"
+              />
+            </div>
+            <RichParagraph className="!text-sm  text-primary/70  line-clamp-1">
+              {StepDescriptions[steps[currentStep][0]]}
+            </RichParagraph>
+          </div>
 
           {/* Mobile: Items Count Badge */}
           <div className="lg:hidden flex items-center gap-2 px-3 py-1 rounded-lg bg-primary/5 text-xs text-primary">
@@ -172,7 +192,7 @@ const MultiStepForm = ({
                     setCurrentStep(0);
                   }}
                   label="← Interior"
-              className="w-full !py-2"
+                  className="w-full !py-2"
                 />
               ) : activeTab === "system" && currentStep === 0 ? (
                 <PrimaryButton
@@ -182,14 +202,14 @@ const MultiStepForm = ({
                     setCurrentStep(0);
                   }}
                   label="← Exterior"
-                className="w-full !py-2"
+                  className="w-full !py-2"
                 />
               ) : (
                 <SecondaryButton
                   onClick={() => goToPrevStep(setCurrentStep, currentStep)}
                   disabled={currentStep === 0}
                   label="← Previous"
-                className="w-full !py-2 !border-0"
+                  className="w-full !py-2 !border-0"
                 />
               )}
             </div>
@@ -204,28 +224,29 @@ const MultiStepForm = ({
                     setCurrentStep(0);
                   }}
                   label="Exterior →"
-                className="w-full !py-2"
+                  className="w-full !py-2"
                 />
-              ) : activeTab === "exterior" && currentStep === steps.length - 1 ? (
+              ) : activeTab === "exterior" &&
+                currentStep === steps.length - 1 ? (
                 <PrimaryButton
                   onClick={() => {
                     setActiveTab("system");
                     setCurrentStep(0);
                   }}
                   label="System →"
-                className="w-full !py-2"
+                  className="w-full !py-2"
                 />
               ) : currentStep === steps.length - 1 ? (
                 <PrimaryButton
                   label="Summary →"
                   onClick={() => setSummaryModal(true)}
-              className="w-full !py-2"
+                  className="w-full !py-2"
                 />
               ) : (
                 <PrimaryButton
-                  onClick={() => goToNextStep(setCurrentStep, currentStep, steps)}
+                  onClick={() => goToNextStep(setCurrentStep, steps)}
                   label="Next →"
-                 className="w-full !py-2"
+                  className="w-full !py-2"
                 />
               )}
             </div>
@@ -252,29 +273,31 @@ const MultiStepForm = ({
       {showQuoteConfirm && (
         <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl flex items-center justify-center p-4 lg:hidden">
           <div className="w-full max-w-sm bg-gray-100 rounded-lg border border-black/10 p-6">
-            <h3 className="text-xl font-bold text-primary mb-2">Get Your Quote</h3>
+            <h3 className="text-xl font-bold text-primary mb-2">
+              Get Your Quote
+            </h3>
             <p className="text-sm text-primary/70 mb-6">
-              You have {addedModels.length} items selected for {BaseVan?.layout || "your van"}.
+              You have {addedModels.length} items selected for{" "}
+              {BaseVan?.layout || "your van"}.
             </p>
 
             <div className="space-y-3">
               <button
                 onClick={() => {
                   setShowQuoteConfirm(false);
-                  handleGetQuote(
-                    addedModels,
-                    dispatch,
-                    BaseVan,
-                    setLoading
-                  );
+                  handleGetQuote(addedModels, dispatch, BaseVan, setLoading);
                 }}
                 disabled={loading}
                 className="w-full py-3 bg-primary text-secondary font-bold rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {loading ? (
-                  <><Loader2 size={18} className="animate-spin" /> Saving...</>
+                  <>
+                    <Loader2 size={18} className="animate-spin" /> Saving...
+                  </>
                 ) : (
-                  <><Sparkles size={18} /> Save & Get Quote</>
+                  <>
+                    <Sparkles size={18} /> Save & Get Quote
+                  </>
                 )}
               </button>
 
@@ -293,7 +316,9 @@ const MultiStepForm = ({
       <div className="hidden lg:block flex-shrink-0 border-t border-black/10 bg-gray-100 p-3">
         <div className="flex items-center justify-between gap-3 mb-3">
           <div>
-            <p className="text-[10px] text-primary/70 uppercase">Selected Van</p>
+            <p className="text-[10px] text-primary/70 uppercase">
+              Selected Van
+            </p>
             <p className="text-sm font-bold text-primary truncate max-w-[150px]">
               {BaseVan?.layout || "Base Van"}
             </p>
@@ -308,21 +333,23 @@ const MultiStepForm = ({
         </div>
 
         <PrimaryButton
-          onClick={() => handleGetQuote(
-            addedModels,
-            dispatch,
-            BaseVan,
-            setLoading
-          )}
-          label= {loading ? (
-            <><Loader2 size={16} className="animate-spin" /> Saving...</>
-          ) : (
-            <><Sparkles size={16} /> Save & Get Quote</>
-          )}
+          onClick={() =>
+            handleGetQuote(addedModels, dispatch, BaseVan, setLoading)
+          }
+          label={
+            loading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" /> Saving...
+              </>
+            ) : (
+              <>
+                <Sparkles size={16} /> Save & Get Quote
+              </>
+            )
+          }
           disabled={loading}
           className="w-full py-2.5 bg-black hover:bg-gray-800 text-white text-sm font-bold rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
         />
-
       </div>
 
       {/* Summary Modal */}

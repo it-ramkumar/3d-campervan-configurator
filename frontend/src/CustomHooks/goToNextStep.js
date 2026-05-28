@@ -1,6 +1,8 @@
-
-export const goToNextStep = (setCurrentStep, currentStep, steps) => {
-  if (currentStep < steps.length - 1) {
-    setCurrentStep((prev) => prev + 1);
-  }
+export const goToNextStep = (setCurrentStep, steps) => {
+  setCurrentStep((prev) => {
+    if (prev < steps.length - 1) {
+      return prev + 1;
+    }
+    return prev;
+  });
 };
