@@ -13,10 +13,56 @@ import {
 import { ArrowBigRightDash, ArrowBigLeftDash } from "lucide-react";
 import "swiper/css";
 import Image from "next/image";
+import ContactForm from "@/components/Consultation/ContactForm";
+import { contact } from "../../../api/contact/contact";
 
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim()
+    ) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await contact(formData);
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+
+      setIsFormOpen(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -120,12 +166,12 @@ export default function Buy({ initialVans = [] }) {
                         >
                           Details
                         </Link>
-                        <Link
-                          href="/contact"
+                        <button
+                          onClick={() => setIsFormOpen(true)}
                           className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300 shadow-lg shadow-primary/10"
                         >
                           Get This Build
-                        </Link>
+                        </button>
                       </div>
                       {van?.slug && (
                         <PrimaryButton
@@ -141,6 +187,25 @@ export default function Buy({ initialVans = [] }) {
           </Swiper>
         </div>
       </div>
+      {isFormOpen && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto">
+          <div className="relative w-full max-w-2xl bg-white border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto pointer-events-auto">
+            <button
+              onClick={() => setIsFormOpen(false)}
+              className="absolute top-5 right-5 text-primary z-30"
+            >
+              ✕
+            </button>
+
+            <ContactForm
+              formData={formData}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              loading={loading}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
