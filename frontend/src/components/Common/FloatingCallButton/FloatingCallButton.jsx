@@ -35,6 +35,7 @@ export default function FloatingCallButton() {
     try {
       console.log("FORM SUBMIT STARTED");
       const result = await contact(formData);
+
       if (typeof window !== "undefined" && window.fbq) {
         window.fbq("track", "Lead", { source: "consultation" });
       }
@@ -65,10 +66,10 @@ export default function FloatingCallButton() {
     >
       {/* 1. OPTIONS MENU */}
       <div
-        className={`flex flex-col gap-2 mb-2 transition-all duration-300 bg-white transform ${
+        className={`flex flex-col gap-2 mb-2 transition-all duration-300  transform ${
           isMenuOpen
-            ? "opacity-100 translate-y-0 scale-100 pointer-events-auto bg-white"
-            : "opacity-0 translate-y-4 scale-95 pointer-events-none bg-white"
+            ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+            : "opacity-0 translate-y-4 scale-95 pointer-events-none "
         }`}
       >
         <a
@@ -156,8 +157,8 @@ export default function FloatingCallButton() {
       {/* 3. CONTACT FORM MODAL */}
       {isFormOpen && (
         /* CRITICAL FIX: z-[10000] completely cuts through everything else */
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md transition-all">
-          <div className="relative w-full max-w-2xl bg-white  border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto injector-style">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md transition-all pointer-events-auto">
+          <div className="relative w-full max-w-2xl bg-white  border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto injector-style pointer-events-auto">
             <button
               onClick={() => setIsFormOpen(false)}
               className="absolute top-5 right-5 text-primary hover:text-white transition-colors rounded-lg hover:bg-white/5 z-30"
