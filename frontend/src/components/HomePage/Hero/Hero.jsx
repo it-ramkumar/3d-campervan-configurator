@@ -71,7 +71,10 @@ export default function HeroSection() {
         }`}
       >
         {/* slogan */}
-        <p className="text-hover text-[12px] md:text-[14px] lg:text-[15px] italic tracking-[0.03em] mb-1 md:mb-1 font-normal">
+        {/* <p className="text-hover text-[12px] md:text-[14px] lg:text-[15px] italic tracking-[0.03em] mb-1 md:mb-1 font-normal">
+          {activeSlide.slogan}
+        </p> */}
+        <p className="text-sm leading-[1.85] text-hover max-w-sm">
           {activeSlide.slogan}
         </p>
         {/* heading */}
