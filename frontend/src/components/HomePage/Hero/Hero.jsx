@@ -60,7 +60,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-screen bg-primary text-secondary overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center px-6 md:px-16 gap-8 lg:gap-6 pt-12 pb-20 lg:pt-0 lg:pb-0">
+    <section className="relative w-full min-h-screen bg-primary text-secondary overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-start lg:items-center px-6 md:px-16 gap-6 lg:gap-4 pt-10 md:pt-8 pb-16 lg:pt-0 lg:pb-0">
       {/* dot grid pattern */}
       <div className="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
 
@@ -71,7 +71,7 @@ export default function HeroSection() {
         }`}
       >
         {/* slogan */}
-        <p className="text-hover text-[13px] md:text-[18px] italic tracking-[0.03em] mb-2 md:mb-3 font-normal">
+        <p className="text-hover text-[12px] md:text-[14px] lg:text-[15px] italic tracking-[0.03em] mb-1 md:mb-1 font-normal">
           {activeSlide.slogan}
         </p>
         {/* heading */}
@@ -83,12 +83,12 @@ export default function HeroSection() {
         <div className="w-11 h-0.5 bg-hover rounded-full mb-4 lg:mb-5" />
 
         {/* description */}
-        <p className="text-sm leading-[1.85] text-white/80 max-w-sm mb-6 lg:mb-9 min-h-[auto] lg:min-h-[60px]">
+        <p className="text-sm leading-[1.85] text-white/80 max-w-sm mb-4 lg:mb-7 min-h-[auto] lg:min-h-[60px]">
           {activeSlide.desc}
         </p>
 
         {/* CTAs */}
-        <div className="flex items-center gap-4 mb-6 lg:mb-10 flex-wrap">
+        <div className="flex items-center gap-4 mb-4 lg:mb-5 flex-wrap">
           <Link
             href={activeSlide.link || "#"}
             className="bg-hover text-primary text-[11px] font-bold uppercase tracking-[0.1em] px-7 py-3.5 rounded hover:opacity-90 transition-opacity"
@@ -142,7 +142,7 @@ export default function HeroSection() {
 
       {/* RIGHT CONTENT — Aesthetic Slider Display */}
       {/* Mobile par h-[35vh] ya h-[40vh] responsive handle kiya hai taake image full-width aur clean dikhe */}
-      <div className="relative w-full h-[35vh] sm:h-[45vh] lg:h-[85vh] lg:col-span-7 flex items-center justify-center z-10 order-2 lg:order-2">
+      <div className="relative w-full h-[35vh] sm:h-[45vh] lg:h-[85vh] lg:col-span-7 flex items-center justify-center z-10 order-2 lg:order-2 -mt-8 lg:mt-0">
         {validSlides.map((slide, index) => {
           const isActive = index === currentSlide;
           return (

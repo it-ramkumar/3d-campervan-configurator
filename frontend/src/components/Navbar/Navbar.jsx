@@ -371,7 +371,7 @@ export default function Navbar({ forceMobile }) {
                 className="object-contain border-none mb-1"
               />
 
-              <span className="text-[9px] md:text-[10px] italic tracking-[0.12em] text-hover mt-[-8px] ml-1">
+              <span className="text-[9px] md:text-[10px] italic tracking-[0.12em] text-primary mt-[-8px] ml-1">
                 You Dream It. We Build It.
               </span>
             </Link>
