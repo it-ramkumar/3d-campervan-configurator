@@ -161,7 +161,7 @@ export default function FloatingCallButton() {
           <div className="relative w-full max-w-2xl bg-white  border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto injector-style pointer-events-auto">
             <button
               onClick={() => setIsFormOpen(false)}
-              className="absolute top-5 right-5 text-primary hover:text-white transition-colors rounded-lg hover:bg-white/5 z-30"
+              className="absolute top-5 right-5 text-primary hover:text-hover transition-colors rounded-lg hover:bg-white/5 z-30 cursor-pointer"
             >
               <svg
                 className="w-6 h-6"
