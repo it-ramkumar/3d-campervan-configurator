@@ -6,6 +6,7 @@ import { ImageWithSkeleton } from "../Common/Common";
 gsap.registerPlugin(ScrollTrigger);
 import { RichParagraph } from "../Common/Common";
 import { Heading2, Heading3 } from "../Common/Common";
+import Image from "next/image";
 
 // 1. Custom Dropdown Component to fix width issues
 const CustomSelect = ({ label, options, value, onChange, placeholder }) => {
@@ -98,7 +99,7 @@ export default function VanConfig() {
       id: "swb",
       title: 'SWB (Short): 144"',
       shortLabel: 'SWB (144")',
-      image: "/sprinter/11.webp",
+      image: "/sprinter/Untitled design (17) 1.webp",
       description: "SWB (Short wheelbase)\n144” wb (19.4 ft long)",
       features: ["Urban", "Easy Park", "Efficient"],
       dimensions: { length: "19.4 ft", cargoVolume: "319 cu ft" },
@@ -107,7 +108,7 @@ export default function VanConfig() {
       id: "lwb",
       title: 'LWB (Long): 170"',
       shortLabel: 'LWB (170")',
-      image: "/sprinter/11.webp",
+      image: "/sprinter/Untitled design (18) 1.webp",
       description: "LWB (Long wheelbase)\n170” wb (22.5 ft long)",
       features: ["Balanced", "Family", "Spacious"],
       dimensions: { length: "22.5 ft", cargoVolume: "489 cu ft" },
@@ -381,10 +382,12 @@ export default function VanConfig() {
                   <div className="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100  flex items-center justify-center">
                     <div className="relative w-full">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-md"></div>
-                      <ImageWithSkeleton
+                      <Image
                         src={option.image}
                         alt={option.title}
-                        className="w-full h-full md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]"
+                        width={500}
+                        height={300}
+                        className="w-full h-32 object-contain"
                       />
                     </div>
                   </div>
@@ -452,10 +455,12 @@ export default function VanConfig() {
                   <div className="p-3 md:p-4 bg-gradient-to-br from-gray-50 to-gray-100 flex-grow flex items-center justify-center">
                     <div className="relative w-full">
                       <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-md"></div>
-                      <ImageWithSkeleton
+                      <Image
                         src={option.image}
                         alt={option.title}
-                        className="w-full h-28 md:h-32 object-contain transform transition-transform duration-500 group-hover:scale-[1.02]"
+                        width={500}
+                        height={300}
+                        className="w-full h-32 object-contain"
                       />
                     </div>
                   </div>
