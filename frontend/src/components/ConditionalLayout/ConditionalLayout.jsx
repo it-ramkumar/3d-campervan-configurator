@@ -22,9 +22,18 @@ export default function ConditionalLayout({ children }) {
   const isConfiguratorPage = pathname.endsWith("/configure");
 
   // Final Logic Toggles
-  const hideLayout = exactHideLayoutPaths.includes(pathname) || isQuotePreview || isConfiguratorPage;
-  const hideConsultation = exactHideConsultationPaths.includes(pathname) || isQuotePreview || isConfiguratorPage;
+  const hideLayout =
+    exactHideLayoutPaths.includes(pathname) ||
+    isQuotePreview ||
+    isConfiguratorPage;
+  const hideConsultation =
+    exactHideConsultationPaths.includes(pathname) ||
+    isQuotePreview ||
+    isConfiguratorPage;
   const hideShareBar = isConfiguratorPage;
+  const hideFloatingButtonPaths = ["/configurator", "/inquiry"];
+
+  const hideFloatingButton = hideFloatingButtonPaths.includes(pathname);
 
   return (
     <>
@@ -34,7 +43,7 @@ export default function ConditionalLayout({ children }) {
         {!hideLayout && <Navbar />}
 
         {!hideShareBar && <SideShareBar />}
-<FloatingCallButton/>
+        {!hideFloatingButton && <FloatingCallButton />}
         <main className="flex-1">{children}</main>
 
         {!hideLayout && !hideConsultation && <Consultation />}
