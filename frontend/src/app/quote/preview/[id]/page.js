@@ -15,7 +15,7 @@ async function getBaseVan(modelId) {
     cache: 'no-store',
     credentials: 'include'
   });
-  console.log(res, "json data vans");
+  // console.log(res, "json data vans");
 
   if (!res.ok) return null;
   const json = await res.json();
