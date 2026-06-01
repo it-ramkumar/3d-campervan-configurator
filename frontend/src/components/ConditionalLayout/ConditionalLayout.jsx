@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import Consultation from "@/components/Consultation/Consultation";
+import dynamic from "next/dynamic";
+const Consultation = dynamic(() => import("@/components/Consultation/Consultation"));
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
 import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
 import FloatingCallButton from "../Common/FloatingCallButton/FloatingCallButton";
