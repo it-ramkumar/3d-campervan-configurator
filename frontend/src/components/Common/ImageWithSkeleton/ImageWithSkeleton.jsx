@@ -18,7 +18,7 @@ export default function ImageWithSkeleton({
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const finalSrc = error ? "/images/blackLogo.jpg" : src;
+  const finalSrc = error ? "/images/blackLogo.webp" : src;
   // console.log(src,"scr")
 
   return (

@@ -19,7 +19,7 @@ export const generateSprinterGuideSchema = () => {
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/blackLogo.jpg"
+        "url": "https://www.bigbearvans.com/blackLogo.webp"
       }
     },
     "mainEntityOfPage": {

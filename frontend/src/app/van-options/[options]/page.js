@@ -53,7 +53,7 @@ export async function generateMetadata({ params }) {
       type: "website",
       images: [
         {
-          url: ogImage, // Agar current.image mein "/img.jpg" hai to ye poora URL bana dega
+          url: ogImage, // Agar current.image mein "/img.webp" hai to ye poora URL bana dega
           width: 1200,
           height: 630,
         },

@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: "Careers at Big Bear Vans",
     description: "Join us in redefining mobile living through precision engineering.",
-    images: ["/images/blackLogo.jpg"], // Replace with actual OG image
+    images: ["/images/blackLogo.webp"], // Replace with actual OG image
   },
 };
 
@@ -76,7 +76,7 @@ const jsonLd = {
           "@type": "Organization",
           "name": "Big Bear Vans",
           "sameAs": "https://www.bigbearvans.com",
-          "logo": "https://www.bigbearvans.com/logo.png"
+          "logo": "https://www.bigbearvans.com/logo.webp"
         },
 
         "url": "https://www.bigbearvans.com/careers"

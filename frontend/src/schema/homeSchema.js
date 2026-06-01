@@ -18,7 +18,7 @@ export const generateHomeSchema = (faqData) => {
         "@id": "https://www.bigbearvans.com/#organization",
         "name": "Big Bear Vans",
         "url": "https://www.bigbearvans.com",
-        "logo": "https://www.bigbearvans.com/images/blackLogo.jpg",
+        "logo": "https://www.bigbearvans.com/images/blackLogo.webp",
         "description": "Premium custom camper van conversions featuring 3D design and automated CNC manufacturing.",
         "sameAs": [
           "https://www.instagram.com/bigbearvans",

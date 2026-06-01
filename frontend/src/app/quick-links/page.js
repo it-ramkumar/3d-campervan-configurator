@@ -14,7 +14,7 @@ export const metadata = {
     description: "Access all official Big Bear Vans resources, social media channels, and contact links in one place.",
     url: "https://www.bigbearvans.com/quick-links",
     type: "website",
-    images: ["https://www.bigbearvans.com/images/blackLogo.jpg"],
+    images: ["https://www.bigbearvans.com/images/blackLogo.webp"],
   },
 };
 

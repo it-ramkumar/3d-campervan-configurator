@@ -115,7 +115,7 @@
 //       "item": {
 //         "@type": "Product",
 //         "name": details.title || details.name || `Custom ${specs.make_model || 'Campervan'}`,
-//         "image": van.gallery?.[0] || van.heroImage || "https://www.bigbearvans.com/images/blackLogo.jpg",
+//         "image": van.gallery?.[0] || van.heroImage || "https://www.bigbearvans.com/images/blackLogo.webp",
 //         "description": details.description?.substring(0, 160) || `Custom built ${specs.make_model || 'Campervan'} by Big Bear Vans with premium features and quality craftsmanship.`,
 //         "url": `https://www.bigbearvans.com/van-detail/${van.slug}`,
 //         "brand": {

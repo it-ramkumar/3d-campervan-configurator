@@ -1,8 +1,11 @@
 import "./globals.css";
+import { Inter } from "next/font/google";
 import Providers from "@/components/Providers/Providers";
 import ConditionalLayout from "@/components/ConditionalLayout/ConditionalLayout";
 import AnalyticsInit from "@/components/AnalyticsInit/AnalyticsInit";
 import Script from "next/script";
+
+const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 
 
 
@@ -13,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${inter.variable}`}>
       <head>
         <meta name="yandex-verification" content="94c87c5e22615ea1" />
       </head>
@@ -47,7 +50,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         {/* ✅ Meta Pixel Code */}
-        <Script id="facebook-pixel" strategy="afterInteractive">
+        <Script id="facebook-pixel" strategy="lazyOnload">
           {`
             !function(f,b,e,v,n,t,s)
             {

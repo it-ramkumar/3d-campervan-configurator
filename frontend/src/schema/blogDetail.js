@@ -19,7 +19,7 @@ export const generateBlogSchema = (blog, currentUrl) => {
 
     "image": blog.gallery && blog.gallery.length > 0
       ? blog.gallery
-      : ["https://www.bigbearvans.com/images/blackLogo.jpg"],
+      : ["https://www.bigbearvans.com/images/blackLogo.webp"],
 
     "datePublished": publishDate,
     "dateModified": modifiedDate,
@@ -35,7 +35,7 @@ export const generateBlogSchema = (blog, currentUrl) => {
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
+        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
       }
     },
 

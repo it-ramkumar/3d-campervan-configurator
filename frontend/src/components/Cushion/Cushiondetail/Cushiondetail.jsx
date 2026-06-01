@@ -10,118 +10,118 @@ const fabricData = {
   "Chenille Fleece": {
     description: "Chenille fleece has twisted fibers, which make it durable and smooth to the touch. This heat-absorbing fabric requires low maintenance.",
     colors: [
-      { name: "Burnt Sienna", code: "#A67360", image: "Cushion fabric Optimize/Chenille Fleece/Burnt Sienna.jpg" },
-      { name: "Dark Brown", code: "#40362E", image: "Cushion fabric Optimize/Chenille Fleece/Dark Brown.jpg" },
-      { name: "Dark Olive Green", code: "#32402C", image: "Cushion fabric Optimize/Chenille Fleece/Dark Olive.jpg" },
-      { name: "Davy's Grey", code: "#585959", image: "Cushion fabric Optimize/Chenille Fleece/Davy_s Grey.jpg" },
-      { name: "Grayish-Blue", code: "#313640", image: "Cushion fabric Optimize/Chenille Fleece/Grayish-blue.jpg" },
-      { name: "Raisin Black", code: "#262526", image: "Cushion fabric Optimize/Chenille Fleece/Raisin black.jpg" },
-      { name: "Rustic Orange", code: "#A65437", image: "Cushion fabric Optimize/Chenille Fleece/Rustic Orange.jpg" }
+      { name: "Burnt Sienna", code: "#A67360", image: "Cushion fabric Optimize/Chenille Fleece/Burnt Sienna.webp" },
+      { name: "Dark Brown", code: "#40362E", image: "Cushion fabric Optimize/Chenille Fleece/Dark Brown.webp" },
+      { name: "Dark Olive Green", code: "#32402C", image: "Cushion fabric Optimize/Chenille Fleece/Dark Olive.webp" },
+      { name: "Davy's Grey", code: "#585959", image: "Cushion fabric Optimize/Chenille Fleece/Davy_s Grey.webp" },
+      { name: "Grayish-Blue", code: "#313640", image: "Cushion fabric Optimize/Chenille Fleece/Grayish-blue.webp" },
+      { name: "Raisin Black", code: "#262526", image: "Cushion fabric Optimize/Chenille Fleece/Raisin black.webp" },
+      { name: "Rustic Orange", code: "#A65437", image: "Cushion fabric Optimize/Chenille Fleece/Rustic Orange.webp" }
     ]
   },
   "Warp Knitted Polyester Chenille": {
     description: "Knitted polyester chenille fabric has a soft and plush texture and can maintain its shape well over time, even with frequent use.",
     colors: [
-      { name: "Almond Frost", code: "#9A8678", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Almond.jpg" },
-      { name: "Ash Grey", code: "#8C8B88", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Ash Grey.jpg" },
-      { name: "Black Eel", code: "#463E3F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Black Eel.jpg" },
-      { name: "Deep Brown", code: "#591E1E", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep brown.jpg" },
-      { name: "Deep Olive", code: "#3D4034", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep Olive.jpg" },
-      { name: "Dusty Green", code: "#808C85", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty Green.jpg" },
-      { name: "Dusty Rose", code: "#D9A79C", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty rose.jpg" },
-      { name: "Gold", code: "#D9AA55", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Gold.jpg" },
-      { name: "Light Silver", code: "#D9D9D9", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Light silver.jpg" },
-      { name: "Pale Beige", code: "#D9D0C1", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pale beige.jpg" },
-      { name: "Pearl White", code: "#F2F2EB", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pearl White.jpg" },
-      { name: "Redwood", code: "#A66249", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Redwood.jpg" },
-      { name: "Shuttle Grey", code: "#565672", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Shuttle Grey.jpg" },
-      { name: "Slate Gray", code: "#72736F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Slate gray.jpg" },
-      { name: "White Rock", code: "#D4CFB4", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/White Rock.jpg" }
+      { name: "Almond Frost", code: "#9A8678", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Almond.webp" },
+      { name: "Ash Grey", code: "#8C8B88", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Ash Grey.webp" },
+      { name: "Black Eel", code: "#463E3F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Black Eel.webp" },
+      { name: "Deep Brown", code: "#591E1E", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep brown.webp" },
+      { name: "Deep Olive", code: "#3D4034", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep Olive.webp" },
+      { name: "Dusty Green", code: "#808C85", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty Green.webp" },
+      { name: "Dusty Rose", code: "#D9A79C", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty rose.webp" },
+      { name: "Gold", code: "#D9AA55", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Gold.webp" },
+      { name: "Light Silver", code: "#D9D9D9", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Light silver.webp" },
+      { name: "Pale Beige", code: "#D9D0C1", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pale beige.webp" },
+      { name: "Pearl White", code: "#F2F2EB", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pearl White.webp" },
+      { name: "Redwood", code: "#A66249", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Redwood.webp" },
+      { name: "Shuttle Grey", code: "#565672", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Shuttle Grey.webp" },
+      { name: "Slate Gray", code: "#72736F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Slate gray.webp" },
+      { name: "White Rock", code: "#D4CFB4", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/White Rock.webp" }
     ]
   },
   "Waterproof Oxford": {
     description: "Waterproof Oxford fabric is lightweight, PU-coated, and easy to maintain. It's ideal for those who need moisture-resistant and easy-to-clean cushions.",
     colors: [
-      { name: "Crimson", code: "#400D16", image: "Cushion fabric Optimize/Waterproof Oxford/Crimson.jpg" },
-      { name: "Dark Gray", code: "#262626", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Gray.jpg" },
-      { name: "Dark Green", code: "#2E4039", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Green.jpg" },
-      { name: "Dark Sage", code: "#425951", image: "Cushion fabric Optimize/Waterproof Oxford/Dark sage.jpg" },
-      { name: "Dark Vanilla", code: "#D9C1B4", image: "Cushion fabric Optimize/Waterproof Oxford/Dark vanilla.jpg" },
-      { name: "Espresso", code: "#401F18", image: "Cushion fabric Optimize/Waterproof Oxford/espresso.jpg" },
-      { name: "Garnet", code: "#A63232", image: "Cushion fabric Optimize/Waterproof Oxford/garnet.jpg" },
-      { name: "Indigo", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/indigo.jpg" },
-      { name: "Ivory", code: "#F2E4D8", image: "Cushion fabric Optimize/Waterproof Oxford/ivory.jpg" },
-      { name: "Lavender", code: "#957BA6", image: "Cushion fabric Optimize/Waterproof Oxford/lavender.jpg" },
-      { name: "Light Brown", code: "#A68877", image: "Cushion fabric Optimize/Waterproof Oxford/light brown.jpg" },
-      { name: "Light Gray", code: "#A6A1A1", image: "Cushion fabric Optimize/Waterproof Oxford/light grey.jpg" },
-      { name: "Moss Green", code: "#A2A629", image: "Cushion fabric Optimize/Waterproof Oxford/moss green.jpg" },
-      { name: "Mustard Brown", code: "#BF923F", image: "Cushion fabric Optimize/Waterproof Oxford/mustard brown.jpg" },
-      { name: "Muted Plum", code: "#40212F", image: "Cushion fabric Optimize/Waterproof Oxford/muted plum.jpg" },
-      { name: "Muted Tan", code: "#A69485", image: "Cushion fabric Optimize/Waterproof Oxford/muted tan.jpg" },
-      { name: "Navy", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/navy.jpg" },
-      { name: "Nobel", code: "#9FA4BF", image: "Cushion fabric Optimize/Waterproof Oxford/nobel.jpg" },
-      { name: "Olive", code: "#8C783B", image: "Cushion fabric Optimize/Waterproof Oxford/olive.jpg" },
-      { name: "Orange-Brown", code: "#BF6E3F", image: "Cushion fabric Optimize/Waterproof Oxford/orange brown.jpg" },
-      { name: "Pink-Magenta", code: "#D996BB", image: "Cushion fabric Optimize/Waterproof Oxford/pink magenta.jpg" },
-      { name: "Sandy Brown", code: "#A6845B", image: "Cushion fabric Optimize/Waterproof Oxford/sandy brown.jpg" }
+      { name: "Crimson", code: "#400D16", image: "Cushion fabric Optimize/Waterproof Oxford/Crimson.webp" },
+      { name: "Dark Gray", code: "#262626", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Gray.webp" },
+      { name: "Dark Green", code: "#2E4039", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Green.webp" },
+      { name: "Dark Sage", code: "#425951", image: "Cushion fabric Optimize/Waterproof Oxford/Dark sage.webp" },
+      { name: "Dark Vanilla", code: "#D9C1B4", image: "Cushion fabric Optimize/Waterproof Oxford/Dark vanilla.webp" },
+      { name: "Espresso", code: "#401F18", image: "Cushion fabric Optimize/Waterproof Oxford/espresso.webp" },
+      { name: "Garnet", code: "#A63232", image: "Cushion fabric Optimize/Waterproof Oxford/garnet.webp" },
+      { name: "Indigo", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/indigo.webp" },
+      { name: "Ivory", code: "#F2E4D8", image: "Cushion fabric Optimize/Waterproof Oxford/ivory.webp" },
+      { name: "Lavender", code: "#957BA6", image: "Cushion fabric Optimize/Waterproof Oxford/lavender.webp" },
+      { name: "Light Brown", code: "#A68877", image: "Cushion fabric Optimize/Waterproof Oxford/light brown.webp" },
+      { name: "Light Gray", code: "#A6A1A1", image: "Cushion fabric Optimize/Waterproof Oxford/light grey.webp" },
+      { name: "Moss Green", code: "#A2A629", image: "Cushion fabric Optimize/Waterproof Oxford/moss green.webp" },
+      { name: "Mustard Brown", code: "#BF923F", image: "Cushion fabric Optimize/Waterproof Oxford/mustard brown.webp" },
+      { name: "Muted Plum", code: "#40212F", image: "Cushion fabric Optimize/Waterproof Oxford/muted plum.webp" },
+      { name: "Muted Tan", code: "#A69485", image: "Cushion fabric Optimize/Waterproof Oxford/muted tan.webp" },
+      { name: "Navy", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/navy.webp" },
+      { name: "Nobel", code: "#9FA4BF", image: "Cushion fabric Optimize/Waterproof Oxford/nobel.webp" },
+      { name: "Olive", code: "#8C783B", image: "Cushion fabric Optimize/Waterproof Oxford/olive.webp" },
+      { name: "Orange-Brown", code: "#BF6E3F", image: "Cushion fabric Optimize/Waterproof Oxford/orange brown.webp" },
+      { name: "Pink-Magenta", code: "#D996BB", image: "Cushion fabric Optimize/Waterproof Oxford/pink magenta.webp" },
+      { name: "Sandy Brown", code: "#A6845B", image: "Cushion fabric Optimize/Waterproof Oxford/sandy brown.webp" }
     ]
   },
   "Waterproof Chenille": {
     description: "Water-resistant chenille has a soft and luxurious texture. Its woven, thick, and insulating properties make it water and stain-resistant.",
     colors: [
-      { name: "Ash Gray", code: "#BFBEBD", image: "Cushion fabric Optimize/Waterproof Chenille/Ash Gray.jpg" },
-      { name: "Dark Charcoal", code: "#595654", image: "Cushion fabric Optimize/Waterproof Chenille/Dark charcoal.jpg" },
-      { name: "Dark Red", code: "#733C40", image: "Cushion fabric Optimize/Waterproof Chenille/Dark red.jpg" },
-      { name: "Dusty Teal", code: "#639FA6", image: "Cushion fabric Optimize/Waterproof Chenille/Dusty teal.jpg" },
-      { name: "Light Beige", code: "#D9CAB8", image: "Cushion fabric Optimize/Waterproof Chenille/Light Beige.jpg" },
-      { name: "Mint Frost", code: "#BAD9CE", image: "Cushion fabric Optimize/Waterproof Chenille/Mint Frost.jpg" },
-      { name: "Raisin Black", code: "#262626", image: "Cushion fabric Optimize/Waterproof Chenille/Raisin black.jpg" },
-      { name: "Saffron Yellow", code: "#F2B749", image: "Cushion fabric Optimize/Waterproof Chenille/Saffron Yellow.jpg" },
-      { name: "Slate Blue", code: "#394459", image: "Cushion fabric Optimize/Waterproof Chenille/Slate blue.jpg" },
-      { name: "Smoky Cocoa", code: "#594842", image: "Cushion fabric Optimize/Waterproof Chenille/Smoky Cocoa.jpg" },
-      { name: "Stone Gray", code: "#8C8887", image: "Cushion fabric Optimize/Waterproof Chenille/Stone Gray.jpg" }
+      { name: "Ash Gray", code: "#BFBEBD", image: "Cushion fabric Optimize/Waterproof Chenille/Ash Gray.webp" },
+      { name: "Dark Charcoal", code: "#595654", image: "Cushion fabric Optimize/Waterproof Chenille/Dark charcoal.webp" },
+      { name: "Dark Red", code: "#733C40", image: "Cushion fabric Optimize/Waterproof Chenille/Dark red.webp" },
+      { name: "Dusty Teal", code: "#639FA6", image: "Cushion fabric Optimize/Waterproof Chenille/Dusty teal.webp" },
+      { name: "Light Beige", code: "#D9CAB8", image: "Cushion fabric Optimize/Waterproof Chenille/Light Beige.webp" },
+      { name: "Mint Frost", code: "#BAD9CE", image: "Cushion fabric Optimize/Waterproof Chenille/Mint Frost.webp" },
+      { name: "Raisin Black", code: "#262626", image: "Cushion fabric Optimize/Waterproof Chenille/Raisin black.webp" },
+      { name: "Saffron Yellow", code: "#F2B749", image: "Cushion fabric Optimize/Waterproof Chenille/Saffron Yellow.webp" },
+      { name: "Slate Blue", code: "#394459", image: "Cushion fabric Optimize/Waterproof Chenille/Slate blue.webp" },
+      { name: "Smoky Cocoa", code: "#594842", image: "Cushion fabric Optimize/Waterproof Chenille/Smoky Cocoa.webp" },
+      { name: "Stone Gray", code: "#8C8887", image: "Cushion fabric Optimize/Waterproof Chenille/Stone Gray.webp" }
     ]
   },
   "Imitation Linen": {
     description: "Imitation Linen fabric has a classy texture. This shrinkage-resistant fabric is easy to clean and built to last.",
     colors: [
-      { name: "Charcoal Brown", code: "#40332C", image: "Cushion fabric Optimize/Imitation Linen/Charcoal brown.jpg" },
-      { name: "Dark Taupe", code: "#403F3E", image: "Cushion fabric Optimize/Imitation Linen/Dark taupe.jpg" },
-      { name: "English Violet", code: "#593C54", image: "Cushion fabric Optimize/Imitation Linen/English violet.jpg" },
-      { name: "Mauve", code: "#8C3B61", image: "Cushion fabric Optimize/Imitation Linen/Mauve.jpg" },
-      { name: "Slate Blue", code: "#9BA7BF", image: "Cushion fabric Optimize/Imitation Linen/Slate blue.jpg" },
-      { name: "Stone Cold", code: "#595857", image: "Cushion fabric Optimize/Imitation Linen/Stone cold.jpg" }
+      { name: "Charcoal Brown", code: "#40332C", image: "Cushion fabric Optimize/Imitation Linen/Charcoal brown.webp" },
+      { name: "Dark Taupe", code: "#403F3E", image: "Cushion fabric Optimize/Imitation Linen/Dark taupe.webp" },
+      { name: "English Violet", code: "#593C54", image: "Cushion fabric Optimize/Imitation Linen/English violet.webp" },
+      { name: "Mauve", code: "#8C3B61", image: "Cushion fabric Optimize/Imitation Linen/Mauve.webp" },
+      { name: "Slate Blue", code: "#9BA7BF", image: "Cushion fabric Optimize/Imitation Linen/Slate blue.webp" },
+      { name: "Stone Cold", code: "#595857", image: "Cushion fabric Optimize/Imitation Linen/Stone cold.webp" }
     ]
   },
   "Faux Leather": {
     description: "Faux leather fabric is wipeable and luxurious, making it ideal for busy households. It is durable, resistant to stains, wear & tears, and fading, ensuring long-lasting use.",
     colors: [
-      { name: "Baltic Sea", code: "#3C3D3E", image: "Cushion fabric Optimize/Faux Leather/Baltic Sea.jpg" },
-      { name: "Dim Gray", code: "#67655E", image: "Cushion fabric Optimize/Faux Leather/Dim Gray.jpg" },
-      { name: "Hampton", code: "#EAD2A4", image: "Cushion fabric Optimize/Faux Leather/Hampton.jpg" },
-      { name: "Pearl Bush", code: "#DED3CB", image: "Cushion fabric Optimize/Faux Leather/Pearl bush.jpg" },
-      { name: "Pinkish Brown", code: "#B17261", image: "Cushion fabric Optimize/Faux Leather/Pinkish brown.jpg" },
-      { name: "Radish Orange", code: "#FF872C", image: "Cushion fabric Optimize/Faux Leather/Radish Orange.jpg" },
-      { name: "Storm Dust", code: "#747473", image: "Cushion fabric Optimize/Faux Leather/Storm Dust.jpg" },
-      { name: "Warm Gray", code: "#A6A197", image: "Cushion fabric Optimize/Faux Leather/Warm Gray.jpg" }
+      { name: "Baltic Sea", code: "#3C3D3E", image: "Cushion fabric Optimize/Faux Leather/Baltic Sea.webp" },
+      { name: "Dim Gray", code: "#67655E", image: "Cushion fabric Optimize/Faux Leather/Dim Gray.webp" },
+      { name: "Hampton", code: "#EAD2A4", image: "Cushion fabric Optimize/Faux Leather/Hampton.webp" },
+      { name: "Pearl Bush", code: "#DED3CB", image: "Cushion fabric Optimize/Faux Leather/Pearl bush.webp" },
+      { name: "Pinkish Brown", code: "#B17261", image: "Cushion fabric Optimize/Faux Leather/Pinkish brown.webp" },
+      { name: "Radish Orange", code: "#FF872C", image: "Cushion fabric Optimize/Faux Leather/Radish Orange.webp" },
+      { name: "Storm Dust", code: "#747473", image: "Cushion fabric Optimize/Faux Leather/Storm Dust.webp" },
+      { name: "Warm Gray", code: "#A6A197", image: "Cushion fabric Optimize/Faux Leather/Warm Gray.webp" }
     ]
   },
   "Dutch Velvet": {
     description: "Dutch velvet has a luxurious feel and is resistant to wear and tear. It's mainly popular due to its soft texture, resistance to piling, and fading.",
     colors: [
-      { name: "Champagne Pink", code: "#F2DFCE", image: "Cushion fabric Optimize/Dutch Velvet/Champagne pink.jpg" },
-      { name: "Muted Blue-Gray", code: "#76A1A6", image: "Cushion fabric Optimize/Dutch Velvet/Muted Blue-Gray.jpg" },
-      { name: "Bleached Silk", code: "#F2E5D5", image: "Cushion fabric Optimize/Dutch Velvet/Bleached silk.jpg" },
-      { name: "Dark Green Pea", code: "#255C3B", image: "Cushion fabric Optimize/Dutch Velvet/Dark Green pea.jpg" },
-      { name: "Dark Grey", code: "#737272", image: "Cushion fabric Optimize/Dutch Velvet/Dark grey.jpg" },
-      { name: "Nile Blue", code: "#245F4E", image: "Cushion fabric Optimize/Dutch Velvet/Nile blue.jpg" },
-      { name: "Pale Aqua", code: "#A3D9C9", image: "Cushion fabric Optimize/Dutch Velvet/Pale Aqua.jpg" },
-      { name: "Saddle Brown", code: "#8C593B", image: "Cushion fabric Optimize/Dutch Velvet/Saddle Brown.jpg" },
-      { name: "Shadow Gray", code: "#565956", image: "Cushion fabric Optimize/Dutch Velvet/Shadow gray.jpg" },
-      { name: "Star Dust", code: "#9F9F9C", image: "Cushion fabric Optimize/Dutch Velvet/Star dust.jpg" },
-      { name: "Sun Yellow", code: "#FFDF22", image: "Cushion fabric Optimize/Dutch Velvet/Sun Yellow.jpg" },
-      { name: "Taupe", code: "#A68B81", image: "Cushion fabric Optimize/Dutch Velvet/Taupe.jpg" },
-      { name: "Timberwolf", code: "#D9D4CC", image: "Cushion fabric Optimize/Dutch Velvet/Timberwolf.jpg" }
+      { name: "Champagne Pink", code: "#F2DFCE", image: "Cushion fabric Optimize/Dutch Velvet/Champagne pink.webp" },
+      { name: "Muted Blue-Gray", code: "#76A1A6", image: "Cushion fabric Optimize/Dutch Velvet/Muted Blue-Gray.webp" },
+      { name: "Bleached Silk", code: "#F2E5D5", image: "Cushion fabric Optimize/Dutch Velvet/Bleached silk.webp" },
+      { name: "Dark Green Pea", code: "#255C3B", image: "Cushion fabric Optimize/Dutch Velvet/Dark Green pea.webp" },
+      { name: "Dark Grey", code: "#737272", image: "Cushion fabric Optimize/Dutch Velvet/Dark grey.webp" },
+      { name: "Nile Blue", code: "#245F4E", image: "Cushion fabric Optimize/Dutch Velvet/Nile blue.webp" },
+      { name: "Pale Aqua", code: "#A3D9C9", image: "Cushion fabric Optimize/Dutch Velvet/Pale Aqua.webp" },
+      { name: "Saddle Brown", code: "#8C593B", image: "Cushion fabric Optimize/Dutch Velvet/Saddle Brown.webp" },
+      { name: "Shadow Gray", code: "#565956", image: "Cushion fabric Optimize/Dutch Velvet/Shadow gray.webp" },
+      { name: "Star Dust", code: "#9F9F9C", image: "Cushion fabric Optimize/Dutch Velvet/Star dust.webp" },
+      { name: "Sun Yellow", code: "#FFDF22", image: "Cushion fabric Optimize/Dutch Velvet/Sun Yellow.webp" },
+      { name: "Taupe", code: "#A68B81", image: "Cushion fabric Optimize/Dutch Velvet/Taupe.webp" },
+      { name: "Timberwolf", code: "#D9D4CC", image: "Cushion fabric Optimize/Dutch Velvet/Timberwolf.webp" }
     ]
   }
 };
@@ -171,7 +171,7 @@ useEffect(() => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${fabricName}_${color.name}_fabric.jpg`;
+      link.download = `${fabricName}_${color.name}_fabric.webp`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

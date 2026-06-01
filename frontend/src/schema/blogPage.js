@@ -26,7 +26,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
+        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
       }
     },
 
@@ -72,7 +72,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
           "name": "Big Bear Vans",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://www.bigbearvans.com/images/blackLogo.jpg"
+            "url": "https://www.bigbearvans.com/images/blackLogo.webp"
           }
         },
 

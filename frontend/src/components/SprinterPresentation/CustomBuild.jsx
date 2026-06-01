@@ -583,7 +583,7 @@ export default function CustomBuild() {
             <div className="relative overflow-hidden rounded-[1rem] border border-gray-100 shadow-xl bg-white">
               <ImageWithSkeleton
                 click={true}
-                src="/sprinter/image 12.png"
+                src="/sprinter/image 12.webp"
                 alt="Pre-built Vans"
                 className="w-full max-h-[400px] object-cover transform group-hover:scale-[1.01] transition-transform duration-[1.2s] ease-out"
               />

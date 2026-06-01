@@ -39,6 +39,6 @@ export const generateProcessSchema = () => ({
   "publisher": {
     "@type": "Organization",
     "name": "Big Bear Vans",
-    "logo": "https://www.bigbearvans.com/images/blackLogo.jpg"
+    "logo": "https://www.bigbearvans.com/images/blackLogo.webp"
   }
 })

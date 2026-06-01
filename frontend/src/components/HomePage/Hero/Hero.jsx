@@ -163,8 +163,8 @@ export default function HeroSection() {
                   alt={slide.title}
                   width={1500}
                   height={1000}
-                  priority={index === 0}
-                  quality={95}
+                  priority={index <= 2}
+                  quality={80}
                   className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.7)] lg:drop-shadow-[0_25px_50px_rgba(0,0,0,0.9)]"
                 />
               </div>

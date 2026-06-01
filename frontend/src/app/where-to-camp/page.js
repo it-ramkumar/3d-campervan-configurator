@@ -15,13 +15,13 @@ export const metadata = {
     description: "Picking up your van? Here is our curated list of the best lakeside retreats and alpine escapes in Big Bear.",
     url: "https://www.bigbearvans.com/where-to-camp",
     type: "article",
-    images: ["https://www.bigbearvans.com/whereToCamp/Pineknot%20campground%202.png"],
+    images: ["https://www.bigbearvans.com/whereToCamp/Pineknot%20campground%202.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Best Big Bear Campgrounds for Your Van Adventure",
     description: "Plan your basecamp! A curated guide to RV parks and campgrounds near Big Bear Lake.",
-    images: ["/whereToCamp/Pineknot%20campground%202.png"],
+    images: ["/whereToCamp/Pineknot%20campground%202.webp"],
   },
 };
 

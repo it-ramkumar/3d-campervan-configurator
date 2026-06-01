@@ -15,7 +15,7 @@ import {
 // --- SUB-COMPONENT: IMAGE GRID ---
 const ProjectImages = ({ images, alt }) => {
   const hasMultiple = images?.length > 1;
-  const displayImages = images?.length > 0 ? images : ["/images/blockLogo.jpg"];
+  const displayImages = images?.length > 0 ? images : ["/images/blockLogo.webp"];
 
   return (
     <div className="group relative w-full h-[300px] md:h-[450px] flex gap-2 p-2 overflow-hidden bg-gray-100 rounded-xl">

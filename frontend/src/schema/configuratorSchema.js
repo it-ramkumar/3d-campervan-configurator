@@ -15,7 +15,7 @@ export const configuratorSchema = () => {
     "provider": {
       "@type": "LocalBusiness",
       "name": "Big Bear Vans",
-      "image": "/custom build/configurator.png" // 3D tool ka screenshot URL
+      "image": "/custom build/configurator.webp" // 3D tool ka screenshot URL
     }
   };
 };

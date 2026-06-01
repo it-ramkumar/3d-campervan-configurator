@@ -20,7 +20,7 @@ export const generateInquirySchema = () => ({
         "@id": "https://www.bigbearvans.com/#organization",
         "name": "Big Bear Vans",
         "url": "https://www.bigbearvans.com",
-        "logo": "https://www.bigbearvans.com/images/blackLogo.jpg",
+        "logo": "https://www.bigbearvans.com/images/blackLogo.webp",
         "telephone": "+1-951-441-9719",
          "address": {
         "@type": "PostalAddress",

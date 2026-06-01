@@ -50,7 +50,7 @@ export default function Detail({ setIsopen, detail }) {
                 </div>
               )}
               <ImageWithSkeleton
-                src={gallery[currentImageIndex] || "/images/blackLogo.jpg"}
+                src={gallery[currentImageIndex] || "/images/blackLogo.webp"}
                 alt="Main view"
                 className="w-full h-full object-cover"
               />

@@ -9,7 +9,7 @@ import Footer from  "../Footer/Footer";
 
 export default function Cushionpage() {
 
-    const heroImage = "Interior Choices/Dinette cushions/1.jpg";
+    const heroImage = "Interior Choices/Dinette cushions/1.webp";
   const newTitleText = "Cushion Color & Fabric Catalog";
 
   return (

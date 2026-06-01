@@ -24,7 +24,7 @@ useEffect(() => {
   window.chatmaximaConfig = {
     token: "miutk867bnhw",
     theme_color: "#5c526b",
-    widget_icon: "https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.png",
+    widget_icon: "https://chatmaxima.com/uploads/widget/632/2025/9/22/logo.webp",
   };
 
   const script = document.createElement("script");

@@ -4,7 +4,7 @@ export const vanLayoutsData = [
     title: "Campervan Layouts for Family (For 2+)",
     images: [
       {
-        img: "/family/amster.jpg",
+        img: "/family/amster.webp",
         link: "/layout-detail/amsterdam"
       },
       {
@@ -12,7 +12,7 @@ export const vanLayoutsData = [
         link: "/layout-detail/amsterdam"
       },
       {
-        img: "/family/amster2.jpg",
+        img: "/family/amster2.webp",
         link: "/layout-detail/amsterdam"
       },
       {
@@ -116,19 +116,19 @@ export const vanLayoutsData = [
         link: "/layout-detail/imperial"
       },
       {
-        img: "/cauple/port2.jpg",
+        img: "/cauple/port2.webp",
         link: "/layout-detail/porto-campervan"
       },
       {
-        img: "/cauple/port3.jpg",
+        img: "/cauple/port3.webp",
         link: "/layout-detail/porto-campervan"
       },
       {
-        img: "/cauple/santab1.jpg",
+        img: "/cauple/santab1.webp",
         link: "/layout-detail/santa-barbara"
       },
       {
-        img: "/cauple/santab3.jpg",
+        img: "/cauple/santab3.webp",
         link: "/layout-detail/santa-barbara"
       },
     ], link: "/van-layouts?category=Layouts+for+Solo+%26+Couple+Travelers"
@@ -154,19 +154,19 @@ export const vanLayoutsData = [
      link: "/layout-detail/lake-tahoe"
       },
       {
-        img: "/short/port.jpg",
+        img: "/short/port.webp",
         link: "/layout-detail/porto-campervan"
       },
       {
-        img: "/short/port1.jpg",
+        img: "/short/port1.webp",
       link: "/layout-detail/porto-campervan"
       },
       {
-        img: "/short/santab.jpg",
+        img: "/short/santab.webp",
       link: "/layout-detail/santa-barbara"
       },
       {
-        img: "/short/santab2.jpg",
+        img: "/short/santab2.webp",
  link: "/layout-detail/santa-barbara"
       },],
     link: "/van-layouts?category=Flagship+Short+Van+—+Santa+Monica"
@@ -176,7 +176,7 @@ export const vanLayoutsData = [
     title: "Long Campervan Layouts ",
     images: [
       {
-        img: "/long/amster.jpg",
+        img: "/long/amster.webp",
        link: "/layout-detail/amsterdam"
       },
       {
@@ -184,7 +184,7 @@ export const vanLayoutsData = [
           link: "/layout-detail/amsterdam"
       },
       {
-        img: "/long/amster2.jpg",
+        img: "/long/amster2.webp",
         link: "/layout-detail/amsterdam"
       },
       {
@@ -228,11 +228,11 @@ export const vanLayoutsData = [
    link: "/layout-detail/san-clemente"
       },
       {
-        img: "/long/santab.jpg",
+        img: "/long/santab.webp",
              link: "/layout-detail/santa-barbara"
       },
       {
-        img: "/long/santab2.jpg",
+        img: "/long/santab2.webp",
          link: "/layout-detail/santa-barbara"
       },
 

@@ -43,7 +43,7 @@ export default async function Blog() {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <ImageWithSkeleton
                   // Naye route mein gallery field aa rahi hai
-                  src={post?.gallery[0] || "/images/blackLogo.jpg"} // Agar gallery nahi hai toh default image
+                  src={post?.gallery[0] || "/images/blackLogo.webp"} // Agar gallery nahi hai toh default image
                   alt={post?.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

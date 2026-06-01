@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const van = data.van;
   const title = `${van.van_listing?.title} | Big Bear Vans`;
   const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
-  const imageUrl = van.gallery?.[0] || "/default-og-image.jpg"; // Pehli image OG image ke liye
+  const imageUrl = van.gallery?.[0] || "/default-og-image.webp"; // Pehli image OG image ke liye
 
   return {
     title,
@@ -58,7 +58,7 @@ export default async function Page({ params }) {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": vanDetail.van.van_listing?.title,
-    "image": vanDetail.van.gallery || ['https://www.bigbearvans.com/images/blackLogo.jpg'],
+    "image": vanDetail.van.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
     "description": vanDetail.van.van_listing?.subtitle,
     "brand": {
       "@type": "Brand",

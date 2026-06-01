@@ -59,7 +59,7 @@ export const generateDynamicSchema = (options, current, categories) => {
               "@type": "Product",
               "name": item.title, // tumhare data me title hai (name nahi)
               "url": `${currentUrl}/${item.slug}`,
-              "image": item.images?.[0] || "/fallback.jpg",
+              "image": item.images?.[0] || "/fallback.webp",
               "description": getDesc(item),
               "brand": {
                 "@type": "Brand",

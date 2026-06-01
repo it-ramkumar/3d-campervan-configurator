@@ -29,7 +29,7 @@ export default function HeroImage({
 }) {
   // FALLBACK IMAGE
   const finalImage =
-    image && image.trim() !== "" ? image : "/images/blackLogo.jpg";
+    image && image.trim() !== "" ? image : "/images/blackLogo.webp";
 
   return (
     <section
@@ -56,7 +56,7 @@ export default function HeroImage({
         quality={70}
         sizes="100vw"
         placeholder="blur"
-        blurDataURL="/images/blackLogo.jpg"
+        blurDataURL="/images/blackLogo.webp"
         className="
 object-cover
 md
@@ -74,7 +74,7 @@ md
         quality={70}
         sizes="100vw"
         placeholder="blur"
-        blurDataURL="/images/blackLogo.jpg"
+        blurDataURL="/images/blackLogo.webp"
         className="
 hidden
 md:block
