@@ -100,7 +100,7 @@ router.get("/add-base-van", async (req, res) => {
   }
 });
 
-router.get("/add-base-van/:id", protect, adminOnly, async (req, res) => {
+router.get("/add-base-van/:id", async (req, res) => {
   try {
     const baseVan = await BaseVan.findById(req.params.id);
 

@@ -11,7 +11,12 @@ async function getQuoteData(id) {
 }
 
 async function getBaseVan(modelId) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/add-base-van/${modelId}`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/add-base-van/${modelId}`, {
+    cache: 'no-store',
+    credentials: 'include'
+  });
+  console.log(res, "json data vans");
+
   if (!res.ok) return null;
   const json = await res.json();
   return json.data;

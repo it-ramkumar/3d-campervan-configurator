@@ -18,7 +18,7 @@ const Loader3D = () => (
 
 export default function PreviewClient({ quoteData, baseVan, partsData }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
+console.log(baseVan,"base van")
   return (
     <div className="relative h-screen w-full bg-[#0a0a0a] overflow-hidden flex">
       {/* Styles remains the same */}
@@ -53,10 +53,7 @@ export default function PreviewClient({ quoteData, baseVan, partsData }) {
                   <p className="text-[10px] text-zinc-500 uppercase">Layout</p>
                   <p className="text-white text-sm font-medium">{baseVan?.layout}</p>
                 </div>
-                {/* <div>
-                  <p className="text-[10px] text-zinc-500 uppercase">Year</p>
-                  <p className="text-white text-sm font-medium">{baseVan?.modelYear}</p>
-                </div> */}
+
               </div>
             </div>
 
