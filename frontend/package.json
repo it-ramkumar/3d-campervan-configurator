@@ -28,7 +28,6 @@
     "react-intersection-observer": "^10.0.3",
     "react-redux": "^9.2.0",
     "recharts": "^3.8.1",
-    "redux-persist": "^6.0.0",
     "sweetalert2": "^11.26.24",
     "sweetalert2-react-content": "^5.1.2",
     "swiper": "^12.1.3",

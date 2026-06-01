@@ -1,29 +1,27 @@
-import axios from "axios";
-/**
- * Fetch blog links for navbar
- * @returns {Promise<{success: boolean, data: any}>}
- */
 export async function linksForNavbar() {
   try {
-    const response = await axios.get(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/test-blog/blog-links`,
+      {
+        cache: 'force-cache',  // ✅ Now this works!
+        next: { revalidate: 604800} // Optional: Revalidate every hour
+      }
     );
 
-    // Backend { success: true, data: [...] } bhej raha hai
-    // Axios khud ka ek .data object rakhta hai
+    if (!response.ok) throw new Error('Failed to fetch');
+
+    const data = await response.json();
+
     return {
       success: true,
-      data: response.data.data, // Check karein agar backend data property mein list bhej raha hai
+      data: data.data, // Adjust based on your API response structure
     };
   } catch (err) {
-    const errorMsg = err.response?.data?.message || "Failed to fetch blogs";
-    console.error(errorMsg);
-
-    // YE RETURN ZAROORI HAI: Taake frontend ko undefined ki jagah object mile
+    console.error(err.message);
     return {
       success: false,
-      data: [], // Khali array bhejein taake .map() crash na ho
-      message: errorMsg
+      data: [],
+      message: err.message
     };
   }
 }

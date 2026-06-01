@@ -43,7 +43,7 @@ export default async function Page({ params }) {
   if (!slug) return { title: "Not Found" };
 
   const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`, {
-    next: { revalidate: 3600 }
+    next: { revalidate: 604800}
   }).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();

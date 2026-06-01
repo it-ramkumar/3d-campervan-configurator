@@ -97,7 +97,6 @@ export default function Footer() {
                 className="w-[180px] h-auto border-none object-contain"
                 width={180}
                 height={80}
-                click={true}
               />
             </Link>
             <RichParagraph white={true}>

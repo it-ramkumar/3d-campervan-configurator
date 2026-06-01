@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 // Aapke existing thunks ko yahan import karein
-import { fetchExterior } from "@/api/model/modelExterior";
-import { fetchInterior } from "@/api/model/modelInterior";
-import { fetchSystem } from "@/api/model/modelSystem";
+// import { fetchExterior } from "@/api/model/modelExterior";
+// import { fetchInterior } from "@/api/model/modelInterior";
+// import { fetchSystem } from "@/api/model/modelSystem";
+import { fetchInterior,fetchExterior,fetchSystem } from "@/api/model/modelAll";
+
 
 const initialState = {
   interior: [],

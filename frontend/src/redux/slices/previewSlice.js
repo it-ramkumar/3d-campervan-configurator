@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+// import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
- preview : [], // ya {} if you're storing an object
-};
+// const initialState = {
+//  preview : [], // ya {} if you're storing an object
+// };
 
-const PreviewSlice = createSlice({
-  name: 'preview',
-  initialState,
-  reducers: {
-    setPreview: (state, action) => {
-      state.preview = action.payload;
-    },
+// const PreviewSlice = createSlice({
+//   name: 'preview',
+//   initialState,
+//   reducers: {
+//     setPreview: (state, action) => {
+//       state.preview = action.payload;
+//     },
 
-    clearPreview: (state) => {
-      state.preview = [];
-    },
-  },
-});
+//     clearPreview: (state) => {
+//       state.preview = [];
+//     },
+//   },
+// });
 
-export const { setPreview, clearPreview } = PreviewSlice.actions;
+// export const { setPreview, clearPreview } = PreviewSlice.actions;
 
-export default PreviewSlice.reducer;
+// export default PreviewSlice.reducer;

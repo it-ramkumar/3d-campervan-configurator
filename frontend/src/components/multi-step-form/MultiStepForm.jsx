@@ -11,11 +11,11 @@ import { goToNextStep } from "@/CustomHooks/goToNextStep";
 import { goToPrevStep } from "@/CustomHooks/goToPrevStep";
 import SummaryModal from "../summary-modal/SummaryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInterior } from "@/api/model/modelInterior";
-import { fetchExterior } from "@/api/model/modelExterior";
-import { fetchSystem } from "@/api/model/modelSystem";
+import { fetchInterior,fetchExterior,fetchSystem } from "@/api/model/modelAll";
+// import { fetchExterior } from "@/api/model/modelExterior";
+// import { fetchSystem } from "@/api/model/modelSystem";
 import { handleGetQuote } from "@/CustomHooks/handleQuote.js";
-import Loader from "../Loader/Loader";
+// import Loader from "../Loader/Loader";
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
 import {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { setPreview } from "@/redux/slices/previewSlice";
+// import { setPreview } from "@/redux/slices/previewSlice";
 import { showQuoteForm } from "./showQuoteForm"
 
 export const handleGetQuote = async (
@@ -42,7 +42,7 @@ export const handleGetQuote = async (
       );
 
       setLoading(false);
-      dispatch(setPreview(res.data.quote));
+      // dispatch(setPreview(res.data.quote));
       Swal.fire({ icon: "success", title: "Success", text: "Quote submitted!" });
 
     } catch (err) {

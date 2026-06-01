@@ -1,29 +1,47 @@
-import axios from "axios";
-import Swal from "sweetalert2";
-
 /**
- * Fetch paginated blogs
+ * Fetch paginated blogs with caching - Server Component version
  * @param {number} page - current page number
+ * @param {string} search - search query
  * @returns {Promise<{success: boolean, data?: any, pagination?: object}>}
  */
 export async function getAllBlogs(page = 1, search = "") {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_URL}/test-blog?page=${page}&search=${encodeURIComponent(search)}`,
-      { withCredentials: true }
-    );
+    const url = new URL(`${process.env.NEXT_PUBLIC_URL}/test-blog`);
+    url.searchParams.append('page', page.toString());
+    if (search) {
+      url.searchParams.append('search', search);
+    }
+
+    const response = await fetch(url.toString(), {
+      // Different cache strategies based on whether searching
+      ...(search
+        ? { cache: 'no-store' } // Don't cache search results (user-specific)
+        : {
+            cache: 'force-cache',
+            next: { revalidate: 604800} // Cache normal pages for 1 hour
+          }
+      ),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`);
+    }
+
+    const data = await response.json();
 
     return {
       success: true,
-      data: response.data.data,
-      pagination: response.data.pagination,
+      data: data.data,
+      pagination: data.pagination,
     };
   } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.response?.data?.message || "Failed to fetch blogs",
-    });
+    console.error("Blog fetch error:", err.message);
+    return {
+      success: false,
+      data: [],
+      pagination: null,
+      error: err.message,
+    };
   }
 }
-

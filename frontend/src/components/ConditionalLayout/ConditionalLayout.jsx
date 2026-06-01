@@ -42,7 +42,7 @@ export default function ConditionalLayout({ children }) {
 
         {!hideLayout && <Navbar />}
 
-        {!hideShareBar && <SideShareBar />}
+        {!hideShareBar && hideShareBar && <SideShareBar />}
         {!hideFloatingButton && <FloatingCallButton />}
         <main className="flex-1">{children}</main>
 

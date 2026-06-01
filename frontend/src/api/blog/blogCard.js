@@ -1,27 +1,33 @@
-import axios from "axios";
-import Swal from "sweetalert2";
-
 /**
- * Fetch paginated blogs
- * @param {number} page - current page number
- * @returns {Promise<{success: boolean, data?: any, pagination?: object}>}
+ * Fetch paginated blogs with caching - Server Component version
  */
 export async function blogCard() {
   try {
-    const response = await axios.get(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/test-blog/blog-card`,
-      { withCredentials: true }
+      {
+        cache: 'force-cache', // ✅ This enables Next.js Data Cache
+        next: { revalidate: 604800}, // Revalidate every hour
+        credentials: 'include',
+      }
     );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`);
+    }
+
+    const data = await response.json();
+
     return {
       success: true,
-      data: response.data.data,
+      data: data.data,
     };
   } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: err.response?.data?.message || "Failed to fetch blogs",
-    });
+    console.error("Blog fetch error:", err.message);
+    return {
+      success: false,
+      data: [],
+      error: err.message,
+    };
   }
 }
-

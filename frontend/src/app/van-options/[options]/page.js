@@ -81,7 +81,7 @@ export default async function Page({ params }) {
     // Variable name fix: NEXT_PUBLIC_URL
     const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
 
-    const res = await fetch(apiUrl, { next: { revalidate: 3600 } });
+    const res = await fetch(apiUrl, { next: { revalidate: 604800} });
     const result = await res.json();
     categoriesData = result.data || [];
   } catch (error) {
