@@ -27,12 +27,12 @@ export async function getAllPortfolio(params = {}) {
 
     const response = await fetch(url.toString(), {
       method: "GET",
-      cache: "force-cache",
-      next: {
-        revalidate: 604800 // ✅ 7 days (weekly) - adjust based on your needs
-        // 2592000 for monthly (30 days)
-        // 1209600 for 2 weeks
-      },
+      // cache: "force-cache",
+      // next: {
+      //   revalidate: 604800 // ✅ 7 days (weekly) - adjust based on your needs
+      //   // 2592000 for monthly (30 days)
+      //   // 1209600 for 2 weeks
+      // },
       headers: {
         "Content-Type": "application/json",
       },

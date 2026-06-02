@@ -147,7 +147,10 @@ export default function PortfolioForm({ setSelected }) {
       setSelected,
     });
   };
-
+  const handleChange = (e) => {
+    setBathroomType(e.target.value);
+    console.log("Selected Value:", e.target.value); // Check karein console me value aa rahi hai ya nahi
+  };
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg border border-gray-300">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -184,54 +187,77 @@ export default function PortfolioForm({ setSelected }) {
 
             </div>
 
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Roof</label>
-              <input
-                type="text"
-                placeholder="Enter roof"
+              <select
                 value={roof}
                 onChange={(e) => setRoof(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
-
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Roof Type</option>
+                <option value="High-Roof">High Roof</option>
+                <option value="Low-Roof">Low Roof</option>
+                <option value="Pop-Top">Pop-Top Roof</option>
+                <option value="Mid-Roof">Mid Roof</option>
+              </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Bed Type</label>
-              <input
-                type="text"
-                placeholder="Enter bed"
+              <select
                 value={bedType}
                 onChange={(e) => setBedType(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Bed Type</option>
+                <option value="Elevator Bed E/W">Elevator Bed E/W</option>
+                <option value="Stationary Bed S/N">Stationary Bed S/N</option>
+                <option value="Stationary Bed E/W">Stationary Bed E/W</option>
+                <option value="Loft Bed ">Loft Bed </option>
+                <option value="Poptop Bed ">Poptop Bed</option>
+                <option value="Dinette To Bed">Dinette To Bed</option>
+                <option value="Bunk Kids Bed">Bunk Kids Bed</option>
+                <option value="Elevator Bed S/N">Elevator Bed S/N</option>
 
+              </select>
             </div>
 
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Bathroom Type</label>
-              <input
-                type="text"
-                placeholder="Enter bathroom"
+              <select
                 value={bathroomType}
-                onChange={(e) => setBathroomType(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Bathroom Type</option> {/* disabled hata diya */}
+                <option value="Full Aluminum">Full Aluminum</option>
+                <option value="Full Acrilic">Full Acrilic</option>
+                <option value="Full Real Tile">Full Real Tile</option>
+                <option value="Rear Shower">Rear Shower</option>
+                <option value="Shower in a Bench">Shower in a Bench</option>
+                <option value="Folding Shower">Folding Shower</option>
+                <option value="Rear Bathroom">Rear Bathroom</option>
+
+
+
+
+              </select>
 
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
-              <input
-                type="text"
-                placeholder="Enter size"
+              <select
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
-
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Size</option>
+                <option value="Short">Short</option>
+                <option value="Mid">Mid</option>
+                <option value="Long">Long</option>
+                <option value="Regular">Regular</option>
+              </select>
             </div>
           </div>
 
