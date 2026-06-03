@@ -4,6 +4,8 @@ const corsOptions = {
     "https://zain.d2qr91yoy4oomc.amplifyapp.com",
     "http://localhost:3000",
     "https://www.bigbearvans.com",
+    "https://bigbearvans.com",
+
 
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
