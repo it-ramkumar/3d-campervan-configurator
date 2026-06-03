@@ -35,19 +35,19 @@ const vanListingSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  bathroomType: {
+   bathroomType: {
     type: String,
     trim: true
   },
-  bedType: {
+   bedType: {
     type: String,
     trim: true
   },
-  size: {
+    size: {
     type: String,
     trim: true
   },
-  roof: {
+    roof: {
     type: String,
     trim: true
   },
@@ -98,28 +98,25 @@ const portfolioVanSchema = new mongoose.Schema({
     default: false
   },
 
-  category: [{
-    type: String,
-    enum: [
-      "flagship-short-van-santa-monica",
-      "flagship-long-van-montreal",
-      "layouts-for-solo-and-couple-travelers",
-      "layouts-for-families-3-9-people",
-      "portfolio-of-custom-builds",
-      "sugarloaf",
-      "amsterdam",
-      "poptop", 
-    ],
-    trim: true
-  }],
+ category: [{
+  type: String,
+  enum: [
+    "Flagship Short Van — Santa Monica",
+    "Flagship Long Van — Montreal",
+    "Layouts for Solo & Couple Travelers",
+    "Layouts for Families (3–9 People)",
+    "Portfolio of Custom Builds"
+  ],
+  trim: true
+}],
 
 
   gallery: [{
     type: String,
     trim: true
   }],
-  rendering: [{
-    type: String,
+  rendering:[{
+     type: String,
     trim: true
   }],
 
@@ -138,7 +135,7 @@ const portfolioVanSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-portfolioVanSchema.virtual('formatted_price').get(function () {
+portfolioVanSchema.virtual('formatted_price').get(function() {
   if (!this.van_listing.price) return null;
   return `$${this.van_listing.price}`;
 });
@@ -157,7 +154,7 @@ portfolioVanSchema.pre("validate", async function (next) {
 });
 
 // ✅ Static method: generate slug
-portfolioVanSchema.statics.generateSlug = async function (title) {
+portfolioVanSchema.statics.generateSlug = async function(title) {
   let baseSlug = title
     .toLowerCase()
     .replace(/[^a-z0-9 -]/g, '')
@@ -177,21 +174,21 @@ portfolioVanSchema.statics.generateSlug = async function (title) {
 };
 
 // ✅ Helper methods
-portfolioVanSchema.statics.findAvailable = function () {
+portfolioVanSchema.statics.findAvailable = function() {
   return this.find({ sold: false });
 };
 
-portfolioVanSchema.statics.findSold = function () {
+portfolioVanSchema.statics.findSold = function() {
   return this.find({ sold: true });
 };
 
-portfolioVanSchema.statics.findByCategory = function (category) {
+portfolioVanSchema.statics.findByCategory = function(category) {
   return this.find({ category: category });
   // MongoDB automatically matches array elements
 };
 
 
-portfolioVanSchema.methods.markAsSold = function () {
+portfolioVanSchema.methods.markAsSold = function() {
   this.sold = true;
   return this.save();
 };
