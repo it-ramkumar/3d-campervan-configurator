@@ -36,12 +36,12 @@ export async function getByCategory(
 
     const response = await fetch(url.toString(), {
       method: "GET",
-      cache: "force-cache",
-      next: {
-        // Cache regular categories for 7 days, search results for 1 day
-        revalidate: isSearchActive ? 86400 : 604800, // 1 day vs 7 days
-        tags: [`category-${category}`, `portfolio-categories`]
-      },
+      // cache: "force-cache",
+      // next: {
+      //   // Cache regular categories for 7 days, search results for 1 day
+      //   revalidate: isSearchActive ? 86400 : 604800, // 1 day vs 7 days
+      //   tags: [`category-${category}`, `portfolio-categories`]
+      // },
       headers: {
         "Content-Type": "application/json",
       },

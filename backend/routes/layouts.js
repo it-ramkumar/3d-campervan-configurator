@@ -312,6 +312,9 @@ router.put(
       const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media));
       const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
 
+      // 🆕 Parse Category Field (Agar frontend se aayi hai toh parse karein, warna puraani rakhein)
+      const category = req.body.category ? JSON.parse(req.body.category) : portfolio.category;
+
       // 2. GALLERY LOGIC (Reordering + Specific Folder Upload + S3 Cleanup)
       let oldGallery = portfolio.gallery || [];
       let finalGalleryOrder = req.body.existingGallery ? JSON.parse(req.body.existingGallery) : oldGallery;
@@ -351,6 +354,8 @@ router.put(
         price: van_listing.price ? String(van_listing.price) : portfolio.van_listing.price,
       };
 
+      // 🆕 Assign updated category, gallery and details
+      portfolio.category = category;
       portfolio.gallery = updatedGallery;
       portfolio.rendering = updatedRendering;
       portfolio.sold = sold;

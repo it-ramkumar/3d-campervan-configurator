@@ -26,14 +26,14 @@ export const handlePortfolioSubmit = async ({
   e.preventDefault();
 
   // Basic validation
-  if (!title || !category || category.length === 0) {
-    Swal.fire({
-      icon: "warning",
-      title: "Warning",
-      text: "Title and at least one category are required",
-    });
-    return;
-  }
+  // if (!title || !category || category.length === 0) {
+  //   Swal.fire({
+  //     icon: "warning",
+  //     title: "Warning",
+  //     text: "Title and at least one category are required",
+  //   });
+  //   return;
+  // }
 
   try {
     setLoading(true);
