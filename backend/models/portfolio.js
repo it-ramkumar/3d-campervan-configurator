@@ -102,7 +102,7 @@ const portfolioVanSchema = new mongoose.Schema({
     type: String,
     enum: [
       "flagship-short-van-Santa-monica",
-      "flagship-long-van-Montreal",
+      "flagship-long-van-montreal",
       "layouts-for-solo-and-couple-travelers",
       "layouts-for-families-3-9-people",
       "portfolio-of-custom-builds",

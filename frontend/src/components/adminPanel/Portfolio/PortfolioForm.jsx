@@ -303,7 +303,7 @@ export default function PortfolioForm({ setSelected }) {
           <div className="flex flex-col gap-2">
             {[
               "flagship-short-van-Santa-monica",
-              "flagship-long-van-Montreal",
+              "flagship-long-van-montreal",
               "layouts-for-solo-and-couple-travelers",
               "layouts-for-families-3-9-people",
               "portfolio-of-custom-builds",
