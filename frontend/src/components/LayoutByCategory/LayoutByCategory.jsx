@@ -151,11 +151,8 @@ export default function CamperProjectsClient({ category, initialData, currentPar
 
               {/* Dynamic Selects */}
               {[
-                { label: "Base Model", key: "model", options: availableFilters?.models },
                 { label: "Seating", key: "sit", options: availableFilters?.sits },
                 { label: "Sleeping", key: "sleep", options: availableFilters?.sleeps },
-                { label: "Bed Setup", key: "bedType", options: availableFilters?.bedType },
-                { label: "Sanitation", key: "bathroomType", options: availableFilters?.bathroomType },
               ].map((f) => (
                 <div key={f.key} className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">{f.label}</label>

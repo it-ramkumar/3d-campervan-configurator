@@ -68,33 +68,7 @@ const nextConfig = {
         destination: "https://www.bigbearvans.com/:path*",
         permanent: true,
       },
-      // 2. Page Specific Redirects
-      {
-        source: "/vans-for-sale",
-        destination: "/camper-vans-for-sale",
-        permanent: true,
-      },
-      // 3. Wheelbase Redirects (Query parameters focus)
-      {
-        source: "/wheel-base/148",
-        destination: "/van-layouts?wheelbase=148",
-        permanent: true,
-      },
-      {
-        source: "/wheel-base/144",
-        destination: "/van-layouts?wheelbase=144",
-        permanent: true,
-      },
-      {
-        source: "/wheel-base/159",
-        destination: "/van-layouts?wheelbase=159",
-        permanent: true,
-      },
-      {
-        source: "/wheel-base/170",
-        destination: "/van-layouts?wheelbase=170",
-        permanent: true,
-      },
+
     ];
   },
 };

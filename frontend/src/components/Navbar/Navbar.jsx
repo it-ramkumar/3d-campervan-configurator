@@ -26,12 +26,12 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
 const layoutCategories = [
   {
     name: "Santa Monica",
-    slug: "/van-layouts?search=santa+monica",
+    slug: "van-layouts?category=flagship-short-van-santa-monica",
     image: ["/renderings/sm.webp"],
   },
   {
     name: "Montreal",
-    slug: "/van-layouts?search=montreal",
+    slug: "van-layouts?category=flagship-long-van-montreal",
     image: ["/renderings/montreal.webp"],
   },
   {
@@ -245,9 +245,18 @@ export default function Navbar({ forceMobile }) {
                 {b.title}
               </BlogListItem>
             ))}
-            <ViewAllLink href="/blog" onClick={closeMobile}>
-              View All Blogs
-            </ViewAllLink>
+             <div className="flex justify-center md:justify-start border-t border-primary/10 pt-6">
+              <Link
+                href="/blog"
+                onClick={closeMobile}
+                className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+              >
+                All Blogs
+                <span className="transform transition-transform group-hover:translate-x-2">
+                  →
+                </span>
+              </Link>
+            </div>
           </>
         );
       }
@@ -272,7 +281,7 @@ export default function Navbar({ forceMobile }) {
               <Link
                 href="/layout-by-category"
                 onClick={closeMobile}
-                className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+                className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
                 View All Layout By Category
                 <span className="transform transition-transform group-hover:translate-x-2">
@@ -313,13 +322,13 @@ export default function Navbar({ forceMobile }) {
             <Heading4 text="Built for Every Journey Size" className="my-4" />
             {/* Uske foran baad ye items nazar aayenge */}
             <NavListItem
-              href={`/van-layouts?category=Flagship+Long+Van+—+Montreal`}
+              href={`/van-layouts?category=layouts-for-solo-and-couple-travelers`}
               onClick={closeMobile}
             >
               Ideal for small families (2–3 people)
             </NavListItem>
             <NavListItem
-              href={`/van-layouts?category=Layouts+for+Families+%283–9+People%29`}
+              href={`/van-layouts?category=layouts-for-families-3-9-people`}
               onClick={closeMobile}
             >
               Perfect for larger families (4+ passengers)
@@ -328,7 +337,7 @@ export default function Navbar({ forceMobile }) {
               <Link
                 href="/van-layouts"
                 onClick={closeMobile}
-                className="group flex items-center gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+                className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
                 View All Layout Options
                 <span className="transform transition-transform group-hover:translate-x-2">

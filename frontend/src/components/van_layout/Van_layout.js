@@ -97,13 +97,13 @@ const filterOptions = (options = []) => {
   // FILTER CONFIG (CASCADING READY)
   // ---------------------------
 const filterConfig = [
-  { label: "Base Model", key: "model", options: filterOptions(filters?.models) },
+  // { label: "Base Model", key: "model", options: filterOptions(filters?.models) },
   { label: "Wheelbase", key: "wheelbase", options: filterOptions(filters?.wheelbase) }, // ✅ NEW
   { label: "Category", key: "category", options: filterOptions(filters?.category) },   // ✅ NEW
   { label: "Seating", key: "sit", options: filterOptions(filters?.sits) },
   { label: "Sleeping", key: "sleep", options: filterOptions(filters?.sleeps) },
-  { label: "Bed Setup", key: "bedType", options: filterOptions(filters?.bedType) },
-  { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
+  // { label: "Bed Setup", key: "bedType", options: filterOptions(filters?.bedType) },
+  // { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
 ];
 
   return (
@@ -149,25 +149,30 @@ const filterConfig = [
               </div>
             </div>
 
-            {/* FILTERS */}
-            {filterConfig.map((f) => (
-              <div key={f.key} className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">
-                  {f.label}
-                </label>
+    {filterConfig.map((f) => (
+  <div key={f.key} className="space-y-2">
+    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">
+      {f.label}
+    </label>
 
-                <select
-                  value={currentParams[f.key] || ""}
-                  onChange={(e) => updateURL(f.key, e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-sm font-medium cursor-pointer focus:bg-white focus:ring-2 focus:ring-orange-500/20 transition-all appearance-none"
-                >
-                  <option value="">All</option>
-                  {f.options?.map((opt, i) => (
-                    <option key={i} value={opt}>{opt}</option>
-                  ))}
-                </select>
-              </div>
-            ))}
+    <select
+      value={currentParams[f.key] || ""}
+      onChange={(e) => updateURL(f.key, e.target.value)}
+      className="w-full px-4 py-3 bg-gray-50 border border-transparent rounded-xl text-sm font-medium cursor-pointer focus:bg-white focus:ring-2 focus:ring-orange-500/20 transition-all appearance-none"
+    >
+      <option value="">All</option>
+      {f.options?.map((opt, i) => (
+        <option key={i} value={opt}>
+          {/* 🆕 Filter logic sirf display text par apply ki hai */}
+          {opt
+            .replace(/-+/g, " ") // Saare dashes (chahe 1 ho ya ---) ko single space se replace karega
+            .replace(/\b\w/g, (char) => char.toUpperCase()) // Har word ka pehla letter Capital karega
+          }
+        </option>
+      ))}
+    </select>
+  </div>
+))}
           </div>
         </div>
 
