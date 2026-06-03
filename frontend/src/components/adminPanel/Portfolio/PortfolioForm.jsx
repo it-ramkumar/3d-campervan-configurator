@@ -302,14 +302,14 @@ export default function PortfolioForm({ setSelected }) {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Category *</h3>
           <div className="flex flex-col gap-2">
             {[
-              "Flagship Short Van — Santa Monica",
-              "Flagship Long Van — Montreal",
-              "Layouts for Solo & Couple Travelers",
-              "Layouts for Families (3–9 People)",
-              "Portfolio of Custom Builds",
-              "Sugarloaf",
-              "Amsterdam",
-              "poptop",
+              "flagship-short-van-Santa-monica",
+              "flagship-long-van-Montreal",
+              "layouts-for-solo-and-couple-travelers",
+              "layouts-for-families-3-9-people",
+              "portfolio-of-custom-builds",
+              "sugarloaf",
+              "amsterdam",
+              "poptop", ,
 
             ].map((cat) => (
               <label key={cat} className="flex items-center gap-2">
