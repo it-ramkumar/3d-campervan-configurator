@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setEditData,clearEditData } from "@/redux/slices/editData";
+import { setEditData, clearEditData } from "@/redux/slices/editData";
 import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 import { deletePortfolio } from "@/api/portfolio/deletePortfolio";
 import Detail from "./Detail";
@@ -22,30 +22,30 @@ export default function PortfolioListing({ setSelected }) {
     fetchData(page, search);
   }, [page]);
 
-const fetchData = async (pageNum = 1, searchQuery = "") => {
-  setLoading(true);
-  try {
-    // ✅ Sahi Tariqa: Poora data ek hi object ke andar wrap kar ke bhejein
-    const res = await getAllPortfolio({
-      page: pageNum,
-      limit: 9,
-      search: searchQuery // Agar aapka backend search query accept karta hai
-    });
+  const fetchData = async (pageNum = 1, searchQuery = "") => {
+    setLoading(true);
+    try {
+      // ✅ Sahi Tariqa: Poora data ek hi object ke andar wrap kar ke bhejein
+      const res = await getAllPortfolio({
+        page: pageNum,
+        limit: 9,
+        search: searchQuery // Agar aapka backend search query accept karta hai
+      });
 
-    if (res.success && Array.isArray(res.data?.data)) {
-      setPortfolios(res.data.data);
-      setPages(res.data.pages);
-    } else {
+      if (res.success && Array.isArray(res.data?.data)) {
+        setPortfolios(res.data.data);
+        setPages(res.data.pages);
+      } else {
+        setPortfolios([]);
+        setPages(1);
+      }
+    } catch (err) {
+      console.error("Error fetching portfolios:", err);
       setPortfolios([]);
-      setPages(1);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Error fetching portfolios:", err);
-    setPortfolios([]);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleSearch = () => {
     setPage(1);
@@ -169,6 +169,22 @@ const fetchData = async (pageNum = 1, searchQuery = "") => {
                   <h3 className="font-bold text-slate-800 text-lg mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
                     {portfolio.van_listing?.title || "Untitled Project"}
                   </h3>
+                  <div className="flex flex-wrap gap-1.5 mb-2">
+                    {portfolio.category && portfolio.category.length > 0 ? (
+                      portfolio.category.map((cat, index) => (
+                        <span
+                          key={index}
+                          className="text-xs font-semibold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md transition-colors group-hover:bg-blue-100"
+                        >
+                          {cat}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-sm font-bold text-slate-400 italic">
+                        Untitled Project
+                      </span>
+                    )}
+                  </div>
                   <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
                     {portfolio.van_listing?.subtitle || "No subtitle provided."}
                   </p>
