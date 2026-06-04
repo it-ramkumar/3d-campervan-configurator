@@ -48,8 +48,7 @@ export default async function Page({ params }) {
 
   if (!vanDetail?.data) return notFound();
   // console.log(vanDetail, "vanDetail");
-  // // --- JSON-LD Structured Data ---
-const hasPrice = vanDetail?.data?.van_listing?.price;
+const hasRealPrice = vanDetail?.data?.van_listing?.price && Number(vanDetail?.data?.van_listing?.price) > 1000;
 
 const jsonLd = {
   "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
@@ -62,7 +61,7 @@ const jsonLd = {
     "@type": "Brand",
     "name": "Big Bear Vans"
   },
-  ...(hasPrice && {
+  ...(hasRealPrice && {
     "offers": {
       "@type": "Offer",
       "price": vanDetail?.data?.van_listing?.price,
