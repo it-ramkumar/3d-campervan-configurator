@@ -49,7 +49,8 @@ export default async function Page({ params }) {
   if (!vanDetail?.data) return notFound();
   // console.log(vanDetail, "vanDetail");
   // // --- JSON-LD Structured Data ---
-const hasPrice = vanDetail?.data?.van_listing?.price;
+const hasPrice = vanDetail?.data?.van_listing?.price &&
+                 vanDetail?.data?.van_listing?.price > 1;
 
 const jsonLd = {
   "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
@@ -58,10 +59,18 @@ const jsonLd = {
   "name": vanDetail.data.van_listing?.title,
   "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
   "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
+  "sku": vanDetail.data.van_listing?.slug || slug,
   "brand": {
     "@type": "Brand",
     "name": "Big Bear Vans"
   },
+  "manufacturer": {
+    "@type": "Organization",
+    "name": "Big Bear Vans",
+    "url": process.env.NEXT_PUBLIC_SITE_URL
+  },
+  "category": "Custom Camper Vans",
+  "keywords": vanDetail.data.van_listing?.tags?.join(", ") || "custom van, camper van, van conversion",
   ...(hasPrice && {
     "offers": {
       "@type": "Offer",
@@ -70,7 +79,27 @@ const jsonLd = {
       "availability": vanDetail.data.status === "available"
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition"
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "Big Bear Vans"
+      }
+    }
+  }),
+  ...(!hasPrice && {
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/PreOrder",
+      "itemCondition": "https://schema.org/NewCondition",
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "USD",
+        "description": "Custom build price — contact us for a quote"
+      },
+      "seller": {
+        "@type": "Organization",
+        "name": "Big Bear Vans"
+      }
     }
   })
 };
