@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const van = data?.data;
   const title = `${van.van_listing?.title} | Big Bear Vans`;
   const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
-  const imageUrl = van.gallery?.[0] || "/default-og-image.webp";
+  const imageUrl = van.gallery?.[0] || "/default-og-image.webp"; // Pehli image OG image ke liye
 
   return {
     title,
@@ -40,50 +40,45 @@ export default async function Page({ params }) {
   const resolvedParams = await Promise.resolve(params);
   const slug = resolvedParams?.slug;
 
-  if (!slug) return notFound();
+  if (!slug) return { title: "Not Found" };
 
   const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`, {
-    next: { revalidate: 604800 } // 1 week cache
+    next: { revalidate: 604800}
   }).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();
+  // console.log(vanDetail, "vanDetail");
+  // // --- JSON-LD Structured Data ---
+const hasPrice = vanDetail?.data?.van_listing?.price;
 
-  const hasRealPrice = vanDetail?.data?.van_listing?.price && Number(vanDetail?.data?.van_listing?.price) > 1000;
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ProductModel",
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
-    "name": vanDetail.data.van_listing?.title,
-    "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
-    "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
-    "brand": {
-      "@type": "Brand",
-      "name": "Big Bear Vans"
-    },
-    ...(hasRealPrice && {
-      "offers": {
-        "@type": "Offer",
-        "price": vanDetail?.data?.van_listing?.price,
-        "priceCurrency": "USD",
-        "availability": vanDetail.data.status === "available"
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    })
-  };
-
+const jsonLd = {
+  "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": vanDetail.data.van_listing?.title,
+  "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
+  "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
+  "brand": {
+    "@type": "Brand",
+    "name": "Big Bear Vans"
+  },
+  ...(hasPrice && {
+    "offers": {
+      "@type": "Offer",
+      "price": vanDetail?.data?.van_listing?.price,
+      "priceCurrency": "USD",
+      "availability": vanDetail.data.status === "available"
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  })
+};
   return (
     <>
-      {/* Next.js me structural dynamic tags ko head me push karne k liye hum dynamic script insert karte hain
-        safely escaped strings k sath.
-      */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <VanPage van={vanDetail.data} />
     </>
