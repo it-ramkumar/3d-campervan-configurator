@@ -26,12 +26,12 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
 const layoutCategories = [
   {
     name: "Santa Monica",
-    slug: "van-layouts?category=flagship-short-van-santa-monica",
+    slug: "/van-layouts?category=flagship-short-van-santa-monica",
     image: ["/renderings/sm.webp"],
   },
   {
     name: "Montreal",
-    slug: "van-layouts?category=flagship-long-van-montreal",
+    slug: "/van-layouts?category=flagship-long-van-montreal",
     image: ["/renderings/montreal.webp"],
   },
   {
