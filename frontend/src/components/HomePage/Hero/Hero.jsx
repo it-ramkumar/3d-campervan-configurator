@@ -148,9 +148,9 @@ export default function Hero() {
         <button
           onClick={() => swiper?.slideNext()}
           aria-label="Next Slide"
-          className="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+          className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
         >
-          <ChevronRight size={28} />
+          <ChevronLeft size={20} className="md:w-7 md:h-7" />
         </button>
       </div>
 
