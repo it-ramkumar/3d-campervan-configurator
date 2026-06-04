@@ -1,200 +1,188 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { slides } from "@/DataUseInComp/homeSlider";
 
-export default function HeroSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [animating, setAnimating] = useState(false);
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
 
-  // Fallback check agar slides array khali ya undefined ho taake build crash na ho
-  const validSlides = slides && slides.length > 0 ? slides : [];
-
-  useEffect(() => {
-    if (validSlides.length <= 1) return;
-    const timer = setInterval(() => {
-      handleNext();
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [validSlides.length]);
-
-  const handleNext = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % validSlides.length);
-      setAnimating(false);
-    }, 300);
-  };
-
-  const handleDotClick = (index) => {
-    if (index === currentSlide) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentSlide(index);
-      setAnimating(false);
-    }, 300);
-  };
-
-  if (validSlides.length === 0) {
-    return <div className="min-h-screen bg-primary" />;
-  }
-
-  const activeSlide = validSlides[currentSlide];
-
-  // Pure JavaScript Title String formatting
-  const renderTitle = (titleText) => {
-    if (!titleText) return "";
-    const words = titleText.split(" ");
-    if (words.length <= 1) return titleText;
-
-    const lastWord = words[words.length - 1];
-    const remainingText = words.slice(0, -1).join(" ");
-
-    return (
-      <>
-        {remainingText} <br />
-        <span className="text-hover">{lastWord}.</span>
-      </>
-    );
-  };
+export default function Hero() {
+  const [swiper, setSwiper] = useState(null);
 
   return (
-    <section className="relative w-full min-h-screen bg-primary text-secondary overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-start lg:items-center px-6 md:px-16 gap-6 lg:gap-4 pt-10 md:pt-8 pb-16 lg:pt-0 lg:pb-0">
-      {/* dot grid pattern */}
-      <div className="absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
-
-      {/* LEFT CONTENT — Typography & Actions */}
-      <div
-        className={`relative z-10 flex flex-col lg:col-span-5 pr-0 lg:pr-6 transition-all duration-500 transform order-1 lg:order-1 ${
-          animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-        }`}
+    <div className="relative w-full h-[75vh] sm:h-[80vh] md:h-[95vh] overflow-hidden bg-black">
+      <Swiper
+        onSwiper={setSwiper}
+        modules={[Navigation, Pagination, Autoplay, EffectFade]}
+        effect="fade"
+        speed={1000}
+        loop
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        className="w-full h-full"
       >
-        {/* slogan */}
-        {/* <p className="text-hover text-[12px] md:text-[14px] lg:text-[15px] italic tracking-[0.03em] mb-1 md:mb-1 font-normal">
-          {activeSlide.slogan}
-        </p> */}
-        <p className="text-sm leading-[1.85] text-hover max-w-sm">
-          {activeSlide.slogan}
-        </p>
-        {/* heading */}
-        <h1 className="text-[clamp(34px,5.5vw,68px)] font-black italic uppercase leading-[1.0] tracking-tight mb-4 lg:mb-5">
-          {renderTitle(activeSlide.title)}
-        </h1>
+        {slides.map((slide, index) => (
+          <SwiperSlide key={index} className="relative">
+            <div className="relative w-full h-full overflow-hidden">
+              {/* Background Images */}
+              {/* Mobile Image */}
+              <Image
+                src={
+                  slide.mobileImage || slide.image || "/images/blackLogo.webp"
+                }
+                alt={slide.title}
+                fill
+                priority={index === 0}
+                quality={70}
+                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
+                className="block md:hidden object-cover"
+                style={{
+                  objectPosition: slide.objectPosition || "center center",
+                }}
+              />
+              {/* Desktop Image */}
+              <Image
+                src={slide.image || "/images/blackLogo.webp"}
+                alt={slide.title}
+                fill
+                priority={index === 0}
+                quality={70}
+                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
+                className="hidden md:block object-cover"
+                style={{
+                  objectPosition: slide.objectPosition || "center center",
+                }}
+              />
 
-        {/* accent line */}
-        <div className="w-11 h-0.5 bg-hover rounded-full mb-4 lg:mb-5" />
+              {/* Overlay */}
+              <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/75 via-black/40 to-transparent" />
 
-        {/* description */}
-        <p className="text-sm leading-[1.85] text-white/80 max-w-sm mb-4 lg:mb-7 min-h-[auto] lg:min-h-[60px]">
-          {activeSlide.desc}
-        </p>
+              {/* Content Container */}
+              <div className="relative z-20 h-full flex items-center">
+                {/* <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-4xl text-white flex flex-col items-start justify-center"> */}
+                {/* <div className="w-full px-6 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col items-start justify-center max-w-none"> */}
+                {/* <div className="w-full px-6 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col justify-center h-full"> */}
+                <div className="w-full px-6 pt-12 md:pt-0 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col md:justify-center h-full">
+                  {/* Slogan */}
+                  <p className="text-hover text-xs md:text-base font-semibold tracking-wide mb-2 animate-fade-up">
+                    {slide.slogan || "You Dream It. We Build It."}
+                  </p>
 
-        {/* CTAs */}
-        <div className="flex items-center gap-4 mb-4 lg:mb-5 flex-wrap">
-          <Link
-            href={activeSlide.link || "#"}
-            className="bg-hover text-primary text-[11px] font-bold uppercase tracking-[0.1em] px-7 py-3.5 rounded hover:opacity-90 transition-opacity"
-          >
-            {activeSlide.btnText}
-          </Link>
+                  {/* Title (stacked lines) */}
+                  <h1 className="text-[clamp(24px,7vw,40px)] sm:text-4xl md:text-6xl lg:text-7xl font-black italic uppercase leading-[0.95] tracking-tighter mb-3 animate-fade-up delay-100">
+                    {slide.title === "Custom Van Builds" ? (
+                      <>
+                        <span className="text-white block">CUSTOM VAN</span>
+                        {/* <span className="text-white block">VAN</span> */}
+                        <span className="text-hover block">BUILDS.</span>
+                      </>
+                    ) : slide.title === "Campervans For Sale" ? (
+                      <>
+                        <span className="text-white block">CAMPERVANS</span>
+                        <span className="text-hover block">FOR SALE.</span>
+                      </>
+                    ) : slide.title === "Previous Layouts" ? (
+                      <>
+                        <span className="text-white block">PREVIOUS</span>
+                        <span className="text-hover block">LAYOUTS.</span>
+                      </>
+                    ) : (
+                      slide.title
+                    )}
+                  </h1>
 
-          <Link
-            href="/van-layouts"
-            className="border border-white/10 text-white/65 text-[11px] font-semibold uppercase tracking-[0.1em] px-6 py-3.5 rounded hover:border-white/25 hover:text-white transition-all"
-          >
-            Explore layouts →
-          </Link>
-        </div>
+                  {/* Divider Line */}
+                  <div className="w-8 sm:w-12 h-[2px] sm:h-[3px] bg-hover rounded-full mb-4 animate-fade-up delay-200" />
 
-        {/* rating card (Static) */}
-        <div className="inline-flex items-center gap-4 bg-white/[0.04] border border-white/[0.08] rounded-xl px-5 py-4 w-fit">
-          <div className="flex -space-x-2.5">
-            {["#7C6D5A", "#9E8B72", "#B5A488"].map((bg, i) => (
-              <div
-                key={i}
-                className="w-8 h-8 rounded-full border-2 border-[#080A0B] flex items-center justify-center text-[10px] font-bold text-white"
-                style={{ background: bg }}
-              >
-                {["J", "M", "R"][i]}
+                  {/* Description */}
+                  <p className="text-[11px] sm:text-sm md:text-base text-white/95 max-w-xs sm:max-w-md mb-5 leading-relaxed animate-fade-up delay-200">
+                    {slide.desc}
+                  </p>
+
+                  {/* Buttons */}
+                  {/* <div className="flex flex-row gap-2.5 w-full sm:w-auto animate-fade-up delay-300"> */}
+                  {/* <div className="flex flex-row gap-2.5 w-full sm:w-auto mt-6 animate-fade-up delay-300"> */}
+                  <div className="flex flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
+                    {/* Primary Button */}
+                    <Link
+                      href={slide.link || "/inquiry"}
+                      className="bg-hover hover:bg-hover/90 text-primary text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
+                    >
+                      {slide.btnText || "Build Your Own"}
+                    </Link>
+
+                    {/* Secondary Button */}
+                    <Link
+                      href="/van-layouts"
+                      className="bg-black/20 border border-white/60 hover:border-white/80 hover:bg-white/5 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
+                    >
+                      Explore Layouts &rarr;
+                    </Link>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-          <div>
-            <div className="flex items-center gap-1 mb-0.5">
-              {[...Array(5)].map((_, i) => (
-                <svg
-                  key={i}
-                  className="w-3 h-3 text-[#D4A843]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-              <span className="text-white/80 text-[11px] font-semibold ml-1">
-                5.0
-              </span>
             </div>
-            <p className="text-white/40 text-[10px] leading-tight">
-              200+ happy customers
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* RIGHT CONTENT — Aesthetic Slider Display */}
-      {/* Mobile par h-[35vh] ya h-[40vh] responsive handle kiya hai taake image full-width aur clean dikhe */}
-      <div className="relative w-full h-[35vh] sm:h-[45vh] lg:h-[85vh] lg:col-span-7 flex items-center justify-center z-10 order-2 lg:order-2 -mt-8 lg:mt-0">
-        {validSlides.map((slide, index) => {
-          const isActive = index === currentSlide;
-          return (
-            <div
-              key={slide.id || index}
-              className={`absolute w-full h-full flex items-center justify-center transition-all duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-                isActive
-                  ? "opacity-100 pointer-events-auto translate-x-0 scale-100 lg:scale-105"
-                  : "opacity-0 pointer-events-none translate-x-12 scale-95 blur-sm"
-              }`}
-            >
-              <div className="w-full h-full select-none flex items-center justify-center">
-                <Image
-                  src={slide.image}
-                  alt={slide.title}
-                  width={1500}
-                  height={1000}
-                  priority={index <= 2}
-                  quality={80}
-                  className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.7)] lg:drop-shadow-[0_25px_50px_rgba(0,0,0,0.9)]"
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Progress Dots Indicator */}
-      <div className="absolute bottom-6 lg:bottom-10 left-6 md:left-16 z-20 flex items-center gap-3">
-        {validSlides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            className="group relative flex h-4 items-center justify-center focus:outline-none"
-            aria-label={`Switch to slide ${index + 1}`}
-          >
-            <span
-              className={`h-[3px] rounded-full transition-all duration-500 ease-out ${
-                index === currentSlide
-                  ? "w-10 bg-[#D4A843]"
-                  : "w-4 bg-white/20 group-hover:bg-white/40"
-              }`}
-            />
-          </button>
+          </SwiperSlide>
         ))}
+      </Swiper>
+
+      {/* NAVIGATION */}
+      {/* <div className="absolute bottom-18 right-6 md:left-12 z-30 flex items-center gap-65 md:gap-4"> */}
+      <div className="absolute bottom-6 md:bottom-10 right-4 md:left-12 z-30 flex items-center gap-3 md:gap-4">
+        <button
+          onClick={() => swiper?.slidePrev()}
+          aria-label="Previous Slide"
+          // className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+          className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+        >
+          <ChevronLeft size={20} className="md:w-7 md:h-7" />
+        </button>
+
+        <button
+          onClick={() => swiper?.slideNext()}
+          aria-label="Next Slide"
+          className="w-14 h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+        >
+          <ChevronRight size={28} />
+        </button>
       </div>
 
-      {/* Soft Bottom Cinematic Gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-24 lg:h-32 bg-gradient-to-t from-[#080A0B] via-[#080A0B]/60 to-transparent pointer-events-none z-10" />
-    </section>
+      {/* SIMPLE CSS ANIMATION */}
+      <style>{`
+  .animate-fade-up {
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`}</style>
+    </div>
   );
 }

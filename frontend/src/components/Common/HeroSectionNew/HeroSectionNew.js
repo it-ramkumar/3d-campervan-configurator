@@ -54,13 +54,10 @@ export default function HeroImage({
         fetchPriority={priority ? "high" : "auto"}
         loading={priority ? "eager" : "lazy"}
         quality={70}
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
         placeholder="blur"
         blurDataURL="/images/blackLogo.webp"
-        className="
-object-cover
-md
-"
+        className="block md:hidden object-cover"
       />
 
       {/* DESKTOP IMAGE */}
@@ -72,14 +69,10 @@ md
         fetchPriority={priority ? "high" : "auto"}
         loading={priority ? "eager" : "lazy"}
         quality={70}
-        sizes="100vw"
+        sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
         placeholder="blur"
         blurDataURL="/images/blackLogo.webp"
-        className="
-hidden
-md:block
-object-cover object-center
-"
+        className="hidden md:block object-cover object-center"
       />
 
       {/* OVERLAY */}
