@@ -53,7 +53,8 @@ const hasRealPrice = vanDetail?.data?.van_listing?.price && Number(vanDetail?.da
 const jsonLd = {
   "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
   "@context": "https://schema.org/",
-  "@type": "Product",
+  // Product ki jagah ProductModel lagane se pricing/offers ki strict error khatam ho jayegi
+  "@type": "ProductModel",
   "name": vanDetail.data.van_listing?.title,
   "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
   "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
@@ -61,6 +62,7 @@ const jsonLd = {
     "@type": "Brand",
     "name": "Big Bear Vans"
   },
+  // Agar by chance kisi portfolio me real price ho, tab hi offers jaye, warna block pure tareeqe se skip ho jaye
   ...(hasRealPrice && {
     "offers": {
       "@type": "Offer",
