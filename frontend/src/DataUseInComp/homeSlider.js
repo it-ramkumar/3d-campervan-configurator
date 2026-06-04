@@ -2,7 +2,7 @@ export const slides = [
   {
     id: 1,
     image: "/renderings/montreal.webp",
-    tag: "Vans For Sale.",
+    tag: "Vans For Sale",
     title: "Campervans For Sale",
     slogan: "You Dream It. We Build It.",
     desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
