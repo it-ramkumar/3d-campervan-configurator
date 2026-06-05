@@ -50,7 +50,7 @@ export default async function Page({ params }) {
   // console.log(vanDetail, "vanDetail");
   // // --- JSON-LD Structured Data ---
 const hasPrice = vanDetail?.data?.van_listing?.price &&
-                 vanDetail?.data?.van_listing?.price > 1;
+                 vanDetail?.data?.van_listing?.price > 10; // 10 se zyada ho tabhi real price
 
 const jsonLd = {
   "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
@@ -71,37 +71,24 @@ const jsonLd = {
   },
   "category": "Custom Camper Vans",
   "keywords": vanDetail.data.van_listing?.tags?.join(", ") || "custom van, camper van, van conversion",
-  ...(hasPrice && {
-    "offers": {
-      "@type": "Offer",
-      "price": vanDetail?.data?.van_listing?.price,
-      "priceCurrency": "USD",
-      "availability": vanDetail.data.status === "available"
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      "itemCondition": "https://schema.org/NewCondition",
-      "seller": {
-        "@type": "Organization",
-        "name": "Big Bear Vans"
-      }
+  "offers": {
+    "@type": "Offer",
+    "price": hasPrice ? vanDetail?.data?.van_listing?.price : "0",
+    "priceCurrency": "USD",
+    "availability": hasPrice
+      ? (vanDetail.data.status === "available"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock")
+      : "https://schema.org/PreOrder",
+    "itemCondition": "https://schema.org/NewCondition",
+    ...(hasPrice ? {} : {
+      "description": "Custom build price — contact us for a quote"
+    }),
+    "seller": {
+      "@type": "Organization",
+      "name": "Big Bear Vans"
     }
-  }),
-  ...(!hasPrice && {
-    "offers": {
-      "@type": "Offer",
-      "availability": "https://schema.org/PreOrder",
-      "itemCondition": "https://schema.org/NewCondition",
-      "priceSpecification": {
-        "@type": "PriceSpecification",
-        "priceCurrency": "USD",
-        "description": "Custom build price — contact us for a quote"
-      },
-      "seller": {
-        "@type": "Organization",
-        "name": "Big Bear Vans"
-      }
-    }
-  })
+  }
 };
   return (
     <>
