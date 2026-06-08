@@ -53,7 +53,7 @@ const floorPlans = [
 const TrendPortfolios = [
   {
     name: "MOTO Campervan ",
-    slug: "/van-layouts?category=flagship-short-van-santa-monica",
+    slug: "/layout-detail/moto-van",
     image: ["/family/moto(2).webp"],
   },
   // {
@@ -63,22 +63,22 @@ const TrendPortfolios = [
   // },
   {
     name: "San Clemente",
-    slug: "/van-layouts?search=imperial",
+    slug: "/layout-detail/san-clemente",
     image: ["/family/san(5).webp"],
   },
   {
     name: "Santa Cruz",
-    slug: "/van-layouts?search=santa+barbara",
+    slug: "/layout-detail/santa-cruz",
     image: ["/family/santa(4).webp"],
   },
   {
     name: "Imperial Campervan",
-    slug: "/layout-detail/cusco-campervan",
+    slug: "/layout-detail/imperial",
     image: ["/long/imperial(8).webp"],
   },
   {
     name: "Lake Tohoe Campervan ",
-    slug: "/van-layouts?category=flagship-short-van-santa-monica",
+    slug: "/layout-detail/lake-tahoe",
     image: ["/short/lake(5).webp"],
   },
 
