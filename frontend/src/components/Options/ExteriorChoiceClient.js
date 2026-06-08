@@ -1,13 +1,16 @@
 "use client";
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
-import ExteriorChoicesList from './ExteriorChoicesList';
-import AdditionalAccessories from './ExteriorAccessories';
+import ExteriorChoicesList from "./ExteriorChoicesList";
+import AdditionalAccessories from "./ExteriorAccessories";
 import SystemOptions from "./SystemOptions";
-import ExteriorCTR from './ExteriorCTR';
+import ExteriorCTR from "./ExteriorCTR";
 
-export default function ExteriorChoiceClient({ options, current, initialRawData }) {
-
+export default function ExteriorChoiceClient({
+  options,
+  current,
+  initialRawData,
+}) {
   const dataState = useMemo(() => {
     const categoryMap = {};
     const initialSubMap = {};
@@ -51,7 +54,7 @@ export default function ExteriorChoiceClient({ options, current, initialRawData 
       categories: categoriesArray,
       activeSubCategoryMap: initialSubMap,
       activeItemMap: initialItemMap,
-      loading: false
+      loading: false,
     };
   }, [initialRawData]);
 
@@ -67,6 +70,7 @@ export default function ExteriorChoiceClient({ options, current, initialRawData 
         title={current.title}
         description={current.desc}
         image={current.heroImage}
+        mobileImage={current.mobileHeroImage}
         showButton={false}
       />
 
@@ -82,10 +86,10 @@ export default function ExteriorChoiceClient({ options, current, initialRawData 
 
         {current.api === "system" && <SystemOptions />}
         {current.api === "exterior" && (
-            <>
-                <ExteriorCTR />
-                <AdditionalAccessories />
-            </>
+          <>
+            <ExteriorCTR />
+            <AdditionalAccessories />
+          </>
         )}
       </main>
     </div>

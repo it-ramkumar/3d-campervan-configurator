@@ -4,23 +4,26 @@ import { generateDynamicSchema } from "@/schema/optionsSchema";
 const PAGE_CONFIG = {
   "exterior-options": {
     api: "exterior",
-    keyword:"bathroom",
+    keyword: "bathroom",
     title: "Campervan Exterior Upgrades",
     desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical exterior accessories.",
-    heroImage: "/heroSlider/exteriorhero.webp"
+    heroImage: "/heroSlider/exteriorhero.webp",
+    mobileHeroImage: "/heroSlider/exteriorhero_mobile.webp",
   },
   "interior-options": {
     api: "interior",
     title: "Premium Interior Finishes",
     desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
-    heroImage: "/heroSlider/interiorHero.webp"
+    heroImage: "/heroSlider/interiorHero.webp",
+    mobileHeroImage: "/heroSlider/interiorHero_mobile.webp",
   },
   "system-options": {
     api: "system",
     title: "Electrical & Water Systems",
     desc: "Reliable, high-performance electrical and water systems, installed in every custom van.",
-    heroImage: "/heroSlider/system.webp"
-  }
+    heroImage: "/heroSlider/system.webp",
+    mobileHeroImage: "/heroSlider/system_mobile.webp",
+  },
 };
 
 export async function generateMetadata({ params }) {
@@ -81,26 +84,25 @@ export default async function Page({ params }) {
     // Variable name fix: NEXT_PUBLIC_URL
     const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
 
-    const res = await fetch(apiUrl, { next: { revalidate: 604800} });
+    const res = await fetch(apiUrl, { next: { revalidate: 604800 } });
     const result = await res.json();
     categoriesData = result.data || [];
   } catch (error) {
     console.error("Fetch error:", error);
   }
-const jsonLd = generateDynamicSchema(options, current, categoriesData);
+  const jsonLd = generateDynamicSchema(options, current, categoriesData);
   return (
     <>
       <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-  />
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-
-    <ExteriorChoiceClient
-      options={options}
-      current={current}
-      initialRawData={categoriesData}
-    />
+      <ExteriorChoiceClient
+        options={options}
+        current={current}
+        initialRawData={categoriesData}
+      />
     </>
   );
 }

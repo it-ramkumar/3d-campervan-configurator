@@ -19,19 +19,20 @@ export const metadata = {
     title: "Custom Camper Van Builders in California | Big Bear Vans",
     description:
       "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
-    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Custom Camper Van Builders in California | Big Bear Vans",
     description:
       "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
-    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
+    images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
 };
 
 export default function AboutUs() {
-  const heroImage = "/heroSlider/processhero.webp";
+  const heroImage = "/heroSlider/aboutus.webp";
+  const mobileHeroImage = "/heroSlider/aboutus_mobile.webp";
   const newTitleText = "About Big Bear Vans | Custom Van Builders California";
   const newSloganText = "You Dream It. We Build It.";
   const newDescriptionText =
@@ -54,6 +55,7 @@ export default function AboutUs() {
             title={newTitleText}
             description={newDescriptionText}
             image={heroImage}
+            mobileImage={mobileHeroImage}
             showButton={false}
           />
         </div>

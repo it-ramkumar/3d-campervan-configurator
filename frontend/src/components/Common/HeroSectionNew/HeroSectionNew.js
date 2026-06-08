@@ -55,8 +55,8 @@ export default function HeroImage({
         loading={priority ? "eager" : "lazy"}
         quality={70}
         sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
-        placeholder="blur"
-        blurDataURL="/images/blackLogo.webp"
+        // placeholder="blur"
+        // blurDataURL="/images/blackLogo.webp"
         className="block md:hidden object-cover"
       />
 
@@ -70,8 +70,8 @@ export default function HeroImage({
         loading={priority ? "eager" : "lazy"}
         quality={70}
         sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
-        placeholder="blur"
-        blurDataURL="/images/blackLogo.webp"
+        // placeholder="blur"
+        // blurDataURL="/images/blackLogo.webp"
         className="hidden md:block object-cover object-center"
       />
 
