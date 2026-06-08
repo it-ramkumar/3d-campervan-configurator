@@ -1,6 +1,5 @@
 export const menuContent = {
   CustomBuild: {
-    title: "Custom Builds",
     sections: [
       {
         title: "Start Your Custom Build",
@@ -24,24 +23,31 @@ export const menuContent = {
     ],
 
   },
-  "vans-for-sale": { title: "Vans for Sale", link: "/camper-vans-for-sale" },
+  "vans-for-sale": {},
   layout: {
-    title: "Layouts by Big Bear Vans",
     sections: [
 
       {
-        title: "Explore Layout Options",
+        title: "Explore Completed Van Builds & Journeys",
         items: [],
       },
       {
-        title: "Van Models Options",
+        title: "Find Your Perfect Van",
         items: [],
       },
     ],
   },
-  "contact-us": { title: "Contact Us", link: "/contact" },
+  floorplans: {
+    sections: [
+
+      {
+        title: "Find Your Ideal Floor Plan",
+        items: [],
+      }
+    ],
+  },
+  "contact-us": {},
   discover: {
-    title: "Discover Big Bear Vans",
     sections: [
       {
         title: "Company Info",

@@ -62,7 +62,7 @@ export default function FloatingCallButton() {
     /* CRITICAL FIX: z-[9999] yahan parent par lagaya hai taake navbar (z-999) iske niche dab jaye */
     <div
       ref={menuRef}
-      className="fixed bottom-10 right-10 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
+      className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
     >
       {/* 1. OPTIONS MENU */}
       <div

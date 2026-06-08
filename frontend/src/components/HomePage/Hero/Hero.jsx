@@ -66,9 +66,6 @@ export default function Hero() {
 
               {/* Content Container */}
               <div className="relative z-20 h-full flex items-center">
-                {/* <div className="container mx-auto px-6 md:px-12 lg:px-20 max-w-4xl text-white flex flex-col items-start justify-center"> */}
-                {/* <div className="w-full px-6 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col items-start justify-center max-w-none"> */}
-                {/* <div className="w-full px-6 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col justify-center h-full"> */}
                 <div className="w-full px-6 pt-12 md:pt-0 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col md:justify-center h-full">
                   {/* Slogan */}
                   <p className="text-hover text-xs md:text-base font-semibold tracking-wide mb-2 animate-fade-up">
@@ -107,8 +104,7 @@ export default function Hero() {
                   </p>
 
                   {/* Buttons */}
-                  {/* <div className="flex flex-row gap-2.5 w-full sm:w-auto animate-fade-up delay-300"> */}
-                  {/* <div className="flex flex-row gap-2.5 w-full sm:w-auto mt-6 animate-fade-up delay-300"> */}
+
                   <div className="flex flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
                     {/* Primary Button */}
                     <Link
@@ -134,23 +130,23 @@ export default function Hero() {
       </Swiper>
 
       {/* NAVIGATION */}
-      {/* <div className="absolute bottom-18 right-6 md:left-12 z-30 flex items-center gap-65 md:gap-4"> */}
-      <div className="absolute bottom-6 md:bottom-10 right-4 md:left-12 z-30 flex items-center gap-3 md:gap-4">
+
+      <div className="absolute bottom-6 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">
         <button
           onClick={() => swiper?.slidePrev()}
           aria-label="Previous Slide"
           // className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
-          className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+          className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
         >
-          <ChevronLeft size={20} className="md:w-7 md:h-7" />
+          <ChevronLeft size={18} className="md:w-6 md:h-6" />
         </button>
 
         <button
           onClick={() => swiper?.slideNext()}
           aria-label="Next Slide"
-          className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
+          className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
         >
-          <ChevronRight size={20} className="md:w-7 md:h-7" />
+          <ChevronRight size={18} className="md:w-6 md:h-6" />
         </button>
       </div>
 

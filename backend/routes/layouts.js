@@ -226,19 +226,30 @@ router.get("/", async (req, res) => {
 });
 router.get("/titles-only", async (req, res) => {
   try {
-    let { page = 1, limit = 12, search } = req.query;
+    let { page = 1, limit = 12, search, category } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 12;
 
+    // 1. Pehle pure database se sabhi unique categories nikalenge dynamic filters ke liye
+    // Taake frontend bina kisi hardcoding ke automated tabs bana sake
+    const uniqueCategories = await PortfolioVan.distinct("category");
+
     const filter = {};
+
+    // Search filter
     if (search && search.trim() !== "") {
       filter["van_listing.title"] = { $regex: search, $options: "i" };
     }
 
-    // 1. Pehle Total count nikalein (Pagination ke liye zaroori hai)
+    // Category filter
+    if (category && category.trim() !== "") {
+      filter["category"] = { $regex: `^${category.trim()}$`, $options: "i" };
+    }
+
+    // Total count nikalein filter ke mutabiq
     const total = await PortfolioVan.countDocuments(filter);
 
-    // 2. Aggregation Pipeline
+    // Aggregation Pipeline
     const vans = await PortfolioVan.aggregate([
       { $match: filter },
       {
@@ -250,8 +261,8 @@ router.get("/titles-only", async (req, res) => {
       },
       {
         $sort: {
-          hasRendering: -1, // Rendering wale pehle
-          createdAt: -1,    // Phir latest wale
+          hasRendering: -1,
+          createdAt: -1,
         },
       },
       { $skip: (page - 1) * limit },
@@ -269,13 +280,14 @@ router.get("/titles-only", async (req, res) => {
       },
     ]);
 
-    // Response structure jo frontend expect kar raha hai
+    // Response structure (Ab isme categories ka array bhi ja raha hai)
     res.json({
       success: true,
-      total,                  // Total items in DB
-      page,                   // Current page
-      pages: Math.ceil(total / limit), // Total pages available
-      data: vans,             // Current page ka data
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+      categories: uniqueCategories, // Dynamic array e.g., ["144", "170", "148", "159", "Custom Builds"]
+      data: vans,
     });
   } catch (err) {
     console.error("Backend Error:", err);

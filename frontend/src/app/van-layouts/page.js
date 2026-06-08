@@ -54,10 +54,9 @@ const dynamicHeroData = {
     desc: "The ultimate space for full-time van life."
   },
   "default": {
-    title: "Explore Custom Van Layouts",
+    title: "Explore Custom Van portfolios",
     image: "/images2/layout2.webp",
-    desc: "Find the perfect floor plan for your dream build."
-  }
+desc: "Browse our portfolio of custom van conversions, organized by wheelbase and category."  }
 };
 export default async function LayoutsPage({ searchParams }) {
 

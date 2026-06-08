@@ -6,7 +6,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { gsap } from "gsap";
 import { linksForNavbar } from "../../api/blog/linksForNavbar";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
-import { routes } from "../../DataUseInComp/NavbarRoutes";
+// import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
 import { Heading4 } from "../Common/Common";
 import Image from "next/image";
@@ -23,44 +23,77 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
   </FooterListItem>
 );
 
-const layoutCategories = [
+const floorPlans = [
   {
     name: "Santa Monica",
-    slug: "/van-layouts?category=flagship-short-van-santa-monica",
+    slug: "/floorplans?category=flagship-short-van-santa-monica",
     image: ["/renderings/sm.webp"],
   },
   {
     name: "Montreal",
-    slug: "/van-layouts?category=flagship-long-van-montreal",
+    slug: "/floorplans?category=flagship-long-van-montreal",
     image: ["/renderings/montreal.webp"],
   },
   {
     name: "Imperial",
-    slug: "/van-layouts?search=imperial",
+    slug: "/floorplans?search=imperial",
     image: ["/renderings/imperial.webp"],
   },
   {
     name: "Santa Barbara",
-    slug: "/van-layouts?search=santa+barbara",
+    slug: "/floorplans?search=santa+barbara",
     image: ["/renderings/santaBarbara.webp"],
   },
   {
     name: "Cusco",
-    slug: "/layout-detail/cusco-campervan",
+    slug: "/floorplans?search=cusco",
     image: ["/renderings/cusco (1).webp"],
   },
 ];
-const CategoryCard = ({ image, title, href, onClick }) => (
-  <div className="flex flex-col items-center group text-center">
+const TrendPortfolios = [
+  {
+    name: "MOTO Campervan ",
+    slug: "/van-layouts?category=flagship-short-van-santa-monica",
+    image: ["/family/moto(2).webp"],
+  },
+  // {
+  //   name: "Cusco Campervan",
+  //   slug: "/van-layouts?category=flagship-long-van-montreal",
+  //   image: ["/family/cusco(3).webp"],
+  // },
+  {
+    name: "San Clemente",
+    slug: "/van-layouts?search=imperial",
+    image: ["/family/san(5).webp"],
+  },
+  {
+    name: "Santa Cruz",
+    slug: "/van-layouts?search=santa+barbara",
+    image: ["/family/santa(4).webp"],
+  },
+  {
+    name: "Imperial Campervan",
+    slug: "/layout-detail/cusco-campervan",
+    image: ["/long/imperial(8).webp"],
+  },
+  {
+    name: "Lake Tohoe Campervan ",
+    slug: "/van-layouts?category=flagship-short-van-santa-monica",
+    image: ["/short/lake(5).webp"],
+  },
+
+];
+const CategoryCard = ({ image, title, href, onClick,floorPlans }) => (
+  <div className={`flex flex-col items-center group ${floorPlans ? "text-center" : ""}`} >
     <Link href={href} onClick={onClick} className="w-full no-underline">
       {/* Image Container */}
       <div className="w-full mb-4 overflow-hidden">
         <Image
           src={image}
           alt={title}
-          width={300}
-          height={200}
-          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+          width={floorPlans ? 500 : 100}
+          height={floorPlans ? 400 : 100}
+          className="object-cover rounded-lg transition-transform duration-500 group-hover:scale-105"
         />
       </div>
 
@@ -83,15 +116,15 @@ const BlogListItem = ({ href, children, onClick }) => (
   </FooterListItem>
 );
 
-const ViewAllLink = ({ href, children, onClick }) => (
-  <FooterListItem
-    href={href}
-    onClick={onClick}
-    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
-  >
-    {children} →
-  </FooterListItem>
-);
+// const ViewAllLink = ({ href, children, onClick }) => (
+//   <FooterListItem
+//     href={href}
+//     onClick={onClick}
+//     className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
+//   >
+//     {children} →
+//   </FooterListItem>
+// );
 
 const MobileSectionTitle = ({ children }) => (
   <Heading4 text={children} textColor="text-primary" />
@@ -128,8 +161,14 @@ export default function Navbar({ forceMobile }) {
       },
       {
         name: "layout",
-        label: "Layouts",
-        path: "/layout-by-category",
+        label: "Portfolios",
+        path: "/van-layouts",
+        hasDropdown: true,
+      },
+       {
+        name: "floorplans",
+        label: "Floor Plans",
+        path: "/floorplans",
         hasDropdown: true,
       },
       {
@@ -143,16 +182,16 @@ export default function Navbar({ forceMobile }) {
     [],
   );
 
-  const isParentActive = useCallback(
-    (key) => {
-      const routeList = routes?.[key];
-      if (!routeList || !pathname) return false;
-      return routeList.some(
-        (r) => pathname === r || pathname.startsWith(r + "/"),
-      );
-    },
-    [pathname],
-  );
+  // const isParentActive = useCallback(
+  //   (key) => {
+  //     const routeList = routes?.[key];
+  //     if (!routeList || !pathname) return false;
+  //     return routeList.some(
+  //       (r) => pathname === r || pathname.startsWith(r + "/"),
+  //     );
+  //   },
+  //   [pathname],
+  // );
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -169,16 +208,11 @@ export default function Navbar({ forceMobile }) {
 
   useEffect(() => {
     const loadData = async () => {
-      // 1. Function call karein
       const res = await linksForNavbar();
-
-      // 2. Response check karein (linksForNavbar hamesha object bhejega)
       if (res && res.success) {
-        // Yahan apna state update karein
         setData(res.data);
       } else {
-        console.log("Kuch ghalat hua:", res.message);
-        // Default empty state set karein
+        console.log("something wrong:", res.message);
         setData({ blogs: [] });
       }
     };
@@ -261,12 +295,12 @@ export default function Navbar({ forceMobile }) {
         );
       }
 
-      if (section?.title === "Explore Layout Options") {
+      if (section?.title === "Explore Completed Van Builds & Journeys") {
         return (
           <div className="flex flex-col w-full">
             {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
-              {layoutCategories?.map((cat, i) => (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-8 md:gap-10">
+              {TrendPortfolios?.map((cat, i) => (
                 <CategoryCard
                   key={i}
                   href={`${cat.slug}`}
@@ -277,7 +311,39 @@ export default function Navbar({ forceMobile }) {
               ))}
             </div>
 
-            <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
+
+          </div>
+        );
+      }
+       if (section?.title === "Find Your Ideal Floor Plan") {
+        return (
+          <div className="flex flex-col w-full">
+            {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
+              {floorPlans?.map((cat, i) => (
+                <CategoryCard
+                  key={i}
+                  href={`${cat.slug}`}
+                  onClick={closeMobile}
+                  image={cat.image[0]}
+                  title={cat.name}
+                  floorPlans={true}
+                />
+              ))}
+            </div>
+  <div className="flex justify-center border-t border-primary/10 pt-6">
+              <Link
+                href="/floorplans"
+                onClick={closeMobile}
+                className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
+              >
+                All Floor Plans
+                <span className="transform transition-transform group-hover:translate-x-2">
+                  →
+                </span>
+              </Link>
+            </div>
+            {/* <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
               <Link
                 href="/layout-by-category"
                 onClick={closeMobile}
@@ -288,11 +354,11 @@ export default function Navbar({ forceMobile }) {
                   →
                 </span>
               </Link>
-            </div>
+            </div> */}
           </div>
         );
       }
-      if (section?.title === "Van Models Options") {
+      if (section?.title === "Find Your Perfect Van") {
         return (
           <>
             <NavListItem
@@ -339,7 +405,7 @@ export default function Navbar({ forceMobile }) {
                 onClick={closeMobile}
                 className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
-                View All Layout Options
+                All Portfolios
                 <span className="transform transition-transform group-hover:translate-x-2">
                   →
                 </span>
@@ -396,10 +462,7 @@ export default function Navbar({ forceMobile }) {
                 href={link.path}
                 onMouseEnter={() => link.hasDropdown && handleHover(link.name)}
                 onMouseLeave={() => link.hasDropdown && handleMouseLeave()}
-                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200 ${
-                  isParentActive(link.name)
-                    ? "text-primary"
-                    : "text-primary hover:!text-hover"
+                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200
                 }`}
               >
                 {link.label}
@@ -433,39 +496,48 @@ export default function Navbar({ forceMobile }) {
       </nav>
 
       {/* --- Desktop Mega Menu --- */}
-      <div
-        ref={megaMenuRef}
-        className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
-        style={{
-          top: "65px",
-          display: desktopMenu && !forceMobile ? "block" : "none",
-          contain: "layout style paint",
-        }}
-        onMouseEnter={() => !forceMobile && clearTimeout(timeoutRef.current)}
-        onMouseLeave={() => !forceMobile && handleMouseLeave()}
-      >
-        <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-10 gap-10 min-h-fit">
-          {menuContent[desktopMenu]?.sections?.map((sec, idx) => {
-            const isExplore = sec.title === "Explore Layout Options";
-            const isVanModels = sec.title === "Van Models Options";
+<div
+  ref={megaMenuRef}
+  className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
+  style={{
+    top: "65px",
+    display: desktopMenu && !forceMobile ? "block" : "none",
+    contain: "layout style paint",
+  }}
+  onMouseEnter={() => !forceMobile && clearTimeout(timeoutRef.current)}
+  onMouseLeave={() => !forceMobile && handleMouseLeave()}
+>
+  <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-12 gap-10 min-h-fit">
+    {menuContent[desktopMenu]?.sections?.map((sec, idx) => {
+      const isExplore =
+        sec.title === "Explore Completed Van Builds & Journeys";
+      const isVanModels = sec.title === "Find Your Perfect Van";
+      const isFloorPlans = sec.title === "Find Your Ideal Floor Plan";
 
-            return (
-              <div
-                key={idx}
-                className={`
-            ${isExplore ? "col-span-7 border-r-1 border-primary" : isVanModels ? "col-span-3" : "col-span-5 border-r-1 border-primary"}
+      return (
+        <div
+          key={idx}
+          className={`
+            ${
+              isFloorPlans
+                ? "col-span-12"
+                : isExplore
+                ? "col-span-9 border-r border-primary"
+                : isVanModels
+                ? "col-span-3"
+                : "col-span-6 border-r border-primary"
+            }
           `}
-              >
-                <Heading4 text={sec.title} textColor="text-primary" />
-                <ul className="space-y-1 font-body mt-4">
-                  {renderSectionItems(sec)}
-                </ul>
-              </div>
-            );
-          })}
+        >
+          <Heading4 text={sec.title} textColor="text-primary" />
+          <ul className="space-y-1 font-body mt-4">
+            {renderSectionItems(sec)}
+          </ul>
         </div>
-      </div>
-
+      );
+    })}
+  </div>
+</div>
       {/* --- Mobile Menu --- */}
       {isMobileMenuOpen && (
         <div
