@@ -68,7 +68,16 @@ const nextConfig = {
         destination: "https://www.bigbearvans.com/:path*",
         permanent: true,
       },
-
+{
+    source: "/vans-for-sale",
+    destination: "/camper-vans-for-sale",
+    permanent: true, // This triggers a 301 permanent redirect
+  },
+  {
+    source: "/layout-by-category",
+    destination: "/van-layouts",
+    permanent: true, // This triggers a 301 permanent redirect
+  },
     ];
   },
 };
