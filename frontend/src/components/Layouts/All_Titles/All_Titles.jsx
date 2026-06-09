@@ -171,9 +171,8 @@ export default function All_Titles_Client() {
               <button
                 type="button"
                 onClick={() => { updateURL({ category: "ALL" }); setDropdownOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
-                  selectedChassis === "ALL" ? "bg-[#001F3D] text-white" : "text-slate-700 hover:bg-slate-50"
-                }`}
+                className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${selectedChassis === "ALL" ? "bg-[#001F3D] text-white" : "text-slate-700 hover:bg-slate-50"
+                  }`}
               >
                 All Architecture Categories
               </button>
@@ -183,9 +182,8 @@ export default function All_Titles_Client() {
                   key={cat}
                   type="button"
                   onClick={() => { updateURL({ category: cat }); setDropdownOpen(false); }}
-                  className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${
-                    selectedChassis === cat ? "bg-[#001F3D] text-white" : "text-slate-600 hover:bg-slate-50"
-                  }`}
+                  className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${selectedChassis === cat ? "bg-[#001F3D] text-white" : "text-slate-600 hover:bg-slate-50"
+                    }`}
                 >
                   {getPlatformMeta(cat).label}
                 </button>
@@ -249,8 +247,7 @@ export default function All_Titles_Client() {
         <div className="space-y-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {portfolios.map((item) => {
-              const path = `/floorplans/${item.slug}`;
-              const isActive = pathname === path;
+              const path = `/layout-detail/${item.slug}?view=floorplan`; const isActive = pathname === path;
               const hasRenderings = item.rendering && item.rendering.length > 0;
 
               // Image swapping logic during card hovering
@@ -267,11 +264,10 @@ export default function All_Titles_Client() {
                   <div
                     onMouseEnter={() => setHoveredId(item._id)}
                     onMouseLeave={() => setHoveredId(null)}
-                    className={`relative rounded-lg border transition-all duration-300 flex flex-col h-full overflow-hidden ${
-                      isActive
+                    className={`relative rounded-lg border transition-all duration-300 flex flex-col h-full overflow-hidden ${isActive
                         ? "bg-[#001F3D] border-[#001F3D] text-white shadow-xl ring-4 ring-[#001F3D]/10"
                         : "bg-white border-slate-200/80 hover:border-slate-300 hover:shadow-xl hover:-translate-y-1"
-                    }`}
+                      }`}
                   >
                     {/* Media Layer Frame */}
                     <div className="relative h-56 w-full overflow-hidden bg-slate-100 border-b border-slate-100">
@@ -290,9 +286,8 @@ export default function All_Titles_Client() {
 
                       {/* Floating Chassis Tag */}
                       <div className="absolute top-4 left-4 z-10">
-                        <span className={`text-[10px] font-extrabold tracking-wide px-3 py-1 rounded-lg border shadow-sm uppercase ${
-                          isActive ? 'bg-white/10 border-white/20 text-white' : meta.style
-                        }`}>
+                        <span className={`text-[10px] font-extrabold tracking-wide px-3 py-1 rounded-lg border shadow-sm uppercase ${isActive ? 'bg-white/10 border-white/20 text-white' : meta.style
+                          }`}>
                           {meta.label}
                         </span>
                       </div>
@@ -327,11 +322,10 @@ export default function All_Titles_Client() {
                       <div className="mt-6 pt-4 border-t border-slate-100 flex flex-col gap-2">
                         <button
                           type="button"
-                          className={`w-full py-2 px-3 rounded-lg text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 border ${
-                            isActive
+                          className={`w-full py-2 px-3 rounded-lg text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 border ${isActive
                               ? "bg-[#ED985F] border-[#ED985F] text-white hover:bg-[#d67e45]"
                               : "bg-[#001F3D] border-[#001F3D] text-white hover:bg-[#001428]"
-                          }`}
+                            }`}
                         >
                           <Hammer size={13} /> View Built Vans
                         </button>
@@ -374,25 +368,25 @@ export default function All_Titles_Client() {
       {/* --- INITIAL LOADING SKELETON PLACEHOLDER --- */}
       {loading && portfolios.length === 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-           {[...Array(4)].map((_, i) => (
-             <div key={i} className="bg-white border border-slate-200 rounded-lg overflow-hidden h-[410px] flex flex-col animate-pulse">
-               <div className="h-56 bg-slate-100 w-full" />
-               <div className="p-6 flex-1 flex flex-col justify-between">
-                 <div className="space-y-3">
-                   <div className="h-3 bg-slate-100 rounded w-1/4" />
-                   <div className="h-5 bg-slate-100 rounded w-3/4" />
-                   <div className="grid grid-cols-2 gap-2 pt-2">
-                     <div className="h-7 bg-slate-50 rounded" />
-                     <div className="h-7 bg-slate-50 rounded" />
-                   </div>
-                 </div>
-                 <div className="space-y-2 mt-4">
-                   <div className="h-9 bg-slate-100 rounded-lg w-full" />
-                   <div className="h-3 bg-slate-50 rounded w-1/2 mx-auto" />
-                 </div>
-               </div>
-             </div>
-           ))}
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-white border border-slate-200 rounded-lg overflow-hidden h-[410px] flex flex-col animate-pulse">
+              <div className="h-56 bg-slate-100 w-full" />
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="h-3 bg-slate-100 rounded w-1/4" />
+                  <div className="h-5 bg-slate-100 rounded w-3/4" />
+                  <div className="grid grid-cols-2 gap-2 pt-2">
+                    <div className="h-7 bg-slate-50 rounded" />
+                    <div className="h-7 bg-slate-50 rounded" />
+                  </div>
+                </div>
+                <div className="space-y-2 mt-4">
+                  <div className="h-9 bg-slate-100 rounded-lg w-full" />
+                  <div className="h-3 bg-slate-50 rounded w-1/2 mx-auto" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

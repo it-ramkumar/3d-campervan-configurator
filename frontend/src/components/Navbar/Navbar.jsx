@@ -116,15 +116,6 @@ const BlogListItem = ({ href, children, onClick }) => (
   </FooterListItem>
 );
 
-// const ViewAllLink = ({ href, children, onClick }) => (
-//   <FooterListItem
-//     href={href}
-//     onClick={onClick}
-//     className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
-//   >
-//     {children} →
-//   </FooterListItem>
-// );
 
 const MobileSectionTitle = ({ children }) => (
   <Heading4 text={children} textColor="text-primary" />
@@ -161,7 +152,7 @@ export default function Navbar({ forceMobile }) {
       },
       {
         name: "layout",
-        label: "Portfolios",
+        label: "Portfolio",
         path: "/van-layouts",
         hasDropdown: true,
       },
@@ -181,17 +172,6 @@ export default function Navbar({ forceMobile }) {
     ],
     [],
   );
-
-  // const isParentActive = useCallback(
-  //   (key) => {
-  //     const routeList = routes?.[key];
-  //     if (!routeList || !pathname) return false;
-  //     return routeList.some(
-  //       (r) => pathname === r || pathname.startsWith(r + "/"),
-  //     );
-  //   },
-  //   [pathname],
-  // );
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
