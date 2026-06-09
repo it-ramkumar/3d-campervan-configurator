@@ -15,7 +15,7 @@ import {
   X
 } from "lucide-react";
 import { SecondaryButton, ImageWithSkeleton } from "../../Common/Common";
-
+import FloorPlanHero from "./FloorPlanHero"; // Apne folder path ke mutabiq import karein
 export default function All_Titles_Client() {
   const LIMIT = 12;
 
@@ -148,6 +148,12 @@ export default function All_Titles_Client() {
   const isFilterActive = selectedChassis !== "ALL" || searchQueryFromURL !== "";
 
   return (
+    <>
+      <FloorPlanHero
+  title="Camper Van Floor Plans for Every Adventure"
+  description="Explore our camper van floor plans, thoughtfully designed for solo travelers, families, pet owners, and moto enthusiasts. Find the perfect layout for your next adventure."
+  image={portfolios[0]?.rendering?.[0]}
+/>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 antialiased">
 
       {/* --- COMPACT INTERACTIVE MANAGEMENT UTILITY BAR --- */}
@@ -390,5 +396,6 @@ export default function All_Titles_Client() {
         </div>
       )}
     </div>
+    </>
   );
 }
