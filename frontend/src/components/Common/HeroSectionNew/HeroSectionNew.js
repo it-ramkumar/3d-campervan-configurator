@@ -26,6 +26,7 @@ export default function HeroImage({
   // IMAGE
   priority = true,
   className = "",
+  imagePosition = "center",
 }) {
   // FALLBACK IMAGE
   const finalImage =
@@ -57,6 +58,7 @@ export default function HeroImage({
         sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
         placeholder="blur"
         blurDataURL="/images/blackLogo.webp"
+        style={{ objectPosition: imagePosition }}
         className="block md:hidden object-cover"
       />
 
@@ -72,7 +74,8 @@ export default function HeroImage({
         sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
         placeholder="blur"
         blurDataURL="/images/blackLogo.webp"
-        className="hidden md:block object-cover object-center"
+        style={{ objectPosition: imagePosition }}
+        className="hidden md:block object-cover"
       />
 
       {/* OVERLAY */}
