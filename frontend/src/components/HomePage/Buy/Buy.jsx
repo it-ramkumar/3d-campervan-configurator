@@ -18,6 +18,7 @@ import { contact } from "../../../api/contact/contact";
 
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
+  const [data,setData] = useState([])
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -33,36 +34,38 @@ export default function Buy({ initialVans = [] }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e, data) => {
+  e.preventDefault();
 
+  try {
     if (
-      !formData.name.trim() ||
-      !formData.email.trim() ||
-      !formData.phone.trim()
+      !data.name?.trim() ||
+      !data.email?.trim() ||
+      !data.phone?.trim()
     ) {
       return;
     }
 
     setLoading(true);
 
-    try {
-      await contact(formData);
+    console.log("Received data:", data);
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+    // API call
+ const result = await contact(data);
 
-      setIsFormOpen(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <section className="bg-secondary py-20 antialiased overflow-hidden">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -167,7 +170,7 @@ export default function Buy({ initialVans = [] }) {
                           Details
                         </Link>
                         <button
-                          onClick={() => setIsFormOpen(true)}
+                          onClick={() => {  setIsFormOpen(true); setData(van)}}
                           className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300 shadow-lg shadow-primary/10"
                         >
                           Get This Build
@@ -212,6 +215,7 @@ export default function Buy({ initialVans = [] }) {
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               loading={loading}
+              initialVans={data}
             />
           </div>
         </div>

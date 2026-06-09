@@ -101,7 +101,7 @@ const filterConfig = [
   { label: "Wheelbase", key: "wheelbase", options: filterOptions(filters?.wheelbase) }, // ✅ NEW
   { label: "Category", key: "category", options: filterOptions(filters?.category) },   // ✅ NEW
   { label: "Seating", key: "sit", options: filterOptions(filters?.sits) },
-  { label: "Sleeping", key: "sleep", options: filterOptions(filters?.sleeps) },
+  // { label: "Sleeping", key: "sleep", options: filterOptions(filters?.sleeps) },
   // { label: "Bed Setup", key: "bedType", options: filterOptions(filters?.bedType) },
   // { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
 ];

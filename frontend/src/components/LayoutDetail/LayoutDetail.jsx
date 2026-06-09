@@ -32,9 +32,9 @@ const HeroSpecItem = ({ icon: Icon, label, value }) => (
   </div>
 );
 
-export default function LayoutDetail({van}) {
+export default function LayoutDetail({van,initialView}) {
 
-
+console.log(initialView, "ye initialView hai jo server se aaya");
   const getFeatureIcon = (cat) => {
     if (cat.includes("Electric")) return <Zap size={24} />;
     if (cat.includes("Water")) return <Droplets size={24} />;
@@ -80,9 +80,18 @@ export default function LayoutDetail({van}) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
               {/* Gallery */}
-               <div className="lg:col-span-7">
-            <VanGallery gallery={van.gallery} title={van?.van_listing?.title} />
-          </div>
+             <div className="lg:col-span-7">
+  {initialView === "floorplan" ? (
+    // Agar view floorplan hai toh rendering array bhejenge (agar rendering khali ho toh fallback gallery)
+    <VanGallery
+      gallery={van.rendering}
+      title={`${van?.van_listing?.title} Blueprint`}
+    />
+  ) : (
+    // Default real photos gallery
+    <VanGallery gallery={van.gallery} title={van?.van_listing?.title} />
+  )}
+</div>
               {/* Info Panel */}
               <div className="lg:col-span-5 lg:sticky lg:top-24 h-fit space-y-8">
 
