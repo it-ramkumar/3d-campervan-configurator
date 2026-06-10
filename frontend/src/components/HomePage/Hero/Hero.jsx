@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,12 +15,12 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
 export default function Hero() {
-  const [swiper, setSwiper] = useState(null);
+  const swiperRef = useRef(null);
 
   return (
     <div className="relative w-full h-[75vh] sm:h-[80vh] md:h-[95vh] overflow-hidden bg-black">
       <Swiper
-        onSwiper={setSwiper}
+        onSwiper={(s) => (swiperRef.current = s)}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
         speed={1000}
@@ -29,7 +29,7 @@ export default function Hero() {
         className="w-full h-full"
       >
         {slides.map((slide, index) => (
-          <SwiperSlide key={index} className="relative">
+          <SwiperSlide key={slide.id} className="relative">
             <div className="relative w-full h-full overflow-hidden">
               {/* Background Images */}
               {/* Mobile Image */}
@@ -41,7 +41,7 @@ export default function Hero() {
                 fill
                 priority={index === 0}
                 quality={70}
-                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
+                sizes="100vw"
                 className="block md:hidden object-cover"
                 style={{
                   objectPosition: slide.objectPosition || "center center",
@@ -54,7 +54,7 @@ export default function Hero() {
                 fill
                 priority={index === 0}
                 quality={70}
-                sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
+                sizes="(min-width: 768px) 100vw"
                 className="hidden md:block object-cover"
                 style={{
                   objectPosition: slide.objectPosition || "center center",
@@ -74,25 +74,13 @@ export default function Hero() {
 
                   {/* Title (stacked lines) */}
                   <h1 className="text-[clamp(24px,7vw,40px)] sm:text-4xl md:text-6xl lg:text-7xl font-black italic uppercase leading-[0.95] tracking-tighter mb-3 animate-fade-up delay-100">
-                    {slide.title === "Custom Van Builds" ? (
-                      <>
-                        <span className="text-white block">CUSTOM VAN</span>
-                        {/* <span className="text-white block">VAN</span> */}
-                        <span className="text-hover block">BUILDS.</span>
-                      </>
-                    ) : slide.title === "Campervans For Sale" ? (
-                      <>
-                        <span className="text-white block">CAMPERVANS</span>
-                        <span className="text-hover block">FOR SALE.</span>
-                      </>
-                    ) : slide.title === "Previous Layouts" ? (
-                      <>
-                        <span className="text-white block">PREVIOUS</span>
-                        <span className="text-hover block">LAYOUTS.</span>
-                      </>
-                    ) : (
-                      slide.title
-                    )}
+                    <>
+                      <span className="text-white block">{slide.title}</span>
+
+                      <span className="text-hover block">
+                        {slide.titleColored}
+                      </span>
+                    </>
                   </h1>
 
                   {/* Divider Line */}
@@ -133,7 +121,7 @@ export default function Hero() {
 
       <div className="absolute bottom-6 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">
         <button
-          onClick={() => swiper?.slidePrev()}
+          onClick={() => swiperRef.current?.slidePrev()}
           aria-label="Previous Slide"
           // className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
           className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
@@ -142,7 +130,7 @@ export default function Hero() {
         </button>
 
         <button
-          onClick={() => swiper?.slideNext()}
+          onClick={() => swiperRef.current?.slideNext()}
           aria-label="Next Slide"
           className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
         >
