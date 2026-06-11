@@ -231,6 +231,29 @@ const VanPage = ({ vanDetail }) => {
         </div>
       </div>
 
+      {vanDetail?.van_listing?.description && (
+        <section className="py-20 px-6 bg-secondary">
+          <div className="max-w-5xl mx-auto">
+            <div className="container mx-auto max-w-5xl text-center">
+              <RichParagraph className="!text-hover uppercase !text-xs font-bold">
+                The Design Philosophy
+              </RichParagraph>
+
+              <Heading2
+                text="Build Overview"
+                className="text-primary mt-4 mb-6"
+              />
+
+              <div className="w-20 h-1 bg-hover mx-auto rounded-full mb-10"></div>
+
+              <RichParagraph className="text-primary/70 italic mt-10">
+                "{vanDetail.van_listing.description}"
+              </RichParagraph>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* BLOCKS SECTION */}
       {blocks.length > 0 && (
         <section className="py-24 max-w-5xl mx-auto px-6 space-y-24">
