@@ -141,12 +141,21 @@ export default function BookingPage() {
 
       setMeetLink(data.meetLink);
       setBookingStep(5);
+
+      // 2. 🟩 FACE META TAG FOR GOOGLE ADS (Yeh humne add kiya hai)
       if (typeof window !== "undefined" && window.fbq) {
         console.log("META LEAD FIRED");
         window.fbq("track", "Lead", {
           source: "calendar-booking consultation",
           name: formData.name,
           email: formData.email,
+        });
+      }
+      // 2. 🟩 GOOGLE TAG MANAGER FOR GOOGLE ADS (Yeh humne add kiya hai)
+      if (typeof window !== "undefined" && window.dataLayer) {
+        console.log("GOOGLE ADS APPOINTMENT FIRED");
+        window.dataLayer.push({
+          event: 'appointment_form_submitted' // Exact yahi naam GTM trigger me dalna hai
         });
       }
       setSlots(
@@ -397,8 +406,7 @@ export default function BookingPage() {
                           key={i}
                           onClick={() => d && handleDateSelect(d)}
                           disabled={!d || d.isPast || d.isSunday}
-                          className={`h-10 rounded-lg text-xs font-bold transition-all ${
-                            !d
+                          className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
                               ? "invisible"
                               : d.isSelected
                                 ? "bg-primary text-white shadow-lg"
@@ -407,7 +415,7 @@ export default function BookingPage() {
                                   : d.isToday
                                     ? "bg-secondary/20 text-hover hover:bg-secondary hover:text-secondary"
                                     : "hover:bg-hover hover:text-secondary text-primary bg-secondary"
-                          }`}
+                            }`}
                         >
                           {d?.day}
                         </button>
@@ -469,11 +477,10 @@ export default function BookingPage() {
                                 setSelectedSlot(s);
                                 setBookingStep(3);
                               }}
-                              className={`p-4 border rounded-lg font-bold text-xs transition-all ${
-                                selectedSlot?.start === s.start
+                              className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot?.start === s.start
                                   ? "border-hover bg-primary/10 text-hover"
                                   : "border-primary/10 hover:border-hover hover:text-hover bg-secondary/30 text-primary"
-                              }`}
+                                }`}
                             >
                               {formatTimeSlot(s.start)}
                             </button>

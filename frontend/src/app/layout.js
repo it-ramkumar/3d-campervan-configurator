@@ -4,6 +4,7 @@ import Providers from "@/components/Providers/Providers";
 import ConditionalLayout from "@/components/ConditionalLayout/ConditionalLayout";
 import AnalyticsInit from "@/components/AnalyticsInit/AnalyticsInit";
 import Script from "next/script";
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 
@@ -34,12 +35,13 @@ export default function RootLayout({ children }) {
         />
 
         {/* ✅ GTM - pehle main script */}
-        <Script
+        {/* <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-16677332528"
           strategy="lazyOnload"
-        />
+        /> */}
+        <GoogleTagManager gtmId="GTM-WCMSZ3TJ" />
 
-        {/* ✅ GTM config - afterLoading */}
+        {/* ✅ GTM config - afterLoading
         <Script id="google-ads-script" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -47,7 +49,7 @@ export default function RootLayout({ children }) {
             gtag('js', new Date());
             gtag('config', 'AW-16677332528');
           `}
-        </Script>
+        </Script> */}
 
         {/* ✅ Meta Pixel Code */}
         <Script id="facebook-pixel" strategy="lazyOnload">
