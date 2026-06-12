@@ -40,7 +40,7 @@ export const slides = [
     mobileImage: "/images2/heromobile1.webp",
     tag: "Vans For Sale.",
     title: "Campervans",
-    titleColored: "For Sale...",
+    titleColored: "For Sale.",
     slogan: "You Dream It. We Build It.",
     desc: "Ready-to-roll premium builds. Hand-crafted for the ultimate road trip experience.",
     btnText: "View Inventory",

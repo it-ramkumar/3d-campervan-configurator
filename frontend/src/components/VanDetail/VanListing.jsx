@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Settings2,
   Zap,
@@ -20,6 +21,8 @@ import {
 } from "../Common/Common";
 import VanGallery from "./GallerySection";
 import BackButton from "../Common/BackButton/BackButton";
+import ContactForm from "@/components/Consultation/ContactForm";
+
 const SvgCheckmark = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -47,8 +50,51 @@ const HeroSpecItem = ({ label, value }) => (
 const VanPage = ({ vanDetail }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
+  const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([])
 
-  // console.log(vanDetail)
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e, data) => {
+    e.preventDefault();
+
+    try {
+      if (
+        !data.name?.trim() ||
+        !data.email?.trim() ||
+        !data.phone?.trim()
+      ) {
+        return;
+      }
+
+      setLoading(true);
+      // API call
+      const result = await contact(data);
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const specs = vanDetail?.van_listing?.specifications;
   const getFeatureIcon = (category) => {
     const icons = {
@@ -155,13 +201,16 @@ const VanPage = ({ vanDetail }) => {
             </div>
 
             <div className="flex flex-col gap-4 pt-4">
-              <SecondaryButton
-                label="Secure This Build"
-                link={
-                  vanDetail?.status === "available" ? "/contact" : "/inquiry"
-                }
-                className="w-full"
-              />
+              <div className="mt-auto flex gap-3">
+
+                <PrimaryButton
+                  label=" Get This Build"
+                  onClick={() => { setIsFormOpen(true); setData(vanDetail) }}
+                  className="w-full mt-4"
+                />
+
+
+              </div>
               <ShareButton title={vanDetail?.van_listing?.title} />
               <RichParagraph className="text-center !text-hover !text-xs uppercase font-bold">
                 Limited 2026 Build Slots
@@ -400,6 +449,36 @@ const VanPage = ({ vanDetail }) => {
                 </div>
               </div>
             ))}
+            {isFormOpen && (
+              <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto">
+                <div className="relative w-full max-w-2xl bg-white border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto pointer-events-auto">
+                  {/* <button
+                          onClick={() => setIsFormOpen(false)}
+                          className="absolute top-5 right-5 text-primary z-30"
+                        >
+                          ✕
+                        </button> */}
+                  <button
+                    onClick={() => setIsFormOpen(false)}
+                    aria-label="Close form"
+                    className="absolute top-5 right-5 z-30 text-primary cursor-pointer
+                         transition-all duration-200
+                         hover:text-hover hover:scale-110
+                         active:scale-95"
+                  >
+                    ✕
+                  </button>
+
+                  <ContactForm
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    loading={loading}
+                    initialVans={data}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </section>
       )}

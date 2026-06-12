@@ -153,7 +153,7 @@ export default function BookingPage() {
       }
       // 2. 🟩 GOOGLE TAG MANAGER FOR GOOGLE ADS (Yeh humne add kiya hai)
       if (typeof window !== "undefined" && window.dataLayer) {
-        console.log("GOOGLE ADS APPOINTMENT FIRED");
+        // console.log("GOOGLE ADS APPOINTMENT FIRED");
         window.dataLayer.push({
           event: 'appointment_form_submitted' // Exact yahi naam GTM trigger me dalna hai
         });
