@@ -9,28 +9,41 @@ const ThankYou = () => {
   const source = searchParams.get("source") || "unknown";
   const vanTitle = searchParams.get("van") || "No Van Selected";
 
-  useEffect(() => {
-    if (window.__LEAD_CONVERSION_FIRED__) return;
-    window.__LEAD_CONVERSION_FIRED__ = true;
+useEffect(() => {
+  if (window.__LEAD_CONVERSION_FIRED__) return;
+  window.__LEAD_CONVERSION_FIRED__ = true;
 
-    if (typeof window !== "undefined") {
-      // 1. Google Tag Manager / DataLayer Custom Event
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "lead_conversion_success",
-        formType: source,
-        vanTitle: vanTitle,
-      });
+  if (typeof window !== "undefined") {
 
-      // 2. Facebook Pixel Tracking
-      if (window.fbq) {
-        window.fbq("track", "Lead", {
-          source: source,
-          vanTitle: vanTitle
+    // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
+    if (window.gtag) {
+      if (source === "Calendar Booking") {
+        // 📅 CALENDAR BOOKING: Jab iska label mile, yahan daal dena
+        window.gtag("event", "conversion", {
+          send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DAALEIN",
         });
+        console.log("GOOGLE ADS: Calendar Booking Fired");
+      } else {
+        // 📝 CONTACT FORM: image_6b63f6.png ke mutabiq exact label add kar diya hai
+        window.gtag("event", "conversion", {
+          send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
+        });
+        console.log("GOOGLE ADS: Contact Form Fired");
       }
     }
-  }, [source, vanTitle]);
+
+    // 2. Facebook Pixel Tracking
+    if (window.fbq) {
+      window.fbq("track", "Lead", { source, vanTitle });
+    }
+
+    // 3. Backup GTM dataLayer (Agar event name se track karna ho)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: source === "Calendar Booking" ? "appointment_form_submitted" : "contact_form_submitted"
+    });
+  }
+}, [source, vanTitle]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
