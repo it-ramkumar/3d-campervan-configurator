@@ -34,6 +34,11 @@ const floorPlans = [
     slug: "/floorplans?category=flagship-long-van-montreal",
     image: ["/renderings/montreal.webp"],
   },
+    {
+    name: "Sugarloaf",
+    slug: "/floorplans?category=sugarloaf",
+    image: ["/renderings/sugarloaf.webp"],
+  },
   {
     name: "Imperial",
     slug: "/floorplans?search=imperial",
@@ -83,6 +88,7 @@ const TrendPortfolios = [
   },
 
 ];
+
 const CategoryCard = ({ image, title, href, onClick,floorPlans }) => (
   <div className={`flex flex-col items-center group ${floorPlans ? "text-center" : ""}`} >
     <Link href={href} onClick={onClick} className="w-full no-underline">
@@ -135,7 +141,9 @@ export default function Navbar({ forceMobile }) {
   const timeoutRef = useRef(null);
   const animationRef = useRef(null);
   const pathname = usePathname(); // Yeh direct string deta hai
-
+const closeDesktopMenu = useCallback(() => {
+  setDesktopMenu(null);
+}, []);
   const navLinks = useMemo(
     () => [
       {
@@ -246,7 +254,13 @@ export default function Navbar({ forceMobile }) {
   const renderSectionItems = useCallback(
     (section, isMobile = false) => {
       const closeMobile = () => isMobile && setIsMobileMenuOpen(false);
-
+const handleItemClick = () => {
+      if (isMobile) {
+        setIsMobileMenuOpen(false);
+      } else {
+        closeDesktopMenu();
+      }
+    };
       if (section.title === "Blog") {
         return (
           <>
@@ -254,7 +268,7 @@ export default function Navbar({ forceMobile }) {
               <BlogListItem
                 key={b.slug}
                 href={`/blog-detail/${b.slug}`}
-                onClick={closeMobile}
+               onClick={handleItemClick}
               >
                 {b.title}
               </BlogListItem>
@@ -262,7 +276,7 @@ export default function Navbar({ forceMobile }) {
              <div className="flex justify-center md:justify-start border-t border-primary/10 pt-6">
               <Link
                 href="/blog"
-                onClick={closeMobile}
+              onClick={handleItemClick}
                 className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
                 All Blogs
@@ -284,7 +298,7 @@ export default function Navbar({ forceMobile }) {
                 <CategoryCard
                   key={i}
                   href={`${cat.slug}`}
-                  onClick={closeMobile}
+                 onClick={handleItemClick}
                   image={cat.image[0]}
                   title={cat.name}
                 />
@@ -304,7 +318,7 @@ export default function Navbar({ forceMobile }) {
                 <CategoryCard
                   key={i}
                   href={`${cat.slug}`}
-                  onClick={closeMobile}
+                onClick={handleItemClick}
                   image={cat.image[0]}
                   title={cat.name}
                   floorPlans={true}
@@ -314,7 +328,7 @@ export default function Navbar({ forceMobile }) {
   <div className="flex justify-center border-t border-primary/10 pt-6">
               <Link
                 href="/floorplans"
-                onClick={closeMobile}
+                onClick={handleItemClick}
                 className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
                 All Floor Plans
@@ -343,19 +357,19 @@ export default function Navbar({ forceMobile }) {
           <>
             <NavListItem
               href={`/van-layouts?wheelbase=144`}
-              onClick={closeMobile}
+         onClick={handleItemClick}
             >
               Mercedes Sprinter 144 →
             </NavListItem>
             <NavListItem
               href={`/van-layouts?wheelbase=170`}
-              onClick={closeMobile}
+             onClick={handleItemClick}
             >
               Mercedes Sprinter 170 →
             </NavListItem>{" "}
             <NavListItem
               href={`/van-layouts?wheelbase=148`}
-              onClick={closeMobile}
+            onClick={handleItemClick}
             >
               Ford Transit 148 →
             </NavListItem>{" "}
@@ -369,20 +383,20 @@ export default function Navbar({ forceMobile }) {
             {/* Uske foran baad ye items nazar aayenge */}
             <NavListItem
               href={`/van-layouts?category=layouts-for-solo-and-couple-travelers`}
-              onClick={closeMobile}
+              onClick={handleItemClick}
             >
               Ideal for small families (2–3 people)
             </NavListItem>
             <NavListItem
               href={`/van-layouts?category=layouts-for-families-3-9-people`}
-              onClick={closeMobile}
+        onClick={handleItemClick}
             >
               Perfect for larger families (4+ passengers)
             </NavListItem>
             <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
               <Link
                 href="/van-layouts"
-                onClick={closeMobile}
+               onClick={handleItemClick}
                 className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
               >
                 All Portfolios
@@ -400,13 +414,14 @@ export default function Navbar({ forceMobile }) {
           key={i}
           href={item?.link}
           isActive={pathname === item?.link}
-          onClick={closeMobile}
+          // onClick={closeMobile}
+          onClick={handleItemClick}
         >
           {item?.label}
         </NavListItem>
       ));
     },
-    [data, pathname],
+    [data, pathname,closeDesktopMenu],
   );
 
   return (

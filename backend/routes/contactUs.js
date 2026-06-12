@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
       vanPrice,
     } = req.body;
 
-    console.log("REQ BODY:", req.body);
 
     if (!name || !email || !phone || !message) {
       return res.status(400).json({
