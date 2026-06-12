@@ -11,19 +11,7 @@ const nextConfig = {
 
   async headers() {
     return [
-      {
-        // Yeh pattern Next.js image optimization endpoint ko target karta hai
-        source: "/_next/image(.*)",
-        headers: [
           {
-            key: "Cache-Control",
-            // Browser cache for 1 day, and CDN cache for 1 week (stale-while-revalidate)
-            value: "public, max-age=86400, stale-while-revalidate=604800",
-          },
-        ],
-      },
-      // Aapke existing static image files ke liye
-      {
         source: "/:all*(jpg|jpeg|png|webp|svg|ico|gif)",
         headers: [
           {

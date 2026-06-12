@@ -22,6 +22,8 @@ import {
 import VanGallery from "./GallerySection";
 import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
+import { contact } from "../../api/contact/contact";
+
 
 const SvgCheckmark = () => (
   <svg
@@ -177,13 +179,39 @@ const VanPage = ({ vanDetail }) => {
               </div>
             )}
 
-            {vanDetail?.slug && (
-              <PrimaryButton
-                label="Launch 3D Configurator"
-                link={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
-                className="w-full"
-              />
-            )}
+  {vanDetail?.slug && (
+  <a
+    href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
+    className="relative inline-flex w-full items-center justify-center gap-4 rounded-lg bg-primary px-8 py-4 font-extrabold uppercase tracking-wide text-white shadow-[0_8px_0_#1d4ed8] transition-all duration-100 hover:bg-primary-200 active:translate-y-[8px] active:shadow-none group text-center overflow-hidden"
+  >
+    {/* Animated Pulse Icon */}
+    <div className="relative flex h-6 w-6 items-center justify-center">
+      {/* Wave 1 */}
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-40"></span>
+      {/* Wave 2 */}
+      <span className="absolute inline-flex h-full w-full animate-pulse rounded-full bg-blue-300 opacity-20"></span>
+
+      {/* Axis/Orbit Icon that spins on Hover */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        className="relative transition-transform duration-700 group-hover:rotate-[360deg]"
+      >
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0"></path>
+        <path d="M12 3v18"></path>
+        <path d="M3 12h18"></path>
+      </svg>
+    </div>
+
+    <span className="drop-shadow-md">Launch 3D Configurator</span>
+  </a>
+)}
             <div className="grid grid-cols-2 gap-4">
               <HeroSpecItem label="Chassis" value={specs?.make_model} />
               <HeroSpecItem label="Wheelbase" value={specs?.wheelbase} />
