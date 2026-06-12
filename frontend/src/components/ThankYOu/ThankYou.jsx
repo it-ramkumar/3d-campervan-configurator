@@ -2,20 +2,35 @@
 import { useSearchParams } from "next/navigation";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
 import { useEffect } from "react";
+
 const ThankYou = () => {
-  // const location = usePathname();
-  // const email = location.state?.email || "user@van-life.com";
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "user@van-life.com";
   const source = searchParams.get("source") || "unknown";
+  const vanTitle = searchParams.get("van") || "No Van Selected";
+
   useEffect(() => {
     if (window.__LEAD_CONVERSION_FIRED__) return;
     window.__LEAD_CONVERSION_FIRED__ = true;
+
     if (typeof window !== "undefined") {
-      if (window.fbq) window.fbq("track", "Lead", { source });
-      if (window.gtag) window.gtag("event", "conversion", { send_to: "AW-16677332528" });
+      // 1. Google Tag Manager / DataLayer Custom Event
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "lead_conversion_success",
+        formType: source,
+        vanTitle: vanTitle,
+      });
+
+      // 2. Facebook Pixel Tracking
+      if (window.fbq) {
+        window.fbq("track", "Lead", {
+          source: source,
+          vanTitle: vanTitle
+        });
+      }
     }
-  }, [source]);
+  }, [source, vanTitle]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
@@ -28,11 +43,11 @@ const ThankYou = () => {
           {/* Header */}
           <div className="flex flex-col items-center mb-10">
             <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center border-2 border-[#30364F] mb-6 shadow-inner">
-              <span className="text-3xl">✔️</span>
+              <span className="text-3xl">{source === "Calendar Booking" ? "📧" : "✔️"}</span>
             </div>
 
             <Heading1
-              text="Thank You for Your Inquiry!"
+              text={source === "Calendar Booking" ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
               className="!text-primary text-center"
             />
           </div>
@@ -49,14 +64,14 @@ const ThankYou = () => {
                 </RichParagraph>
 
                 <div className="flex justify-between items-start border-b border-primary pb-2 mb-2">
-                  <span>Status:</span>
-                  <span className="text-secondary/80">
-                    Successfully Submitted
+                  <span>Type:</span>
+                  <span className="text-secondary/80 font-semibold">
+                    {source}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-start">
-                  <span>Email:</span>
+                  <span>Sent To:</span>
                   <span className="break-all text-right ml-4 font-semibold">
                     {email}
                   </span>
@@ -66,18 +81,43 @@ const ThankYou = () => {
 
             {/* Message */}
             <RichParagraph className="text-primary text-center italic text-sm leading-relaxed">
-              Thank you for reaching out to us. We’ve successfully received your
-              inquiry and sent all the details to your email address.
+              {source === "Calendar Booking" ? (
+                <>
+                  <strong className="text-red-600 not-italic block mb-2 text-base">⚠️ Important Step to Confirm Your Meet:</strong>
+                  We have sent an automated Google Calendar invitation to your email.
+                  <span className="block mt-2 font-semibold not-italic text-slate-800">
+                    Please open your inbox, open the invitation email, and click <span className="text-emerald-600">"Yes"</span> or <span className="text-emerald-600">"Going"</span> to lock in your time slot.
+                  </span>
+                </>
+              ) : (
+                <>
+                  Thank you for reaching out to us. We’ve successfully received your inquiry and sent all the details to your email address.
+                </>
+              )}
               <br />
               <br />
-              Please check your inbox (and spam folder just in case). Our team
-              will review your request and get back to you shortly.
+              Please check your inbox (and spam folder just in case). Our team will review your request and get back to you shortly.
             </RichParagraph>
           </div>
 
           {/* Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SecondaryButton label="Back to Home" link="/" />
+
+            {/* AGAR CALENDAR BOOKING HAI TO USER KO DIRECT EMAIL OPEN KARNE KA RASTA DIKHAO */}
+            {source === "Calendar Booking" && (
+              <a
+                href="https://mail.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full"
+              >
+                <SecondaryButton
+                  label="Open Gmail Inbox"
+                  className="!bg-rose-600 hover:!bg-rose-700 !text-white w-full"
+                />
+              </a>
+            )}
           </div>
         </div>
 

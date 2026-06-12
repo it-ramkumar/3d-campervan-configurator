@@ -5,6 +5,8 @@ import Link from "next/link";
 import PrimaryButton from "../Common/Button/PrimaryButton";
 import { Heading4, Heading3, RichParagraph } from "../Common/Common";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
+
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
@@ -12,6 +14,8 @@ export default function BookingPage() {
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState();
   const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
 
   // Your existing functions remain the same...
   // ✅ FIXED: Get tomorrow's date instead of today
@@ -139,31 +143,25 @@ export default function BookingPage() {
         return;
       }
 
-      setMeetLink(data.meetLink);
-      setBookingStep(5);
-
-      // 2. 🟩 FACE META TAG FOR GOOGLE ADS (Yeh humne add kiya hai)
-      if (typeof window !== "undefined" && window.fbq) {
-        console.log("META LEAD FIRED");
-        window.fbq("track", "Lead", {
-          source: "calendar-booking consultation",
-          name: formData.name,
-          email: formData.email,
-        });
-      }
-      // 2. 🟩 GOOGLE TAG MANAGER FOR GOOGLE ADS (Yeh humne add kiya hai)
-      if (typeof window !== "undefined" && window.dataLayer) {
-        // console.log("GOOGLE ADS APPOINTMENT FIRED");
-        window.dataLayer.push({
-          event: 'appointment_form_submitted' // Exact yahi naam GTM trigger me dalna hai
-        });
-      }
+      // Slots state update (Optional, kyunki page change ho raha hai)
       setSlots(
         slots.map((s) =>
           s.start === selectedSlot.start ? { ...s, available: false } : s,
         ),
       );
+
       setSubmitting(false);
+
+      // 1. Parameters tayar karein (Source: "Calendar Booking")
+      const formSource = "Calendar Booking";
+      const vanTitle = "No Van Selected";
+      const meetLink = data.meetLink || ""; // Agar meet link use karna ho
+
+      // 2. Redirect with all details (Humne pixel/dataLayer yahan se remove kar diya)
+    router.push(
+  `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitle)}`
+);
+
     } catch (err) {
       console.error("❌ Network error:", err);
       alert("Network error - check console");
@@ -407,14 +405,14 @@ export default function BookingPage() {
                           onClick={() => d && handleDateSelect(d)}
                           disabled={!d || d.isPast || d.isSunday}
                           className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
-                              ? "invisible"
-                              : d.isSelected
-                                ? "bg-primary text-white shadow-lg"
-                                : d.isPast || d.isSunday
-                                  ? "text-secondary-300 cursor-not-allowed bg-secondary-50"
-                                  : d.isToday
-                                    ? "bg-secondary/20 text-hover hover:bg-secondary hover:text-secondary"
-                                    : "hover:bg-hover hover:text-secondary text-primary bg-secondary"
+                            ? "invisible"
+                            : d.isSelected
+                              ? "bg-primary text-white shadow-lg"
+                              : d.isPast || d.isSunday
+                                ? "text-secondary-300 cursor-not-allowed bg-secondary-50"
+                                : d.isToday
+                                  ? "bg-secondary/20 text-hover hover:bg-secondary hover:text-secondary"
+                                  : "hover:bg-hover hover:text-secondary text-primary bg-secondary"
                             }`}
                         >
                           {d?.day}
@@ -478,8 +476,8 @@ export default function BookingPage() {
                                 setBookingStep(3);
                               }}
                               className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot?.start === s.start
-                                  ? "border-hover bg-primary/10 text-hover"
-                                  : "border-primary/10 hover:border-hover hover:text-hover bg-secondary/30 text-primary"
+                                ? "border-hover bg-primary/10 text-hover"
+                                : "border-primary/10 hover:border-hover hover:text-hover bg-secondary/30 text-primary"
                                 }`}
                             >
                               {formatTimeSlot(s.start)}
