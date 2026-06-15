@@ -35,6 +35,8 @@ const SystemSubCategory = require("./routes/systemSubCat")
 const BaseVanRoute = require("./routes/baseVan");
 const VanPart3dModel = require("./routes/vanPart3dModel");
 const VariantRoute = require("./routes/vanVariant");
+const RecommendRoute = require("./routes/recommend");
+
 
 
 const app = express();
@@ -87,6 +89,8 @@ app.use("/sitemap.xml", Sitemap);
 app.use("/api", BaseVanRoute);
 app.use("/api", VanPart3dModel);
 app.use("/api", VariantRoute);
+app.use("/api", RecommendRoute);
+
 
 
 

@@ -144,43 +144,43 @@ export default function Navbar({ forceMobile }) {
 const closeDesktopMenu = useCallback(() => {
   setDesktopMenu(null);
 }, []);
-  const navLinks = useMemo(
-    () => [
-      {
-        name: "CustomBuild",
-        label: "Custom Build",
-        path: "/custom-build",
-        hasDropdown: true,
-      },
-      {
-        name: "Camper Vans For Sale",
-        label: "Vans For Sale",
-        path: "/camper-vans-for-sale",
-        hasDropdown: false,
-      },
-      {
-        name: "layout",
-        label: "Portfolio",
-        path: "/van-layouts",
-        hasDropdown: true,
-      },
-       {
-        name: "floorplans",
-        label: "Floor Plans",
-        path: "/floorplans",
-        hasDropdown: true,
-      },
-      {
-        name: "Shop",
-        label: "Shop",
-        path: "https://vanpartsoutlet.com/",
-        hasDropdown: false,
-      },
-      { name: "discover", label: "Discover", path: "#", hasDropdown: true },
-    ],
-    [],
-  );
-
+const navLinks = useMemo(
+  () => [
+    {
+      name: "CustomBuild",
+      label: "Custom Build",
+      path: "/custom-build",
+      hasDropdown: true,
+    },
+    {
+      name: "Camper Vans For Sale",
+      label: "Vans For Sale",
+      path: "/camper-vans-for-sale",
+      hasDropdown: false,
+    },
+    {
+      name: "layout",
+      label: "Portfolio",
+      path: "/van-layouts",
+      hasDropdown: true,
+    },
+    {
+      name: "floorplans",
+      label: "Floor Plans",
+      path: "/floorplans",
+      hasDropdown: true,
+    },
+    // Updated item below:
+    {
+      name: "DIY COMPONENTS",
+      label: "DIY COMPONENTS",
+      path: "/diy-components", // Ye aapka naya internal page path hoga
+      hasDropdown: false,
+    },
+    { name: "discover", label: "Discover", path: "#", hasDropdown: true },
+  ],
+  [],
+);
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setDesktopMenu(null);
@@ -436,7 +436,7 @@ const handleItemClick = () => {
               <Image
                 src="/images/logoo.webp"
                 alt="BBV logo"
-                width={200}
+                width={150}
                 height={100}
                 className="object-contain border-none mb-1"
               />
@@ -449,7 +449,7 @@ const handleItemClick = () => {
 
           {/* DESKTOP LINKS */}
           <div
-            className={`${forceMobile ? "hidden" : "hidden lg:flex"} absolute left-1/2 -translate-x-1/2 gap-6`}
+            className={`${forceMobile ? "hidden" : "hidden lg:flex"} gap-6`}
           >
             {navLinks.map((link) => (
               <Link
@@ -474,7 +474,7 @@ const handleItemClick = () => {
             {!forceMobile && (
               <Link
                 href="/contact"
-                className="hidden lg:block px-5 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-widest bg-primary text-secondary border border-black/20 transition-transform hover:scale-105 hover:bg-primary hover:text-secondary"
+                className="hidden lg:block px-5 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-widest bg-primary text-secondary border border-black/20 transition-transform hover:scale-105 hover:bg-primary hover:text-secondary"
               >
                 Book Consultation
               </Link>

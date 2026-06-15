@@ -11,7 +11,6 @@ import {
   Hammer,
   ArrowRightIcon,
   LayoutTemplateIcon,
-  ChevronDown,
   X
 } from "lucide-react";
 import { SecondaryButton, ImageWithSkeleton } from "../../Common/Common";
@@ -32,7 +31,6 @@ export default function All_Titles_Client() {
 
   // Dynamic Categories container extracted directly via backend schema distinct lookups
   const [dbCategories, setDbCategories] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const [portfolios, setPortfolios] = useState([]);
   const [page, setPage] = useState(1);
@@ -44,14 +42,6 @@ export default function All_Titles_Client() {
   useEffect(() => {
     setLocalSearch(searchQueryFromURL);
   }, [searchQueryFromURL]);
-
-  // Dynamic Dropdown Document handler to automatically close panel when clicking outside
-  useEffect(() => {
-    if (!dropdownOpen) return;
-    const closeDropdown = () => setDropdownOpen(false);
-    document.addEventListener("click", closeDropdown);
-    return () => document.removeEventListener("click", closeDropdown);
-  }, [dropdownOpen]);
 
   const updateURL = (params) => {
     const sp = new URLSearchParams(searchParams.toString());
@@ -134,6 +124,19 @@ export default function All_Titles_Client() {
     setLoading(false);
   };
 
+  const getCategoryLabel = (slug) => {
+    const map = {
+      "amsterdam": "Amsterdam",
+      "flagship-long-van-montreal": "Montreal",
+      "flagship-short-van-santa-monica": "Santa Monica",
+      "layouts-for-families-3-9-people": "Families",
+      "layouts-for-solo-and-couple-travelers": "Solo & Couples",
+      "portfolio-of-custom-builds": "Custom Builds",
+      "sugarloaf": "Sugarloaf",
+    };
+    return map[slug] || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  };
+
   // Chassis Badging System Lookups
   const getPlatformMeta = (wb) => {
     const config = {
@@ -159,43 +162,34 @@ export default function All_Titles_Client() {
       {/* --- COMPACT INTERACTIVE MANAGEMENT UTILITY BAR --- */}
       <div className="bg-white rounded-lg border border-slate-200/80 p-4 mb-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
 
-        {/* DYNAMIC CATEGORY DROPDOWN */}
-        <div className="relative w-full md:w-72" onClick={(e) => e.stopPropagation()}>
+        {/* CATEGORY FILTER BUTTONS */}
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-xs text-slate-700 font-bold tracking-wide flex items-center justify-between hover:bg-slate-100 transition-all focus:outline-none"
+            onClick={() => updateURL({ category: "ALL" })}
+            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all border ${
+              selectedChassis === "ALL"
+                ? "bg-[#001F3D] border-[#001F3D] text-white"
+                : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+            }`}
           >
-            <span className="uppercase">
-              {selectedChassis === "ALL" ? "All Architecture Categories" : `Category: ${getPlatformMeta(selectedChassis).label}`}
-            </span>
-            <ChevronDown size={14} className={`text-slate-500 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
+            All
           </button>
 
-          {dropdownOpen && (
-            <div className="absolute left-0 mt-1.5 w-full bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1 max-h-60 overflow-y-auto animate-in fade-in slide-in-from-top-1 duration-150">
-              <button
-                type="button"
-                onClick={() => { updateURL({ category: "ALL" }); setDropdownOpen(false); }}
-                className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${selectedChassis === "ALL" ? "bg-[#001F3D] text-white" : "text-slate-700 hover:bg-slate-50"
-                  }`}
-              >
-                All Architecture Categories
-              </button>
-
-              {dbCategories.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => { updateURL({ category: cat }); setDropdownOpen(false); }}
-                  className={`w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors ${selectedChassis === cat ? "bg-[#001F3D] text-white" : "text-slate-600 hover:bg-slate-50"
-                    }`}
-                >
-                  {getPlatformMeta(cat).label}
-                </button>
-              ))}
-            </div>
-          )}
+          {dbCategories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => updateURL({ category: cat })}
+              className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all border ${
+                selectedChassis === cat
+                  ? "bg-[#001F3D] border-[#001F3D] text-white"
+                  : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              {getCategoryLabel(cat)}
+            </button>
+          ))}
         </div>
 
         {/* Realtime Enter-based Search input */}
