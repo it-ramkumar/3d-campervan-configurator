@@ -94,7 +94,8 @@ function normalizeInventoryVan(van) {
     price,
     features: allFeatures,
     images:   van.gallery || [],
-    status:   van.status
+    status:   van.status,
+    glbFile:  van.glbFile || null
   };
 }
 
@@ -124,7 +125,8 @@ function normalizePortfolioVan(van) {
     price,
     features: allFeatures,
     images:   [...(van.rendering || []), ...(van.gallery || [])],
-    status:   van.sold ? 'sold' : 'available'
+    status:   van.sold ? 'sold' : 'available',
+    glbFile:  null
   };
 }
 
@@ -139,19 +141,29 @@ function scoreVan(van, userInput) {
     priority
   } = userInput;
 
+  // Hard Filter: Agar bathroom zaroori hai aur van me nahi hai, to skip kar dein
+  if (bathroom_required && !van.bathroom) {
+    return -100;
+  }
+
   let score = 0;
 
-  // Seats
-  if (van.seats >= seats_required) score += 2;
+  // Seats (Strict Number Comparison)
+  const vanSeats = Number(van.seats) || 0;
+  const reqSeats = Number(seats_required) || 2;
+
+  if (vanSeats >= reqSeats) score += 2;
   else score -= 2;
 
-  // Sleeps
-  if (van.sleeps >= sleeps_required) score += 2;
+  // Sleeps (Strict Number Comparison)
+  const vanSleeps = Number(van.sleeps) || 0;
+  const reqSleeps = Number(sleeps_required) || 2;
 
-  // Bathroom (strictly enforced)
-  if (bathroom_required) {
-    if (van.bathroom) score += 3;
-    else score -= 3;
+  if (vanSleeps >= reqSleeps) score += 2;
+
+  // Bathroom (Strictly enforced score boost if matched)
+  if (bathroom_required && van.bathroom) {
+    score += 3;
   }
 
   // Budget
@@ -179,31 +191,44 @@ function scoreVan(van, userInput) {
   }
 
   // Poptop boost for large sleep needs
-  if (sleeps_required >= 4 && vanCats.includes('poptop')) score += 2;
+  if (reqSleeps >= 4 && vanCats.includes('poptop')) score += 2;
 
   return score;
 }
 
 function buildReason(van, userInput) {
   const parts = [];
-  if (van.seats >= userInput.seats_required)
-    parts.push(`seats ${userInput.seats_required}+ people`);
-  if (van.sleeps >= userInput.sleeps_required)
-    parts.push(`sleeps ${userInput.sleeps_required}+`);
+
+  const vanSeats = Number(van.seats) || 0;
+  const reqSeats = Number(userInput.seats_required) || 2;
+  const vanSleeps = Number(van.sleeps) || 0;
+  const reqSleeps = Number(userInput.sleeps_required) || 2;
+
+  if (vanSeats >= reqSeats)
+    parts.push(`seats ${reqSeats}+ people`);
+  if (vanSleeps >= reqSleeps)
+    parts.push(`sleeps ${reqSleeps}+`);
   if (userInput.bathroom_required && van.bathroom)
     parts.push('includes bathroom');
+
   const vanCats = Array.isArray(van.category) ? van.category : [van.category];
   const useCats = USE_CASE_CATEGORIES[userInput.use_case] || [];
   if (vanCats.some(c => useCats.includes(c)))
     parts.push(`ideal for ${userInput.use_case} travel`);
+
   if (parts.length === 0) parts.push('closest available match');
   return parts.join(', ');
 }
 
 async function getRecommendation(userInput) {
   const [inventoryVans, portfolioVans] = await Promise.all([
-    Van.find({ status: { $in: ['available', 'coming_soon'] } }),
-    PortfolioVan.find({})
+    Van.find({
+      status: { $in: ['available', 'coming_soon'] },
+      'van_listing.specifications.capacity.sits': { $gte: String(userInput.seats_required) }
+    }),
+    PortfolioVan.find({
+      'van_listing.specifications.capacity.sits': { $gte: String(userInput.seats_required) }
+    })
   ]);
 
   const normInventory  = inventoryVans.map(normalizeInventoryVan);
@@ -211,10 +236,12 @@ async function getRecommendation(userInput) {
 
   const scoredInventory = normInventory
     .map(v => ({ ...v, score: scoreVan(v, userInput) }))
+    .filter(v => v.score >= 0) // Discard ignored hard-filtered vans
     .sort((a, b) => b.score - a.score);
 
   const scoredPortfolio = normPortfolio
     .map(v => ({ ...v, score: scoreVan(v, userInput) }))
+    .filter(v => v.score >= 0) // Discard ignored hard-filtered vans
     .sort((a, b) => b.score - a.score);
 
   const topInv  = scoredInventory[0]  || null;
@@ -267,7 +294,8 @@ async function getRecommendation(userInput) {
       seats:        primary.seats,
       sleeps:       primary.sleeps,
       bathroom:     primary.bathroom,
-      status:       primary.status
+      status:       primary.status,
+      glbFile:      primary.glbFile
     },
     alternatives: alternatives.slice(0, 2).map(v => ({
       title: v.title,

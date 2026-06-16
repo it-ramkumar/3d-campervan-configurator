@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Heading1, HeroParagraph, RichParagraph } from "../../Common/Common";
 
 import { slides } from "@/DataUseInComp/homeSlider";
 
@@ -16,6 +17,15 @@ import "swiper/css/effect-fade";
 
 export default function Hero() {
   const swiperRef = useRef(null);
+
+  // Smooth scroll function for the Matchmaker quiz
+  const scrollToQuiz = (e) => {
+    e.preventDefault();
+    const quizSection = document.getElementById("quiz-section");
+    if (quizSection) {
+      quizSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="relative w-full h-[75vh] sm:h-[80vh] md:h-[95vh] overflow-hidden bg-black">
@@ -68,47 +78,55 @@ export default function Hero() {
               <div className="relative z-20 h-full flex items-center">
                 <div className="w-full px-6 pt-12 md:pt-0 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col md:justify-center h-full">
                   {/* Slogan */}
-                  <p className="text-hover text-xs md:text-base font-semibold tracking-wide mb-2 animate-fade-up">
+                  <span className="!text-hover text-xs md:text-base font-semibold tracking-wide -mb-2 ml-4 animate-fade-up">
                     {slide.slogan || "You Dream It. We Build It."}
-                  </p>
+                  </span>
 
                   {/* Title (stacked lines) */}
-                  <h1 className="text-[clamp(24px,7vw,40px)] sm:text-4xl md:text-6xl lg:text-7xl font-black italic uppercase leading-[0.95] tracking-tighter mb-3 animate-fade-up delay-100">
-                    <>
-                      <span className="text-white block">{slide.title}</span>
-
-                      <span className="text-hover block">
-                        {slide.titleColored}
-                      </span>
-                    </>
-                  </h1>
+                  <Heading1
+                    textColor="text-white"
+                    className="text-[clamp(24px,7vw,40px)] font-black italic uppercase mb-3 animate-fade-up delay-100"
+                  >
+                    <span className="text-white block">{slide.title}</span>
+                    <span className="text-hover block">{slide.titleColored}</span>
+                  </Heading1>
 
                   {/* Divider Line */}
                   <div className="w-8 sm:w-12 h-[2px] sm:h-[3px] bg-hover rounded-full mb-4 animate-fade-up delay-200" />
 
                   {/* Description */}
-                  <p className="text-[11px] sm:text-sm md:text-base text-white/95 max-w-xs sm:max-w-md mb-5 leading-relaxed animate-fade-up delay-200">
-                    {slide.desc}
-                  </p>
+                  <HeroParagraph
+                    text={slide.desc}
+                    textColor="text-white/95"
+                    className=" max-w-xs sm:max-w-md mb-5 animate-fade-up delay-200"
+                  />
 
-                  {/* Buttons */}
-
-                  <div className="flex flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
+                  {/* Buttons Grid Layout */}
+                  <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
                     {/* Primary Button */}
                     <Link
                       href={slide.link || "/inquiry"}
-                      className="bg-hover hover:bg-hover/90 text-primary text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
+                      className="bg-black/20 border border-white/60 hover:border-white/80 hover:bg-white/5 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
                     >
                       {slide.btnText || "Build Your Own"}
                     </Link>
 
+                    {/* Dynamic Matchmaker Quiz Scroll Button */}
+                    <button
+                      onClick={scrollToQuiz}
+                      className="bg-orange-500 hover:bg-orange-600 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial flex items-center justify-center gap-1.5 shadow-lg shadow-orange-500/20"
+                    >
+                      <Sparkles size={14} className="animate-pulse" />
+                      Van Matchmaker Quiz
+                    </button>
+
                     {/* Secondary Button */}
-                    <Link
+                    {/* <Link
                       href="/van-layouts"
                       className="bg-black/20 border border-white/60 hover:border-white/80 hover:bg-white/5 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
                     >
                       Explore Layouts &rarr;
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </div>
@@ -118,12 +136,10 @@ export default function Hero() {
       </Swiper>
 
       {/* NAVIGATION */}
-
       <div className="absolute bottom-6 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">
         <button
           onClick={() => swiperRef.current?.slidePrev()}
           aria-label="Previous Slide"
-          // className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
           className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-white/10 text-white backdrop-blur-md hover:bg-hover hover:text-black transition-all"
         >
           <ChevronLeft size={18} className="md:w-6 md:h-6" />

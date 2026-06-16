@@ -1,7 +1,7 @@
 import Hero from "@/components/HomePage/Hero/Hero";
-import { CustomLink } from "@/components/Common/Common";
 import { generateHomeSchema } from "../schema/homeSchema";
 import dynamic from "next/dynamic";
+import { Heading2,RichParagraph } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
 
 export const metadata = {
@@ -36,7 +36,9 @@ export const metadata = {
 };
 
 const Buy = dynamic(() => import("@/components/HomePage/Buy/Buy"));
-const Customize = dynamic(() => import("@/components/Customize/Cutomize"));
+// Dynamic Import for the new Front-end Matchmaker Quiz Component
+const VanRecommendation = dynamic(() => import("@/components/VanRecommendation/VanRecommendation"));
+
 const Portfolio = dynamic(
   () => import("@/components/HomePage/Portfolio/Portfolio"),
 );
@@ -53,38 +55,7 @@ const Blog = dynamic(() => import("@/components/HomePage/Blog/Blog"));
 const FAQs = dynamic(() => import("@/components/Faqs/Faqs"));
 
 export default async function Home() {
-  // Data Logic
-  const maintitle = "Customize Your Van";
-  const sectiontitle = "Customize Your Dream Van";
-  const desc =
-    "When you give us 4-5 months, we design and build your custom camper van from scratch, the way you want it";
-
-  const descriptionList = [
-    {
-      text: (
-        <span>
-          <CustomLink href="/configurator" text={"3D renderings "} /> to help
-          you visualise your future van.
-        </span>
-      ),
-    },
-    { text: "3D Scanning, engineered CAD modelling, and CNC manufacturing." },
-    { text: "Every cabinet, seat, and bed is built for your layout." },
-    { text: "Power, water, and heating systems for real off-grid living." },
-    { text: "Interior finishes that look like a home, not like a cargo van." },
-  ];
-
-  const image = [
-    { img: "/long/cnc.webp", link: "" },
-    { img: "/long/amster.webp", link: "/layout-detail/amsterdam" },
-    { img: "/long/imperial(8).webp", link: "/layout-detail/imperial" },
-    // { img: "/long/san(1).webp", link: "/layout-detail/san-clemente" },
-    // { img: "/long/moto(10).webp", link: "/layout-detail/moto-van" },
-    // { img: "/family/casa(11).webp", link: "/layout-detail/calabasas" },
-    // { img: "/family/santa(9).webp", link: "/layout-detail/santa-cruz" },
-    // { img: "/family/san(7).webp", link: "/layout-detail/san-clemente" },
-  ];
-
+  // FAQs Data
   const faqs = [
     {
       question: "What Van Models Do You Customise?",
@@ -146,17 +117,22 @@ export default async function Home() {
         <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-20">
           <Buy initialVans={readyToGoVans} />
 
-          <section className="tour-customizer bg-secondary py-16 md:py-24">
-            <Customize
-              mainTitle={maintitle}
-              sectionTitle={sectiontitle}
-              description={desc}
-              descriptionList={descriptionList}
-              image={image}
-              orderButtonLabel="Order Custom Build"
-              orderButtonLink="/inquiry"
-              lastText="Start by filling out our TEST for a real estimate."
-            />
+          {/* Replaced <Customize /> with the Matchmaker Quiz System */}
+          <section id="quiz-section" className="bg-secondary py-16 md:py-24 border-y border-slate-100 scroll-mt-20">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center px-4 mb-8">
+                <span className="text-orange-500 font-bold uppercase tracking-wider text-xs md:text-sm bg-orange-50 px-3 py-1 rounded-full">
+                  AI Recommendation Engine
+                </span>
+                <Heading2 text="Match Your Vibe with a Layout"/>
+                {/* <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 mt-3">
+                </h2> */}
+               <RichParagraph className="mx-auto text-center max-w-2xl">
+  Answer a few simple build questions to view live inventory pricing matching or portfolio configuration blueprints instantly.
+</RichParagraph>
+              </div>
+              <VanRecommendation />
+            </div>
           </section>
 
           <Portfolio />

@@ -40,7 +40,8 @@ const Heading2 = ({
   text = "Section Title",
   textColor = "text-primary",
   className = "",
-  inlineStyle = {}
+  inlineStyle = {},
+  children
 }) => {
   return (
     <h2
@@ -50,7 +51,7 @@ const Heading2 = ({
         borderRadius: '8px'
       }}
     >
-      {text}
+      {children ?? text}
     </h2>
   );
 };

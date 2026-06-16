@@ -39,7 +39,8 @@ const Heading4 = ({
   text = "",
   textColor = "text-primary",
   className = "",
-  inlineStyle = {}
+  inlineStyle = {},
+  children
 }) => {
   return (
     <h4
@@ -49,7 +50,7 @@ const Heading4 = ({
         borderRadius: '8px'
       }}
     >
-      {text}
+      {children ?? text}
     </h4>
   );
 };
