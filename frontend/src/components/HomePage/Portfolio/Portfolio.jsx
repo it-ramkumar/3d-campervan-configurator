@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton } from '../../Common/Common'
+import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton, WatermarkText } from '../../Common/Common'
 
 const images = [
   { id: 1, src: "/images/p1.webp",   alt: "Overhead view of kitchen",    tag: "Kitchenette"   },
@@ -13,7 +13,7 @@ const images = [
 export default function Portfolio() {
 
   const PortfolioImage = ({ img, className }) => (
-    <div className={`group relative overflow-hidden rounded-xl shadow-md transition-all duration-500 hover:shadow-2xl ${className}`}>
+    <div className={`group relative overflow-hidden rounded-lg shadow-md transition-all duration-500 hover:shadow-2xl ${className}`}>
       <ImageWithSkeleton src={img.src} alt={img.alt} />
 
       {/* Hover overlay */}
@@ -21,9 +21,9 @@ export default function Portfolio() {
 
       {/* Tag — always visible, turns orange on hover */}
       <div className="absolute bottom-4 left-4">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg shadow-lg bg-secondary/90 text-primary group-hover:bg-hover group-hover:text-white transition-all duration-300">
-          {img.tag}
-        </span>
+        <WatermarkText text={img.tag} className="uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg shadow-lg bg-secondary/90 text-primary group-hover:bg-hover group-hover:text-white transition-all duration-300"/>
+
+
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import { Heading1, HeroParagraph, RichParagraph } from "../../Common/Common";
+import { Heading1, HeroParagraph, PrimaryButton, RichParagraph, SecondaryButton,WatermarkText } from "../../Common/Common";
 
 import { slides } from "@/DataUseInComp/homeSlider";
 
@@ -78,14 +78,10 @@ export default function Hero() {
               <div className="relative z-20 h-full flex items-center">
                 <div className="w-full px-6 pt-12 md:pt-0 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col md:justify-center h-full">
                   {/* Slogan */}
-                  <span className="!text-hover text-xs md:text-base font-semibold tracking-wide -mb-2 ml-4 animate-fade-up">
-                    {slide.slogan || "You Dream It. We Build It."}
-                  </span>
-
+                  <WatermarkText text= {slide.slogan || "You Dream It. We Build It."}/>
                   {/* Title (stacked lines) */}
                   <Heading1
                     textColor="text-white"
-                    className="text-[clamp(24px,7vw,40px)] font-black italic uppercase mb-3 animate-fade-up delay-100"
                   >
                     <span className="text-white block">{slide.title}</span>
                     <span className="text-hover block">{slide.titleColored}</span>
@@ -94,39 +90,16 @@ export default function Hero() {
                   {/* Divider Line */}
                   <div className="w-8 sm:w-12 h-[2px] sm:h-[3px] bg-hover rounded-full mb-4 animate-fade-up delay-200" />
 
-                  {/* Description */}
                   <HeroParagraph
                     text={slide.desc}
-                    textColor="text-white/95"
-                    className=" max-w-xs sm:max-w-md mb-5 animate-fade-up delay-200"
                   />
-
-                  {/* Buttons Grid Layout */}
                   <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
-                    {/* Primary Button */}
-                    <Link
-                      href={slide.link || "/inquiry"}
-                      className="bg-black/20 border border-white/60 hover:border-white/80 hover:bg-white/5 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
-                    >
-                      {slide.btnText || "Build Your Own"}
-                    </Link>
-
-                    {/* Dynamic Matchmaker Quiz Scroll Button */}
-                    <button
-                      onClick={scrollToQuiz}
-                      className="bg-orange-500 hover:bg-orange-600 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial flex items-center justify-center gap-1.5 shadow-lg shadow-orange-500/20"
-                    >
-                      <Sparkles size={14} className="animate-pulse" />
-                      Van Matchmaker Quiz
-                    </button>
-
-                    {/* Secondary Button */}
-                    {/* <Link
-                      href="/van-layouts"
-                      className="bg-black/20 border border-white/60 hover:border-white/80 hover:bg-white/5 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider px-4 py-2.5 sm:px-6 sm:py-3 rounded hover:scale-[1.02] transition-all duration-300 text-center flex-1 sm:flex-initial"
-                    >
-                      Explore Layouts &rarr;
-                    </Link> */}
+<PrimaryButton label={slide.btnText || "Build Your Own"} link={slide.link || "/inquiry"} className="bg-secondary !text-primary"/>
+<SecondaryButton
+          label={<><Sparkles size={14} className="animate-pulse mr-2 " />Van Matchmaker Quiz</>}
+          onClick={scrollToQuiz}
+          className="!bg-hover text-secondary"
+        />
                   </div>
                 </div>
               </div>

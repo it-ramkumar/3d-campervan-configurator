@@ -64,7 +64,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", DelelteImageFromS3);
 app.use("/api/test-blog", blog)
 app.use("/api/portfolio", layouts)
-// app.use("/api", Export)
 app.use("/api/van", van)
 app.use("/api", userRoute);
 app.use("/api/inquery", inquery)

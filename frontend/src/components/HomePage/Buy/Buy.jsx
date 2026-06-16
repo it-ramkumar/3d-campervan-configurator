@@ -8,6 +8,8 @@ import {
   RichParagraph,
   PrimaryButton,
   CustomLink,
+  WatermarkText,
+  SecondaryButton,
 } from "../../Common/Common";
 import { ArrowBigRightDash, ArrowBigLeftDash } from "lucide-react";
 import "swiper/css";
@@ -53,8 +55,8 @@ export default function Buy({ initialVans = [] }) {
     <section className=" py-20 antialiased overflow-hidden relative rounded-2xl mx-4 md:mx-8">
 
       {/* Ghost background text */}
-      <div className="absolute right-0 inset-y-0 flex items-center pointer-events-none select-none overflow-hidden">
-        <span className="text-[220px] font-black text-white/[0.025] leading-none pr-4">VANS</span>
+      <div className="absolute right-4 -top-90 inset-y-0 flex items-center pointer-events-none select-none overflow-hidden">
+        <span className="text-[220px] font-black text-primary/[0.025] leading-none pr-4">VANS</span>
       </div>
 
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -62,14 +64,13 @@ export default function Buy({ initialVans = [] }) {
         {/* ── HEADER ── */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-6">
-            <span className="w-8 h-px bg-hover" />
-            <RichParagraph className="text-hover text-xs font-black uppercase tracking-[0.35em]">Premium Builds</RichParagraph>
+            <WatermarkText className="w-8 h-px bg-hover" />
+            <WatermarkText text={"Premium Builds"}/>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <Heading2
               textColor="text-primary"
-              className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95]"
             >
               Premium Camper Vans<br />
               <span className="text-hover">Ready for Adventure</span>
@@ -85,11 +86,10 @@ export default function Buy({ initialVans = [] }) {
         <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-5">
           <CustomLink
             href="/camper-vans-for-sale"
-            text={
-              <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-hover">
+            text={<>
                 Browse Full Inventory
                 <span className="text-base leading-none">→</span>
-              </span>
+            </>
             }
           />
           <div className="flex gap-2">
@@ -130,13 +130,12 @@ export default function Buy({ initialVans = [] }) {
     )
     .map((van, i) => (
       <SwiperSlide key={i} className="h-auto">
-        <div className="bg-secondary rounded-xl overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:-translate-y-1">
+        <div className="bg-secondary rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:-translate-y-1">
 
           {/* Image */}
           <div className="relative h-48 md:h-56 overflow-hidden bg-primary/10">
-            <div className="absolute top-4 left-4 z-10 bg-hover text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg pointer-events-none transition-transform duration-300 group-hover:scale-105">
-              Available for Sale
-            </div>
+          <WatermarkText text={"Available for Sale"} className="absolute top-4 left-4 z-10 bg-hover text-white  px-3 py-1.5 rounded-lg pointer-events-none "/>
+            
             {van?.image ? (
               <Image
                 src={van.image}
@@ -166,34 +165,23 @@ export default function Buy({ initialVans = [] }) {
             <div className="mb-6 flex items-baseline gap-1">
               {van?.price ? (
                 <>
-                  <span className="text-xs font-semibold text-primary/60 uppercase tracking-wider">From</span>
-                  <span className="text-xl font-extrabold text-primary tracking-tight">
-                    {typeof van?.price === 'number'
+                  <WatermarkText text={"From"} className="font-semibold text-primary/60 uppercase tracking-wider" />
+                  <WatermarkText text={typeof van?.price === 'number'
                       ? `$${van?.price.toLocaleString()}`
-                      : van?.price}
-                  </span>
+                      : van?.price} className="text-xl font-extrabold text-primary tracking-tight"/>
                 </>
               ) : (
-                <span className="text-xs font-medium text-primary/40 italic">
-                  Pricing upon request
-                </span>
+                <WatermarkText text={"Pricing upon request"} className="text-primary/40 italic"/>
+
+
               )}
             </div>
 
             {/* Actions */}
             <div className="mt-auto flex gap-3">
-              <Link
-                href={`/van-detail/${van?.slug}`}
-                className="flex-1 py-3 bg-white text-primary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-primary hover:text-secondary transition-all duration-300 border border-primary/10"
-              >
-                Details
-              </Link>
-              <button
-                onClick={() => { setIsFormOpen(true); setData(van); }}
-                className="flex-1 py-3 bg-primary text-secondary rounded-lg text-center text-[11px] font-bold uppercase tracking-widest hover:bg-hover transition-all duration-300"
-              >
-                Get This Build
-              </button>
+              <SecondaryButton label={"Details"} link={`/van-detail/${van?.slug}`} className="w-full !px-4"/>
+          <PrimaryButton label={"Get This Build"} onClick={() => { setIsFormOpen(true); setData(van); }} className="w-full !px-4"/>
+
             </div>
             {van?.slug && (
               <PrimaryButton

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useRef } from 'react';
-import { Heading3 } from '../Common/Common';
+import { Heading3, RichParagraph, WatermarkText, SecondaryButton } from '../Common/Common';
 
 const OPTIONS = {
     use_case: [
@@ -98,29 +98,20 @@ export default function VanRecommendation() {
         <div className="w-full max-w-6xl mx-auto px-4 py-12" style={{ fontFamily: 'var(--font-heading)' }}>
 
             {/* ===== FORM CARD ===== */}
-            <div  className="overflow-hidden shadow-2xl mb-12 bg-primary rounded-lg">
+            <div className="overflow-hidden shadow-2xl mb-12 bg-primary rounded-lg">
 
                 {/* Header Strip */}
-                <div className="px-8 pt-8 pb-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                <div className="px-8 pt-8 pb-6 border-b">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <p className="text-xs font-bold tracking-widest uppercase mb-1 text-hover">
-                                Van Matchmaker
-                            </p>
+                            <WatermarkText text="Van Matchmaker" className="mb-1" />
                             <Heading3 text='Find Your Perfect Build' className='text-secondary' />
-
-
                         </div>
-                        <span
-                            className="text-xs font-bold tracking-widest uppercase px-3 py-1.5"
-                            style={{ backgroundColor: 'rgba(237,152,95,0.15)', color: '#ED985F', borderRadius: '4px', border: '1px solid rgba(237,152,95,0.3)' }}
-                        >
-                            {currentStep} / {totalSteps}
-                        </span>
+                        <WatermarkText text={`${currentStep} / ${totalSteps}`} />
                     </div>
 
                     {/* Step indicators */}
-                    <div className="flex items-center gap-1 mb-5">
+                    <div className="flex items-center gap-1 mb-5 w-full">
                         {STEP_LABELS.map((label, i) => {
                             const step = i + 1;
                             const isActive = step === currentStep;
@@ -129,23 +120,27 @@ export default function VanRecommendation() {
                                 <React.Fragment key={step}>
                                     <div className="flex flex-col items-center">
                                         <div
-                                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-all"
-                                            style={{
-                                                backgroundColor: isActive ? '#ED985F' : isDone ? 'rgba(237,152,95,0.3)' : 'rgba(255,255,255,0.08)',
-                                                color: isActive ? '#fff' : isDone ? '#ED985F' : 'rgba(255,255,255,0.3)',
-                                            }}
+                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-all duration-300
+                                                ${isActive
+                                                    ? 'bg-[#ED985F] text-white scale-110 shadow-md shadow-[#ED985F]/20'
+                                                    : isDone
+                                                        ? 'bg-[#ED985F]/30 text-[#ED985F]'
+                                                        : 'bg-white/5 text-white/30'
+                                                }`}
                                         >
                                             {isDone ? '✓' : step}
                                         </div>
-                                        <span
-                                            className="text-[9px] font-bold tracking-wider uppercase mt-1 hidden md:block"
-                                            style={{ color: isActive ? '#ED985F' : 'rgba(255,255,255,0.3)' }}
-                                        >
-                                            {label}
-                                        </span>
+                                        <WatermarkText
+                                            text={label}
+                                            className={`!text-[12px] mt-1 hidden md:block transition-colors duration-300
+                                                ${isActive ? 'text-hover' : 'text-secondary/30'}`}
+                                        />
                                     </div>
                                     {i < STEP_LABELS.length - 1 && (
-                                        <div className="flex-1 h-px mb-3" style={{ backgroundColor: isDone ? 'rgba(237,152,95,0.4)' : 'rgba(255,255,255,0.08)' }} />
+                                        <div
+                                            className={`flex-1 h-px mb-3 transition-colors duration-300
+                                                ${isDone ? 'bg-[#ED985F]/40' : 'bg-white/5'}`}
+                                        />
                                     )}
                                 </React.Fragment>
                             );
@@ -168,9 +163,9 @@ export default function VanRecommendation() {
                         {/* STEP 1 */}
                         {currentStep === 1 && (
                             <div>
-                                <p className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                                <RichParagraph className="font-bold text-secondary tracking-widest uppercase mb-5" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                     What is your primary travel vibe?
-                                </p>
+                                </RichParagraph>
                                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                     {OPTIONS.use_case.map((opt) => {
                                         const active = formData.use_case === opt.value;
@@ -187,12 +182,10 @@ export default function VanRecommendation() {
                                                 }}
                                             >
                                                 <span className="text-2xl">{opt.icon}</span>
-                                                <span
-                                                    className="text-xs font-bold tracking-wider text-center uppercase"
-                                                    style={{ color: active ? '#ED985F' : 'rgba(255,255,255,0.5)' }}
-                                                >
-                                                    {opt.label}
-                                                </span>
+                                                <WatermarkText
+                                                    text={opt.label}
+                                                    className={`!text-[10px] font-bold tracking-wider text-center uppercase ${active ? '!text-[#ED985F]' : '!text-white/50'}`}
+                                                />
                                             </button>
                                         );
                                     })}
@@ -203,9 +196,9 @@ export default function VanRecommendation() {
                         {/* STEP 2 */}
                         {currentStep === 2 && (
                             <div>
-                                <p className="text-xs font-bold tracking-widest uppercase mb-6" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-6" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                     How many people need to fit?
-                                </p>
+                                </RichParagraph>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                                     {[
                                         { key: 'seats_required', label: 'Seats Required', sub: 'Number of seatbelts needed' },
@@ -217,8 +210,8 @@ export default function VanRecommendation() {
                                             style={{ borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(255,255,255,0.03)' }}
                                         >
                                             <div>
-                                                <span className="block font-black text-sm tracking-wide" style={{ color: '#FBFBF9' }}>{label}</span>
-                                                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</span>
+                                                <WatermarkText text={label} className="!text-secondary font-black text-sm tracking-wide" />
+                                                <WatermarkText text={sub} className="!text-white/35 text-xs" />
                                             </div>
                                             <div className="flex items-center gap-4">
                                                 <button
@@ -244,12 +237,12 @@ export default function VanRecommendation() {
                         {/* STEP 3 */}
                         {currentStep === 3 && (
                             <div className="max-w-md mx-auto text-center">
-                                <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                     Bathroom Requirement
-                                </p>
-                                <p className="text-sm mb-8" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                                </RichParagraph>
+                                <RichParagraph className="text-sm mb-8" inlineStyle={{ color: 'rgba(255,255,255,0.35)' }}>
                                     Do you strictly need an indoor shower / toilet arrangement?
-                                </p>
+                                </RichParagraph>
                                 <div className="flex items-center justify-center gap-4">
                                     {[
                                         { val: false, label: 'Not Needed' },
@@ -280,9 +273,9 @@ export default function VanRecommendation() {
                         {/* STEP 4 */}
                         {currentStep === 4 && (
                             <div>
-                                <p className="text-xs font-bold tracking-widest uppercase mb-5" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-5" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                     Select your preferred price bracket
-                                </p>
+                                </RichParagraph>
                                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                     {OPTIONS.budget.map((opt) => {
                                         const active = formData.budget === opt.value;
@@ -298,15 +291,9 @@ export default function VanRecommendation() {
                                                     backgroundColor: active ? 'rgba(237,152,95,0.12)' : 'rgba(255,255,255,0.03)',
                                                 }}
                                             >
-                                                <span className="block text-xs font-black tracking-widest uppercase" style={{ color: active ? '#ED985F' : '#FBFBF9' }}>
-                                                    {opt.label}
-                                                </span>
-                                                <span className="block text-base font-black" style={{ color: active ? '#ED985F' : 'rgba(255,255,255,0.6)' }}>
-                                                    {opt.sub}
-                                                </span>
-                                                <span className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                                                    {opt.desc}
-                                                </span>
+                                                <WatermarkText text={opt.label} className={`!text-xs font-black tracking-widest uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                <WatermarkText text={opt.sub} className={`!text-base font-black ${active ? '!text-[#ED985F]' : '!text-white/60'}`} />
+                                                <WatermarkText text={opt.desc} className="!text-xs leading-relaxed !text-white/30" />
                                             </button>
                                         );
                                     })}
@@ -322,7 +309,9 @@ export default function VanRecommendation() {
                                     { field: 'priority', label: 'Top Priority', items: OPTIONS.priority },
                                 ].map(({ field, label, items }) => (
                                     <div key={field}>
-                                        <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>{label}</p>
+                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                            {label}
+                                        </RichParagraph>
                                         <div className="space-y-2">
                                             {items.map((opt) => {
                                                 const active = formData[field] === opt.value;
@@ -338,10 +327,8 @@ export default function VanRecommendation() {
                                                         }}
                                                     >
                                                         <div>
-                                                            <span className="block text-xs font-black tracking-wide uppercase" style={{ color: active ? '#ED985F' : '#FBFBF9' }}>
-                                                                {opt.label}
-                                                            </span>
-                                                            <span className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.3)' }}>{opt.desc}</span>
+                                                            <WatermarkText text={opt.label} className={`!text-xs font-black tracking-wide uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                            <WatermarkText text={opt.desc} className="!text-xs mt-0.5 !text-white/30" />
                                                         </div>
                                                         <div
                                                             className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center transition-all"
@@ -366,56 +353,36 @@ export default function VanRecommendation() {
                             className="flex items-center justify-between mt-8 pt-6"
                             style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
                         >
-                            <button
-                                type="button"
+                            <SecondaryButton
+                                label="Back"
                                 onClick={handlePrev}
                                 disabled={currentStep === 1 || loading}
-                                className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase transition-all"
-                                style={{
-                                    borderRadius: '6px',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    backgroundColor: 'transparent',
-                                    color: currentStep === 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)',
-                                    cursor: currentStep === 1 ? 'not-allowed' : 'pointer',
-                                }}
-                            >
-                                Back
-                            </button>
+                                type="button"
+                            />
 
                             {currentStep < totalSteps ? (
-                                <button
-                                    type="button"
+                                <SecondaryButton
+                                    label="Continue →"
                                     onClick={handleNext}
-                                    className="px-7 py-2.5 text-xs font-black tracking-widest uppercase transition-all"
-                                    style={{ borderRadius: '6px', backgroundColor: '#FBFBF9', color: '#001F3D' }}
-                                >
-                                    Continue →
-                                </button>
+                                    type="button"
+                                />
                             ) : (
-                                <button
-                                    type="submit"
+                                <SecondaryButton
+                                    label={loading ? 'Analyzing Builds...' : 'Find My Van →'}
                                     disabled={loading}
-                                    className="px-8 py-2.5 text-xs font-black tracking-widest uppercase transition-all"
-                                    style={{
-                                        borderRadius: '6px',
-                                        backgroundColor: loading ? 'rgba(237,152,95,0.5)' : '#ED985F',
-                                        color: '#fff',
-                                        cursor: loading ? 'not-allowed' : 'pointer',
-                                    }}
-                                >
-                                    {loading ? 'Analyzing Builds...' : 'Find My Van →'}
-                                </button>
+                                    type="submit"
+                                />
                             )}
                         </div>
                     </div>
 
                     {error && (
-                        <p
+                        <RichParagraph
                             className="mt-4 text-xs font-bold text-center p-3 tracking-wide"
-                            style={{ borderRadius: '6px', backgroundColor: 'rgba(255,59,48,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,59,48,0.2)' }}
+                            inlineStyle={{ borderRadius: '6px', backgroundColor: 'rgba(255,59,48,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,59,48,0.2)' }}
                         >
                             {error}
-                        </p>
+                        </RichParagraph>
                     )}
                 </form>
             </div>
@@ -428,15 +395,15 @@ export default function VanRecommendation() {
 
                         {/* Results header */}
                         <div className="text-center max-w-xl mx-auto">
-                            <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: '#ED985F' }}>
+                            <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: '#ED985F' }}>
                                 Matchmaking Complete
-                            </p>
+                            </RichParagraph>
                             <h3 className="text-3xl font-black tracking-tight" style={{ color: '#001F3D' }}>
                                 Your Personalized Result
                             </h3>
-                            <p className="text-sm mt-2" style={{ color: 'rgba(0,31,61,0.45)' }}>
+                            <RichParagraph className="text-sm mt-2" inlineStyle={{ color: 'rgba(0,31,61,0.45)' }}>
                                 Based on: <em className="font-medium not-italic" style={{ color: '#001F3D' }}>{recommendation.user_profile_summary}</em>
-                            </p>
+                            </RichParagraph>
                         </div>
 
                         {/* PRIMARY MATCH */}
@@ -458,9 +425,10 @@ export default function VanRecommendation() {
                                     </span>
 
                                     <div className="mt-12 space-y-2">
-                                        <span className="text-xs font-bold tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                                            {recommendation.primary_match.type === 'inventory' ? 'Available Inventory' : 'Custom Portfolio'}
-                                        </span>
+                                        <WatermarkText
+                                            text={recommendation.primary_match.type === 'inventory' ? 'Available Inventory' : 'Custom Portfolio'}
+                                            className="!text-xs font-bold tracking-widest uppercase !text-white/35"
+                                        />
                                         <h4 className="text-2xl font-black tracking-tight" style={{ color: '#FBFBF9' }}>
                                             {recommendation.primary_match.title}
                                         </h4>
@@ -494,20 +462,14 @@ export default function VanRecommendation() {
                                             style={{ borderBottom: '1px solid rgba(0,31,61,0.08)' }}
                                         >
                                             <div>
-                                                <span className="text-xs font-bold tracking-widest uppercase" style={{ color: 'rgba(0,31,61,0.4)' }}>
-                                                    Price Estimate
-                                                </span>
+                                                <WatermarkText text="Price Estimate" className="!text-xs font-bold tracking-widest uppercase !text-primary/40" />
                                                 <span className="block text-2xl font-black mt-0.5" style={{ color: '#001F3D' }}>
                                                     {(() => {
-                                                        // Safe check: Price ko integer mein convert karein (commas/characters remove karke)
                                                         const rawPrice = recommendation.primary_match.price;
                                                         const parsedPrice = rawPrice ? parseInt(String(rawPrice).replace(/[^0-9]/g, ''), 10) : 0;
-
-                                                        // Agar price valid hai aur 100 se barri hai, to hi return karein
                                                         if (parsedPrice > 100) {
                                                             return `$${parsedPrice.toLocaleString()}`;
                                                         } else {
-                                                            // Fallback text jab price 100 se kam ho, null ho, ya empty ho
                                                             return 'Contact for Pricing';
                                                         }
                                                     })()}
@@ -540,22 +502,22 @@ export default function VanRecommendation() {
 
                                         {/* Match reason */}
                                         <div className="mb-5">
-                                            <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'rgba(0,31,61,0.4)' }}>
+                                            <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: 'rgba(0,31,61,0.4)' }}>
                                                 Why This Match
-                                            </p>
-                                            <p
+                                            </RichParagraph>
+                                            <RichParagraph
                                                 className="text-sm font-medium px-4 py-3 capitalize"
-                                                style={{ borderRadius: '6px', backgroundColor: 'rgba(237,152,95,0.1)', color: '#001F3D', border: '1px solid rgba(237,152,95,0.25)' }}
+                                                inlineStyle={{ borderRadius: '6px', backgroundColor: 'rgba(237,152,95,0.1)', color: '#001F3D', border: '1px solid rgba(237,152,95,0.25)' }}
                                             >
                                                 ✅ {recommendation.primary_match.reason}
-                                            </p>
+                                            </RichParagraph>
                                         </div>
 
                                         {/* Features */}
                                         <div>
-                                            <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(0,31,61,0.4)' }}>
+                                            <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(0,31,61,0.4)' }}>
                                                 Key Highlight Features
-                                            </p>
+                                            </RichParagraph>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
                                                 {recommendation.primary_match.key_features?.map((feat, i) => (
                                                     <div key={i} className="flex items-start gap-2 text-xs" style={{ color: 'rgba(0,31,61,0.7)' }}>
@@ -604,14 +566,11 @@ export default function VanRecommendation() {
                                             </a>
                                         )}
 
-                                        <button
-                                            type="button"
+                                        <SecondaryButton
+                                            label="Retake Quiz"
                                             onClick={handleReset}
-                                            className="text-xs font-bold ml-auto transition-all"
-                                            style={{ color: 'rgba(0,31,61,0.35)', textDecoration: 'underline', textDecorationStyle: 'dotted' }}
-                                        >
-                                            Retake Quiz
-                                        </button>
+                                            className="ml-auto"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -620,9 +579,9 @@ export default function VanRecommendation() {
                         {/* ALTERNATIVES */}
                         {recommendation.alternatives && recommendation.alternatives.length > 0 && (
                             <div>
-                                <p className="text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2" style={{ color: 'rgba(0,31,61,0.5)' }}>
+                                <RichParagraph className="text-xs font-bold tracking-widests uppercase mb-4 flex items-center gap-2" inlineStyle={{ color: 'rgba(0,31,61,0.5)' }}>
                                     <span style={{ color: '#ED985F' }}>—</span> Alternative Layouts
-                                </p>
+                                </RichParagraph>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {recommendation.alternatives.map((alt, idx) => (
                                         <div
@@ -638,9 +597,7 @@ export default function VanRecommendation() {
                                                     {alt.type} Setup
                                                 </span>
                                                 <h6 className="font-black text-sm" style={{ color: '#001F3D' }}>{alt.title}</h6>
-                                                <span className="text-xs mt-0.5" style={{ color: 'rgba(0,31,61,0.35)' }}>
-                                                    Match Score: {alt.score}
-                                                </span>
+                                                <WatermarkText text={`Match Score: ${alt.score}`} className="!text-xs mt-0.5 !text-primary/35" />
                                             </div>
                                             <a
                                                 href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`}
