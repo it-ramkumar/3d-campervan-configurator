@@ -7,6 +7,7 @@ import {
   ImageWithSkeleton,
   SecondaryButton,
   CustomLink,
+  WatermarkText,
 } from "../../Common/Common";
 
 export default function SoldVans({
@@ -27,9 +28,9 @@ export default function SoldVans({
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-8 h-[2px] bg-hover opacity-30"></span>
-              <RichParagraph className="!text-hover uppercase  font-bold !text-xs italic">
-                The Archive
-              </RichParagraph>
+              <WatermarkText text={"The Archive"} className="uppercase italic"/>
+
+
             </div>
             <Heading2 text={soldHeading} className="text-primary" />
             <div className="mt-8">
@@ -94,9 +95,9 @@ export default function SoldVans({
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--color-primary)]/10">
-                    <span className="text-[var(--color-primary)] opacity-40 text-[10px] font-bold uppercase tracking-widest">
-                      Gallery Coming Soon
-                    </span>
+                    <WatermarkText text={"Gallery Coming Soon"} className="text-primary opacity-40 "/>
+
+
                   </div>
                 )}
 
@@ -124,14 +125,14 @@ export default function SoldVans({
                 <div className="mb-4">
                   <Heading3
                     text={van?.van_listing?.title || "Signature Build"}
-                    className="text-[var(--color-primary)] text-lg mb-1"
+                    className="text-primary mb-1"
                   />
-                  <RichParagraph className="uppercase">
+                  <RichParagraph>
                     {van?.van_listing?.subtitle || "Premium Conversion"}
                   </RichParagraph>
                 </div>
 
-                <div className="h-[1px] w-full bg-[var(--color-secondary)] mb-4" />
+                <div className="h-[1px] w-full bg-secondary mb-4" />
 
                 <div className="flex items-center justify-between">
                   <CustomLink

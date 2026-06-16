@@ -85,7 +85,7 @@ export default function HeroImage({
 
       {/* CONTENT */}
       <div className="relative z-[2] h-full flex items-center">
-        <div className="container px-6 md:px-12 lg:px-20 max-w-4xl text-white space-y-6">
+        <div className="container px-6 md:px-12 lg:px-20 max-w-3xl text-white space-y-6">
           {slogan && (
             <p className="text-hover text-lg md:text-xl font-semibold italic mt-4 mb-4 tracking-wide">
               {slogan}
@@ -96,7 +96,7 @@ export default function HeroImage({
 
           {/* DESCRIPTION */}
           {description && (
-            <RichParagraph textColor="secondary">{description}</RichParagraph>
+            <RichParagraph textColor="secondary" >{description}</RichParagraph>
           )}
 
           {/* BUTTON */}
