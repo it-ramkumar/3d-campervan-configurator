@@ -23,8 +23,8 @@ const signupUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      // role: "admin",
-      role: role || "user",
+      role: "admin",
+      // role: role || "user",
     });
 
     const token = generateToken(user);
