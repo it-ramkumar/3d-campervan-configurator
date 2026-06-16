@@ -23,17 +23,17 @@ const signupUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: "admin",
-      // role: role || "user",
+      // role: "admin",
+      role: role || "user",
     });
 
     const token = generateToken(user);
-res.cookie("token", token, {
-  httpOnly: true,
-  secure: true, // ✅ must be true in production (HTTPS)
-  sameSite: "None", // ✅ required for cross-site cookies
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // ✅ must be true in production (HTTPS)
+      sameSite: "None", // ✅ required for cross-site cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
 
 
@@ -57,12 +57,12 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
 
     const token = generateToken(user);
-res.cookie("token", token, {
-  httpOnly: true,
-  secure: true, // ✅ must be true in production (HTTPS)
-  sameSite: "None", // ✅ required for cross-site cookies
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // ✅ must be true in production (HTTPS)
+      sameSite: "None", // ✅ required for cross-site cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
 
 
