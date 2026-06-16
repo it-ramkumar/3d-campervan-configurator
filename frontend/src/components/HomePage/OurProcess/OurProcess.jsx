@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   Calendar
 } from "lucide-react";
-import { Heading2,Heading4, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton,CustomLink } from '../../Common/Common'
+import { Heading2,Heading4, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton,CustomLink, WatermarkText } from '../../Common/Common'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,7 +100,7 @@ export default function OurProcess() {
 
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
-          <RichParagraph className="!!text-hover font-bold !text-sm tracking-wider uppercase mb-4 block">Our Methodology</RichParagraph>
+          <WatermarkText text={"Our Methodology"} className="uppercase mb-4 flex justify-center"/>
           <Heading2 text={"Big Bear Vans Custom Build Process"} />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg my-8"></div>
           <RichParagraph>
@@ -127,8 +127,7 @@ export default function OurProcess() {
                     />
                     {/* Time Badge */}
                     <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg flex items-center gap-[var(--gap-sm)] border border-primary/5">
-                      <Calendar size={14} className="!!text-hover" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">{step.time}</span>
+                     <WatermarkText text={<><Calendar size={14} className="!!text-hover" />{step.time}</>}/>
                     </div>
                   </div>
                 </div>
@@ -141,8 +140,8 @@ export default function OurProcess() {
                 {/* Content Side */}
                 <div className={`w-full lg:w-[45%] ${index % 2 !== 0 ? 'lg:pr-20' : 'lg:pl-20'}`}>
                   <div className="inline-flex items-center gap-[var(--gap-sm)] mb-4">
-                    <CheckCircle2 size={16} className="!text-hover" />
-                    <RichParagraph className="font-bold uppercase !text-xs !text-hover">Step 0{index + 1}</RichParagraph>
+
+                    <WatermarkText  text={<><CheckCircle2 size={16} className="!text-hover" /> Step 0{index + 1}</>} className="font-bold uppercase !text-xs !text-hover"/>
                   </div>
                   <Heading3 text={step.title} className="mb-8" />
 

@@ -7,7 +7,7 @@ import {
   Users, TentTree, Table, Utensils,
   BatteryCharging, Thermometer, Droplets, AirVent, Sun
 } from 'lucide-react';
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink } from '../../Common/Common';
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink, WatermarkText } from '../../Common/Common';
 
 const sections = [
   {
@@ -90,7 +90,7 @@ export default function WhyChoose() {
 
           <div className="flex items-center gap-3 mb-8">
             <span className="w-8 h-px bg-hover" />
-            <RichParagraph className="text-hover text-xs font-black uppercase tracking-[0.35em]">Our Advantage</RichParagraph>
+            <WatermarkText text={"Our Advantage"} className="text-hover uppercase "/>
           </div>
 
           <Heading2

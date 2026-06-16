@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Quote, X, Copy, Check } from 'lucide-react';
-import { Heading2, RichParagraph, Heading3 } from '../../Common/Common'
+import { Heading2, RichParagraph, Heading3, WatermarkText } from '../../Common/Common'
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -47,7 +47,7 @@ const handleCopy = (e) => {
 
         {/* --- Header --- */}
         <div className="text-center mb-16 md:mb-24">
-          <RichParagraph className="!text-hover uppercase font-bold !text-sm tracking-wider mb-4">Testimonials</RichParagraph>
+          <WatermarkText text={"Testimonials"} className="mb-4 flex justify-center"/>
           <Heading2 text={"Voices of the Van Life"} />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg mt-6"></div>
         </div>

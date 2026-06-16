@@ -37,7 +37,7 @@ export default function Portfolio() {
           <div className="max-w-xl">
             <div className="flex items-center gap-3 mb-6">
               <span className="w-8 h-px bg-hover" />
-              <RichParagraph className="text-hover text-xs font-black uppercase tracking-[0.35em]">Our Craft</RichParagraph>
+              <WatermarkText text={"Our Craft"} className=""/>
             </div>
             <Heading2
               textColor="text-primary"
@@ -90,9 +90,9 @@ export default function Portfolio() {
             link="/van-layouts"
             className="!rounded-lg !px-12 !py-4 shadow-md hover:-translate-y-1 transition-all"
           />
-          <RichParagraph className="mt-5 text-[10px] font-black uppercase tracking-widest text-primary/30">
-            Updated Weekly • 2026 Collection
-          </RichParagraph>
+          <WatermarkText text={" Updated Weekly • 2026 Collection"} className="mt-5  uppercase tracking-widest text-primary/30"/>
+
+
         </div>
 
       </div>
