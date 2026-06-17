@@ -133,8 +133,7 @@ async function getRecommendation(userInput) {
   if (!topInv && !topPort) {
     return {
       no_match_found: true,
-      message: "Hamare existing blueprint specs me is seat requirement ki koi layout nahi mili. BBV custom design team aapke specification limits ke mutabik naya map architecture ready kar sakti hai.",
-      cta_recommendation: 'WhatsApp'
+message: "No layout matching this seat requirement was found in our existing blueprint specs. The BBV custom design team can create a new map architecture tailored to your specification limits.",      cta_recommendation: 'WhatsApp'
     };
   }
 
@@ -152,8 +151,7 @@ async function getRecommendation(userInput) {
   // Check if selected wheelbase matrix mismatch occurred
   if (userInput.wheelbase !== 'no_preference' && primary.wheelbase !== userInput.wheelbase) {
     wbAlert = true;
-    contextNotes.push(`Aapne ${userInput.wheelbase}" Wheelbase select kiya tha, lekin humne pehle yeh layout design ${primary.wheelbase}" wheelbase platform par execute kiya hai. Yeh aapke pasandida ${userInput.wheelbase}" length structure par bhi easily tailor-made ho sakta hai!`);
-  } else if (primary.wheelbase) {
+contextNotes.push(`You selected the ${userInput.wheelbase}" Wheelbase, but we previously executed this layout design on a ${primary.wheelbase}" wheelbase platform. However, it can easily be tailor-made for your preferred ${userInput.wheelbase}" length structure!`);  } else if (primary.wheelbase) {
     contextNotes.push(`This layout is engineered cleanly natively over a ${primary.wheelbase}" length platform structure.`);
   }
 
@@ -161,8 +159,7 @@ async function getRecommendation(userInput) {
   if (userInput.bathroom_required) {
     if (!primary.bathroom) {
       bathAlert = true;
-      contextNotes.push(`Is physical template core structure me humne bathroom display nahi kiya hai, par aapka selected "${userInput.bathroom_type.replace(/_/g, ' ')}" module custom add-on integration zone me deploy ho sakta hai.`);
-    } else if (userInput.bathroom_type && primary.bathroom_type !== userInput.bathroom_type) {
+contextNotes.push(`In this physical template core structure, we haven't displayed the bathroom, but your selected "${userInput.bathroom_type.replace(/_/g, ' ')}" module can be deployed in the custom add-on integration zone.`);    } else if (userInput.bathroom_type && primary.bathroom_type !== userInput.bathroom_type) {
       bathAlert = true;
       contextNotes.push(`Aapne "${userInput.bathroom_type.replace(/_/g, ' ')}" bathroom option select kiya hai, humne pehle is build template me "${primary.bathroom_type.replace(/_/g, ' ')}" space install kiya tha. Lekin agar aap chahain to custom building k waqt aapka preferred model fix kiya ja sakta hai.`);
     }

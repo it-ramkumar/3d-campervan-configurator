@@ -10,11 +10,20 @@ const { deleteFromS3 } = require("../services/s3");
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
-  secure: true,
+  secure: true, // true for port 465
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASS,
   },
+});
+
+// 🔥 Debugging: Check karein ke SMTP connect ho raha hai ya nahi
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ SMTP Connection Error:", error);
+  } else {
+    console.log("✅ Email Server ready to send messages");
+  }
 });
 
 // Simple parts formatter (no S3 links now)
@@ -30,7 +39,7 @@ function formatPartsHTML(parts) {
           (part) => `
             <li>
               <strong>${part.label || "Unnamed Part"}</strong>
-              (${part.id})
+              (${part.id || "No ID"})
               ${part.type ? `<br/><strong>Type:</strong> ${part.type}` : ""}
             </li>
           `
@@ -61,15 +70,16 @@ router.post("/", async (req, res) => {
       parts,
     });
 
-    // 🔥 Generate dynamic preview link
+    // Generate dynamic preview link
     const previewLink = `${process.env.FRONTEND_URL}/quote/preview/${newQuote._id}`;
-
     const htmlParts = formatPartsHTML(parts);
 
     // Get admin + sub-admin emails
     const leads = await Lead.find({}, { email: 1, _id: 0 });
     const leadEmails = leads.map((l) => l.email).filter(Boolean);
-    const allAdminEmails = [process.env.GMAIL_USER, ...leadEmails];
+
+    // Ensure allAdminEmails is clean and has no undefined values
+    const allAdminEmails = [process.env.GMAIL_USER, ...leadEmails].filter(Boolean);
 
     const emailContent = `
       <h2>New Quote Request - Van Configurator</h2>
@@ -81,23 +91,25 @@ router.post("/", async (req, res) => {
       <p><strong>Selected Parts:</strong></p>
       ${htmlParts}
       <p><strong>Preview Link:</strong>
-        <a href="${previewLink}" target="_blank">
-          ${previewLink}
-        </a>
+        <a href="${previewLink}" target="_blank">${previewLink}</a>
       </p>
       <p><strong>Submitted At:</strong> ${new Date().toLocaleString()}</p>
     `;
 
+    // Emails Send karne ka process
     try {
-      // Admin email
-      await transporter.sendMail({
-        from: `"Van Configurator" <${process.env.GMAIL_USER}>`,
-        to: allAdminEmails,
-        subject: `New Quote Request from ${name}`,
-        html: emailContent,
-      });
+      // 1. Admin Email
+      if (allAdminEmails.length > 0) {
+        await transporter.sendMail({
+          from: `"Van Configurator" <${process.env.GMAIL_USER}>`,
+          to: allAdminEmails.join(", "), // Multiple emails ko comma separated string banana behtar hota hai
+          subject: `New Quote Request from ${name}`,
+          html: emailContent,
+        });
+        console.log("ℹ️ Admin Email sent successfully");
+      }
 
-      // User confirmation
+      // 2. User confirmation
       await transporter.sendMail({
         from: `"Van Configurator" <${process.env.GMAIL_USER}>`,
         to: email,
@@ -106,19 +118,16 @@ router.post("/", async (req, res) => {
           <h2>Hi ${name},</h2>
           <p>Thank you for submitting your van configuration.</p>
           <p>You can preview your configured van here:</p>
-          <p>
-            <a href="${previewLink}" target="_blank">
-              ${previewLink}
-            </a>
-          </p>
+          <p><a href="${previewLink}" target="_blank">${previewLink}</a></p>
           <p>Our team will contact you shortly.</p>
           <p>Best regards,<br/>Van Configurator Team</p>
         `,
       });
+      console.log("ℹ️ User Confirmation Email sent successfully");
 
     } catch (emailErr) {
-      console.error("Email sending error:", emailErr);
-      // Continue even if email fails
+      // 🔥 Yeh console aapko terminal mein asli galti bataye ga
+      console.error("❌ Detailed Email sending error:", emailErr);
     }
 
     res.status(201).json({
