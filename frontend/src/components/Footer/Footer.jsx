@@ -37,7 +37,7 @@ export default function Footer() {
         icon: "warning",
         title: "Email Required",
         text: "Please enter your email address first!",
-        confirmButtonColor: "var(--color-primary)",
+        confirmButtonColor: "var(--color-primary)", // SweetAlert JS mein CSS variable use kar sakte hain
       });
       return;
     }
@@ -75,7 +75,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative text-white pt-16 pb-8 bg-[var(--color-primary)] font-body overflow-hidden">
+    <footer className="relative text-white pt-16 pb-8 bg-primary font-sans overflow-hidden">
       {/* Background Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none"
@@ -84,12 +84,9 @@ export default function Footer() {
 
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         {/* Main Grid */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-start"
-          style={{ gap: "var(--gap-xl)" }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-start gap-8">
           {/* 1. Company Info & Socials */}
-          <div className="flex flex-col" style={{ gap: "var(--gap-md)" }}>
+          <div className="flex flex-col gap-4">
             <Link href="/" className="block">
               <Image
                 src="/images/logooFooter.webp"
@@ -97,10 +94,11 @@ export default function Footer() {
                 className="w-[180px] h-auto border-none object-contain"
                 width={180}
                 height={80}
+                priority
               />
             </Link>
             <RichParagraph white={true}>
-              <span className="text-sm text-[var(--color-secondary)] opacity-80 leading-relaxed">
+              <span className="text-sm text-secondary opacity-80 leading-relaxed">
                 Wherever the road leads you is your home. Our custom campers, be
                 it Transit or Sprinter camper vans, are designed to make every
                 journey memorable.
@@ -110,7 +108,8 @@ export default function Footer() {
               You Dream It. We Build It.
             </p>
 
-            <div className="flex" style={{ gap: "var(--gap-sm)" }}>
+            {/* Social Icons */}
+            <div className="flex gap-3">
               {[
                 {
                   icon: <FaTwitter />,
@@ -137,17 +136,7 @@ export default function Footer() {
                   key={index}
                   href={item.link}
                   aria-label={item.label}
-                  className="p-2.5 transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center"
-                  style={{
-                    color: "white",
-                    backgroundColor: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "var(--radius-md)",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--color-hover)")
-                  }
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "white")}
+                  className="p-2.5 text-white bg-white/5 border border-white/10 rounded-md transition-all duration-300 transform hover:-translate-y-1 hover:text-hover hover:border-hover/30 flex items-center justify-center"
                 >
                   {item.icon}
                 </Link>
@@ -155,16 +144,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 2. Quick Links - All Links Added */}
+          {/* 2. Quick Links */}
           <div>
             <Heading3
               text="Quick Links"
               textColor="text-white mb-6 text-lg font-bold"
             />
-            <ul
-              className="grid grid-cols-2 lg:grid-cols-1"
-              style={{ gap: "var(--gap-xs)" }}
-            >
+            <ul className="grid grid-cols-2 lg:grid-cols-1 gap-2">
               <FooterListItem href="/">Home</FooterListItem>
               <FooterListItem href="/camper-vans-for-sale">
                 Vans For Sale
@@ -184,40 +170,33 @@ export default function Footer() {
               text="Contact Info"
               textColor="text-white mb-6 text-lg font-bold"
             />
-            <ul className="flex flex-col" style={{ gap: "var(--gap-md)" }}>
-              <li className="flex items-start" style={{ gap: "var(--gap-sm)" }}>
-                <FaMapMarkerAlt
-                  className="mt-1 text-sm shrink-0"
-                  style={{ color: "var(--color-hover)" }}
-                />
+            <ul className="flex flex-col gap-4">
+              <li className="flex items-start gap-3">
+                <FaMapMarkerAlt className="mt-1 text-sm shrink-0 text-hover" />
                 <div className="flex flex-col">
-                  <span className="text-sm text-[var(--color-secondary)] opacity-90 leading-snug">
+                  <span className="text-sm text-secondary opacity-90 leading-snug">
                     320 W Big Bear Blvd, Big Bear City, California, 92314, USA
                   </span>
                   <button
                     onClick={() =>
                       handleCopy(
-                        "320 W Big Bear Blvd, Big Bear City, California, 92314, USA",
+                        "320 W Big Bear Blvd, Big Bear City, California, 92314, USA"
                       )
                     }
-                    className="flex items-center gap-1 text-[10px] uppercase tracking-wider opacity-40 hover:opacity-100 transition-opacity mt-2"
-                    style={{ color: "var(--color-hover)" }}
+                    className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-hover opacity-40 hover:opacity-100 transition-opacity mt-2"
                   >
                     <FaCopy /> Copy Address
                   </button>
                 </div>
               </li>
 
-              <li className="flex items-start" style={{ gap: "var(--gap-sm)" }}>
-                <FaPhoneAlt
-                  className="mt-1 text-sm shrink-0"
-                  style={{ color: "var(--color-hover)" }}
-                />
+              <li className="flex items-start gap-3">
+                <FaPhoneAlt className="mt-1 text-sm shrink-0 text-hover" />
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2 group">
                     <Link
                       href="tel:+19514419748"
-                      className="text-sm hover:text-[var(--color-hover)] transition-colors"
+                      className="text-sm hover:text-hover transition-colors"
                     >
                       +1 (951) 441-9748
                     </Link>
@@ -229,7 +208,7 @@ export default function Footer() {
                   <div className="flex items-center gap-2 group">
                     <Link
                       href="tel:+19514419719"
-                      className="text-sm hover:text-[var(--color-hover)] transition-colors"
+                      className="text-sm hover:text-hover transition-colors"
                     >
                       +1 (951) 441-9719
                     </Link>
@@ -241,14 +220,11 @@ export default function Footer() {
                 </div>
               </li>
 
-              <li className="flex items-start" style={{ gap: "var(--gap-sm)" }}>
-                <FaEnvelope
-                  className="mt-1 text-sm shrink-0"
-                  style={{ color: "var(--color-hover)" }}
-                />
+              <li className="flex items-start gap-3">
+                <FaEnvelope className="mt-1 text-sm shrink-0 text-hover" />
                 <Link
                   href="mailto:bigbearvans@gmail.com"
-                  className="text-sm hover:text-[var(--color-hover)] transition-colors truncate"
+                  className="text-sm hover:text-hover transition-colors truncate"
                 >
                   bigbearvans@gmail.com
                 </Link>
@@ -257,16 +233,13 @@ export default function Footer() {
           </div>
 
           {/* 4. Business Hours & Newsletter */}
-          <div className="flex flex-col" style={{ gap: "var(--gap-lg)" }}>
+          <div className="flex flex-col gap-6">
             <div>
               <Heading4
                 text="Business Hours"
                 className="text-white mb-4 text-xs font-bold uppercase tracking-widest"
               />
-              <div
-                className="flex flex-col text-sm"
-                style={{ gap: "var(--gap-xs)" }}
-              >
+              <div className="flex flex-col text-sm gap-2">
                 <div className="flex justify-between border-b border-white/5 pb-1">
                   <span className="opacity-60">Mon - Fri:</span>
                   <span>9:00 AM - 6:00 PM</span>
@@ -277,42 +250,28 @@ export default function Footer() {
                 </div>
                 <div className="flex justify-between">
                   <span className="opacity-60">Sunday:</span>
-                  <span style={{ color: "var(--color-hover)" }}>
-                    By Appointment
-                  </span>
+                  <span className="text-hover">By Appointment</span>
                 </div>
               </div>
             </div>
 
             {/* Newsletter */}
-            <div
-              className="p-4 border border-white/10"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.03)",
-                borderRadius: "var(--radius-md)",
-              }}
-            >
+            <div className="p-4 border border-white/10 bg-white/5 rounded-md">
               <p className="text-xs font-bold uppercase tracking-widest mb-3 opacity-80">
                 Stay Updated
               </p>
-              <div className="flex" style={{ gap: "var(--gap-xs)" }}>
+              <div className="flex gap-2">
                 <input
                   type="email"
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 min-w-0 bg-black/20 border border-white/10 px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[var(--color-hover)] transition-colors"
-                  style={{ borderRadius: "var(--radius-md)" }}
+                  className="flex-1 min-w-0 bg-black/20 border border-white/10 rounded-md px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:border-hover transition-colors"
                 />
                 <button
                   onClick={handleSubscribe}
                   aria-label="Subscribe"
-                  className="p-2.5 transition-all duration-300 flex items-center justify-center"
-                  style={{
-                    backgroundColor: "var(--color-hover)",
-                    color: "white",
-                    borderRadius: "var(--radius-md)",
-                  }}
+                  className="p-2.5 bg-hover text-white rounded-md transition-all duration-300 flex items-center justify-center hover:brightness-110"
                 >
                   <FaArrowRight />
                 </button>

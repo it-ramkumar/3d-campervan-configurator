@@ -204,7 +204,7 @@ export default function VanConfig() {
         {/* Calculator Button */}
         <button
           onClick={() => setCalculatorOpen(!calculatorOpen)}
-          className="bg-gradient-to-br from-[#364153] to-gray-800 text-[var(--color-secondary)] p-3 rounded-2xl font-bold shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 border-2 border-white/20 backdrop-blur-sm flex items-center justify-center w-12 h-12 md:w-14 md:h-14"
+          className="bg-gradient-to-br from-[#364153] to-gray-800 text-secondary p-3 rounded-2xl font-bold shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 border-2 border-white/20 backdrop-blur-sm flex items-center justify-center w-12 h-12 md:w-14 md:h-14"
         >
           <span className="text-lg md:text-xl">📐</span>
         </button>
@@ -264,7 +264,7 @@ export default function VanConfig() {
               {/* Results Card */}
               {result && (
                 <div className="bg-[#364153] rounded-xl p-4 mt-4 animate-in zoom-in duration-300 text-white shadow-lg">
-                  <h4 className="font-bold text-[var(--color-secondary)] mb-3 text-center text-xs tracking-widest">
+                  <h4 className="font-bold text-secondary mb-3 text-center text-xs tracking-widest">
                     DIMENSIONS
                   </h4>
                   <div className="space-y-2 text-xs">

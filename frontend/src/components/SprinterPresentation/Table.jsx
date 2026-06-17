@@ -122,9 +122,9 @@ export default function Table() {
                 <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Feature"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Cargo Van"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Crew Van"} className="!text-[var(--color-secondary)] !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Feature"} className="!text-secondary !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Cargo Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Crew Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Feature</th> */}
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Cargo Van</th> */}
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Crew Van</th> */}
@@ -185,7 +185,7 @@ export default function Table() {
 
           <div className="mb-8">
             {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-            <Heading3 text={"2500 Vs 3500 & Dually"}  className="!text-[var(--color-secondary)]" />
+            <Heading3 text={"2500 Vs 3500 & Dually"}  className="!text-secondary" />
             {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black mb-3 text-white drop-shadow-lg">
               2500 Vs 3500 & Dually
             </h2> */}
@@ -330,9 +330,9 @@ export default function Table() {
                 <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Aspect"} className="!text-[var(--color-secondary)]"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Manual Sliding Door"} className="!text-[var(--color-secondary)] "/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Electric Sliding Doors"} className="!text-[var(--color-secondary)]"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Aspect"} className="!text-secondary"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Manual Sliding Door"} className="!text-secondary "/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Electric Sliding Doors"} className="!text-secondary"/></th>
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Aspect</th> */}
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Manual Sliding Doors</th> */}
                     {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Electric Sliding Doors</th> */}

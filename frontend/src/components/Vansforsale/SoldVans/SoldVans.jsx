@@ -112,7 +112,7 @@ export default function SoldVans({
 
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[var(--color-primary)]/30 backdrop-blur-[2px]">
-                  <div className="bg-[var(--color-secondary)] text-[var(--color-primary)] px-5 py-2 font-bold text-xs uppercase tracking-widest shadow-2xl rounded-lg">
+                  <div className="bg-secondary text-[var(--color-primary)] px-5 py-2 font-bold text-xs uppercase tracking-widest shadow-2xl rounded-lg">
                     View Build
                   </div>
                 </div>

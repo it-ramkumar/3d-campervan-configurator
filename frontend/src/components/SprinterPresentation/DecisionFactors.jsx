@@ -236,7 +236,7 @@ export default function DecisionFactors() {
             {/* MODIFIED: Increased mobile vertical padding p-3.5 to p-4 */}
             <div className="p-4 md:p-3 flex-grow flex flex-col justify-between relative z-10">
               <div>
-                {/* <RichParagraph className="!text-[var(--color-secondary)]">{"Plan for interior build, exterior upgrades, and custom features (e.g., $100,000 -$160,000)"}</RichParagraph> */}
+                {/* <RichParagraph className="!text-secondary">{"Plan for interior build, exterior upgrades, and custom features (e.g., $100,000 -$160,000)"}</RichParagraph> */}
                 <Heading4
                   text={
                     "Plan for interior build, exterior upgrades, and custom features (e.g., $100,000 -$160,000)"
@@ -456,7 +456,7 @@ export default function DecisionFactors() {
           {/* <h2 className="font-serif font-bold text-xl md:text-4xl mb-2 md:mb-4 tracking-tight">Consult Experts</h2>
      <p className="font-serif text-xs md:text-lg max-w-md mx-auto leading-relaxed font-light text-gray-200">
       Leverage our team’s experience to select the optimal van for your vision.
-      
+
      </p> */}
           <SecondaryButton label={"CONTACT US"} link="/contact" />
           {/* <button className="px-8 py-3 border-2 border-secondary text-secondary font-semibold tracking-widest rounded-lg transition-all duration-300 hover:bg-hover hover:border-hover hover:text-white">

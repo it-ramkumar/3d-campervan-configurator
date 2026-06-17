@@ -285,13 +285,13 @@ export default function BookingPage() {
   return (
     <div className="flex bg-secondary min-h-screen justify-center items-center p-4">
       {/* Main Container */}
-      <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-2xl overflow-hidden min-h-[700px] border border-[#001F3D]/5">
+      <div className="flex w-full max-w-6xl bg-secondary rounded-lg shadow-2xl overflow-hidden min-h-[700px] border border-primary/5">
         {/* Sidebar: Navy Theme */}
         <div className="hidden lg:flex lg:w-1/3 bg-primary text-secondary p-10 flex-col justify-between relative">
           <div>
             <Heading3
               text="Consultation Call"
-              textColor="text-white"
+              textColor="text-secondary"
               className="mb-8"
             />
 
@@ -301,7 +301,7 @@ export default function BookingPage() {
               {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex items-center gap-4 relative z-10">
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? "bg-[#ED985F] text-[#001F3D]" : "bg-white/10 text-white/30"}`}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? "bg-hover text-primary" : "bg-secondary/10 text-secondary/30"}`}
                   >
                     {s}
                   </div>
@@ -369,7 +369,7 @@ export default function BookingPage() {
                     <div className="flex justify-between items-center mb-6">
                       <button
                         onClick={() => navigateMonth(-1)}
-                        className="p-2 hover:bg-white rounded-lg transition-all text-primary hover:text-hover"
+                        className="p-2 hover:bg-secondary rounded-lg transition-all text-primary hover:text-hover"
                       >
                         ←
                       </button>
@@ -407,7 +407,7 @@ export default function BookingPage() {
                           className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
                             ? "invisible"
                             : d.isSelected
-                              ? "bg-primary text-white shadow-lg"
+                              ? "bg-primary text-secondary shadow-lg"
                               : d.isPast || d.isSunday
                                 ? "text-secondary-300 cursor-not-allowed bg-secondary-50"
                                 : d.isToday
@@ -427,7 +427,7 @@ export default function BookingPage() {
               {bookingStep === 2 && (
                 <div className="animate-in slide-in-from-right-4">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
                       Time
                     </span>
                     <Heading4 text="Available Slots" />
@@ -558,12 +558,12 @@ export default function BookingPage() {
                         value={formData.summary}
                         onChange={handleChange}
                         placeholder="Brief topic or purpose of meeting"
-                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30"
+                        className="w-full p-4 bg-secondary rounded-lg border border-transparent focus:border-hover outline-none text-sm font-medium placeholder-primary/30"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 ml-1 mb-2 block">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 ml-1 mb-2 block">
                         Additional Notes
                       </label>
                       <textarea
@@ -571,7 +571,7 @@ export default function BookingPage() {
                         value={formData.description}
                         onChange={handleChange}
                         placeholder="Any specific topics or questions you'd like to discuss..."
-                        className="w-full p-4 bg-[#F5F5F0] rounded-lg border border-transparent focus:border-[#ED985F] outline-none text-sm font-medium placeholder-[#001F3D]/30 resize-none"
+                        className="w-full p-4 bg-secondary rounded-lg border border-transparent focus:border-hover outline-none text-sm font-medium placeholder-primary/30 resize-none"
                         rows="3"
                       />
                     </div>
@@ -580,14 +580,14 @@ export default function BookingPage() {
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={() => setBookingStep(2)}
-                      className="flex-1 py-4 rounded-lg bg-[#F5F5F0] text-[10px] font-bold uppercase tracking-widest text-[#001F3D] hover:bg-[#001F3D]/5 transition-colors"
+                      className="flex-1 py-4 rounded-lg bg-secondary text-[10px] font-bold uppercase tracking-widest text-primary hover:bg-primary/5 transition-colors"
                     >
                       Back
                     </button>
                     <button
                       onClick={() => setBookingStep(4)}
                       disabled={!formData.name || !formData.email}
-                      className="flex-1 py-4 rounded-lg bg-[#001F3D] text-white text-[10px] font-bold uppercase tracking-widest hover:bg-[#ED985F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 py-4 rounded-lg bg-primary text-secondary text-[10px] font-bold uppercase tracking-widest hover:bg-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Review Booking
                     </button>
@@ -599,71 +599,71 @@ export default function BookingPage() {
               {bookingStep === 4 && (
                 <div className="animate-in zoom-in-95 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest">
+                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
                       Review
                     </span>
                     <Heading4 text="Confirm Details" />
                   </header>
 
-                  <div className="bg-[#F5F5F0] rounded-lg p-6 border border-[#001F3D]/5 space-y-4">
-                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                  <div className="bg-secondary rounded-lg p-6 border border-primary/5 space-y-4">
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">
                         Date
                       </span>
-                      <span className="text-sm font-bold text-[#001F3D]">
+                      <span className="text-sm font-bold text-primary">
                         {formatDate(selectedDate)}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">
                         Time
                       </span>
-                      <span className="text-sm font-bold text-[#001F3D]">
+                      <span className="text-sm font-bold text-primary">
                         {selectedSlot && formatTimeSlot(selectedSlot.start)}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">
                         Name
                       </span>
-                      <span className="text-sm font-bold text-[#001F3D]">
+                      <span className="text-sm font-bold text-primary">
                         {formData.name}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">
                         Email
                       </span>
-                      <span className="text-sm font-bold text-[#001F3D]">
+                      <span className="text-sm font-bold text-primary">
                         {formData.email}
                       </span>
                     </div>
                     {formData.phone && (
-                      <div className="flex justify-between items-center border-b border-[#001F3D]/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60">
+                      <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">
                           Phone
                         </span>
-                        <span className="text-sm font-bold text-[#001F3D]">
+                        <span className="text-sm font-bold text-primary">
                           {formData.phone}
                         </span>
                       </div>
                     )}
                     {formData.summary && (
-                      <div className="border-b border-[#001F3D]/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">
+                      <div className="border-b border-primary/10 pb-3">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60 block mb-2">
                           Topic
                         </span>
-                        <span className="text-sm text-[#001F3D]">
+                        <span className="text-sm text-primary">
                           {formData.summary}
                         </span>
                       </div>
                     )}
                     {formData.description && (
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 block mb-2">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60 block mb-2">
                           Notes
                         </span>
-                        <span className="text-sm text-[#001F3D]">
+                        <span className="text-sm text-primary">
                           {formData.description}
                         </span>
                       </div>
@@ -673,14 +673,14 @@ export default function BookingPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setBookingStep(3)}
-                      className="flex-1 py-4 rounded-lg bg-[#F5F5F0] text-[10px] font-bold uppercase tracking-widest text-[#001F3D] hover:bg-[#001F3D]/5 transition-colors"
+                      className="flex-1 py-4 rounded-lg bg-secondary text-[10px] font-bold uppercase tracking-widest text-primary hover:bg-primary/5 transition-colors"
                     >
                       Edit Details
                     </button>
                     <button
                       onClick={handleBooking}
                       disabled={submitting}
-                      className="flex-1 py-4 rounded-lg bg-[#ED985F] text-white text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 py-4 rounded-lg bg-hover text-secondary text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submitting ? "Booking..." : "Confirm & Schedule"}
                     </button>
@@ -691,7 +691,7 @@ export default function BookingPage() {
               {/* Step 5: Success */}
               {bookingStep === 5 && (
                 <div className="text-center py-12 animate-in fade-in zoom-in">
-                  <div className="w-20 h-20 bg-[#ED985F]/10 text-[#ED985F] rounded-lg flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-hover/10 text-hover rounded-lg flex items-center justify-center mx-auto mb-6">
                     <svg
                       className="w-10 h-10"
                       fill="none"
@@ -707,19 +707,19 @@ export default function BookingPage() {
                     </svg>
                   </div>
                   <Heading3 text="Booking Confirmed!" />
-                  <p className="text-sm text-[#001F3D]/60 mb-8 max-w-sm mx-auto">
+                  <p className="text-sm text-primary/60 mb-8 max-w-sm mx-auto">
                     Your consultation is confirmed. Check your email for
                     calendar invite and meeting details.
                   </p>
 
                   {meetLink && (
-                    <div className="p-4 bg-[#F5F5F0] rounded-lg border border-[#001F3D]/5 flex items-center justify-between gap-4 mb-8">
-                      <span className="text-[10px] font-mono truncate text-[#001F3D]/60 flex-1 text-left">
+                    <div className="p-4 bg-secondary rounded-lg border border-primary/5 flex items-center justify-between gap-4 mb-8">
+                      <span className="text-[10px] font-mono truncate text-primary/60 flex-1 text-left">
                         {meetLink}
                       </span>
                       <button
                         onClick={copyToClipboard}
-                        className="text-[#ED985F] font-bold text-[10px] uppercase tracking-widest hover:underline whitespace-nowrap"
+                        className="text-hover font-bold text-[10px] uppercase tracking-widest hover:underline secondaryspace-nowrap"
                       >
                         Copy Link
                       </button>
@@ -734,7 +734,7 @@ export default function BookingPage() {
                     />
                     <Link
                       href="/"
-                      className="block w-full py-3 text-[10px] font-bold uppercase tracking-widest text-[#001F3D]/60 hover:text-[#001F3D] transition-colors"
+                      className="block w-full py-3 text-[10px] font-bold uppercase tracking-widest text-primary/60 hover:text-primary transition-colors"
                     >
                       Back to Home
                     </Link>

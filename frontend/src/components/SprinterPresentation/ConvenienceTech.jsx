@@ -29,7 +29,7 @@ const SwivelCard = ({ title, description,  index }) => (
       <div className="relative">
         {/* MODIFIED: Reduced w-10/h-10 to w-9/h-9 and text to text-sm */}
         <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#1e2a4a] to-[#2d3b5e] flex items-center justify-center mr-3 border border-[#3a4259] shadow-md group-hover:shadow-lg group-hover:from-[#2d3b5e] group-hover:to-[#3c4a6d] transition-all duration-500">
-          <span className="font-serif font-bold text-[var(--color-secondary)] text-sm">
+          <span className="font-serif font-bold text-secondary text-sm">
             {index}
           </span>
         </div>
@@ -39,11 +39,11 @@ const SwivelCard = ({ title, description,  index }) => (
     </div>
 
     {/* MODIFIED: Reduced lg:text-xl to lg:text-lg */}
-    <Heading3 text={title} className="!text-[var(--color-secondary)] mb-2 group-hover:text-[#f0f4ff] transition-colors duration-500 leading-snug relative z-10" />
-    
+    <Heading3 text={title} className="!text-secondary mb-2 group-hover:text-[#f0f4ff] transition-colors duration-500 leading-snug relative z-10" />
+
     {/* MODIFIED: Reduced text-sm to text-xs */}
-    <RichParagraph className="!text-[var(--color-secondary)] leading-relaxed flex-1 relative z-10 group-hover:text-[#d8e0ff] transition-colors duration-500">{description}</RichParagraph>
-    
+    <RichParagraph className="!text-secondary leading-relaxed flex-1 relative z-10 group-hover:text-[#d8e0ff] transition-colors duration-500">{description}</RichParagraph>
+
 
     {/* Animated progress bar */}
     <div className="mt-4 relative z-10">
@@ -71,10 +71,10 @@ const TechCard = ({ title, description, imageUrl }) => (
     <div className="p-4 flex-1 relative z-10">
       {/* MODIFIED: Reduced lg:text-xl to lg:text-lg and text-lg to text-base */}
       <Heading3 text={title} className="mb-2 pb-2"/>
-      
+
       {/* MODIFIED: Reduced text-sm to text-xs */}
       <RichParagraph className="text-[#5a6578] leading-relaxed group-hover:text-[#4a5568] transition-colors duration-500">{description}</RichParagraph>
-      
+
     </div>
 
     {/* Enhanced image container */}
@@ -256,11 +256,11 @@ export default function ConvenienceTech() {
 
           {/* MODIFIED: Reduced lg:text-4xl to lg:text-3xl and mb-3 to mb-2 */}
           <Heading2 text={"Tech & Conversion Ready Components"}/>
-          
+
 
           {/* MODIFIED: Reduced lg:text-xl to lg:text-lg */}
           <RichParagraph>{" Stock Mercedes Swivel Seats – Uncompromised OEM Excellence"}</RichParagraph>
-          
+
         </div>
 
         {/* Enhanced Swivel Seat Cards Grid */}
@@ -310,11 +310,11 @@ export default function ConvenienceTech() {
 
           {/* MODIFIED: Reduced lg:text-3xl to lg:text-2xl and mb-3 to mb-2 */}
           <Heading2 text={"Safety & Convenience Technology"}/>
-          
+
 
           {/* MODIFIED: Reduced text-base to text-sm */}
           <RichParagraph>{" Advanced systems designed to enhance your driving experience with cutting-edge safety and convenience features."}</RichParagraph>
-          
+
         </div>
 
         {/* Enhanced Tech Feature Cards with Premium Borders */}
