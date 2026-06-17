@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchModelAll } from '@/api/model/modelAll';
+import { fetchAllConfiguratorData } from '@/api/model/modelAll';
 import { setEditData,clearEditData } from '@/redux/slices/editData';
 import { Plus, Pencil, Trash2, Box, Layers, Search, Filter } from 'lucide-react'
 import DetailModal from './Detail'
@@ -19,7 +19,7 @@ export default function ConfiguratorListing({ setSelected }) {
   const [openModal, setOpenModal] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchModelAll())
+        dispatch(fetchAllConfiguratorData())
     }, [dispatch])
 
     // Filter Logic
@@ -47,7 +47,7 @@ export default function ConfiguratorListing({ setSelected }) {
             });
             const result = await res.json();
             if (result.success) {
-                dispatch(fetchModelAll());
+                dispatch(fetchAllConfiguratorData());
             }
         } catch (err) {
             console.error("Delete failed:", err);
@@ -55,10 +55,10 @@ export default function ConfiguratorListing({ setSelected }) {
     };
 
 
-  const handleView = (item) => {
-    setSelectedItem(item); // Store the clicked item
-    setOpenModal(true);    // Open the modal
-  };
+//   const handleView = (item) => {
+//     setSelectedItem(item); // Store the clicked item
+//     setOpenModal(true);    // Open the modal
+//   };
 
     return (
         <div className="p-8 bg-[#f8fafc] min-h-screen">
