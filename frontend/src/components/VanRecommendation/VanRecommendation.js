@@ -621,7 +621,7 @@ export default function VanRecommendation() {
                                                 )}
 
                                                 {recommendation.primary_match.glbFile && (
-                                                    <a href={`/viewer?model=${recommendation.primary_match.glbFile}`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-6 py-3 bg-primary text-white rounded">
+                                                    <a href={`/camper-vans-for-sale/${recommendation.primary_match.slug}/configure`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-6 py-3 bg-primary text-white rounded">
                                                         👓 Render 3D Interface
                                                     </a>
                                                 )}

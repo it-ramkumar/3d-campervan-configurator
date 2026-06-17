@@ -4,18 +4,14 @@ import { toggleModelSelection } from "@/CustomHooks/toogleModelSelection";
 import { isDependencyMet } from "@/CustomHooks/isDependecyMet";
 import { StepDescriptions } from "@/CustomHooks/stepDescription";
 import { groupByGroup } from "@/CustomHooks/groupByGroup";
-import NextBackButton from "./MultiStepPaginationButtons";
 import TabButtons from "./MultiStepTabButtons";
 import ModelsCard from "./MultiStepCard";
 import { goToNextStep } from "@/CustomHooks/goToNextStep";
 import { goToPrevStep } from "@/CustomHooks/goToPrevStep";
 import SummaryModal from "../summary-modal/SummaryModal";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInterior,fetchExterior,fetchSystem } from "@/api/model/modelAll";
-// import { fetchExterior } from "@/api/model/modelExterior";
-// import { fetchSystem } from "@/api/model/modelSystem";
 import { handleGetQuote } from "@/CustomHooks/handleQuote.js";
-// import Loader from "../Loader/Loader";
+import { fetchAllConfiguratorData } from "@/api/model/modelAll"; // Clean single function integration
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
 import {
@@ -37,61 +33,78 @@ const MultiStepForm = ({
 }) => {
   const dispatch = useDispatch();
   const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
-  const models = useSelector((state) => state.models || []);
   const addedModels = useSelector((state) => state.addedModels.addedModels);
-  const interior = models?.interior;
-  const exterior = models?.exterior?.data;
-  const system = models?.system?.data;
+
+  // Standalone single source of truth state metrics
+  const [localModels, setLocalModels] = useState({
+    interior: [],
+    exterior: [],
+    system: []
+  });
+
   const [activeTab, setActiveTab] = useState("interior");
   const [currentStep, setCurrentStep] = useState(0);
   const [summaryModal, setSummaryModal] = useState(false);
-
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const loadAllData = async () => {
-      try {
-        setLoading(true);
-        await Promise.all([
-          dispatch(fetchInterior()),
-          dispatch(fetchExterior()),
-          dispatch(fetchSystem()),
-        ]);
-      } catch (err) {
-        console.error("Error fetching initial data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadAllData();
-  }, [dispatch]);
+  // Execution engine pulling data from a single optimized database route payload
+useEffect(() => {
+  const loadUnifiedDataPayload = async () => {
+    try {
+      setLoading(true);
 
+      const responseData = await fetchAllConfiguratorData();
+      console.log(responseData, "models");
+
+      // Agar response data array wrapper object me wrapped ho ('data' key ke sath)
+      const flatList = Array.isArray(responseData)
+        ? responseData
+        : (responseData?.data || []);
+
+      // Ek hi main flat array ko category base par dynamically filter karein
+      setLocalModels({
+        interior: flatList.filter(item => item?.category === "interior"),
+        exterior: flatList.filter(item => item?.category === "exterior"),
+        system: flatList.filter(item => item?.category === "system" || item?.category === "systems")
+      });
+
+    } catch (err) {
+      console.error("Failed downloading single runtime profile context payload:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadUnifiedDataPayload();
+}, []);
+
+  // 3D Matrix Preloader
   useEffect(() => {
     if (!loading) {
       const allData = [
-        ...(interior || []),
-        ...(exterior || []),
-        ...(system || []),
+        ...(localModels.interior || []),
+        ...(localModels.exterior || []),
+        ...(localModels.system || []),
       ];
       allData.forEach((model) => {
         if (model?.glbFile) {
           try {
             useGLTF.preload(model.glbFile);
           } catch (e) {
-            console.warn("Preload failed for:", model.glbFile);
+            console.warn("Asynchronous viewport asset map skip on element:", model.glbFile);
           }
         }
       });
     }
-  }, [loading, interior, exterior, system]);
+  }, [loading, localModels]);
 
   const steps = useMemo(() => {
     if (activeTab === "interior")
-      return Object.entries(groupByGroup(interior || []));
+      return Object.entries(groupByGroup(localModels.interior || []));
     if (activeTab === "exterior")
-      return Object.entries(groupByGroup(exterior || []));
-    return Object.entries(groupByGroup(system || []));
-  }, [activeTab, interior, exterior, system]);
+      return Object.entries(groupByGroup(localModels.exterior || []));
+    return Object.entries(groupByGroup(localModels.system || []));
+  }, [activeTab, localModels]);
 
   const progressPercent = Math.round(
     ((currentStep + 1) / (steps.length || 1)) * 100,
@@ -106,7 +119,10 @@ const MultiStepForm = ({
   ) {
     return (
       <div className="h-full flex items-center justify-center bg-slate-900">
-        {/* <Loader /> */}
+        <div className="flex flex-col items-center gap-3 text-white">
+          <Loader2 className="animate-spin text-orange-400" size={32} />
+          <span className="text-xs font-bold tracking-widest uppercase opacity-60">Assembling Build Vectors...</span>
+        </div>
       </div>
     );
   }
@@ -153,7 +169,7 @@ const MultiStepForm = ({
             </RichParagraph>
           </div>
 
-          {/* Mobile: Items Count Badge */}
+          {/* Mobile Count Badge */}
           <div className="lg:hidden flex items-center gap-2 px-3 py-1 rounded-lg bg-primary/5 text-xs text-primary">
             <CheckCircle2 size={12} className="text-primary" />
             <span>{addedModels.length} items</span>
@@ -178,11 +194,10 @@ const MultiStepForm = ({
         />
       </div>
 
-      {/* Footer */}
+      {/* Footer Nav Links */}
       <div className="flex-shrink-0 border-t border-black/10 bg-white z-20 pb-[env(safe-area-inset-bottom)] lg:pb-0">
         <div className="p-3">
           <div className="flex justify-between items-center gap-3">
-            {/* Back Button */}
             <div className="flex-1">
               {activeTab === "exterior" && currentStep === 0 ? (
                 <SecondaryButton
@@ -214,7 +229,6 @@ const MultiStepForm = ({
               )}
             </div>
 
-            {/* Next Button */}
             <div className="flex-1">
               {activeTab === "interior" && currentStep === steps.length - 1 ? (
                 <PrimaryButton
@@ -226,8 +240,7 @@ const MultiStepForm = ({
                   label="Exterior →"
                   className="w-full !py-2"
                 />
-              ) : activeTab === "exterior" &&
-                currentStep === steps.length - 1 ? (
+              ) : activeTab === "exterior" && currentStep === steps.length - 1 ? (
                 <PrimaryButton
                   onClick={() => {
                     setActiveTab("system");
@@ -254,7 +267,7 @@ const MultiStepForm = ({
         </div>
       </div>
 
-      {/* MOBILE: FAB for Quote */}
+      {/* MOBILE Trigger FAB */}
       <div className="lg:hidden fixed bottom-20 right-4 z-40">
         <button
           onClick={() => setShowQuoteConfirm(true)}
@@ -269,16 +282,13 @@ const MultiStepForm = ({
         </button>
       </div>
 
-      {/* Quote Confirmation Modal */}
+      {/* Confirmation Slide Over Overlay */}
       {showQuoteConfirm && (
         <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl flex items-center justify-center p-4 lg:hidden">
           <div className="w-full max-w-sm bg-gray-100 rounded-lg border border-black/10 p-6">
-            <h3 className="text-xl font-bold text-primary mb-2">
-              Get Your Quote
-            </h3>
+            <h3 className="text-xl font-bold text-primary mb-2">Get Your Quote</h3>
             <p className="text-sm text-primary/70 mb-6">
-              You have {addedModels.length} items selected for{" "}
-              {BaseVan?.layout || "your van"}.
+              You have {addedModels.length} items selected for {BaseVan?.layout || "your van"}.
             </p>
 
             <div className="space-y-3">
@@ -312,13 +322,11 @@ const MultiStepForm = ({
         </div>
       )}
 
-      {/* DESKTOP: Quote Section */}
+      {/* DESKTOP Workspace Console Footer */}
       <div className="hidden lg:block flex-shrink-0 border-t border-black/10 bg-gray-100 p-3">
         <div className="flex items-center justify-between gap-3 mb-3">
           <div>
-            <p className="text-[10px] text-primary/70 uppercase">
-              Selected Van
-            </p>
+            <p className="text-[10px] text-primary/70 uppercase">Selected Van</p>
             <p className="text-sm font-bold text-primary truncate max-w-[150px]">
               {BaseVan?.layout || "Base Van"}
             </p>
@@ -333,9 +341,7 @@ const MultiStepForm = ({
         </div>
 
         <PrimaryButton
-          onClick={() =>
-            handleGetQuote(addedModels, dispatch, BaseVan, setLoading)
-          }
+          onClick={() => handleGetQuote(addedModels, dispatch, BaseVan, setLoading)}
           label={
             loading ? (
               <>
@@ -352,7 +358,6 @@ const MultiStepForm = ({
         />
       </div>
 
-      {/* Summary Modal */}
       {summaryModal && (
         <SummaryModal
           SummaryModal={summaryModal}
