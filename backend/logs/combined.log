@@ -1,3 +1,6 @@
 {"level":"info","message":" Connected to MongoDB","timestamp":"2026-06-11 13:39:06"}
 {"level":"info","message":" Connected to MongoDB","timestamp":"2026-06-15 11:36:53"}
 {"level":"info","message":"127.0.0.1 - - [15/Jun/2026:06:46:12 +0000] \"POST /api/recommend HTTP/1.1\" 200 644 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-06-15 11:46:12"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-06-17 09:01:26"}
+{"level":"info","message":"127.0.0.1 - - [17/Jun/2026:04:03:11 +0000] \"POST /api/recommend HTTP/1.1\" 200 348 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-06-17 09:03:11"}
+{"level":"info","message":"127.0.0.1 - - [17/Jun/2026:04:03:48 +0000] \"POST /api/recommend HTTP/1.1\" 200 348 \"-\" \"PostmanRuntime/7.54.0\"","timestamp":"2026-06-17 09:03:48"}

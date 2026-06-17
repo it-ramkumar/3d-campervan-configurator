@@ -18,15 +18,17 @@ const OPTIONS = {
         { value: 'folding_shower', label: 'Folding Shower', desc: 'Collapsible integrated stow-away footprint' },
         { value: 'rear_bathroom', label: 'Rear Bathroom', desc: 'Dedicated layout partitioned at the back' }
     ],
-    kitchen_amenities: [
-        { value: 'sink', label: 'Deep Undermount Sink', desc: 'Premium sink with professional faucet' },
-        { value: 'fridge', label: '12V Compressor Fridge', desc: 'Dedicated efficient cooling appliance' },
-        { value: 'stove', label: 'Induction / Gas Cooktop', desc: 'Built-in high performance stove' }
-    ],
     vehicle_chassis: [
         { value: 'sprinter', label: 'Mercedes Sprinter', desc: 'Premium precision chassis setup' },
         { value: 'transit', label: 'Ford Transit', desc: 'High serviceability & capable AWD options' },
         { value: 'no_preference', label: 'No Preference', desc: 'Prioritize layout build specifications' }
+    ],
+    wheelbase: [
+        { value: '144', label: '144" Wheelbase', desc: 'Compact, agile, fits standard parking spots' },
+        { value: '170', label: '170" Wheelbase', desc: 'Extended platform maximum interior space' },
+        { value: '148', label: '148" Wheelbase', desc: 'Standard highly versatile length footprint' },
+        { value: '130', label: '130" Wheelbase', desc: 'Ultra-compact nimble custom build setup' },
+        { value: 'no_preference', label: 'No Preference', desc: 'Open to any chassis build length standard' }
     ],
     style: [
         { value: 'luxury', label: 'Luxury', desc: 'Sleek, high-end, premium material look' },
@@ -48,9 +50,8 @@ export default function VanRecommendation() {
         seats_required: 2,
         bathroom_required: false,
         bathroom_type: '',
-        kitchen_required: false,
-        kitchen_items: [], // Array to hold selected kitchen elements multiple values
         vehicle_chassis: 'no_preference',
+        wheelbase: 'no_preference',
         style: 'luxury',
         priority: 'comfort',
     });
@@ -68,16 +69,6 @@ export default function VanRecommendation() {
         setFormData((prev) => {
             const newVal = type === 'inc' ? prev[key] + 1 : Math.max(1, prev[key] - 1);
             return { ...prev, [key]: newVal };
-        });
-    };
-
-    const toggleKitchenItem = (itemValue) => {
-        setFormData((prev) => {
-            const exists = prev.kitchen_items.includes(itemValue);
-            const updated = exists
-                ? prev.kitchen_items.filter(i => i !== itemValue)
-                : [...prev.kitchen_items, itemValue];
-            return { ...prev, kitchen_items: updated };
         });
     };
 
@@ -117,9 +108,8 @@ export default function VanRecommendation() {
             seats_required: 2,
             bathroom_required: false,
             bathroom_type: '',
-            kitchen_required: false,
-            kitchen_items: [],
             vehicle_chassis: 'no_preference',
+            wheelbase: 'no_preference',
             style: 'luxury',
             priority: 'comfort'
         });
@@ -136,7 +126,7 @@ export default function VanRecommendation() {
                 <div className="px-8 pt-8 pb-6 border-b">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <WatermarkText text="Van Matchmaker" className="mb-1" />
+                            <WatermarkText text="BBV Matchmaker Engine" className="mb-1" />
                             <Heading3 text='Find Your Perfect Build' className='text-secondary' />
                         </div>
                         <WatermarkText text={`${currentStep} / ${totalSteps}`} />
@@ -257,10 +247,9 @@ export default function VanRecommendation() {
                             </div>
                         )}
 
-                        {/* STEP 3: AMENITIES FUNNEL (BATHROOM TYPES & KITCHEN SPECIFICS) */}
+                        {/* STEP 3: AMENITIES FUNNEL (BATHROOM SELECTION MATRIX) */}
                         {currentStep === 3 && (
                             <div className="space-y-8 max-w-3xl mx-auto w-full">
-                                {/* Bathroom Master Switch */}
                                 <div>
                                     <RichParagraph className="text-center text-xs font-bold tracking-widest uppercase mb-4" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                         Do you need an Indoor Bathroom / Shower Setup?
@@ -289,9 +278,9 @@ export default function VanRecommendation() {
                                         })}
                                     </div>
 
-                                    {/* Conditional BBV Bathroom Sub-options */}
+                                    {/* Conditional BBV Bathroom Variant Grid */}
                                     {formData.bathroom_required && (
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4 transition-all duration-300">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-6 transition-all duration-300">
                                             {OPTIONS.bathroom_type.map((type) => {
                                                 const active = formData.bathroom_type === type.value;
                                                 return (
@@ -312,92 +301,61 @@ export default function VanRecommendation() {
                                         </div>
                                     )}
                                 </div>
+                            </div>
+                        )}
 
-                                {/* Kitchen Master Switch */}
-                                <div className="pt-6 border-t border-white/5">
-                                    <RichParagraph className="text-center text-xs font-bold tracking-widest uppercase mb-4" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                        Do you need an Indoor Galley / Kitchen Setup?
-                                    </RichParagraph>
-                                    <div className="flex justify-center gap-4 mb-4">
-                                        {[
-                                            { val: false, label: 'Not Needed' },
-                                            { val: true, label: 'Must Have 🍳' },
-                                        ].map(({ val, label }) => {
-                                            const active = formData.kitchen_required === val;
-                                            return (
-                                                <button
-                                                    key={String(val)}
-                                                    type="button"
-                                                    onClick={() => { handleInputChange('kitchen_required', val); if(!val) handleInputChange('kitchen_items', []); }}
-                                                    className="px-6 py-3 font-black text-xs uppercase tracking-wider border rounded-md transition-all w-40"
-                                                    style={{
-                                                        border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.1)',
-                                                        backgroundColor: active ? 'rgba(237,152,95,0.15)' : 'rgba(255,255,255,0.03)',
-                                                        color: active ? '#ED985F' : 'rgba(255,255,255,0.45)',
-                                                    }}
-                                                >
-                                                    {label}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-
-                                    {/* Conditional Kitchen Infrastructure Items */}
-                                    {formData.kitchen_required && (
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-4 transition-all duration-300">
-                                            {OPTIONS.kitchen_amenities.map((item) => {
-                                                const active = formData.kitchen_items.includes(item.value);
+                        {/* STEP 4: CHASSIS, WHEELBASE LENGTH, STYLE & PRIORITY */}
+                        {currentStep === 4 && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                            Preferred Vehicle Chassis
+                                        </RichParagraph>
+                                        <div className="space-y-2">
+                                            {OPTIONS.vehicle_chassis.map((opt) => {
+                                                const active = formData.vehicle_chassis === opt.value;
                                                 return (
                                                     <div
-                                                        key={item.value}
-                                                        onClick={() => toggleKitchenItem(item.value)}
-                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left flex items-center justify-between"
+                                                        key={opt.value}
+                                                        onClick={() => handleInputChange('vehicle_chassis', opt.value)}
+                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left"
                                                         style={{
-                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.05)',
-                                                            backgroundColor: active ? 'rgba(237,152,95,0.08)' : 'transparent',
+                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.07)',
+                                                            backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
                                                         }}
                                                     >
-                                                        <div>
-                                                            <WatermarkText text={item.label} className={`!text-xs font-black ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                            <WatermarkText text={item.desc} className="!text-[10px] !text-white/30 mt-0.5 leading-tight" />
-                                                        </div>
-                                                        <div className="w-3.5 h-3.5 border rounded flex items-center justify-center text-[9px] font-bold" style={{ borderColor: active ? '#ED985F' : 'rgba(255,255,255,0.2)', color: '#ED985F' }}>
-                                                            {active && '✓'}
-                                                        </div>
+                                                        <WatermarkText text={opt.label} className={`!text-xs font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                        <WatermarkText text={opt.desc} className="!text-[11px] mt-0.5 !text-white/30" />
                                                     </div>
                                                 );
                                             })}
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                                    </div>
 
-                        {/* STEP 4: CHASSIS VEHICLE, STYLE & PRIORITY */}
-                        {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <div>
-                                    <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                        Preferred Vehicle Platform
-                                    </RichParagraph>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                        {OPTIONS.vehicle_chassis.map((opt) => {
-                                            const active = formData.vehicle_chassis === opt.value;
-                                            return (
-                                                <div
-                                                    key={opt.value}
-                                                    onClick={() => handleInputChange('vehicle_chassis', opt.value)}
-                                                    className="p-4 cursor-pointer border rounded-md transition-all text-left"
-                                                    style={{
-                                                        border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.07)',
-                                                        backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
-                                                    }}
-                                                >
-                                                    <WatermarkText text={opt.label} className={`!text-xs font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                    <WatermarkText text={opt.desc} className="!text-xs mt-0.5 !text-white/30" />
-                                                </div>
-                                            );
-                                        })}
+                                    <div>
+                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                            Target Wheelbase Length
+                                        </RichParagraph>
+                                        <div className="space-y-2">
+                                            {OPTIONS.wheelbase.map((opt) => {
+                                                const active = formData.wheelbase === opt.value;
+                                                return (
+                                                    <div
+                                                        key={opt.value}
+                                                        onClick={() => handleInputChange('wheelbase', opt.value)}
+                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left"
+                                                        style={{
+                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.07)',
+                                                            backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
+                                                        }}
+                                                    >
+                                                        <WatermarkText text={opt.label} className={`!text-xs font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                        <WatermarkText text={opt.desc} className="!text-[11px] mt-0.5 !text-white/30" />
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -467,7 +425,7 @@ export default function VanRecommendation() {
                                 />
                             ) : (
                                 <SecondaryButton
-                                    label={loading ? 'Analyzing Builds...' : 'Find My Van →'}
+                                    label={loading ? 'BBV Cluster Syncing...' : 'Match Build Architecture →'}
                                     disabled={loading}
                                     type="submit"
                                 />
@@ -485,268 +443,215 @@ export default function VanRecommendation() {
                     )}
                 </form>
             </div>
+
             {/* ===== RESULTS ACCORDION ===== */}
             <div ref={resultsRef} id="results-section" className="scroll-mt-6">
                 {recommendation && (
                     <div className="space-y-8">
 
-                        {/* Results header */}
                         <div className="text-center max-w-xl mx-auto">
                             <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: '#ED985F' }}>
-                                Matchmaking Complete
+                                Matching Sequence Complete
                             </RichParagraph>
                             <h3 className="text-3xl font-black tracking-tight" style={{ color: '#001F3D' }}>
-                                Your Personalized Result
+                                BBV Matchmaker Engineering Profile
                             </h3>
-                            <RichParagraph className="text-sm mt-2" inlineStyle={{ color: 'rgba(0,31,61,0.45)' }}>
-                                Based on your layout selections and requirements context.
-                            </RichParagraph>
                         </div>
 
-                        {/* CONDITION 1: RECONCILE DYNAMIC FALLBACK IF ABSOLUTELY NO PLANS MATCH */}
+                        {/* CONDITION 1: NO BUILD MATCHES HARD CAP SEATS AT ALL */}
                         {recommendation.no_match_found ? (
                             <div className="max-w-3xl mx-auto overflow-hidden shadow-2xl bg-[#001F3D] border border-orange-400/20 text-center p-12 rounded-lg">
                                 <div className="w-16 h-16 bg-orange-400/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                     <span className="text-3xl">📐</span>
                                 </div>
                                 <h3 className="text-3xl font-black tracking-tight text-white mb-3">
-                                    Your Requirements are Beautifully Unique!
+                                    Fabricate a Custom Blueprint Concept!
                                 </h3>
                                 <RichParagraph className="text-base text-white/70 max-w-xl mx-auto mb-8">
-                                    {recommendation.message || "Hamare ready configurations ya baseline assets me aapki strict configuration maujood nahi hai. Lekin fikr ki koi baat nahi, hum custom builders hain!"}
+                                    {recommendation.message}
                                 </RichParagraph>
-
-                                <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md mx-auto mb-8 text-left grid grid-cols-2 gap-4">
-                                    <div>
-                                        <span className="text-xs text-white/40 block uppercase font-black">Vibe Context</span>
-                                        <span className="text-sm font-bold text-orange-400 uppercase">{formData.use_case} Build</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-xs text-white/40 block uppercase font-black">Target Seating</span>
-                                        <span className="text-sm font-bold text-orange-400">{formData.seats_required} Belted Spots</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-xs text-white/40 block uppercase font-black">Bathroom Infrastructure</span>
-                                        <span className="text-sm font-bold text-white">{formData.bathroom_required ? formData.bathroom_type.replace('_',' ') : 'None (Open Space)'}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-xs text-white/40 block uppercase font-black">Kitchen Items</span>
-                                        <span className="text-sm font-bold text-white">{formData.kitchen_required ? formData.kitchen_items.join(', ') : 'None'}</span>
-                                    </div>
-                                </div>
 
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                     <a
                                         href={`https://wa.me/19514419719?text=${encodeURIComponent(
-                                            `Hi! I configured a custom layout via Quiz. No matching ready plan fits my exact components: Vibe: ${formData.use_case.toUpperCase()}, Seats Needed: ${formData.seats_required}, Bathroom Configuration: ${formData.bathroom_required ? formData.bathroom_type : 'No'}, Kitchen Infrastructure: ${formData.kitchen_required ? formData.kitchen_items.join('+') : 'No'}. I want to talk to an engineer for a custom 3D layout blueprint.`
+                                            `Hi BBV Team! I ran the Matchmaker Quiz. I need a custom structure build setup: Vibe: ${formData.use_case.toUpperCase()}, Strict Belted Seats: ${formData.seats_required}, Wheelbase Target: ${formData.wheelbase}. Let's discuss custom blueprint routing.`
                                         )}`}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-10 py-4 transition-all bg-[#25D366] text-white rounded-md shadow-lg hover:opacity-90"
+                                        className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-10 py-4 transition-all bg-[#25D366] text-white rounded-md shadow-lg"
                                     >
-                                        💬 Connect On WhatsApp
+                                        💬 Consult BBV Engineer On WhatsApp
                                     </a>
-                                    <button
-                                        type="button"
-                                        onClick={handleReset}
-                                        className="w-full sm:w-auto text-xs font-black tracking-widest uppercase px-8 py-4 bg-white/5 text-white hover:bg-white/10 rounded-md transition-all border border-white/10"
-                                    >
-                                        🔄 Adjust Selections
+                                    <button type="button" onClick={handleReset} className="w-full sm:w-auto text-xs font-black tracking-widest uppercase px-8 py-4 bg-white/5 text-white rounded-md transition-all border border-white/10">
+                                        🔄 Modify Matrix Options
                                     </button>
                                 </div>
                             </div>
                         ) : (
-                            /* CONDITION 2: STANDARD SUCCESS MATCH PRESENTATION */
+                            /* CONDITION 2: STANDARD ASSISTANCE OUTPUT (WHEELBASE / BATHROOM NOTICES RENDER) */
                             recommendation.primary_match && (
-                                <div
-                                    className="overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-2xl"
-                                    style={{ borderRadius: '6px', border: '1px solid rgba(0,31,61,0.12)' }}
-                                >
-                                    {/* Left dark panel */}
-                                    <div
-                                        className="lg:col-span-5 p-7 flex flex-col justify-between relative"
-                                        style={{ backgroundColor: '#001F3D', minHeight: '320px' }}
-                                    >
-                                        <span
-                                            className="absolute top-5 left-5 text-xs font-black tracking-widest uppercase px-3 py-1.5"
-                                            style={{ borderRadius: '4px', backgroundColor: '#ED985F', color: '#fff' }}
+                                <div className="space-y-6">
+
+                                    {/* DYNAMIC INTELLECTUAL SUGGESTIONS FEEDBACK COMPONENT */}
+                                    {recommendation.suggestions?.compiled_pitch && (
+                                        <div
+                                            className="p-5 border flex items-start gap-4 shadow-sm transition-all"
+                                            style={{
+                                                borderRadius: '6px',
+                                                backgroundColor: 'rgba(237,152,95,0.06)',
+                                                borderColor: '#ED985F',
+                                                borderLeftWidth: '5px'
+                                            }}
                                         >
-                                            {recommendation.primary_match.score >= 12 ? '🏆 Best Layout Match' : 'Closest Recommendation'}
-                                        </span>
-
-                                        <div className="mt-12 space-y-2">
-                                            <WatermarkText
-                                                text={recommendation.primary_match.type === 'inventory' ? 'Available Inventory' : 'Custom Portfolio Layout'}
-                                                className="!text-xs font-bold tracking-widest uppercase !text-white/35"
-                                            />
-                                            <h4 className="text-2xl font-black tracking-tight" style={{ color: '#FBFBF9' }}>
-                                                {recommendation.primary_match.title}
-                                            </h4>
+                                            <span className="text-2xl mt-0.5">💡</span>
+                                            <div>
+                                                <h5 className="font-black text-sm uppercase tracking-wide mb-1" style={{ color: '#001F3D' }}>
+                                                    BBV Engineering Suggestion Note
+                                                </h5>
+                                                <RichParagraph className="text-sm font-medium leading-relaxed" inlineStyle={{ color: '#001F3D' }}>
+                                                    {recommendation.suggestions.compiled_pitch}
+                                                </RichParagraph>
+                                            </div>
                                         </div>
+                                    )}
 
-                                        <div className="grid grid-cols-3 gap-2 mt-5">
-                                            {recommendation.primary_match.images && recommendation.primary_match.images.length > 0 ? (
-                                                recommendation.primary_match.images.map((img, idx) => (
+                                    {/* Core Card Splitter */}
+                                    <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-2xl rounded-lg border border-primary/10">
+
+                                        {/* Left Layout Information Header */}
+                                        <div className="lg:col-span-5 p-7 flex flex-col justify-between relative bg-primary text-white min-h-[320px]">
+                                            <span className="absolute top-5 left-5 text-[10px] font-black tracking-widest uppercase px-3 py-1.5 bg-[#ED985F] text-white rounded">
+                                                ⚙️ Configured Template Match
+                                            </span>
+
+                                            <div className="mt-12 space-y-1.5">
+                                                <WatermarkText
+                                                    text={recommendation.primary_match.type === 'inventory' ? 'Available Physical Asset' : 'Engineering Blueprint Vector'}
+                                                    className="!text-xs font-bold tracking-widest uppercase !text-white/40"
+                                                />
+                                                <h4 className="text-2xl font-black tracking-tight text-white">
+                                                    {recommendation.primary_match.title}
+                                                </h4>
+                                            </div>
+
+                                            <div className="grid grid-cols-3 gap-2 mt-5">
+                                                {recommendation.primary_match.images?.slice(0, 3).map((img, idx) => (
                                                     <img
                                                         key={idx}
                                                         src={img}
-                                                        alt="Van Layout Blueprint"
-                                                        className="w-full h-20 object-cover transition-all hover:scale-105"
-                                                        style={{ borderRadius: '4px', border: '1px solid rgba(255,255,255,0.08)' }}
+                                                        alt="BBV Layout Concept Map"
+                                                        className="w-full h-20 object-cover transition-all hover:scale-105 border border-white/5 rounded"
                                                     />
-                                                ))
-                                            ) : (
-                                                <div className="col-span-3 h-20 flex items-center justify-center text-xs" style={{ borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.2)' }}>
-                                                    No configuration renders available
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Right light panel */}
-                                    <div className="lg:col-span-7 p-8 flex flex-col justify-between" style={{ backgroundColor: '#FBFBF9' }}>
-                                        <div>
-                                            <div
-                                                className="flex items-center justify-between mb-5 pb-5"
-                                                style={{ borderBottom: '1px solid rgba(0,31,61,0.08)' }}
-                                            >
-                                                <div>
-                                                    <WatermarkText text="Layout Status" className="!text-xs font-bold tracking-widest uppercase !text-primary/40" />
-                                                    <span className="block text-xl font-black mt-0.5 text-primary uppercase">
-                                                        {recommendation.primary_match.type === 'inventory' ? 'Ready to Ship' : 'Custom Spec Plan'}
-                                                    </span>
-                                                </div>
-                                                <span
-                                                    className="text-xs font-black tracking-widest uppercase px-3 py-1.5"
-                                                    style={{ borderRadius: '4px', backgroundColor: 'rgba(0,31,61,0.07)', color: '#001F3D' }}
-                                                >
-                                                    {recommendation.primary_match.status || 'Available'}
-                                                </span>
-                                            </div>
-
-                                            {/* Dynamic Layout Configuration Badges */}
-                                            <div className="flex flex-wrap gap-2 mb-5">
-                                                <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded">
-                                                    💺 Seats: {recommendation.primary_match.seats}
-                                                </span>
-                                                {recommendation.primary_match.bathroom && (
-                                                    <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded capitalize">
-                                                        🚿 Bath: {recommendation.primary_match.bathroom_type?.replace(/_/g, ' ')}
-                                                    </span>
+                                                )) || (
+                                                    <div className="col-span-3 h-20 bg-white/5 text-xs flex items-center justify-center text-white/20">
+                                                        No visual blueprints found
+                                                    </div>
                                                 )}
-                                                <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded">
-                                                    {recommendation.primary_match.glbFile ? '👓 3D Asset Available' : '📐 Blueprint Map'}
-                                                </span>
                                             </div>
+                                        </div>
 
-                                            {/* Match reasoning justification text */}
-                                            {recommendation.primary_match.reason && (
-                                                <div className="mb-5">
-                                                    <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: 'rgba(0,31,61,0.4)' }}>
-                                                        Why This Match Fits
-                                                    </RichParagraph>
-                                                    <RichParagraph
-                                                        className="text-sm font-medium px-4 py-3"
-                                                        inlineStyle={{ borderRadius: '6px', backgroundColor: 'rgba(237,152,95,0.1)', color: '#001F3D', border: '1px solid rgba(237,152,95,0.25)' }}
-                                                    >
-                                                        ✅ {recommendation.primary_match.reason}
-                                                    </RichParagraph>
-                                                </div>
-                                            )}
-
-                                            {/* Key features display list */}
+                                        {/* Right Layout Capabilities Specs Sheet */}
+                                        <div className="lg:col-span-7 p-8 flex flex-col justify-between bg-[#FBFBF9]">
                                             <div>
-                                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(0,31,61,0.4)' }}>
-                                                    Key Premium Highlights
-                                                </RichParagraph>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
-                                                    {recommendation.primary_match.key_features?.map((feat, i) => (
-                                                        <div key={i} className="flex items-start gap-2 text-xs" style={{ color: 'rgba(0,31,61,0.7)' }}>
-                                                            <span style={{ color: '#ED985F', flexShrink: 0 }}>—</span>
-                                                            <span>{feat}</span>
-                                                        </div>
-                                                    ))}
+                                                <div className="flex items-center justify-between mb-5 pb-4 border-b border-primary/5">
+                                                    <div>
+                                                        <WatermarkText text="Layout Base Specifications" className="!text-xs font-bold tracking-widest uppercase !text-primary/40" />
+                                                        <span className="block text-xl font-black mt-0.5 text-primary uppercase">
+                                                            {recommendation.primary_match.wheelbase}" Wheelbase Structure
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-xs font-black tracking-widest uppercase px-3 py-1.5 bg-primary/5 text-primary rounded">
+                                                        {recommendation.primary_match.status}
+                                                    </span>
                                                 </div>
+
+                                                {/* Structural Configuration Tokens */}
+                                                <div className="flex flex-wrap gap-2 mb-6">
+                                                    <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded">
+                                                        💺 {recommendation.primary_match.seats} Belted Locations Fitted
+                                                    </span>
+                                                    <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded capitalize">
+                                                        🚿 Built Bathroom: {recommendation.primary_match.bathroom_type ? recommendation.primary_match.bathroom_type.replace(/_/g, ' ') : 'None / Open Cabin'}
+                                                    </span>
+                                                </div>
+
+                                                {/* Match Logic Justification */}
+                                                {recommendation.primary_match.reason && (
+                                                    <div className="mb-6">
+                                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2 text-primary/40">
+                                                            Core Structural Logic
+                                                        </RichParagraph>
+                                                        <RichParagraph className="text-sm font-medium px-4 py-3 bg-white border border-primary/10 rounded-md text-primary">
+                                                            ✅ {recommendation.primary_match.reason}
+                                                        </RichParagraph>
+                                                    </div>
+                                                )}
+
+                                                {/* Features Highlight Parsing */}
+                                                <div>
+                                                    <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3 text-primary/40">
+                                                        Fitted Engineering Metrics
+                                                    </RichParagraph>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                        {recommendation.primary_match.key_features?.map((feat, i) => (
+                                                            <div key={i} className="flex items-start gap-2 text-xs text-primary/70">
+                                                                <span className="text-[#ED985F]">—</span>
+                                                                <span>{feat}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* CTA Response Trigger Blocks */}
+                                            <div className="mt-8 pt-6 flex flex-col sm:flex-row items-center gap-3 border-t border-primary/5">
+                                                {recommendation.cta_recommendation === 'Get Quote' ? (
+                                                    <a href={`/quote?van=${recommendation.primary_match.slug}`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 bg-[#ED985F] text-white rounded">
+                                                        Get Custom Quote
+                                                    </a>
+                                                ) : (
+                                                    <a
+                                                        href={`https://wa.me/19514419719?text=${encodeURIComponent(
+                                                            `Hi! I just ran your BBV Matchmaker Engine and mapped out the "${recommendation.primary_match.title}" layout structure. Let's discuss tailoring this setup over a custom spec.`
+                                                        )}`}
+                                                        target="_blank" rel="noreferrer" className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 bg-[#25D366] text-white rounded shadow-md"
+                                                    >
+                                                        💬 WhatsApp BBV Engineer
+                                                    </a>
+                                                )}
+
+                                                {recommendation.primary_match.glbFile && (
+                                                    <a href={`/viewer?model=${recommendation.primary_match.glbFile}`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-6 py-3 bg-primary text-white rounded">
+                                                        👓 Render 3D Interface
+                                                    </a>
+                                                )}
+
+                                                <SecondaryButton label="Retake Quiz" onClick={handleReset} className="ml-auto" />
                                             </div>
                                         </div>
 
-                                        {/* Core CTA Actions Panel */}
-                                        <div
-                                            className="mt-8 pt-6 flex flex-col sm:flex-row items-center gap-3"
-                                            style={{ borderTop: '1px solid rgba(0,31,61,0.08)' }}
-                                        >
-                                            {recommendation.cta_recommendation === 'Get Quote' ? (
-                                                <a
-                                                    href={`/quote?van=${recommendation.primary_match.slug}`}
-                                                    className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 transition-all"
-                                                    style={{ borderRadius: '6px', backgroundColor: '#ED985F', color: '#fff' }}
-                                                >
-                                                    Get Custom Quote
-                                                </a>
-                                            ) : (
-                                                <a
-                                                    href={`https://wa.me/19514419719?text=${encodeURIComponent(
-                                                        `Hi! I matched "${recommendation.primary_match.title}" via Van Quiz configuration. I want to discuss this blueprint layout design with an engineer.`
-                                                    )}`}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 transition-all"
-                                                    style={{ borderRadius: '6px', backgroundColor: '#25D366', color: '#fff' }}
-                                                >
-                                                    💬 WhatsApp Us
-                                                </a>
-                                            )}
-
-                                            {recommendation.primary_match.glbFile && (
-                                                <a
-                                                    href={`/viewer?model=${recommendation.primary_match.glbFile}`}
-                                                    className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-6 py-3 transition-all"
-                                                    style={{ borderRadius: '6px', backgroundColor: '#001F3D', color: '#FBFBF9' }}
-                                                >
-                                                    👓 View 3D Model
-                                                </a>
-                                            )}
-
-                                            <SecondaryButton
-                                                label="Retake Quiz"
-                                                onClick={handleReset}
-                                                className="ml-auto"
-                                            />
-                                        </div>
                                     </div>
                                 </div>
                             )
                         )}
 
-                        {/* ALTERNATIVES LAYOUT RENDER COMPONENT */}
+                        {/* ALTERNATIVES COMPONENT CARDS */}
                         {recommendation.alternatives && recommendation.alternatives.length > 0 && !recommendation.no_match_found && (
                             <div>
-                                <RichParagraph className="text-xs font-bold tracking-widests uppercase mb-4 flex items-center gap-2" inlineStyle={{ color: 'rgba(0,31,61,0.5)' }}>
-                                    <span style={{ color: '#ED985F' }}>—</span> Alternative Layout Solutions
+                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2 text-primary/50">
+                                    <span className="text-[#ED985F]">—</span> Additional Build Solutions
                                 </RichParagraph>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {recommendation.alternatives.map((alt, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center justify-between p-5 transition-all hover:shadow-md"
-                                            style={{ borderRadius: '6px', border: '1px solid rgba(0,31,61,0.1)', backgroundColor: '#FBFBF9' }}
-                                        >
+                                        <div key={idx} className="flex items-center justify-between p-5 bg-[#FBFBF9] border border-primary/10 rounded-lg transition-all hover:shadow-md">
                                             <div>
-                                                <span
-                                                    className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 mb-1.5 inline-block"
-                                                    style={{ borderRadius: '3px', backgroundColor: 'rgba(0,31,61,0.07)', color: 'rgba(0,31,61,0.5)' }}
-                                                >
-                                                    {alt.type === 'inventory' ? 'Inventory Asset' : 'Custom Blueprint'} Setup
+                                                <span className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 mb-1.5 inline-block bg-primary/5 text-primary/60 rounded">
+                                                    {alt.type === 'inventory' ? 'Inventory Model' : 'Blueprint Design'}
                                                 </span>
-                                                <h6 className="font-black text-sm" style={{ color: '#001F3D' }}>{alt.title}</h6>
-                                                <WatermarkText text={`Match Score: ${alt.score}`} className="!text-xs mt-0.5 !text-primary/35" />
+                                                <h6 className="font-black text-sm text-primary">{alt.title}</h6>
                                             </div>
-                                            <a
-                                                href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`}
-                                                className="text-xs font-black tracking-wider uppercase px-4 py-2 transition-all flex-shrink-0"
-                                                style={{ borderRadius: '4px', backgroundColor: 'rgba(237,152,95,0.1)', color: '#ED985F', border: '1px solid rgba(237,152,95,0.2)' }}
-                                            >
-                                                View Plan →
+                                            <a href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`} className="text-xs font-black tracking-wider uppercase px-4 py-2 bg-[#ED985F]/10 text-[#ED985F] border border-[#ED985F]/20 rounded transition-all">
+                                                Inspect Layout →
                                             </a>
                                         </div>
                                     ))}
