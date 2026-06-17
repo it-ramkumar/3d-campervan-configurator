@@ -1,299 +1,202 @@
 const Van = require('../models/vanModel');
 const PortfolioVan = require('../models/portfolio');
 
-const BUDGET_RANGES = {
-  low:     { max: 60000 },
-  mid:     { min: 60000,  max: 100000 },
-  high:    { min: 100000, max: 150000 },
-  premium: { min: 150000 }
-};
-
-const USE_CASE_CATEGORIES = {
-  solo:      ['layouts-for-solo-and-couple-travelers', 'flagship-short-van-santa-monica'],
-  couple:    ['layouts-for-solo-and-couple-travelers', 'flagship-short-van-santa-monica'],
-  family:    ['layouts-for-families-3-9-people', 'flagship-long-van-montreal'],
-  business:  ['flagship-long-van-montreal', 'portfolio-of-custom-builds'],
-  adventure: ['sugarloaf', 'portfolio-of-custom-builds']
-};
-
-const STYLE_CATEGORIES = {
-  rugged:    ['sugarloaf'],
-  adventure: ['sugarloaf'],
-  luxury:    ['amsterdam', 'flagship-long-van-montreal'],
-  minimal:   ['layouts-for-solo-and-couple-travelers'],
-  mixed:     ['portfolio-of-custom-builds']
-};
-
+// Keyword index definitions mapping infrastructure keywords to database description vectors
 const STYLE_KEYWORDS = {
-  luxury:    ['leather', 'premium', 'luxury', 'heated floor', 'marble', 'quartz', 'high-end'],
-  rugged:    ['off-grid', '4x4', 'awd', 'roof rack', 'skid plate', 'all terrain'],
-  minimal:   ['compact', 'minimal', 'efficient', 'lightweight'],
-  mixed:     ['solar', 'kitchen', 'storage', 'versatile']
+  luxury:    ['leather', 'premium', 'luxury', 'heated floor', 'marble', 'quartz', 'high-end', 'alcantara'],
+  rugged:    ['off-grid', '4x4', 'awd', 'roof rack', 'skid plate', 'all terrain', 'winch', 'safari'],
+  minimal:   ['compact', 'minimal', 'efficient', 'lightweight', 'clean line', 'stowaway']
 };
 
 const PRIORITY_KEYWORDS = {
-  comfort:   ['heated', 'climate', 'air conditioning', 'memory foam', 'leather seat', 'sound system'],
-  adventure: ['solar', 'battery', 'off-grid', 'water tank', 'generator', 'roof rack'],
-  space:     ['storage', 'garage', 'closet', 'wardrobe', 'organization', 'cabinet'],
-  price:     []
+  comfort:   ['heated', 'climate', 'air conditioning', 'memory foam', 'leather seat', 'sound system', 'boondocker'],
+  adventure: ['solar', 'battery', 'off-grid', 'water tank', 'generator', 'roof rack', 'lithium'],
+  space:     ['storage', 'garage', 'closet', 'wardrobe', 'organization', 'cabinet', 'moto-garage']
 };
 
-function hasBathroomInFeatures(detailed_features = []) {
+function determineBathroomVariant(detailed_features = [], blueprintType = '') {
   const text = detailed_features.flatMap(f => f.items || []).join(' ').toLowerCase();
-  return (
-    text.includes('bathroom') ||
-    text.includes('toilet') ||
-    text.includes('shower') ||
-    text.includes('wet bath') ||
-    text.includes('dry bath') ||
-    text.includes('cassette')
-  );
-}
 
-function priceToNumber(price) {
-  if (!price && price !== 0) return null;
-  if (typeof price === 'number') return price;
-  const n = parseFloat(String(price).replace(/[^0-9.]/g, ''));
-  return isNaN(n) ? null : n;
-}
+  if (blueprintType) return blueprintType; // Fallback mapping hook if explicitly recorded in schema
+  if (text.includes('aluminum')) return 'full_aluminum';
+  if (text.includes('acrylic')) return 'full_acrylic';
+  if (text.includes('tile')) return 'full_real_tile';
+  if (text.includes('rear shower')) return 'rear_shower';
+  if (text.includes('bench')) return 'shower_in_a_bench';
+  if (text.includes('folding')) return 'folding_shower';
+  if (text.includes('rear bathroom')) return 'rear_bathroom';
 
-function budgetFits(price, budget) {
-  if (!price) return false;
-  const range = BUDGET_RANGES[budget];
-  if (!range) return false;
-  if (range.min !== undefined && price < range.min) return false;
-  if (range.max !== undefined && price > range.max) return false;
-  return true;
-}
-
-function inferInventoryCategory(sits, sleeps, detailed_features = []) {
-  const text = detailed_features.flatMap(f => f.items || []).join(' ').toLowerCase();
-  if (sits >= 5 || sleeps >= 4) return ['layouts-for-families-3-9-people'];
-  if (text.includes('4x4') || text.includes('off-road') || text.includes('awd')) return ['sugarloaf'];
-  if (sits <= 2 && sleeps <= 2) return ['layouts-for-solo-and-couple-travelers'];
-  return ['portfolio-of-custom-builds'];
+  return text.includes('shower') || text.includes('bath') ? 'full_acrylic' : '';
 }
 
 function normalizeInventoryVan(van) {
   const specs = van.van_listing?.specifications;
-  const sits  = parseInt(specs?.capacity?.sits)   || 0;
-  const sleeps = parseInt(specs?.capacity?.sleeps) || 0;
-  const hasBathroom = hasBathroomInFeatures(van.detailed_features);
-  const price = priceToNumber(van.van_listing?.price);
+  const sits  = parseInt(specs?.capacity?.sits) || 0;
   const allFeatures = (van.detailed_features || []).flatMap(f => f.items || []);
+  const bathVariant = determineBathroomVariant(van.detailed_features, van.van_listing?.bathroomType);
 
   return {
     _id:      van._id,
-    title:    van.van_listing?.title || 'Untitled',
+    title:    van.van_listing?.title || 'Untitled Build Asset',
     slug:     van.slug,
     type:     'inventory',
-    category: inferInventoryCategory(sits, sleeps, van.detailed_features),
     seats:    sits,
-    sleeps,
-    bathroom: hasBathroom,
-    price,
+    bathroom: bathVariant !== '',
+    bathroom_type: bathVariant,
     features: allFeatures,
     images:   van.gallery || [],
-    status:   van.status,
-    glbFile:  van.glbFile || null
+    status:   van.status || 'Available',
+    glbFile:  van.glbFile || null,
+    chassis:  van.van_listing?.chassisType?.toLowerCase() || ''
   };
 }
 
 function normalizePortfolioVan(van) {
-  const specs       = van.van_listing?.specifications;
-  const sits        = parseInt(specs?.capacity?.sits)   || 0;
-  const sleeps      = parseInt(specs?.capacity?.sleeps) || 0;
-  const bathroomType = van.van_listing?.bathroomType || '';
-  const hasBathroom = !!(
-    bathroomType &&
-    bathroomType.toLowerCase() !== 'none' &&
-    bathroomType.toLowerCase() !== 'no bathroom' &&
-    bathroomType.trim() !== ''
-  );
-  const price = priceToNumber(van.van_listing?.price);
+  const specs = van.van_listing?.specifications;
+  const sits  = parseInt(specs?.capacity?.sits) || 0;
   const allFeatures = (van.detailed_features || []).flatMap(f => f.items || []);
+  const bathVariant = determineBathroomVariant(van.detailed_features, van.van_listing?.bathroomType);
 
   return {
     _id:      van._id,
-    title:    van.van_listing?.title || 'Untitled',
+    title:    van.van_listing?.title || 'Custom Portfolio Layout',
     slug:     van.slug,
     type:     'portfolio',
-    category: van.category || [],
     seats:    sits,
-    sleeps,
-    bathroom: hasBathroom,
-    price,
+    bathroom: bathVariant !== '',
+    bathroom_type: bathVariant,
     features: allFeatures,
     images:   [...(van.rendering || []), ...(van.gallery || [])],
-    status:   van.sold ? 'sold' : 'available',
-    glbFile:  null
+    status:   van.sold ? 'Built Variant' : 'Blueprint Reference',
+    glbFile:  null,
+    chassis:  van.van_listing?.chassisType?.toLowerCase() || ''
   };
 }
 
 function scoreVan(van, userInput) {
-  const {
-    use_case,
-    seats_required  = 2,
-    sleeps_required = 2,
-    bathroom_required = false,
-    budget,
-    style,
-    priority
-  } = userInput;
+  // Hard Filter 1: Strict Bathroom Requirement Enforcement
+  if (userInput.bathroom_required && !van.bathroom) return -100;
 
-  // Hard Filter: Agar bathroom zaroori hai aur van me nahi hai, to skip kar dein
-  if (bathroom_required && !van.bathroom) {
-    return -100;
+  // Hard Filter 2: Specific Bathroom Variant Matching
+  if (userInput.bathroom_required && userInput.bathroom_type && van.bathroom_type !== userInput.bathroom_type) {
+    return -50; // De-prioritize if bathroom structure layout doesn't align natively
+  }
+
+  // Hard Filter 3: Platform Chassis mismatch bypass filter
+  if (userInput.vehicle_chassis !== 'no_preference' && van.chassis && !van.chassis.includes(userInput.vehicle_chassis)) {
+    return -30;
   }
 
   let score = 0;
 
-  // Seats (Strict Number Comparison)
+  // Belted Seats Strict Verification Matrix
   const vanSeats = Number(van.seats) || 0;
-  const reqSeats = Number(seats_required) || 2;
-
-  if (vanSeats >= reqSeats) score += 2;
-  else score -= 2;
-
-  // Sleeps (Strict Number Comparison)
-  const vanSleeps = Number(van.sleeps) || 0;
-  const reqSleeps = Number(sleeps_required) || 2;
-
-  if (vanSleeps >= reqSleeps) score += 2;
-
-  // Bathroom (Strictly enforced score boost if matched)
-  if (bathroom_required && van.bathroom) {
-    score += 3;
+  const reqSeats = Number(userInput.seats_required) || 2;
+  if (vanSeats >= reqSeats) {
+    score += 5;
+    if (vanSeats === reqSeats) score += 2; // Perfect seat matching bonus footprint
+  } else {
+    return -100; // Hard fail if physical belt configuration is physically impossible
   }
 
-  // Budget
-  if (van.price && budgetFits(van.price, budget)) score += 2;
+  // Kitchen elements evaluation checklist array parsing
+  if (userInput.kitchen_required && userInput.kitchen_items.length > 0) {
+    const textFeatures = van.features.join(' ').toLowerCase();
+    userInput.kitchen_items.forEach(item => {
+      if (textFeatures.includes(item)) score += 3;
+    });
+  }
 
-  // Use-case category match
-  const vanCats   = Array.isArray(van.category) ? van.category : [van.category];
-  const useCats   = USE_CASE_CATEGORIES[use_case] || [];
-  if (vanCats.some(c => useCats.includes(c))) score += 2;
-
-  // Style category match
-  const styleCats = STYLE_CATEGORIES[style] || [];
-  if (vanCats.some(c => styleCats.includes(c))) score += 2;
-
-  // Feature keyword matching (max +5)
+  // Keyword clustering score compilation
   const keywords = [
-    ...(STYLE_KEYWORDS[style]      || []),
-    ...(PRIORITY_KEYWORDS[priority] || [])
+    ...(STYLE_KEYWORDS[userInput.style] || []),
+    ...(PRIORITY_KEYWORDS[userInput.priority] || [])
   ];
   if (keywords.length > 0) {
     const matched = van.features.filter(f =>
       keywords.some(kw => f.toLowerCase().includes(kw.toLowerCase()))
     );
-    score += Math.min(matched.length, 5);
+    score += Math.min(matched.length, 6);
   }
-
-  // Poptop boost for large sleep needs
-  if (reqSleeps >= 4 && vanCats.includes('poptop')) score += 2;
 
   return score;
 }
 
 function buildReason(van, userInput) {
   const parts = [];
+  parts.push(`Configured with exactly ${van.seats} premium belted locations`);
 
-  const vanSeats = Number(van.seats) || 0;
-  const reqSeats = Number(userInput.seats_required) || 2;
-  const vanSleeps = Number(van.sleeps) || 0;
-  const reqSleeps = Number(userInput.sleeps_required) || 2;
+  if (userInput.bathroom_required && van.bathroom_type) {
+    parts.push(`engineered featuring a custom ${van.bathroom_type.replace(/_/g, ' ')} internal layout`);
+  }
+  if (userInput.kitchen_required && userInput.kitchen_items.length > 0) {
+    parts.push(`integrates specialized galley configuration specs`);
+  }
+  if (van.chassis) {
+    parts.push(`optimized natively for ${van.chassis.toUpperCase()} platforms`);
+  }
 
-  if (vanSeats >= reqSeats)
-    parts.push(`seats ${reqSeats}+ people`);
-  if (vanSleeps >= reqSleeps)
-    parts.push(`sleeps ${reqSleeps}+`);
-  if (userInput.bathroom_required && van.bathroom)
-    parts.push('includes bathroom');
-
-  const vanCats = Array.isArray(van.category) ? van.category : [van.category];
-  const useCats = USE_CASE_CATEGORIES[userInput.use_case] || [];
-  if (vanCats.some(c => useCats.includes(c)))
-    parts.push(`ideal for ${userInput.use_case} travel`);
-
-  if (parts.length === 0) parts.push('closest available match');
-  return parts.join(', ');
+  return parts.join(', ') + '.';
 }
 
 async function getRecommendation(userInput) {
+  // Pull potential candidate datasets matching base constraint profiles from DB
   const [inventoryVans, portfolioVans] = await Promise.all([
-    Van.find({
-      status: { $in: ['available', 'coming_soon'] },
-      'van_listing.specifications.capacity.sits': { $gte: String(userInput.seats_required) }
-    }),
-    PortfolioVan.find({
-      'van_listing.specifications.capacity.sits': { $gte: String(userInput.seats_required) }
-    })
+    Van.find({ status: { $in: ['available', 'coming_soon'] } }),
+    PortfolioVan.find({})
   ]);
 
-  const normInventory  = inventoryVans.map(normalizeInventoryVan);
-  const normPortfolio  = portfolioVans.map(normalizePortfolioVan);
+  const normInventory = inventoryVans.map(normalizeInventoryVan);
+  const normPortfolio = portfolioVans.map(normalizePortfolioVan);
 
+  // Score dataset maps
   const scoredInventory = normInventory
     .map(v => ({ ...v, score: scoreVan(v, userInput) }))
-    .filter(v => v.score >= 0) // Discard ignored hard-filtered vans
+    .filter(v => v.score >= 12) // Minimum confidence score threshold for high-quality standard match
     .sort((a, b) => b.score - a.score);
 
   const scoredPortfolio = normPortfolio
     .map(v => ({ ...v, score: scoreVan(v, userInput) }))
-    .filter(v => v.score >= 0) // Discard ignored hard-filtered vans
+    .filter(v => v.score >= 12)
     .sort((a, b) => b.score - a.score);
 
   const topInv  = scoredInventory[0]  || null;
   const topPort = scoredPortfolio[0]  || null;
 
-  if (!topInv && !topPort) return null;
-
-  let primary;
-  let fallbackUsed = false;
-
-  if (topInv && topInv.score >= 7) {
-    primary = topInv;
-  } else if (topPort) {
-    primary = topPort;
-    fallbackUsed = !topInv || topInv.score < 7;
-  } else {
-    primary = topInv;
+  // TRIGGER DYNAMIC FALLBACK SYSTEM IF NO MATRICES MATCH STRICT THRESHOLDS
+  if (!topInv && !topPort) {
+    return {
+      no_match_found: true,
+      message: "Hamare ready inventory templates me is waqt koi exact baseline layout majood nahi hai jo aapke is custom components configuration matrix se strictly match ho ske. Lekin as high-end custom engineers, hum aapki criteria par blueprint designs fabricate kar sakte hain!",
+      cta_recommendation: 'WhatsApp'
+    };
   }
 
-  // Alternatives: 1-2 from the other dataset + 2nd best of same
+  // Determine top overall match profile
+  let primary = topInv && topInv.score >= topPort?.score ? topInv : (topPort || topInv);
+
   const alternatives = [];
   if (primary.type === 'inventory') {
     if (topPort) alternatives.push(topPort);
-    if (scoredInventory[1]?.score >= 4) alternatives.push(scoredInventory[1]);
+    if (scoredInventory[1]) alternatives.push(scoredInventory[1]);
   } else {
     if (topInv)  alternatives.push(topInv);
-    if (scoredPortfolio[1]?.score >= 4) alternatives.push(scoredPortfolio[1]);
+    if (scoredPortfolio[1]) alternatives.push(scoredPortfolio[1]);
   }
 
-  const profileSummary = [
-    `${userInput.use_case} traveler`,
-    `${userInput.seats_required} seats`,
-    `${userInput.sleeps_required} sleeping spots`,
-    userInput.bathroom_required ? 'bathroom required' : 'no bathroom needed',
-    `${userInput.budget} budget`,
-    `${userInput.style} style`
-  ].join(', ');
-
   return {
+    no_match_found: false,
     primary_match: {
       title:        primary.title,
       type:         primary.type,
-      category:     Array.isArray(primary.category) ? primary.category[0] : primary.category,
       slug:         primary.slug,
       score:        primary.score,
       reason:       buildReason(primary, userInput),
       images:       primary.images.slice(0, 3),
       key_features: primary.features.slice(0, 6),
-      price:        primary.price,
       seats:        primary.seats,
-      sleeps:       primary.sleeps,
       bathroom:     primary.bathroom,
+      bathroom_type: primary.bathroom_type,
       status:       primary.status,
       glbFile:      primary.glbFile
     },
@@ -303,9 +206,7 @@ async function getRecommendation(userInput) {
       slug:  v.slug,
       score: v.score
     })),
-    fallback_used:        fallbackUsed,
-    user_profile_summary: profileSummary,
-    cta_recommendation:   primary.type === 'inventory' ? 'Get Quote' : 'WhatsApp'
+    cta_recommendation: primary.type === 'inventory' ? 'Get Quote' : 'WhatsApp'
   };
 }
 

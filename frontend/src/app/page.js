@@ -122,7 +122,7 @@ export default async function Home() {
             <div className="max-w-7xl mx-auto">
               <div className="text-center px-4 mb-8">
                 <span className="text-orange-500 font-bold uppercase tracking-wider text-xs md:text-sm bg-orange-50 px-3 py-1 rounded-full">
-                  AI Recommendation Engine
+                  BBV Matchmaker Engine
                 </span>
                 <Heading2 text="Match Your Vibe with a Layout"/>
                 {/* <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 mt-3">
