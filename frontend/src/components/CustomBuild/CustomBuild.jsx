@@ -203,9 +203,9 @@ const CustomBuild = () => {
                 <SecondaryButton link="/configurator" label={"Try 3D Configurator"} />
 
               </div>
-              <div className="aspect-[8/5]">
+              <div className="aspect-[8/4] rounded-3xl">
 
-                <ImageWithSkeleton src={`${imgPath}configurator.webp`} alt="Configurator" />
+                <ImageWithSkeleton src={`${imgPath}configurator.webp`} alt="Configurator"  />
               </div>
             </div>
           </div>

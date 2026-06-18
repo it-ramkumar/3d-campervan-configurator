@@ -2,15 +2,15 @@ const Van = require('../models/vanModel');
 const PortfolioVan = require('../models/portfolio');
 
 const STYLE_KEYWORDS = {
-  luxury:    ['leather', 'premium', 'luxury', 'heated floor', 'marble', 'quartz', 'high-end'],
-  rugged:    ['off-grid', '4x4', 'awd', 'roof rack', 'skid plate', 'all terrain', 'safari'],
-  minimal:   ['compact', 'minimal', 'efficient', 'lightweight', 'clean line']
+  luxury: ['leather', 'premium', 'luxury', 'heated floor', 'marble', 'quartz', 'high-end'],
+  rugged: ['off-grid', '4x4', 'awd', 'roof rack', 'skid plate', 'all terrain', 'safari'],
+  minimal: ['compact', 'minimal', 'efficient', 'lightweight', 'clean line']
 };
 
 const PRIORITY_KEYWORDS = {
-  comfort:   ['heated', 'climate', 'air conditioning', 'memory foam', 'leather seat', 'sound system'],
+  comfort: ['heated', 'climate', 'air conditioning', 'memory foam', 'leather seat', 'sound system'],
   adventure: ['solar', 'battery', 'off-grid', 'water tank', 'generator', 'roof rack'],
-  space:     ['storage', 'garage', 'closet', 'wardrobe', 'organization', 'cabinet']
+  space: ['storage', 'garage', 'closet', 'wardrobe', 'organization', 'cabinet']
 };
 
 function determineBathroomVariant(detailed_features = [], blueprintType = '') {
@@ -43,25 +43,25 @@ function parseWheelbase(van) {
 
 function normalizeVanAsset(van, type) {
   const specs = van.van_listing?.specifications;
-  const sits  = parseInt(specs?.capacity?.sits) || 0;
+  const sits = parseInt(specs?.capacity?.sits) || 0;
   const allFeatures = (van.detailed_features || []).flatMap(f => f.items || []);
   const bathVariant = determineBathroomVariant(van.detailed_features, van.van_listing?.bathroomType);
   const wb = parseWheelbase(van);
 
   return {
-    _id:      van._id,
-    title:    van.van_listing?.title || 'BBV Custom Concept',
-    slug:     van.slug,
-    type:     type,
-    seats:    sits,
+    _id: van._id,
+    title: van.van_listing?.title || 'BBV Custom Concept',
+    slug: van.slug,
+    type: type,
+    seats: sits,
     bathroom: bathVariant !== '',
     bathroom_type: bathVariant,
     wheelbase: wb,
     features: allFeatures,
-    images:   type === 'inventory' ? (van.gallery || []) : [...(van.rendering || []), ...(van.gallery || [])],
-    status:   type === 'inventory' ? (van.status || 'Available') : (van.sold ? 'Built Variant' : 'Blueprint Reference'),
-    glbFile:  type === 'inventory' ? (van.glbFile || null) : null,
-    chassis:  van.van_listing?.chassisType?.toLowerCase() || ''
+    images: type === 'inventory' ? (van.gallery || []) : [...(van.rendering || []), ...(van.gallery || [])],
+    status: type === 'inventory' ? (van.status || 'Available') : (van.sold ? 'Built Variant' : 'Blueprint Reference'),
+    glbFile: type === 'inventory' ? (van.glbFile || null) : null,
+    chassis: van.van_listing?.chassisType?.toLowerCase() || ''
   };
 }
 
@@ -127,13 +127,13 @@ async function getRecommendation(userInput) {
     .filter(v => v.score > 0)
     .sort((a, b) => b.score - a.score);
 
-  const topInv  = scoredInventory[0]  || null;
-  const topPort = scoredPortfolio[0]  || null;
+  const topInv = scoredInventory[0] || null;
+  const topPort = scoredPortfolio[0] || null;
 
   if (!topInv && !topPort) {
     return {
       no_match_found: true,
-message: "No layout matching this seat requirement was found in our existing blueprint specs. The BBV custom design team can create a new map architecture tailored to your specification limits.",      cta_recommendation: 'WhatsApp'
+      message: "No layout matching this seat requirement was found in our existing blueprint specs. The BBV custom design team can create a new map architecture tailored to your specification limits.", cta_recommendation: 'WhatsApp'
     };
   }
 
@@ -151,7 +151,8 @@ message: "No layout matching this seat requirement was found in our existing blu
   // Check if selected wheelbase matrix mismatch occurred
   if (userInput.wheelbase !== 'no_preference' && primary.wheelbase !== userInput.wheelbase) {
     wbAlert = true;
-contextNotes.push(`You selected the ${userInput.wheelbase}" Wheelbase, but we previously executed this layout design on a ${primary.wheelbase}" wheelbase platform. However, it can easily be tailor-made for your preferred ${userInput.wheelbase}" length structure!`);  } else if (primary.wheelbase) {
+    contextNotes.push(`You selected the ${userInput.wheelbase}" Wheelbase, but we previously executed this layout design on a ${primary.wheelbase}" wheelbase platform. However, it can easily be tailor-made for your preferred ${userInput.wheelbase}" length structure!`);
+  } else if (primary.wheelbase) {
     contextNotes.push(`This layout is engineered cleanly natively over a ${primary.wheelbase}" length platform structure.`);
   }
 
@@ -159,9 +160,10 @@ contextNotes.push(`You selected the ${userInput.wheelbase}" Wheelbase, but we pr
   if (userInput.bathroom_required) {
     if (!primary.bathroom) {
       bathAlert = true;
-contextNotes.push(`In this physical template core structure, we haven't displayed the bathroom, but your selected "${userInput.bathroom_type.replace(/_/g, ' ')}" module can be deployed in the custom add-on integration zone.`);    } else if (userInput.bathroom_type && primary.bathroom_type !== userInput.bathroom_type) {
+      contextNotes.push(`In this physical template core structure, we haven't displayed the bathroom, but your selected "${userInput.bathroom_type.replace(/_/g, ' ')}" module can be deployed in the custom add-on integration zone.`);
+    } else if (userInput.bathroom_type && primary.bathroom_type !== userInput.bathroom_type) {
       bathAlert = true;
-      contextNotes.push(`Aapne "${userInput.bathroom_type.replace(/_/g, ' ')}" bathroom option select kiya hai, humne pehle is build template me "${primary.bathroom_type.replace(/_/g, ' ')}" space install kiya tha. Lekin agar aap chahain to custom building k waqt aapka preferred model fix kiya ja sakta hai.`);
+      contextNotes.push(`You have selected the "${userInput.bathroom_type.replace(/_/g, ' ')}" bathroom option; we had previously installed the "${primary.bathroom_type.replace(/_/g, ' ')}" space in this build template. However, if you prefer, your preferred model can be fixed during custom building.`);
     }
   }
 
@@ -170,35 +172,35 @@ contextNotes.push(`In this physical template core structure, we haven't displaye
     if (topPort) alternatives.push(topPort);
     if (scoredInventory[1]) alternatives.push(scoredInventory[1]);
   } else {
-    if (topInv)  alternatives.push(topInv);
+    if (topInv) alternatives.push(topInv);
     if (scoredPortfolio[1]) alternatives.push(scoredPortfolio[1]);
   }
 
   return {
     no_match_found: false,
     primary_match: {
-      title:         primary.title,
-      type:          primary.type,
-      slug:          primary.slug,
-      score:         primary.score,
-      images:        primary.images.slice(0, 3),
-      key_features:  primary.features.slice(0, 6),
-      seats:         primary.seats,
-      wheelbase:     primary.wheelbase,
+      title: primary.title,
+      type: primary.type,
+      slug: primary.slug,
+      score: primary.score,
+      images: primary.images.slice(0, 3),
+      key_features: primary.features.slice(0, 6),
+      seats: primary.seats,
+      wheelbase: primary.wheelbase,
       bathroom_type: primary.bathroom_type,
-      status:        primary.status,
-      glbFile:       primary.glbFile
+      status: primary.status,
+      glbFile: primary.glbFile
     },
     suggestions: {
       wheelbase_mismatch_alert: wbAlert,
-      bathroom_mismatch_alert:  bathAlert,
-      educational_logs:         contextNotes,
-      compiled_pitch:           contextNotes.join(' ')
+      bathroom_mismatch_alert: bathAlert,
+      educational_logs: contextNotes,
+      compiled_pitch: contextNotes.join(' ')
     },
     alternatives: alternatives.slice(0, 2).map(v => ({
       title: v.title,
-      type:  v.type,
-      slug:  v.slug
+      type: v.type,
+      slug: v.slug
     })),
     cta_recommendation: primary.type === 'inventory' ? 'Get Quote' : 'WhatsApp'
   };
