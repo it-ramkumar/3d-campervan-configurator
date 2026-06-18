@@ -1,26 +1,43 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllConfiguratorData } from '@/api/model/modelAll';
-import { setEditData,clearEditData } from '@/redux/slices/editData';
 import { Plus, Pencil, Trash2, Box, Layers, Search, Filter } from 'lucide-react'
 import DetailModal from './Detail'
 
-export default function ConfiguratorListing({ setSelected }) {
-    const dispatch = useDispatch()
-    const modelAll = useSelector((state) => state.models.modelAll || {})
-    const models = modelAll?.data?.data || []
+// 1. Yahan props me 'setEditData' ko receive kiya hai
+export default function ConfiguratorListing({ setSelected, setEditData }) {
+    // Local State for data management
+    const [models, setModels] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Search aur Filter States
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
-      const [selectedItem, setSelectedItem] = useState(null); // Add this
-  const [openModal, setOpenModal] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [openModal, setOpenModal] = useState(false);
+
+    // Simple Data Fetch Function
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/models/all`, {
+                method: "GET",
+                credentials: "include"
+            });
+            const result = await res.json();
+
+            const fetchedModels = result?.data?.data || result?.data || [];
+            setModels(fetchedModels);
+        } catch (err) {
+            console.error("Data fetching failed:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        dispatch(fetchAllConfiguratorData())
-    }, [dispatch])
+        fetchData();
+    }, []);
 
     // Filter Logic
     const filteredModels = useMemo(() => {
@@ -32,7 +49,7 @@ export default function ConfiguratorListing({ setSelected }) {
         });
     }, [models, searchQuery, activeCategory]);
 
-    // Unique categories nikalne ke liye (for the filter tabs)
+    // Unique categories nikalne ke liye
     const categories = ["All", ...new Set(models.map(m => m.category).filter(Boolean))];
 
     const deletePro = async (id, label, category) => {
@@ -47,18 +64,12 @@ export default function ConfiguratorListing({ setSelected }) {
             });
             const result = await res.json();
             if (result.success) {
-                dispatch(fetchAllConfiguratorData());
+                fetchData();
             }
         } catch (err) {
             console.error("Delete failed:", err);
         }
     };
-
-
-//   const handleView = (item) => {
-//     setSelectedItem(item); // Store the clicked item
-//     setOpenModal(true);    // Open the modal
-//   };
 
     return (
         <div className="p-8 bg-[#f8fafc] min-h-screen">
@@ -89,7 +100,8 @@ export default function ConfiguratorListing({ setSelected }) {
                     <button
                         onClick={() => {
                             setSelected("Configurator-form")
-                            dispatch(clearEditData())
+                            // 2. New model banate waqt agar setEditData prop pass hua hai to use clear (null) kar do
+                            if (setEditData) setEditData(null);
                         }}
                         className="bg-slate-900 text-white px-5 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-slate-200 flex items-center gap-2"
                     >
@@ -117,7 +129,11 @@ export default function ConfiguratorListing({ setSelected }) {
             </div>
 
             {/* Grid Content */}
-            {filteredModels.length === 0 ? (
+            {loading ? (
+                <div className="text-center p-20">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Loading Assets...</p>
+                </div>
+            ) : filteredModels.length === 0 ? (
                 <div className="bg-white rounded-[2.5rem] border border-slate-200 p-20 text-center">
                     <Box size={32} className="mx-auto text-slate-200 mb-3" />
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No matching results</p>
@@ -127,7 +143,6 @@ export default function ConfiguratorListing({ setSelected }) {
                     {filteredModels.map((item) => (
                         <div
                             key={item._id}
-                            // onClick={() => handleView(item)}
                             className="bg-white border border-slate-200 p-6 rounded-[2.5rem] hover:shadow-2xl hover:shadow-slate-200/50 transition-all group relative overflow-hidden"
                         >
                             <div className="flex justify-between items-start mb-6">
@@ -154,8 +169,9 @@ export default function ConfiguratorListing({ setSelected }) {
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => {
-                                        dispatch(setEditData(item))
-                                        setSelected("Configurator-form")
+                                        // 3. Redux dispatcher ki jagah prop function me pure item ka data bhej diya
+                                        if (setEditData) setEditData(item);
+                                        setSelected("Configurator-form");
                                     }}
                                     className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 rounded-2xl transition-all text-[9px] font-black uppercase tracking-widest border border-transparent hover:border-blue-100"
                                 >
@@ -171,17 +187,17 @@ export default function ConfiguratorListing({ setSelected }) {
                         </div>
                     ))}
                 </div>
-
             )}
- {openModal && (
-        <DetailModal
-          item={selectedItem}
-          onClose={() => {
-            setOpenModal(false);
-            setSelectedItem(null);
-          }}
-        />
-      )}
+
+            {openModal && (
+                <DetailModal
+                    item={selectedItem}
+                    onClose={() => {
+                        setOpenModal(false);
+                        setSelectedItem(null);
+                    }}
+                />
+            )}
         </div>
     )
 }

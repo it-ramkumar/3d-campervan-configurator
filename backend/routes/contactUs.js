@@ -219,7 +219,7 @@ const userHtml = `
     await transporter.sendMail({
       from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
       to: allAdminEmails,
-      subject: "New Contact Message from Website",
+      subject: `Contact Form Lead from ${name}`,
       html: adminHtml,
     });
 
