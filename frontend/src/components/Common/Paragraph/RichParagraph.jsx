@@ -1,4 +1,3 @@
-// export default RichParagraph;
 import React from "react";
 
 const RichParagraph = ({
@@ -9,14 +8,15 @@ const RichParagraph = ({
   inlineStyle = {},
   onClick
 }) => {
-  const baseStyles = "text-[14px] sm:text-base lg:text-[15px] leading-relaxed tracking-tighter font-body opacity-90";
+  // 1. tracking-tighter hata diya
+  // 2. lg:text-base hata diya kyunki sm:text-base hi agay chalega
+  const baseStyles = "text-sm sm:text-base leading-relaxed font-body opacity-90";
 
-  // Asli Content jo direct render hoga
   if (html) {
     return (
       <div
         className={`${baseStyles} ${textColor} ${className}`}
-        style={{ ...inlineStyle, borderRadius: '8px' }}
+        style={inlineStyle} // borderRadius ki zaroorat p par nahi hoti jab tak bg na ho
         onClick={onClick}
         dangerouslySetInnerHTML={{ __html: html }}
       />
@@ -24,13 +24,14 @@ const RichParagraph = ({
   }
 
   return (
-    <div
+    // Isko div se badal kar p tag kar diya semantic HTML ke liye
+    <p
       className={`${baseStyles} ${textColor} ${className}`}
-      style={{ ...inlineStyle, borderRadius: '8px' }}
+      style={inlineStyle}
       onClick={onClick}
     >
       {children}
-    </div>
+    </p>
   );
 };
 

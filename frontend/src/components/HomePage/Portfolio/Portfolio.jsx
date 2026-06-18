@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton, WatermarkText } from '../../Common/Common'
+import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton, SpanTag } from '../../Common/Common'
 
 const images = [
   { id: 1, src: "/images/p1.webp",   alt: "Overhead view of kitchen",    tag: "Kitchenette"   },
@@ -21,7 +21,7 @@ export default function Portfolio() {
 
       {/* Tag — always visible, turns orange on hover */}
       <div className="absolute bottom-4 left-4">
-        <WatermarkText text={img.tag} className="uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg shadow-lg bg-secondary/90 text-primary group-hover:bg-hover group-hover:text-white transition-all duration-300"/>
+        <SpanTag text={img.tag} className="px-4 py-1 rounded-lg shadow-lg bg-secondary/90 text-primary group-hover:bg-hover group-hover:text-white transition-all duration-300"/>
 
 
       </div>
@@ -36,8 +36,7 @@ export default function Portfolio() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-primary/10 pb-10 gap-6">
           <div className="max-w-xl">
             <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-px bg-hover" />
-              <WatermarkText text={"Our Craft"} className=""/>
+              <SpanTag text={"Our Craft"} />
             </div>
             <Heading2
               textColor="text-primary"
@@ -48,7 +47,7 @@ export default function Portfolio() {
             </Heading2>
           </div>
 
-          <RichParagraph className="text-primary/50 text-sm leading-relaxed max-w-xs md:text-right flex-shrink-0">
+          <RichParagraph className="text-primary max-w-xs md:text-right flex-shrink-0">
             Explore the craftsmanship and attention to detail in our best custom van conversions.
           </RichParagraph>
         </div>
@@ -90,7 +89,7 @@ export default function Portfolio() {
             link="/van-layouts"
             className="!rounded-lg !px-12 !py-4 shadow-md hover:-translate-y-1 transition-all"
           />
-          <WatermarkText text={" Updated Weekly • 2026 Collection"} className="mt-5  uppercase tracking-widest text-primary/30"/>
+          <SpanTag text={" Updated Weekly • 2026 Collection"} className="mt-5  uppercase tracking-widest text-primary/30"/>
 
 
         </div>

@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -v \":0$\")"
+      "Bash(grep -v \":0$\")",
+      "Bash(cd /d \"D:\\\\development\\\\3d-campervan-configurator\")",
+      "Bash(Get-ChildItem -Path . -Name -Directory)",
+      "Bash(xargs grep -l -i \"heading\\\\|SectionHeading\\\\|SectionTitle\\\\|HeadingText\")",
+      "PowerShell(Get-ChildItem \"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\\\\\", \"\"\\) })"
     ]
   }
 }

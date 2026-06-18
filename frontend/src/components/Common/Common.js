@@ -11,6 +11,6 @@ export { default as Breadcrumb } from './Breadcrumb/Breadcrumb'
 export { default as RichParagraph } from './Paragraph/RichParagraph'
 export { default as ImageWithSkeleton } from './ImageWithSkeleton/ImageWithSkeleton'
 export { default as HeroParagraph } from './Paragraph/HeroParagraph'
-export { default as WatermarkText } from './Paragraph/WatermarkText'
+export { default as SpanTag } from './Paragraph/SpanTag'
 
 // export { default as Loader } from './Loader/Loader'

@@ -7,7 +7,7 @@ import {
   ImageWithSkeleton,
   SecondaryButton,
   CustomLink,
-  WatermarkText,
+  SpanTag,
 } from "../../Common/Common";
 
 export default function SoldVans({
@@ -27,8 +27,7 @@ export default function SoldVans({
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <span className="w-8 h-[2px] bg-hover opacity-30"></span>
-              <WatermarkText text={"The Archive"} className="uppercase italic"/>
+              <SpanTag text={"The Archive"}/>
 
 
             </div>
@@ -95,7 +94,7 @@ export default function SoldVans({
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--color-primary)]/10">
-                    <WatermarkText text={"Gallery Coming Soon"} className="text-primary opacity-40 "/>
+                    <SpanTag text={"Gallery Coming Soon"} className="text-primary opacity-40 "/>
 
 
                   </div>
@@ -139,7 +138,7 @@ export default function SoldVans({
                     href={`/van-detail/${van.slug}`}
                     text={"Full Specs →"}
                   />
-                  <div className="w-2 h-2 rounded-full bg-[var(--color-highlight)] group-hover:animate-ping" />
+                  <div className="w-2 h-2 rounded-lg  group-hover:animate-ping" />
                 </div>
               </div>
             </div>
@@ -157,7 +156,7 @@ export default function SoldVans({
               loading
                 ? "Opening Vault..."
                 : !hasMore
-                  ? "End of Archive"
+                  ? ""
                   : "Load More Past Builds"
             }
           />

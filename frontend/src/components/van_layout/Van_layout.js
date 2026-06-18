@@ -103,7 +103,7 @@ const filterConfig = [
   { label: "Seating", key: "sit", options: filterOptions(filters?.sits) },
   // { label: "Sleeping", key: "sleep", options: filterOptions(filters?.sleeps) },
   // { label: "Bed Setup", key: "bedType", options: filterOptions(filters?.bedType) },
-  // { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
+  { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
 ];
 
   return (

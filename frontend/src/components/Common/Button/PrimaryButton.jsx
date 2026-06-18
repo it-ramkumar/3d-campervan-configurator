@@ -11,15 +11,16 @@ export default function PrimaryButton({
   type,
   ariaLabel
 }) {
-  // Base classes using theme variables
-const baseClasses = `
+  // 1. Font size ko text-xs (12px) se sm (14px) kiya readability ke liye
+  // 2. Mobile padding wahi rakhi par md screen par thoda expand kiya
+  const baseClasses = `
     inline-flex items-center justify-center
-    text-secondary font-bold uppercase tracking-[0.15em]
+    text-secondary font-bold uppercase tracking-[0.12em]
     !rounded-lg transition-all duration-300 ease-in-out
-    text-[11px] sm:text-[12px]
+    text-xs sm:text-sm
     py-3 px-6 md:py-3.5 md:px-8
   `;
-  // Enabled state using theme variables
+
   const enabledClasses = `
     bg-primary border border-primary
     cursor-pointer
@@ -32,6 +33,7 @@ const baseClasses = `
     cursor-not-allowed opacity-70
   `;
 
+  // className ko aakhir me rakha taake 'w-full' jaisi classes baahar se override ho sakein
   const finalClass = `${baseClasses} ${disabled ? disabledClasses : enabledClasses} ${className}`;
 
   const ButtonContent = () => (
@@ -46,7 +48,8 @@ const baseClasses = `
   );
 
   return link ? (
-    <Link href={link} aria-label={ariaLabel || label} className="inline-block">
+    /* w-full sm:w-auto lagaya taake jab aap baahar se button ko w-full dein to link bhi expand ho */
+    <Link href={link} aria-label={ariaLabel || label} className="inline-block w-full sm:w-auto">
       <ButtonContent />
     </Link>
   ) : (

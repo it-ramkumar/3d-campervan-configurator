@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import { Heading1, HeroParagraph, PrimaryButton, RichParagraph, SecondaryButton,WatermarkText } from "../../Common/Common";
+import { Heading1, HeroParagraph, PrimaryButton, RichParagraph, SecondaryButton, SpanTag } from "../../Common/Common";
 
 import { slides } from "@/DataUseInComp/homeSlider";
 
@@ -41,8 +41,6 @@ export default function Hero() {
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id} className="relative">
             <div className="relative w-full h-full overflow-hidden">
-              {/* Background Images */}
-              {/* Mobile Image */}
               <Image
                 src={
                   slide.mobileImage || slide.image || "/images/blackLogo.webp"
@@ -73,34 +71,42 @@ export default function Hero() {
 
               {/* Overlay */}
               <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/75 via-black/40 to-transparent" />
-
-              {/* Content Container */}
               <div className="relative z-20 h-full flex items-center">
-                <div className="w-full px-6 pt-12 md:pt-0 md:pl-16 md:pr-12 lg:pl-24 lg:pr-20 text-white flex flex-col md:justify-center h-full">
+                {/* md:justify-center ko hata kar default justify-center lagaya taake mobile par bhi vertically center rahe */}
+                <div className="w-full px-5 text-white flex flex-col justify-center h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
+
                   {/* Slogan */}
-                  <WatermarkText text= {slide.slogan || "You Dream It. We Build It."}/>
+                  <div className="ml-2">
+                    <SpanTag text={slide.slogan || "You Dream It. We Build It."} />
+                  </div>
+
                   {/* Title (stacked lines) */}
-                  <Heading1
-                    textColor="text-white"
-                  >
+                  <Heading1 textColor="text-white">
                     <span className="text-white block">{slide.title}</span>
                     <span className="text-hover block">{slide.titleColored}</span>
                   </Heading1>
 
                   {/* Divider Line */}
-                  <div className="w-8 sm:w-12 h-[2px] sm:h-[3px] bg-hover rounded-full mb-4 animate-fade-up delay-200" />
+                  <div className="w-12 h-[3px] bg-hover rounded-full my-4 animate-fade-up delay-200" />
 
-                  <HeroParagraph
-                    text={slide.desc}
-                  />
-                  <div className="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto mt-auto md:mt-6 mb-20 md:mb-0 animate-fade-up delay-300">
-<PrimaryButton label={slide.btnText || "Build Your Own"} link={slide.link || "/inquiry"} className="bg-secondary !text-primary"/>
-<SecondaryButton
-          label={<><Sparkles size={14} className="animate-pulse mr-2 " />Van Matchmaker Quiz</>}
-          onClick={scrollToQuiz}
-          className="!bg-hover text-secondary"
-        />
+                  {/* Description */}
+                  <HeroParagraph text={slide.desc} />
+
+                  {/* Buttons Container: Mobile par tight margins, mt-auto hata diya */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-6 md:mt-8 animate-fade-up delay-300">
+                    <PrimaryButton
+                      label={slide.btnText}
+                      link={slide.link}
+                      className="w-full sm:w-auto bg-secondary !text-primary"
+                    />
+                    <SecondaryButton
+                      label={<><Sparkles size={14} className="animate-pulse mr-2" />Van Matchmaker Quiz</>}
+                      onClick={scrollToQuiz}
+                      // w-full sm:w-auto lagaya aur text/border ko background ke mutabik match kiya
+                      className="w-full sm:w-auto !bg-hover !text-secondary !border-hover hover:!bg-white hover:!text-black"
+                    />
                   </div>
+
                 </div>
               </div>
             </div>

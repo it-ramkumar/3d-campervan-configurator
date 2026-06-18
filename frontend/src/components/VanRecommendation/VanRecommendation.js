@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useRef } from 'react';
-import { Heading3, RichParagraph, WatermarkText, SecondaryButton } from '../Common/Common';
+import { Heading3, RichParagraph, SpanTag, SecondaryButton } from '../Common/Common';
+import { ShowerHead, Armchair } from "lucide-react"
 
 const OPTIONS = {
     use_case: [
@@ -117,19 +118,19 @@ export default function VanRecommendation() {
     };
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-4 py-12" style={{ fontFamily: 'var(--font-heading)' }}>
+        <div className="w-full max-w-6xl mx-auto md:px-4 py-12" style={{ fontFamily: 'var(--font-heading)' }}>
 
             {/* ===== FORM CARD ===== */}
             <div className="overflow-hidden shadow-2xl mb-12 bg-primary rounded-lg">
 
                 {/* Header Strip */}
-                <div className="px-8 pt-8 pb-6 border-b">
+                <div className="px-4 pt-8 pb-6 border-b">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <WatermarkText text="BBV Matchmaker Engine" className="mb-1" />
+                            <SpanTag text="BBV Matchmaker Engine" className="mb-1" />
                             <Heading3 text='Find Your Perfect Build' className='text-secondary' />
                         </div>
-                        <WatermarkText text={`${currentStep} / ${totalSteps}`} />
+                        <SpanTag text={`${currentStep} / ${totalSteps}`} />
                     </div>
 
                     {/* Step indicators */}
@@ -142,17 +143,17 @@ export default function VanRecommendation() {
                                 <React.Fragment key={step}>
                                     <div className="flex flex-col items-center">
                                         <div
-                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-all duration-300
+                                            className={`w-6 h-6 rounded-full flex items-center justify-center  font-black transition-all duration-300
                                                 ${isActive
-                                                    ? 'bg-[#ED985F] text-white scale-110 shadow-md shadow-[#ED985F]/20'
+                                                    ? 'bg-[#ED985F] text-secondary scale-110 shadow-md shadow-[#ED985F]/20'
                                                     : isDone
                                                         ? 'bg-[#ED985F]/30 text-[#ED985F]'
-                                                        : 'bg-white/5 text-white/30'
+                                                        : 'bg-secondary/5 text-secondary/30'
                                                 }`}
                                         >
                                             {isDone ? '✓' : step}
                                         </div>
-                                        <WatermarkText
+                                        <SpanTag
                                             text={label}
                                             className={`!text-[12px] mt-1 hidden md:block transition-colors duration-300
                                                 ${isActive ? 'text-hover' : 'text-secondary/30'}`}
@@ -161,7 +162,7 @@ export default function VanRecommendation() {
                                     {i < STEP_LABELS.length - 1 && (
                                         <div
                                             className={`flex-1 h-px mb-3 transition-colors duration-300
-                                                ${isDone ? 'bg-[#ED985F]/40' : 'bg-white/5'}`}
+                                                ${isDone ? 'bg-[#ED985F]/40' : 'bg-secondary/5'}`}
                                         />
                                     )}
                                 </React.Fragment>
@@ -179,7 +180,7 @@ export default function VanRecommendation() {
                 </div>
 
                 {/* Form body */}
-                <form onSubmit={handleSubmit} className="px-8 py-8">
+                <form onSubmit={handleSubmit} className="px-4 py-8">
                     <div className="min-h-[260px] flex flex-col justify-between">
 
                         {/* STEP 1: TRAVEL VIBE */}
@@ -203,10 +204,12 @@ export default function VanRecommendation() {
                                                     backgroundColor: active ? 'rgba(237,152,95,0.12)' : 'rgba(255,255,255,0.03)',
                                                 }}
                                             >
-                                                <span className="text-3xl">{opt.icon}</span>
-                                                <div>
-                                                    <WatermarkText text={opt.label} className={`!text-sm font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                    <WatermarkText text={opt.desc} className="!text-xs !text-white/30 mt-1" />
+                                                <SpanTag
+                                                    text={opt.icon}
+                                                    className="!text-3xl font-normal !text-primary"
+                                                />                                                <div>
+                                                    <SpanTag text={opt.label} className={`!text-sm font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                    <SpanTag text={opt.desc} className="! !text-secondary/30 mt-1" />
                                                 </div>
                                             </button>
                                         );
@@ -218,15 +221,15 @@ export default function VanRecommendation() {
                         {/* STEP 2: SEATING CAPACITY */}
                         {currentStep === 2 && (
                             <div className="max-w-md mx-auto text-center w-full">
-                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-6" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                <RichParagraph className=" font-bold tracking-widest uppercase mb-6" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                     How many belted seats do you strictly require?
                                 </RichParagraph>
                                 <div
-                                    className="flex items-center justify-between p-6 bg-white/5 border border-white/10 rounded-lg max-w-sm mx-auto"
+                                    className="flex items-center justify-between p-6 bg-secondary/5 border border-secondary/10 rounded-lg max-w-sm mx-auto"
                                 >
                                     <div className="text-left">
-                                        <WatermarkText text="Seats Required" className="!text-secondary font-black text-sm tracking-wide" />
-                                        <WatermarkText text="Number of seatbelts needed" className="!text-white/35 text-xs" />
+                                        <SpanTag text="Seats Required" className="!text-secondary font-black text-sm tracking-wide" />
+                                        <SpanTag text="Number of seatbelts needed" className="!text-secondary/35 " />
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <button
@@ -235,8 +238,11 @@ export default function VanRecommendation() {
                                             className="w-10 h-10 flex items-center justify-center font-black text-base transition-all"
                                             style={{ borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)', color: '#FBFBF9' }}
                                         >−</button>
-                                        <span className="text-2xl font-black w-6 text-center" style={{ color: '#ED985F' }}>{formData.seats_required}</span>
-                                        <button
+                                        <SpanTag
+                                            text={formData.seats_required}
+                                            className="!text-2xl font-black w-6 text-center"
+                                            inlineStyle={{ color: 'var(--color-hover)' }}
+                                        />                                        <button
                                             type="button"
                                             onClick={() => handleCounter('seats_required', 'inc')}
                                             className="w-10 h-10 flex items-center justify-center font-black text-base transition-all"
@@ -251,7 +257,7 @@ export default function VanRecommendation() {
                         {currentStep === 3 && (
                             <div className="space-y-8 max-w-3xl mx-auto w-full">
                                 <div>
-                                    <RichParagraph className="text-center text-xs font-bold tracking-widest uppercase mb-4" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                    <RichParagraph className="text-center  font-bold tracking-widest uppercase mb-4" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                         Do you need an Indoor Bathroom / Shower Setup?
                                     </RichParagraph>
                                     <div className="flex justify-center gap-4 mb-4">
@@ -264,8 +270,8 @@ export default function VanRecommendation() {
                                                 <button
                                                     key={String(val)}
                                                     type="button"
-                                                    onClick={() => { handleInputChange('bathroom_required', val); if(!val) handleInputChange('bathroom_type', ''); }}
-                                                    className="px-6 py-3 font-black text-xs uppercase tracking-wider border rounded-md transition-all w-40"
+                                                    onClick={() => { handleInputChange('bathroom_required', val); if (!val) handleInputChange('bathroom_type', ''); }}
+                                                    className="px-6 py-3 font-black  uppercase tracking-wider border rounded-md transition-all w-40"
                                                     style={{
                                                         border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.1)',
                                                         backgroundColor: active ? 'rgba(237,152,95,0.15)' : 'rgba(255,255,255,0.03)',
@@ -293,8 +299,8 @@ export default function VanRecommendation() {
                                                             backgroundColor: active ? 'rgba(237,152,95,0.08)' : 'transparent',
                                                         }}
                                                     >
-                                                        <WatermarkText text={type.label} className={`!text-xs font-black ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <WatermarkText text={type.desc} className="!text-[10px] !text-white/30 mt-0.5 leading-tight" />
+                                                        <SpanTag text={type.label} className={`! font-black ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                        <SpanTag text={type.desc} className="!text-[10px] !text-secondary/30 mt-0.5 leading-tight" />
                                                     </div>
                                                 );
                                             })}
@@ -309,7 +315,7 @@ export default function VanRecommendation() {
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                             Preferred Vehicle Chassis
                                         </RichParagraph>
                                         <div className="space-y-2">
@@ -325,8 +331,8 @@ export default function VanRecommendation() {
                                                             backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
                                                         }}
                                                     >
-                                                        <WatermarkText text={opt.label} className={`!text-xs font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <WatermarkText text={opt.desc} className="!text-[11px] mt-0.5 !text-white/30" />
+                                                        <SpanTag text={opt.label} className={`! font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                        <SpanTag text={opt.desc} className="!text-[11px] mt-0.5 !text-secondary/30" />
                                                     </div>
                                                 );
                                             })}
@@ -334,7 +340,7 @@ export default function VanRecommendation() {
                                     </div>
 
                                     <div>
-                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                             Target Wheelbase Length
                                         </RichParagraph>
                                         <div className="space-y-2">
@@ -350,8 +356,8 @@ export default function VanRecommendation() {
                                                             backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
                                                         }}
                                                     >
-                                                        <WatermarkText text={opt.label} className={`!text-xs font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <WatermarkText text={opt.desc} className="!text-[11px] mt-0.5 !text-white/30" />
+                                                        <SpanTag text={opt.label} className={`! font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                        <SpanTag text={opt.desc} className="!text-[11px] mt-0.5 !text-secondary/30" />
                                                     </div>
                                                 );
                                             })}
@@ -359,13 +365,13 @@ export default function VanRecommendation() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-secondary/5">
                                     {[
                                         { field: 'style', label: 'Build Style Interior', items: OPTIONS.style },
                                         { field: 'priority', label: 'Top Priority Focus', items: OPTIONS.priority },
                                     ].map(({ field, label, items }) => (
                                         <div key={field}>
-                                            <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                            <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
                                                 {label}
                                             </RichParagraph>
                                             <div className="space-y-2">
@@ -383,8 +389,8 @@ export default function VanRecommendation() {
                                                             }}
                                                         >
                                                             <div>
-                                                                <WatermarkText text={opt.label} className={`!text-xs font-black tracking-wide uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                                <WatermarkText text={opt.desc} className="!text-xs mt-0.5 !text-white/30" />
+                                                                <SpanTag text={opt.label} className={`! font-black tracking-wide uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
+                                                                <SpanTag text={opt.desc} className="! mt-0.5 !text-secondary/30" />
                                                             </div>
                                                             <div
                                                                 className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center transition-all"
@@ -393,7 +399,7 @@ export default function VanRecommendation() {
                                                                     backgroundColor: active ? '#ED985F' : 'transparent',
                                                                 }}
                                                             >
-                                                                {active && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                                                                {active && <div className="w-1.5 h-1.5 rounded-full bg-secondary" />}
                                                             </div>
                                                         </div>
                                                     );
@@ -435,7 +441,7 @@ export default function VanRecommendation() {
 
                     {error && (
                         <RichParagraph
-                            className="mt-4 text-xs font-bold text-center p-3 tracking-wide"
+                            className="mt-4  font-bold text-center p-3 tracking-wide"
                             inlineStyle={{ borderRadius: '6px', backgroundColor: 'rgba(255,59,48,0.1)', color: '#ff6b6b', border: '1px solid rgba(255,59,48,0.2)' }}
                         >
                             {error}
@@ -450,7 +456,7 @@ export default function VanRecommendation() {
                     <div className="space-y-8">
 
                         <div className="text-center max-w-xl mx-auto">
-                            <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: '#ED985F' }}>
+                            <RichParagraph className=" font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: '#ED985F' }}>
                                 Matching Sequence Complete
                             </RichParagraph>
                             <h3 className="text-3xl font-black tracking-tight" style={{ color: '#001F3D' }}>
@@ -462,12 +468,15 @@ export default function VanRecommendation() {
                         {recommendation.no_match_found ? (
                             <div className="max-w-3xl mx-auto overflow-hidden shadow-2xl bg-[#001F3D] border border-orange-400/20 text-center p-12 rounded-lg">
                                 <div className="w-16 h-16 bg-orange-400/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <span className="text-3xl">📐</span>
-                                </div>
-                                <h3 className="text-3xl font-black tracking-tight text-white mb-3">
+                                    <SpanTag
+                                        text="📐"
+                                        className="!text-3xl font-normal"
+                                        inlineStyle={{ color: 'var(--color-primary)' }}
+                                    />                                </div>
+                                <h3 className="text-3xl font-black tracking-tight text-secondary mb-3">
                                     Fabricate a Custom Blueprint Concept!
                                 </h3>
-                                <RichParagraph className="text-base text-white/70 max-w-xl mx-auto mb-8">
+                                <RichParagraph className="text-base text-secondary/70 max-w-xl mx-auto mb-8">
                                     {recommendation.message}
                                 </RichParagraph>
 
@@ -478,11 +487,11 @@ export default function VanRecommendation() {
                                         )}`}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-10 py-4 transition-all bg-[#25D366] text-white rounded-md shadow-lg"
+                                        className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-10 py-4 transition-all bg-[#25D366] text-secondary rounded-md shadow-lg"
                                     >
                                         💬 Consult BBV Engineer On WhatsApp
                                     </a>
-                                    <button type="button" onClick={handleReset} className="w-full sm:w-auto text-xs font-black tracking-widest uppercase px-8 py-4 bg-white/5 text-white rounded-md transition-all border border-white/10">
+                                    <button type="button" onClick={handleReset} className="w-full sm:w-auto  font-black tracking-widest uppercase px-8 py-4 bg-secondary/5 text-secondary rounded-md transition-all border border-secondary/10">
                                         🔄 Modify Matrix Options
                                     </button>
                                 </div>
@@ -503,8 +512,11 @@ export default function VanRecommendation() {
                                                 borderLeftWidth: '5px'
                                             }}
                                         >
-                                            <span className="text-2xl mt-0.5">💡</span>
-                                            <div>
+                                            <SpanTag
+                                                text="💡"
+                                                className="!text-2xl mt-0.5 shrink-0"
+                                                inlineStyle={{ color: 'var(--color-hover)' }}
+                                            />                                            <div>
                                                 <h5 className="font-black text-sm uppercase tracking-wide mb-1" style={{ color: '#001F3D' }}>
                                                     BBV Engineering Suggestion Note
                                                 </h5>
@@ -519,17 +531,19 @@ export default function VanRecommendation() {
                                     <div className="overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-2xl rounded-lg border border-primary/10">
 
                                         {/* Left Layout Information Header */}
-                                        <div className="lg:col-span-5 p-7 flex flex-col justify-between relative bg-primary text-white min-h-[320px]">
-                                            <span className="absolute top-5 left-5 text-[10px] font-black tracking-widest uppercase px-3 py-1.5 bg-[#ED985F] text-white rounded">
-                                                ⚙️ Configured Template Match
-                                            </span>
+                                        <div className="lg:col-span-5 p-7 flex flex-col justify-between relative bg-primary text-secondary min-h-[320px]">
+                                            <SpanTag
+
+                                                text={`⚙️${`Configured Template Match`}`}
+                                                className="!text-[10px] font-black tracking-widest uppercase !text-secondary"
+                                            />
 
                                             <div className="mt-12 space-y-1.5">
-                                                <WatermarkText
+                                                <SpanTag
                                                     text={recommendation.primary_match.type === 'inventory' ? 'Available Physical Asset' : 'Engineering Blueprint Vector'}
-                                                    className="!text-xs font-bold tracking-widest uppercase !text-white/40"
+                                                    className="! font-bold tracking-widest uppercase !text-secondary/40"
                                                 />
-                                                <h4 className="text-2xl font-black tracking-tight text-white">
+                                                <h4 className="text-2xl font-black tracking-tight text-secondary">
                                                     {recommendation.primary_match.title}
                                                 </h4>
                                             </div>
@@ -540,13 +554,13 @@ export default function VanRecommendation() {
                                                         key={idx}
                                                         src={img}
                                                         alt="BBV Layout Concept Map"
-                                                        className="w-full h-20 object-cover transition-all hover:scale-105 border border-white/5 rounded"
+                                                        className="w-full h-20 object-cover transition-all hover:scale-105 border border-secondary/5 rounded"
                                                     />
                                                 )) || (
-                                                    <div className="col-span-3 h-20 bg-white/5 text-xs flex items-center justify-center text-white/20">
-                                                        No visual blueprints found
-                                                    </div>
-                                                )}
+                                                        <div className="col-span-3 h-20 bg-secondary/5  flex items-center justify-center text-secondary/20">
+                                                            No visual blueprints found
+                                                        </div>
+                                                    )}
                                             </div>
                                         </div>
 
@@ -555,33 +569,43 @@ export default function VanRecommendation() {
                                             <div>
                                                 <div className="flex items-center justify-between mb-5 pb-4 border-b border-primary/5">
                                                     <div>
-                                                        <WatermarkText text="Layout Base Specifications" className="!text-xs font-bold tracking-widest uppercase !text-primary/40" />
-                                                        <span className="block text-xl font-black mt-0.5 text-primary uppercase">
-                                                            {recommendation.primary_match.wheelbase}" Wheelbase Structure
-                                                        </span>
+                                                        <SpanTag text="Layout Base Specifications" className="! font-bold tracking-widest uppercase !text-primary/40" />
+                                                        <SpanTag
+                                                            text={`${recommendation.primary_match.wheelbase}" Wheelbase Structure`}
+                                                            className="!text-xl font-black uppercase !text-primary"
+                                                        />
                                                     </div>
-                                                    <span className="text-xs font-black tracking-widest uppercase px-3 py-1.5 bg-primary/5 text-primary rounded">
-                                                        {recommendation.primary_match.status}
-                                                    </span>
+                                                    <SpanTag
+                                                        text={recommendation.primary_match.status}
+                                                        className="! font-black tracking-widest uppercase !text-primary"
+                                                    />
                                                 </div>
 
                                                 {/* Structural Configuration Tokens */}
                                                 <div className="flex flex-wrap gap-2 mb-6">
-                                                    <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded">
-                                                        💺 {recommendation.primary_match.seats} Belted Locations Fitted
-                                                    </span>
-                                                    <span className="text-xs font-bold tracking-wide px-3 py-1.5 bg-primary/5 text-primary rounded capitalize">
-                                                        🚿 Built Bathroom: {recommendation.primary_match.bathroom_type ? recommendation.primary_match.bathroom_type.replace(/_/g, ' ') : 'None / Open Cabin'}
-                                                    </span>
+                                                    <div className="flex items-center gap-1.5  font-bold tracking-wide px-3 py-1.5 bg-primary/5 rounded">
+                                                        <Armchair className="w-3.5 h-3.5" style={{ color: 'var(--color-primary)' }} />
+                                                        <SpanTag
+                                                            text={`${recommendation.primary_match.seats} Belted Locations Fitted`}
+                                                            className="! font-bold tracking-wide !text-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center gap-1.5  font-bold tracking-wide px-3 py-1.5 bg-primary/5 rounded capitalize">
+                                                        <ShowerHead className="w-3.5 h-3.5" style={{ color: 'var(--color-primary)' }} />
+                                                        <SpanTag
+                                                            text={`Built Bathroom: ${recommendation.primary_match.bathroom_type ? recommendation.primary_match.bathroom_type.replace(/_/g, ' ') : 'None / Open Cabin'}`}
+                                                            className="! font-bold tracking-wide !text-primary capitalize"
+                                                        />
+                                                    </div>
                                                 </div>
 
                                                 {/* Match Logic Justification */}
                                                 {recommendation.primary_match.reason && (
                                                     <div className="mb-6">
-                                                        <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-2 text-primary/40">
+                                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-2 text-primary/40">
                                                             Core Structural Logic
                                                         </RichParagraph>
-                                                        <RichParagraph className="text-sm font-medium px-4 py-3 bg-white border border-primary/10 rounded-md text-primary">
+                                                        <RichParagraph className="text-sm font-medium px-4 py-3 bg-secondary border border-primary/10 rounded-md text-primary">
                                                             ✅ {recommendation.primary_match.reason}
                                                         </RichParagraph>
                                                     </div>
@@ -589,14 +613,21 @@ export default function VanRecommendation() {
 
                                                 {/* Features Highlight Parsing */}
                                                 <div>
-                                                    <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-3 text-primary/40">
+                                                    <RichParagraph className=" font-bold tracking-widest uppercase mb-3 text-primary/40">
                                                         Fitted Engineering Metrics
                                                     </RichParagraph>
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                         {recommendation.primary_match.key_features?.map((feat, i) => (
-                                                            <div key={i} className="flex items-start gap-2 text-xs text-primary/70">
-                                                                <span className="text-[#ED985F]">—</span>
-                                                                <span>{feat}</span>
+                                                            <div key={i} className="flex items-start gap-2  text-primary/70">
+
+                                                                <SpanTag
+                                                                    text={"—"}
+                                                                    className=" !text-hover"
+                                                                />
+                                                                <SpanTag
+                                                                    text={feat}
+                                                                    className="! font-medium !text-primary/70"
+                                                                />
                                                             </div>
                                                         ))}
                                                     </div>
@@ -606,7 +637,7 @@ export default function VanRecommendation() {
                                             {/* CTA Response Trigger Blocks */}
                                             <div className="mt-8 pt-6 flex flex-col sm:flex-row items-center gap-3 border-t border-primary/5">
                                                 {recommendation.cta_recommendation === 'Get Quote' ? (
-                                                    <a href={`/quote?van=${recommendation.primary_match.slug}`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 bg-[#ED985F] text-white rounded">
+                                                    <a href={`/quote?van=${recommendation.primary_match.slug}`} className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-8 py-3 bg-hover text-secondary rounded">
                                                         Get Custom Quote
                                                     </a>
                                                 ) : (
@@ -614,14 +645,14 @@ export default function VanRecommendation() {
                                                         href={`https://wa.me/19514419719?text=${encodeURIComponent(
                                                             `Hi! I just ran your BBV Matchmaker Engine and mapped out the "${recommendation.primary_match.title}" layout structure. Let's discuss tailoring this setup over a custom spec.`
                                                         )}`}
-                                                        target="_blank" rel="noreferrer" className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-8 py-3 bg-[#25D366] text-white rounded shadow-md"
+                                                        target="_blank" rel="noreferrer" className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-8 py-3 bg-[#25D366] text-secondary rounded shadow-md"
                                                     >
                                                         💬 WhatsApp BBV Engineer
                                                     </a>
                                                 )}
 
                                                 {recommendation.primary_match.glbFile && (
-                                                    <a href={`/camper-vans-for-sale/${recommendation.primary_match.slug}/configure`} className="w-full sm:w-auto text-center text-xs font-black tracking-widest uppercase px-6 py-3 bg-primary text-white rounded">
+                                                    <a href={`/camper-vans-for-sale/${recommendation.primary_match.slug}/configure`} className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-6 py-3 bg-primary text-secondary rounded">
                                                         👓 Render 3D Interface
                                                     </a>
                                                 )}
@@ -638,19 +669,28 @@ export default function VanRecommendation() {
                         {/* ALTERNATIVES COMPONENT CARDS */}
                         {recommendation.alternatives && recommendation.alternatives.length > 0 && !recommendation.no_match_found && (
                             <div>
-                                <RichParagraph className="text-xs font-bold tracking-widest uppercase mb-4 flex items-center gap-2 text-primary/50">
-                                    <span className="text-[#ED985F]">—</span> Additional Build Solutions
-                                </RichParagraph>
+                                <div className="mb-4 flex items-center gap-2">
+                                    <SpanTag
+                                        text="Additional Build Solutions"
+                                        className="! font-bold tracking-widest uppercase !text-primary/50"
+                                    />
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {recommendation.alternatives.map((alt, idx) => (
-                                        <div key={idx} className="flex items-center justify-between p-5 bg-[#FBFBF9] border border-primary/10 rounded-lg transition-all hover:shadow-md">
+                                        <div key={idx} className="flex items-center justify-between p-5 bg-secondary border border-primary/10 rounded-lg transition-all hover:shadow-md">
                                             <div>
-                                                <span className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 mb-1.5 inline-block bg-primary/5 text-primary/60 rounded">
-                                                    {alt.type === 'inventory' ? 'Inventory Model' : 'Blueprint Design'}
-                                                </span>
+                                                <div className="mb-1.5">
+                                                    <SpanTag
+                                                        text={alt.type === 'inventory' ? 'Inventory Model' : 'Blueprint Design'}
+                                                        className="!text-[9px] font-black tracking-widest uppercase px-2 py-0.5 inline-block bg-primary/5 !text-primary/60 rounded"
+                                                    />
+                                                </div>
                                                 <h6 className="font-black text-sm text-primary">{alt.title}</h6>
                                             </div>
-                                            <a href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`} className="text-xs font-black tracking-wider uppercase px-4 py-2 bg-[#ED985F]/10 text-[#ED985F] border border-[#ED985F]/20 rounded transition-all">
+                                            <a
+                                                href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`}
+                                                className=" font-black uppercase px-4 py-2 bg-hover/10 text-hover border border-hover/20 rounded transition-all hover:bg-hover hover:text-secondary"
+                                            >
                                                 Inspect Layout →
                                             </a>
                                         </div>

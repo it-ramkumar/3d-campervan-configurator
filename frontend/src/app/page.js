@@ -1,7 +1,7 @@
 import Hero from "@/components/HomePage/Hero/Hero";
 import { generateHomeSchema } from "../schema/homeSchema";
 import dynamic from "next/dynamic";
-import { Heading2,RichParagraph } from "@/components/Common/Common";
+import { Heading2,RichParagraph, SpanTag } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
 
 export const metadata = {
@@ -114,16 +114,16 @@ export default async function Home() {
       <main>
         <Hero />
 
-        <div className="overflow-x-hidden bg-white flex flex-col space-y-16 md:space-y-20">
+        <div className="overflow-x-hidden bg-white flex flex-col space-y-16 ">
           <Buy initialVans={readyToGoVans} />
 
           {/* Replaced <Customize /> with the Matchmaker Quiz System */}
           <section id="quiz-section" className="bg-secondary py-16 md:py-24 border-y border-slate-100 scroll-mt-20">
             <div className="max-w-7xl mx-auto">
               <div className="text-center px-4 mb-8">
-                <span className="text-orange-500 font-bold uppercase tracking-wider text-xs md:text-sm bg-orange-50 px-3 py-1 rounded-full">
-                  BBV Matchmaker Engine
-                </span>
+                <SpanTag text={"BBV Matchmaker Engine"} className="font-bold uppercas"/>
+
+
                 <Heading2 text="Match Your Vibe with a Layout"/>
                 {/* <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 mt-3">
                 </h2> */}

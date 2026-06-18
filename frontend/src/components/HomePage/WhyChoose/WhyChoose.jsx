@@ -7,7 +7,7 @@ import {
   Users, TentTree, Table, Utensils,
   BatteryCharging, Thermometer, Droplets, AirVent, Sun
 } from 'lucide-react';
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink, WatermarkText } from '../../Common/Common';
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink, SpanTag } from '../../Common/Common';
 
 const sections = [
   {
@@ -89,8 +89,7 @@ export default function WhyChoose() {
         <div className="container mx-auto px-6 max-w-7xl py-24 md:py-32 relative z-10">
 
           <div className="flex items-center gap-3 mb-8">
-            <span className="w-8 h-px bg-hover" />
-            <WatermarkText text={"Our Advantage"} className="text-hover uppercase "/>
+            <SpanTag text={"Our Advantage"} className="text-hover"/>
           </div>
 
           <Heading2

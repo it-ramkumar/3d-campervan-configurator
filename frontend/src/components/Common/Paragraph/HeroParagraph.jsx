@@ -16,12 +16,13 @@ const Paragraph = ({
   inlineStyle = {},
 }) => {
   return (
- <RichParagraph
-  className={`text-sm sm:text-base md:text-lg lg:text-[20px] tracking-tight ${textColor} ${className}`}
-  style={inlineStyle}
->
-  {text}
-</RichParagraph>
+    <RichParagraph
+      // style={inlineStyle} ki jagah inlineStyle={inlineStyle} likhein
+      className={`text-sm sm:text-base md:text-lg lg:text-[20px] tracking-tight ${textColor} ${className}`}
+      inlineStyle={inlineStyle}
+    >
+      {text}
+    </RichParagraph>
   );
 };
 

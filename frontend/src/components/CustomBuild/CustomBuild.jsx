@@ -40,9 +40,9 @@ const CustomBuild = () => {
   ];
 
   const heroImage = "/images/s2.webp";
-  const newTitleText = "Custom Campervan Builders of Big Bear";
+  const newTitleText = "Custom Campervan Builders";
   const newDescriptionText =
-    "At Big Bear Vans, we build custom campervans from the ground up. Unlike standard models or limited packages of other companies, we begin with a blank slate and build from the chassis up. You choose the layout, features, and finishes; we handle the design, build, and quality checks.";
+    "At Big Bear Vans, we build custom campervans from the chassis up. You choose the layout, features, and finishes; we handle the design, build, and quality checks..";
 
   return (
     <>
@@ -54,7 +54,7 @@ const CustomBuild = () => {
           overlayOpacity="bg-black/40"
         />
         {/* ================= INTRO ================= */}
-        <section className="py-24 border-b border-secondary">
+        <section className="py-24 border-b border-primary/10">
           <div className=" mx-auto px-4 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
               <RichParagraph >
@@ -78,15 +78,15 @@ const CustomBuild = () => {
           <div className=" mx-auto px-4 max-w-7xl px-6">
             <Heading3 text="This is exactly how we do it:" className=" uppercase mb-12  text-center italic" />
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-10 rounded-lg border border-gray-100">
+              <div className="bg-white p-10 rounded-lg border border-primary/5">
                 <Heading4 text="Start with an Empty Van" className="uppercase mb-4 " />
                 <RichParagraph >We begin with an empty van. There are no pre-built parts to work around.</RichParagraph>
               </div>
-              <div className="bg-white p-10 rounded-lg border border-gray-100">
+              <div className="bg-white p-10 rounded-lg border border-primary/5">
                 <Heading4 text="Zero Restrictions" className="uppercase mb-4" />
                 <RichParagraph >Instead of restricting you to a few preset floor plans or feature packages, we listen to your ideas, vision, and create a 3D render for you.</RichParagraph>
               </div>
-              <div className="bg-white p-10 rounded-lg border border-gray-100">
+              <div className="bg-white p-10 rounded-lg border border-primary/5">
                 <Heading4 text="You Control Every Detail" className=" uppercase mb-4" />
                 <RichParagraph >You will see your van virtually and select every detail to your liking. From the components of your electrical system to the design for your cabinets, you make all the final choices.</RichParagraph>
               </div>
@@ -116,8 +116,8 @@ const CustomBuild = () => {
             <div className="grid md:grid-cols-2 gap-12 mb-20">
               {/* 1. Customize Interior Layouts */}
               <div className="flex flex-col space-y-6">
-                <div className="rounded-2xl overflow-hidden aspect-[2/3] bg-gray-100 shadow-lg">
-                  <ImageWithSkeleton src={`${imgPath}interior-layout.webp`} alt="Interior Layout"  />
+                <div className="rounded-lg overflow-hidden aspect-[2/3] bg-secondary shadow-lg">
+                  <ImageWithSkeleton src={`${imgPath}buildProcess.webp`} alt="Interior Layout"  />
                 </div>
                 <div className="space-y-4">
                   <Heading3 text="Customize Interior Layouts" className="uppercase" />
@@ -138,7 +138,7 @@ const CustomBuild = () => {
 
               {/* 2. Premium Materials */}
               <div className="flex flex-col space-y-6">
-                <div className="rounded-2xl overflow-hidden aspect-[2/3] bg-gray-100 shadow-lg">
+                <div className="rounded-lg overflow-hidden aspect-[2/3] bg-secondary shadow-lg">
                   <ImageWithSkeleton src={`${imgPath}IMG_9845.webp`} alt="Materials"  />
                 </div>
                 <div className="space-y-4">
@@ -155,7 +155,7 @@ const CustomBuild = () => {
             <div className="grid md:grid-cols-2 gap-12">
               {/* 3. CNC Technology */}
               <div className="flex flex-col space-y-6">
-                <div className="rounded-lg overflow-hidden aspect-video bg-gray-100 shadow-md aspect-[8/5]">
+                <div className="rounded-lg overflow-hidden aspect-video bg-secondary shadow-md aspect-[8/5]">
                   <ImageWithSkeleton src={'/images2/cnc1.webp'} alt="CNC" />
                 </div>
                 <div className="space-y-4">
@@ -169,7 +169,7 @@ const CustomBuild = () => {
 
               {/* 4. Post-Build Support */}
               <div className="flex flex-col space-y-6">
-                <div className="rounded-lg overflow-hidden aspect-video bg-gray-100 shadow-md aspect-[8/5]">
+                <div className="rounded-lg overflow-hidden aspect-video bg-secondary shadow-md aspect-[8/5]">
                   <ImageWithSkeleton src={'/images2/wcu4.webp'} alt="Support" />
                 </div>
                 <div className="space-y-4">
@@ -220,7 +220,7 @@ const CustomBuild = () => {
             </RichParagraph>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <Image src={`/images2/op4.webp`} alt="Portfolio 1" className="rounded-lg h-[400px] w-full object-cover" width={800} height={600} />
-              <div className="bg-gray-50 rounded-lg p-12 flex flex-col justify-center items-center text-center">
+              <div className="bg-secondary rounded-lg p-12 flex flex-col justify-center items-center text-center">
                 <PrimaryButton link="/van-layouts" label={"View Portfolio"} />
               </div>
             </div>
@@ -244,8 +244,8 @@ const CustomBuild = () => {
               {/* Typography Grid as Image Replacement */}
               <div className="grid grid-cols-2 gap-4">
                 {["Families", "Couples", "Pet Owners", "Full-time Lifers"].map((label, index) => (
-                  <div key={index} className="p-8 border border-gray-100 rounded-lg bg-gray-50 flex items-center justify-center h-32 hover:border-black transition-colors group">
-                    <span className="text-xs font-bold text-gray-400 group-hover:text-black tracking-[0.2em] uppercase">{label}</span>
+                  <div key={index} className="p-8 border border-primary/10 rounded-lg bg-secondary flex items-center justify-center h-32 hover:border-primary transition-colors group">
+                    <span className="text-xs font-bold text-primary/30 group-hover:text-primary tracking-[0.2em] uppercase">{label}</span>
                   </div>
                 ))}
               </div>
@@ -258,7 +258,7 @@ const CustomBuild = () => {
           <div className=" mx-auto px-4 max-w-7xl aspect-[9/3]">
             <Heading2 text="Our Showroom" className="uppercase mb-12 text-center" />
 
-            <ImageWithSkeleton src={`${imgPath}40279.webp`} alt="Showroom" />
+            <ImageWithSkeleton src={`${imgPath}40279.webp`} alt="Showroom" className="rounded-lg"/>
             <div className="grid md:grid-cols-2 gap-16 mt-6">
               <RichParagraph className=" leading-relaxed">
                 To witness the process firsthand, we invite you to visit our showroom in Big Bear City, California. Here, you can see our building process, meet our team, and explore our ongoing and completed projects.
@@ -274,11 +274,11 @@ const CustomBuild = () => {
         </section>
 
         {/* ================= MEET THE BUILDERS ================= */}
-        <section className="py-24 bg-black text-white">
+        <section className="py-24 bg-primary text-white">
           <div className=" mx-auto px-4 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
-            <div className="rounded-lg overflow-hidden border-8 border-white/5 aspect-square">
+            <div className="rounded-lg overflow-hidden  aspect-square">
 
-              <ImageWithSkeleton src={`/images/anna.webp`} alt="Artur and Anna" />
+              <ImageWithSkeleton src={`/images/anna.webp`} alt="Artur and Anna" className="rounded-lg"/>
             </div>
             <div className="space-y-8">
               <Heading2 text="Meet the Founders" className=" text-secondary uppercase tracking-tighter" />
