@@ -128,7 +128,7 @@ const VanPage = ({ vanDetail }) => {
   };
 
   const uniqueMedia = [...new Set(vanDetail?.media || [])];
-
+console.log(vanDetail)
   return (
     <div className="bg-secondary font-body text-primary">
       <div className="flex justify-between items-center bg-secondary px-4 md:px-8 py-4 w-full border-b border-primary/5">
@@ -179,17 +179,17 @@ const VanPage = ({ vanDetail }) => {
               </div>
             )}
 
-  {vanDetail?.slug && (
+  {vanDetail?.glbFile && (
   <a
     href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
-    className="relative inline-flex w-full items-center justify-center gap-4 rounded-lg bg-primary px-8 py-4 font-extrabold uppercase tracking-wide text-white shadow-[0_8px_0_#1d4ed8] transition-all duration-100 hover:bg-primary-200 active:translate-y-[8px] active:shadow-none group text-center overflow-hidden"
+    className="relative inline-flex w-full items-center justify-center gap-4 rounded-lg bg-primary px-8 py-4 font-extrabold uppercase tracking-wide text-white transition-all duration-100 hover:bg-primary-200 active:translate-y-[8px] active:shadow-none group text-center overflow-hidden"
   >
     {/* Animated Pulse Icon */}
     <div className="relative flex h-6 w-6 items-center justify-center">
       {/* Wave 1 */}
-      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-40"></span>
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-lg bg-white opacity-40"></span>
       {/* Wave 2 */}
-      <span className="absolute inline-flex h-full w-full animate-pulse rounded-full bg-blue-300 opacity-20"></span>
+      <span className="absolute inline-flex h-full w-full animate-pulse rounded-lg bg-primary/70 opacity-20"></span>
 
       {/* Axis/Orbit Icon that spins on Hover */}
       <svg
@@ -209,7 +209,7 @@ const VanPage = ({ vanDetail }) => {
       </svg>
     </div>
 
-    <span className="drop-shadow-md">Launch 3D Configurator</span>
+    <span className="drop-shadow-md animate-pulse">Launch 3D Configurator</span>
   </a>
 )}
             <div className="grid grid-cols-2 gap-4">

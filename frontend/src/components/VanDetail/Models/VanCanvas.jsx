@@ -12,35 +12,6 @@ import { PrimaryButton } from "@/components/Common/Common"
 import PartModel from "./Parts"
 import { useRouter } from "next/navigation"
 
-// function CameraRig({ view }) {
-//   const [isUserInteracting, setIsUserInteracting] = useState(false)
-
-//   useEffect(() => {
-//     setIsUserInteracting(false)
-//   }, [view])
-
-//   useFrame((state, delta) => {
-//     if (isUserInteracting) return
-//     easing.damp3(state.camera.position, view.position, 0.4, delta)
-//     if (state.controls) {
-//       easing.damp3(state.controls.target, view.target, 0.4, delta)
-//       state.controls.update()
-//     }
-//   })
-
-//   useEffect(() => {
-//     const handleStart = () => setIsUserInteracting(true)
-//     window.addEventListener("mousedown", handleStart)
-//     window.addEventListener("touchstart", handleStart)
-//     return () => {
-//       window.removeEventListener("mousedown", handleStart)
-//       window.removeEventListener("touchstart", handleStart)
-//     }
-//   }, [])
-
-//   return null
-// }
-
 export default function VanCanvas({ url, variants }) {
   // const [currentView, setCurrentView] = useState(cameraViews.default)
   const [activeVariant, setActiveVariant] = useState(null)
@@ -120,8 +91,7 @@ export default function VanCanvas({ url, variants }) {
           </div>
 
           <Canvas shadows camera={{ position: [15, 15, 15], fov: 50 }}>
-            {/* <ambientLight />
-            <pointLight/> */}
+
 
             <Suspense
               fallback={
@@ -134,7 +104,6 @@ export default function VanCanvas({ url, variants }) {
             >
               {!interiorMode ? (
                 <>
-                  {/* <CameraRig view={currentView} /> */}
                   <OrbitControls
                     makeDefault
                     enableDamping
@@ -264,15 +233,15 @@ export default function VanCanvas({ url, variants }) {
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
                   Van Variants
                 </p>
-                <div className="h-[1px] flex-1 bg-slate-700 ml-4"></div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
                 {variants.map((v) => (
                   <PrimaryButton
                     key={v._id}
                     onClick={() => handleVariantClick(v)}
                     label={v.name}
                     className={`
+                      w-full
                       !rounded-lg !py-3 !text-sm border transition-all duration-300
                       ${activeVariant?._id === v._id
                         ? "!bg-secondary !text-primary border-secondary shadow-xl scale-[1.02]"
