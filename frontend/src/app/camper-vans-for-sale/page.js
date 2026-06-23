@@ -150,7 +150,7 @@ export default async function VansForSale() {
         description="At Big Bear Vans, we turn Mercedes Sprinter and Ford Transit vans into fully custom camper vans. From off-grid setups to luxury travel homes, everything is designed around how you want to live and travel. We’re proud to have 111+ happy owners across the US."
         image="/images2/vfs.webp"
         link="/inquiry"
-        buttonText="Get a Quote"
+        buttonText="Reserve your van"
         showButton={true}
       />
 

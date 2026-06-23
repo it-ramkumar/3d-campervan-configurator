@@ -76,7 +76,7 @@ console.log(initialView, "ye initialView hai jo server se aaya");
 <main  className="bg-secondary font-body">
 
           {/* TOP SECTION */}
-          <div className="max-w-[1440px] mx-auto pt-10 pb-20 px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto pt-10 pb-20 px-4 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
               {/* Gallery */}
@@ -158,7 +158,7 @@ console.log(initialView, "ye initialView hai jo server se aaya");
           </div>
 
           {/* BUILD OVERVIEW */}
-          <section className="py-24 px-6 bg-white rounded-t-lg shadow-2xl relative z-20">
+          <section className="py-20 px-4 bg-white rounded-t-lg shadow-2xl relative z-20">
             <div className="container mx-auto max-w-5xl text-center">
               <RichParagraph className="!text-hover uppercase !text-xs font-bold">
                 The Design Philosophy
@@ -175,7 +175,7 @@ console.log(initialView, "ye initialView hai jo server se aaya");
           </section>
 
           {/* FEATURES */}
-          <section className="py-24 px-6 bg-secondary text-primary">
+          <section className="py-16 px-4 bg-secondary text-primary">
             <div className="container mx-auto">
               <div className="text-center mb-20">
                 <Heading2 text="Standard Features" className="" />

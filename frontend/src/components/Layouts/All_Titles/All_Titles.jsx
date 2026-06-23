@@ -157,7 +157,7 @@ export default function All_Titles_Client() {
   description="Explore our camper van floor plans, thoughtfully designed for solo travelers, families, pet owners, and moto enthusiasts. Find the perfect layout for your next adventure."
   image={portfolios[0]?.rendering?.[0]}
 />
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 antialiased">
+    <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 my-12 antialiased">
 
       {/* --- COMPACT INTERACTIVE MANAGEMENT UTILITY BAR --- */}
       <div className="bg-white rounded-lg border border-slate-200/80 p-4 mb-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">

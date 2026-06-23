@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 
@@ -8,27 +8,22 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   const [activeImage, setActiveImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // 🔄 Jab parent component tabs switch kare (Photos <-> Floorplan),
-  // toh active image index ko wapas 0 par reset karne ke liye yeh effect zaroori hai:
   useEffect(() => {
     setActiveImage(0);
   }, [gallery]);
 
-  // Safe check agar gallery array exist na karta ho ya khali ho
   const hasImages = gallery && gallery.length > 0;
   const currentImage = hasImages ? gallery[activeImage] : "";
 
-  // NEXT
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (!hasImages) return;
     setActiveImage((prev) => (prev + 1) % gallery.length);
-  };
+  }, [hasImages, gallery.length]);
 
-  // PREV
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (!hasImages) return;
     setActiveImage((prev) => (prev - 1 + gallery.length) % gallery.length);
-  };
+  }, [hasImages, gallery.length]);
 
   // 🛑 FALLBACK UI: Agar array khali ho toh yeh box render hoga
   if (!hasImages) {
@@ -78,6 +73,22 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   return (
     <div className="space-y-4">
 
+      {/* Hidden preload: sab full-size images pehle se Next.js cache mein process ho jati hain */}
+      <div className="hidden" aria-hidden="true">
+        {gallery.map((img, i) =>
+          i !== activeImage ? (
+            <Image
+              key={img}
+              src={img}
+              width={1000}
+              height={800}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+              alt=""
+            />
+          ) : null
+        )}
+      </div>
+
       {/* MAIN IMAGE */}
       <div className="relative flex items-center justify-center overflow-hidden bg-white rounded-lg h-[450px]">
 
@@ -85,19 +96,21 @@ const VanGallery = ({ gallery = [], title = "" }) => {
         <Image
           src={currentImage}
           fill
-          alt={title}
+          alt=""
+          sizes="(max-width: 768px) 100vw, 60vw"
           className="object-cover blur-2xl scale-110 opacity-50"
-          priority
         />
 
-        {/* FOREGROUND IMAGE (actual clean image) */}
+        {/* FOREGROUND IMAGE — key change se instant switch with fade */}
         <Image
+          key={currentImage}
           src={currentImage}
           width={1000}
           height={800}
           alt={title}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
           onClick={() => setIsFullscreen(true)}
-          className="relative max-h-full w-auto object-contain cursor-zoom-in z-10 p-2"
+          className="relative max-h-full w-auto object-contain cursor-zoom-in z-10 p-2 animate-fadeIn"
           priority
         />
 

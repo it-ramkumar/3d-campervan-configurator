@@ -48,7 +48,7 @@ export default function AdditionalAccessories() {
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary rounded-lg -mt-20 blur-3xl" />
       <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-primary rounded-lg -ml-20 -mb-20 blur-3xl" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
 
         {/* --- Header: Clean & Authoritative --- */}
         <div className="max-w-3xl mb-16">

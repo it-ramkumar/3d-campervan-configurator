@@ -234,7 +234,7 @@ export default function Buy({ initialVans = [] }) {
             <button
               onClick={() => setIsFormOpen(false)}
               aria-label="Close form"
-              className="absolute top-5 right-5 z-30 text-white cursor-pointer transition-all duration-200 hover:text-hover hover:scale-110 active:scale-95"
+              className="absolute top-5 right-5 z-30 text-primary cursor-pointer transition-all duration-200  hover:scale-110 active:scale-95"
             >
               ✕
             </button>

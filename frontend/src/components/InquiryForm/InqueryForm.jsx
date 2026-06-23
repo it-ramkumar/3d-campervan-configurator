@@ -228,7 +228,7 @@ export default function InquiryForm() {
 
   return (
     <>
-      <div className="bg-secondary min-h-screen py-20 px-4">
+      <div className="bg-secondary min-h-screen py-16 md:px-4">
         <div className="max-w-6xl w-full mx-auto">
           <div className="text-center mb-16">
             <p className="!text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">

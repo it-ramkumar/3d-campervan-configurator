@@ -480,22 +480,13 @@ console.log(vanDetail)
             {isFormOpen && (
               <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto">
                 <div className="relative w-full max-w-2xl bg-white border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto pointer-events-auto">
-                  {/* <button
+                  <button
                           onClick={() => setIsFormOpen(false)}
-                          className="absolute top-5 right-5 text-primary z-30"
+                          className="absolute top-4 right-4 text-primary cursor-pointer z-30"
                         >
                           ✕
-                        </button> */}
-                  <button
-                    onClick={() => setIsFormOpen(false)}
-                    aria-label="Close form"
-                    className="absolute top-5 right-5 z-30 text-primary cursor-pointer
-                         transition-all duration-200
-                         hover:text-hover hover:scale-110
-                         active:scale-95"
-                  >
-                    ✕
-                  </button>
+                        </button>
+
 
                   <ContactForm
                     formData={formData}

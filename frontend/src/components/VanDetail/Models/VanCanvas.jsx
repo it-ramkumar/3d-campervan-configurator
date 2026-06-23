@@ -227,7 +227,6 @@ export default function VanCanvas({ url, variants }) {
               </div>
             )}
 
-            {/* VARIANTS */}
             <div>
               <div className="flex items-center justify-between mb-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">
@@ -235,24 +234,30 @@ export default function VanCanvas({ url, variants }) {
                 </p>
               </div>
               <div className="space-y-2">
-                {variants.map((v) => (
-                  <PrimaryButton
-                    key={v._id}
-                    onClick={() => handleVariantClick(v)}
-                    label={v.name}
-                    className={`
-                      w-full
-                      !rounded-lg !py-3 !text-sm border transition-all duration-300
-                      ${activeVariant?._id === v._id
-                        ? "!bg-secondary !text-primary border-secondary shadow-xl scale-[1.02]"
-                        : "bg-slate-900/40 text-secondary border-slate-700 hover:border-secondary/50 hover:bg-slate-800"
-                      }
-                    `}
-                  />
-                ))}
+                {/* Humne variants array ko sort kiya taake numbers ke hisab se sequence theak ho jaye */}
+                {[...variants]
+                  .sort((a, b) => {
+                    const numA = parseInt(a.name) || 0; // "7-persons..." me se 7 nikalega
+                    const numB = parseInt(b.name) || 0; // "5-persons..." me se 5 nikalega
+                    return numA - numB; // Chote se bare (1, 2, 3...) order ke liye
+                  })
+                  .map((v) => (
+                    <PrimaryButton
+                      key={v._id}
+                      onClick={() => handleVariantClick(v)}
+                      label={v.name}
+                      className={`
+            w-full
+            !rounded-lg !py-3 !text-sm border transition-all duration-300
+            ${activeVariant?._id === v._id
+                          ? "!bg-secondary !text-primary border-secondary shadow-xl scale-[1.02]"
+                          : "bg-slate-900/40 text-secondary border-slate-700 hover:border-secondary/50 hover:bg-slate-800"
+                        }
+          `}
+                    />
+                  ))}
               </div>
             </div>
-
           </div>
         </div>
 
