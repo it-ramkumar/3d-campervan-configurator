@@ -285,6 +285,12 @@ export default function Footer() {
           <p className="text-[12px] opacity-40 tracking-[0.2em] uppercase">
             © {new Date().getFullYear()} BIG BEAR VANS. All Rights Reserved.
           </p>
+          <Link
+            href="/privacy-policy"
+            className="text-[11px] opacity-40 hover:opacity-100 hover:text-hover tracking-[0.2em] uppercase transition-all duration-200"
+          >
+            Privacy Policy
+          </Link>
         </div>
       </div>
     </footer>
