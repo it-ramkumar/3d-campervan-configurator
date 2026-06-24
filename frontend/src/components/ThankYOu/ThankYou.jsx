@@ -30,24 +30,33 @@ const ThankYou = () => {
     window.__FIRED_CONVERSIONS__[source] = true;
 
     // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
-    if (window.gtag) {
-      if (source === "Calendar Booking") {
-        window.gtag("event", "conversion", {
-          send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
-        });
-        console.log("GOOGLE ADS: Calendar Booking Fired");
-      } else if (source === "Inquiry Form") {
-        window.gtag("event", "conversion", {
-          send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
-        });
-        console.log("GOOGLE ADS: Inquiry Form Fired");
-      } else {
-        window.gtag("event", "conversion", {
-          send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
-        });
-        console.log("GOOGLE ADS: Contact Form Fired");
-      }
-    }
+   // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
+if (window.gtag) {
+  // .toLowerCase() aur .includes() use karein taake exact spelling ka rona na rahe
+  const currentSource = (source || "").toLowerCase();
+
+  if (currentSource.includes("calendar")) {
+    // 📅 CALENDAR BOOKING
+    window.gtag("event", "conversion", {
+      send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
+    });
+    console.log("GOOGLE ADS: Calendar Booking Fired");
+
+  } else if (currentSource.includes("inquiry")) {
+    // 🔍 INQUIRY FORM (Ab yeh har haal mein fire hoga!)
+    window.gtag("event", "conversion", {
+      send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
+    });
+    console.log("GOOGLE ADS: Inquiry Form Fired");
+
+  } else {
+    // 📝 CONTACT FORM (Default backup)
+    window.gtag("event", "conversion", {
+      send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
+    });
+    console.log("GOOGLE ADS: Contact Form Fired");
+  }
+}
 
     // 2. Facebook Pixel Tracking
     if (window.fbq) {
