@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
 import { useEffect, useState } from "react";
+import { sendGTMEvent } from '@next/third-parties/google';
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
@@ -9,72 +10,66 @@ const ThankYou = () => {
   const source = searchParams.get("source") || "unknown";
   const vanTitle = searchParams.get("van") || "No Van Selected";
 
-  // ✨ State for Reference ID to avoid hydration mismatch
+  // State for Reference ID to avoid hydration mismatch
   const [referenceId, setReferenceId] = useState("");
 
-useEffect(() => {
-  if (typeof window === "undefined") return;
+  // Clean source for UI checks (Tension free matching)
+  const isCalendar = source.toLowerCase().includes("calendar");
 
-  // 🔴 DEBUG LOGS
-  console.log("--- TRACKING DEBUG START ---");
-  console.log("RAW SOURCE FROM URL:", source);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  if (!source || source === "unknown") {
-    console.log("TRACKING SKIPPED: Source is empty or unknown");
-    return;
-  }
+    // 1. Generate Reference ID safely on client side
+    setReferenceId("BBV-" + Math.random().toString(36).substr(2, 9).toUpperCase());
 
-  const currentSource = source.toLowerCase();
-  console.log("LOWERCASE SOURCE:", currentSource);
-  console.log("--- TRACKING DEBUG END ---");
+    // 🔴 DEBUG LOGS
+    console.log("--- TRACKING DEBUG START ---");
+    console.log("RAW SOURCE FROM URL:", source);
 
-  // Global window tracking array setup karein (GTM aur Extensions ke liye sab se best hai)
-  window.dataLayer = window.dataLayer || [];
-
-  // 🔐 DEBUNCE / LOCKING SYSTEM
-  // Agar is unique session/render mein yeh source fire ho chuka hai, toh bypass karein
-  window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
-  if (window.__FIRED_CONVERSIONS__[currentSource]) {
-    console.log(`LOCK ACTIVE: Conversion for [${currentSource}] already sent in this session.`);
-    return;
-  }
-
-  // Target labels define karein
-  let targetLabel = "";
-  let logMessage = "";
-
-  if (currentSource.includes("calendar")) {
-    targetLabel = "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN";
-    logMessage = "FIRED: Calendar Booking";
-  } else if (currentSource.includes("inquiry")) {
-    targetLabel = "AW-16677332528/TFmwCMXKwMQcELDMr5A-";
-    logMessage = "FIRED: Inquiry Form (Click to Call)";
-  } else if (currentSource.includes("contact")) {
-    targetLabel = "AW-16677332528/E1hYCOzM6b0cELDMr5A-";
-    logMessage = "FIRED: Contact Form";
-  }
-
-  // Agar label mil gaya hai toh fire karein
-  if (targetLabel) {
-    // 1. Mark as fired immediately taake dubara call na ho
-    window.__FIRED_CONVERSIONS__[currentSource] = true;
-
-    // 2. Standard GTM dataLayer push (Extension isko 100% capture karegi)
-    window.dataLayer.push({
-      event: "conversion",
-      send_to: targetLabel,
-    });
-    console.log(`🚀 ${logMessage} with label: ${targetLabel}`);
-
-    // 3. Fallback: Agar gtag directly configured hai
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "conversion", { send_to: targetLabel });
+    if (!source || source === "unknown") {
+      console.log("TRACKING SKIPPED: Source is empty or unknown");
+      return;
     }
-  } else {
-    console.log("NO MATCHING SOURCE FOUND FOR GOOGLE ADS");
-  }
 
-}, [source, vanTitle]);
+    const currentSource = source.toLowerCase();
+    console.log("LOWERCASE SOURCE:", currentSource);
+    console.log("--- TRACKING DEBUG END ---");
+
+    // 🔐 DEBUNCE / SESSION LOCK SYSTEM
+    window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
+    if (window.__FIRED_CONVERSIONS__[currentSource]) {
+      console.log(`LOCK ACTIVE: Conversion for [${currentSource}] already sent.`);
+      return;
+    }
+
+    // Target variables
+    let targetLabel = "";
+
+    // 🎯 URL SOURCE MATCHING
+    if (currentSource.includes("calendar")) {
+      // 📝 TODO: Yahan apne Google Ads calendar goal ka real label paste karein
+      targetLabel = "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN";
+    } else if (currentSource.includes("inquiry")) {
+      targetLabel = "AW-16677332528/TFmwCMXKwMQcELDMr5A-";
+    } else if (currentSource.includes("contact")) {
+      targetLabel = "AW-16677332528/E1hYCOzM6b0cELDMr5A-";
+    }
+
+    // 🚀 FIRE EVENT TO GTM
+    if (targetLabel) {
+      window.__FIRED_CONVERSIONS__[currentSource] = true; // Lock immediately
+
+      sendGTMEvent({
+        event: "conversion",
+        send_to: targetLabel,
+      });
+
+      console.log(`🚀 NEXT.JS GTM EVENT SENT for label: ${targetLabel}`);
+    } else {
+      console.log("NO MATCHING SOURCE FOUND FOR GOOGLE ADS");
+    }
+
+  }, [source, vanTitle]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
@@ -85,11 +80,11 @@ useEffect(() => {
           {/* Header */}
           <div className="flex flex-col items-center mb-10">
             <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center border-2 border-[#30364F] mb-6 shadow-inner">
-              <span className="text-3xl">{source === "Calendar Booking" ? "📧" : "✔️"}</span>
+              <span className="text-3xl">{isCalendar ? "📧" : "✔️"}</span>
             </div>
 
             <Heading1
-              text={source === "Calendar Booking" ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
+              text={isCalendar ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
               className="!text-primary text-center"
             />
           </div>
@@ -118,7 +113,7 @@ useEffect(() => {
 
             {/* Message */}
             <RichParagraph className="text-primary text-center italic text-sm leading-relaxed">
-              {source === "Calendar Booking" ? (
+              {isCalendar ? (
                 <>
                   <strong className="text-red-600 not-italic block mb-2 text-base">⚠️ Important Step to Confirm Your Meet:</strong>
                   We have sent an automated Google Calendar invitation to your email.
@@ -141,7 +136,7 @@ useEffect(() => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SecondaryButton label="Back to Home" link="/" />
 
-            {source === "Calendar Booking" && (
+            {isCalendar && (
               <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" className="w-full">
                 <SecondaryButton
                   label="Open Gmail Inbox"
@@ -159,9 +154,8 @@ useEffect(() => {
             <div className="w-2 h-2 rounded-full bg-secondary"></div>
           </div>
 
-          {/* Safely rendering referenceId without Hydration error */}
           <span className="text-[9px] font-mono text-secondary uppercase tracking-widest">
-            Reference ID: {referenceId || "LOADING..."}
+            Reference ID: {referenceId}
           </span>
         </div>
       </div>
