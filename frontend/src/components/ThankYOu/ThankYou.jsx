@@ -15,51 +15,40 @@ const ThankYou = () => {
 useEffect(() => {
   if (typeof window === "undefined") return;
 
-  // 🔥 SECURITY CHECK: Agar source missing hai, toh tracking skip karo
+  // 🔴 DEBUG LOGS: Isko check karein console mein kya aata hai
+  console.log("--- TRACKING DEBUG START ---");
+  console.log("RAW SOURCE FROM URL:", source);
+  console.log("TYPE OF SOURCE:", typeof source);
+
   if (!source || source === "unknown") {
-    console.log("TRACKING SKIPPED: No valid source found.");
+    console.log("TRACKING SKIPPED: Source is empty or unknown");
     return;
   }
 
-  // Har source ke liye alag lock taake double tracking na ho
+  const currentSource = source.toLowerCase();
+  console.log("LOWERCASE SOURCE:", currentSource);
+  console.log("INCLUDES INQUIRY?:", currentSource.includes("inquiry"));
+  console.log("--- TRACKING DEBUG END ---");
+
+  // Har source ke liye lock
   window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
   if (window.__FIRED_CONVERSIONS__[source]) return;
   window.__FIRED_CONVERSIONS__[source] = true;
 
-  const currentSource = source.toLowerCase();
-
-  // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
   if (window.gtag) {
     if (currentSource.includes("calendar")) {
-      // 📅 CALENDAR BOOKING
-      window.gtag("event", "conversion", {
-        send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
-      });
-      console.log("GOOGLE ADS: Calendar Booking Fired");
-
+      window.gtag("event", "conversion", { send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN" });
+      console.log("FIRED: Calendar Booking");
     } else if (currentSource.includes("inquiry")) {
-      // 🔍 INQUIRY FORM (Click to Call Label)
-      window.gtag("event", "conversion", {
-        send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
-      });
-      console.log("GOOGLE ADS: Inquiry Form Fired");
-
+      window.gtag("event", "conversion", { send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-" });
+      console.log("FIRED: Inquiry Form");
     } else if (currentSource.includes("contact")) {
-      // 📝 CONTACT FORM
-      window.gtag("event", "conversion", {
-        send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
-      });
-      console.log("GOOGLE ADS: Contact Form Fired");
+      window.gtag("event", "conversion", { send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-" });
+      console.log("FIRED: Contact Form");
     }
-    // ❌ KOI ELSE BLOCK NAHI HAI: Agar koi aur source hua toh galti se bhi koi ghalat label fire nahi hoga.
   }
-
-  // 2. Facebook Pixel Tracking
-  if (window.fbq) {
-    window.fbq("track", "Lead", { source, vanTitle });
-  }
-
 }, [source, vanTitle]);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
       <div className="relative w-full max-w-2xl bg-white border-2 border-secondary rounded-lg shadow-xl overflow-hidden">
