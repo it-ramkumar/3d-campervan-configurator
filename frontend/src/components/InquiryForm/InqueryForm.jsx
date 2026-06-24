@@ -193,15 +193,13 @@ export default function InquiryForm() {
     try {
       const result = await submitInquiry(formData);
       if (result.success) {
-        if (typeof window !== "undefined") {
-          if (window.fbq) window.fbq("track", "Lead");
-          if (window.gtag) window.gtag("event", "generate_lead", { currency: "USD" });
-        }
+
         setFormData({});
         setCurrentStep(0);
-        navigate.push(
-          `/thank-you?email=${encodeURIComponent(formData.email)}&source=inquiry`,
-        );
+        // Bas user ko bhej dein, baaki kaam Thank-You page ka useEffect khud sambhal lega
+    navigate.push(
+      `/thank-you?email=${encodeURIComponent(formData.email)}&source=Inquiry%20Form`
+    );
       } else {
         console.log(result.error);
         console.log(result);

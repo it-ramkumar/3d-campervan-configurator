@@ -1,7 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ThankYou = () => {
   const searchParams = useSearchParams();
@@ -9,22 +9,39 @@ const ThankYou = () => {
   const source = searchParams.get("source") || "unknown";
   const vanTitle = searchParams.get("van") || "No Van Selected";
 
-useEffect(() => {
-  if (window.__LEAD_CONVERSION_FIRED__) return;
-  window.__LEAD_CONVERSION_FIRED__ = true;
+  // ✨ State for Reference ID to avoid hydration mismatch
+  const [referenceId, setReferenceId] = useState("");
 
-  if (typeof window !== "undefined") {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Client side par unique ID generate karein
+    setReferenceId(Math.random().toString(36).substring(7).toUpperCase());
+
+    // 🔥 SECURITY CHECK: Agar koi direct URL type karke aaye, toh tracking skip karein
+    if (!source || source === "unknown") {
+      console.log("TRACKING SKIPPED: Direct page visit detected (No source found).");
+      return;
+    }
+
+    // Har source ke liye alag lock taake double tracking na ho
+    window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
+    if (window.__FIRED_CONVERSIONS__[source]) return;
+    window.__FIRED_CONVERSIONS__[source] = true;
 
     // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
     if (window.gtag) {
       if (source === "Calendar Booking") {
-        // 📅 CALENDAR BOOKING: Jab iska label mile, yahan daal dena
         window.gtag("event", "conversion", {
-          send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DAALEIN",
+          send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
         });
         console.log("GOOGLE ADS: Calendar Booking Fired");
+      } else if (source === "Inquiry Form") {
+        window.gtag("event", "conversion", {
+          send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
+        });
+        console.log("GOOGLE ADS: Inquiry Form Fired");
       } else {
-        // 📝 CONTACT FORM: image_6b63f6.png ke mutabiq exact label add kar diya hai
         window.gtag("event", "conversion", {
           send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
         });
@@ -37,19 +54,26 @@ useEffect(() => {
       window.fbq("track", "Lead", { source, vanTitle });
     }
 
-    // 3. Backup GTM dataLayer (Agar event name se track karna ho)
+    // 3. Backup GTM dataLayer
+    let gtmEvent = "contact_form_submitted";
+    if (source === "Calendar Booking") {
+      gtmEvent = "appointment_form_submitted";
+    } else if (source === "Inquiry Form") {
+      gtmEvent = "inquiry_form_submitted";
+    }
+
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-      event: source === "Calendar Booking" ? "appointment_form_submitted" : "contact_form_submitted"
+      event: gtmEvent,
+      conversion_source: source,
+      page_title: vanTitle || "No Van Selected"
     });
-  }
-}, [source, vanTitle]);
+
+  }, [source, vanTitle]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
-      {/* Main Container */}
       <div className="relative w-full max-w-2xl bg-white border-2 border-secondary rounded-lg shadow-xl overflow-hidden">
-        {/* Top Accent */}
         <div className="h-2 bg-primary w-full" />
 
         <div className="p-8 md:p-12">
@@ -68,7 +92,6 @@ useEffect(() => {
           {/* Info Box */}
           <div className="space-y-4 mb-10">
             <div className="bg-primary text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden">
-              {/* Grid Overlay */}
               <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(rgba(245,245,240,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,240,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
               <div className="relative z-10">
@@ -78,16 +101,12 @@ useEffect(() => {
 
                 <div className="flex justify-between items-start border-b border-primary pb-2 mb-2">
                   <span>Type:</span>
-                  <span className="text-secondary/80 font-semibold">
-                    {source}
-                  </span>
+                  <span className="text-secondary/80 font-semibold">{source}</span>
                 </div>
 
                 <div className="flex justify-between items-start">
                   <span>Sent To:</span>
-                  <span className="break-all text-right ml-4 font-semibold">
-                    {email}
-                  </span>
+                  <span className="break-all text-right ml-4 font-semibold">{email}</span>
                 </div>
               </div>
             </div>
@@ -117,14 +136,8 @@ useEffect(() => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SecondaryButton label="Back to Home" link="/" />
 
-            {/* AGAR CALENDAR BOOKING HAI TO USER KO DIRECT EMAIL OPEN KARNE KA RASTA DIKHAO */}
             {source === "Calendar Booking" && (
-              <a
-                href="https://mail.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full"
-              >
+              <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" className="w-full">
                 <SecondaryButton
                   label="Open Gmail Inbox"
                   className="!bg-rose-600 hover:!bg-rose-700 !text-white w-full"
@@ -141,9 +154,9 @@ useEffect(() => {
             <div className="w-2 h-2 rounded-full bg-secondary"></div>
           </div>
 
+          {/* Safely rendering referenceId without Hydration error */}
           <span className="text-[9px] font-mono text-secondary uppercase tracking-widest">
-            Reference ID:{" "}
-            {Math.random().toString(36).substring(7).toUpperCase()}
+            Reference ID: {referenceId || "LOADING..."}
           </span>
         </div>
       </div>
