@@ -12,74 +12,54 @@ const ThankYou = () => {
   // ✨ State for Reference ID to avoid hydration mismatch
   const [referenceId, setReferenceId] = useState("");
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    // Client side par unique ID generate karein
-    setReferenceId(Math.random().toString(36).substring(7).toUpperCase());
-
-    // 🔥 SECURITY CHECK: Agar koi direct URL type karke aaye, toh tracking skip karein
-    if (!source || source === "unknown") {
-      console.log("TRACKING SKIPPED: Direct page visit detected (No source found).");
-      return;
-    }
-
-    // Har source ke liye alag lock taake double tracking na ho
-    window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
-    if (window.__FIRED_CONVERSIONS__[source]) return;
-    window.__FIRED_CONVERSIONS__[source] = true;
-
-    // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
-   // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
-if (window.gtag) {
-  // .toLowerCase() aur .includes() use karein taake exact spelling ka rona na rahe
-  const currentSource = (source || "").toLowerCase();
-
-  if (currentSource.includes("calendar")) {
-    // 📅 CALENDAR BOOKING
-    window.gtag("event", "conversion", {
-      send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
-    });
-    console.log("GOOGLE ADS: Calendar Booking Fired");
-
-  } else if (currentSource.includes("inquiry")) {
-    // 🔍 INQUIRY FORM (Ab yeh har haal mein fire hoga!)
-    window.gtag("event", "conversion", {
-      send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
-    });
-    console.log("GOOGLE ADS: Inquiry Form Fired");
-
-  } else {
-    // 📝 CONTACT FORM (Default backup)
-    window.gtag("event", "conversion", {
-      send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
-    });
-    console.log("GOOGLE ADS: Contact Form Fired");
+  // 🔥 SECURITY CHECK: Agar source missing hai, toh tracking skip karo
+  if (!source || source === "unknown") {
+    console.log("TRACKING SKIPPED: No valid source found.");
+    return;
   }
-}
 
-    // 2. Facebook Pixel Tracking
-    if (window.fbq) {
-      window.fbq("track", "Lead", { source, vanTitle });
+  // Har source ke liye alag lock taake double tracking na ho
+  window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
+  if (window.__FIRED_CONVERSIONS__[source]) return;
+  window.__FIRED_CONVERSIONS__[source] = true;
+
+  const currentSource = source.toLowerCase();
+
+  // 1. GOOGLE ADS DIRECT ID & LABEL TRACKING
+  if (window.gtag) {
+    if (currentSource.includes("calendar")) {
+      // 📅 CALENDAR BOOKING
+      window.gtag("event", "conversion", {
+        send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN",
+      });
+      console.log("GOOGLE ADS: Calendar Booking Fired");
+
+    } else if (currentSource.includes("inquiry")) {
+      // 🔍 INQUIRY FORM (Click to Call Label)
+      window.gtag("event", "conversion", {
+        send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-",
+      });
+      console.log("GOOGLE ADS: Inquiry Form Fired");
+
+    } else if (currentSource.includes("contact")) {
+      // 📝 CONTACT FORM
+      window.gtag("event", "conversion", {
+        send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-",
+      });
+      console.log("GOOGLE ADS: Contact Form Fired");
     }
+    // ❌ KOI ELSE BLOCK NAHI HAI: Agar koi aur source hua toh galti se bhi koi ghalat label fire nahi hoga.
+  }
 
-    // 3. Backup GTM dataLayer
-    let gtmEvent = "contact_form_submitted";
-    if (source === "Calendar Booking") {
-      gtmEvent = "appointment_form_submitted";
-    } else if (source === "Inquiry Form") {
-      gtmEvent = "inquiry_form_submitted";
-    }
+  // 2. Facebook Pixel Tracking
+  if (window.fbq) {
+    window.fbq("track", "Lead", { source, vanTitle });
+  }
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: gtmEvent,
-      conversion_source: source,
-      page_title: vanTitle || "No Van Selected"
-    });
-
-  }, [source, vanTitle]);
-
+}, [source, vanTitle]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
       <div className="relative w-full max-w-2xl bg-white border-2 border-secondary rounded-lg shadow-xl overflow-hidden">
