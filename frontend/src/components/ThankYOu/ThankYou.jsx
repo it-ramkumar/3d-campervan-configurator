@@ -43,7 +43,7 @@ useEffect(() => {
       window.gtag("event", "conversion", { send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-" });
       console.log("FIRED: Inquiry Form");
     } else if (currentSource.includes("contact")) {
-      window.gtag("event", "conversion", { send_to: "AW-16677332528/wrYHCJeQ9b0cELDMr5A-" });
+      window.gtag("event", "conversion", { send_to: "AW-16677332528/E1hYCOzM6b0cELDMr5A-" });
       console.log("FIRED: Contact Form");
     }
   }
