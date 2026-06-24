@@ -15,10 +15,9 @@ const ThankYou = () => {
 useEffect(() => {
   if (typeof window === "undefined") return;
 
-  // 🔴 DEBUG LOGS: Isko check karein console mein kya aata hai
+  // 🔴 DEBUG LOGS
   console.log("--- TRACKING DEBUG START ---");
   console.log("RAW SOURCE FROM URL:", source);
-  console.log("TYPE OF SOURCE:", typeof source);
 
   if (!source || source === "unknown") {
     console.log("TRACKING SKIPPED: Source is empty or unknown");
@@ -27,26 +26,54 @@ useEffect(() => {
 
   const currentSource = source.toLowerCase();
   console.log("LOWERCASE SOURCE:", currentSource);
-  console.log("INCLUDES INQUIRY?:", currentSource.includes("inquiry"));
   console.log("--- TRACKING DEBUG END ---");
 
-  // Har source ke liye lock
-  window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
-  if (window.__FIRED_CONVERSIONS__[source]) return;
-  window.__FIRED_CONVERSIONS__[source] = true;
+  // Global window tracking array setup karein (GTM aur Extensions ke liye sab se best hai)
+  window.dataLayer = window.dataLayer || [];
 
-  if (window.gtag) {
-    if (currentSource.includes("calendar")) {
-      window.gtag("event", "conversion", { send_to: "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN" });
-      console.log("FIRED: Calendar Booking");
-    } else if (currentSource.includes("inquiry")) {
-      window.gtag("event", "conversion", { send_to: "AW-16677332528/TFmwCMXKwMQcELDMr5A-" });
-      console.log("FIRED: Inquiry Form");
-    } else if (currentSource.includes("contact")) {
-      window.gtag("event", "conversion", { send_to: "AW-16677332528/E1hYCOzM6b0cELDMr5A-" });
-      console.log("FIRED: Contact Form");
-    }
+  // 🔐 DEBUNCE / LOCKING SYSTEM
+  // Agar is unique session/render mein yeh source fire ho chuka hai, toh bypass karein
+  window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
+  if (window.__FIRED_CONVERSIONS__[currentSource]) {
+    console.log(`LOCK ACTIVE: Conversion for [${currentSource}] already sent in this session.`);
+    return;
   }
+
+  // Target labels define karein
+  let targetLabel = "";
+  let logMessage = "";
+
+  if (currentSource.includes("calendar")) {
+    targetLabel = "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN";
+    logMessage = "FIRED: Calendar Booking";
+  } else if (currentSource.includes("inquiry")) {
+    targetLabel = "AW-16677332528/TFmwCMXKwMQcELDMr5A-";
+    logMessage = "FIRED: Inquiry Form (Click to Call)";
+  } else if (currentSource.includes("contact")) {
+    targetLabel = "AW-16677332528/E1hYCOzM6b0cELDMr5A-";
+    logMessage = "FIRED: Contact Form";
+  }
+
+  // Agar label mil gaya hai toh fire karein
+  if (targetLabel) {
+    // 1. Mark as fired immediately taake dubara call na ho
+    window.__FIRED_CONVERSIONS__[currentSource] = true;
+
+    // 2. Standard GTM dataLayer push (Extension isko 100% capture karegi)
+    window.dataLayer.push({
+      event: "conversion",
+      send_to: targetLabel,
+    });
+    console.log(`🚀 ${logMessage} with label: ${targetLabel}`);
+
+    // 3. Fallback: Agar gtag directly configured hai
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion", { send_to: targetLabel });
+    }
+  } else {
+    console.log("NO MATCHING SOURCE FOUND FOR GOOGLE ADS");
+  }
+
 }, [source, vanTitle]);
 
   return (
