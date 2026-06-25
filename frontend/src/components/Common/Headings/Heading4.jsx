@@ -10,7 +10,7 @@ const Heading4 = ({
 }) => {
   return (
     <h4
-      className={`text-base sm:text-lg md:text-xl lg:text-2xl font-semibold tracking-tight leading-snug font-body ${textColor} ${className}`}
+      className={`text-lg sm:text-xl md:text-2xl font-bold tracking-wide leading-snug font-display ${textColor} ${className}`}
       style={{
         ...inlineStyle,
         borderRadius: '8px'

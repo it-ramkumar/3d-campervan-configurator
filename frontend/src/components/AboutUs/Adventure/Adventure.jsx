@@ -19,72 +19,80 @@ const ctaBgImage = "/images2/vfs.webp";
 
 export default function AboutPage() {
   return (
-    <div className="bg-secondary text-primary font-body overflow-x-hidden">
+    <div className="font-body overflow-x-hidden">
       {/* SECTION 1: Narrative Intro */}
-      <section className="container mx-auto px-6 py-24 lg:py-40">
-        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-          <div className="w-full lg:w-1/2 relative">
-            {/* Design Element: Simple Primary Border Box */}
-            <div className="aspect-[4/5]">
-              <ImageWithSkeleton src={ownersImage} alt="Artur and Anna" />
+      <section className="bbv-section-light relative overflow-hidden">
+        <div className="bbv-dot-grid-light" />
+        <div className="container mx-auto px-6 py-24 lg:py-40 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+            <div className="w-full lg:w-1/2 relative">
+              <div className="aspect-[4/5] relative">
+                <ImageWithSkeleton src={ownersImage} alt="Artur and Anna" />
+                <div className="bbv-amber-line" />
+              </div>
             </div>
-          </div>
 
-          <div className="w-full lg:w-1/2 space-y-8">
-            <div>
-              <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">
-                The Founders
+            <div className="w-full lg:w-1/2 space-y-8">
+              <div>
+                <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+                  The Founders
+                </p>
+                <Heading2
+                  text="Artur and Anna"
+                  className="font-display text-primary uppercase tracking-wide mt-2"
+                />
+                <div className="bbv-divider mb-6" />
+              </div>
+
+              <RichParagraph className="text-xl font-medium leading-relaxed text-primary/90">
+                Our journey wasn't born in a factory—it was born on the open road
+                across Europe and the USA.
               </RichParagraph>
-              <Heading2 text="Artur and Anna" className="mt-2" />
-              <div className="h-1 w-20 bg-primary mt-4 rounded-lg"></div>
+
+              <RichParagraph className="text-primary/60 leading-relaxed">
+                Combining all the knowledge from our travels in trailers, buses,
+                and fifth-wheels, we were eager to create the perfect compact van
+                space for a family of 5. Every build we create is a result of that
+                evolution.
+              </RichParagraph>
             </div>
-
-            <RichParagraph className="text-xl font-medium leading-relaxed opacity-90">
-              Our journey wasn’t born in a factory—it was born on the open road
-              across Europe and the USA.
-            </RichParagraph>
-
-            <RichParagraph className="opacity-80">
-              Combining all the knowledge from our travels in trailers, buses,
-              and fifth-wheels, we were eager to create the perfect compact van
-              space for a family of 5. Every build we create is a result of that
-              evolution.
-            </RichParagraph>
           </div>
         </div>
       </section>
 
       {/* SECTION 2: Van Evolution */}
-      <section className="bg-primary py-24 lg:py-40">
-        <div className="container mx-auto px-6">
+      <section className="bg-primary py-24 lg:py-40 relative overflow-hidden">
+        <div className="bbv-dot-grid" />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="mb-20">
-            <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">
+            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
               Our Journey
-            </RichParagraph>
+            </p>
             <Heading2
               text="The Evolution of Our Vans"
-              className="text-secondary mt-2"
+              className="font-display text-secondary uppercase tracking-wide mt-2"
             />
+            <div className="bbv-divider mb-6" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Wide Card 1 */}
-            <div className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+            <div className="md:col-span-7 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
               <div className="aspect-[8/5] overflow-hidden relative">
                 <ImageWithSkeleton
                   src={ambulanceImage}
                   alt={"ambulance custom build"}
                 />
-                <div className="absolute top-4 left-4 bg-primary text-secondary px-4 py-1 rounded-lg text-xs font-bold uppercase">
+                <div className="absolute top-4 left-4 bg-hover text-primary px-4 py-1 rounded-lg text-xs font-bold uppercase">
                   Build 01
                 </div>
               </div>
               <div className="p-10">
                 <Heading3
                   text="Ambulance Afterlife"
-                  className="text-primary mb-4"
+                  className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-primary opacity-80">
+                <RichParagraph className="text-secondary/60">
                   Our journey began in 2020 with a Sprinter ambulance
                   conversion. We crafted this for family use, retiring it only
                   after 300,000 miles of memories.
@@ -93,7 +101,7 @@ export default function AboutPage() {
             </div>
 
             {/* Small Card 2 */}
-            <div className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+            <div className="md:col-span-5 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
               <div className="aspect-[8/5] overflow-hidden relative">
                 <ImageWithSkeleton
                   src={prototypeImage}
@@ -104,9 +112,9 @@ export default function AboutPage() {
               <div className="p-10">
                 <Heading3
                   text="Lift Bed Prototype"
-                  className="text-primary mb-4"
+                  className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-primary opacity-80">
+                <RichParagraph className="text-secondary/60">
                   This build featured our first attempt at an elevator bed—a
                   feature that now defines the Santa Monica layout.
                 </RichParagraph>
@@ -114,7 +122,7 @@ export default function AboutPage() {
             </div>
 
             {/* Small Card 3 */}
-            <div className="md:col-span-5 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+            <div className="md:col-span-5 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
               <div className="aspect-[8/5] overflow-hidden">
                 <ImageWithSkeleton
                   src={blueWhaleImage}
@@ -123,13 +131,16 @@ export default function AboutPage() {
                 />
               </div>
               <div className="p-10">
-                <Heading3 text="Blue Whale" className="text-primary mb-4" />
-                <RichParagraph className="text-primary opacity-80">
+                <Heading3
+                  text="Blue Whale"
+                  className="font-display text-secondary uppercase tracking-wide mb-4"
+                />
+                <RichParagraph className="text-secondary/60">
                   A Ford Transit 148 high roof with roof hammocks and rear
                   decks. View the{" "}
                   <Link
                     href="/layout-detail/blue-whale-van"
-                    className="font-bold underline"
+                    className="text-hover font-bold underline hover:text-secondary transition-colors"
                   >
                     Layout Details
                   </Link>
@@ -139,7 +150,7 @@ export default function AboutPage() {
             </div>
 
             {/* Wide Card 4 */}
-            <div className="md:col-span-7 bg-secondary rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+            <div className="md:col-span-7 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
               <div className="aspect-[8/5] overflow-hidden">
                 <ImageWithSkeleton
                   src={grayWolfImage}
@@ -148,13 +159,16 @@ export default function AboutPage() {
                 />
               </div>
               <div className="p-10">
-                <Heading3 text="Gray Wolf" className="text-primary mb-4" />
-                <RichParagraph className="text-primary opacity-80">
+                <Heading3
+                  text="Gray Wolf"
+                  className="font-display text-secondary uppercase tracking-wide mb-4"
+                />
+                <RichParagraph className="text-secondary/60">
                   Our 144 Sprinter demo sleeps five and reflects our commitment
                   to innovation. View the{" "}
                   <Link
                     href="/layout-detail/santa-monica-gray"
-                    className="font-bold underline"
+                    className="text-hover font-bold underline hover:text-secondary transition-colors"
                   >
                     Santa Monica
                   </Link>{" "}
@@ -176,24 +190,33 @@ export default function AboutPage() {
             width={1920}
             height={1080}
           />
-          <div className="absolute inset-0 bg-primary/80 backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-primary/85 backdrop-blur-sm"></div>
         </div>
 
         <div className="relative z-10 text-center max-w-4xl px-6">
-          <Heading2 text="Join the Adventure" className="text-secondary mb-4" />
+          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+            Ready to Roll
+          </p>
+          <Heading2
+            text="Join the Adventure"
+            className="font-display text-secondary uppercase tracking-wide mb-4"
+          />
+          <div className="bbv-divider mb-6" />
 
           <p className="text-hover text-lg md:text-xl font-semibold italic tracking-wide mb-6">
             You Dream It. We Build It.
           </p>
-          <RichParagraph
-            white={true}
-            className="text-secondary opacity-90 mb-10 text-lg"
-          >
+          <RichParagraph className="text-secondary/80 mb-10 text-lg">
             Become a creator of your own home on wheels. Design your floor plan,
             select materials, and customize finishes for your dream rig.
           </RichParagraph>
           <div className="flex justify-center">
-            <PrimaryButton label="Start Your Build" link="/contact" />
+            <Link
+              href="/contact"
+              className="bg-hover text-primary font-bold uppercase tracking-wider px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Start Your Build
+            </Link>
           </div>
         </div>
       </section>

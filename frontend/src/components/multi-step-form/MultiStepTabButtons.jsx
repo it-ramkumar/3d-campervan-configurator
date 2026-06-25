@@ -14,7 +14,13 @@ export default function TabButtons({
   ];
 
   return (
-    <div className="flex p-1 rounded-lg bg-secondary-100 border border-primary/10">
+    <div
+      className="flex p-1 rounded-xl"
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.07)",
+      }}
+    >
       {tabs.map((t) => {
         const Icon = t.icon;
         const isActive = activeTab === t.key;
@@ -29,15 +35,14 @@ export default function TabButtons({
               if (t.key === "exterior") toggleExterior(true);
               if (t.key === "system") toggleExterior(true);
             }}
-            className={`
-              flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-medium transition-all
-              ${isActive
-                ? "bg-primary text-secondary shadow-lg"
-                : "text-primary hover:text-primary/70 hover:bg-primary/5"
-              }
-            `}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg font-ui text-[10px] font-semibold uppercase tracking-[0.12em] transition-all duration-200"
+            style={
+              isActive
+                ? { background: "#FBFBF9", color: "#001F3D" }
+                : { color: "rgba(251,251,249,0.4)" }
+            }
           >
-            <Icon size={14} />
+            <Icon size={13} />
             <span className="hidden sm:inline">{t.label}</span>
             <span className="sm:hidden">{t.short}</span>
           </button>

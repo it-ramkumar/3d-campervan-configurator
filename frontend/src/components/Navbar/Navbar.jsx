@@ -17,7 +17,7 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
   <FooterListItem
     href={href}
     onClick={onClick}
-    className={`block py-1 ${isActive ? "text-primary font-semibold" : "text-primary hover:!text-hover"} transition-colors font-body tracking-tight text-[14px]`}
+    className={`block py-1.5 ${isActive ? "text-[#ED985F] font-semibold" : "text-primary hover:!text-[#ED985F]"} transition-colors font-ui tracking-wide text-[13px]`}
   >
     {children}
   </FooterListItem>
@@ -104,7 +104,7 @@ const CategoryCard = ({ image, title, href, onClick,floorPlans }) => (
       </div>
 
       {/* Title Section */}
-      <span className="block px-2 text-[14px] font-body font-semibold uppercase tracking-[0.1em] text-primary group-hover:text-hover transition-colors">
+      <span className="block px-2 text-[12px] font-display font-bold uppercase tracking-[0.12em] text-primary group-hover:text-[#ED985F] transition-colors">
         {title}
       </span>
     </Link>
@@ -115,7 +115,7 @@ const BlogListItem = ({ href, children, onClick }) => (
   <FooterListItem
     href={href}
     onClick={onClick}
-    className="block py-2 text-[14px] text-primary font-body tracking-tight hover:!text-hover transition-colors"
+    className="block py-2 text-[13px] text-primary font-ui tracking-wide hover:!text-[#ED985F] transition-colors"
     bullets="list-desc"
   >
     {children} →
@@ -428,7 +428,7 @@ const handleItemClick = () => {
     <>
       {/* --- Main Navigation Bar --- */}
       <nav
-        className={`sticky top-0 w-full font-body z-[100] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary shadow-md h-[65px]"}`}
+        className={`sticky top-0 w-full font-ui z-[100] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary h-[65px] shadow-[0_1px_0_0_rgba(0,31,61,0.08),0_2px_12px_rgba(0,0,0,0.04)]"}`}
       >
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
           {!forceMobile && (
@@ -441,7 +441,7 @@ const handleItemClick = () => {
                 className="object-contain border-none mb-1"
               />
 
-              <span className="text-[9px] md:text-[10px] italic tracking-[0.12em] text-primary mt-[-8px] ml-1">
+              <span className="font-ui text-[9px] md:text-[10px] italic tracking-[0.15em] text-[#ED985F] mt-[-8px] ml-1">
                 You Dream It. We Build It.
               </span>
             </Link>
@@ -457,8 +457,11 @@ const handleItemClick = () => {
                 href={link.path}
                 onMouseEnter={() => link.hasDropdown && handleHover(link.name)}
                 onMouseLeave={() => link.hasDropdown && handleMouseLeave()}
-                className={`flex items-center gap-1 uppercase text-[12px] font-body font-semibold tracking-tight transition-colors duration-200
-                }`}
+                className={`flex items-center gap-1 uppercase text-[11px] font-ui font-semibold tracking-[0.1em] transition-colors duration-200 pb-0.5
+                  ${pathname === link.path
+                    ? "text-[#ED985F] border-b-2 border-[#ED985F]"
+                    : "text-primary hover:text-[#ED985F]"
+                  }`}
               >
                 {link.label}
                 {link.hasDropdown && (
@@ -474,7 +477,7 @@ const handleItemClick = () => {
             {!forceMobile && (
               <Link
                 href="/contact"
-                className="hidden lg:block px-5 py-2 rounded-lg text-[11px] font-semibold uppercase tracking-widest bg-primary text-secondary border border-black/20 transition-transform hover:scale-105 hover:bg-primary hover:text-secondary"
+                className="hidden lg:block px-5 py-2 rounded-lg text-[11px] font-ui font-semibold uppercase tracking-[0.15em] bg-primary text-secondary border border-primary/20 transition-all duration-200 hover:bg-[#ED985F] hover:border-[#ED985F] hover:scale-105"
               >
                 Book Consultation
               </Link>
@@ -493,7 +496,7 @@ const handleItemClick = () => {
       {/* --- Desktop Mega Menu --- */}
 <div
   ref={megaMenuRef}
-  className="fixed left-0 w-full shadow-2xl z-[999] border-t font-body tracking-tight will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
+  className="fixed left-0 w-full shadow-2xl z-[999] border-t border-[#ED985F]/15 font-ui will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
   style={{
     top: "65px",
     display: desktopMenu && !forceMobile ? "block" : "none",
@@ -525,7 +528,7 @@ const handleItemClick = () => {
           `}
         >
           <Heading4 text={sec.title} textColor="text-primary" />
-          <ul className="space-y-1 font-body mt-4">
+          <ul className="space-y-1 font-ui mt-4">
             {renderSectionItems(sec)}
           </ul>
         </div>
@@ -569,7 +572,7 @@ const handleItemClick = () => {
                     // Simple Link (No Dropdown)
                     <Link
                       href={link.path}
-                      className="block py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
+                      className="block py-4 font-display font-bold text-2xl uppercase tracking-wide transition-colors hover:!text-[#ED985F]"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -581,7 +584,7 @@ const handleItemClick = () => {
                         {/* 1. Yeh text user ko page par le jayega */}
                         <Link
                           href={link.path}
-                          className="flex-grow py-4 font-semibold text-lg uppercase transition-colors hover:!text-hover"
+                          className="flex-grow py-4 font-display font-bold text-2xl uppercase tracking-wide transition-colors hover:!text-[#ED985F]"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {link.label}
@@ -627,7 +630,7 @@ const handleItemClick = () => {
               <div className="pt-6">
                 <Link
                   href="/contact"
-                  className="block w-full bg-primary font-body text-secondary text-center py-4 rounded-md font-semibold uppercase tracking-tight text-xs transition-transform hover:scale-105"
+                  className="block w-full bg-primary font-ui text-secondary text-center py-4 rounded-lg font-semibold uppercase tracking-[0.15em] text-xs transition-all hover:bg-[#ED985F] hover:scale-105"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Book Free Consultation

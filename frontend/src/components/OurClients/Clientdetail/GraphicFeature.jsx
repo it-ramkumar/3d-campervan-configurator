@@ -8,12 +8,12 @@ export default function GraphicFeature({ text, index }) {
       initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1 }}
-      className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-primary/5"
+      className="flex flex-col items-center text-center p-6 bbv-glass rounded-lg border border-hover/20 hover:border-hover/40 transition-all duration-300"
     >
-      <div className="w-16 h-16 bg-primary rounded-lg flex items-center justify-center mb-4 transition-transform hover:scale-105">
+      <div className="w-16 h-16 bg-hover/20 rounded-lg flex items-center justify-center mb-4 transition-transform hover:scale-105 border border-hover/30">
         {/* Graphic content goes here */}
       </div>
-      <RichParagraph className="text-primary/80 font-medium">
+      <RichParagraph className="text-secondary/80 font-medium">
         {text}
       </RichParagraph>
     </motion.div>

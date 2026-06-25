@@ -28,7 +28,7 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative w-full h-[75vh] sm:h-[80vh] md:h-[95vh] overflow-hidden bg-black">
+    <div className="relative w-full h-[88vh] sm:h-[92vh] md:h-screen overflow-hidden bg-black">
       <Swiper
         onSwiper={(s) => (swiperRef.current = s)}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
@@ -70,7 +70,8 @@ export default function Hero() {
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/75 via-black/40 to-transparent" />
+              <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
+              <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="relative z-20 h-full flex items-center">
                 {/* md:justify-center ko hata kar default justify-center lagaya taake mobile par bhi vertically center rahe */}
                 <div className="w-full px-5 text-white flex flex-col justify-center h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
@@ -113,6 +114,9 @@ export default function Hero() {
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Orange bottom accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ED985F] z-30" />
 
       {/* NAVIGATION */}
       <div className="absolute bottom-6 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">

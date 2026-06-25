@@ -17,17 +17,17 @@ export default function BlogSearchUI({ initialSearch }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-[8px] shadow-sm border border-primary/5 mb-16 max-w-3xl mx-auto">
-      <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest mb-3 text-center lg:text-left">
+    <div className="bbv-card p-6 rounded-lg mb-16 max-w-3xl mx-auto">
+      <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3 text-center lg:text-left">
         Search the Archives
       </p>
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 h-5 w-5" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/40 h-5 w-5" />
           <input
             type="text"
             placeholder="Keywords (e.g. Solar, Bathroom...)"
-            className="w-full pl-12 pr-4 py-3 bg-secondary border-none rounded-[8px] focus:ring-2 focus:ring-hover text-primary shadow-inner"
+            className="w-full pl-12 pr-4 py-3 bg-white border border-primary/20 rounded-lg focus:ring-2 focus:ring-hover/40 focus:border-hover/50 text-primary placeholder:text-primary/30 outline-none transition-all"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}

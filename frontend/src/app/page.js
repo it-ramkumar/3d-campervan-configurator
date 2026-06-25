@@ -114,7 +114,7 @@ export default async function Home() {
       <main>
         <Hero />
 
-        <div className="overflow-x-hidden bg-white flex flex-col space-y-16 ">
+        <div className="overflow-x-hidden bg-secondary flex flex-col space-y-16 ">
           <Buy initialVans={readyToGoVans} />
 
           {/* Replaced <Customize /> with the Matchmaker Quiz System */}

@@ -42,7 +42,7 @@ const handleCopy = (e) => {
   });
 };
   return (
-    <section className="w-full py-20 bg-secondary overflow-hidden antialiased">
+    <section className="w-full py-20 bg-[#F8F8F6] overflow-hidden antialiased">
       <div className="container mx-auto px-4 max-w-7xl">
 
         {/* --- Header --- */}

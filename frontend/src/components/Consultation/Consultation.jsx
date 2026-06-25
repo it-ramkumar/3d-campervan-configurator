@@ -50,27 +50,30 @@ export default function Consultation() {
   };
 
   return (
-    <div className="bg-secondary min-h-screen py-20 flex flex-col items-center space-y-16">
+    <div className="bg-[#F8F8F6] min-h-screen py-20 flex flex-col items-center space-y-16 relative">
       {/* ===== Header Text ===== */}
-      <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl">
-        <RichParagraph className="!text-hover font-bold !text-sm tracking-wider uppercase  mb-2 block">
+      <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl relative z-10">
+        <span className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
           Connect With Us
-        </RichParagraph>
-        <Heading2 text="Schedule Your Free Consultation Call" />
-        <div className="w-16 h-1 bg-hover rounded-lg"></div>
-        <RichParagraph className="">
+        </span>
+        <Heading2
+          text="Schedule Your Free Consultation Call"
+          className="font-display uppercase tracking-wide"
+        />
+        <div className="bbv-divider mb-2" />
+        <RichParagraph className="!text-primary/70">
           Talk with our experts in Big Bear, California, about financing, test
           drives, and personalized upgrades.
         </RichParagraph>
       </div>
 
       {/* ===== Calendar Section ===== */}
-      <div className="w-full max-w-6xl bg-white rounded-lg shadow-sm border border-primary/5">
+      <div className="w-full max-w-6xl border-t-2 border-hover relative z-10">
         <CalendarSection />
       </div>
 
       {/* ===== Contact Form Section ===== */}
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl relative z-10">
         <ContactForm
           formData={formData}
           handleChange={handleChange}
@@ -80,7 +83,7 @@ export default function Consultation() {
       </div>
 
       {/* ===== Map Section ===== */}
-      <div className="w-full max-w-6xl">
+      <div className="w-full max-w-6xl relative z-10">
         <MapSection />
       </div>
     </div>

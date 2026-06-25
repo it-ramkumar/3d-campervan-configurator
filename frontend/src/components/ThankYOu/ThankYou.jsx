@@ -47,12 +47,11 @@ const ThankYou = () => {
 
     // 🎯 URL SOURCE MATCHING
     if (currentSource.includes("calendar")) {
-      // 📝 TODO: Yahan apne Google Ads calendar goal ka real label paste karein
       targetLabel = "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN";
     } else if (currentSource.includes("inquiry")) {
-      targetLabel = "AW-16677332528/TFmwCMXKwMQcELDMr5A-";
+      targetLabel = "AW-16677332528/tfm6CM_S-MQcELDMr5A-";
     } else if (currentSource.includes("contact")) {
-      targetLabel = "AW-16677332528/E1hYCOzM6b0cELDMr5A-";
+      targetLabel = "AW-16677332528/zNLyCKCpjsUcELDMr5A-";
     }
 
     // 🚀 FIRE EVENT TO GTM
@@ -72,58 +71,65 @@ const ThankYou = () => {
   }, [source, vanTitle]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-secondary p-6">
-      <div className="relative w-full max-w-2xl bg-white border-2 border-secondary rounded-lg shadow-xl overflow-hidden">
-        <div className="h-2 bg-primary w-full" />
+    <div className="flex items-center justify-center min-h-screen bg-canvas p-6 relative">
+      {/* Dot grid background */}
+      <div className="bbv-dot-grid" />
+
+      <div className="relative w-full max-w-2xl bbv-glass border border-white/7 rounded-lg overflow-hidden z-10">
+        {/* Amber top accent */}
+        <div className="h-[2px] bg-hover w-full" />
 
         <div className="p-8 md:p-12">
           {/* Header */}
           <div className="flex flex-col items-center mb-10">
-            <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center border-2 border-[#30364F] mb-6 shadow-inner">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6 border border-hover/40"
+              style={{ background: "rgba(237,152,95,0.12)" }}>
               <span className="text-3xl">{isCalendar ? "📧" : "✔️"}</span>
             </div>
 
             <Heading1
               text={isCalendar ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
-              className="!text-primary text-center"
+              className="!text-secondary text-center"
             />
           </div>
 
           {/* Info Box */}
           <div className="space-y-4 mb-10">
-            <div className="bg-primary text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5 pointer-events-none bg-[linear-gradient(rgba(245,245,240,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(245,245,240,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+            <div className="bg-canvas/80 text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden border border-white/10">
+              <div className="bbv-dot-grid" />
 
               <div className="relative z-10">
-                <RichParagraph className="mb-2 uppercase !text-secondary tracking-widest underline">
+                <RichParagraph className="mb-2 uppercase !text-secondary/60 tracking-widest underline">
                   Submission Details
                 </RichParagraph>
 
-                <div className="flex justify-between items-start border-b border-primary pb-2 mb-2">
-                  <span>Type:</span>
-                  <span className="text-secondary/80 font-semibold">{source}</span>
+                <div className="flex justify-between items-start border-b border-white/10 pb-2 mb-2">
+                  <span className="text-secondary/60">Type:</span>
+                  <span className="text-secondary font-semibold">{source}</span>
                 </div>
 
                 <div className="flex justify-between items-start">
-                  <span>Sent To:</span>
-                  <span className="break-all text-right ml-4 font-semibold">{email}</span>
+                  <span className="text-secondary/60">Sent To:</span>
+                  <span className="break-all text-right ml-4 font-semibold text-secondary">{email}</span>
                 </div>
               </div>
             </div>
 
             {/* Message */}
-            <RichParagraph className="text-primary text-center italic text-sm leading-relaxed">
+            <RichParagraph className="text-secondary/70 text-center italic text-sm leading-relaxed">
               {isCalendar ? (
                 <>
-                  <strong className="text-red-600 not-italic block mb-2 text-base">⚠️ Important Step to Confirm Your Meet:</strong>
+                  <strong className="text-hover not-italic block mb-2 text-base">Important Step to Confirm Your Meet:</strong>
                   We have sent an automated Google Calendar invitation to your email.
-                  <span className="block mt-2 font-semibold not-italic text-slate-800">
-                    Please open your inbox, open the invitation email, and click <span className="text-emerald-600">"Yes"</span> or <span className="text-emerald-600">"Going"</span> to lock in your time slot.
+                  <span className="block mt-2 font-semibold not-italic text-secondary">
+                    Please open your inbox, open the invitation email, and click{" "}
+                    <span className="text-hover">"Yes"</span> or{" "}
+                    <span className="text-hover">"Going"</span> to lock in your time slot.
                   </span>
                 </>
               ) : (
                 <>
-                  Thank you for reaching out to us. We’ve successfully received your inquiry and sent all the details to your email address.
+                  Thank you for reaching out to us. We've successfully received your inquiry and sent all the details to your email address.
                 </>
               )}
               <br />
@@ -148,13 +154,13 @@ const ThankYou = () => {
         </div>
 
         {/* Footer */}
-        <div className="bg-primary/10 p-3 flex justify-between items-center border-t border-secondary/30">
+        <div className="bg-white/5 p-3 flex justify-between items-center border-t border-white/10">
           <div className="flex gap-1">
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-            <div className="w-2 h-2 rounded-full bg-secondary"></div>
+            <div className="w-2 h-2 rounded-full bg-hover animate-pulse"></div>
+            <div className="w-2 h-2 rounded-full bg-secondary/30"></div>
           </div>
 
-          <span className="text-[9px] font-mono text-secondary uppercase tracking-widest">
+          <span className="text-[9px] font-mono text-secondary/40 uppercase tracking-widest">
             Reference ID: {referenceId}
           </span>
         </div>

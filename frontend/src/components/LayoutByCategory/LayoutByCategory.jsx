@@ -18,7 +18,7 @@ const ProjectImages = ({ images, alt, slug }) => {
   const hasMultiple = images?.length > 1;
 
   return (
-    <div className="group relative w-full h-[300px] md:h-[450px] flex gap-2 p-2 overflow-hidden bg-secondary rounded-xl">
+    <div className="group relative w-full h-[300px] md:h-[450px] flex gap-2 p-2 overflow-hidden bbv-glass rounded-xl">
       {/* Main Image Container */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -34,6 +34,8 @@ const ProjectImages = ({ images, alt, slug }) => {
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
+        {/* Amber bottom line accent on hover */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-hover opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </motion.div>
 
       {/* Side Column (Grid) */}
@@ -45,7 +47,7 @@ const ProjectImages = ({ images, alt, slug }) => {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex-1 w-full overflow-hidden rounded-lg bg-gray-200"
+              className="relative flex-1 w-full overflow-hidden rounded-lg bg-primary/40"
             >
               <Image
                 src={img}
@@ -57,9 +59,9 @@ const ProjectImages = ({ images, alt, slug }) => {
 
               {/* More Images Overlay */}
               {i === 1 && images.length > 3 && (
-                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white backdrop-blur-[2px]">
+                <div className="absolute inset-0 bg-primary/70 flex flex-col items-center justify-center text-secondary backdrop-blur-[2px]">
                   <span className="text-xl font-bold">+{images.length - 3}</span>
-                  <span className="text-[10px] uppercase tracking-widest">Photos</span>
+                  <span className="text-[10px] uppercase tracking-widest text-secondary/70">Photos</span>
                 </div>
               )}
             </motion.div>
@@ -68,7 +70,7 @@ const ProjectImages = ({ images, alt, slug }) => {
       )}
 
       {/* Subtle Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent pointer-events-none" />
     </div>
   );
 };
@@ -88,9 +90,7 @@ export default function CamperProjectsClient({ category, initialData, currentPar
     } else {
       params.delete(key);
     }
-    // Filter change par page 1 par wapas le jana behtar hota hai
     if (key !== "page") params.set("page", "1");
-
     router.push(`${pathname}?${params.toString()}`, { scroll: true });
   };
 
@@ -102,7 +102,7 @@ export default function CamperProjectsClient({ category, initialData, currentPar
   const formattedCategory = category?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
   return (
-    <main className="bg-[#F9FAFB] min-h-screen">
+    <main className="bg-primary min-h-screen">
       <HeroSection
         title={formattedCategory}
         description={`Bespoke ${formattedCategory} configurations crafted for the ultimate journey.`}
@@ -110,17 +110,18 @@ export default function CamperProjectsClient({ category, initialData, currentPar
         showButton={false}
       />
 
-      <section className="py-12 lg:py-20 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-[1300px]">
+      <section className="bbv-section-dark py-12 lg:py-20 px-4 sm:px-6 lg:px-8 relative">
+        <div className="bbv-dot-grid" />
+        <div className="container mx-auto max-w-[1300px] relative z-10">
 
-          {/* --- MODERN FILTER DASHBOARD --- */}
-          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 mb-16">
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
+          {/* --- FILTER DASHBOARD --- */}
+          <div className="bbv-glass p-6 md:p-8 rounded-2xl mb-16">
+            <div className="flex items-center justify-between mb-8 pb-4 border-b border-secondary/10">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-hover/10 rounded-lg">
                   <SlidersHorizontal size={20} className="text-hover" />
                 </div>
-                <Heading3 text="Refine Results" className="!mb-0 !text-primary tracking-tight" />
+                <Heading3 text="Refine Results" className="!mb-0 text-secondary tracking-tight font-display uppercase" />
               </div>
               {Object.keys(currentParams).length > 0 && (
                 <button
@@ -135,7 +136,7 @@ export default function CamperProjectsClient({ category, initialData, currentPar
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
               {/* Search Field */}
               <div className="lg:col-span-1 space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Search</label>
+                <label className="text-hover text-[10px] font-bold uppercase tracking-widest ml-1">Search</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -143,9 +144,9 @@ export default function CamperProjectsClient({ category, initialData, currentPar
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && updateURL("search", searchTerm)}
-                    className="w-full pl-10 pr-4 py-3 bg-secondary/50 border border-transparent rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-hover/20 focus:border-hover transition-all"
+                    className="bbv-input w-full pl-10 pr-4 py-3 text-sm"
                   />
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary/40" size={16} />
                 </div>
               </div>
 
@@ -155,11 +156,11 @@ export default function CamperProjectsClient({ category, initialData, currentPar
                 { label: "Sleeping", key: "sleep", options: availableFilters?.sleeps },
               ].map((f) => (
                 <div key={f.key} className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">{f.label}</label>
+                  <label className="text-hover text-[10px] font-bold uppercase tracking-widest ml-1">{f.label}</label>
                   <select
                     value={currentParams[f.key] || ""}
                     onChange={(e) => updateURL(f.key, e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary/50 border border-transparent rounded-xl text-sm font-medium cursor-pointer focus:bg-white focus:ring-2 focus:ring-hover/20 transition-all appearance-none"
+                    className="bbv-input w-full px-4 py-3 text-sm font-medium cursor-pointer appearance-none"
                   >
                     <option value="">All</option>
                     {f.options && [...new Set(f.options.map(opt => opt.trim()))].map((opt, i) => (
@@ -176,10 +177,10 @@ export default function CamperProjectsClient({ category, initialData, currentPar
             {layouts.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-gray-100"
+                className="text-center py-32 bbv-glass rounded-3xl border-2 border-dashed border-secondary/10"
               >
-                <Search size={48} className="mx-auto text-gray-200 mb-4" />
-                <Heading3 text="No matching builds found." className="!text-gray-400" />
+                <Search size={48} className="mx-auto text-secondary/20 mb-4" />
+                <Heading3 text="No matching builds found." className="text-secondary/40" />
                 <button onClick={handleClearAll} className="mt-4 text-hover font-medium">Clear search and try again</button>
               </motion.div>
             ) : (
@@ -197,13 +198,13 @@ export default function CamperProjectsClient({ category, initialData, currentPar
                     >
                       {/* Content Side */}
                       <div className="w-full lg:w-5/12 space-y-6 text-center lg:text-left">
-                        <div className="inline-block px-3 py-1 bg-hover/5 rounded-full">
-                          <RichParagraph className="!text-hover uppercase !text-[11px] tracking-[0.2em] font-bold !mb-0">
+                        <div className="inline-block px-3 py-1 bg-hover/10 rounded-full">
+                          <p className="text-hover uppercase text-[11px] tracking-[0.2em] font-bold mb-0">
                             Big Bear Signature
-                          </RichParagraph>
+                          </p>
                         </div>
-                        <Heading2 text={project.van_listing?.title} className="!text-3xl md:!text-4xl" />
-                        <RichParagraph className="text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">
+                        <Heading2 text={project.van_listing?.title} className="!text-3xl md:!text-4xl text-secondary font-display uppercase tracking-wide" />
+                        <RichParagraph className="text-secondary/60 leading-relaxed line-clamp-3 md:line-clamp-none">
                           {project.van_listing?.description}
                         </RichParagraph>
                         <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -226,25 +227,25 @@ export default function CamperProjectsClient({ category, initialData, currentPar
             )}
           </AnimatePresence>
 
-          {/* --- PREMIUM PAGINATION --- */}
+          {/* --- PAGINATION --- */}
           {layouts.length > 0 && (
-            <div className="flex justify-center items-center gap-8 mt-32 pt-10 border-t border-gray-100">
+            <div className="flex justify-center items-center gap-8 mt-32 pt-10 border-t border-secondary/10">
               <button
                 onClick={() => updateURL("page", currentPage - 1)}
                 disabled={currentPage <= 1}
-                className="p-3 rounded-full border border-gray-200 disabled:opacity-30 hover:bg-white hover:shadow-md transition-all"
+                className="p-3 rounded-full border border-secondary/20 disabled:opacity-30 hover:border-hover hover:text-hover text-secondary/70 transition-all"
               >
                 <ArrowRight className="rotate-180" size={20} />
               </button>
 
-              <span className="text-sm font-bold tracking-widest text-primary">
-                PAGE {currentPage} <span className="text-gray-300 mx-2">/</span> {totalPages}
+              <span className="text-sm font-bold tracking-widest text-secondary">
+                PAGE {currentPage} <span className="text-secondary/30 mx-2">/</span> {totalPages}
               </span>
 
               <button
                 onClick={() => updateURL("page", currentPage + 1)}
                 disabled={currentPage >= totalPages}
-                className="p-3 rounded-full border border-gray-200 disabled:opacity-30 hover:bg-white hover:shadow-md transition-all"
+                className="p-3 rounded-full border border-secondary/20 disabled:opacity-30 hover:border-hover hover:text-hover text-secondary/70 transition-all"
               >
                 <ArrowRight size={20} />
               </button>

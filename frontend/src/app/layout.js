@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Barlow_Condensed, DM_Sans } from "next/font/google";
 import Providers from "@/components/Providers/Providers";
 import ConditionalLayout from "@/components/ConditionalLayout/ConditionalLayout";
 import AnalyticsInit from "@/components/AnalyticsInit/AnalyticsInit";
@@ -7,6 +7,8 @@ import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
+const barlowCond = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap", variable: "--font-barlow-cond" });
+const dmSans = DM_Sans({ subsets: ["latin"], display: "swap", variable: "--font-dm-sans" });
 
 
 
@@ -17,7 +19,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`h-full antialiased ${inter.variable}`}>
+    <html lang="en" className={`h-full antialiased ${inter.variable} ${barlowCond.variable} ${dmSans.variable}`}>
       <head>
         <meta name="yandex-verification" content="94c87c5e22615ea1" />
       </head>

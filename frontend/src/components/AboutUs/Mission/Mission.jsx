@@ -37,73 +37,88 @@ export default function Mission() {
   ];
 
   return (
-    <div className="bg-secondary min-h-screen py-20 px-6 md:px-12 lg:px-24 font-body overflow-x-hidden">
+    <div className="font-body overflow-x-hidden">
 
       {/* Mission and Purpose Section */}
-      <div className="max-w-7xl mx-auto mb-32">
-        <div className="text-center mb-16">
-          <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">Our Core Values</RichParagraph>
-          <Heading2 text="Mission and Purpose" className='mt-2 text-primary' />
-          <div className="h-1 w-16 bg-primary mx-auto mt-4 rounded-lg"></div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          {/* Image Container */}
-          <div className="w-full lg:w-1/2 relative group">
-            {/* Design Element: Decorative border box */}
-            <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-primary/20 rounded-lg -z-10 group-hover:-bottom-2 group-hover:-right-2 transition-all duration-500"></div>
-
-            <div className="p-2 aspect-[4/5] bg-white rounded-lg shadow-xl">
-              <ImageWithSkeleton
-                src="/images/mission.webp"
-                alt="Cozy interior of a custom campervan"
-                className="rounded-lg w-full h-auto object-cover"
-              />
-            </div>
+      <section className="bbv-section-light relative overflow-hidden">
+        <div className="bbv-dot-grid-light" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-20 relative z-10">
+          <div className="text-center mb-16">
+            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Our Core Values</p>
+            <Heading2
+              text="Mission and Purpose"
+              className="font-display text-primary uppercase tracking-wide mt-2"
+            />
+            <div className="bbv-divider mb-6" />
           </div>
 
-          {/* Text Content */}
-          <div className="w-full lg:w-1/2 space-y-6">
-            <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
-              At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs.
-            </RichParagraph>
-            <RichParagraph className="text-primary/80 leading-relaxed">
-              We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort.
-            </RichParagraph>
-            <RichParagraph className="text-primary/80 leading-relaxed">
-              Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
-            </RichParagraph>
-          </div>
-        </div>
-      </div>
-
-      {/* Our Advantages Section */}
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <RichParagraph className="!text-hover font-bold uppercase tracking-wider !text-sm">Why Choose Us</RichParagraph>
-          <Heading2 text="Our Advantages" className='mt-2' />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {advantages.map((advantage, index) => (
-            <div
-              key={index}
-              className="group bg-primary rounded-lg p-10 flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-            >
-              {/* Icon Container */}
-              <div className="w-20 h-20 bg-secondary rounded-lg flex items-center justify-center mb-8 text-primary transition-transform duration-700 group-hover:rotate-[360deg]">
-                {advantage.icon}
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+            {/* Image Container */}
+            <div className="w-full lg:w-1/2 relative group">
+              <div className="absolute -bottom-4 -right-4 w-full h-full border border-hover/20 rounded-lg -z-10 group-hover:-bottom-2 group-hover:-right-2 transition-all duration-500"></div>
+              <div className="aspect-[4/5] relative rounded-lg overflow-hidden">
+                <ImageWithSkeleton
+                  src="/images/mission.webp"
+                  alt="Cozy interior of a custom campervan"
+                  className="rounded-lg w-full h-auto object-cover"
+                />
+                <div className="bbv-amber-line" />
               </div>
+            </div>
 
-              <Heading3 text={advantage.title} className="text-secondary mb-4" />
-
-              <RichParagraph className="text-secondary/70">
-                {advantage.text}
+            {/* Text Content */}
+            <div className="w-full lg:w-1/2 space-y-6">
+              <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
+                At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs.
+              </RichParagraph>
+              <RichParagraph className="text-primary/60 leading-relaxed">
+                We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort.
+              </RichParagraph>
+              <RichParagraph className="text-primary/60 leading-relaxed">
+                Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
               </RichParagraph>
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Our Advantages Section */}
+      <section className="bg-primary relative overflow-hidden">
+        <div className="bbv-dot-grid" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-20 relative z-10">
+          <div className="text-center mb-16">
+            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Why Choose Us</p>
+            <Heading2
+              text="Our Advantages"
+              className="font-display text-secondary uppercase tracking-wide mt-2"
+            />
+            <div className="bbv-divider mb-6" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {advantages.map((advantage, index) => (
+              <div
+                key={index}
+                className="group bbv-glass-light rounded-lg p-10 flex flex-col items-center text-center transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+              >
+                {/* Icon Container */}
+                <div className="w-20 h-20 bg-hover/10 border border-hover/30 rounded-lg flex items-center justify-center mb-8 text-hover transition-transform duration-700 group-hover:rotate-[360deg]">
+                  {advantage.icon}
+                </div>
+
+                <Heading3
+                  text={advantage.title}
+                  className="font-display text-secondary uppercase tracking-wide mb-4"
+                />
+
+                <RichParagraph className="text-secondary/60">
+                  {advantage.text}
+                </RichParagraph>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -5,7 +5,13 @@
       "Bash(cd /d \"D:\\\\development\\\\3d-campervan-configurator\")",
       "Bash(Get-ChildItem -Path . -Name -Directory)",
       "Bash(xargs grep -l -i \"heading\\\\|SectionHeading\\\\|SectionTitle\\\\|HeadingText\")",
-      "PowerShell(Get-ChildItem \"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\\\\\", \"\"\\) })"
+      "PowerShell(Get-ChildItem \"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\" -Recurse | ForEach-Object { $_.FullName.Replace\\(\"D:\\\\development\\\\3d-campervan-configurator\\\\frontend\\\\src\\\\components\\\\Common\\\\\", \"\"\\) })",
+      "Bash(npx --yes playwright screenshot http://localhost:3000/custom-build /tmp/cb.png --viewport-size=\"1440,900\")",
+      "Bash(npx --yes playwright screenshot http://localhost:3000/custom-build \"C:/Users/zaini/AppData/Local/Temp/cb-full.png\" --full-page --viewport-size=\"1440,900\")",
+      "Bash(node *)",
+      "Bash(curl *)",
+      "Skill(artifact-design)",
+      "Bash(Get-Content *)"
     ]
   }
 }

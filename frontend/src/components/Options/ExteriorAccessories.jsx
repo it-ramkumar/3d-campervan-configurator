@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import { motion } from 'framer-motion';
-import { Heading2, RichParagraph, Heading4,Heading3, ImageWithSkeleton, SecondaryButton } from '../Common/Common';
+import { Heading2, RichParagraph, Heading4, Heading3, ImageWithSkeleton, SecondaryButton } from '../Common/Common';
 import {
   Waves, Lightbulb, ShowerHead, Camera, Maximize,
   Activity, Disc, Zap, Droplets, ArrowRight
 } from "lucide-react";
 
-// --- Accessory Icon Mapping (Switched to Lucide for BBV Consistency) ---
+// --- Accessory Icon Mapping ---
 const getAccessoryIcon = (title) => {
   const iconMap = {
     "Saucer Swing": Waves,
@@ -18,7 +18,6 @@ const getAccessoryIcon = (title) => {
     "Rear Foldable Patio": Maximize,
     "Van Suspension System": Activity,
     "Tires & Wheels": Disc,
-    // "Side Ladder": Ladder,
     "30A Shore Power Inlet": Zap,
     "Dump Valve": Droplets,
     "Freshwater Inlet": Droplets
@@ -43,14 +42,12 @@ export default function AdditionalAccessories() {
   ];
 
   return (
-    <section className="py-20 bg-[#F5F5F0] relative overflow-hidden">
-      {/* --- BBV Decorative Background --- */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary rounded-lg -mt-20 blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-primary rounded-lg -ml-20 -mb-20 blur-3xl" />
+    <section className="bbv-section-light py-20 relative overflow-hidden">
+      <div className="bbv-dot-grid-light" />
 
       <div className="container mx-auto px-4 relative z-10">
 
-        {/* --- Header: Clean & Authoritative --- */}
+        {/* --- Header --- */}
         <div className="max-w-3xl mb-16">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -58,12 +55,13 @@ export default function AdditionalAccessories() {
             viewport={{ once: true }}
             className="flex items-center gap-4 mb-4"
           >
-            <div className="h-[2px] w-12 bg-primary" />
-            <RichParagraph className="text-primary uppercase">Customization</RichParagraph>
+            <div className="h-[2px] w-12 bg-hover" />
+            <p className="text-hover text-xs uppercase tracking-widest font-bold">Customization</p>
           </motion.div>
 
-          <Heading2 text="Additional Exterior Accessories"/>
-          <RichParagraph className="mt-6  max-w-2xl ">
+          <Heading2 text="Additional Exterior Accessories" className="font-display text-primary uppercase tracking-wide" />
+          <div className="bbv-divider mb-6" />
+          <RichParagraph className="mt-6 max-w-2xl text-primary/60">
             Beyond our standard packages, we offer curated accessories to refine your van's utility.
             Choose from our tested selections or share your custom vision with us.
           </RichParagraph>
@@ -81,7 +79,7 @@ export default function AdditionalAccessories() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true, margin: "-50px" }}
-                className="group bg-white rounded-lg border border-prmary hover:border-hover shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col"
+                className="bbv-card group rounded-lg hover:border-hover/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col"
               >
                 {/* Image Container */}
                 <div className="relative h-64 overflow-hidden">
@@ -90,30 +88,29 @@ export default function AdditionalAccessories() {
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
+                  {/* Amber top border on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-hover opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   {/* Floating Badge */}
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md p-3 rounded-lg shadow-xl">
-                    <Icon className="w-5 h-5 text-primary" />
+                  <div className="absolute top-4 left-4 bg-primary/80 backdrop-blur-md p-3 rounded-lg shadow-xl border border-secondary/10">
+                    <Icon className="w-5 h-5 text-hover" />
                   </div>
                   {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
                 </div>
 
                 {/* Content */}
                 <div className="p-8 flex-grow flex flex-col">
                   <div className="flex justify-between items-start mb-4">
-                    <Heading4 text={item.title}  className="group-hover:!text-hover transition-colors" />
+                    <Heading4 text={item.title} className="group-hover:!text-hover transition-colors text-primary" />
                   </div>
 
-                  <RichParagraph className="!text-primary  mb-6 ">
+                  <RichParagraph className="text-primary/60 mb-6">
                     {item.description}
                   </RichParagraph>
 
-                  {/* Footer Interaction */}
-                  <div className="pt-6 border-t border-[#001F3D]/5 flex items-center justify-between">
-                    <RichParagraph className=" uppercase !text-sm !text-hover">Verified Accessory</RichParagraph>
-                    {/* <div className="w-8 h-8 rounded-full bg-[#F5F5F0] group-hover:bg-[#001F3D] flex items-center justify-center transition-all duration-300">
-                      <ArrowRight className="w-4 h-4 text-primary group-hover:!text-hover" />
-                    </div> */}
+                  {/* Footer */}
+                  <div className="pt-6 border-t border-primary/10 flex items-center justify-between">
+                    <p className="text-hover uppercase text-xs tracking-widest font-bold">Verified Accessory</p>
                   </div>
                 </div>
               </motion.div>
@@ -125,14 +122,13 @@ export default function AdditionalAccessories() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="mt-20 p-8 bg-primary rounded-lg flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
+          className="mt-20 p-8 bg-primary rounded-lg border border-hover/20 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
         >
           <div className="text-center md:text-left">
-            <Heading3 text={"Have a specific accessory in mind?"} className="mb-2 text-secondary"/>
-            <RichParagraph className="text-secondary">We can source and install custom equipment tailored to your build.</RichParagraph>
+            <Heading3 text={"Have a specific accessory in mind?"} className="mb-2 text-primary font-display uppercase tracking-wide" />
+            <RichParagraph className="text-primary/60">We can source and install custom equipment tailored to your build.</RichParagraph>
           </div>
-          <SecondaryButton label={"Discuss Custom Ideas"} link={"/contact"}/>
-
+          <SecondaryButton label={"Discuss Custom Ideas"} link={"/contact"} />
         </motion.div>
 
       </div>

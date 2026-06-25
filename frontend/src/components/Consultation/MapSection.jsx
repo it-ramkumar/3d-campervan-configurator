@@ -12,7 +12,7 @@ export default function MapSection() {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="relative w-full rounded-lg overflow-hidden shadow-xl border-4 border-white">
+    <div className="relative w-full rounded-lg overflow-hidden shadow-xl border border-primary/20">
       {loaded ? (
         <iframe
           src={MAP_SRC}

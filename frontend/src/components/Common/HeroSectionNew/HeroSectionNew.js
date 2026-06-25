@@ -80,16 +80,22 @@ export default function HeroImage({
 
       {/* OVERLAY */}
       {overlay && (
-        <div className={`absolute inset-0 z-[1] ${overlayOpacity}`} />
+        <>
+          <div className="absolute inset-0 z-[1] bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+        </>
       )}
+
+      {/* Orange bottom accent — matches site-wide style */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ED985F] z-10" />
 
       {/* CONTENT */}
       <div className="relative z-[2] h-full flex items-center">
-        <div className="container px-6 md:px-12 lg:px-20 max-w-3xl text-white space-y-6">
+        <div className="container px-6 md:px-12 lg:px-20 max-w-3xl text-white space-y-5">
           {slogan && (
-            <p className="text-hover text-lg md:text-xl font-semibold italic mt-4 mb-4 tracking-wide">
+            <span className="inline-flex items-center font-ui font-semibold text-[10px] uppercase tracking-[0.28em] text-[#ED985F] border-l-2 border-[#ED985F] pl-3 py-0.5">
               {slogan}
-            </p>
+            </span>
           )}
           {/* TITLE */}
           {title && <Heading1 text={title} />}

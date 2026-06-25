@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   Calendar
 } from "lucide-react";
-import { Heading2,Heading4, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton,CustomLink, SpanTag } from '../../Common/Common'
+import { Heading2, Heading4, RichParagraph, Heading3, ImageWithSkeleton, SecondaryButton, CustomLink, SpanTag } from '../../Common/Common'
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,8 +23,8 @@ const processSteps = [
     imageSrc: "/images2/op4.webp",
     altText: "Vans parked in a row",
     details: [
-      { subtitle: "Bring Your Van", description: "Already own a Sprinter? We’ll inspect it and plan your build." },
-      { subtitle: "We’ll Source It For You", description: "Access a brand-new van directly from a Mercedes dealer at a great price. We secure preferential pricing in LA/San Diego and handle all paperwork." },
+      { subtitle: "Bring Your Van", description: "Already own a Sprinter? We'll inspect it and plan your build." },
+      { subtitle: "We'll Source It For You", description: "Access a brand-new van directly from a Mercedes dealer at a great price. We secure preferential pricing in LA/San Diego and handle all paperwork." },
     ],
   },
   {
@@ -35,7 +35,7 @@ const processSteps = [
     altText: "Designers collaborating on a 3D model",
     details: [
       { subtitle: "Zoom Consultations", description: "Meet your Project Manager to discuss adventure trips, family size, and storage priorities." },
-      { subtitle: "3D Renderings & Refine", description: "Our designers create photorealistic visuals. Tweaks are unlimited until you’re 100% satisfied." },
+      { subtitle: "3D Renderings & Refine", description: "Our designers create photorealistic visuals. Tweaks are unlimited until you're 100% satisfied." },
     ],
   },
   {
@@ -95,15 +95,17 @@ export default function OurProcess() {
   }, []);
 
   return (
-    <section ref={containerRef} className="bg-secondary py-20 overflow-hidden antialiased font-sans">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <section ref={containerRef} className="bg-[#F8F8F6] py-20 overflow-hidden antialiased font-sans relative">
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
 
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-24 md:mb-32">
-          <SpanTag text={"Our Methodology"} className="mb-4 flex justify-center"/>
+          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3 flex justify-center">
+            Our Methodology
+          </p>
           <Heading2 text={"Big Bear Vans Custom Build Process"} />
-          <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg my-8"></div>
-          <RichParagraph>
+          <div className="bbv-divider mb-6 mx-auto" />
+          <RichParagraph className="!text-primary/70">
             Our transparent, collaborative process ensures your vision comes to life, from initial ideas to keys in your hand.
           </RichParagraph>
         </div>
@@ -119,37 +121,51 @@ export default function OurProcess() {
 
                 {/* Image Side */}
                 <div className="w-full lg:w-[45%]">
-                  <div className="relative group aspect-[8/5]  overflow-hidden rounded-lg shadow-xl border-4 border-white transition-transform duration-700 hover:scale-[1.02]">
+                  <div className="relative group aspect-[8/5] overflow-hidden rounded-lg shadow-xl border border-primary/10 transition-transform duration-700 hover:scale-[1.02]">
                     <ImageWithSkeleton
                       src={step.imageSrc}
                       alt={step.altText}
                       className="object-center"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#020C18]/60 via-transparent to-transparent pointer-events-none" />
                     {/* Time Badge */}
-                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg flex items-center gap-[var(--gap-sm)] border border-primary/5">
-                     <SpanTag text={<><Calendar size={14} className="!!text-hover" />{step.time}</>}/>
+                    <div
+                      className="absolute top-6 left-6 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2"
+                      style={{ background: 'rgba(2,12,24,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(237,152,95,0.30)' }}
+                    >
+                      <Calendar size={14} className="text-hover" />
+                      <span className="text-xs font-bold text-secondary uppercase tracking-wider">{step.time}</span>
                     </div>
+                    <div className="bbv-amber-line" />
                   </div>
                 </div>
 
                 {/* Center Icon */}
-                <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-14 h-14 rounded-lg bg-white shadow-xl border-2 border-hover items-center justify-center z-10 transition-colors group-hover:bg-hover">
-                  <div className="!!text-hover">{step.icon}</div>
+                <div
+                  className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-14 h-14 rounded-lg items-center justify-center z-10 transition-colors"
+                  style={{ background: 'rgba(2,12,24,0.90)', backdropFilter: 'blur(12px)', border: '2px solid rgba(237,152,95,0.50)' }}
+                >
+                  <div className="text-hover">{step.icon}</div>
                 </div>
 
                 {/* Content Side */}
                 <div className={`w-full lg:w-[45%] ${index % 2 !== 0 ? 'lg:pr-20' : 'lg:pl-20'}`}>
-                  <div className="inline-flex items-center gap-[var(--gap-sm)] mb-4">
-
-                    <SpanTag  text={<><CheckCircle2 size={16} className="!text-hover" /> Step 0{index + 1}</>} className="font-bold uppercase !text-xs !text-hover"/>
+                  <div className="inline-flex items-center gap-2 mb-4">
+                    <CheckCircle2 size={16} className="text-hover" />
+                    <span className="font-bold uppercase text-xs text-hover tracking-widest">
+                      Step 0{index + 1}
+                    </span>
                   </div>
                   <Heading3 text={step.title} className="mb-8" />
 
                   <div className="space-y-8">
                     {step.details.map((detail, dIdx) => (
-                      <div key={dIdx} className="relative pl-6 before:absolute before:left-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-hover before:rounded-full">
-                        <Heading4 text={detail.subtitle} className="mb-2"/>
-                        <RichParagraph>{detail.description}</RichParagraph>
+                      <div
+                        key={dIdx}
+                        className="relative pl-6 before:absolute before:left-0 before:top-1.5 before:w-1.5 before:h-1.5 before:bg-hover before:rounded-full"
+                      >
+                        <Heading4 text={detail.subtitle} className="mb-2" />
+                        <RichParagraph className="!text-primary/70">{detail.description}</RichParagraph>
                       </div>
                     ))}
                   </div>
@@ -161,9 +177,9 @@ export default function OurProcess() {
         </div>
 
         {/* Global CTA */}
-        <div className="mt-32 text-center bg-white p-12 md:p-20 rounded-lg shadow-sm border border-primary/5">
-           <Heading3 text="Ready to start your build?" className="mb-8 text-primary" />
-           <SecondaryButton label={"Get a Custom Quote"} link="/contact" />
+        <div className="mt-32 text-center p-12 md:p-20 rounded-lg bg-primary">
+          <Heading3 text="Ready to start your build?" className="mb-8 text-secondary" />
+          <SecondaryButton label={"Get a Custom Quote"} link="/contact" />
         </div>
 
       </div>

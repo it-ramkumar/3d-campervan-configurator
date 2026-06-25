@@ -51,11 +51,10 @@ export default function Buy({ initialVans = [] }) {
   };
 
   return (
-    <section className="py-12 md:py-20 antialiased overflow-hidden relative rounded-lg">
-
-      {/* Ghost background text (Responsive hidden on small screens for clean UI) */}
+    <section className="bg-white py-12 md:py-20 antialiased overflow-hidden relative rounded-lg">
+      {/* Ghost background text */}
       <div className="absolute right-4 -top-90 inset-y-0 hidden lg:flex items-center pointer-events-none select-none overflow-hidden">
-        <span className="text-[220px] font-black text-white/[0.015] leading-none pr-4">VANS</span>
+        <span className="text-[220px] font-black text-primary/[0.03] leading-none pr-4">VANS</span>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
@@ -66,14 +65,12 @@ export default function Buy({ initialVans = [] }) {
             <SpanTag text={"Premium Builds"} className="text-hover" />
           </div>
 
-          {/* gap-4 add kiya taake mobile par heading aur paragraph chipke na */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <Heading2 textColor="text-primary">
+            <Heading2>
               Premium Camper Vans<br />
               <span className="text-hover">Ready for Adventure</span>
             </Heading2>
-            {/* Mobile par text-left aur md screen par text-right */}
-            <RichParagraph className="max-w-md text-left md:text-right flex-shrink-0 opacity-80">
+            <RichParagraph className="max-w-md text-left md:text-right flex-shrink-0 !text-primary/60">
               Fully built premium camper vans available now — skip the wait and
               start your adventure today.
             </RichParagraph>
@@ -81,7 +78,7 @@ export default function Buy({ initialVans = [] }) {
         </div>
 
         {/* ── CONTROLS BAR ── */}
-        <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-5">
+        <div className="flex items-center justify-between mb-6 border-b border-primary/10 pb-5">
           <CustomLink
             href="/camper-vans-for-sale"
             text={
@@ -94,14 +91,14 @@ export default function Buy({ initialVans = [] }) {
             <button
               onClick={() => swiper?.slidePrev()}
               aria-label="Previous slide"
-              className="w-10 h-10 rounded-lg border border-white/20 flex items-center justify-center text-white/60 hover:border-hover hover:text-hover transition-all cursor-pointer"
+              className="w-10 h-10 rounded-lg border border-primary/20 flex items-center justify-center text-primary/60 hover:border-hover hover:text-hover transition-all cursor-pointer"
             >
               <ArrowBigLeftDash size={18} />
             </button>
             <button
               onClick={() => swiper?.slideNext()}
               aria-label="Next slide"
-              className="w-10 h-10 rounded-lg bg-hover flex items-center justify-center text-white hover:bg-hover/80 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-lg bg-hover flex items-center justify-center text-secondary hover:bg-hover/80 transition-all cursor-pointer"
             >
               <ArrowBigRightDash size={18} />
             </button>
@@ -127,14 +124,13 @@ export default function Buy({ initialVans = [] }) {
                 van?.title !== "Ford Transit T-350 2026..",
             )
             .map((van, i) => (
-
               <SwiperSlide key={i} className="h-auto">
-                <div className="bg-secondary rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:-translate-y-1 border border-white/5">
+                <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
 
                   <Link href={`/van-detail/${van?.slug}`}>
                     <>
                       {/* Image */}
-                      <div className="relative h-48 md:h-56 overflow-hidden bg-primary/10">
+                      <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
                         <SpanTag
                           text={"Available for Sale"}
                           className="absolute top-4 left-4 z-10 bg-hover text-secondary font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md"
@@ -149,20 +145,22 @@ export default function Buy({ initialVans = [] }) {
                             height={600}
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-white/20 italic text-xs">
+                          <div className="w-full h-full flex items-center justify-center text-primary/20 italic text-xs">
                             Coming Soon
                           </div>
                         )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+                        <div className="bbv-amber-line" />
                       </div>
 
                       {/* Content */}
                       <div className="p-5 flex flex-col flex-grow">
                         <Heading3
                           text={van?.title || "New Build"}
-                          className="truncate block text-primary"
+                          className="truncate block"
                         />
 
-                        <RichParagraph className="mt-2 mb-4 line-clamp-2 h-12 opacity-80">
+                        <RichParagraph className="mt-2 mb-4 line-clamp-2 h-12 !text-primary/60">
                           {van?.subtitle ||
                             "High-end craftsmanship meeting rugged durability."}
                         </RichParagraph>
@@ -173,10 +171,9 @@ export default function Buy({ initialVans = [] }) {
                             <>
                               <SpanTag
                                 text="From"
-                                className="font-bold text-primary/60"
+                                className="font-bold text-primary/50"
                               />
-
-                              <RichParagraph className="font-bold opacity-80">
+                              <RichParagraph className="font-bold !text-primary/80">
                                 {typeof van?.price === "number"
                                   ? `$${van?.price.toLocaleString()}`
                                   : van?.price}
@@ -192,7 +189,6 @@ export default function Buy({ initialVans = [] }) {
                       </div>
                     </>
                   </Link>
-
 
                   <div className="mt-auto py-3">
                     <div className="flex flex-col md:flex-row justify-center gap-2">
@@ -213,28 +209,27 @@ export default function Buy({ initialVans = [] }) {
                           link={`/camper-vans-for-sale/${van.slug}/configure`}
                           className="w-full"
                         />
-
                       </div>
-
                     </div>
                   </div>
 
-
                 </div>
               </SwiperSlide>
-
             ))}
         </Swiper>
       </div>
 
       {/* ── MODAL ── */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 backdrop-blur-md pointer-events-auto p-4">
-          <div className="relative w-full max-w-2xl bg-secondary border border-white/10 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto pointer-events-auto">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#020C18]/90 backdrop-blur-md pointer-events-auto p-4">
+          <div
+            className="relative w-full max-w-2xl rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.9)] max-h-[90vh] overflow-y-auto pointer-events-auto"
+            style={{ background: 'rgba(2,12,24,0.95)', border: '1px solid rgba(255,255,255,0.07)' }}
+          >
             <button
               onClick={() => setIsFormOpen(false)}
               aria-label="Close form"
-              className="absolute top-5 right-5 z-30 text-primary cursor-pointer transition-all duration-200  hover:scale-110 active:scale-95"
+              className="absolute top-5 right-5 z-30 text-secondary/60 cursor-pointer transition-all duration-200 hover:text-hover hover:scale-110 active:scale-95"
             >
               ✕
             </button>

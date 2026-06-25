@@ -29,7 +29,7 @@ export default function Portfolio() {
   );
 
   return (
-    <section className="w-full py-20 bg-white antialiased overflow-hidden">
+    <section className="w-full py-20 bg-secondary antialiased overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
 
         {/* ── HEADER ── */}

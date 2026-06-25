@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { Helmet } from "react-helmet";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
@@ -18,27 +17,48 @@ const NotFound = () => {
 
   return (
     <>
-
-        <title>404 - Page Not Found | BigBear Vans</title>
-        <meta name="robots" content="noindex, nofollow" />
-        <meta name="prerender-status-code" content="404" />
-        <meta name="description" content="The page you are looking for does not exist or has been moved." />
-
+      <title>404 - Page Not Found | BigBear Vans</title>
+      <meta name="robots" content="noindex, nofollow" />
+      <meta name="prerender-status-code" content="404" />
+      <meta name="description" content="The page you are looking for does not exist or has been moved." />
 
       <Navbar />
-      <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 text-gray-800 p-4">
-        <h1 className="text-6xl font-bold mb-4 text-red-600">404</h1>
-        <h2 className="text-2xl md:text-3xl mb-4">Oops! Page Not Found</h2>
-        <p className="mb-6 text-center max-w-md">
-          The page you are looking for does not exist or has been moved.
-        </p>
-        <Link
-          to="/"
-          className="px-6 py-3 bg-blue-600 text-white font-semibold rounded shadow hover:bg-blue-700 transition"
-        >
-          Go Back Home
-        </Link>
+
+      <div className="min-h-screen flex flex-col justify-center items-center bg-canvas relative p-4">
+        {/* Dot grid */}
+        <div className="bbv-dot-grid" />
+
+        <div className="relative z-10 flex flex-col items-center text-center">
+          {/* Big 404 */}
+          <h1 className="font-display text-[10rem] md:text-[14rem] font-bold leading-none text-hover select-none"
+            style={{ textShadow: "0 0 80px rgba(237,152,95,0.25)" }}>
+            404
+          </h1>
+
+          {/* Divider */}
+          <div className="bbv-divider mb-6 mx-auto" />
+
+          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+            Page Not Found
+          </p>
+
+          <h2 className="font-display text-secondary text-3xl md:text-4xl uppercase tracking-wide mb-4">
+            Oops! Lost in the Wild
+          </h2>
+
+          <p className="text-secondary/60 max-w-md mb-10 leading-relaxed">
+            The page you are looking for does not exist or has been moved. Let's get you back on the road.
+          </p>
+
+          <Link
+            href="/"
+            className="bg-hover text-primary font-bold uppercase tracking-wider px-8 py-4 rounded-lg transition-opacity hover:opacity-90"
+          >
+            Go Back Home
+          </Link>
+        </div>
       </div>
+
       <Footer />
     </>
   );

@@ -82,25 +82,26 @@ export default function WhyChoose() {
   const toggle = (i) => setExpanded(prev => ({ ...prev, [i]: !prev[i] }));
 
   return (
-    <section className="bg-primary overflow-hidden antialiased">
+    <section className="bbv-section-light overflow-hidden antialiased relative">
+      <div className="bbv-dot-grid-light" />
 
       {/* ── HEADER ── */}
-      <div className="relative border-b border-white/10 overflow-hidden">
+      <div className="relative border-b border-primary/10 overflow-hidden">
         <div className="container mx-auto px-6 max-w-7xl py-24 md:py-32 relative z-10">
 
           <div className="flex items-center gap-3 mb-8">
-            <SpanTag text={"Our Advantage"} className="text-hover"/>
+            <p className="text-hover text-xs uppercase tracking-widest font-bold">Our Advantage</p>
           </div>
 
           <Heading2
-            textColor="text-secondary"
+            textColor="text-primary"
             className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-8"
           >
             Why Choose<br />
             <span className="text-hover">Big Bear Vans?</span>
           </Heading2>
 
-          <RichParagraph className="text-secondary/50 text-sm md:text-base leading-relaxed max-w-lg">
+          <RichParagraph className="!text-primary/50 !text-sm md:!text-base leading-relaxed max-w-lg">
             Based in Big Bear, California, our team of expert builders and engineers
             deliver precision-crafted homes on wheels that stand in a class of their own.
           </RichParagraph>
@@ -108,7 +109,7 @@ export default function WhyChoose() {
 
         {/* Ghost brand mark */}
         <div className="absolute right-0 inset-y-0 flex items-center pointer-events-none select-none overflow-hidden">
-          <span className="text-[260px] font-black text-white/[0.025] leading-none pr-6">BBV</span>
+          <span className="text-[260px] font-black text-primary/[0.025] leading-none pr-6">BBV</span>
         </div>
       </div>
 
@@ -118,11 +119,11 @@ export default function WhyChoose() {
         const num = String(i + 1).padStart(2, '0');
 
         return (
-          <div key={i} className="relative border-b border-white/10 overflow-hidden">
+          <div key={i} className="relative border-b border-primary/10 overflow-hidden">
 
             {/* Ghost section number */}
             <div className={`absolute inset-y-0 ${section.isReverse ? 'left-0' : 'right-0'} flex items-center pointer-events-none select-none overflow-hidden`}>
-              <span className="text-[200px] font-black text-white/[0.03] leading-none px-4">{num}</span>
+              <span className="text-[200px] font-black text-primary/[0.03] leading-none px-4">{num}</span>
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl py-20 md:py-28 relative z-10">
@@ -132,12 +133,13 @@ export default function WhyChoose() {
                 <div className="w-full lg:w-[55%] relative pb-8 lg:pb-0">
 
                   {/* Primary image */}
-                  <div className="relative aspect-[8/5] rounded-lg overflow-hidden ring-1 ring-white/10 shadow-2xl">
+                  <div className="relative aspect-[8/5] rounded-lg overflow-hidden ring-1 ring-primary/10 shadow-xl">
                     <ImageWithSkeleton src={section.images[0]} alt={section.title} zoom />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent pointer-events-none" />
+                    <div className="bbv-amber-line" />
                   </div>
 
-                  {/* Floating secondary — orange glow frame */}
+                  {/* Floating secondary — amber glow frame */}
                   <div className={`
                     absolute bottom-0 z-30
                     ${section.isReverse ? '-left-4 md:-left-8' : '-right-4 md:-right-8'}
@@ -158,22 +160,20 @@ export default function WhyChoose() {
                     <span className="text-xs font-black text-hover bg-hover/15 border border-hover/20 rounded-lg px-3 py-1.5 uppercase tracking-[0.15em]">
                       {num}
                     </span>
-                    <span className="text-xs font-bold text-white/30 uppercase tracking-widest">
+                    <span className="text-xs font-bold text-primary/30 uppercase tracking-widest">
                       / {sections.length} Features
                     </span>
                   </div>
 
                   {/* Title */}
-                  <Heading3
-                    textColor="text-secondary"
-                  >
+                  <Heading3 textColor="text-primary">
                     {section.title}
                   </Heading3>
 
                   {/* Expandable body */}
                   <div className={`relative overflow-hidden transition-all duration-500 ${!isOpen ? 'max-h-[320px]' : 'max-h-[2000px]'}`}>
 
-                    <RichParagraph className="!text-secondary/55 !text-sm leading-relaxed mb-5">
+                    <RichParagraph className="!text-primary/55 !text-sm leading-relaxed mb-5">
                       {section.intro}
                     </RichParagraph>
 
@@ -181,24 +181,27 @@ export default function WhyChoose() {
                       {section.features.map((f, fi) => (
                         <div
                           key={fi}
-                          className="group flex items-start gap-4 p-4 rounded-lg bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-hover/30 transition-all"
+                          className="group flex items-start gap-4 p-4 rounded-lg hover:border-hover/30 transition-all"
+                          style={{ background: 'rgba(0,31,61,0.04)', border: '1px solid rgba(0,31,61,0.08)' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,31,61,0.08)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,31,61,0.04)'}
                         >
-                          <span className="flex-shrink-0 p-2 rounded-lg bg-hover/20 text-hover group-hover:bg-hover group-hover:text-white transition-all mt-0.5">
+                          <span className="flex-shrink-0 p-2 rounded-lg bg-hover/20 text-hover group-hover:bg-hover group-hover:text-secondary transition-all mt-0.5">
                             {f.icon}
                           </span>
-                          <RichParagraph html={f.text} className="!text-secondary/60 !text-sm leading-relaxed" />
+                          <RichParagraph html={f.text} className="!text-primary/60 !text-sm leading-relaxed" />
                         </div>
                       ))}
                     </div>
 
                     {section.outro && (
-                      <div className="mt-5 p-5 rounded-lg bg-hover/[0.07] border-l-2 border-hover">
-                        <RichParagraph html={section.outro} className="!text-secondary/65 !text-sm italic" />
+                      <div className="mt-5 p-5 rounded-lg border-l-2 border-hover" style={{ background: 'rgba(237,152,95,0.07)' }}>
+                        <RichParagraph html={section.outro} className="!text-primary/65 !text-sm italic" />
                       </div>
                     )}
 
                     {!isOpen && (
-                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-primary to-transparent pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none" />
                     )}
                   </div>
 
@@ -209,8 +212,8 @@ export default function WhyChoose() {
                   >
                     <span className="w-8 h-8 rounded-lg border border-hover/40 flex items-center justify-center group-hover:bg-hover group-hover:border-hover transition-all">
                       {isOpen
-                        ? <ChevronUp size={13} className="group-hover:text-white transition-colors" />
-                        : <ChevronDown size={13} className="group-hover:text-white transition-colors" />
+                        ? <ChevronUp size={13} className="group-hover:text-secondary transition-colors" />
+                        : <ChevronDown size={13} className="group-hover:text-secondary transition-colors" />
                       }
                     </span>
                     {isOpen ? 'Show Less' : 'Explore Details'}

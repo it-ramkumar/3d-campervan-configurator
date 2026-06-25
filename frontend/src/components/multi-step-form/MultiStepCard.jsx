@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { TYPE_DEPENDENCIES } from '../../CustomHooks/typeDependencyData';
-import {Heading3, Heading4, ImageWithSkeleton, PrimaryButton, RichParagraph, SecondaryButton} from '../Common/Common';
+import { ImageWithSkeleton } from '../Common/Common';
 import { AlertCircle, Check, ChevronLeft, ChevronRight, X, Plus } from 'lucide-react';
 
 export default function ModelsCard({
@@ -20,7 +20,7 @@ export default function ModelsCard({
   const scrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [showExtensionModal, setShowExtensionModal] = useState(null); // null or model object
+  const [showExtensionModal, setShowExtensionModal] = useState(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -50,10 +50,7 @@ export default function ModelsCard({
   const scrollToCard = (index) => {
     if (scrollRef.current && isMobile) {
       const cardWidth = window.innerWidth * 0.85;
-      scrollRef.current.scrollTo({
-        left: index * cardWidth,
-        behavior: 'smooth'
-      });
+      scrollRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -68,79 +65,86 @@ export default function ModelsCard({
     });
   };
 
-  // Extension Modal Component
-  // Extension Modal Component - LIGHT THEME
+  // Extension Modal — dark studio theme
   const ExtensionModal = ({ model, onClose }) => {
     const extensions = getExtensionsForModel(model.label);
-
     return (
-      <div className="fixed inset-0 z-50 bg-white flex flex-col">
-        {/* Modal Header */}
-        <div className="flex items-center justify-between p-4 border-b border-black/10">
+      <div
+        className="fixed inset-0 z-50 flex flex-col"
+        style={{ background: "#001F3D" }}
+      >
+        {/* Top accent */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ED985F]" />
+
+        {/* Header */}
+        <div
+          className="flex items-start justify-between p-4 mt-0.5"
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+        >
           <div>
-            <Heading3 text={model.label} />
-            <RichParagraph >Select Extensions</RichParagraph>
+            <p className="font-ui text-[9px] uppercase tracking-[0.3em] font-semibold mb-1" style={{ color: "#ED985F" }}>
+              Extensions
+            </p>
+            <h3 className="font-display text-xl font-bold" style={{ color: "#FBFBF9" }}>
+              {model.label}
+            </h3>
           </div>
-          <PrimaryButton
-          label= {"X"}
+          <button
             onClick={onClose}
-            className="!px-3 !py-2 !rounded-full flex items-center justify-center"
-          />
-
-
+            className="w-9 h-9 flex items-center justify-center rounded-full transition-all duration-200"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(251,251,249,0.5)",
+            }}
+          >
+            <X size={15} />
+          </button>
         </div>
 
-        {/* Extensions List */}
+        {/* Extensions list */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {extensions.map((ext) => {
             const isExtSelected = addedModels.some(m => m.label === ext.label && m.type === ext.type);
-
             return (
               <div
                 key={ext.label}
-                onClick={() => {
-                  toggleModelSelection(
-                    ext,
-                    addModelToScene,
-                    getAddedQuantity,
-                    removeModelFromScene,
-                    dispatch,
-                    addedModels,
-                    cameraRef,
-                    modelRefs,
-                    orbitControlsRef
-                  );
-                }}
-                className={`
-                  flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all
-                  ${isExtSelected
-                    ? "bg-black/5 border-black/30"
-                    : "bg-gray-100 border-black/10 hover:border-black/20"
-                  }
-                `}
+                onClick={() => toggleModelSelection(ext, addModelToScene, getAddedQuantity, removeModelFromScene, dispatch, addedModels, cameraRef, modelRefs, orbitControlsRef)}
+                className="flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-200"
+                style={
+                  isExtSelected
+                    ? {
+                        background: "rgba(237,152,95,0.08)",
+                        border: "1px solid rgba(237,152,95,0.35)",
+                      }
+                    : {
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.07)",
+                      }
+                }
               >
-                <div className="w-20 h-20 rounded-xl bg-white border border-black/10 flex-shrink-0 overflow-hidden">
-                  <ImageWithSkeleton
-                    src={ext.image}
-                    alt={ext.label}
-                    className="w-full h-full object-contain"
-                  />
+                <div
+                  className="w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}
+                >
+                  <ImageWithSkeleton src={ext.image} alt={ext.label} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <Heading4 text={ext.label} />
-                  <RichParagraph className="text-sm text-gray-500 mb-2">Extension Option</RichParagraph>
-                  <div className={`
-                    inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium
-                    ${isExtSelected
-                      ? "bg-black text-white"
-                      : "bg-black/10 text-gray-700"
+                  <p className="font-ui text-sm font-semibold mb-1 truncate" style={{ color: "#FBFBF9" }}>
+                    {ext.label}
+                  </p>
+                  <p className="font-ui text-[11px] mb-2" style={{ color: "rgba(251,251,249,0.4)" }}>
+                    Extension Option
+                  </p>
+                  <div
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-ui text-[10px] font-semibold uppercase tracking-wider"
+                    style={
+                      isExtSelected
+                        ? { background: "#ED985F", color: "#fff" }
+                        : { background: "rgba(255,255,255,0.07)", color: "rgba(251,251,249,0.5)" }
                     }
-                  `}>
-                    {isExtSelected ? (
-                      <><Check size={12} /> Selected</>
-                    ) : (
-                      <><Plus size={12} /> Tap to Add</>
-                    )}
+                  >
+                    {isExtSelected ? <><Check size={11} /> Selected</> : <><Plus size={11} /> Add</>}
                   </div>
                 </div>
               </div>
@@ -148,30 +152,32 @@ export default function ModelsCard({
           })}
         </div>
 
-        {/* Done Button */}
-        <div className="p-4 border-t border-black/10 bg-gray-100">
-          <PrimaryButton
-            label="Done"
+        {/* Done button */}
+        <div
+          className="p-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "rgba(0,0,0,0.2)" }}
+        >
+          <button
             onClick={onClose}
-            className="w-full py-3 bg-black hover:bg-gray-800 text-white font-bold rounded-xl transition"
-          />
-
-
+            className="w-full py-3 rounded-xl font-ui font-semibold text-[11px] uppercase tracking-[0.2em] transition-all active:scale-[0.98]"
+            style={{ background: "#ED985F", color: "#fff" }}
+          >
+            Done
+          </button>
         </div>
       </div>
     );
   };
 
-  // Desktop Layout - LIGHT THEME
+  // Desktop Layout — dark studio
   if (!isMobile) {
     return (
-      <div className="h-full overflow-y-auto p-3 space-y-2">
+      <div className="h-full overflow-y-auto p-3 space-y-2 dark-scrollbar">
         {regularModels.map((model) => {
           const modelDependencies = TYPE_DEPENDENCIES[model.type] || [];
           const missingDependencies = modelDependencies.filter(dep => {
-            if (typeof dep === "string") {
-              return !addedModels.some(m => m.type === dep || m.label === dep);
-            } else if (typeof dep === "object") {
+            if (typeof dep === "string") return !addedModels.some(m => m.type === dep || m.label === dep);
+            if (typeof dep === "object") {
               const matchingModel = addedModels.find(m => m.type === dep.type);
               if (!matchingModel) return true;
               return Object.keys(dep.conditions).some(key => matchingModel[key] !== dep.conditions[key]);
@@ -187,83 +193,92 @@ export default function ModelsCard({
           return (
             <div key={model.label}>
               <div
-                onClick={() =>
-                  !isDisabled
-                    ? toggleModelSelection(
-                        model,
-                        addModelToScene,
-                        getAddedQuantity,
-                        removeModelFromScene,
-                        dispatch,
-                        addedModels,
-                        cameraRef,
-                        modelRefs,
-                        orbitControlsRef
-                      )
-                    : undefined
-                }
-                className={`
-                  flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all border-2
-                  ${isSelected
-                    ? "bg-primary/5 border-primary/30"
-                    : "bg-secondary-100 border-transparent hover:border-primary/20"
-                  }
-                  ${isDisabled ? "opacity-50" : ""}
-                `}
+                onClick={() => !isDisabled ? toggleModelSelection(model, addModelToScene, getAddedQuantity, removeModelFromScene, dispatch, addedModels, cameraRef, modelRefs, orbitControlsRef) : undefined}
+                className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200"
+                style={{
+                  background: isSelected ? "rgba(237,152,95,0.07)" : "rgba(255,255,255,0.03)",
+                  border: isSelected
+                    ? "1px solid rgba(237,152,95,0.3)"
+                    : "1px solid rgba(255,255,255,0.07)",
+                  opacity: isDisabled ? 0.4 : 1,
+                  cursor: isDisabled ? "not-allowed" : "pointer",
+                }}
               >
-                <div className="w-16 h-16 rounded-lg bg-secondary border border-primary/10 flex-shrink-0">
+                {/* Thumbnail */}
+                <div
+                  className="w-14 h-14 rounded-lg flex-shrink-0 overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}
+                >
                   <ImageWithSkeleton src={model.image} alt={model.label} click={true} className="w-full h-full object-contain" />
                 </div>
+
+                {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <Heading3 text={model.label}  className='!text-base !capitalize text-primary mb-1 line-clamp-1'/>
-                  {model.description && <RichParagraph className="line-clamp-1 !text-sm text-primary/70">{model.description}</RichParagraph>}
+                  <p
+                    className="font-ui text-sm font-semibold capitalize truncate mb-0.5"
+                    style={{ color: "#FBFBF9" }}
+                  >
+                    {model.label}
+                  </p>
+                  {model.description && (
+                    <p className="font-ui text-[11px] line-clamp-1" style={{ color: "rgba(251,251,249,0.4)" }}>
+                      {model.description}
+                    </p>
+                  )}
                 </div>
-                <div className={`
-                  w-6 h-6 rounded-lg border-2 flex items-center justify-center
-                  ${isSelected ? "border-primary bg-primary text-secondary" : "border-secondary-300"}
-                `}>
-                  {isSelected && <Check size={14} strokeWidth={3} />}
+
+                {/* Checkbox */}
+                <div
+                  className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all duration-200"
+                  style={
+                    isSelected
+                      ? { background: "#ED985F", border: "none" }
+                      : { background: "transparent", border: "1px solid rgba(255,255,255,0.2)" }
+                  }
+                >
+                  {isSelected && <Check size={12} color="#fff" strokeWidth={3} />}
                 </div>
               </div>
 
-              {/* Desktop Extensions Button */}
+              {/* Extensions link */}
               {hasExtensions && (
                 <button
                   onClick={() => setShowExtensionModal(model)}
-                  className="ml-4 mt-2 text-xs text-primary hover:text-primary-600 flex items-center gap-1"
+                  className="ml-3 mt-1.5 font-ui text-[10px] font-semibold uppercase tracking-wider flex items-center gap-1 transition-all"
+                  style={{ color: "#ED985F", opacity: 0.7 }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = "1"}
+                  onMouseLeave={e => e.currentTarget.style.opacity = "0.7"}
                 >
-                  <Plus size={12} /> {extensions.length} Extensions Available
+                  <Plus size={11} /> {extensions.length} Extension{extensions.length > 1 ? 's' : ''}
                 </button>
               )}
             </div>
           );
         })}
 
-        {/* Desktop Extension Modal */}
         {showExtensionModal && (
-          <ExtensionModal
-            model={showExtensionModal}
-            onClose={() => setShowExtensionModal(null)}
-          />
+          <ExtensionModal model={showExtensionModal} onClose={() => setShowExtensionModal(null)} />
         )}
+
+        <style>{`
+          .dark-scrollbar::-webkit-scrollbar { width: 3px; }
+          .dark-scrollbar::-webkit-scrollbar-track { background: transparent; }
+          .dark-scrollbar::-webkit-scrollbar-thumb { background: rgba(237,152,95,0.25); border-radius: 99px; }
+        `}</style>
       </div>
     );
   }
 
-  // MOBILE LAYOUT - LIGHT THEME
+  // Mobile Layout — dark studio
   return (
     <>
-      {/* Extension Modal */}
       {showExtensionModal && (
-        <ExtensionModal
-          model={showExtensionModal}
-          onClose={() => setShowExtensionModal(null)}
-        />
+        <ExtensionModal model={showExtensionModal} onClose={() => setShowExtensionModal(null)} />
       )}
 
-      <div className="h-full flex flex-col ">
+      <div className="h-full flex flex-col">
         {/* Cards Container */}
-        <div className="flex-1 relative overflow-hidden ">
+        <div className="flex-1 relative overflow-hidden">
           <div
             ref={scrollRef}
             onScroll={handleScroll}
@@ -273,9 +288,8 @@ export default function ModelsCard({
             {regularModels.map((model, index) => {
               const modelDependencies = TYPE_DEPENDENCIES[model.type] || [];
               const missingDependencies = modelDependencies.filter(dep => {
-                if (typeof dep === "string") {
-                  return !addedModels.some(m => m.type === dep || m.label === dep);
-                } else if (typeof dep === "object") {
+                if (typeof dep === "string") return !addedModels.some(m => m.type === dep || m.label === dep);
+                if (typeof dep === "object") {
                   const matchingModel = addedModels.find(m => m.type === dep.type);
                   if (!matchingModel) return true;
                   return Object.keys(dep.conditions).some(key => matchingModel[key] !== dep.conditions[key]);
@@ -293,33 +307,23 @@ export default function ModelsCard({
                 <div key={model.label} className="w-[85vw] flex-shrink-0 snap-center">
                   {/* Main Card */}
                   <div
-                    onClick={() =>
-                      !isDisabled
-                        ? toggleModelSelection(
-                            model,
-                            addModelToScene,
-                            getAddedQuantity,
-                            removeModelFromScene,
-                            dispatch,
-                            addedModels,
-                            cameraRef,
-                            modelRefs,
-                            orbitControlsRef
-                          )
-                        : undefined
-                    }
-                    className={`
-                      flex flex-row rounded-lg overflow-hidden border-2 transition-all duration-300
-                      ${isSelected
-                        ? "bg-gray-100 border-black/30 shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-                        : "bg-white border-black/10"
-                      }
-                      ${isDisabled ? "opacity-60" : ""}
-                      ${isActive ? "scale-100" : "scale-95 opacity-90"}
-                    `}
+                    onClick={() => !isDisabled ? toggleModelSelection(model, addModelToScene, getAddedQuantity, removeModelFromScene, dispatch, addedModels, cameraRef, modelRefs, orbitControlsRef) : undefined}
+                    className="flex flex-row rounded-xl overflow-hidden transition-all duration-300"
+                    style={{
+                      background: isSelected ? "rgba(237,152,95,0.07)" : "rgba(255,255,255,0.04)",
+                      border: isSelected
+                        ? "1px solid rgba(237,152,95,0.35)"
+                        : "1px solid rgba(255,255,255,0.08)",
+                      opacity: isDisabled ? 0.5 : isActive ? 1 : 0.85,
+                      transform: isActive ? "scale(1)" : "scale(0.96)",
+                      boxShadow: isSelected ? "0 0 20px rgba(237,152,95,0.1)" : "none",
+                    }}
                   >
                     {/* Image */}
-                    <div className="w-[40%] aspect-square bg-gray-50 relative flex items-center justify-center p-3 border-r border-black/5">
+                    <div
+                      className="w-[40%] aspect-square relative flex items-center justify-center p-3"
+                      style={{ borderRight: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.03)" }}
+                    >
                       <ImageWithSkeleton
                         src={model.image}
                         alt={model.label}
@@ -327,49 +331,71 @@ export default function ModelsCard({
                         className="max-w-full max-h-full object-contain"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-lg bg-black flex items-center justify-center">
-                          <Check className="text-white" size={14} strokeWidth={3} />
+                        <div
+                          className="absolute top-2 right-2 w-6 h-6 rounded-lg flex items-center justify-center"
+                          style={{ background: "#ED985F" }}
+                        >
+                          <Check color="#fff" size={13} strokeWidth={3} />
                         </div>
                       )}
                     </div>
 
                     {/* Content */}
-                    <div className="w-[60%] p-2 flex flex-col justify-between">
+                    <div className="w-[60%] p-3 flex flex-col justify-between">
                       <div>
-                        <Heading4 text={model.label} className=" text-primary mb-1 line-clamp-1" />
-                        {model.description && <RichParagraph className="line-clamp-1 !text-primary/70">{model.description}</RichParagraph>}
+                        <p className="font-ui text-sm font-semibold mb-1 line-clamp-1" style={{ color: "#FBFBF9" }}>
+                          {model.label}
+                        </p>
+                        {model.description && (
+                          <p className="font-ui text-[11px] line-clamp-1" style={{ color: "rgba(251,251,249,0.4)" }}>
+                            {model.description}
+                          </p>
+                        )}
                       </div>
 
-                      <div className="mt-1">
+                      <div className="mt-2">
                         {isDisabled ? (
-                          <div className="px-2 py-1 rounded-lg bg-gray-200 border border-gray-300 flex items-center gap-1">
-                            <AlertCircle size={10} className="text-primary" />
-                            <p className="!text-primary">Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}</p>
+                          <div
+                            className="px-2 py-1 rounded-lg flex items-center gap-1"
+                            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+                          >
+                            <AlertCircle size={10} style={{ color: "rgba(251,251,249,0.5)", flexShrink: 0 }} />
+                            <p className="font-ui text-[10px]" style={{ color: "rgba(251,251,249,0.4)" }}>
+                              Add {typeof missingDependencies[0] === "string" ? missingDependencies[0] : missingDependencies[0]?.type}
+                            </p>
                           </div>
                         ) : isSelected ? (
-                          <div className="px-2 py-1 rounded-lg bg-black/10 border border-black/20 flex items-center justify-center gap-1">
-                            <Check size={12} className="text-black" />
-                            <p  className="!text-primary text-center">Selected</p>
+                          <div
+                            className="px-2 py-1 rounded-lg flex items-center justify-center gap-1"
+                            style={{ background: "rgba(237,152,95,0.12)", border: "1px solid rgba(237,152,95,0.25)" }}
+                          >
+                            <Check size={11} style={{ color: "#ED985F" }} />
+                            <p className="font-ui text-[10px] font-semibold" style={{ color: "#ED985F" }}>Selected</p>
                           </div>
                         ) : (
-                          <div className=" rounded-lg border border-black/10">
-                            <p className="!text-primary text-center">Tap to Select</p>
+                          <div
+                            className="px-2 py-1 rounded-lg text-center"
+                            style={{ border: "1px solid rgba(255,255,255,0.1)" }}
+                          >
+                            <p className="font-ui text-[10px]" style={{ color: "rgba(251,251,249,0.35)" }}>Tap to Select</p>
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  {/* Extensions Button - Outside Card */}
+                  {/* Extensions button */}
                   {hasExtensions && (
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowExtensionModal(model);
+                      onClick={(e) => { e.stopPropagation(); setShowExtensionModal(model); }}
+                      className="w-full mt-2 py-2 px-3 rounded-xl font-ui text-[10px] font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all"
+                      style={{
+                        background: "rgba(237,152,95,0.07)",
+                        border: "1px solid rgba(237,152,95,0.2)",
+                        color: "#ED985F",
                       }}
-                      className="w-full mt-2 py-2 px-3 rounded-lg bg-gray-100 border border-black/10 text-xs text-black font-medium flex items-center justify-center gap-2 hover:bg-gray-200 transition"
                     >
-                      <Plus size={14} />
+                      <Plus size={12} />
                       {extensions.length} Extension{extensions.length > 1 ? 's' : ''} Available
                     </button>
                   )}
@@ -384,16 +410,28 @@ export default function ModelsCard({
               <button
                 onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
                 disabled={activeIndex === 0}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl flex items-center justify-center disabled:opacity-0 transition-all z-10"
+                style={{
+                  background: "rgba(2,12,24,0.72)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "rgba(251,251,249,0.6)",
+                }}
               >
-                <ChevronLeft size={20} />
+                <ChevronLeft size={18} />
               </button>
               <button
                 onClick={() => scrollToCard(Math.min(regularModels.length - 1, activeIndex + 1))}
                 disabled={activeIndex === regularModels.length - 1}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-white/95 text-black flex items-center justify-center disabled:opacity-0 transition-opacity z-10 border border-black/20 shadow-md"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl flex items-center justify-center disabled:opacity-0 transition-all z-10"
+                style={{
+                  background: "rgba(2,12,24,0.72)",
+                  backdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "rgba(251,251,249,0.6)",
+                }}
               >
-                <ChevronRight size={20} />
+                <ChevronRight size={18} />
               </button>
             </>
           )}
@@ -401,18 +439,20 @@ export default function ModelsCard({
 
         {/* Pagination Dots */}
         {regularModels.length > 1 && (
-          <div className="flex justify-center gap-2 py-2 bg-white border-t border-black/5 flex-shrink-0">
+          <div
+            className="flex justify-center gap-2 py-2 flex-shrink-0"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          >
             {regularModels.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => scrollToCard(idx)}
-                className={`
-                  h-1.5 rounded-lg transition-all duration-300
-                  ${idx === activeIndex
-                    ? 'w-6 bg-black shadow-[0_0_8px_rgba(0,0,0,0.3)]'
-                    : 'w-1.5 bg-gray-300'
-                  }
-                `}
+                className="h-1.5 rounded-full transition-all duration-300"
+                style={{
+                  width: idx === activeIndex ? "24px" : "6px",
+                  background: idx === activeIndex ? "#ED985F" : "rgba(255,255,255,0.15)",
+                  boxShadow: idx === activeIndex ? "0 0 8px rgba(237,152,95,0.4)" : "none",
+                }}
               />
             ))}
           </div>

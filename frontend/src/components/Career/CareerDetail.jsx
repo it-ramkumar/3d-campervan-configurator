@@ -21,7 +21,7 @@ export default function JobDetailsClient({ job }) {
     <div className="flex items-center gap-3">
       <button
         onClick={handleShare}
-        className="p-4 rounded-lg bg-secondary text-primary hover:bg-hover hover:text-primary transition-all border border-primary/5"
+        className="p-4 rounded-lg bbv-card text-primary/60 hover:text-hover hover:border-hover/40 transition-all border border-primary/10"
         title="Share Job"
       >
         <Share2 className="w-5 h-5" />
@@ -29,7 +29,7 @@ export default function JobDetailsClient({ job }) {
 
       <Link
         href={`/apply/${job._id}`}
-        className="bg-primary text-secondary px-8 py-4 rounded-lg font-bold hover:bg-hover hover:text-primary transition-all uppercase tracking-wider"
+        className="bg-hover text-primary font-bold uppercase tracking-wider px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"
       >
         APPLY NOW
       </Link>
