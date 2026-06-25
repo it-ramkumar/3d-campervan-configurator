@@ -71,7 +71,7 @@ const ThankYou = () => {
   }, [source, vanTitle]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-canvas p-6 relative">
+    <div className="flex items-center justify-center min-h-screen bg-primary p-6 relative">
       {/* Dot grid background */}
       <div className="bbv-dot-grid" />
 
@@ -89,13 +89,13 @@ const ThankYou = () => {
 
             <Heading1
               text={isCalendar ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
-              className="!text-secondary text-center"
+              className="!text-primary text-center"
             />
           </div>
 
           {/* Info Box */}
           <div className="space-y-4 mb-10">
-            <div className="bg-canvas/80 text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden border border-white/10">
+            <div className="bg-primary/80 text-secondary p-5 rounded-md font-mono text-sm relative overflow-hidden border border-white/10">
               <div className="bbv-dot-grid" />
 
               <div className="relative z-10">
@@ -116,12 +116,12 @@ const ThankYou = () => {
             </div>
 
             {/* Message */}
-            <RichParagraph className="text-secondary/70 text-center italic text-sm leading-relaxed">
+            <RichParagraph className="text-primary/70 text-center italic text-sm leading-relaxed">
               {isCalendar ? (
                 <>
                   <strong className="text-hover not-italic block mb-2 text-base">Important Step to Confirm Your Meet:</strong>
                   We have sent an automated Google Calendar invitation to your email.
-                  <span className="block mt-2 font-semibold not-italic text-secondary">
+                  <span className="block mt-2 font-semibold not-italic text-primary">
                     Please open your inbox, open the invitation email, and click{" "}
                     <span className="text-hover">"Yes"</span> or{" "}
                     <span className="text-hover">"Going"</span> to lock in your time slot.

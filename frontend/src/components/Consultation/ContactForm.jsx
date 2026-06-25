@@ -100,32 +100,32 @@ export default function ContactForm({
       {/* FORM */}
       <form
         onSubmit={async (e) => {
-          e.preventDefault();
+  e.preventDefault();
 
-          try {
-            // 1. Form data submit hone ka wait karein
-            await handleSubmit(e, {
-              ...formData,
-              vanSlug: van?.slug,
-              vanTitle: van?.title,
-              vanPrice: van?.price,
-            });
+  try {
+    // 1. Form data submit hone ka wait karein
+    await handleSubmit(e, {
+      ...formData,
+      vanSlug: van?.slug,
+      vanTitle: van?.title,
+      vanPrice: van?.price,
+    });
 
-            // 2. Parameters tayar karein jo Thank You page par bhejne hain
-            const formSource = hasSelectedVan ? "Inquiry Form" : "General Contact";
-            const vanTitle = van?.title || "No Van Selected";
+    // 🎯 Condition Khatam: Ab har haal me source "General Contact" hi jayega
+    const formSource = "Contact";
+    const vanTitleText = van?.title || "No Van Selected";
 
-            // 3. Clean Redirect: Saara data URL parameters me bhej diya
-            router.push(
-              `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitle)}`
-            );
+    // 3. Clean Redirect: Saara data URL parameters me bhej diya
+    router.push(
+      `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitleText)}`
+    );
 
-          } catch (error) {
-            // Agar API/Server me error aaye to redirect nahi hoga aur error console ho jayega
-            console.error("Form submission failed:", error);
-          }
-        }}
-        className="space-y-6 w-full"
+  } catch (error) {
+    // Agar API/Server me error aaye to redirect nahi hoga aur error console ho jayega
+    console.error("Form submission failed:", error);
+  }
+}}
+className="space-y-6 w-full"
       >
         {/* HIDDEN INPUTS */}
         {hasSelectedVan && (

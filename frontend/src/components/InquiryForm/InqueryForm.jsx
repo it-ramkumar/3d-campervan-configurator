@@ -198,7 +198,7 @@ export default function InquiryForm() {
         setCurrentStep(0);
         // Bas user ko bhej dein, baaki kaam Thank-You page ka useEffect khud sambhal lega
     navigate.push(
-      `/thank-you?email=${encodeURIComponent(formData.email)}&source=Inquiry%20Form`
+      `/thank-you?email=${encodeURIComponent(formData.email)}&source=Inquiry`
     );
       } else {
         console.log(result.error);
