@@ -112,7 +112,7 @@ export default function ContactForm({
     });
 
     // 🎯 Condition Khatam: Ab har haal me source "General Contact" hi jayega
-    const formSource = "Contact";
+    const formSource = "contact";
     const vanTitleText = van?.title || "No Van Selected";
 
     // 3. Clean Redirect: Saara data URL parameters me bhej diya
