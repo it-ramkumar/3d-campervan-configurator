@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useState, useRef, Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useEffect, useState, useRef, Suspense, Component } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 import { Environment, Html, Preload } from "@react-three/drei";
 import { useDispatch, useSelector } from "react-redux";
 import MultiStepForm from "../multi-step-form/MultiStepForm";
@@ -28,10 +29,122 @@ import axios from "axios";
 import BaseVanModel from "./BaseVanModel";
 import Loader from "../../components/Loader/Loader"
 
+function isWebGLAvailable() {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      canvas.getContext("webgl2") ||
+      canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")
+    );
+  } catch {
+    return false;
+  }
+}
+
+class CanvasErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(error) { return { error }; }
+  render() {
+    if (this.state.error) return this.props.fallback;
+    return this.props.children;
+  }
+}
+
+const WebGLBlockedFallback = () => (
+  <div className="w-full h-full flex flex-col items-center justify-center gap-4 px-8 text-center">
+    <div
+      className="rounded-2xl p-6 max-w-sm w-full"
+      style={{ background: "rgba(237,152,95,0.08)", border: "1px solid rgba(237,152,95,0.25)" }}
+    >
+      <p className="font-ui text-[9px] uppercase tracking-[0.3em] text-[#ED985F] font-semibold mb-2">GPU Unavailable</p>
+      <h2 className="font-display text-lg font-bold text-[#FBFBF9] mb-3">3D view is blocked</h2>
+      <p className="font-ui text-[11px] text-[#FBFBF9]/50 leading-relaxed mb-4">
+        Chrome has disabled hardware acceleration for this session. Restart your browser to restore it.
+      </p>
+      <div
+        className="rounded-xl p-3 text-left"
+        style={{ background: "rgba(2,12,24,0.6)", border: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        <p className="font-ui text-[9px] uppercase tracking-[0.2em] text-[#FBFBF9]/30 mb-2">Quick fix</p>
+        <ol className="font-ui text-[10px] text-[#FBFBF9]/55 space-y-1 list-decimal list-inside leading-relaxed">
+          <li>Close all Chrome windows completely</li>
+          <li>Reopen Chrome and return here</li>
+          <li>If it persists → <span className="text-[#ED985F]">chrome://flags/#ignore-gpu-blocklist</span> → Enable</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+);
+
 const STUDIO_BG = "radial-gradient(ellipse 80% 65% at 50% 58%, #0D2647 0%, #071423 55%, #020C18 100%)"
+
+function DynamicModel({ model, modelRefs }) {
+  const { scene } = useGLTF(model.glbFile);
+  return (
+    <primitive
+      object={scene}
+      ref={(el) => (modelRefs.current[model.id] = el)}
+      position={model.position || [0, 0, 0]}
+      scale={model.scale || [1, 1, 1]}
+      rotation={model.rotation || [0, 0, 0]}
+      castShadow
+      receiveShadow
+    />
+  );
+}
+
+const FLOOR_PULSES = 7;
+
+function AnimatedFloor() {
+  const pulseRefs = useRef([]);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime() * 0.1;
+    pulseRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const phase = (t + i / FLOOR_PULSES) % 1;
+      const s = 0.8 + phase * 5;
+      mesh.scale.set(s, s, s);
+      mesh.material.opacity = 0.15 * Math.sin(phase * Math.PI);
+    });
+  });
+
+  return (
+    <group rotation={[-Math.PI / 2, 0, 0]}>
+      {/* Static concentric rings — subtle base grid */}
+      {[1.5, 2.5, 3.5, 4.5, 5.5].map((r) => (
+        <mesh key={r}>
+          <ringGeometry args={[r - 0.008, r, 96]} />
+          <meshBasicMaterial
+            color="#ED985F"
+            transparent
+            opacity={0.05}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+      {/* Animated ripple pulse rings */}
+      {Array.from({ length: FLOOR_PULSES }).map((_, i) => (
+        <mesh key={i} ref={(el) => (pulseRefs.current[i] = el)}>
+          <ringGeometry args={[0.92, 1, 96]} />
+          <meshBasicMaterial
+            color="#ED985F"
+            transparent
+            opacity={0}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
 
 function Van() {
   const [isSanta, setIsSanta] = useState(0)
+  const [webGLAvailable, setWebGLAvailable] = useState(true);
   const dispatch = useDispatch();
   const addedModels = useSelector((state) => state.addedModels.addedModels);
   const [isOpen, setIsOpen] = useState(false);
@@ -100,6 +213,7 @@ function Van() {
   }, [sceneToExport]);
 
   useEffect(() => {
+    setWebGLAvailable(isWebGLAvailable());
     document.body.style.overflow = "hidden";
     document.body.style.height = "100vh";
     return () => {
@@ -118,23 +232,7 @@ function Van() {
 
   useLeavePageConfirm("Are you sure you want to leave? Your changes will be lost.");
 
-  function DynamicModel({ model, setActiveModelId, modelRefs }) {
-    const { scene } = useGLTF(model.glbFile);
-    return (
-      <primitive
-        object={scene}
-        ref={(el) => (modelRefs.current[model.id] = el)}
-        position={model.position || [0, 0, 0]}
-        scale={model.scale || [1, 1, 1]}
-        rotation={model.rotation || [0, 0, 0]}
-        castShadow
-        receiveShadow
-        onClick={() => setActiveModelId(model.id)}
-      />
-    );
-  }
-
-  // Mobile van selector modal — dark studio themed
+  // ─────────────────────────────────────────────
   const MobileVanSelector = () => (
     <div
       className="fixed inset-0 z-[9999] flex flex-col p-4 lg:hidden"
@@ -385,7 +483,14 @@ function Van() {
 
           {/* 3D Canvas */}
           <div className="w-full h-full" ref={canvasContainerRef}>
-            <Canvas className="h-full w-full">
+            {!webGLAvailable ? (
+              <WebGLBlockedFallback />
+            ) : (
+            <CanvasErrorBoundary fallback={<WebGLBlockedFallback />}>
+            <Canvas
+              className="h-full w-full"
+              gl={{ powerPreference: "high-performance", antialias: true, preserveDrawingBuffer: false }}
+            >
               {/* Fix canvas background — no white flash */}
               <color attach="background" args={["#020C18"]} />
 
@@ -427,6 +532,8 @@ function Van() {
                     background={false}
                   />
 
+                  <AnimatedFloor />
+
                   {currentVanUrl && (
                     <BaseVanModel
                       key={modelKey}
@@ -439,7 +546,6 @@ function Van() {
                     <DynamicModel
                       key={model?._id || model?.id}
                       model={model}
-                      setActiveModelId={() => { }}
                       modelRefs={modelRefs}
                     />
                   ))}
@@ -455,12 +561,14 @@ function Van() {
                 />
               )}
             </Canvas>
+            </CanvasErrorBoundary>
+            )}
 
-            {loading && <Loader />}
+            {loading && webGLAvailable && <Loader />}
           </div>
 
           {/* View toggle — Exterior / Interior */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 lg:bottom-8">
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 lg:bottom-8">
             <div
               className="p-1 flex gap-1 rounded-xl"
               style={{

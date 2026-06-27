@@ -323,11 +323,11 @@ const MultiStepForm = ({
       {/* Mobile quote confirm overlay */}
       {showQuoteConfirm && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:hidden"
+          className="fixed inset-0 z-[9999] flex items-start justify-center pt-12 lg:hidden"
           style={{ background: "rgba(2,12,24,0.92)", backdropFilter: "blur(20px)" }}
         >
           <div
-            className="w-full max-w-sm rounded-2xl p-6"
+            className="w-full max-w-sm rounded-2xl p-6 z-10"
             style={{
               background: "#001F3D",
               border: "1px solid rgba(237,152,95,0.25)",
