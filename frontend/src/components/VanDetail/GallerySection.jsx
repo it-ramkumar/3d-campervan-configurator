@@ -25,7 +25,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
     setActiveImage((prev) => (prev - 1 + gallery.length) % gallery.length);
   }, [hasImages, gallery.length]);
 
-  // 🛑 FALLBACK UI: Agar array khali ho toh yeh box render hoga
+  // 🛑 FALLBACK UI
   if (!hasImages) {
     return (
       <div
@@ -36,7 +36,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
           border: "1px solid rgba(255,255,255,0.07)",
         }}
       >
-        {/* Big Bear Vans Brand Logo Watermark Layer */}
         <div className="relative w-40 h-16 opacity-80 mb-4 animate-pulse">
           <Image
             src="https://www.bigbearvans.com/images/blackLogo.webp"
@@ -47,7 +46,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
           />
         </div>
 
-        {/* Informational Status Frame */}
         <div className="space-y-2 max-w-sm">
           <span className="inline-flex items-center gap-1.5 bg-[#ED985F]/10 text-[#ED985F] text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border border-[#ED985F]/20">
             <ImageIcon size={12} className="stroke-[2.5]" /> Structural Asset
@@ -56,12 +54,15 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             Visuals Coming Soon
           </h3>
           <p className="text-[#FBFBF9]/60 text-xs font-medium leading-relaxed">
-            Our engineering studio is currently processing the high-fidelity render maps for the {title || "requested signature layout"}.
+            Our engineering studio is currently processing the high-fidelity
+            render maps for the {title || "requested signature layout"}.
           </p>
         </div>
 
-        {/* ⚡ BBV SLOGAN SECTION */}
-        <div className="mt-8 pt-6 w-full max-w-xs" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div
+          className="mt-8 pt-6 w-full max-w-xs"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+        >
           <span className="block text-[10px] font-bold text-[#FBFBF9]/40 uppercase tracking-widest mb-1">
             The Artisan Promise
           </span>
@@ -73,12 +74,10 @@ const VanGallery = ({ gallery = [], title = "" }) => {
     );
   }
 
-  // 🖼️ ACTUAL GALLERY UI (Jab data majood ho)
+  // 🖼️ ACTUAL GALLERY UI
   return (
     <div className="space-y-4">
-
-      {/* Hidden preload: sab full-size images pehle se Next.js cache mein process ho jati hain */}
-      <div className="hidden" aria-hidden="true">
+      {/* <div className="hidden" aria-hidden="true">
         {gallery.map((img, i) =>
           i !== activeImage ? (
             <Image
@@ -89,46 +88,33 @@ const VanGallery = ({ gallery = [], title = "" }) => {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
               alt=""
             />
-          ) : null
+          ) : null,
         )}
-      </div>
+      </div> */}
 
-      {/* MAIN IMAGE */}
-      <div
-        className="relative flex items-center justify-center overflow-hidden rounded-xl h-[450px]"
-        style={{
-          background: "rgba(2,12,24,0.72)",
-          border: "1px solid rgba(237,152,95,0.22)",
-          boxShadow: "0 0 48px rgba(237,152,95,0.06)",
-        }}
-      >
+      {/* MAIN IMAGE CONTAINER */}
+      <div className="relative flex items-center justify-center overflow-hidden rounded-xl h-[450px]">
+        {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
+        {gallery.map((img, i) => (
+          <Image
+            key={img}
+            src={img}
+            fill
+            alt={`${title} - image ${i + 1}`}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+            onClick={() => activeImage === i && setIsFullscreen(true)}
+            className={`object-contain transition-opacity duration-200 ${
+              activeImage === i
+                ? "opacity-100 z-10 cursor-zoom-in"
+                : "opacity-0 z-0 pointer-events-none"
+            }`}
+            priority={i === 0} // Only prioritize loading the very first image immediately
+          />
+        ))}
 
-        {/* BACKGROUND IMAGE (fills empty space) */}
-        <Image
-          src={currentImage}
-          fill
-          alt=""
-          sizes="(max-width: 768px) 100vw, 60vw"
-          className="object-cover blur-2xl scale-110 opacity-20"
-        />
-
-        {/* FOREGROUND IMAGE — key change se instant switch with fade */}
-        <Image
-          key={currentImage}
-          src={currentImage}
-          width={1000}
-          height={800}
-          alt={title}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-          onClick={() => setIsFullscreen(true)}
-          className="relative max-h-full w-auto object-contain cursor-zoom-in z-10 p-2 animate-fadeIn"
-          priority
-        />
-
-        {/* Navigation Overlays — Renders only if multi-image set exists */}
+        {/* Navigation Overlays (Keep these exactly as you have them) */}
         {gallery.length > 1 && (
           <>
-            {/* PREV */}
             <button
               onClick={prevImage}
               className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
@@ -141,7 +127,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
               <ChevronLeft size={20} className="text-[#FBFBF9]" />
             </button>
 
-            {/* NEXT */}
             <button
               onClick={nextImage}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
@@ -155,7 +140,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             </button>
           </>
         )}
-
       </div>
 
       {/* THUMBNAILS */}
@@ -165,10 +149,11 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             <div
               key={i}
               onClick={() => setActiveImage(i)}
+              // FIX 2: Removed "opacity-40 hover:opacity-80" from the inactive state string below
               className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                 activeImage === i
                   ? "border-[#ED985F] scale-[0.98]"
-                  : "border-transparent opacity-40 hover:opacity-80"
+                  : "border-transparent hover:border-[#ED985F]/50"
               }`}
               style={
                 activeImage === i
@@ -182,6 +167,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
                 height={120}
                 alt={`Thumbnail ${i}`}
                 className="w-full h-full object-cover"
+                priority={i < 5}
               />
             </div>
           ))}
@@ -191,8 +177,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
       {/* FULLSCREEN BOX */}
       {isFullscreen && (
         <div className="fixed inset-0 bg-[#020C18]/95 z-[9999] flex items-center justify-center">
-
-          {/* IMAGE */}
           <Image
             key={currentImage}
             src={currentImage}
@@ -202,7 +186,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             className="max-h-[90vh] w-auto object-contain"
           />
 
-          {/* CLOSE */}
           <button
             onClick={() => setIsFullscreen(false)}
             className="absolute top-5 right-5 text-[#FBFBF9] text-3xl hover:text-[#ED985F] hover:scale-110 transition-all"
@@ -212,7 +195,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
           {gallery.length > 1 && (
             <>
-              {/* PREV */}
               <button
                 onClick={prevImage}
                 className="absolute left-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full transition-colors"
@@ -225,7 +207,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
                 <ChevronLeft size={32} />
               </button>
 
-              {/* NEXT */}
               <button
                 onClick={nextImage}
                 className="absolute right-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full transition-colors"
@@ -239,11 +220,9 @@ const VanGallery = ({ gallery = [], title = "" }) => {
               </button>
             </>
           )}
-
         </div>
       )}
-
-      </div>
+    </div>
   );
 };
 
