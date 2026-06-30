@@ -24,6 +24,16 @@ const NavListItem = ({ href, children, isActive, onClick }) => (
 );
 
 const floorPlans = [
+   {
+    name: "Moto Van",
+    slug: "/floorplans?search=moto",
+    image: ["/renderings/moto.webp"],
+  },
+   {
+    name: "Imperial",
+    slug: "/floorplans?search=imperial",
+    image: ["/renderings/imperial.webp"],
+  },
   {
     name: "Santa Monica",
     slug: "/floorplans?category=flagship-short-van-santa-monica",
@@ -34,26 +44,28 @@ const floorPlans = [
     slug: "/floorplans?category=flagship-long-van-montreal",
     image: ["/renderings/montreal.webp"],
   },
+   {
+    name: "Cusco",
+    slug: "/floorplans?search=cusco",
+    image: ["/renderings/cusco (1).webp"],
+  },
+   {
+    name: "Oregan Campervan",
+    slug: "/floorplans?search=Oregon",
+    image: ["/renderings/oregon.webp"],
+  },
     {
     name: "Sugarloaf",
     slug: "/floorplans?category=sugarloaf",
     image: ["/renderings/sugarloaf.webp"],
   },
-  {
-    name: "Imperial",
-    slug: "/floorplans?search=imperial",
-    image: ["/renderings/imperial.webp"],
-  },
+
   {
     name: "Santa Barbara",
     slug: "/floorplans?search=santa+barbara",
     image: ["/renderings/santaBarbara.webp"],
   },
-  {
-    name: "Cusco",
-    slug: "/floorplans?search=cusco",
-    image: ["/renderings/cusco (1).webp"],
-  },
+
 ];
 const TrendPortfolios = [
   {
@@ -313,7 +325,7 @@ const handleItemClick = () => {
         return (
           <div className="flex flex-col w-full">
             {/* 1. Cards Grid: Mobile pe 2, Desktop pe 3 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-10">
               {floorPlans?.map((cat, i) => (
                 <CategoryCard
                   key={i}
@@ -497,6 +509,7 @@ const handleItemClick = () => {
 <div
   ref={megaMenuRef}
   className="fixed left-0 w-full shadow-2xl z-[999] border-t border-[#ED985F]/15 font-ui will-change-transform bg-secondary text-primary max-h-[80vh] overflow-y-auto"
+  data-lenis-prevent
   style={{
     top: "65px",
     display: desktopMenu && !forceMobile ? "block" : "none",
@@ -544,6 +557,7 @@ const handleItemClick = () => {
         >
           <div
             className={`fixed right-0 top-0 h-full w-full p-6 overflow-y-auto transform transition-transform duration-300 will-change-transform bg-secondary text-primary`}
+            data-lenis-prevent
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-8 border-b border-primary pb-4">
