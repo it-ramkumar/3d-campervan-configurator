@@ -6,18 +6,30 @@ const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
+const parseJSONField = (field, fallback) => {
+  try {
+    return field ? JSON.parse(field) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/* POST /  — Create Van                                                       */
+/* -------------------------------------------------------------------------- */
+
 router.post('/', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 },
-  { name: "glbFile", maxCount: 1 },    // Sirf ek model file
-  // { name: "textures", maxCount: 20 }
+  { name: "glbFile", maxCount: 1 },
 ]), async (req, res) => {
   try {
-    // Parse JSON fields
-    const van_listing = JSON.parse(req.body.van_listing || "{}");
-    const detailed_features = JSON.parse(req.body.detailed_features || "[]");
-    const media = JSON.parse(req.body.media || "[]");
-    let delivery_date = req.body.delivery_date;
+    const van_listing      = parseJSONField(req.body.van_listing, {});
+    const detailed_features = parseJSONField(req.body.detailed_features, []);
+    const media            = parseJSONField(req.body.media, []);
+    const blocks           = parseJSONField(req.body.blocks, []);
+    const textures         = parseJSONField(req.body.textures, []);
 
+    let delivery_date = req.body.delivery_date;
     try {
       if (delivery_date && (delivery_date.startsWith('"') || delivery_date.startsWith('{'))) {
         delivery_date = JSON.parse(delivery_date);
@@ -26,15 +38,13 @@ router.post('/', protect, adminOnly, upload.fields([
       console.log("Parsing failed, using raw string");
     }
 
-    const blocks = JSON.parse(req.body.blocks || "[]");
-
-    const status = req.body.status || "sold";
+    const status       = req.body.status || "available";
+    const is_published = req.body.is_published === "true" || req.body.is_published === true;
 
     if (!van_listing || !van_listing.title) {
       return res.status(400).json({ message: 'Van listing with title is required' });
     }
 
-    // Validate status enum
     const validStatuses = ['available', 'sale_pending', 'sold', 'coming_soon'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
@@ -42,24 +52,21 @@ router.post('/', protect, adminOnly, upload.fields([
       });
     }
 
-    // Generate slug
     let slug = req.body.slug || await Van.generateSlug(van_listing.title);
 
-    // Check if slug exists
     const existingVan = await Van.findOne({ slug });
     if (existingVan) {
       return res.status(409).json({ message: 'Van with this slug already exists' });
     }
 
-    // Upload gallery images
+    // Gallery → [url_string]
     const gallery = await Promise.all(
-      (req.files["gallery"] || []).map(async file =>
-        await uploadToS3(file.buffer, "van/gallery", file.originalname)
+      (req.files["gallery"] || []).map(async (file) =>
+        uploadToS3(file.buffer, "van/gallery", file.originalname)
       )
     );
 
-
-    // 2. Upload Single GLB File
+    // GLB file
     let modelUrl = null;
     if (req.files["glbFile"]?.[0]) {
       const file = req.files["glbFile"][0];
@@ -71,42 +78,36 @@ router.post('/', protect, adminOnly, upload.fields([
       van_listing: {
         ...van_listing,
         price: van_listing.price ? Number(van_listing.price) : null,
-        specifications: van_listing.specifications ? {
-          ...van_listing.specifications,
-          capacity: van_listing.specifications.capacity || {}
-        } : undefined
+        specifications: van_listing.specifications
+          ? { ...van_listing.specifications, capacity: van_listing.specifications.capacity || {} }
+          : undefined
       },
+      is_published,
       status,
-      glbFile: modelUrl,    // Single string URL
-      // textures: textureUrls, // Array of string URLs
+      glbFile: modelUrl,
       gallery,
       detailed_features,
-      delivery_date: delivery_date || null, // New field
-
-      // --- Blocks ko yahan add kiya gaya hai ---
+      delivery_date: delivery_date || null,
       blocks,
-
-      media
+      media,
+      textures
     };
 
     const newVan = await Van.create(vanData);
 
-    res.status(201).json({
-      message: 'Van created successfully',
-      van: newVan
-    });
+    res.status(201).json({ message: 'Van created successfully', van: newVan });
   } catch (err) {
     console.error("SERVER ERROR:", err);
-    res.status(500).json({
-      message: 'Server error',
-      error: err.message
-    });
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/* GET /available  — Lightweight list for configurator                        */
+/* -------------------------------------------------------------------------- */
+
 router.get('/available', async (req, res) => {
   try {
-
     const vans = await Van.find(
       { status: 'available' },
       {
@@ -115,7 +116,7 @@ router.get('/available', async (req, res) => {
         'van_listing.title': 1,
         'van_listing.subtitle': 1,
         'van_listing.price': 1,
-        gallery: { $slice: 1 }, // sirf first image
+        gallery: { $slice: 1 },
         glbFile: 1,
       }
     ).sort({ order: 1 });
@@ -130,41 +131,29 @@ router.get('/available', async (req, res) => {
       glb: v.glbFile || null
     }));
 
-    res.status(200).json({
-      count: formatted.length,
-      vans: formatted
-    });
-
+    res.status(200).json({ count: formatted.length, vans: formatted });
   } catch (err) {
-    res.status(500).json({
-      message: 'Server error',
-      error: err.message
-    });
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
+
+/* -------------------------------------------------------------------------- */
+/* GET /van-by-status  — Paginated by status                                  */
+/* -------------------------------------------------------------------------- */
+
 router.get('/van-by-status', async (req, res) => {
   try {
-    const {
-      status,
-      page = 1,
-      limit = 9
-    } = req.query;
+    const { status, page = 1, limit = 9 } = req.query;
 
     if (!status) {
-      return res.status(400).json({
-        success: false,
-        message: 'status is required'
-      });
+      return res.status(400).json({ success: false, message: 'status is required' });
     }
 
     const skip = (page - 1) * limit;
-
-    const vans = await Van.find({ status })
-      .sort({ order: 1 })
-      .skip(Number(skip))
-      .limit(Number(limit));
-
-    const total = await Van.countDocuments({ status });
+    const [vans, total] = await Promise.all([
+      Van.find({ status }).sort({ order: 1 }).skip(Number(skip)).limit(Number(limit)),
+      Van.countDocuments({ status })
+    ]);
 
     res.status(200).json({
       success: true,
@@ -174,37 +163,28 @@ router.get('/van-by-status', async (req, res) => {
       hasMore: skip + vans.length < total,
       data: vans
     });
-
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: err.message
-    });
+    res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/* GET /  — All vans (admin), search + pagination                             */
+/* -------------------------------------------------------------------------- */
 
 router.get("/", async (req, res) => {
   try {
-    let { page = 1, limit = 8, search = "" } = req.query; // ✅ search add kiya
-    page = Number(page);
+    let { page = 1, limit = 8, search = "" } = req.query;
+    page  = Number(page);
     limit = Number(limit);
 
-    // ✅ Build filter condition
     const query = {};
     if (search) {
-      query["van_listing.title"] = { $regex: search, $options: "i" }; // case-insensitive search
+      query["van_listing.title"] = { $regex: search, $options: "i" };
     }
 
-    // ✅ Total vans count (filtered)
     const total = await Van.countDocuments(query);
-
-    // ✅ Vans with pagination + search
-    const vans = await Van.find(query)
-      .sort({ order: 1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+    const vans  = await Van.find(query).sort({ order: 1 }).skip((page - 1) * limit).limit(limit);
 
     res.status(200).json({
       success: true,
@@ -216,55 +196,53 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching vans:", error);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-    });
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/* GET /:slug  — Single van                                                   */
+/* -------------------------------------------------------------------------- */
 
 router.get('/:slug', async (req, res) => {
   try {
-    const { slug } = req.params;
+    const van = await Van.findOne({ slug: req.params.slug });
+    if (!van) return res.status(404).json({ message: 'Van not found' });
 
-    // Explicitly check karein ke field select ho rahi hai
-    const van = await Van.findOne({ slug });
-
-    if (!van) {
-      return res.status(404).json({ message: 'Van not found' });
-    }
-
-    // Debugging ke liye yahan check karein
-    // console.log("Full Van Object from DB:", van);
-    // console.log("Delivery Date:", van.delivery_date);
-
-    res.status(200).json({
-      message: 'Van fetched successfully',
-      van
-    });
+    res.status(200).json({ message: 'Van fetched successfully', van });
   } catch (error) {
-    // ... error handling
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-router.put("/reorder",protect, adminOnly, async (req, res) => {
+/* -------------------------------------------------------------------------- */
+/* PUT /reorder  — Drag-and-drop order                                        */
+/* -------------------------------------------------------------------------- */
+
+router.put("/reorder", protect, adminOnly, async (req, res) => {
   try {
-    // console.log("Reorder request body:", req.body);
-    const { newOrder } = req.body; // Array of objects: [{_id: "...", order: 1}, ...]
-
-    const updatePromises = newOrder.map((item) =>
-      Van.findByIdAndUpdate(item._id, { order: item.order })
-    );
-
-    await Promise.all(updatePromises);
-
+    const { newOrder } = req.body;
+    await Promise.all(newOrder.map(item => Van.findByIdAndUpdate(item._id, { order: item.order })));
     res.status(200).json({ success: true, message: "Order updated!" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+/* -------------------------------------------------------------------------- */
+/* PUT /:slug  — Update Van                                                   */
+/* -------------------------------------------------------------------------- */
+/*
+  galleryOrder  — JSON array of existing gallery objects in new order:
+                  [{ url: "https://...", caption: "..." }, ...]
+                  Items omitted from this array are removed from S3 + DB.
+
+  galleryCaptions — JSON array of captions for newly uploaded gallery files:
+                    ["caption for file[0]", "caption for file[1]", ...]
+
+  insertAt      — integer index where new gallery files are spliced in
+                  (defaults to end of gallery)
+*/
 
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 },
@@ -274,150 +252,145 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     const { slug } = req.params;
 
     const van = await Van.findOne({ slug });
-    if (!van) {
-      return res.status(404).json({ message: 'Van not found' });
-    }
+    if (!van) return res.status(404).json({ message: 'Van not found' });
 
-    const parseJSONField = (field, fallback) => {
-      try {
-        return field ? JSON.parse(field) : fallback;
-      } catch {
-        return fallback;
-      }
-    };
-
-    // Existing fields parsing
-    const van_listing = parseJSONField(req.body.van_listing, van.van_listing);
+    const van_listing       = parseJSONField(req.body.van_listing, van.van_listing);
     const detailed_features = parseJSONField(req.body.detailed_features, van.detailed_features);
-    const delivery_date = req.body.delivery_date;
-    const media = parseJSONField(req.body.media, van.media);
-    const blocks = parseJSONField(req.body.blocks, van.blocks);
-    const status = req.body.status !== undefined ? req.body.status : van.status;
-    const galleryOrder = parseJSONField(req.body.galleryOrder, null);
+    const delivery_date     = req.body.delivery_date;
+    const media             = parseJSONField(req.body.media, van.media);
+    const blocks            = parseJSONField(req.body.blocks, van.blocks);
+    const textures          = parseJSONField(req.body.textures, van.textures);
+    const status            = req.body.status !== undefined ? req.body.status : van.status;
+    const is_published      = req.body.is_published !== undefined
+      ? (req.body.is_published === "true" || req.body.is_published === true)
+      : van.is_published;
+    const galleryOrder      = parseJSONField(req.body.galleryOrder, null);
 
-
-    let newSlug = van.slug; // Default current slug
+    // Slug regeneration on title change
+    let newSlug = van.slug;
     if (van_listing.title && van_listing.title !== van.van_listing.title) {
       newSlug = await Van.generateSlug(van_listing.title);
     }
 
-    // console.log(van.glbFile,"glb")
-    // ✅ GLB File Handling with Deletion
+    // ── GLB file ──────────────────────────────────────────────────────────────
     let modelUrl = van.glbFile;
 
     if (req.body.removeGlbFile === "true" && van.glbFile) {
-      try {
-        await deleteFromS3(van.glbFile);
-        modelUrl = null;
-      } catch (deleteError) {
-        console.error('Error deleting GLB from S3:', deleteError);
-      }
+      try { await deleteFromS3(van.glbFile); } catch (e) { console.error('Error deleting GLB:', e); }
+      modelUrl = null;
     }
 
     if (req.files["glbFile"]?.[0]) {
       const file = req.files["glbFile"][0];
-
       if (van.glbFile && req.body.removeGlbFile !== "true") {
-        try {
-          await deleteFromS3(van.glbFile);
-        } catch (deleteError) {
-          console.error('Error deleting old GLB:', deleteError);
-        }
+        try { await deleteFromS3(van.glbFile); } catch (e) { console.error('Error deleting old GLB:', e); }
       }
-
       modelUrl = await uploadToS3(file.buffer, "van/models", file.originalname, file.mimetype);
     }
 
-    // Handle gallery reordering and new uploads
-    let updatedGallery = van.gallery || [];
+    // ── Gallery ───────────────────────────────────────────────────────────────
+    let updatedGallery = van.gallery || [];   // [url_string]
+
     if (galleryOrder && Array.isArray(galleryOrder)) {
-      const validUrls = galleryOrder.filter(url => updatedGallery.includes(url));
-      updatedGallery = validUrls;
+      // galleryOrder items may be strings or legacy { url } objects
+      const normalise = (item) => (typeof item === "string" ? item : item.url || item);
+      const keepUrls = new Set(galleryOrder.map(normalise));
+
+      // Delete removed images from S3
+      const removedUrls = updatedGallery.filter(url => !keepUrls.has(url));
+      if (removedUrls.length > 0) {
+        await Promise.allSettled(removedUrls.map(url => deleteFromS3(url)));
+      }
+
+      updatedGallery = galleryOrder
+        .map(normalise)
+        .filter(url => van.gallery.includes(url));
     }
 
+    // Upload new gallery files and splice them in
     const newGallery = await Promise.all(
-      (req.files["gallery"] || []).map(async file =>
-        await uploadToS3(file.buffer, "van/gallery", file.originalname)
+      (req.files["gallery"] || []).map(async (file) =>
+        uploadToS3(file.buffer, "van/gallery", file.originalname)
       )
     );
 
-    const insertAt = req.body.insertAt !== undefined ? parseInt(req.body.insertAt) : updatedGallery.length;
+    const insertAt = req.body.insertAt !== undefined
+      ? parseInt(req.body.insertAt)
+      : updatedGallery.length;
+
     updatedGallery.splice(insertAt, 0, ...newGallery);
 
-    // ✅ AB VAN UPDATE KARO
+    // ── Save ──────────────────────────────────────────────────────────────────
     van.van_listing = {
       ...van.van_listing,
       ...van_listing,
       price: van_listing.price ? Number(van_listing.price) : van.van_listing.price,
-      specifications: van_listing.specifications ? {
-        ...van.van_listing.specifications,
-        ...van_listing.specifications,
-      } : van.van_listing.specifications
+      specifications: van_listing.specifications
+        ? { ...van.van_listing.specifications, ...van_listing.specifications }
+        : van.van_listing.specifications
     };
 
-    van.delivery_date = delivery_date;
+    van.delivery_date     = delivery_date;
     van.detailed_features = detailed_features;
-    van.media = media;
-    van.status = status;
-    van.gallery = updatedGallery;
-    van.blocks = blocks;
-    van.glbFile = modelUrl;
-    van.slug = newSlug; // ✅ SLUG ASSIGN KARO
+    van.media             = media;
+    van.status            = status;
+    van.is_published      = is_published;
+    van.gallery           = updatedGallery;
+    van.blocks            = blocks;
+    van.glbFile           = modelUrl;
+    van.slug              = newSlug;
+    van.textures          = textures;
 
     const updatedVan = await van.save();
 
-    res.status(200).json({
-      message: 'Van updated successfully',
-      van: updatedVan
-    });
+    res.status(200).json({ message: 'Van updated successfully', van: updatedVan });
   } catch (error) {
     console.error('Error updating van:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
+/* -------------------------------------------------------------------------- */
+/* DELETE /:slug  — Delete Van + all S3 assets                               */
+/* -------------------------------------------------------------------------- */
+
 router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {
-    const { slug } = req.params;
+    const van = await Van.findOneAndDelete({ slug: req.params.slug });
+    if (!van) return res.status(404).json({ message: 'Van not found' });
 
-    // 🔹 Step 1: Find and delete van
-    const van = await Van.findOneAndDelete({ slug });
-    if (!van) {
-      return res.status(404).json({ message: 'Van not found' });
-    }
+    const s3Deletes = [];
 
-    // 🔹 Step 2: Delete Gallery images from S3
+    // Gallery images — each item is a url string
     if (Array.isArray(van.gallery) && van.gallery.length > 0) {
-      await Promise.all(van.gallery.map(url => deleteFromS3(url)));
-      // console.log(`🧹 Deleted ${van.gallery.length} gallery images`);
+      s3Deletes.push(...van.gallery.map(url => deleteFromS3(url)));
     }
 
-    // 🔹 Step 3: Delete GLB Model File from S3
+    // GLB model
     if (van.glbFile) {
-      await deleteFromS3(van.glbFile);
-      // console.log(`🧹 Deleted GLB model file`);
+      s3Deletes.push(deleteFromS3(van.glbFile));
     }
 
-    // 🔹 Step 4: Delete Texture images from S3
-    // if (Array.isArray(van.textures) && van.textures.length > 0) {
-    //   await Promise.all(van.textures.map(url => deleteFromS3(url)));
-    //   console.log(`🧹 Deleted ${van.textures.length} textures`);
-    // }
+    // Block media (images / videos / pdfs uploaded inside content blocks)
+    if (Array.isArray(van.blocks) && van.blocks.length > 0) {
+      const blockMediaUrls = van.blocks
+        .flatMap(block => (block.block_media || []).map(m => m.url))
+        .filter(Boolean);
+      s3Deletes.push(...blockMediaUrls.map(url => deleteFromS3(url)));
+    }
 
-    // 🔹 Final Response
+    if (s3Deletes.length > 0) {
+      await Promise.allSettled(s3Deletes);
+    }
+
     res.status(200).json({
-      message: '✅ Van, 3D Models, and all S3 assets deleted successfully',
+      message: 'Van, 3D Models, and all S3 assets deleted successfully',
       van
     });
-
   } catch (error) {
-    console.error('❌ Error deleting van:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message
-    });
+    console.error('Error deleting van:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
 
 module.exports = router;
