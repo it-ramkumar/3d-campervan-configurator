@@ -3,7 +3,7 @@ export const slides = [
   {
     id: 1,
     image: "/sprinter/sphero.webp",
-    mobileImage: "/images2/heromobile1.webp",
+    mobileImage: "/images2/mobilesm.webp",
     tag: "Vans For Sale.",
     title: "Campervans",
     titleColored: "For Sale.",

@@ -71,10 +71,11 @@ export default function Hero() {
 
               {/* Overlay */}
               <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
-              <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="relative z-20 h-full flex items-center">
-                {/* md:justify-center ko hata kar default justify-center lagaya taake mobile par bhi vertically center rahe */}
-                <div className="w-full px-5 text-white flex flex-col justify-center h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
+              <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+              {/* Content Box: Mobile pe content bottom me push karne k liye items-end aur padding-bottom lagai hai */}
+              <div className="relative z-20 h-full flex items-end md:items-center">
+                <div className="w-full px-5 pb-24 md:pb-0 text-white flex flex-col justify-end md:justify-center h-auto md:h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
 
                   {/* Slogan */}
                   <div className="ml-2">
@@ -88,13 +89,13 @@ export default function Hero() {
                   </Heading1>
 
                   {/* Divider Line */}
-                  <div className="w-12 h-[3px] bg-hover rounded-full my-4 animate-fade-up delay-200" />
+                  <div className="w-12 h-[3px] bg-hover rounded-full my-3 md:my-4 animate-fade-up delay-200" />
 
                   {/* Description */}
                   <HeroParagraph text={slide.desc} />
 
-                  {/* Buttons Container: Mobile par tight margins, mt-auto hata diya */}
-                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-6 md:mt-8 animate-fade-up delay-300">
+                  {/* Buttons Container: pr-20 taake navigation buttons k sath wrap/overlap na ho */}
+                  <div className="flex flex-col sm:flex-row gap-3 w-full pr-16 sm:pr-0 sm:w-auto mt-5 md:mt-8 animate-fade-up delay-300">
                     <PrimaryButton
                       label={slide.btnText}
                       link={slide.link}
@@ -103,7 +104,6 @@ export default function Hero() {
                     <SecondaryButton
                       label={<><Sparkles size={14} className="animate-pulse mr-2" />Van Matchmaker Quiz</>}
                       onClick={scrollToQuiz}
-                      // w-full sm:w-auto lagaya aur text/border ko background ke mutabik match kiya
                       className="w-full sm:w-auto !bg-hover !text-secondary !border-hover hover:!bg-white hover:!text-black"
                     />
                   </div>
@@ -118,8 +118,8 @@ export default function Hero() {
       {/* Orange bottom accent line */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ED985F] z-30" />
 
-      {/* NAVIGATION */}
-      <div className="absolute bottom-6 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">
+      {/* NAVIGATION: Mobile button alignment safe zone */}
+      <div className="absolute bottom-8 md:bottom-28 right-4 md:right-4 z-30 flex items-center gap-3 md:gap-4">
         <button
           onClick={() => swiperRef.current?.slidePrev()}
           aria-label="Previous Slide"
