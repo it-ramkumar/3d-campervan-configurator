@@ -93,9 +93,9 @@ const FeatureGridBlock = ({ block }) => {
         <div className="divide-y divide-white/8">
           {(block.items || []).map((item, i) => (
             <div key={i} className="group flex items-start gap-5 py-5 cursor-default">
-              <span className="font-display font-black text-3xl text-hover/22 leading-none mt-0.5 shrink-0 w-10 text-right group-hover:text-hover/55 transition-colors duration-300 select-none">
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              {/* <span className="font-display font-black text-3xl text-hover/22 leading-none mt-0.5 shrink-0 w-10 text-right group-hover:text-hover/55 transition-colors duration-300 select-none">
+                {String(i + 1).padStart(2, "0") +}
+              </span> */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   {item.icon && <span className="text-xl shrink-0">{item.icon}</span>}
@@ -103,7 +103,7 @@ const FeatureGridBlock = ({ block }) => {
                 </div>
                 {item.value && <p className="font-display font-black text-2xl text-hover mb-1">{item.value}</p>}
                 {item.description && (
-                  <RichParagraph className="!text-secondary/50 !text-sm leading-relaxed">{item.description}</RichParagraph>
+                  <RichParagraph className="!text-secondary/50 leading-relaxed">{item.description}</RichParagraph>
                 )}
               </div>
             </div>
@@ -545,8 +545,8 @@ const VanPage = ({ vanDetail }) => {
                       {block.items.map((item, i) => (
                         <div key={i} className={`p-6 rounded-lg text-center ${cardCls}`}>
                           {item.value && <p className="text-3xl font-black text-hover mb-1 font-display leading-tight">{item.value}</p>}
-                          {item.title && <p className={`font-ui text-[9px] uppercase tracking-[0.22em] font-bold ${subCls}`}>{item.title}</p>}
-                          {item.description && <RichParagraph className={`text-xs mt-1 ${subCls}`}>{item.description}</RichParagraph>}
+                          {item.title && <p className={`font-ui text-[11px] uppercase tracking-[0.22em] font-bold ${subCls}`}>{item.title}</p>}
+                          {item.description && <RichParagraph className={` mt-1 ${subCls}`}>{item.description}</RichParagraph>}
                         </div>
                       ))}
                     </div>
