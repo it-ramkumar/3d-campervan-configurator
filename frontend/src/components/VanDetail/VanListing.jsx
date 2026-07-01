@@ -116,84 +116,84 @@ const FeatureGridBlock = ({ block }) => {
 };
 
 /* ── Inline gallery for feature-grid image column ── */
-const FeatureGallery = ({ images = [], isDark = false }) => {
-  const [active, setActive] = useState(0);
-  const [fullscreen, setFullscreen] = useState(false);
+// const FeatureGallery = ({ images = [], isDark = false }) => {
+//   const [active, setActive] = useState(0);
+//   const [fullscreen, setFullscreen] = useState(false);
 
-  const prev = useCallback(() => setActive(i => (i - 1 + images.length) % images.length), [images.length]);
-  const next = useCallback(() => setActive(i => (i + 1) % images.length), [images.length]);
+//   const prev = useCallback(() => setActive(i => (i - 1 + images.length) % images.length), [images.length]);
+//   const next = useCallback(() => setActive(i => (i + 1) % images.length), [images.length]);
 
-  if (!images.length) return null;
+//   if (!images.length) return null;
 
-  return (
-    <>
-      <div className="space-y-3">
-        {/* Main image — taller aspect for impact */}
-        <div
-          className="relative overflow-hidden rounded-lg cursor-zoom-in group"
-          style={{ aspectRatio: "4/3" }}
-          onClick={() => setFullscreen(true)}
-        >
-          <img
-            src={images[active]}
-            alt={`feature-${active}`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-          />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent pointer-events-none" />
-          <div className="bbv-amber-line" />
-          {images.length > 1 && (
-            <>
-              <button type="button" onClick={e => { e.stopPropagation(); prev(); }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
-              </button>
-              <button type="button" onClick={e => { e.stopPropagation(); next(); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-              </button>
-              <span className="absolute bottom-3 right-3 text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 font-ui">
-                {active + 1} / {images.length}
-              </span>
-            </>
-          )}
-        </div>
+//   return (
+//     <>
+//       <div className="space-y-3">
+//         {/* Main image — taller aspect for impact */}
+//         <div
+//           className="relative overflow-hidden rounded-lg cursor-zoom-in group"
+//           style={{ aspectRatio: "4/3" }}
+//           onClick={() => setFullscreen(true)}
+//         >
+//           <img
+//             src={images[active]}
+//             alt={`feature-${active}`}
+//             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+//           />
+//           {/* Gradient overlay */}
+//           <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent pointer-events-none" />
+//           <div className="bbv-amber-line" />
+//           {images.length > 1 && (
+//             <>
+//               <button type="button" onClick={e => { e.stopPropagation(); prev(); }}
+//                 className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
+//                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+//               </button>
+//               <button type="button" onClick={e => { e.stopPropagation(); next(); }}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
+//                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+//               </button>
+//               <span className="absolute bottom-3 right-3 text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 font-ui">
+//                 {active + 1} / {images.length}
+//               </span>
+//             </>
+//           )}
+//         </div>
 
-        {/* Thumbnails */}
-        {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-            {images.map((img, i) => (
-              <button key={i} type="button" onClick={() => setActive(i)}
-                className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                  i === active ? "border-hover" : "border-transparent opacity-50 hover:opacity-90"
-                }`}>
-                <img src={img} alt={`thumb-${i}`} className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+//         {/* Thumbnails */}
+//         {images.length > 1 && (
+//           <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+//             {images.map((img, i) => (
+//               <button key={i} type="button" onClick={() => setActive(i)}
+//                 className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all ${
+//                   i === active ? "border-hover" : "border-transparent opacity-50 hover:opacity-90"
+//                 }`}>
+//                 <img src={img} alt={`thumb-${i}`} className="w-full h-full object-cover" />
+//               </button>
+//             ))}
+//           </div>
+//         )}
+//       </div>
 
-      {/* Fullscreen lightbox */}
-      {fullscreen && (
-        <div className="fixed inset-0 bg-canvas/95 z-[9999] flex items-center justify-center backdrop-blur-sm" onClick={() => setFullscreen(false)}>
-          <img src={images[active]} alt="fullscreen" className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" onClick={e => e.stopPropagation()} />
-          <button type="button" onClick={() => setFullscreen(false)} className="absolute top-5 right-5 text-secondary text-3xl hover:text-hover transition-colors">✕</button>
-          {images.length > 1 && (
-            <>
-              <button type="button" onClick={e => { e.stopPropagation(); prev(); }} className="absolute left-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
-              </button>
-              <button type="button" onClick={e => { e.stopPropagation(); next(); }} className="absolute right-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-              </button>
-            </>
-          )}
-        </div>
-      )}
-    </>
-  );
-};
+//       {/* Fullscreen lightbox */}
+//       {fullscreen && (
+//         <div className="fixed inset-0 bg-canvas/95 z-[9999] flex items-center justify-center backdrop-blur-sm" onClick={() => setFullscreen(false)}>
+//           <img src={images[active]} alt="fullscreen" className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" onClick={e => e.stopPropagation()} />
+//           <button type="button" onClick={() => setFullscreen(false)} className="absolute top-5 right-5 text-secondary text-3xl hover:text-hover transition-colors">✕</button>
+//           {images.length > 1 && (
+//             <>
+//               <button type="button" onClick={e => { e.stopPropagation(); prev(); }} className="absolute left-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+//                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+//               </button>
+//               <button type="button" onClick={e => { e.stopPropagation(); next(); }} className="absolute right-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+//                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+//               </button>
+//             </>
+//           )}
+//         </div>
+//       )}
+//     </>
+//   );
+// };
 
 const SvgCheck = ({ small = false }) => (
   <svg className={`${small ? "w-3 h-3" : "w-4 h-4"} shrink-0`} style={{ color: "#ED985F" }}
@@ -204,8 +204,8 @@ const SvgCheck = ({ small = false }) => (
 
 const HeroSpecItem = ({ label, value }) => (
   <div className="group py-3 border-b border-primary/10 hover:border-hover/50 transition-all duration-200">
-    <RichParagraph className="!text-[10px] uppercase tracking-[0.3em] font-semibold text-primary/45 mb-1 font-ui">{label}</RichParagraph>
-    <RichParagraph className="font-display font-bold text-lg leading-tight text-primary group-hover:text-hover transition-colors">
+    <SpanTag text={label} className=" uppercase tracking-[0.3em] font-semibold text-primary/45 mb-1 "/>
+    <RichParagraph className="font-display font-bold  text-primary group-hover:text-hover transition-colors">
       {value}
     </RichParagraph>
   </div>
@@ -388,7 +388,7 @@ const VanPage = ({ vanDetail }) => {
             <SpanTag text="The Design Philosophy" className="justify-center mb-5" />
             <Heading2 text="Build Overview" className="text-primary mt-4" />
             <div className="bbv-divider mx-auto mt-5 mb-10" />
-            <RichParagraph className="text-primary/60 italic text-lg leading-relaxed">
+            <RichParagraph className="text-primary/60 italic leading-relaxed">
               "{vanDetail.van_listing.description}"
             </RichParagraph>
           </div>
