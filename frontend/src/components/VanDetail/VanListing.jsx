@@ -307,7 +307,7 @@ const VanPage = ({ vanDetail }) => {
 
               {/* Title */}
               <div>
-                <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary mb-2 leading-[0.9]" />
+                <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary !text-6xl mb-2 leading-[0.9]" />
                 {vanDetail?.van_listing?.subtitle && (
                   <div className="flex items-center gap-3 mt-4">
                     <div className="w-8 h-0.5 bg-hover shrink-0" />
