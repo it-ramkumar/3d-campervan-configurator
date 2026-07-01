@@ -8,14 +8,7 @@ export async function availableVans() {
       `${process.env.NEXT_PUBLIC_URL}/van/available`,
       {
         method: "GET",
-        // cache: "force-cache",
-        // next: {
-        //   revalidate: 604800, // 7 days
-        //   tags: ['vans', 'available-vans'] // For manual purge when inventory changes
-        // },
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        cache: "no-store",
       },
     );
 

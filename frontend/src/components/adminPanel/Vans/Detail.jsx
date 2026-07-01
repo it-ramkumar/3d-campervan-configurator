@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { ImageWithSkeleton } from "@/components/Common/Common";
 export default function Detail({ setIsopen, detail }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const gallery = detail.gallery || [];
+  // gallery is string[]; normalise legacy { url } objects from old data
+  const gallery = (detail.gallery || []).map((item) =>
+    typeof item === "string" ? item : item?.url
+  ).filter(Boolean);
   const blocks = detail.blocks || []; // Dynamic blocks array
 
-  // console.log(detail);
+  console.log(detail);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -61,6 +64,23 @@ export default function Detail({ setIsopen, detail }) {
                 </div>
               )}
             </div>
+            {/* Thumbnail strip */}
+            {gallery.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {gallery.map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                      idx === currentImageIndex ? "border-blue-500" : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={item} alt={`thumb-${idx}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -73,72 +93,67 @@ export default function Detail({ setIsopen, detail }) {
                 </p>
               </section>
 
-              {/* ✅ Dynamic Blocks Section */}
-              {blocks.length > 0 && (
+              {/* Dynamic Blocks Section */}
+              {blocks.filter(b => b.is_active !== false).length > 0 && (
                 <section className="space-y-6">
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Full Details</h3>
                   <div className="space-y-6">
-                    {blocks.sort((a, b) => a.order - b.order).map((block, idx) => (
-                      <div key={block._id || idx} className="animate-fade-in">
+                    {[...blocks]
+                      .filter(b => b.is_active !== false)
+                      .sort((a, b) => a.order - b.order)
+                      .map((block, idx) => (
+                      <div key={block._id || idx}>
 
-                        {block.block_type === 'heading' && (
-                          <h2 className="text-2xl font-bold text-slate-800 mt-4">{block.title}</h2>
+                        {/* HEADING */}
+                        {block.block_type === "heading" && (
+                          <div className="mt-4">
+                            <h2 className="text-2xl font-bold text-slate-800">{block.title}</h2>
+                            {block.subtitle && <p className="text-slate-500 mt-1">{block.subtitle}</p>}
+                          </div>
                         )}
 
-                        {block.block_type === 'subheading' && (
+                        {/* SUBHEADING */}
+                        {block.block_type === "subheading" && (
                           <h3 className="text-lg font-semibold text-slate-700 mt-2">{block.title}</h3>
                         )}
 
-                        {block.block_type === 'paragraph' && (
-                          <p className="text-slate-600 leading-relaxed mt-1">{block.content}</p>
+                        {/* PARAGRAPH */}
+                        {block.block_type === "paragraph" && (
+                          <p className="text-slate-600 leading-relaxed">{block.content}</p>
                         )}
 
-                       {block.block_type === "list" && (
-  <div className="mt-2">
-    {block.title && (
-      <h4 className="font-bold text-slate-800 mb-2">
-        {block.title}
-      </h4>
-    )}
+                        {/* LIST */}
+                        {block.block_type === "list" && (
+                          <div>
+                            {block.title && <h4 className="font-bold text-slate-800 mb-2">{block.title}</h4>}
+                            <ul className="list-disc list-inside space-y-1 text-slate-600">
+                              {(block.list_items || []).map((item, i) => (
+                                <li key={i}>
+                                  {item?.text}
+                                  {item?.sub_items?.length > 0 && (
+                                    <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                                      {item.sub_items.map((sub, si) => <li key={si}>{sub}</li>)}
+                                    </ul>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-    <ul className="list-disc list-inside space-y-1 text-slate-600">
-      {(block.list_items || []).map((item, i) => (
-        <li key={i}>
-          {item?.text}
-
-          {/* Sub Items */}
-          {(item?.sub_items?.length > 0) && (
-            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-              {item.sub_items.map((sub, sIndex) => (
-                <li key={sIndex}>{sub}</li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
-
-
-                        {block.block_type === 'table' && block.table_data && (
-                          <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+                        {/* TABLE */}
+                        {block.block_type === "table" && block.table_data && (
+                          <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm">
                             {block.title && <div className="bg-slate-50 p-3 border-b font-bold text-slate-700">{block.title}</div>}
                             <div className="overflow-x-auto">
                               <table className="w-full text-left text-sm">
                                 <thead className="bg-slate-100 text-slate-600 font-bold">
-                                  <tr>
-                                    {block.table_data.headers.map((h, i) => (
-                                      <th key={i} className="px-4 py-2 border-b">{h}</th>
-                                    ))}
-                                  </tr>
+                                  <tr>{block.table_data.headers.map((h, i) => <th key={i} className="px-4 py-2 border-b">{h}</th>)}</tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 bg-white">
                                   {block.table_data.rows.map((row, ri) => (
-                                    <tr key={ri} className="hover:bg-slate-50 transition-colors">
-                                      {row.map((cell, ci) => (
-                                        <td key={ci} className="px-4 py-2 text-slate-600">{cell}</td>
-                                      ))}
+                                    <tr key={ri} className="hover:bg-slate-50">
+                                      {row.map((cell, ci) => <td key={ci} className="px-4 py-2 text-slate-600">{cell}</td>)}
                                     </tr>
                                   ))}
                                 </tbody>
@@ -146,6 +161,95 @@ export default function Detail({ setIsopen, detail }) {
                             </div>
                           </div>
                         )}
+
+                        {/* MEDIA */}
+                        {block.block_type === "media" && (block.block_media || []).length > 0 && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {block.block_media.map((m, mi) => (
+                              <div key={mi} className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                                {m.type === "image" && (
+                                  <img src={m.url} alt={m.alt || ""} className="w-full h-48 object-cover" />
+                                )}
+                                {m.type === "video" && (
+                                  <video src={m.url} controls poster={m.thumbnail} className="w-full h-48 object-cover" />
+                                )}
+                                {m.type === "iframe" && (
+                                  <iframe src={m.url} title={m.alt || "embed"} className="w-full h-48 border-0" allowFullScreen />
+                                )}
+                                {m.type === "pdf" && (
+                                  <a href={m.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-4 text-blue-600 font-medium hover:underline">
+                                    <span>📄</span> {m.alt || "View PDF"}
+                                  </a>
+                                )}
+                                {m.caption && <p className="text-xs text-slate-500 p-2 bg-slate-50">{m.caption}</p>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* FEATURE-GRID */}
+                        {block.block_type === "feature-grid" && (
+                          <div>
+                            {block.title && <h3 className="text-lg font-bold text-slate-800 mb-1">{block.title}</h3>}
+                            {block.subtitle && <p className="text-sm text-slate-500 mb-3">{block.subtitle}</p>}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              {(block.items || []).map((item, ii) => (
+                                <div key={ii} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                                  {item.icon && <span className="text-2xl shrink-0">{item.icon}</span>}
+                                  <div>
+                                    {item.title && <p className="font-semibold text-slate-800 text-sm">{item.title}</p>}
+                                    {item.description && <p className="text-xs text-slate-500 mt-0.5">{item.description}</p>}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* STATS */}
+                        {block.block_type === "stats" && (
+                          <div>
+                            {block.title && <h3 className="text-lg font-bold text-slate-800 mb-1">{block.title}</h3>}
+                            {block.subtitle && <p className="text-sm text-slate-500 mb-3">{block.subtitle}</p>}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              {(block.items || []).map((item, ii) => (
+                                <div key={ii} className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm text-center">
+                                  <p className="text-2xl font-black text-slate-900">{item.value}</p>
+                                  <p className="text-xs font-semibold text-slate-600 mt-1">{item.title}</p>
+                                  {item.description && <p className="text-xs text-slate-400 mt-0.5">{item.description}</p>}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* QUOTE */}
+                        {block.block_type === "quote" && (
+                          <blockquote className="border-l-4 border-slate-300 pl-4 py-1">
+                            <p className="text-slate-600 italic leading-relaxed">"{block.content}"</p>
+                            {block.title && <footer className="text-xs text-slate-400 mt-2 font-semibold">— {block.title}</footer>}
+                          </blockquote>
+                        )}
+
+                        {/* CTA */}
+                        {block.block_type === "cta" && (
+                          <div className="p-6 bg-slate-800 text-white rounded-xl text-center space-y-3">
+                            {block.title && <h3 className="text-xl font-bold">{block.title}</h3>}
+                            {block.subtitle && <p className="text-slate-300 text-sm">{block.subtitle}</p>}
+                            {block.content && <p className="text-slate-400 text-sm">{block.content}</p>}
+                            {block.button?.label && (
+                              <a
+                                href={block.button.url || "#"}
+                                target={block.button.target === "blank" ? "_blank" : "_self"}
+                                rel="noreferrer"
+                                className="inline-block mt-2 px-6 py-2 bg-white text-slate-800 font-bold rounded-lg hover:bg-slate-100 transition-colors"
+                              >
+                                {block.button.label}
+                              </a>
+                            )}
+                          </div>
+                        )}
+
                       </div>
                     ))}
                   </div>
@@ -179,7 +283,14 @@ export default function Detail({ setIsopen, detail }) {
               <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4 sticky top-20">
                 <div className="border-b border-slate-100 pb-3">
                   <p className="text-xs text-slate-500 font-medium">Listing Price</p>
-                  <p className="text-2xl font-black text-slate-900">{detail.formatted_price}</p>
+                  {detail.van_listing?.sale_price ? (
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-2xl font-black text-slate-900">{detail.formatted_sale_price}</p>
+                      <p className="text-sm line-through text-slate-400">{detail.formatted_price}</p>
+                    </div>
+                  ) : (
+                    <p className="text-2xl font-black text-slate-900">{detail.formatted_price}</p>
+                  )}
                 </div>
                 <div className="space-y-3">
                   <SpecItem label="Drivetrain" value={detail.van_listing?.specifications?.drivetrain} />

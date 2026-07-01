@@ -109,7 +109,7 @@ router.post('/', protect, adminOnly, upload.fields([
 router.get('/available', async (req, res) => {
   try {
     const vans = await Van.find(
-      { status: 'available' },
+      { status: 'available', is_published: true },
       {
         _id: 1,
         slug: 1,
@@ -150,9 +150,10 @@ router.get('/van-by-status', async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
+    const filter = { status, is_published: true };
     const [vans, total] = await Promise.all([
-      Van.find({ status }).sort({ order: 1 }).skip(Number(skip)).limit(Number(limit)),
-      Van.countDocuments({ status })
+      Van.find(filter).sort({ order: 1 }).skip(Number(skip)).limit(Number(limit)),
+      Van.countDocuments(filter)
     ]);
 
     res.status(200).json({
@@ -201,6 +202,21 @@ router.get("/", async (req, res) => {
 });
 
 /* -------------------------------------------------------------------------- */
+/* GET /preview/:slug  — Single van, draft or published (unlisted preview)    */
+/* -------------------------------------------------------------------------- */
+
+router.get('/preview/:slug', async (req, res) => {
+  try {
+    const van = await Van.findOne({ slug: req.params.slug });
+    if (!van) return res.status(404).json({ message: 'Van not found' });
+
+    res.status(200).json({ message: 'Van fetched successfully', van });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+/* -------------------------------------------------------------------------- */
 /* GET /:slug  — Single van                                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -208,6 +224,7 @@ router.get('/:slug', async (req, res) => {
   try {
     const van = await Van.findOne({ slug: req.params.slug });
     if (!van) return res.status(404).json({ message: 'Van not found' });
+    if (!van.is_published) return res.status(404).json({ message: 'Van not found' });
 
     res.status(200).json({ message: 'Van fetched successfully', van });
   } catch (error) {

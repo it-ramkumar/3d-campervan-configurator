@@ -9,52 +9,59 @@ import { handleMediaUrlChange } from "@/CustomHooks/handleMediaUrlChange";
 import { removeMediaUrl } from "@/CustomHooks/removeMediaUrl";
 import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
-import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock"; // Naya Component
+import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
 import Swal from "sweetalert2";
+
+const emptyVanListing = {
+  title: "",
+  description: "",
+  subtitle: "",
+  roof: "",
+  price: "",
+  sale_price: "",
+  tagline: "",
+  specifications: {
+    make_model: "",
+    wheelbase: "",
+    drivetrain: "",
+    engine: "",
+    capacity: { sits: "", sleeps: "" },
+    transmission: "",
+    exterior_color: "",
+    interior_color: "",
+  },
+};
 
 const VansForm = ({ setSelected }) => {
   const editData = useSelector((state) => state.editData.editData);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    van_listing: {
-      title: "",
-      description: "",
-      subtitle: "",
-      roof: "",
-      price: "",
-      tagline: "",
-      specifications: {
-        make_model: "",
-        wheelbase: "",
-        drivetrain: "",
-        engine: "",
-        capacity: { sits: "", sleeps: "" },
-        transmission: "",
-        exterior_color: "",
-        interior_color: ""
-      },
-    },
+    van_listing: emptyVanListing,
     delivery_date: "",
     status: "available",
-    gallery: [],
-    media: [],
+    is_published: false,
   });
 
   const [features, setFeatures] = useState([{ category: "", items: [""] }]);
-  // --- Naya: Blocks State ---
   const [blocks, setBlocks] = useState([]);
 
+  // gallery: existingGallery is string[] of image URLs
   const [existingGallery, setExistingGallery] = useState([]);
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreviews, setGalleryPreviews] = useState([]);
-  const [removedExistingGallery, setRemovedExistingGallery] = useState([]);
+console.log(existingGallery,"1")
+console.log(galleryFiles,"2")
+console.log(galleryPreviews,"3")
+
+
   const [mediaUrls, setMediaUrls] = useState([""]);
-  // Existing states ke saath ye add karein
+
   const [glbFile, setGlbFile] = useState(null);
-  const [existingGlbFile, setExistingGlbFile] = useState(null); // ✅ Add this
-  const [removeGlbFile, setRemoveGlbFile] = useState(false); // ✅ Add this
-  // const [textureFiles, setTextureFiles] = useState([]);
+  const [existingGlbFile, setExistingGlbFile] = useState(null);
+  const [removeGlbFile, setRemoveGlbFile] = useState(false);
+
+  const [textures, setTextures] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -66,159 +73,137 @@ const VansForm = ({ setSelected }) => {
     { value: "coming_soon", label: "Coming Soon" },
   ];
 
-
+  /* ── Load edit data ─────────────────────────────────────────────────── */
   useEffect(() => {
-
     if (editData) {
-
       setFormData((prev) => ({
         ...prev,
         ...editData,
         van_listing: {
-          ...prev.van_listing,
+          ...emptyVanListing,
           ...(editData.van_listing || {}),
           specifications: {
-            ...(editData.van_listing?.specifications || prev.van_listing.specifications),
+            ...emptyVanListing.specifications,
+            ...(editData.van_listing?.specifications || {}),
             capacity: {
-              ...(editData.van_listing?.specifications?.capacity || prev.van_listing.specifications.capacity),
+              ...emptyVanListing.specifications.capacity,
+              ...(editData.van_listing?.specifications?.capacity || {}),
             },
           },
         },
-        media: editData.media || [],
-        gallery: editData.gallery || [],
         status: editData.status || "available",
-        delivery_date: editData?.delivery_date,
+        is_published: editData.is_published ?? false,
+        delivery_date: editData?.delivery_date || "",
       }));
-      // ✅ Add GLB handling
+
       setExistingGlbFile(editData.glbFile || null);
       setRemoveGlbFile(false);
-      setExistingGallery(editData.gallery ? [...editData.gallery] : []);
+      setTextures(editData.textures?.length > 0 ? [...editData.textures] : []);
+
+      // gallery is string[] from backend; normalise legacy { url } objects just in case
+      const normaliseGallery = (items) =>
+        (items || []).map((item) => (typeof item === "string" ? item : item?.url)).filter(Boolean);
+      setExistingGallery(normaliseGallery(editData.gallery));
       setMediaUrls(editData.media?.length > 0 ? [...editData.media] : [""]);
 
       if (editData.blocks) {
-        const transformedBlocks = editData.blocks.map((block) => {
+        const transformed = editData.blocks.map((block) => {
           if (block.block_type === "list") {
             return {
               ...block,
               list_items: (block.list_items || []).map((item) => ({
                 text: item?.text || "",
-                sub_items: item?.sub_items || []
-              }))
+                sub_items: item?.sub_items || [],
+              })),
             };
           }
-
           return block;
         });
-
-        setBlocks(transformedBlocks);
+        setBlocks(transformed);
       }
 
-      setFeatures(editData.detailed_features?.length > 0
-        ? editData.detailed_features
-        : [{ category: "", items: [""] }]
+      setFeatures(
+        editData.detailed_features?.length > 0
+          ? editData.detailed_features
+          : [{ category: "", items: [""] }]
       );
     }
   }, [editData]);
 
+  /* ── Reset ──────────────────────────────────────────────────────────── */
   const resetForm = () => {
-    setFormData({
-      van_listing: {
-        title: "",
-        description: "",
-        subtitle: "",
-        roof: "",
-        price: "",
-        tagline: "",
-        specifications: {
-          make_model: "",
-          wheelbase: "",
-          drivetrain: "",
-          engine: "",
-          capacity: { sits: "", sleeps: "" },
-          transmission: "",
-          exterior_color: "",
-          interior_color: ""
-        },
-      },
-      delivery_date: "",
-      status: "available",
-      gallery: [],
-      detailed_features: [{ category: "", items: [""] }],
-      media: [],
-    });
-    setGlbFile(null),
-      setExistingGlbFile(null); // ✅ Add this
-    setRemoveGlbFile(false); // ✅ Add this
+    setFormData({ van_listing: emptyVanListing, delivery_date: "", status: "available", is_published: false });
+    setGlbFile(null);
+    setExistingGlbFile(null);
+    setRemoveGlbFile(false);
+    setTextures([]);
     setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
-    setRemovedExistingGallery([]);
     setMediaUrls([""]);
-    setBlocks([]); // Blocks reset
-
+    setBlocks([]);
+    setFeatures([{ category: "", items: [""] }]);
     dispatch(clearEditData());
   };
-
-
 
   useEffect(() => {
     return () => {
       galleryPreviews.forEach((url) => {
-        try { URL.revokeObjectURL(url); } catch (e) { }
+        try { URL.revokeObjectURL(url); } catch (e) {}
       });
     };
   }, [galleryPreviews]);
 
+  /* ── Submit ─────────────────────────────────────────────────────────── */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // console.log(formData);
+
     try {
       const formToSend = new FormData();
 
+      // Clean blocks — per-type cleanup then generic empty-field removal
       const cleanedBlocks = (blocks || [])
         .map((block) => {
-          const b = { ...block };
+          const b = JSON.parse(JSON.stringify(block)); // deep clone
 
-          // ✅ LIST BLOCK CLEANING
+          // ── list ──
           if (b.block_type === "list") {
             b.list_items = (b.list_items || [])
               .map((item) => {
                 if (!item || typeof item !== "object") return null;
-
-                const cleanedSubItems = (item.sub_items || [])
-                  .filter((sub) => sub && sub.trim() !== "");
-
                 const mainText = item.text?.trim() || "";
-
-                // Agar main text empty hai to pura item remove
                 if (!mainText) return null;
-
-                return {
-                  text: mainText,
-                  ...(cleanedSubItems.length > 0 && {
-                    sub_items: cleanedSubItems,
-                  }),
-                };
+                const sub = (item.sub_items || []).filter((s) => s && s.trim() !== "");
+                return { text: mainText, ...(sub.length > 0 && { sub_items: sub }) };
               })
               .filter(Boolean);
-
-            // Agar koi valid list item nahi bacha
-            if (!b.list_items.length) {
-              delete b.list_items;
-            }
+            if (!b.list_items.length) delete b.list_items;
           }
 
-          // ✅ REMOVE EMPTY FIELDS
-          Object.keys(b).forEach((key) => {
-            const value = b[key];
+          // ── media ──
+          if (b.block_type === "media") {
+            b.block_media = (b.block_media || []).filter((m) => m?.url?.trim());
+            if (!b.block_media.length) delete b.block_media;
+          }
 
-            if (
-              value === null ||
-              value === undefined ||
-              value === "" ||
-              (Array.isArray(value) && value.length === 0)
-            ) {
+          // ── feature-grid / stats ──
+          if (b.block_type === "feature-grid" || b.block_type === "stats") {
+            b.items = (b.items || []).filter((item) =>
+              Object.values(item).some((v) => v && String(v).trim())
+            );
+            if (!b.items.length) delete b.items;
+          }
+
+          // ── button: remove from any block if label+url are both empty ──
+          if (b.button && !b.button.label?.trim() && !b.button.url?.trim()) {
+            delete b.button;
+          }
+
+          // ── generic: remove null / "" / undefined / empty arrays ──
+          Object.keys(b).forEach((key) => {
+            const v = b[key];
+            if (v === null || v === undefined || v === "" || (Array.isArray(v) && v.length === 0)) {
               delete b[key];
             }
           });
@@ -227,28 +212,32 @@ const VansForm = ({ setSelected }) => {
         })
         .filter((block) => Object.keys(block).length > 1);
 
-      // 2. Append Data
-      formToSend.append("van_listing", JSON.stringify(formData.van_listing));
-      formToSend.append("delivery_date", formData.delivery_date);
+      // van_listing — strip empty sale_price
+      const van_listing = { ...formData.van_listing };
+      if (!van_listing.sale_price) delete van_listing.sale_price;
+
+      formToSend.append("van_listing", JSON.stringify(van_listing));
+      formToSend.append("delivery_date", formData.delivery_date || "");
       formToSend.append("status", formData.status);
+      formToSend.append("is_published", String(formData.is_published));
       formToSend.append("detailed_features", JSON.stringify(features));
-      formToSend.append("media", JSON.stringify(mediaUrls.filter(u => u && u.trim() !== "")));
+      formToSend.append("media", JSON.stringify(mediaUrls.filter((u) => u && u.trim() !== "")));
       formToSend.append("blocks", JSON.stringify(cleanedBlocks));
+
+      formToSend.append("textures", JSON.stringify(textures.filter((t) => t && t.trim() !== "")));
+      // galleryOrder: existing URLs in final order — backend deletes removed ones from S3
       formToSend.append("galleryOrder", JSON.stringify(existingGallery));
       formToSend.append("insertAt", "0");
-      galleryFiles.forEach((file) => formToSend.append("gallery", file));
-      // ✅ Handle GLB file logic
-      if (removeGlbFile) {
-        formToSend.append("removeGlbFile", "true");
-      }
 
-      if (glbFile) {
-        formToSend.append("glbFile", glbFile);
-      }
+      // New gallery files
+      galleryFiles.forEach((file) => formToSend.append("gallery", file));
+
+      // GLB
+      if (removeGlbFile) formToSend.append("removeGlbFile", "true");
+      if (glbFile) formToSend.append("glbFile", glbFile);
 
       if (editData?._id) {
-        console.log("Updating van via slug:", editData.slug);
-        await updateVan(editData.slug, formToSend); // Parent ID ki jagah SLUG use karein
+        await updateVan(editData.slug, formToSend);
       } else {
         await createVan(formToSend);
       }
@@ -256,9 +245,8 @@ const VansForm = ({ setSelected }) => {
       Swal.fire("Success", "Van saved successfully", "success");
       setSelected("Vans-listing");
       resetForm();
-
     } catch (err) {
-      console.error("Submission Error Details:", err.response?.data || err);
+      console.error("Submission Error:", err.response?.data || err);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -269,6 +257,7 @@ const VansForm = ({ setSelected }) => {
     }
   };
 
+  /* ── Render ─────────────────────────────────────────────────────────── */
   return (
     <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-5xl mx-auto">
@@ -282,10 +271,12 @@ const VansForm = ({ setSelected }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Basic Info Card */}
+
+          {/* ── Basic Info ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Basic Information</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
                 <input
@@ -299,27 +290,26 @@ const VansForm = ({ setSelected }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Roof *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Roof</label>
                 <input
                   name="roof"
                   value={formData.van_listing.roof}
                   onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.roof ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter roof type"
                 />
               </div>
 
               <div className="lg:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <textarea
                   name="description"
                   value={formData.van_listing.description}
                   onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
                   rows={4}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.description ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter detailed description"
                 />
-                {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
               </div>
 
               <div>
@@ -333,6 +323,18 @@ const VansForm = ({ setSelected }) => {
                   placeholder="Enter price"
                 />
                 {errors.price && <p className="text-sm text-red-600 mt-1">{errors.price}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sale Price</label>
+                <input
+                  name="sale_price"
+                  type="number"
+                  value={formData.van_listing.sale_price}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="Leave empty if not on sale"
+                />
               </div>
 
               <div>
@@ -356,44 +358,43 @@ const VansForm = ({ setSelected }) => {
                   placeholder="Enter tagline"
                 />
               </div>
+
             </div>
           </section>
 
-          {/* Specifications Card */}
+          {/* ── Specifications ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Technical Specifications</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Make & Model *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Make & Model</label>
                 <input
                   name="make_model"
                   value={formData.van_listing.specifications.make_model}
                   onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.make_model ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.make_model && <p className="text-sm text-red-600 mt-1">{errors.make_model}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Wheelbase *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Wheelbase</label>
                 <input
                   name="wheelbase"
                   value={formData.van_listing.specifications.wheelbase}
                   onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.wheelbase ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.wheelbase && <p className="text-sm text-red-600 mt-1">{errors.wheelbase}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Drivetrain *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Drivetrain</label>
                 <input
                   name="drivetrain"
                   value={formData.van_listing.specifications.drivetrain}
                   onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.drivetrain ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.drivetrain && <p className="text-sm text-red-600 mt-1">{errors.drivetrain}</p>}
               </div>
 
               <div>
@@ -407,37 +408,43 @@ const VansForm = ({ setSelected }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sits *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
+                <input
+                  name="transmission"
+                  value={formData.van_listing.specifications.transmission}
+                  onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sits</label>
                 <input
                   name="sits"
                   value={formData.van_listing.specifications.capacity.sits}
                   onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.sits ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.sits && <p className="text-sm text-red-600 mt-1">{errors.sits}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sleeps *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Sleeps</label>
                 <input
                   name="sleeps"
                   value={formData.van_listing.specifications.capacity.sleeps}
                   onChange={(e) => handleInputChange(e, "van_listing.specifications.capacity", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg ${errors.sleeps ? "border-red-500" : "border-gray-300"}`}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.sleeps && <p className="text-sm text-red-600 mt-1">{errors.sleeps}</p>}
               </div>
 
-
-
-              {/* Exterior Color Picker */}
+              {/* Exterior Color */}
               <div className="flex flex-col gap-2">
                 <label className="block text-sm font-medium text-gray-700">Exterior Color</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
                     name="exterior_color"
-                    value={formData.van_listing.specifications.exterior_color || "#ffffff"} // Default white
+                    value={formData.van_listing.specifications.exterior_color || "#ffffff"}
                     onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                     className="h-10 w-20 cursor-pointer rounded border border-gray-300"
                   />
@@ -447,14 +454,14 @@ const VansForm = ({ setSelected }) => {
                 </div>
               </div>
 
-              {/* Interior Color Picker */}
+              {/* Interior Color */}
               <div className="flex flex-col gap-2">
                 <label className="block text-sm font-medium text-gray-700">Interior Color</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
                     name="interior_color"
-                    value={formData.van_listing.specifications.interior_color || "#000000"} // Default black
+                    value={formData.van_listing.specifications.interior_color || "#000000"}
                     onChange={(e) => handleInputChange(e, "van_listing.specifications", setFormData)}
                     className="h-10 w-20 cursor-pointer rounded border border-gray-300"
                   />
@@ -463,38 +470,36 @@ const VansForm = ({ setSelected }) => {
                   </span>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
-                <input
-                  name="transmission"
-                  value={formData.van_listing.specifications.transmission}
-                  onChange={(e) => handleInputChange(e, "van_listing.specifications.transmission", setFormData)}
-                  className={`w-full px-4 py-2 border rounded-lg `}
-                />
-              </div>
+
             </div>
           </section>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Delivery Date</label>
 
-          <input
-            name="delivery_date"
-            value={formData.delivery_date}
-            onChange={(e) => handleInputChange(e, "delivery_date", setFormData)}
-            className={`w-full px-4 py-2 border rounded-lg `}
-          />
-          {/* Detailed Features */}
-          <div className="border border-gray-300 rounded-lg p-6">
+          {/* ── Delivery Date ── */}
+          <section className="border border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Delivery Date</h2>
+            <input
+              name="delivery_date"
+              value={formData.delivery_date}
+              onChange={(e) => handleInputChange(e, "delivery_date", setFormData)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+              placeholder="e.g. Q1 2025 or March 2025"
+            />
+          </section>
+
+          {/* ── Detailed Features ── */}
+          <section className="border border-gray-300 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Detailed Features</h3>
             <DetailedFeatures features={features} setFeatures={setFeatures} />
-          </div>
+          </section>
 
-          {/* --- Naya: Dynamic Content Blocks Section --- */}
+          {/* ── Dynamic Content Blocks ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Content Blocks (Dynamic)</h2>
             <p className="text-sm text-gray-500 mb-6">Add dynamic sections like Headings, Tables, Paragraphs, or Lists.</p>
             <DynamicBlocks blocks={blocks} setBlocks={setBlocks} />
           </section>
 
+          {/* ── Gallery ── */}
           <GalleryUploader
             galleryFiles={galleryFiles}
             setGalleryFiles={setGalleryFiles}
@@ -502,36 +507,31 @@ const VansForm = ({ setSelected }) => {
             setGalleryPreviews={setGalleryPreviews}
             existingGallery={existingGallery}
             setExistingGallery={setExistingGallery}
-            removedExistingGallery={removedExistingGallery}
-            setRemovedExistingGallery={setRemovedExistingGallery}
           />
-          {/* --- 3D Model Section --- */}
+
+          {/* ── 3D Model (GLB) ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">3D Model (GLB)</h2>
-
             <div className="space-y-4">
-              {/* Show existing GLB file */}
+
               {existingGlbFile && !removeGlbFile && (
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-700">Current GLB File:</p>
-                      <p className="text-xs text-gray-500 truncate max-w-md">
-                        {existingGlbFile.split('/').pop()}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setRemoveGlbFile(true)}
-                      className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
-                    >
-                      Remove
-                    </button>
+                <div className="p-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Current GLB File:</p>
+                    <p className="text-xs text-gray-500 truncate max-w-md">
+                      {existingGlbFile.split("/").pop()}
+                    </p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setRemoveGlbFile(true)}
+                    className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                  >
+                    Remove
+                  </button>
                 </div>
               )}
 
-              {/* Show removal confirmation */}
               {removeGlbFile && existingGlbFile && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                   <p className="text-sm text-red-700 mb-2">GLB file will be deleted on save.</p>
@@ -545,7 +545,6 @@ const VansForm = ({ setSelected }) => {
                 </div>
               )}
 
-              {/* GLB File Input - show when no existing file or when removing */}
               {(!existingGlbFile || removeGlbFile) && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -560,9 +559,47 @@ const VansForm = ({ setSelected }) => {
                   {glbFile && <p className="text-xs text-green-600 mt-1">Selected: {glbFile.name}</p>}
                 </div>
               )}
+
             </div>
           </section>
-          {/* Media URLs Section */}
+
+          {/* ── Textures ── */}
+          <section className="border border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">Texture URLs</h2>
+            <div className="space-y-4">
+              {textures.map((url, index) => (
+                <div key={index} className="flex gap-3">
+                  <input
+                    type="text"
+                    placeholder="Enter texture URL"
+                    value={url}
+                    onChange={(e) => {
+                      const updated = [...textures];
+                      updated[index] = e.target.value;
+                      setTextures(updated);
+                    }}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setTextures(textures.filter((_, i) => i !== index))}
+                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setTextures([...textures, ""])}
+              className="mt-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            >
+              + Add Texture URL
+            </button>
+          </section>
+
+          {/* ── Media URLs ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-6">Media URLs</h2>
             <div className="space-y-4">
@@ -594,19 +631,21 @@ const VansForm = ({ setSelected }) => {
             </button>
           </section>
 
-          {/* Status & Submit Section */}
+          {/* ── Status & Publish ── */}
           <section className="border border-gray-300 rounded-lg p-6">
             <div className="space-y-6">
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">Listing Status *</label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {statusOptions.map((option) => (
                     <label
                       key={option.value}
-                      className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.status === option.value
-                        ? "border-green-600 bg-green-50"
-                        : "border-gray-300 hover:border-gray-400"
-                        }`}
+                      className={`flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        formData.status === option.value
+                          ? "border-green-600 bg-green-50"
+                          : "border-gray-300 hover:border-gray-400"
+                      }`}
                     >
                       <input
                         type="radio"
@@ -622,7 +661,34 @@ const VansForm = ({ setSelected }) => {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              {/* Publish / Draft toggle */}
+              <div className="flex items-center justify-between p-4 border-2 rounded-lg border-gray-200 bg-gray-50">
+                <div>
+                  <p className="text-sm font-medium text-gray-800">
+                    {formData.is_published ? "Published" : "Draft"}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {formData.is_published
+                      ? "This van is live and visible to customers."
+                      : "This van is saved as a draft and not visible to customers."}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, is_published: !formData.is_published })}
+                  className={`relative w-14 h-7 rounded-full transition-colors focus:outline-none ${
+                    formData.is_published ? "bg-green-500" : "bg-gray-300"
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-all ${
+                      formData.is_published ? "left-8" : "left-1"
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex justify-end gap-3">
                 <button
                   type="submit"
                   disabled={loading}
@@ -633,6 +699,7 @@ const VansForm = ({ setSelected }) => {
               </div>
             </div>
           </section>
+
         </form>
       </div>
     </div>

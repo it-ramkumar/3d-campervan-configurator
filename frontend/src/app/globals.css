@@ -192,6 +192,8 @@ html {
   scroll-behavior: smooth;
   overscroll-behavior-y: auto;
   height: 100%;
+  /* Navbar height offset so anchor links don't hide under sticky nav */
+  scroll-padding-top: 65px;
 }
 
 body {

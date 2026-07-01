@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
         // Data fetch karein
         const [VansLink, PortfolioLink, BlogLink] = await Promise.all([
-            Vans.find({}).select('slug updatedAt'),
+            Vans.find({ is_published: true }).select('slug updatedAt'),
             Portfolio.find({}).select('slug updatedAt van_listing.specifications.wheelbase').lean(),
             Blog.find({}).select('slug updatedAt')
 

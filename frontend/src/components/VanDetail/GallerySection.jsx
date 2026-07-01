@@ -93,54 +93,54 @@ const VanGallery = ({ gallery = [], title = "" }) => {
       </div> */}
 
       {/* MAIN IMAGE CONTAINER */}
-      <div className="relative flex items-center justify-center overflow-hidden rounded-xl h-[450px]">
-        {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
-        {gallery.map((img, i) => (
-          <Image
-            key={img}
-            src={img}
-            fill
-            alt={`${title} - image ${i + 1}`}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-            onClick={() => activeImage === i && setIsFullscreen(true)}
-            className={`object-contain transition-opacity duration-200 ${
-              activeImage === i
-                ? "opacity-100 z-10 cursor-zoom-in"
-                : "opacity-0 z-0 pointer-events-none"
-            }`}
-            priority={i === 0} // Only prioritize loading the very first image immediately
-          />
-        ))}
+<div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto min-h-[600px] max-h-[850px]">
+  {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
+  {gallery.map((img, i) => (
+    <Image
+      key={img}
+      src={img}
+      fill
+      alt={`${title} - image ${i + 1}`}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+      onClick={() => activeImage === i && setIsFullscreen(true)}
+      className={`object-contain transition-opacity duration-200 ${
+        activeImage === i
+          ? "opacity-100 z-10 cursor-zoom-in"
+          : "opacity-0 z-0 pointer-events-none"
+      }`}
+      priority={i === 0}
+    />
+  ))}
 
-        {/* Navigation Overlays (Keep these exactly as you have them) */}
-        {gallery.length > 1 && (
-          <>
-            <button
-              onClick={prevImage}
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
-              style={{
-                background: "rgba(2,12,24,0.72)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <ChevronLeft size={20} className="text-[#FBFBF9]" />
-            </button>
+  {/* Navigation Overlays (Keep these exactly as you have them) */}
+  {gallery.length > 1 && (
+    <>
+      <button
+        onClick={prevImage}
+        className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
+        style={{
+          background: "rgba(2,12,24,0.72)",
+          backdropFilter: "blur(16px)",
+          border: "1px solid rgba(255,255,255,0.07)",
+        }}
+      >
+        <ChevronLeft size={20} className="text-[#FBFBF9]" />
+      </button>
 
-            <button
-              onClick={nextImage}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
-              style={{
-                background: "rgba(2,12,24,0.72)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.07)",
-              }}
-            >
-              <ChevronRight size={20} className="text-[#FBFBF9]" />
-            </button>
-          </>
-        )}
-      </div>
+      <button
+        onClick={nextImage}
+        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full z-20 transition-colors"
+        style={{
+          background: "rgba(2,12,24,0.72)",
+          backdropFilter: "blur(16px)",
+          border: "1px solid rgba(255,255,255,0.07)",
+        }}
+      >
+        <ChevronRight size={20} className="text-[#FBFBF9]" />
+      </button>
+    </>
+  )}
+</div>
 
       {/* THUMBNAILS */}
       {gallery.length > 1 && (

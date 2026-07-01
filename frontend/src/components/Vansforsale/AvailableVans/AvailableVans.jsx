@@ -36,14 +36,7 @@ const FEATURES = [
 
 export default function AvailableVans({ availableVans, hasMore, loading, onLoadMore }) {
 
-  const filteredVans = availableVans?.filter((van) => {
-  const title = van?.van_listing?.title?.toLowerCase();
-
-  return ![
-    "santa monica white",
-    "ford transit t-350 2026..",
-  ].includes(title);
-})
+const filteredVans = availableVans ? [...availableVans] : [];
   return (
     <section className="bg-secondary py-16 md:py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto  px-6">

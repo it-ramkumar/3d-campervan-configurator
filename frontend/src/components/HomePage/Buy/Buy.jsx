@@ -118,11 +118,7 @@ export default function Buy({ initialVans = [] }) {
           className="!overflow-visible"
         >
           {initialVans
-            .filter(
-              (van) =>
-                van?.title !== "Santa Monica White" &&
-                van?.title !== "Ford Transit T-350 2026..",
-            )
+        
             .map((van, i) => (
               <SwiperSlide key={i} className="h-auto">
                 <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
