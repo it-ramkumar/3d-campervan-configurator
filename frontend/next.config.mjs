@@ -33,6 +33,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+        {
+        protocol: "https",
+        hostname: "*.previews.dropboxusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: "www.bigbearvans.com", // ← ADD THIS

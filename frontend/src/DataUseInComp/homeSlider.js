@@ -3,7 +3,7 @@ export const slides = [
   {
     id: 1,
     image: "/sprinter/sphero.webp",
-    mobileImage: "/images2/mobilesm.webp",
+    mobileImage: "/images2/fn.webp",
     tag: "Vans For Sale.",
     title: "Campervans",
     titleColored: "For Sale.",
@@ -17,7 +17,7 @@ export const slides = [
   {
     id: 2,
     image: "/heroSlider/heroimg2.webp",
-    mobileImage: "/heroSlider/heromobile2.webp",
+    mobileImage: "/images2/dm.webp",
     tag: "Bespoke Service",
     title: "Custom Van",
     titleColored: "BUILDS.",
@@ -30,7 +30,7 @@ export const slides = [
   },
   {
     id: 3,
-    image: "/heroSlider/bloghero.webp",
+    image: "/images2/hero3.webp",
     mobileImage: "/heroSlider/heromobile3.webp",
     tag: "Our Layouts",
     title: "Previous",

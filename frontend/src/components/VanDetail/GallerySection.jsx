@@ -93,7 +93,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
       </div> */}
 
       {/* MAIN IMAGE CONTAINER */}
-<div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto min-h-[400px] md:min-h-[700px] max-h-[850px]">
+<div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto min-h-[400px] md:min-h-[800px] max-h-[850px]">
   {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
   {gallery.map((img, i) => (
     <Image

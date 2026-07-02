@@ -64,9 +64,7 @@ export default function Hero() {
                 quality={70}
                 sizes="(min-width: 768px) 100vw"
                 className="hidden md:block object-cover"
-                style={{
-                  objectPosition: slide.objectPosition || "center center",
-                }}
+
               />
 
               {/* Overlay */}

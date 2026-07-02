@@ -14,10 +14,6 @@ const parseJSONField = (field, fallback) => {
   }
 };
 
-/* -------------------------------------------------------------------------- */
-/* POST /  — Create Van                                                       */
-/* -------------------------------------------------------------------------- */
-
 router.post('/', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 },
   { name: "glbFile", maxCount: 1 },
@@ -102,10 +98,6 @@ router.post('/', protect, adminOnly, upload.fields([
   }
 });
 
-/* -------------------------------------------------------------------------- */
-/* GET /available  — Lightweight list for configurator                        */
-/* -------------------------------------------------------------------------- */
-
 router.get('/available', async (req, res) => {
   try {
     const vans = await Van.find(
@@ -137,10 +129,6 @@ router.get('/available', async (req, res) => {
   }
 });
 
-/* -------------------------------------------------------------------------- */
-/* GET /van-by-status  — Paginated by status                                  */
-/* -------------------------------------------------------------------------- */
-
 router.get('/van-by-status', async (req, res) => {
   try {
     const { status, page = 1, limit = 9 } = req.query;
@@ -168,10 +156,6 @@ router.get('/van-by-status', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
 });
-
-/* -------------------------------------------------------------------------- */
-/* GET /  — All vans (admin), search + pagination                             */
-/* -------------------------------------------------------------------------- */
 
 router.get("/", async (req, res) => {
   try {
@@ -201,10 +185,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-/* -------------------------------------------------------------------------- */
-/* GET /preview/:slug  — Single van, draft or published (unlisted preview)    */
-/* -------------------------------------------------------------------------- */
-
 router.get('/preview/:slug', async (req, res) => {
   try {
     const van = await Van.findOne({ slug: req.params.slug });
@@ -215,10 +195,6 @@ router.get('/preview/:slug', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
-/* -------------------------------------------------------------------------- */
-/* GET /:slug  — Single van                                                   */
-/* -------------------------------------------------------------------------- */
 
 router.get('/:slug', async (req, res) => {
   try {
@@ -232,10 +208,6 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
-/* -------------------------------------------------------------------------- */
-/* PUT /reorder  — Drag-and-drop order                                        */
-/* -------------------------------------------------------------------------- */
-
 router.put("/reorder", protect, adminOnly, async (req, res) => {
   try {
     const { newOrder } = req.body;
@@ -245,21 +217,6 @@ router.put("/reorder", protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
-/* -------------------------------------------------------------------------- */
-/* PUT /:slug  — Update Van                                                   */
-/* -------------------------------------------------------------------------- */
-/*
-  galleryOrder  — JSON array of existing gallery objects in new order:
-                  [{ url: "https://...", caption: "..." }, ...]
-                  Items omitted from this array are removed from S3 + DB.
-
-  galleryCaptions — JSON array of captions for newly uploaded gallery files:
-                    ["caption for file[0]", "caption for file[1]", ...]
-
-  insertAt      — integer index where new gallery files are spliced in
-                  (defaults to end of gallery)
-*/
 
 router.put('/:slug', protect, adminOnly, upload.fields([
   { name: "gallery", maxCount: 10 },
@@ -366,10 +323,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
-/* -------------------------------------------------------------------------- */
-/* DELETE /:slug  — Delete Van + all S3 assets                               */
-/* -------------------------------------------------------------------------- */
 
 router.delete('/:slug', protect, adminOnly, async (req, res) => {
   try {

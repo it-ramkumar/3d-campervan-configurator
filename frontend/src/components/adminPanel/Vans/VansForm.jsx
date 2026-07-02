@@ -50,11 +50,6 @@ const VansForm = ({ setSelected }) => {
   const [existingGallery, setExistingGallery] = useState([]);
   const [galleryFiles, setGalleryFiles] = useState([]);
   const [galleryPreviews, setGalleryPreviews] = useState([]);
-console.log(existingGallery,"1")
-console.log(galleryFiles,"2")
-console.log(galleryPreviews,"3")
-
-
   const [mediaUrls, setMediaUrls] = useState([""]);
 
   const [glbFile, setGlbFile] = useState(null);

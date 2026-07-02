@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   Settings2,
   Zap,
@@ -13,7 +13,6 @@ import {
 import {
   Heading2,
   Heading3,
-  Heading4,
   Heading1,
   RichParagraph,
   SecondaryButton,
@@ -25,175 +24,10 @@ import VanGallery from "./GallerySection";
 import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
+import FeatureGridBlock from "./BlockFeatureCard";
 
 
-/* ── Cinematic feature-grid block ── */
-const FeatureGridBlock = ({ block }) => {
-  const [activeImg, setActiveImg] = useState(0);
 
-  const layout = block.layout || "left";
-  const imageRight = layout !== "right";
-
-  const galleryImages = [
-    ...(block.items || []).map(it => it.media).filter(Boolean),
-    ...(block.block_media || []).filter(m => m.type === "image" && m.url).map(m => m.url),
-  ];
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[580px]">
-
-      {/* IMAGE PANEL */}
-      {galleryImages.length > 0 && (
-        <div
-          className={`relative overflow-hidden ${imageRight ? "lg:order-2" : "lg:order-1"} h-[320px] lg:h-auto`}
-          style={{ minHeight: "420px" }}
-        >
-          <img
-            src={galleryImages[activeImg]}
-            alt={block.title || "feature"}
-            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent pointer-events-none" />
-
-          {galleryImages.length > 1 && (
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2 overflow-x-auto no-scrollbar z-10">
-              {galleryImages.map((img, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setActiveImg(i)}
-                  className={`shrink-0 w-14 h-10 rounded overflow-hidden border-2 transition-all duration-200 ${
-                    i === activeImg ? "border-hover scale-95" : "border-white/20 opacity-50 hover:opacity-100"
-                  }`}
-                >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-hover" />
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-hover/30" />
-        </div>
-      )}
-
-      {/* CONTENT PANEL */}
-      <div className={`flex flex-col justify-center px-8 py-14 lg:px-12 lg:py-16 ${imageRight ? "lg:order-1" : "lg:order-2"}`}>
-        {(block.title || block.subtitle) && (
-          <div className="mb-10">
-            {block.subtitle && <SpanTag text={block.subtitle} className="mb-4" />}
-            {block.title && (
-              <Heading2 text={block.title} className="!text-secondary mt-3 leading-[0.95]" />
-            )}
-            <div className="w-12 h-0.5 bg-hover mt-5" />
-          </div>
-        )}
-
-        <div className="divide-y divide-white/8">
-          {(block.items || []).map((item, i) => (
-            <div key={i} className="group flex items-start gap-5 py-5 cursor-default">
-              {/* <span className="font-display font-black text-3xl text-hover/22 leading-none mt-0.5 shrink-0 w-10 text-right group-hover:text-hover/55 transition-colors duration-300 select-none">
-                {String(i + 1).padStart(2, "0") +}
-              </span> */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  {item.icon && <span className="text-xl shrink-0">{item.icon}</span>}
-                  {item.title && <Heading4 text={item.title} className="!text-secondary !text-base leading-tight" />}
-                </div>
-                {item.value && <p className="font-display font-black text-2xl text-hover mb-1">{item.value}</p>}
-                {item.description && (
-                  <RichParagraph className="!text-secondary/50 leading-relaxed">{item.description}</RichParagraph>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    </div>
-  );
-};
-
-/* ── Inline gallery for feature-grid image column ── */
-// const FeatureGallery = ({ images = [], isDark = false }) => {
-//   const [active, setActive] = useState(0);
-//   const [fullscreen, setFullscreen] = useState(false);
-
-//   const prev = useCallback(() => setActive(i => (i - 1 + images.length) % images.length), [images.length]);
-//   const next = useCallback(() => setActive(i => (i + 1) % images.length), [images.length]);
-
-//   if (!images.length) return null;
-
-//   return (
-//     <>
-//       <div className="space-y-3">
-//         {/* Main image — taller aspect for impact */}
-//         <div
-//           className="relative overflow-hidden rounded-lg cursor-zoom-in group"
-//           style={{ aspectRatio: "4/3" }}
-//           onClick={() => setFullscreen(true)}
-//         >
-//           <img
-//             src={images[active]}
-//             alt={`feature-${active}`}
-//             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-//           />
-//           {/* Gradient overlay */}
-//           <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent pointer-events-none" />
-//           <div className="bbv-amber-line" />
-//           {images.length > 1 && (
-//             <>
-//               <button type="button" onClick={e => { e.stopPropagation(); prev(); }}
-//                 className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
-//                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
-//               </button>
-//               <button type="button" onClick={e => { e.stopPropagation(); next(); }}
-//                 className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-primary/70 backdrop-blur-sm text-white hover:bg-primary transition-colors z-10 opacity-0 group-hover:opacity-100 duration-200">
-//                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-//               </button>
-//               <span className="absolute bottom-3 right-3 text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-full px-2 py-0.5 font-ui">
-//                 {active + 1} / {images.length}
-//               </span>
-//             </>
-//           )}
-//         </div>
-
-//         {/* Thumbnails */}
-//         {images.length > 1 && (
-//           <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-//             {images.map((img, i) => (
-//               <button key={i} type="button" onClick={() => setActive(i)}
-//                 className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-//                   i === active ? "border-hover" : "border-transparent opacity-50 hover:opacity-90"
-//                 }`}>
-//                 <img src={img} alt={`thumb-${i}`} className="w-full h-full object-cover" />
-//               </button>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Fullscreen lightbox */}
-//       {fullscreen && (
-//         <div className="fixed inset-0 bg-canvas/95 z-[9999] flex items-center justify-center backdrop-blur-sm" onClick={() => setFullscreen(false)}>
-//           <img src={images[active]} alt="fullscreen" className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" onClick={e => e.stopPropagation()} />
-//           <button type="button" onClick={() => setFullscreen(false)} className="absolute top-5 right-5 text-secondary text-3xl hover:text-hover transition-colors">✕</button>
-//           {images.length > 1 && (
-//             <>
-//               <button type="button" onClick={e => { e.stopPropagation(); prev(); }} className="absolute left-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
-//                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
-//               </button>
-//               <button type="button" onClick={e => { e.stopPropagation(); next(); }} className="absolute right-5 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
-//                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-//               </button>
-//             </>
-//           )}
-//         </div>
-//       )}
-//     </>
-//   );
-// };
 
 const SvgCheck = ({ small = false }) => (
   <svg className={`${small ? "w-3 h-3" : "w-4 h-4"} shrink-0`} style={{ color: "#ED985F" }}
@@ -278,7 +112,7 @@ const VanPage = ({ vanDetail }) => {
       {/* ── TOP NAV BAR ── */}
       <div className="relative bbv-section-light border-b border-primary/8">
         <div className="bbv-amber-line-top" />
-        <div className="flex items-center px-4 md:px-8 py-4">
+        <div className="flex items-center px-4 md:px-8 py-3">
           <BackButton className="!static !mt-0" />
         </div>
       </div>
@@ -286,8 +120,8 @@ const VanPage = ({ vanDetail }) => {
       {/* ── HERO — light ── */}
       <section className="bbv-section-light relative">
         <div className="bbv-dot-grid-light" />
-        <div className="relative max-w-7xl mx-auto pt-8 pb-16 px-6 md:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="relative max-w-9xl mx-auto md:pt-4 pb-16 px-6 ">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             {/* LEFT: GALLERY */}
             <div className="lg:col-span-7">
