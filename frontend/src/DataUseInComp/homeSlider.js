@@ -1,4 +1,3 @@
-
 export const slides = [
   {
     id: 1,
@@ -31,7 +30,7 @@ export const slides = [
   {
     id: 3,
     image: "/images2/hero3.webp",
-    mobileImage: "/heroSlider/heromobile3.webp",
+    mobileImage: "/images2/img3.webp",
     tag: "Our Layouts",
     title: "Previous",
     titleColored: "LAYOUTS.",
