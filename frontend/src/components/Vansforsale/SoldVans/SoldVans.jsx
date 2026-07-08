@@ -194,7 +194,7 @@ export default function SoldVans({
                 {van.status === "sold" && (
                   <div className="absolute top-4 right-4 z-20">
                     <div className="bg-[#ED3500] text-[#FFFCFB] text-[9px] font-black px-3 py-1.5 uppercase tracking-widest shadow-lg rounded-sm">
-                      Sold Out
+                      Sold
                     </div>
                   </div>
                 )}
