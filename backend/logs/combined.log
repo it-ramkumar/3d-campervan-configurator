@@ -693,3 +693,6 @@
 {"level":"info","message":"127.0.0.1 - - [08/Jul/2026:17:51:21 +0000] \"GET /api/variants?vanSlug=awd-transit-santa-monica-charcoal HTTP/1.1\" 200 67282 \"-\" \"node\"","timestamp":"2026-07-08 22:51:21"}
 {"level":"info","message":"127.0.0.1 - - [08/Jul/2026:18:14:30 +0000] \"GET /api/van/awd-transit-santa-monica-charcoal HTTP/1.1\" 200 15913 \"-\" \"node\"","timestamp":"2026-07-08 23:14:30"}
 {"level":"info","message":"127.0.0.1 - - [08/Jul/2026:18:14:32 +0000] \"GET /api/variants?vanSlug=awd-transit-santa-monica-charcoal HTTP/1.1\" 200 67282 \"-\" \"node\"","timestamp":"2026-07-08 23:14:32"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-07-08 23:16:16"}
+{"level":"info","message":"127.0.0.1 - - [08/Jul/2026:18:17:27 +0000] \"GET /api/calendar/auth/url HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36\"","timestamp":"2026-07-08 23:17:27"}
+{"level":"info","message":"127.0.0.1 - - [08/Jul/2026:18:17:27 +0000] \"GET /api/calendar/status HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36\"","timestamp":"2026-07-08 23:17:27"}
