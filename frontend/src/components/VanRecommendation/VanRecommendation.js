@@ -570,8 +570,8 @@ export default function VanRecommendation() {
                                             {/* CTA Response Trigger Blocks */}
                                             <div className="mt-8 pt-6 flex flex-col sm:flex-row items-center gap-3 border-t border-primary/5">
                                                 {recommendation.cta_recommendation === 'Get Quote' ? (
-                                                    <a href={`/quote?van=${recommendation.primary_match.slug}`} className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-8 py-3 bg-hover text-secondary rounded">
-                                                        Get Custom Quote
+                                                    <a href={`/van-detail/${recommendation.primary_match.slug}`} className="w-full sm:w-auto text-center  font-black tracking-widest uppercase px-8 py-3 bg-hover text-secondary rounded">
+                                                        Get Full Detail
                                                     </a>
                                                 ) : (
                                                     <a
