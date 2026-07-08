@@ -15,7 +15,9 @@ const OPTIONS = {
     ],
 };
 
-const STEP_LABELS = ['Van Length', 'Passengers', 'Bathroom', 'Battery & AC'];
+const STEP_LABELS = ['Van Length', 'Passengers', 'Bathroom', 'Battery & AC', 'Contact Info'];
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function VanRecommendation() {
     const [formData, setFormData] = useState({
@@ -23,6 +25,9 @@ export default function VanRecommendation() {
         passengers: 2,
         bathroom_required: 'no_preference',
         battery_ac_required: 'no_preference',
+        customer_name: '',
+        customer_phone: '',
+        customer_email: '',
     });
 
     const [currentStep, setCurrentStep] = useState(1);
@@ -30,7 +35,7 @@ export default function VanRecommendation() {
     const [recommendation, setRecommendation] = useState(null);
     const [error, setError] = useState('');
     const resultsRef = useRef(null);
-    const totalSteps = 4;
+    const totalSteps = 5;
 
     const handleInputChange = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
@@ -46,6 +51,16 @@ export default function VanRecommendation() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!formData.customer_name.trim() || !formData.customer_phone.trim() || !formData.customer_email.trim()) {
+            setError('Please fill in your name, phone and email so our team can reach you back.');
+            return;
+        }
+        if (!EMAIL_REGEX.test(formData.customer_email.trim())) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+
         setLoading(true);
         setError('');
         try {
@@ -77,6 +92,9 @@ export default function VanRecommendation() {
             passengers: 2,
             bathroom_required: 'no_preference',
             battery_ac_required: 'no_preference',
+            customer_name: '',
+            customer_phone: '',
+            customer_email: '',
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -276,6 +294,54 @@ export default function VanRecommendation() {
                                                 </button>
                                             );
                                         })}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP 5: CONTACT INFO (GATE BEFORE RESULTS) */}
+                        {currentStep === 5 && (
+                            <div className="max-w-md mx-auto w-full space-y-4">
+                                <RichParagraph className="text-center font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                    Almost there — where should we send your matches?
+                                </RichParagraph>
+                                <RichParagraph className="text-center mb-4 !text-secondary/30">
+                                    So our BBV team can follow up and answer any questions about your build.
+                                </RichParagraph>
+
+                                <div className="space-y-3">
+                                    <div>
+                                        <SpanTag text="Full Name" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1" />
+                                        <input
+                                            type="text"
+                                            value={formData.customer_name}
+                                            onChange={(e) => handleInputChange('customer_name', e.target.value)}
+                                            placeholder="John Doe"
+                                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all"
+                                            style={{ border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <SpanTag text="Phone Number" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1" />
+                                        <input
+                                            type="tel"
+                                            value={formData.customer_phone}
+                                            onChange={(e) => handleInputChange('customer_phone', e.target.value)}
+                                            placeholder="+1 (555) 123-4567"
+                                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all"
+                                            style={{ border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <SpanTag text="Email Address" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1" />
+                                        <input
+                                            type="email"
+                                            value={formData.customer_email}
+                                            onChange={(e) => handleInputChange('customer_email', e.target.value)}
+                                            placeholder="you@example.com"
+                                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all"
+                                            style={{ border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)' }}
+                                        />
                                     </div>
                                 </div>
                             </div>

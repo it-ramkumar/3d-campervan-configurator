@@ -21,7 +21,7 @@ function renderMatchLine(match) {
   return `<p style="margin:4px 0;">• ${match.title} (${match.type}) — <a href="${absoluteUrl(match.url)}">${absoluteUrl(match.url)}</a></p>`;
 }
 
-async function sendMatchmakerResultEmail(userInput, result) {
+async function sendMatchmakerResultEmail(userInput, contact, result) {
   if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASS) return;
 
   const transporter = buildTransporter();
@@ -41,6 +41,12 @@ async function sendMatchmakerResultEmail(userInput, result) {
       <h2 style="color:#fff;margin:0;font-size:18px;">New BBV Matchmaker Completion</h2>
     </div>
     <div style="padding:20px;">
+      <div style="background:#fff7ed;border:1px solid #ED985F;padding:12px;border-radius:8px;margin-bottom:16px;">
+        <p style="margin:0 0 8px 0;font-weight:700;color:#001F3D;">Contact Back</p>
+        <p style="margin:5px 0;"><strong>Name:</strong> ${contact.name}</p>
+        <p style="margin:5px 0;"><strong>Phone:</strong> <a href="tel:${contact.phone}">${contact.phone}</a></p>
+        <p style="margin:5px 0;"><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
+      </div>
       <div style="background:#f9fafb;padding:12px;border-radius:8px;">
         <p style="margin:5px 0;"><strong>Seating Requirement:</strong> ${userInput.passengers}+ passengers</p>
         <p style="margin:5px 0;"><strong>Preferred Van Length:</strong> ${userInput.van_length}</p>
@@ -58,7 +64,8 @@ async function sendMatchmakerResultEmail(userInput, result) {
   await transporter.sendMail({
     from: `"BBV Matchmaker" <${process.env.GMAIL_USER}>`,
     to: process.env.GMAIL_USER,
-    subject: 'New Matchmaker Quiz Completion',
+    replyTo: contact.email,
+    subject: `New Matchmaker Quiz Completion — ${contact.name}`,
     html
   });
 }
