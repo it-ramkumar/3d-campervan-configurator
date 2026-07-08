@@ -1,17 +1,19 @@
 const Van = require('../models/vanModel');
 const PortfolioVan = require('../models/portfolio');
 
-const STYLE_KEYWORDS = {
-  luxury: ['leather', 'premium', 'luxury', 'heated floor', 'marble', 'quartz', 'high-end'],
-  rugged: ['off-grid', '4x4', 'awd', 'roof rack', 'skid plate', 'all terrain', 'safari'],
-  minimal: ['compact', 'minimal', 'efficient', 'lightweight', 'clean line']
-};
+/* -------------------------------------------------------------------------- */
+/* Frontend URL helper                                                        */
+/* -------------------------------------------------------------------------- */
 
-const PRIORITY_KEYWORDS = {
-  comfort: ['heated', 'climate', 'air conditioning', 'memory foam', 'leather seat', 'sound system'],
-  adventure: ['solar', 'battery', 'off-grid', 'water tank', 'generator', 'roof rack'],
-  space: ['storage', 'garage', 'closet', 'wardrobe', 'organization', 'cabinet']
-};
+function buildFrontendUrl(type, slug) {
+  return type === 'inventory' ? `/van-detail/${slug}` : `/layout-detail/${slug}`;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Bathroom detection (kept from legacy engine — inventory Vans only carry    */
+/* bathroom info as free text inside detailed_features, Portfolio carries an  */
+/* explicit bathroomType field)                                               */
+/* -------------------------------------------------------------------------- */
 
 function determineBathroomVariant(detailed_features = [], blueprintType = '') {
   const text = detailed_features.flatMap(f => f.items || []).join(' ').toLowerCase();
@@ -26,105 +28,167 @@ function determineBathroomVariant(detailed_features = [], blueprintType = '') {
   return text.includes('shower') || text.includes('bath') ? 'full_acrylic' : '';
 }
 
-function parseWheelbase(van) {
-  // Extracting from specifications strings safely
+/* -------------------------------------------------------------------------- */
+/* Van length classification — maps a van onto the 'long' / 'short' buckets   */
+/* requested by the matchmaker (long: Sprinter 170 / Transit 148 ext /        */
+/* Promaster 159, short: Sprinter 144 / Transit 148 / Promaster 130)          */
+/* -------------------------------------------------------------------------- */
+
+function classifyVanLength(van) {
+  const specs = van.van_listing?.specifications || {};
+  const haystack = [
+    specs.make_model,
+    specs.wheelbase,
+    van.van_listing?.title,
+    van.van_listing?.subtitle,
+    van.van_listing?.tagline,
+    ...(van.detailed_features || []).flatMap(f => f.items || [])
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  const isPromaster = /promaster|ram/.test(haystack);
+  const isSprinter = /sprinter|mercedes/.test(haystack);
+  const isTransit = /transit|ford/.test(haystack);
+  const isExtended = /\bext(ended)?\b/.test(haystack);
+
+  if (isPromaster && /159/.test(haystack)) return 'long';
+  if (isPromaster && /130/.test(haystack)) return 'short';
+
+  if (isSprinter && /170/.test(haystack)) return 'long';
+  if (isSprinter && /144/.test(haystack)) return 'short';
+
+  if (isTransit && /148/.test(haystack)) return isExtended ? 'long' : 'short';
+
+  // Fallback purely on wheelbase digits when chassis brand text is missing/dirty
+  if (/170/.test(haystack) || /159/.test(haystack)) return 'long';
+  if (/144/.test(haystack) || /130/.test(haystack)) return 'short';
+  if (/148/.test(haystack)) return isExtended ? 'long' : 'short';
+
+  return null;
+}
+
+function parseWheelbaseDigits(van) {
+  const specs = van.van_listing?.specifications;
+  if (specs?.wheelbase) {
+    const digits = String(specs.wheelbase).match(/\d+/);
+    if (digits) return digits[0];
+  }
   const text = [
     van.van_listing?.title || '',
-    van.van_listing?.specifications?.notes || '',
     ...(van.detailed_features || []).flatMap(f => f.items || [])
-  ].join(' ').toLowerCase();
-
-  if (text.includes('144')) return '144';
-  if (text.includes('170')) return '170';
-  if (text.includes('148')) return '148';
-  if (text.includes('130')) return '130';
-  return '144'; // Default baseline custom layout standard
+  ].join(' ');
+  const match = text.match(/1(30|44|48|59|70)/);
+  return match ? match[0] : '';
 }
+
+/* -------------------------------------------------------------------------- */
+/* Normalization                                                              */
+/* -------------------------------------------------------------------------- */
 
 function normalizeVanAsset(van, type) {
   const specs = van.van_listing?.specifications;
   const sits = parseInt(specs?.capacity?.sits) || 0;
   const allFeatures = (van.detailed_features || []).flatMap(f => f.items || []);
   const bathVariant = determineBathroomVariant(van.detailed_features, van.van_listing?.bathroomType);
-  const wb = parseWheelbase(van);
 
   return {
     _id: van._id,
     title: van.van_listing?.title || 'BBV Custom Concept',
     slug: van.slug,
-    type: type,
+    type,
+    url: buildFrontendUrl(type, van.slug),
     seats: sits,
     bathroom: bathVariant !== '',
     bathroom_type: bathVariant,
-    wheelbase: wb,
+    van_length: classifyVanLength(van),
+    wheelbase: parseWheelbaseDigits(van),
     features: allFeatures,
     images: type === 'inventory' ? (van.gallery || []) : [...(van.rendering || []), ...(van.gallery || [])],
-    status: type === 'inventory' ? (van.status || 'Available') : (van.sold ? 'Built Variant' : 'Blueprint Reference'),
-    glbFile: type === 'inventory' ? (van.glbFile || null) : null,
-    chassis: van.van_listing?.chassisType?.toLowerCase() || ''
+    status: type === 'inventory' ? (van.status || 'available') : (van.sold ? 'Built Variant' : 'Blueprint Reference'),
+    glbFile: type === 'inventory' ? (van.glbFile || null) : null
   };
 }
 
-function scoreVanWithSuggestions(van, userInput) {
-  // 1. STRICT SEATS CONSTRAINT
-  const vanSeats = Number(van.seats) || 0;
-  const reqSeats = Number(userInput.seats_required) || 2;
-  if (vanSeats < reqSeats) return -100; // Physical capacity restriction drop
+/* -------------------------------------------------------------------------- */
+/* Scoring — length, seat closeness and bathroom alignment only               */
+/* -------------------------------------------------------------------------- */
 
-  let score = 20; // High base matching footprint
+function scoreVan(van, userInput) {
+  let score = 0;
 
-  // Seat closeness matching
-  if (vanSeats === reqSeats) score += 10;
+  const overshoot = Math.max(0, van.seats - userInput.passengers);
+  score += Math.max(0, 25 - overshoot * 4); // perfect seat count = 25, decays with extra capacity
 
-  // 2. WHEELBASE SOFT SELECTION
-  if (userInput.wheelbase !== 'no_preference' && van.wheelbase) {
-    if (van.wheelbase === userInput.wheelbase) {
-      score += 15; // Heavy bonus points for matching preferred engineering chassis line
-    }
+  if (userInput.van_length !== 'no_preference' && van.van_length === userInput.van_length) {
+    score += 20;
   }
 
-  // 3. BATHROOM INTERIOR LAYOUT CHECK
-  if (userInput.bathroom_required) {
-    if (van.bathroom) {
-      score += 10;
-      if (userInput.bathroom_type && van.bathroom_type === userInput.bathroom_type) {
-        score += 10; // Extra alignment match
-      }
-    }
-  }
-
-  // 4. STYLE & CHARACTER CORRELATIONS
-  const keywords = [
-    ...(STYLE_KEYWORDS[userInput.style] || []),
-    ...(PRIORITY_KEYWORDS[userInput.priority] || [])
-  ];
-  if (keywords.length > 0) {
-    const matched = van.features.filter(f =>
-      keywords.some(kw => f.toLowerCase().includes(kw.toLowerCase()))
-    );
-    score += Math.min(matched.length, 5);
+  if (userInput.bathroom_required === 'yes' && van.bathroom) {
+    score += 15;
   }
 
   return score;
 }
 
+/* -------------------------------------------------------------------------- */
+/* DB-level minimum capacity filter                                          */
+/* capacity.sits is stored as a String in both schemas, so a plain $gte would */
+/* compare lexicographically — $convert makes the comparison numeric.        */
+/* -------------------------------------------------------------------------- */
+
+function capacityFilter(minPassengers) {
+  return {
+    $expr: {
+      $gte: [
+        {
+          $convert: {
+            input: '$van_listing.specifications.capacity.sits',
+            to: 'int',
+            onError: 0,
+            onNull: 0
+          }
+        },
+        minPassengers
+      ]
+    }
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* Main entry point                                                           */
+/* -------------------------------------------------------------------------- */
+
 async function getRecommendation(userInput) {
   const [inventoryVans, portfolioVans] = await Promise.all([
-    Van.find({ status: { $in: ['available', 'coming_soon'] } }),
-    PortfolioVan.find({})
+    Van.find({
+      status: { $in: ['available', 'coming_soon'] },
+      ...capacityFilter(userInput.passengers)
+    }),
+    PortfolioVan.find(capacityFilter(userInput.passengers))
   ]);
 
-  const normInventory = inventoryVans.map(v => normalizeVanAsset(v, 'inventory'));
-  const normPortfolio = portfolioVans.map(v => normalizeVanAsset(v, 'portfolio'));
+  let normInventory = inventoryVans.map(v => normalizeVanAsset(v, 'inventory'));
+  let normPortfolio = portfolioVans.map(v => normalizeVanAsset(v, 'portfolio'));
+
+  // Van length is a hard filter — skipped entirely on 'no_preference'
+  if (userInput.van_length !== 'no_preference') {
+    normInventory = normInventory.filter(v => v.van_length === userInput.van_length);
+    normPortfolio = normPortfolio.filter(v => v.van_length === userInput.van_length);
+  }
+
+  // Bathroom is a hard filter — skipped entirely on 'no_preference'
+  if (userInput.bathroom_required === 'yes') {
+    normInventory = normInventory.filter(v => v.bathroom);
+    normPortfolio = normPortfolio.filter(v => v.bathroom);
+  }
+
+  // battery_ac_required intentionally never filters — client budget indicator only
 
   const scoredInventory = normInventory
-    .map(v => ({ ...v, score: scoreVanWithSuggestions(v, userInput) }))
-    .filter(v => v.score > 0)
+    .map(v => ({ ...v, score: scoreVan(v, userInput) }))
     .sort((a, b) => b.score - a.score);
 
   const scoredPortfolio = normPortfolio
-    .map(v => ({ ...v, score: scoreVanWithSuggestions(v, userInput) }))
-    .filter(v => v.score > 0)
+    .map(v => ({ ...v, score: scoreVan(v, userInput) }))
     .sort((a, b) => b.score - a.score);
 
   const topInv = scoredInventory[0] || null;
@@ -133,38 +197,23 @@ async function getRecommendation(userInput) {
   if (!topInv && !topPort) {
     return {
       no_match_found: true,
-      message: "No layout matching this seat requirement was found in our existing blueprint specs. The BBV custom design team can create a new map architecture tailored to your specification limits.", cta_recommendation: 'WhatsApp'
+      message: "No layout matching this seat requirement was found in our existing blueprint specs. The BBV custom design team can create a new map architecture tailored to your specification limits.",
+      cta_recommendation: 'WhatsApp'
     };
   }
 
-  // Prioritize primary asset matching engine
   let primary = topInv;
   if (!topInv || (topPort && topPort.score > topInv.score)) {
     primary = topPort;
   }
 
-  // BUILD CUSTOM SUGGESTIONS ENGINE MESSAGES DYNAMICALLY
-  const contextNotes = [];
-  let wbAlert = false;
-  let bathAlert = false;
-
-  // Check if selected wheelbase matrix mismatch occurred
-  if (userInput.wheelbase !== 'no_preference' && primary.wheelbase !== userInput.wheelbase) {
-    wbAlert = true;
-    contextNotes.push(`You selected the ${userInput.wheelbase}" Wheelbase, but we previously executed this layout design on a ${primary.wheelbase}" wheelbase platform. However, it can easily be tailor-made for your preferred ${userInput.wheelbase}" length structure!`);
-  } else if (primary.wheelbase) {
-    contextNotes.push(`This layout is engineered cleanly natively over a ${primary.wheelbase}" length platform structure.`);
+  const educationalLogs = [];
+  educationalLogs.push(`Seats ${primary.seats} — comfortably covers your ${userInput.passengers}+ passenger requirement.`);
+  if (userInput.van_length !== 'no_preference') {
+    educationalLogs.push(`Built on our ${userInput.van_length} wheelbase platform lineup, matching your selected length preference.`);
   }
-
-  // Check if chosen premium bathroom layout matches physical template build
-  if (userInput.bathroom_required) {
-    if (!primary.bathroom) {
-      bathAlert = true;
-      contextNotes.push(`In this physical template core structure, we haven't displayed the bathroom, but your selected "${userInput.bathroom_type.replace(/_/g, ' ')}" module can be deployed in the custom add-on integration zone.`);
-    } else if (userInput.bathroom_type && primary.bathroom_type !== userInput.bathroom_type) {
-      bathAlert = true;
-      contextNotes.push(`You have selected the "${userInput.bathroom_type.replace(/_/g, ' ')}" bathroom option; we had previously installed the "${primary.bathroom_type.replace(/_/g, ' ')}" space in this build template. However, if you prefer, your preferred model can be fixed during custom building.`);
-    }
+  if (userInput.bathroom_required === 'yes') {
+    educationalLogs.push(`Includes a fitted ${primary.bathroom_type ? primary.bathroom_type.replace(/_/g, ' ') : 'onboard'} bathroom, meeting your must-have requirement.`);
   }
 
   const alternatives = [];
@@ -182,6 +231,7 @@ async function getRecommendation(userInput) {
       title: primary.title,
       type: primary.type,
       slug: primary.slug,
+      url: primary.url,
       score: primary.score,
       images: primary.images.slice(0, 3),
       key_features: primary.features.slice(0, 6),
@@ -192,15 +242,14 @@ async function getRecommendation(userInput) {
       glbFile: primary.glbFile
     },
     suggestions: {
-      wheelbase_mismatch_alert: wbAlert,
-      bathroom_mismatch_alert: bathAlert,
-      educational_logs: contextNotes,
-      compiled_pitch: contextNotes.join(' ')
+      educational_logs: educationalLogs,
+      compiled_pitch: educationalLogs.join(' ')
     },
     alternatives: alternatives.slice(0, 2).map(v => ({
       title: v.title,
       type: v.type,
-      slug: v.slug
+      slug: v.slug,
+      url: v.url
     })),
     cta_recommendation: primary.type === 'inventory' ? 'Get Quote' : 'WhatsApp'
   };

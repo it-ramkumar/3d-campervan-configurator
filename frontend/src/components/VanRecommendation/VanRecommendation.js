@@ -1,60 +1,28 @@
 "use client"
 import React, { useState, useRef } from 'react';
 import { Heading3, RichParagraph, SpanTag, SecondaryButton } from '../Common/Common';
-import { ShowerHead, Armchair } from "lucide-react"
+import { ShowerHead, Armchair, Ruler, Zap } from "lucide-react"
 
 const OPTIONS = {
-    use_case: [
-        { value: 'solo', label: 'Solo / Couple', icon: '🧑‍🚀', desc: 'Layouts optimized for 1-2 travelers' },
-        { value: 'family', label: 'Family Trip', icon: '👨‍👩‍👧‍👦', desc: 'Spacious builds for families' },
-        { value: 'adventure', label: 'Extreme Adventure', icon: '🏔️', desc: 'Built for tough off-grid terrains' },
-        { value: 'business', label: 'Business / Commercial', icon: '💼', desc: 'Mobile offices & utility work spaces' },
+    van_length: [
+        { value: 'short', label: 'Short Wheelbase', desc: 'Compact & agile — Sprinter 144 / Transit 148 / Promaster 130' },
+        { value: 'long', label: 'Long Wheelbase', desc: 'Maximum interior space — Sprinter 170 / Transit 148 Ext / Promaster 159' },
+        { value: 'no_preference', label: 'No Preference', desc: 'Open to any chassis length' },
     ],
-    bathroom_type: [
-        { value: 'full_aluminum', label: 'Full Aluminum', desc: 'Heavy-duty engineered full aluminum enclosure' },
-        { value: 'full_acrylic', label: 'Full Acrylic', desc: 'Sleek, modern water-tight acrylic finish' },
-        { value: 'full_real_tile', label: 'Full Real Tile', desc: 'Premium, high-end residential luxury tilework' },
-        { value: 'rear_shower', label: 'Rear Shower', desc: 'Outdoor/rear door wash down system' },
-        { value: 'shower_in_a_bench', label: 'Shower in a Bench', desc: 'Space-saving flip-top hidden bench shower' },
-        { value: 'folding_shower', label: 'Folding Shower', desc: 'Collapsible integrated stow-away footprint' },
-        { value: 'rear_bathroom', label: 'Rear Bathroom', desc: 'Dedicated layout partitioned at the back' }
-    ],
-    vehicle_chassis: [
-        { value: 'sprinter', label: 'Mercedes Sprinter', desc: 'Premium precision chassis setup' },
-        { value: 'transit', label: 'Ford Transit', desc: 'High serviceability & capable AWD options' },
-        { value: 'no_preference', label: 'No Preference', desc: 'Prioritize layout build specifications' }
-    ],
-    wheelbase: [
-        { value: '144', label: '144" Wheelbase', desc: 'Compact, agile, fits standard parking spots' },
-        { value: '170', label: '170" Wheelbase', desc: 'Extended platform maximum interior space' },
-        { value: '148', label: '148" Wheelbase', desc: 'Standard highly versatile length footprint' },
-        { value: '130', label: '130" Wheelbase', desc: 'Ultra-compact nimble custom build setup' },
-        { value: 'no_preference', label: 'No Preference', desc: 'Open to any chassis build length standard' }
-    ],
-    style: [
-        { value: 'luxury', label: 'Luxury', desc: 'Sleek, high-end, premium material look' },
-        { value: 'rugged', label: 'Rugged / 4x4', desc: 'Heavy duty, built for tough terrains' },
-        { value: 'minimal', label: 'Minimalist', desc: 'Clean, efficient space saving' }
-    ],
-    priority: [
-        { value: 'comfort', label: 'Comfort & Climate', desc: 'AC, robust heaters, premium insulation' },
-        { value: 'adventure', label: 'Off-Grid Power', desc: 'Solar arrays, massive lithium systems' },
-        { value: 'space', label: 'Storage & Garage', desc: 'Large gear moto-garage, smart cabinets' }
+    yes_no_preference: [
+        { value: 'yes', label: 'Yes, Must Have' },
+        { value: 'no_preference', label: 'No Preference' },
     ],
 };
 
-const STEP_LABELS = ['Travel Vibe', 'Seating Capacity', 'Amenities Funnel', 'Platform & Aesthetic'];
+const STEP_LABELS = ['Van Length', 'Passengers', 'Bathroom', 'Battery & AC'];
 
 export default function VanRecommendation() {
     const [formData, setFormData] = useState({
-        use_case: 'solo',
-        seats_required: 2,
-        bathroom_required: false,
-        bathroom_type: '',
-        vehicle_chassis: 'no_preference',
-        wheelbase: 'no_preference',
-        style: 'luxury',
-        priority: 'comfort',
+        van_length: 'no_preference',
+        passengers: 2,
+        bathroom_required: 'no_preference',
+        battery_ac_required: 'no_preference',
     });
 
     const [currentStep, setCurrentStep] = useState(1);
@@ -66,10 +34,10 @@ export default function VanRecommendation() {
 
     const handleInputChange = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
 
-    const handleCounter = (key, type) => {
+    const handleCounter = (type) => {
         setFormData((prev) => {
-            const newVal = type === 'inc' ? prev[key] + 1 : Math.max(1, prev[key] - 1);
-            return { ...prev, [key]: newVal };
+            const newVal = type === 'inc' ? prev.passengers + 1 : Math.max(1, prev.passengers - 1);
+            return { ...prev, passengers: newVal };
         });
     };
 
@@ -105,14 +73,10 @@ export default function VanRecommendation() {
         setRecommendation(null);
         setCurrentStep(1);
         setFormData({
-            use_case: 'solo',
-            seats_required: 2,
-            bathroom_required: false,
-            bathroom_type: '',
-            vehicle_chassis: 'no_preference',
-            wheelbase: 'no_preference',
-            style: 'luxury',
-            priority: 'comfort'
+            van_length: 'no_preference',
+            passengers: 2,
+            bathroom_required: 'no_preference',
+            battery_ac_required: 'no_preference',
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -183,31 +147,29 @@ export default function VanRecommendation() {
                 <form onSubmit={handleSubmit} className="px-4 py-8">
                     <div className="min-h-[260px] flex flex-col justify-between">
 
-                        {/* STEP 1: TRAVEL VIBE */}
+                        {/* STEP 1: VAN LENGTH */}
                         {currentStep === 1 && (
                             <div>
                                 <RichParagraph className="font-bold text-secondary tracking-widest uppercase mb-5" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                    What is your primary travel vibe?
+                                    Do you have a preferred van length?
                                 </RichParagraph>
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                                    {OPTIONS.use_case.map((opt) => {
-                                        const active = formData.use_case === opt.value;
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    {OPTIONS.van_length.map((opt) => {
+                                        const active = formData.van_length === opt.value;
                                         return (
                                             <button
                                                 key={opt.value}
                                                 type="button"
-                                                onClick={() => handleInputChange('use_case', opt.value)}
-                                                className="p-5 flex flex-col text-left justify-between h-40 transition-all"
+                                                onClick={() => handleInputChange('van_length', opt.value)}
+                                                className="p-5 flex flex-col text-left justify-between h-36 transition-all"
                                                 style={{
                                                     borderRadius: '6px',
                                                     border: `1px solid ${active ? '#ED985F' : 'rgba(255,255,255,0.08)'}`,
                                                     backgroundColor: active ? 'rgba(237,152,95,0.12)' : 'rgba(255,255,255,0.03)',
                                                 }}
                                             >
-                                                <SpanTag
-                                                    text={opt.icon}
-                                                    className="!text-3xl font-normal !text-primary"
-                                                />                                                <div>
+                                                <Ruler className="w-6 h-6" style={{ color: active ? '#ED985F' : 'rgba(255,255,255,0.5)' }} />
+                                                <div>
                                                     <SpanTag text={opt.label} className={`!text-sm font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
                                                     <SpanTag text={opt.desc} className="! !text-secondary/30 mt-1" />
                                                 </div>
@@ -218,33 +180,33 @@ export default function VanRecommendation() {
                             </div>
                         )}
 
-                        {/* STEP 2: SEATING CAPACITY */}
+                        {/* STEP 2: PASSENGERS */}
                         {currentStep === 2 && (
                             <div className="max-w-md mx-auto text-center w-full">
                                 <RichParagraph className=" font-bold tracking-widest uppercase mb-6" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                    How many belted seats do you strictly require?
+                                    How many passengers do you need to seat at minimum?
                                 </RichParagraph>
                                 <div
                                     className="flex items-center justify-between p-6 bg-secondary/5 border border-secondary/10 rounded-lg max-w-sm mx-auto"
                                 >
                                     <div className="text-left">
-                                        <SpanTag text="Seats Required" className="!text-secondary font-black text-sm tracking-wide" />
-                                        <SpanTag text="Number of seatbelts needed" className="!text-secondary/35 " />
+                                        <SpanTag text="Passengers" className="!text-secondary font-black text-sm tracking-wide" />
+                                        <SpanTag text="Minimum seating capacity" className="!text-secondary/35 " />
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <button
                                             type="button"
-                                            onClick={() => handleCounter('seats_required', 'dec')}
+                                            onClick={() => handleCounter('dec')}
                                             className="w-10 h-10 flex items-center justify-center font-black text-base transition-all"
                                             style={{ borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)', color: '#FBFBF9' }}
                                         >−</button>
                                         <SpanTag
-                                            text={formData.seats_required}
+                                            text={formData.passengers}
                                             className="!text-2xl font-black w-6 text-center"
                                             inlineStyle={{ color: 'var(--color-hover)' }}
                                         />                                        <button
                                             type="button"
-                                            onClick={() => handleCounter('seats_required', 'inc')}
+                                            onClick={() => handleCounter('inc')}
                                             className="w-10 h-10 flex items-center justify-center font-black text-base transition-all"
                                             style={{ borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)', backgroundColor: 'rgba(255,255,255,0.05)', color: '#FBFBF9' }}
                                         >+</button>
@@ -253,7 +215,7 @@ export default function VanRecommendation() {
                             </div>
                         )}
 
-                        {/* STEP 3: AMENITIES FUNNEL (BATHROOM SELECTION MATRIX) */}
+                        {/* STEP 3: BATHROOM */}
                         {currentStep === 3 && (
                             <div className="space-y-8 max-w-3xl mx-auto w-full">
                                 <div>
@@ -261,152 +223,60 @@ export default function VanRecommendation() {
                                         Do you need an Indoor Bathroom / Shower Setup?
                                     </RichParagraph>
                                     <div className="flex justify-center gap-4 mb-4">
-                                        {[
-                                            { val: false, label: 'Not Needed' },
-                                            { val: true, label: 'Must Have 🚿' },
-                                        ].map(({ val, label }) => {
-                                            const active = formData.bathroom_required === val;
+                                        {OPTIONS.yes_no_preference.map((opt) => {
+                                            const active = formData.bathroom_required === opt.value;
                                             return (
                                                 <button
-                                                    key={String(val)}
+                                                    key={opt.value}
                                                     type="button"
-                                                    onClick={() => { handleInputChange('bathroom_required', val); if (!val) handleInputChange('bathroom_type', ''); }}
-                                                    className="px-6 py-3 font-black  uppercase tracking-wider border rounded-md transition-all w-40"
+                                                    onClick={() => handleInputChange('bathroom_required', opt.value)}
+                                                    className="px-6 py-3 font-black  uppercase tracking-wider border rounded-md transition-all w-48"
                                                     style={{
                                                         border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.1)',
                                                         backgroundColor: active ? 'rgba(237,152,95,0.15)' : 'rgba(255,255,255,0.03)',
                                                         color: active ? '#ED985F' : 'rgba(255,255,255,0.45)',
                                                     }}
                                                 >
-                                                    {label}
+                                                    {opt.value === 'yes' ? `${opt.label} 🚿` : opt.label}
                                                 </button>
                                             );
                                         })}
                                     </div>
-
-                                    {/* Conditional BBV Bathroom Variant Grid */}
-                                    {formData.bathroom_required && (
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-6 transition-all duration-300">
-                                            {OPTIONS.bathroom_type.map((type) => {
-                                                const active = formData.bathroom_type === type.value;
-                                                return (
-                                                    <div
-                                                        key={type.value}
-                                                        onClick={() => handleInputChange('bathroom_type', type.value)}
-                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left"
-                                                        style={{
-                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.05)',
-                                                            backgroundColor: active ? 'rgba(237,152,95,0.08)' : 'transparent',
-                                                        }}
-                                                    >
-                                                        <SpanTag text={type.label} className={`! font-black ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <SpanTag text={type.desc} className="!text-[10px] !text-secondary/30 mt-0.5 leading-tight" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         )}
 
-                        {/* STEP 4: CHASSIS, WHEELBASE LENGTH, STYLE & PRIORITY */}
+                        {/* STEP 4: BATTERY / OFF-GRID AC */}
                         {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                            Preferred Vehicle Chassis
-                                        </RichParagraph>
-                                        <div className="space-y-2">
-                                            {OPTIONS.vehicle_chassis.map((opt) => {
-                                                const active = formData.vehicle_chassis === opt.value;
-                                                return (
-                                                    <div
-                                                        key={opt.value}
-                                                        onClick={() => handleInputChange('vehicle_chassis', opt.value)}
-                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left"
-                                                        style={{
-                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.07)',
-                                                            backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
-                                                        }}
-                                                    >
-                                                        <SpanTag text={opt.label} className={`! font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <SpanTag text={opt.desc} className="!text-[11px] mt-0.5 !text-secondary/30" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                            <div className="space-y-8 max-w-3xl mx-auto w-full">
+                                <div>
+                                    <RichParagraph className="text-center  font-bold tracking-widest uppercase mb-2" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
+                                        Do you want an Off-Grid Battery & AC System?
+                                    </RichParagraph>
+                                    <RichParagraph className="text-center mb-4 !text-secondary/30">
+                                        Helps us understand your budget for a complex electrical build — doesn't affect which layouts you're shown.
+                                    </RichParagraph>
+                                    <div className="flex justify-center gap-4 mb-4">
+                                        {OPTIONS.yes_no_preference.map((opt) => {
+                                            const active = formData.battery_ac_required === opt.value;
+                                            return (
+                                                <button
+                                                    key={opt.value}
+                                                    type="button"
+                                                    onClick={() => handleInputChange('battery_ac_required', opt.value)}
+                                                    className="px-6 py-3 font-black  uppercase tracking-wider border rounded-md transition-all w-48 flex items-center justify-center gap-2"
+                                                    style={{
+                                                        border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.1)',
+                                                        backgroundColor: active ? 'rgba(237,152,95,0.15)' : 'rgba(255,255,255,0.03)',
+                                                        color: active ? '#ED985F' : 'rgba(255,255,255,0.45)',
+                                                    }}
+                                                >
+                                                    {opt.value === 'yes' && <Zap className="w-4 h-4" />}
+                                                    {opt.label}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
-
-                                    <div>
-                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                            Target Wheelbase Length
-                                        </RichParagraph>
-                                        <div className="space-y-2">
-                                            {OPTIONS.wheelbase.map((opt) => {
-                                                const active = formData.wheelbase === opt.value;
-                                                return (
-                                                    <div
-                                                        key={opt.value}
-                                                        onClick={() => handleInputChange('wheelbase', opt.value)}
-                                                        className="p-3 cursor-pointer border rounded-md transition-all text-left"
-                                                        style={{
-                                                            border: active ? '1px solid #ED985F' : '1px solid rgba(255,255,255,0.07)',
-                                                            backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
-                                                        }}
-                                                    >
-                                                        <SpanTag text={opt.label} className={`! font-black uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                        <SpanTag text={opt.desc} className="!text-[11px] mt-0.5 !text-secondary/30" />
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-secondary/5">
-                                    {[
-                                        { field: 'style', label: 'Build Style Interior', items: OPTIONS.style },
-                                        { field: 'priority', label: 'Top Priority Focus', items: OPTIONS.priority },
-                                    ].map(({ field, label, items }) => (
-                                        <div key={field}>
-                                            <RichParagraph className=" font-bold tracking-widest uppercase mb-3" inlineStyle={{ color: 'rgba(255,255,255,0.4)' }}>
-                                                {label}
-                                            </RichParagraph>
-                                            <div className="space-y-2">
-                                                {items.map((opt) => {
-                                                    const active = formData[field] === opt.value;
-                                                    return (
-                                                        <div
-                                                            key={opt.value}
-                                                            onClick={() => handleInputChange(field, opt.value)}
-                                                            className="p-4 cursor-pointer transition-all flex items-center justify-between gap-3"
-                                                            style={{
-                                                                borderRadius: '6px',
-                                                                border: `1px solid ${active ? '#ED985F' : 'rgba(255,255,255,0.07)'}`,
-                                                                backgroundColor: active ? 'rgba(237,152,95,0.1)' : 'rgba(255,255,255,0.02)',
-                                                            }}
-                                                        >
-                                                            <div>
-                                                                <SpanTag text={opt.label} className={`! font-black tracking-wide uppercase ${active ? '!text-[#ED985F]' : '!text-secondary'}`} />
-                                                                <SpanTag text={opt.desc} className="! mt-0.5 !text-secondary/30" />
-                                                            </div>
-                                                            <div
-                                                                className="w-4 h-4 rounded-full flex-shrink-0 flex items-center justify-center transition-all"
-                                                                style={{
-                                                                    border: `2px solid ${active ? '#ED985F' : 'rgba(255,255,255,0.2)'}`,
-                                                                    backgroundColor: active ? '#ED985F' : 'transparent',
-                                                                }}
-                                                            >
-                                                                {active && <div className="w-1.5 h-1.5 rounded-full bg-secondary" />}
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
                                 </div>
                             </div>
                         )}
@@ -483,7 +353,7 @@ export default function VanRecommendation() {
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                     <a
                                         href={`https://wa.me/19514419719?text=${encodeURIComponent(
-                                            `Hi BBV Team! I ran the Matchmaker Quiz. I need a custom structure build setup: Vibe: ${formData.use_case.toUpperCase()}, Strict Belted Seats: ${formData.seats_required}, Wheelbase Target: ${formData.wheelbase}. Let's discuss custom blueprint routing.`
+                                            `Hi BBV Team! I ran the Matchmaker Quiz. I need a custom structure build setup: Strict Passengers: ${formData.passengers}, Van Length Preference: ${formData.van_length}. Let's discuss custom blueprint routing.`
                                         )}`}
                                         target="_blank"
                                         rel="noreferrer"
@@ -497,7 +367,7 @@ export default function VanRecommendation() {
                                 </div>
                             </div>
                         ) : (
-                            /* CONDITION 2: STANDARD ASSISTANCE OUTPUT (WHEELBASE / BATHROOM NOTICES RENDER) */
+                            /* CONDITION 2: STANDARD ASSISTANCE OUTPUT */
                             recommendation.primary_match && (
                                 <div className="space-y-6">
 
@@ -597,19 +467,16 @@ export default function VanRecommendation() {
                                                             className="! font-bold tracking-wide !text-primary capitalize"
                                                         />
                                                     </div>
+                                                    {formData.battery_ac_required === 'yes' && (
+                                                        <div className="flex items-center gap-1.5  font-bold tracking-wide px-3 py-1.5 bg-primary/5 rounded capitalize">
+                                                            <Zap className="w-3.5 h-3.5" style={{ color: 'var(--color-primary)' }} />
+                                                            <SpanTag
+                                                                text="Off-Grid Power: Available as Custom Add-On"
+                                                                className="! font-bold tracking-wide !text-primary capitalize"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
-
-                                                {/* Match Logic Justification */}
-                                                {recommendation.primary_match.reason && (
-                                                    <div className="mb-6">
-                                                        <RichParagraph className=" font-bold tracking-widest uppercase mb-2 text-primary/40">
-                                                            Core Structural Logic
-                                                        </RichParagraph>
-                                                        <RichParagraph className="text-sm font-medium px-4 py-3 bg-secondary border border-primary/10 rounded-md text-primary">
-                                                            ✅ {recommendation.primary_match.reason}
-                                                        </RichParagraph>
-                                                    </div>
-                                                )}
 
                                                 {/* Features Highlight Parsing */}
                                                 <div>
@@ -688,7 +555,7 @@ export default function VanRecommendation() {
                                                 <h6 className="font-black text-sm text-primary">{alt.title}</h6>
                                             </div>
                                             <a
-                                                href={`/${alt.type === 'inventory' ? 'van' : 'layouts'}/${alt.slug}`}
+                                                href={alt.url}
                                                 className=" font-black uppercase px-4 py-2 bg-hover/10 text-hover border border-hover/20 rounded transition-all hover:bg-hover hover:text-secondary"
                                             >
                                                 Inspect Layout →
