@@ -265,7 +265,7 @@ export default function VanCanvas({ url, variants }) {
                 Custom Build Studio
               </p>
               <h1 className="font-display text-[2rem] lg:text-[2.25rem] font-bold text-[#FBFBF9] leading-[0.95] tracking-wide">
-                Configure<br />Your Van
+                Configure Your Van
               </h1>
             </div>
             <button
