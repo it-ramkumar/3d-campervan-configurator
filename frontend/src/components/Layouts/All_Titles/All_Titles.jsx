@@ -24,20 +24,38 @@ export default function All_Titles_Client() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // 1. URL Se active values read karein
   const selectedChassis = searchParams.get("category") || "ALL";
   const searchQueryFromURL = searchParams.get("search") || "";
+  const bathroomFilterFromURL = searchParams.get("bathroomType") || "";
+  const wheelbaseFilterFromURL = searchParams.get("wheelbase") || "";
+  const seatingFilterFromURL = searchParams.get("seating") || "";
 
   const [localSearch, setLocalSearch] = useState(searchQueryFromURL);
-  const [dbCategories, setDbCategories] = useState([]);
   const [portfolios, setPortfolios] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hoveredId, setHoveredId] = useState(null);
 
+  // Backend se aane wale dynamic filter arrays ki states
+  const [dbCategories, setDbCategories] = useState([]);
+  const [dbBathrooms, setDbBathrooms] = useState([]);
+  const [dbWheelbases, setDbWheelbases] = useState([]);
+  const [dbSeatings, setDbSeatings] = useState([]);
+
+  // 2. TEMPORARY STATES FOR CHECKBOXES (Apply button ke liye)
+  const [tempBathrooms, setTempBathrooms] = useState([]);
+  const [tempWheelbases, setTempWheelbases] = useState([]);
+  const [tempSeatings, setTempSeatings] = useState([]);
+
+  // URL badalne par temporary checkboxes ko sync rakhein
   useEffect(() => {
     setLocalSearch(searchQueryFromURL);
-  }, [searchQueryFromURL]);
+    setTempBathrooms(bathroomFilterFromURL ? bathroomFilterFromURL.split(",") : []);
+    setTempWheelbases(wheelbaseFilterFromURL ? wheelbaseFilterFromURL.split(",") : []);
+    setTempSeatings(seatingFilterFromURL ? seatingFilterFromURL.split(",") : []);
+  }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL]);
 
   const updateURL = (params) => {
     const sp = new URLSearchParams(searchParams.toString());
@@ -51,8 +69,30 @@ export default function All_Titles_Client() {
     router.push(`${pathname}?${sp.toString()}`);
   };
 
+  // 3. Handle Checkbox Toggles (Only updates local state, does not trigger API)
+  const handleLocalCheckboxToggle = (stateSetter, currentArray, value) => {
+    if (currentArray.includes(String(value))) {
+      stateSetter(currentArray.filter((item) => item !== String(value)));
+    } else {
+      stateSetter([...currentArray, String(value)]);
+    }
+  };
+
+  // 4. APPLY BUTTON LOGIC: Ek sath saare filters URL mein bhejta hai
+  const handleApplyFilters = () => {
+    updateURL({
+      bathroomType: tempBathrooms.join(","),
+      wheelbase: tempWheelbases.join(","),
+      seating: tempSeatings.join(","),
+      page: 1, // Filters badalne par page reset 1 par
+    });
+  };
+
   const handleClearFilters = () => {
     setLocalSearch("");
+    setTempBathrooms([]);
+    setTempWheelbases([]);
+    setTempSeatings([]);
     router.push(pathname);
   };
 
@@ -62,12 +102,15 @@ export default function All_Titles_Client() {
     }
   };
 
-  const fetchPortfolios = useCallback(async (pageNum, category, search) => {
+  const fetchPortfolios = useCallback(async (pageNum, category, search, bathroom, wb, seat) => {
     try {
       const url = `${process.env.NEXT_PUBLIC_URL}/portfolio/titles-only` +
         `?page=${pageNum}&limit=${LIMIT}` +
         `&category=${category !== "ALL" ? category : ""}` +
         `&search=${encodeURIComponent(search || "")}` +
+        `&bathroomType=${encodeURIComponent(bathroom || "")}` +
+        `&wheelbase=${encodeURIComponent(wb || "")}` +
+        `&seating=${encodeURIComponent(seat || "")}` +
         `&t=${Date.now()}`;
       const res = await fetch(url, { cache: "no-store" });
       return res.json();
@@ -81,22 +124,43 @@ export default function All_Titles_Client() {
     const load = async () => {
       setLoading(true);
       setPage(1);
-      const res = await fetchPortfolios(1, selectedChassis, searchQueryFromURL);
+      const res = await fetchPortfolios(
+        1,
+        selectedChassis,
+        searchQueryFromURL,
+        bathroomFilterFromURL,
+        wheelbaseFilterFromURL,
+        seatingFilterFromURL
+      );
       if (res.success) {
         setPortfolios(res.data || []);
         setHasMore(1 < res.pages);
         if (res.categories) setDbCategories(res.categories);
+
+        // Backend se dynamic unique options save karein
+        if (res.filterOptions) {
+          setDbBathrooms(res.filterOptions.bathrooms || []);
+          setDbWheelbases(res.filterOptions.wheelbases || []);
+          setDbSeatings(res.filterOptions.seatings || []);
+        }
       }
       setLoading(false);
     };
     load();
-  }, [selectedChassis, searchQueryFromURL, fetchPortfolios]);
+  }, [selectedChassis, searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, fetchPortfolios]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     const nextPage = page + 1;
-    const res = await fetchPortfolios(nextPage, selectedChassis, searchQueryFromURL);
+    const res = await fetchPortfolios(
+      nextPage,
+      selectedChassis,
+      searchQueryFromURL,
+      bathroomFilterFromURL,
+      wheelbaseFilterFromURL,
+      seatingFilterFromURL
+    );
     if (res.success) {
       setPortfolios((prev) => [...prev, ...(res.data || [])]);
       setPage(nextPage);
@@ -128,7 +192,12 @@ export default function All_Titles_Client() {
     return map[wb] || (wb ? `${wb}"` : "Custom");
   };
 
-  const isFilterActive = selectedChassis !== "ALL" || searchQueryFromURL !== "";
+  const isFilterActive =
+    selectedChassis !== "ALL" ||
+    searchQueryFromURL !== "" ||
+    bathroomFilterFromURL !== "" ||
+    wheelbaseFilterFromURL !== "" ||
+    seatingFilterFromURL !== "";
 
   return (
     <>
@@ -141,103 +210,190 @@ export default function All_Titles_Client() {
       <div className="bg-secondary min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-16">
 
-          {/* ── FILTER BAR ── */}
-          <div className="bg-white border border-primary/8 rounded-2xl shadow-sm mb-8 overflow-hidden">
-            <div className="h-[2px] w-full bg-[#ED985F]" />
-            <div className="p-5 md:p-6">
+    {/* ── FILTER BAR ── */}
+{/* Yahan se overflow-hidden ko hata kar safe kiya gaya hai taaki dropdowns baahar float kar sakein */}
+<div className="bg-white border border-primary/8 rounded-2xl shadow-sm mb-8 relative">
+  {/* Rounded corners border match karne ke liye custom top bar divider */}
+  <div className="h-[2px] w-full bg-[#ED985F] rounded-t-2xl absolute top-0 left-0" />
 
-              <div className="flex items-center gap-3 mb-5 pb-4 border-b border-primary/6">
-                <div className="p-2 bg-[#ED985F]/10 rounded-lg">
-                  <SlidersHorizontal size={16} className="text-[#ED985F]" />
-                </div>
-                <SpanTag text="Browse Floor Plans" className="mb-0" />
-              </div>
+  <div className="p-5 md:p-6 pt-6">
 
-              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+    {/* Header & Results Count */}
+    <div className="flex items-center justify-between mb-5 pb-4 border-b border-primary/6">
+      <div className="flex items-center gap-3">
+        <div className="p-2 bg-[#ED985F]/10 rounded-lg">
+          <SlidersHorizontal size={16} className="text-[#ED985F]" />
+        </div>
+        <SpanTag text="Browse Floor Plans" className="mb-0" />
+      </div>
+      <span className="font-ui font-semibold text-xs text-primary/60 bg-secondary px-3 py-1.5 rounded-lg border border-primary/6">
+        {portfolios.length} {portfolios.length === 1 ? "Result" : "Results"}
+      </span>
+    </div>
 
-                {/* Category buttons */}
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => updateURL({ category: "ALL" })}
-                    className={`font-ui font-semibold text-[10px] uppercase tracking-[0.15em] px-4 py-2 rounded-xl border transition-all ${
-                      selectedChassis === "ALL"
-                        ? "bg-primary border-primary text-secondary"
-                        : "bg-secondary border-primary/12 text-primary/60 hover:border-[#ED985F]/40 hover:text-primary"
-                    }`}
-                  >
-                    All
-                  </button>
+    {/* Search Input Box */}
+    <div className="relative w-full mb-5">
+      <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30" />
+      <input
+        type="text"
+        value={localSearch}
+        onChange={(e) => setLocalSearch(e.target.value)}
+        onKeyDown={handleSearchCommit}
+        onBlur={handleSearchCommit}
+        placeholder="Search layouts..."
+        className="w-full bg-secondary border border-primary/10 rounded-xl pl-11 pr-4 py-3 font-ui text-sm text-primary placeholder:text-primary/30 focus:outline-none focus:border-[#ED985F]/40 focus:ring-2 focus:ring-[#ED985F]/10 transition-all"
+      />
+    </div>
 
-                  {dbCategories.map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => updateURL({ category: cat })}
-                      className={`font-ui font-semibold text-[10px] uppercase tracking-[0.15em] px-4 py-2 rounded-xl border transition-all ${
-                        selectedChassis === cat
-                          ? "bg-primary border-primary text-secondary"
-                          : "bg-secondary border-primary/12 text-primary/60 hover:border-[#ED985F]/40 hover:text-primary"
-                      }`}
-                    >
-                      {getCategoryLabel(cat)}
-                    </button>
-                  ))}
-                </div>
+    {/* ── DROPDOWNS ROW ── */}
+    {/* relative aur high z-index (z-40) ensure karega ki dropdown niche wale grid section se upar rahein */}
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 relative z-40">
 
-                {/* Search */}
-                <div className="relative w-full md:w-72 shrink-0">
-                  <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-primary/30" />
+      {/* 1. Chassis Dropdown */}
+      <div className="relative group">
+        <button
+          type="button"
+          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+        >
+          <span>Chassis {selectedChassis !== "ALL" ? `(${getCategoryLabel(selectedChassis)})` : "▼"}</span>
+        </button>
+        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
+          <button
+            type="button"
+            onClick={() => updateURL({ category: "ALL" })}
+            className={`w-full text-left font-ui text-xs uppercase tracking-wider px-3 py-2 rounded-lg transition-all mb-1 ${
+              selectedChassis === "ALL" ? "bg-primary text-secondary" : "hover:bg-secondary text-primary/70"
+            }`}
+          >
+            All Chassis
+          </button>
+          {dbCategories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => updateURL({ category: cat })}
+              className={`w-full text-left font-ui text-xs uppercase tracking-wider px-3 py-2 rounded-lg transition-all mb-1 ${
+                selectedChassis === cat ? "bg-primary text-secondary" : "hover:bg-secondary text-primary/70"
+              }`}
+            >
+              {getCategoryLabel(cat)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. Bathroom Dropdown */}
+      <div className="relative group">
+        <button
+          type="button"
+          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+        >
+          <span>Bathroom {tempBathrooms.length > 0 ? `(${tempBathrooms.length})` : "▼"}</span>
+        </button>
+        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
+          {dbBathrooms.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {dbBathrooms.map((type) => (
+                <label key={type} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
                   <input
-                    type="text"
-                    value={localSearch}
-                    onChange={(e) => setLocalSearch(e.target.value)}
-                    onKeyDown={handleSearchCommit}
-                    onBlur={handleSearchCommit}
-                    placeholder="Search layouts..."
-                    className="w-full bg-secondary border border-primary/10 rounded-xl pl-9 pr-4 py-2.5 font-ui text-sm text-primary placeholder:text-primary/30 focus:outline-none focus:border-[#ED985F]/40 focus:ring-2 focus:ring-[#ED985F]/10 transition-all"
+                    type="checkbox"
+                    checked={tempBathrooms.includes(type)}
+                    onChange={() => handleLocalCheckboxToggle(setTempBathrooms, tempBathrooms, type)}
+                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
                   />
-                </div>
-              </div>
+                  {type}
+                </label>
+              ))}
             </div>
-          </div>
-
-          {/* ── ACTIVE FILTERS ── */}
-          {isFilterActive && (
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-white border border-primary/8 rounded-xl px-4 py-3 mb-8">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/35 mr-1">
-                  Active:
-                </span>
-
-                {selectedChassis !== "ALL" && (
-                  <span className="inline-flex items-center gap-1.5 bg-primary text-secondary font-ui text-[10px] font-semibold uppercase tracking-[0.12em] pl-3 pr-2 py-1 rounded-lg">
-                    {getCategoryLabel(selectedChassis)}
-                    <button onClick={() => updateURL({ category: "ALL" })} className="hover:bg-secondary/20 p-0.5 rounded transition-colors">
-                      <X size={11} />
-                    </button>
-                  </span>
-                )}
-
-                {searchQueryFromURL !== "" && (
-                  <span className="inline-flex items-center gap-1.5 bg-primary text-secondary font-ui text-[10px] font-semibold uppercase tracking-[0.12em] pl-3 pr-2 py-1 rounded-lg">
-                    &ldquo;{searchQueryFromURL}&rdquo;
-                    <button onClick={() => { setLocalSearch(""); updateURL({ search: "" }); }} className="hover:bg-secondary/20 p-0.5 rounded transition-colors">
-                      <X size={11} />
-                    </button>
-                  </span>
-                )}
-              </div>
-
-              <button
-                type="button"
-                onClick={handleClearFilters}
-                className="font-ui font-semibold text-[10px] uppercase tracking-[0.15em] text-[#ED985F] hover:text-primary flex items-center gap-1.5 transition-colors"
-              >
-                <X size={11} /> Clear All
-              </button>
-            </div>
+          ) : (
+            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
           )}
+        </div>
+      </div>
+
+      {/* 3. Wheelbase Dropdown */}
+      <div className="relative group">
+        <button
+          type="button"
+          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+        >
+          <span>Wheelbase {tempWheelbases.length > 0 ? `(${tempWheelbases.length})` : "▼"}</span>
+        </button>
+        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
+          {dbWheelbases.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {dbWheelbases.map((wb) => (
+                <label key={wb} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
+                  <input
+                    type="checkbox"
+                    checked={tempWheelbases.includes(String(wb))}
+                    onChange={() => handleLocalCheckboxToggle(setTempWheelbases, tempWheelbases, wb)}
+                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
+                  />
+                  {getWheelbaseLabel(String(wb))}
+                </label>
+              ))}
+            </div>
+          ) : (
+            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
+          )}
+        </div>
+      </div>
+
+      {/* 4. Seats Dropdown */}
+      <div className="relative group">
+        <button
+          type="button"
+          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+        >
+          <span>Seats {tempSeatings.length > 0 ? `(${tempSeatings.length})` : "▼"}</span>
+        </button>
+        {/* Right side alignment safe layout for extreme or grid edge visibility */}
+        <div className="absolute right-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
+          {dbSeatings.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {dbSeatings.map((seat) => (
+                <label key={seat} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
+                  <input
+                    type="checkbox"
+                    checked={tempSeatings.includes(String(seat))}
+                    onChange={() => handleLocalCheckboxToggle(setTempSeatings, tempSeatings, seat)}
+                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
+                  />
+                  {seat} Seats
+                </label>
+              ))}
+            </div>
+          ) : (
+            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
+          )}
+        </div>
+      </div>
+
+    </div>
+
+    {/* ── ACTION BUTTONS ROW ── */}
+    <div className="flex justify-end gap-3 pt-3 border-t border-primary/6 relative z-10">
+      {isFilterActive && (
+        <button
+          type="button"
+          onClick={handleClearFilters}
+          className="px-6 py-2 rounded-xl font-ui font-semibold text-[11px] uppercase tracking-[0.15em] bg-secondary text-primary/70 border border-primary/10 hover:border-[#ED985F]/40 hover:text-primary transition-all flex items-center gap-2 cursor-pointer"
+        >
+          <FilterX size={13} /> Clear Filters
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={handleApplyFilters}
+        className="px-6 py-2 rounded-xl font-ui font-semibold text-[11px] uppercase tracking-[0.15em] bg-[#ED985F] text-white hover:bg-primary transition-all shadow-sm cursor-pointer"
+      >
+        Apply Filters
+      </button>
+    </div>
+
+  </div>
+</div>
 
           {/* ── GRID ── */}
           {portfolios.length > 0 ? (
@@ -249,8 +405,10 @@ export default function All_Titles_Client() {
                   const displayImage = (hoveredId === item._id && item.rendering?.length > 1)
                     ? item.rendering[1]
                     : item.rendering?.[0];
+
                   const wb = item.van_listing?.specifications?.wheelbase;
-                  const capacitySleep = item.category?.some(c => c.includes("families")) ? "3–4" : "2";
+                  const bathType = item.van_listing?.bathroomType || "No Bath";
+                  const seatingCap = item.van_listing?.seating || "2";
 
                   return (
                     <Link key={item._id} href={path} className="block group h-full">
@@ -283,7 +441,6 @@ export default function All_Titles_Client() {
                             </div>
                           )}
 
-                          {/* Gradient overlay on hover */}
                           <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
                         </div>
 
@@ -299,15 +456,15 @@ export default function All_Titles_Client() {
                               </h3>
                             </div>
 
-                            {/* Feature chips */}
+                            {/* Dynamic Chips from Backend */}
                             <div className="grid grid-cols-2 gap-2">
                               <div className="flex items-center gap-2 px-2.5 py-1.5 bg-secondary rounded-lg border border-primary/6">
                                 <BedDouble size={13} className="text-[#ED985F] shrink-0" />
-                                <span className="font-ui font-semibold text-[10px] text-primary/70">Sleeps {capacitySleep}</span>
+                                <span className="font-ui font-semibold text-[10px] text-primary/70">{seatingCap} Seating</span>
                               </div>
                               <div className="flex items-center gap-2 px-2.5 py-1.5 bg-secondary rounded-lg border border-primary/6">
                                 <Flame size={13} className="text-[#ED985F] shrink-0" />
-                                <span className="font-ui font-semibold text-[10px] text-primary/70">Full Kitchen</span>
+                                <span className="font-ui font-semibold text-[10px] text-primary/70 truncate">{bathType}</span>
                               </div>
                             </div>
                           </div>
@@ -368,7 +525,7 @@ export default function All_Titles_Client() {
             )
           )}
 
-          {/* Loading skeleton */}
+          {/* Loading Skeletons */}
           {loading && portfolios.length === 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (

@@ -257,7 +257,7 @@ router.get("/titles-only", async (req, res) => {
       PortfolioVan.distinct("category"),
       PortfolioVan.distinct("van_listing.bathroomType"),
       PortfolioVan.distinct("van_listing.specifications.wheelbase"),
-      PortfolioVan.distinct("van_listing.seating")
+      PortfolioVan.distinct("van_listing.specifications.capacity.sits")
     ]);
 
     const filter = {};
@@ -293,9 +293,10 @@ router.get("/titles-only", async (req, res) => {
 
     // Seating Filter
     const parsedSeating = parseCheckboxFilter(seating);
-    if (parsedSeating && parsedSeating.length > 0) {
-      const seatingNumbers = parsedSeating.map(s => parseInt(s) || s);
-      filter["van_listing.seating"] = { $in: seatingNumbers };
+    if (parsedSeating?.length) {
+      filter["van_listing.specifications.capacity.sits"] = {
+        $in: parsedSeating
+      };
     }
 
     // Total count matching the filters
@@ -328,7 +329,7 @@ router.get("/titles-only", async (req, res) => {
           "van_listing.title": 1,
           "van_listing.description": 1,
           "van_listing.bathroomType": 1,
-          "van_listing.seating": 1,
+          "van_listing.specifications.capacity.sits": 1,
           "van_listing.specifications.wheelbase": 1,
         },
       },
