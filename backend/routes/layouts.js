@@ -238,70 +238,72 @@ router.get("/", async (req, res) => {
 });
 router.get("/titles-only", async (req, res) => {
   try {
-    // 1. Frontend se saare query parameters catch karein
     let {
       page = 1,
       limit = 12,
       search,
       category,
-      seating,       // Checkbox data (e.g., "2,4" ya array)
-      bathroomType,  // Checkbox data (e.g., "Full Bath,Cassette")
-      wheelbase      // Checkbox data (e.g., "144,170")
+      seating,
+      bathroomType,
+      wheelbase
     } = req.query;
 
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 12;
 
-    const uniqueCategories = await PortfolioVan.distinct("category");
+    // ─── DYNAMIC OPTIONS FROM DATABASE ───
+    // Ye poore database se unique options nikalega taaki frontend pe checkboxes ban sakein
+    const [uniqueCategories, uniqueBathrooms, uniqueWheelbases, uniqueSeatings] = await Promise.all([
+      PortfolioVan.distinct("category"),
+      PortfolioVan.distinct("van_listing.bathroomType"),
+      PortfolioVan.distinct("van_listing.specifications.wheelbase"),
+      PortfolioVan.distinct("van_listing.seating")
+    ]);
+
     const filter = {};
 
-    // 2. Text Search Filter
+    // Text Search Filter
     if (search && search.trim() !== "") {
       filter["van_listing.title"] = { $regex: search, $options: "i" };
     }
 
-    // 3. Category Filter
+    // Category Filter
     if (category && category.trim() !== "") {
       filter["category"] = { $regex: `^${category.trim()}$`, $options: "i" };
     }
 
-    // --- MULTIPLE CHECKBOX FILTERS LOGIC ---
-
-    // Helper function: Agar frontend se comma-separated string aaye ya array, dono ko saaf array bana de
+    // Helper to parse comma-separated strings or arrays
     const parseCheckboxFilter = (param) => {
       if (!param) return null;
       if (Array.isArray(param)) return param.map(p => p.trim()).filter(Boolean);
       return param.split(",").map(p => p.trim()).filter(Boolean);
     };
 
-    // 4. Bathroom Type Filter (Multiple Checkboxes)
+    // Bathroom Filter
     const parsedBathrooms = parseCheckboxFilter(bathroomType);
     if (parsedBathrooms && parsedBathrooms.length > 0) {
-      // Isse agar user ne 'Full Bath' aur 'Cassette' dono select kiye toh dono ka data aayega
       filter["van_listing.bathroomType"] = { $in: parsedBathrooms };
     }
 
-    // 5. Wheelbase Filter (Multiple Checkboxes)
+    // Wheelbase Filter
     const parsedWheelbase = parseCheckboxFilter(wheelbase);
     if (parsedWheelbase && parsedWheelbase.length > 0) {
       filter["van_listing.specifications.wheelbase"] = { $in: parsedWheelbase };
     }
 
-    // 6. Seating Filter (Multiple Checkboxes)
+    // Seating Filter
     const parsedSeating = parseCheckboxFilter(seating);
     if (parsedSeating && parsedSeating.length > 0) {
-      // Agar db mein seating Number hai, toh strings ko numbers mein convert karna hoga
       const seatingNumbers = parsedSeating.map(s => parseInt(s) || s);
       filter["van_listing.seating"] = { $in: seatingNumbers };
-      // NOTE: Agar seating 'specifications' ke andar hai toh path "van_listing.specifications.seating" karden.
     }
 
-    // Total count nikalein naye combined filters ke mutabiq
+    // Total count matching the filters
     const total = await PortfolioVan.countDocuments(filter);
 
     // Aggregation Pipeline
     const vans = await PortfolioVan.aggregate([
-      { $match: filter }, // Filters yahan apply honge
+      { $match: filter },
       {
         $addFields: {
           hasRendering: {
@@ -332,13 +334,18 @@ router.get("/titles-only", async (req, res) => {
       },
     ]);
 
-    // Response structure
+    // Response mein ab saare dynamic filters ke arrays ja rahe hain
     res.json({
       success: true,
       total,
       page,
       pages: Math.ceil(total / limit),
       categories: uniqueCategories,
+      filterOptions: {
+        bathrooms: uniqueBathrooms.filter(Boolean), // filter(Boolean) null/empty values nikal dega
+        wheelbases: uniqueWheelbases.filter(Boolean),
+        seatings: uniqueSeatings.filter(Boolean).sort((a, b) => a - b), // Seating ko sort kar diya 2, 3, 4
+      },
       data: vans,
     });
   } catch (err) {
