@@ -7,7 +7,7 @@ import { generateAboutSchema } from "@/schema/about";
 export const metadata = {
   title: "Custom Camper Van Builders in California | Big Bear Vans",
   description:
-    "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
+    "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
   keywords:
     "Big Bear Vans founders, custom van builders California, 5 person sleeper van, sprinter elevator bed conversion, CNC engineered campervans",
   alternates: {
@@ -18,14 +18,14 @@ export const metadata = {
     url: "https://www.bigbearvans.com/about-us",
     title: "Custom Camper Van Builders in California | Big Bear Vans",
     description:
-      "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
+      "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
     images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Custom Camper Van Builders in California | Big Bear Vans",
     description:
-      "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna. See our story.",
+      "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
     images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
 };

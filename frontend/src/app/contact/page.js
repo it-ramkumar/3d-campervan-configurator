@@ -4,7 +4,7 @@ import { generateConsultationSchema } from "@/schema/consultationSchema";
 
 // ✅ 1, 2, 3. Metadata API (SEO aur Social Media Tags)
 export const metadata = {
-  title: "Book a Consultation | Custom Van Building & Inquiry | Big Bear Vans",
+  title: "Book a Free Van Building Consultation | Big Bear Vans",
   description: "Schedule your free consultation with Big Bear Vans. Book a showroom visit, discuss financing, or start your custom 3D van design journey in Big Bear City, CA.",
   keywords: "book van consultation, campervan build inquiry, schedule showroom tour, Big Bear Vans contact, custom van building quote, Mercedes Sprinter conversion California",
   alternates: {

@@ -6,9 +6,9 @@ import { configuratorSchema } from "@/schema/configuratorSchema";
 export const metadata = {
   metadataBase: new URL("https://www.bigbearvans.com"),
 
-  title: "3D Camper Van Configurator | Design Your Own Van | Big Bear Vans",
+  title: "Free 3D Camper Van Configurator | Big Bear Vans",
   description:
-    "Use our professional 3D Van Configurator to design your dream Mercedes Sprinter build. Customize layouts, colors, and features in real-time.",
+    "Design your dream Mercedes Sprinter build in our free 3D configurator. Customize layouts, colors & features in real-time.",
 
   alternates: {
     canonical: "https://www.bigbearvans.com/configurator",

@@ -4,7 +4,7 @@ import { campgrounds } from "@/DataUseInComp/WhereToCamp";
 
 // Metadata export (bahar)
 export const metadata = {
-  title: "Where to Camp in Big Bear | Best RV Parks & Campgrounds | Big Bear Vans",
+  title: "Where to Camp in Big Bear | Best RV Parks & Campgrounds",
   description: "Discover the best campgrounds and RV parks near Big Bear Lake. From Serrano's full hookups to Holcomb Valley's quiet escapes, find the perfect basecamp for your new campervan.",
   keywords: "Big Bear Lake camping, RV parks Big Bear, Serrano Campground, Pineknot Campground, campervan basecamp California, RV hookups Big Bear",
   alternates: {

@@ -3,8 +3,8 @@ import CustomBuild from "../../components/CustomBuild/CustomBuild"
 
 export async function generateMetadata() {
   try {
-    const title = `Custom Camper Van Builders | Big Bear Vans — Built From Scratch`;
-    const description = `We build 100% custom Mercedes Sprinter & Ford Transit campervans from a blank slate. You choose every detail — layout, materials & features. 105+ builds delivered. Get a free quote today.`;
+    const title = `Custom Camper Vans Built From Scratch | Big Bear Vans`;
+    const description = `100% custom Mercedes Sprinter & Ford Transit camper vans — you choose the layout, materials & features. 105+ builds delivered. Get a free quote.`;
     return {
       title,
       description,
@@ -17,8 +17,8 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Custom Camper Van Builders | Big Bear Vans — Built From Scratch",
-      description: "We build 100% custom Mercedes Sprinter & Ford Transit campervans from a blank slate. You choose every detail — layout, materials & features. 105+ builds delivered. Get a free quote today.",
+      title: "Custom Camper Vans Built From Scratch | Big Bear Vans",
+      description: "100% custom Mercedes Sprinter & Ford Transit camper vans — you choose the layout, materials & features. 105+ builds delivered. Get a free quote.",
     };
   }
 }

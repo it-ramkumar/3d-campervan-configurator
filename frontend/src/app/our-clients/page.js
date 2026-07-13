@@ -16,7 +16,7 @@ import MobileOfficeSection from "@/components//OurClients/Clientdetail/MobileOff
 // ✅ 1. Next.js Metadata API for SEO
 export const metadata = {
   title: "Client Stories & Custom Build Gallery | Big Bear Vans",
-  description: "Explore our custom campervan case studies. From pet-friendly sanctuaries and mobile offices to family-ready Sprinters with elevator beds. See how our clients live off-grid.",
+  description: "Real custom campervan case studies — pet-friendly rigs, mobile offices, and family Sprinters with elevator beds. See how our clients live off-grid.",
   keywords: "custom van stories, pet friendly campervans, mobile office sprinter, moto van garage, retiree rv adventure, Big Bear Vans reviews",
   alternates: {
     canonical: "https://www.bigbearvans.com/our-clients",

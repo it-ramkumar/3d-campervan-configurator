@@ -4,8 +4,8 @@ import { generateInquirySchema } from "@/schema/inquerySchema"
 
 // ✅ Next.js Metadata API for SEO
 export const metadata = {
-  title: 'Build Your Dream Van | Custom Van Configurator | Big Bear Vans',
-  description: 'Use our custom van configurator to design your dream Mercedes Sprinter or Ford Transit build. Choose your layout, electrical systems, and get a custom quote today.',
+  title: 'Get a Custom Van Quote | Big Bear Vans',
+  description: 'Tell us your layout, budget & timeline and get a custom Sprinter or Transit quote from Big Bear Vans within 48 hours.',
   keywords: ['van build configurator', 'custom van conversion quote', 'sprinter van layout tool', 'campervan build cost', 'Big Bear Vans inquiry'],
   alternates: {
     canonical: 'https://www.bigbearvans.com/inquiry',

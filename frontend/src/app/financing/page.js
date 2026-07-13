@@ -5,10 +5,9 @@ import { generateFinancingSchema } from "../../schema/financing";
 
 // ✅ 1, 2, 3. Standard, Twitter, and Open Graph Metadata
 export const metadata = {
-  title:
-    "Campervan Financing & RV Loans | Custom Sprinter Builds | Big Bear Vans",
+  title: "Campervan Financing & RV Loans | Big Bear Vans",
   description:
-    "Explore flexible financing for your custom Mercedes Sprinter. From specialized 15-year RV loans through Trident Funding to all-in-one build loans. 20-30% down payment options available.",
+    "Flexible financing for your custom Sprinter build — 15-year RV loans via Trident Funding, 20-30% down. Get pre-qualified today.",
   keywords:
     "sprinter van financing, trident funding rv, campervan loan california",
   alternates: {
