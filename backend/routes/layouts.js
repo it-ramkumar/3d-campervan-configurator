@@ -236,152 +236,72 @@ router.get("/", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
-// router.get("/", async (req, res) => {
-//   try {
-//     let {
-//       page = 1,
-//       limit = 12,
-//       category,
-//       wheelbase,
-//       sold,
-//       search,
-//       model,
-//       sit,
-//       sleep,
-//       bedType,
-//       bathroomType
-//     } = req.query;
-
-//     const pageNum = Number(page);
-//     const limitNum = Number(limit);
-//     const skip = (pageNum - 1) * limitNum;
-
-
-//     const filter = {};
-//    if (category) {
-//   const categories = category.split(",").map((c) => c.trim());
-
-//   filter["category"] = { $in: categories };
-// }
-//     if (sold !== undefined) filter.sold = sold === "true";
-//     if (wheelbase) {
-//       filter["van_listing.specifications.wheelbase"] = wheelbase;
-//     }
-//     if (sit) filter["van_listing.specifications.capacity.sits"] = { $in: [sit] };
-//     if (sleep) filter["van_listing.specifications.capacity.sleeps"] = { $in: [sleep] };
-//     if (model) filter["van_listing.specifications.make_model"] = { $in: [model] };
-//     if (bedType) filter["van_listing.bedType"] = { $in: [bedType] };
-//     if (bathroomType) filter["van_listing.bathroomType"] = { $in: [bathroomType] };
-
-//     if (search && search.trim() !== "") {
-//       const regex = new RegExp(search.split(" ").join(".*"), "i");
-//       filter.$or = [
-//         { "van_listing.title": { $regex: regex } },
-//         { "van_listing.description": { $regex: regex } }
-//       ];
-//     }
-
-//     // 🔥 SINGLE AGGREGATION (data + filters)
-//     const result = await PortfolioVan.aggregate([
-//       { $match: filter },
-
-//       {
-//         $facet: {
-//           data: [
-//             {
-//               $addFields: {
-//                 hasRendering: {
-//                   $gt: [{ $size: { $ifNull: ["$rendering", []] } }, 0],
-//                 },
-//               },
-//             },
-//             {
-//               $sort: { hasRendering: -1, createdAt: -1 },
-//             },
-//             { $skip: skip },
-//             { $limit: limitNum },
-//           ],
-
-//           totalCount: [
-//             { $count: "total" }
-//           ],
-
-//          filters: [
-//   { $unwind: { path: "$category", preserveNullAndEmptyArrays: true } },
-//   {
-//     $group: {
-//       _id: null,
-//       category: { $addToSet: "$category" },
-//       wheelbase: { $addToSet: "$van_listing.specifications.wheelbase" },
-//       sits: { $addToSet: "$van_listing.specifications.capacity.sits" },
-//       sleeps: { $addToSet: "$van_listing.specifications.capacity.sleeps" },
-//       models: { $addToSet: "$van_listing.specifications.make_model" },
-//       bedType: { $addToSet: "$van_listing.bedType" },
-//       bathroomType: { $addToSet: "$van_listing.bathroomType" },
-//     }
-//   }
-// ]
-//         }
-//       }
-//     ]);
-
-//     const data = result[0].data;
-//     const total = result[0].totalCount[0]?.total || 0;
-//     const filtersRaw = result[0].filters[0] || {};
-
-//     const filters = {
-//       category: (filtersRaw.category || []).filter(Boolean).sort(),
-//       wheelbase: (filtersRaw.wheelbase || []).filter(Boolean).sort(),
-//       sits: (filtersRaw.sits || []).filter(Boolean).sort(),
-//       sleeps: (filtersRaw.sleeps || []).filter(Boolean).sort(),
-//       models: (filtersRaw.models || []).filter(Boolean).sort(),
-//       bedType: (filtersRaw.bedType || []).filter(Boolean).sort(),
-//       bathroomType: (filtersRaw.bathroomType || []).filter(Boolean).sort(),
-//     };
-
-//     res.json({
-//       success: true,
-//       total,
-//       page: pageNum,
-//       pages: Math.ceil(total / limitNum),
-//       limit: limitNum,
-//       data,
-//       filters
-//     });
-
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ success: false });
-//   }
-// });
 router.get("/titles-only", async (req, res) => {
   try {
-    let { page = 1, limit = 12, search, category } = req.query;
+    // 1. Frontend se saare query parameters catch karein
+    let {
+      page = 1,
+      limit = 12,
+      search,
+      category,
+      seating,       // Checkbox data (e.g., "2,4" ya array)
+      bathroomType,  // Checkbox data (e.g., "Full Bath,Cassette")
+      wheelbase      // Checkbox data (e.g., "144,170")
+    } = req.query;
+
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 12;
 
-    // 1. Pehle pure database se sabhi unique categories nikalenge dynamic filters ke liye
-    // Taake frontend bina kisi hardcoding ke automated tabs bana sake
     const uniqueCategories = await PortfolioVan.distinct("category");
-
     const filter = {};
 
-    // Search filter
+    // 2. Text Search Filter
     if (search && search.trim() !== "") {
       filter["van_listing.title"] = { $regex: search, $options: "i" };
     }
 
-    // Category filter
+    // 3. Category Filter
     if (category && category.trim() !== "") {
       filter["category"] = { $regex: `^${category.trim()}$`, $options: "i" };
     }
 
-    // Total count nikalein filter ke mutabiq
+    // --- MULTIPLE CHECKBOX FILTERS LOGIC ---
+
+    // Helper function: Agar frontend se comma-separated string aaye ya array, dono ko saaf array bana de
+    const parseCheckboxFilter = (param) => {
+      if (!param) return null;
+      if (Array.isArray(param)) return param.map(p => p.trim()).filter(Boolean);
+      return param.split(",").map(p => p.trim()).filter(Boolean);
+    };
+
+    // 4. Bathroom Type Filter (Multiple Checkboxes)
+    const parsedBathrooms = parseCheckboxFilter(bathroomType);
+    if (parsedBathrooms && parsedBathrooms.length > 0) {
+      // Isse agar user ne 'Full Bath' aur 'Cassette' dono select kiye toh dono ka data aayega
+      filter["van_listing.bathroomType"] = { $in: parsedBathrooms };
+    }
+
+    // 5. Wheelbase Filter (Multiple Checkboxes)
+    const parsedWheelbase = parseCheckboxFilter(wheelbase);
+    if (parsedWheelbase && parsedWheelbase.length > 0) {
+      filter["van_listing.specifications.wheelbase"] = { $in: parsedWheelbase };
+    }
+
+    // 6. Seating Filter (Multiple Checkboxes)
+    const parsedSeating = parseCheckboxFilter(seating);
+    if (parsedSeating && parsedSeating.length > 0) {
+      // Agar db mein seating Number hai, toh strings ko numbers mein convert karna hoga
+      const seatingNumbers = parsedSeating.map(s => parseInt(s) || s);
+      filter["van_listing.seating"] = { $in: seatingNumbers };
+      // NOTE: Agar seating 'specifications' ke andar hai toh path "van_listing.specifications.seating" karden.
+    }
+
+    // Total count nikalein naye combined filters ke mutabiq
     const total = await PortfolioVan.countDocuments(filter);
 
     // Aggregation Pipeline
     const vans = await PortfolioVan.aggregate([
-      { $match: filter },
+      { $match: filter }, // Filters yahan apply honge
       {
         $addFields: {
           hasRendering: {
@@ -405,18 +325,20 @@ router.get("/titles-only", async (req, res) => {
           category: 1,
           "van_listing.title": 1,
           "van_listing.description": 1,
+          "van_listing.bathroomType": 1,
+          "van_listing.seating": 1,
           "van_listing.specifications.wheelbase": 1,
         },
       },
     ]);
 
-    // Response structure (Ab isme categories ka array bhi ja raha hai)
+    // Response structure
     res.json({
       success: true,
       total,
       page,
       pages: Math.ceil(total / limit),
-      categories: uniqueCategories, // Dynamic array e.g., ["144", "170", "148", "159", "Custom Builds"]
+      categories: uniqueCategories,
       data: vans,
     });
   } catch (err) {
