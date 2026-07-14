@@ -8,6 +8,7 @@ import { handleMediaUrlChange } from "@/CustomHooks/handleMediaUrlChange";
 import { handlePortfolioSubmit } from "@/CustomHooks/handlePortfolioSubmit"
 import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
+import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
 
 export default function PortfolioForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
@@ -23,6 +24,8 @@ export default function PortfolioForm({ setSelected }) {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [sold, setSold] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
+  const [blocks, setBlocks] = useState([]);
   const [makeModel, setMakeModel] = useState("");
   const [wheelbase, setWheelbase] = useState("");
   const [drivetrain, setDrivetrain] = useState("");
@@ -55,6 +58,8 @@ export default function PortfolioForm({ setSelected }) {
     setFeatures([{ category: "", items: [""] }]);
     setMediaUrls([""]);
     setCategory([]);
+    setIsPublished(false);
+    setBlocks([]);
     // ... your existing clear logic
     setRenderingFiles([]);
     setRenderingPreviews([]);
@@ -73,6 +78,7 @@ export default function PortfolioForm({ setSelected }) {
       setDescription(editData.van_listing?.description || "");
       setPrice(editData.van_listing?.price || "");
       setSold(editData.sold || false);
+      setIsPublished(editData.is_published ?? false);
 
       setMakeModel(editData.van_listing?.specifications?.make_model || "");
       setWheelbase(editData.van_listing?.specifications?.wheelbase || "");
@@ -95,6 +101,24 @@ export default function PortfolioForm({ setSelected }) {
       );
       setExistingGallery(editData.gallery || []);
       setExistingRendering(editData.rendering || []);
+
+      if (editData.blocks) {
+        const transformed = editData.blocks.map((block) => {
+          if (block.block_type === "list") {
+            return {
+              ...block,
+              list_items: (block.list_items || []).map((item) => ({
+                text: item?.text || "",
+                sub_items: item?.sub_items || [],
+              })),
+            };
+          }
+          return block;
+        });
+        setBlocks(transformed);
+      } else {
+        setBlocks([]);
+      }
     } else {
       clearForm();
     }
@@ -106,6 +130,52 @@ export default function PortfolioForm({ setSelected }) {
       });
     };
   }, [galleryPreviews]);
+  // Clean blocks — per-type cleanup then generic empty-field removal (mirrors VansForm)
+  const cleanBlocks = () =>
+    (blocks || [])
+      .map((block) => {
+        const b = JSON.parse(JSON.stringify(block)); // deep clone
+
+        if (b.block_type === "list") {
+          b.list_items = (b.list_items || [])
+            .map((item) => {
+              if (!item || typeof item !== "object") return null;
+              const mainText = item.text?.trim() || "";
+              if (!mainText) return null;
+              const sub = (item.sub_items || []).filter((s) => s && s.trim() !== "");
+              return { text: mainText, ...(sub.length > 0 && { sub_items: sub }) };
+            })
+            .filter(Boolean);
+          if (!b.list_items.length) delete b.list_items;
+        }
+
+        if (b.block_type === "media") {
+          b.block_media = (b.block_media || []).filter((m) => m?.url?.trim());
+          if (!b.block_media.length) delete b.block_media;
+        }
+
+        if (b.block_type === "feature-grid" || b.block_type === "stats") {
+          b.items = (b.items || []).filter((item) =>
+            Object.values(item).some((v) => v && String(v).trim())
+          );
+          if (!b.items.length) delete b.items;
+        }
+
+        if (b.button && !b.button.label?.trim() && !b.button.url?.trim()) {
+          delete b.button;
+        }
+
+        Object.keys(b).forEach((key) => {
+          const v = b[key];
+          if (v === null || v === undefined || v === "" || (Array.isArray(v) && v.length === 0)) {
+            delete b[key];
+          }
+        });
+
+        return b;
+      })
+      .filter((block) => Object.keys(block).length > 1);
+
   // Form Submit Handler
   const onSubmit = (e) => {
     // Hum handlePortfolioSubmit ko call kar rahe hain aur galleryOrder pass kar rahe hain
@@ -125,6 +195,8 @@ export default function PortfolioForm({ setSelected }) {
       features,
       mediaUrls,
       sold,
+      is_published: isPublished,
+      blocks: cleanBlocks(),
       van_listing: {
         title,
         subtitle,
@@ -297,6 +369,40 @@ export default function PortfolioForm({ setSelected }) {
               </label>
             </div>
           </div>
+
+          {/* Publish / Draft toggle */}
+          <div className="flex items-center justify-between p-4 border-2 rounded-lg border-gray-200 bg-gray-50 mt-4">
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                {isPublished ? "Published" : "Draft"}
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {isPublished
+                  ? "This project is live and visible to customers."
+                  : "This project is saved as a draft and not visible to customers."}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsPublished(!isPublished)}
+              className={`relative w-14 h-7 rounded-full transition-colors focus:outline-none ${
+                isPublished ? "bg-green-500" : "bg-gray-300"
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-all ${
+                  isPublished ? "left-8" : "left-1"
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* CONTENT BLOCKS (Dynamic) */}
+        <div className="border border-gray-300 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-1">Content Blocks (Dynamic)</h3>
+          <p className="text-sm text-gray-500 mb-6">Add dynamic sections like Headings, Tables, Paragraphs, or Lists.</p>
+          <DynamicBlocks blocks={blocks} setBlocks={setBlocks} />
         </div>
         <div className="border border-gray-300 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Category *</h3>

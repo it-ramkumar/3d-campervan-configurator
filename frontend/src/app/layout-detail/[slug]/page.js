@@ -47,13 +47,15 @@ export default async function Page({ params, searchParams }) {
   // ✅ Ab hum direct searchParams se query parameters read kar sakte hain bina hook ke
   const viewMode = resolvedSearchParams?.view || "photos";
 
-  const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`, {
-    next: { revalidate: 604800 }
-  }).then(res => res.json()).catch(() => null);
+  const vanDetail = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/${slug}`,
+    {
+    // next: { revalidate: 604800 }
+  }
+).then(res => res.json()).catch(() => null);
 
   if (!vanDetail?.data) return notFound();
 
-  console.log(vanDetail.data, "viewMode Server Side par read ho gaya!");
+  // console.log(vanDetail.data, "viewMode Server Side par read ho gaya!");
 
   // --- JSON-LD Structured Data ---
   const hasPrice = vanDetail?.data?.van_listing?.price && vanDetail?.data?.van_listing?.price > 10;

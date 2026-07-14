@@ -19,7 +19,9 @@ router.post(
       const van_listing = JSON.parse(req.body.van_listing || "{}");
       const detailed_features = JSON.parse(req.body.detailed_features || "[]");
       const media = JSON.parse(req.body.media || "[]");
+      const blocks = JSON.parse(req.body.blocks || "[]");
       const sold = req.body.sold === "true";
+      const is_published = req.body.is_published === "true";
 
       if (!van_listing || !van_listing.title) {
         return res.status(400).json({
@@ -86,6 +88,8 @@ router.post(
           } : undefined,
         },
         sold,
+        is_published,
+        blocks,
         category,
         gallery,
         rendering,
@@ -382,7 +386,11 @@ router.put(
       const van_listing = JSON.parse(req.body.van_listing || JSON.stringify(portfolio.van_listing));
       const detailed_features = JSON.parse(req.body.detailed_features || JSON.stringify(portfolio.detailed_features));
       const media = JSON.parse(req.body.media || JSON.stringify(portfolio.media));
+      const blocks = req.body.blocks !== undefined ? JSON.parse(req.body.blocks) : portfolio.blocks;
       const sold = req.body.sold !== undefined ? req.body.sold === "true" : portfolio.sold;
+      const is_published = req.body.is_published !== undefined
+        ? req.body.is_published === "true"
+        : portfolio.is_published;
 
       // 🆕 Parse Category Field (Agar frontend se aayi hai toh parse karein, warna puraani rakhein)
       const category = req.body.category ? JSON.parse(req.body.category) : portfolio.category;
@@ -431,6 +439,8 @@ router.put(
       portfolio.gallery = updatedGallery;
       portfolio.rendering = updatedRendering;
       portfolio.sold = sold;
+      portfolio.is_published = is_published;
+      portfolio.blocks = blocks;
       portfolio.detailed_features = detailed_features;
       portfolio.media = media;
 
@@ -466,10 +476,15 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
       });
     }
 
-    // 2️⃣ Combine all images to delete (Gallery + Renderings)
+    // 2️⃣ Combine all images to delete (Gallery + Renderings + Block media)
+    const blockMediaUrls = (portfolio.blocks || [])
+      .flatMap(block => (block.block_media || []).map(m => m.url))
+      .filter(Boolean);
+
     const allImages = [
       ...(portfolio.gallery || []),
-      ...(portfolio.rendering || []) // 🆕 Added renderings
+      ...(portfolio.rendering || []), // 🆕 Added renderings
+      ...blockMediaUrls
     ];
 
     // 3️⃣ Delete all collected images from S3
@@ -497,7 +512,7 @@ router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
 
-    if (!portfolio) {
+    if (!portfolio || !portfolio.is_published) {
       return res.status(404).json({
         success: false,
         message: "Portfolio not found"

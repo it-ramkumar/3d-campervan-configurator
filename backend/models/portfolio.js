@@ -1,5 +1,115 @@
 const mongoose = require('mongoose');
 
+/* -------------------------------------------------------------------------- */
+/* Content Block Schema (mirrors backend/models/vanModel.js)                 */
+/* -------------------------------------------------------------------------- */
+
+const BLOCK_TYPES = [
+  "heading",
+  "subheading",
+  "paragraph",
+  "list",
+  "table",
+  "media",
+  "feature-grid",
+  "stats",
+  "quote",
+  "cta"
+];
+
+const BLOCK_LAYOUTS = ["left", "right", "center", "full", "grid"];
+
+const MEDIA_TYPES = ["image", "video", "pdf", "iframe"];
+
+const contentBlockSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      default: () => new mongoose.Types.ObjectId().toString()
+    },
+    order: {
+      type: Number,
+      default: 0
+    },
+    is_active: {
+      type: Boolean,
+      default: true
+    },
+    block_type: {
+      type: String,
+      enum: BLOCK_TYPES,
+      required: true
+    },
+    layout: {
+      type: String,
+      enum: BLOCK_LAYOUTS,
+      default: undefined
+    },
+    title: { type: String, trim: true, default: undefined },
+    subtitle: { type: String, trim: true, default: undefined },
+    content: { type: String, trim: true, default: undefined },
+
+    block_media: {
+      type: [
+        {
+          type: {
+            type: String,
+            enum: MEDIA_TYPES,
+            required: true
+          },
+          url: { type: String, required: true },
+          thumbnail: { type: String, trim: true },
+          alt: { type: String, trim: true },
+          caption: { type: String, trim: true }
+        }
+      ],
+      default: undefined
+    },
+
+    items: {
+      type: [
+        {
+          title: { type: String, trim: true },
+          description: { type: String, trim: true },
+          value: { type: String, trim: true },
+          icon: { type: String, trim: true },
+          media: { type: String, trim: true }
+        }
+      ],
+      default: undefined
+    },
+
+    button: {
+      label: { type: String, default: undefined },
+      url: { type: String, default: undefined },
+      target: {
+        type: String,
+        enum: ["self", "blank"],
+        default: undefined
+      }
+    },
+
+    list_items: {
+      type: [
+        {
+          text: { type: String, trim: true },
+          sub_items: [{ type: String, trim: true }]
+        }
+      ],
+      default: undefined
+    },
+
+    table_data: {
+      type: {
+        headers: [String],
+        rows: [[String]]
+      },
+      default: undefined
+    }
+  },
+  { _id: false }
+);
+
 // Capacity Sub-Schema
 const capacitySchema = new mongoose.Schema({
   sits: {
@@ -97,6 +207,12 @@ const portfolioVanSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  is_published: {
+    type: Boolean,
+    default: true // existing portfolio items were always public before this field existed
+  },
+
+  blocks: { type: [contentBlockSchema], default: [] },
 
   category: [{
     type: String,
@@ -145,6 +261,7 @@ portfolioVanSchema.virtual('formatted_price').get(function () {
 
 // Indexes
 portfolioVanSchema.index({ sold: 1 });
+portfolioVanSchema.index({ is_published: 1 });
 portfolioVanSchema.index({ category: 1 });
 portfolioVanSchema.index({ 'van_listing.title': 'text', 'van_listing.description': 'text' });
 

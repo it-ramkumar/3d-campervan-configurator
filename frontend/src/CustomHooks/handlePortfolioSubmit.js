@@ -16,6 +16,8 @@ export const handlePortfolioSubmit = async ({
   features,
   mediaUrls,
   sold,
+  is_published,
+  blocks,
   van_listing,
   setLoading,
   setRemovedExistingGallery,
@@ -73,6 +75,8 @@ export const handlePortfolioSubmit = async ({
     // --- OTHER FIELDS ---
     formDataToSend.append("van_listing", JSON.stringify(van_listing));
     formDataToSend.append("sold", sold.toString());
+    formDataToSend.append("is_published", String(!!is_published));
+    formDataToSend.append("blocks", JSON.stringify(blocks || []));
     formDataToSend.append("category", JSON.stringify(category));
 
     // Detailed features cleanup
