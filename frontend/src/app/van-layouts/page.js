@@ -135,6 +135,7 @@ export default async function LayoutsPage({ searchParams }) {
   const res = await getAllPortfolio({
     ...cleanParams,
     limit: 12,
+    is_published: true,
   });
 
   const initialData = res?.success

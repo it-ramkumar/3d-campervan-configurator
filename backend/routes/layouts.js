@@ -123,7 +123,8 @@ router.get("/", async (req, res) => {
       sit,
       sleep,
       bedType,
-      bathroomType
+      bathroomType,
+      is_published
     } = req.query;
 
     const pageNum = Number(page);
@@ -162,6 +163,8 @@ router.get("/", async (req, res) => {
     }
 
     if (sold !== undefined) filter.sold = sold === "true";
+
+    if (is_published !== undefined) filter.is_published = is_published === "true";
 
     // Search Configuration
     if (search && search.trim() !== "") {
