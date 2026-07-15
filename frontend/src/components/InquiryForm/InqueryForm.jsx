@@ -179,22 +179,21 @@ export default function InquiryForm() {
     if (isLoading) return;
     setIsLoading(true);
 
-    const contactGroup = formQuestions[formQuestions.length - 1];
-
     if (!formData.name?.trim()) {
       setValidationMessage("⚠️ Please enter your name to continue.");
       setIsLoading(false);
       return;
     }
 
-    const hasContactInfo = contactGroup.questions
-      .filter((q) => q.id !== "name")
-      .some((q) => formData[q.id]);
+    const email = formData.email?.trim();
+    if (!email) {
+      setValidationMessage("⚠️ Please provide your e-mail address.");
+      setIsLoading(false);
+      return;
+    }
 
-    if (!hasContactInfo) {
-      setValidationMessage(
-        "⚠️ Please provide contact details so we can reach you.",
-      );
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setValidationMessage("⚠️ Please enter a valid e-mail address.");
       setIsLoading(false);
       return;
     }

@@ -162,9 +162,10 @@ export const formQuestions = [
       },
       {
         id: "email",
-        question: "OR leave your e-mail address below",
+        question: "Please leave your e-mail address below",
         type: "email",
         placeholder: "Email Address",
+        required: true,
       },
     ],
   },
