@@ -511,6 +511,26 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
     res.status(500).json({ success: false, message: "Delete failed" });
   }
 });
+router.get("/preview/:slug", async (req, res) => {
+  try {
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+
+    if (!portfolio) {
+      return res.status(404).json({
+        success: false,
+        message: "Portfolio not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      data: portfolio
+    });
+  } catch (err) {
+    console.error("Error fetching portfolio preview:", err);
+    res.status(500).json({ success: false, message: "Fetch failed" });
+  }
+});
 router.get("/:slug", async (req, res) => {
   try {
     const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
