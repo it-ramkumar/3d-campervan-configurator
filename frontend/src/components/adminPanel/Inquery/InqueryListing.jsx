@@ -76,6 +76,7 @@ export default function InqueryListing() {
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
       data = data.filter(inq =>
+        inq.name?.toLowerCase().includes(lower) ||
         inq.email?.toLowerCase().includes(lower) ||
         inq.phone?.includes(lower) ||
         inq.message?.toLowerCase().includes(lower)
@@ -154,6 +155,7 @@ export default function InqueryListing() {
           <table className="w-full text-left border-collapse">
             <thead className="bg-[#f8fafc] border-b border-slate-100">
               <tr>
+                <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400">Name</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400">Contact Info</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400">Message Preview</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400">Status</th>
@@ -163,6 +165,9 @@ export default function InqueryListing() {
             <tbody className="divide-y divide-slate-50">
               {filtered.map((inq) => (
                 <tr key={inq._id} className="group hover:bg-blue-50/30 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-bold text-slate-800">{inq.name || "—"}</div>
+                  </td>
                   <td className="px-6 py-4">
                     <div className="text-sm font-bold text-slate-800">{inq.email || "—"}</div>
                     <div className="text-[11px] text-slate-400 font-medium">{inq.phone || "No Phone"}</div>

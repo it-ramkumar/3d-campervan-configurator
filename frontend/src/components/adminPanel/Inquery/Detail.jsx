@@ -34,7 +34,7 @@ export default function InquiryDetailModal({ inquiry, onClose, onUpdateStatus })
 <div className="px-8 py-5 border-b border-slate-200 flex justify-between items-center bg-white">
   <div>
     <div className="flex items-center gap-3 mb-1">
-      <h2 className="text-xl font-black text-slate-800 tracking-tight">Van Build Inquiry</h2>
+      <h2 className="text-xl font-black text-slate-800 tracking-tight">{inquiry.name || "Van Build Inquiry"}</h2>
       <span className={`px-3 py-0.5 rounded-full text-[10px] font-black uppercase border ${statusConfig[inquiry.status]}`}>
         {inquiry.status}
       </span>

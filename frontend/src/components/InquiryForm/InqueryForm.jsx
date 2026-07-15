@@ -180,7 +180,16 @@ export default function InquiryForm() {
     setIsLoading(true);
 
     const contactGroup = formQuestions[formQuestions.length - 1];
-    const hasContactInfo = contactGroup.questions.some((q) => formData[q.id]);
+
+    if (!formData.name?.trim()) {
+      setValidationMessage("⚠️ Please enter your name to continue.");
+      setIsLoading(false);
+      return;
+    }
+
+    const hasContactInfo = contactGroup.questions
+      .filter((q) => q.id !== "name")
+      .some((q) => formData[q.id]);
 
     if (!hasContactInfo) {
       setValidationMessage(

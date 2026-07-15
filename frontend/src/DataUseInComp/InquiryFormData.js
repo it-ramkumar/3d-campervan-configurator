@@ -148,6 +148,13 @@ export const formQuestions = [
 
     questions: [
       {
+        id: "name",
+        question: "Please leave your name below",
+        type: "text",
+        placeholder: "Full Name",
+        required: true,
+      },
+      {
         id: "phone",
         question: "Please leave your phone number below (OPTIONAL)",
         type: "text",

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const InquerySchema = new mongoose.Schema(
   {
+    name: { type: String, required: true },
     plans: { type: [String], required: true },
     people: { type: String, required: true },
     vanSize: { type: [String], required: true },
