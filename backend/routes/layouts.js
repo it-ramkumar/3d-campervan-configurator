@@ -267,7 +267,7 @@ router.get("/titles-only", async (req, res) => {
       PortfolioVan.distinct("van_listing.specifications.capacity.sits")
     ]);
 
-    const filter = {};
+    const filter = { is_published: true };
 
     // Text Search Filter
     if (search && search.trim() !== "") {

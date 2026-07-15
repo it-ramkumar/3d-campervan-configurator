@@ -188,6 +188,9 @@ export default function PortfolioListing({ setSelected }) {
                   <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
                     {portfolio.van_listing?.subtitle || "No subtitle provided."}
                   </p>
+                  <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
+                    {portfolio.is_published === true ? "Published" : "Unpublished"}
+                  </p>
                 </div>
 
                 {/* Buttons (Lite Styling) */}
