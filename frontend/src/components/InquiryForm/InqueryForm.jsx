@@ -245,7 +245,7 @@ const payload = {
         <div className="max-w-6xl w-full mx-auto">
           <div className="text-center mb-16">
             <p className="!text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">
-              Configurator
+              Configurator.
             </p>
             <Heading1 text="Build Your Dream Van" className="!text-primary" />
             <div className="w-24 h-1 bg-hover mx-auto mt-6 rounded-full" />
