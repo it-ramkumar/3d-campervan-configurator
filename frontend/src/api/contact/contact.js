@@ -4,7 +4,7 @@ export const contact = async (formData) => {
   try {
     const tracking =
       typeof window !== "undefined"
-        ? JSON.parse(localStorage.getItem("tracking")) || {}
+        ? JSON.parse(sessionStorage.getItem("tracking")) || {}
         : {};
 
     const payload = { ...formData, ...tracking };

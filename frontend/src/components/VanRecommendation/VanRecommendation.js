@@ -64,10 +64,15 @@ export default function VanRecommendation() {
         setLoading(true);
         setError('');
         try {
+            const tracking =
+                typeof window !== 'undefined'
+                    ? JSON.parse(sessionStorage.getItem('tracking')) || {}
+                    : {};
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/recommend`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, ...tracking }),
             });
             const data = await response.json();
             if (data.success) {

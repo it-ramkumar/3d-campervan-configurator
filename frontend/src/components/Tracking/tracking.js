@@ -17,5 +17,5 @@ export const saveTrackingData = () => {
     landing_page: window.location.href,
   };
 
-  localStorage.setItem("tracking", JSON.stringify(tracking));
+  sessionStorage.setItem("tracking", JSON.stringify(tracking));
 };

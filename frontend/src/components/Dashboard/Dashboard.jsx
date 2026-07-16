@@ -15,6 +15,7 @@ import ConfiguratorForm from "../adminPanel/Configurator/ConfiguratorForm";
 import UsersData from "../adminPanel/Users/User";
 import InqueryListing from "../adminPanel/Inquery/InqueryListing";
 import ContactListing from "../adminPanel/Contact/ContactListing";
+import MatchmakerListing from "../adminPanel/Matchmaker/MatchmakerListing";
 import InteriorForm from "../adminPanel/InteriorChoices/InteriorForm";
 import InteriorList from "../adminPanel/InteriorChoices/InteriorListing";
 import ExteriorList from "../adminPanel/ExteriorChoice/ExteriorListing";
@@ -86,6 +87,12 @@ export default function Dashboard() {
       label: "Client Contact",
       desc: "Manage contact form submissions.",
       icon: "📞"
+    },
+    {
+      id: "Matchmaker-data",
+      label: "Matchmaker Leads",
+      desc: "View quiz submissions and matched builds.",
+      icon: "🧭"
     },
     {
       id: "career",
@@ -169,6 +176,7 @@ export default function Dashboard() {
       case "Configurator-data": return <ConfiguratorListing setSelected={setSelected} />;
       case "Inquiry-data": return <InqueryListing setSelected={setSelected} />;
       case "Contact-data": return <ContactListing setSelected={setSelected} />;
+      case "Matchmaker-data": return <MatchmakerListing setSelected={setSelected} />;
       case "Users": return <UsersData setSelected={setSelected} />;
       case "interior-choices": return <InteriorList setSelected={setSelected} />;
       case "interior-form": return <InteriorForm setSelected={setSelected} />;

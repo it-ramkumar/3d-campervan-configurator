@@ -198,7 +198,7 @@ export default function InquiryForm() {
       return;
     }
 const tracking =
-  JSON.parse(localStorage.getItem("tracking")) || {};
+  JSON.parse(sessionStorage.getItem("tracking")) || {};
 
 const payload = {
   ...formData,
