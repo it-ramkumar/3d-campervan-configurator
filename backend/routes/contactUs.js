@@ -29,6 +29,34 @@ router.post("/", async (req, res) => {
 const vanUrl = vanSlug
   ? `${process.env.FRONTEND_URL.replace(/\/$/, "")}/layout-detail/${vanSlug}`
   : null;
+
+    // ==========================
+    // Lead Tracking Detection
+    // ==========================
+
+    let leadSource = "Direct";
+
+    if (req.body.gclid) {
+      leadSource = "Google Ads";
+    }
+    else if (
+      req.body.utm_source === "google" &&
+      req.body.utm_medium === "cpc"
+    ) {
+      leadSource = "Google Ads";
+    }
+    else if (
+      req.body.utm_source === "google"
+    ) {
+      leadSource = "Organic Search";
+    }
+    else if (
+      req.body.referrer &&
+      req.body.referrer.includes("google")
+    ) {
+      leadSource = "Organic Search";
+    }
+
     // Save contact
     const newContact = new Contact({
       name,
@@ -38,6 +66,15 @@ const vanUrl = vanSlug
       vanSlug:vanUrl || null,
       vanTitle: vanTitle || null,
       vanPrice: vanPrice || null,
+      leadSource,
+      gclid: req.body.gclid || null,
+      utm_source: req.body.utm_source || null,
+      utm_medium: req.body.utm_medium || null,
+      utm_campaign: req.body.utm_campaign || null,
+      utm_term: req.body.utm_term || null,
+      utm_content: req.body.utm_content || null,
+      referrer: req.body.referrer || null,
+      landing_page: req.body.landing_page || null,
     });
 
     await newContact.save();
@@ -117,6 +154,18 @@ const adminHtml = `
       `
           : ""
       }
+
+      <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
+        <p style="margin:5px 0;"><strong>Lead Source:</strong> ${leadSource}</p>
+        <p style="margin:5px 0;"><strong>Gclid:</strong> ${req.body.gclid || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>UTM Source:</strong> ${req.body.utm_source || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>UTM Medium:</strong> ${req.body.utm_medium || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>UTM Campaign:</strong> ${req.body.utm_campaign || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>UTM Term:</strong> ${req.body.utm_term || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>UTM Content:</strong> ${req.body.utm_content || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>Referrer:</strong> ${req.body.referrer || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>Landing Page:</strong> ${req.body.landing_page || "N/A"}</p>
+      </div>
 
       <div style="margin-top:20px;text-align:center;">
         <a href="https://www.bigbearvans.com/dashboard"

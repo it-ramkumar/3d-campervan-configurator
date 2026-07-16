@@ -52,6 +52,54 @@ const contactSchema = new mongoose.Schema(
       default: null,
     },
 
+    // ==========================
+    // Marketing / Tracking Data
+    // ==========================
+    leadSource: {
+      type: String,
+      default: "Direct",
+    },
+
+    gclid: {
+      type: String,
+      default: null,
+    },
+
+    utm_source: {
+      type: String,
+      default: null,
+    },
+
+    utm_medium: {
+      type: String,
+      default: null,
+    },
+
+    utm_campaign: {
+      type: String,
+      default: null,
+    },
+
+    utm_term: {
+      type: String,
+      default: null,
+    },
+
+    utm_content: {
+      type: String,
+      default: null,
+    },
+
+    referrer: {
+      type: String,
+      default: null,
+    },
+
+    landing_page: {
+      type: String,
+      default: null,
+    },
+
     // Lead Status
     status: {
       type: String,

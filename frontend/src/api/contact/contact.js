@@ -2,8 +2,14 @@ import axios from "axios"
 import Swal from "sweetalert2";
 export const contact = async (formData) => {
   try {
+    const tracking =
+      typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("tracking")) || {}
+        : {};
 
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/contact`, formData, {
+    const payload = { ...formData, ...tracking };
+
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/contact`, payload, {
       withCredentials: true,
     })
         // Swal.fire({

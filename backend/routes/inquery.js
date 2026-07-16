@@ -78,8 +78,10 @@ router.post("/", async (req, res) => {
     // Email Table Data
     // ==========================
 
+    const { leadSource: _leadSourceRaw, ...emailFields } = req.body;
+
     const emailData = {
-      ...req.body,
+      ...emailFields,
       "Lead Source": leadSource,
     };
 
