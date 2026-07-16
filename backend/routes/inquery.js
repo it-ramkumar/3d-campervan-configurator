@@ -10,122 +10,360 @@ const Lead = require("../models/leadsEmail");
 
 router.post("/", async (req, res) => {
   try {
-    // 1️⃣ Save form data to database
+
+    // ==========================
+    // Lead Tracking Detection
+    // ==========================
+
+    let leadSource = "Direct";
+
+    if (req.body.gclid) {
+      leadSource = "Google Ads";
+    }
+    else if (
+      req.body.utm_source === "google" &&
+      req.body.utm_medium === "cpc"
+    ) {
+      leadSource = "Google Ads";
+    }
+    else if (
+      req.body.utm_source === "google"
+    ) {
+      leadSource = "Organic Search";
+    }
+    else if (
+      req.body.referrer &&
+      req.body.referrer.includes("google")
+    ) {
+      leadSource = "Organic Search";
+    }
+
+
+    // ==========================
+    // Add Tracking Data
+    // ==========================
+
+    req.body.leadSource = leadSource;
+
+    req.body.gclid = req.body.gclid || null;
+    req.body.utm_source = req.body.utm_source || null;
+    req.body.utm_medium = req.body.utm_medium || null;
+    req.body.utm_campaign = req.body.utm_campaign || null;
+    req.body.utm_term = req.body.utm_term || null;
+    req.body.utm_content = req.body.utm_content || null;
+    req.body.referrer = req.body.referrer || null;
+    req.body.landing_page = req.body.landing_page || null;
+
+
+    // ==========================
+    // Save Inquiry
+    // ==========================
+
     const newForm = new Inquery(req.body);
     await newForm.save();
 
-    // Setup basic variables for email mapping
+
+    // ==========================
+    // Basic Email Variables
+    // ==========================
+
     const clientName = req.body.name || "Customer";
     const clientEmail = req.body.email;
-    const clientPhone = req.body.phone || "N/A";
-    const brandLogo = "https://www.bigbearvans.com/images/blackLogo.webp";
 
-    // 2️⃣ Prepare HTML table rows dynamically (excluding sensitive or internal keys if any)
-    const tableRows = Object.entries(req.body)
+    const brandLogo =
+      "https://www.bigbearvans.com/images/blackLogo.webp";
+
+
+    // ==========================
+    // Email Table Data
+    // ==========================
+
+    const emailData = {
+      ...req.body,
+      "Lead Source": leadSource,
+    };
+
+
+    const tableRows = Object.entries(emailData)
       .map(
         ([key, value]) => `
-        <tr style="border-bottom: 1px solid #eee;">
-          <td style="padding: 10px; font-weight: bold; text-transform: capitalize; color: #001F3D; width: 30%; font-size: 14px;">${key}:</td>
-          <td style="padding: 10px; color: #555; font-size: 14px;">${value}</td>
+        <tr style="border-bottom:1px solid #eee;">
+          <td style="
+            padding:10px;
+            font-weight:bold;
+            text-transform:capitalize;
+            color:#001F3D;
+            width:30%;
+            font-size:14px;
+          ">
+            ${key.replace(/_/g, " ")}:
+          </td>
+
+          <td style="
+            padding:10px;
+            color:#555;
+            font-size:14px;
+          ">
+            ${Array.isArray(value)
+            ? value.join(", ")
+            : value || "N/A"
+          }
+          </td>
         </tr>
       `
       )
       .join("");
 
-    // 3️⃣ Beautiful Admin Notification HTML (Matching Big Bear Vans Identity)
+
+    // ==========================
+    // Admin Email
+    // ==========================
+
     const adminHtmlTable = `
-      <div style="font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px;">
-        <div style="max-width: 600px; margin: auto; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #eee;">
-          <div style="background: #001F3D; padding: 15px; text-align: center;">
-            <h2 style="color: #fff; margin: 0; font-size: 18px;">
+      <div style="
+        font-family:Arial,sans-serif;
+        background:#f4f6f8;
+        padding:20px;
+      ">
+
+        <div style="
+          max-width:600px;
+          margin:auto;
+          background:#fff;
+          border-radius:10px;
+          overflow:hidden;
+          border:1px solid #eee;
+        ">
+
+          <div style="
+            background:#001F3D;
+            padding:15px;
+            text-align:center;
+          ">
+            <h2 style="
+              color:#fff;
+              margin:0;
+              font-size:18px;
+            ">
               [Inquiry Form] New Lead Received
             </h2>
           </div>
-          <div style="padding: 20px;">
-            <p style="margin: 0 0 15px 0; color: #333; font-size: 15px;">
-              You have received a new general inquiry from the website. Here are the details:
+
+
+          <div style="padding:20px;">
+
+            <p style="
+              color:#333;
+              font-size:15px;
+            ">
+              You have received a new inquiry from the website.
+              Here are the details:
             </p>
 
-            <table style="width: 100%; border-collapse: collapse; background: #fff; margin-top: 10px;">
+
+            <table style="
+              width:100%;
+              border-collapse:collapse;
+            ">
               <tbody>
                 ${tableRows}
               </tbody>
             </table>
 
-            <div style="margin-top: 25px; text-align: center;">
+
+            <div style="
+              margin-top:25px;
+              text-align:center;
+            ">
               <a href="https://www.bigbearvans.com/dashboard"
-                style="background: #ED985F; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                style="
+                  background:#ED985F;
+                  color:#fff;
+                  padding:12px 20px;
+                  text-decoration:none;
+                  border-radius:6px;
+                  font-weight:bold;
+                ">
                 Open Admin Panel
               </a>
             </div>
-            <p style="color: #888; font-size: 12px; margin-top: 20px; text-align: center;">
-              This message was generated automatically by your website at ${new Date().toLocaleString()}.
-            </p>
-          </div>
-        </div>
-      </div>
-    `;
 
-    // 4️⃣ Beautiful User Confirmation Email HTML (Matches Perfectly)
+
+            <p style="
+              color:#888;
+              font-size:12px;
+              text-align:center;
+              margin-top:20px;
+            ">
+              Generated automatically at
+              ${new Date().toLocaleString()}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;    // ==========================
+    // User Confirmation Email
+    // ==========================
+
     const userHtml = `
-      <div style="margin: 0; padding: 0; background: #f4f6f8; font-family: Arial, sans-serif;">
-        <div style="max-width: 620px; margin: auto; background: #ffffff; border-radius: 10px; overflow: hidden; margin-top: 20px; margin-bottom: 20px;">
-          <div style="text-align: center; padding: 30px 20px; background: #001F3D;">
-            <img src="${brandLogo}" width="140" style="margin-bottom: 10px;" />
-            <p style="color: #ED985F; margin: 0; font-weight: 600; letter-spacing: 1px; font-size: 13px;">
+      <div style="
+        margin:0;
+        padding:0;
+        background:#f4f6f8;
+        font-family:Arial,sans-serif;
+      ">
+
+        <div style="
+          max-width:620px;
+          margin:auto;
+          background:#ffffff;
+          border-radius:10px;
+          overflow:hidden;
+          margin-top:20px;
+        ">
+
+          <div style="
+            text-align:center;
+            padding:30px 20px;
+            background:#001F3D;
+          ">
+
+            <img
+              src="${brandLogo}"
+              width="140"
+              style="margin-bottom:10px;"
+            />
+
+            <p style="
+              color:#ED985F;
+              margin:0;
+              font-weight:600;
+              letter-spacing:1px;
+              font-size:13px;
+            ">
               YOU DREAM IT, WE BUILD IT
             </p>
+
           </div>
 
-          <div style="padding: 25px;">
-            <h2 style="color: #001F3D; margin-top: 0; font-size: 22px;">
+
+          <div style="padding:25px;">
+
+            <h2 style="
+              color:#001F3D;
+              margin-top:0;
+              font-size:22px;
+            ">
               Thanks for reaching out, ${clientName}!
             </h2>
-            <p style="color: #555; line-height: 1.6; font-size: 15px;">
-              We’ve successfully received your inquiry. Our specialized team is reviewing your message and will connect with you shortly to discuss how we can build your dream van exactly the way you imagine it.
+
+
+            <p style="
+              color:#555;
+              line-height:1.6;
+              font-size:15px;
+            ">
+              We’ve successfully received your inquiry.
+              Our specialized team is reviewing your message
+              and will connect with you shortly.
             </p>
 
-            <div style="margin-top: 25px; padding: 16px; border-radius: 12px; background: #f9fafb; border: 1px solid #eee;">
-              <h3 style="margin: 0 0 12px 0; color: #001F3D; font-size: 16px;">Inquiry Submission Summary</h3>
-              <table style="width: 100%; border-collapse: collapse;">
+
+            <div style="
+              margin-top:25px;
+              padding:16px;
+              border-radius:12px;
+              background:#f9fafb;
+              border:1px solid #eee;
+            ">
+
+              <h3 style="
+                color:#001F3D;
+                font-size:16px;
+              ">
+                Inquiry Submission Summary
+              </h3>
+
+
+              <table style="
+                width:100%;
+                border-collapse:collapse;
+              ">
                 <tbody>
                   ${tableRows}
                 </tbody>
               </table>
+
             </div>
 
-            <div style="text-align: center; margin-top: 25px;">
+
+            <div style="
+              text-align:center;
+              margin-top:25px;
+            ">
+
               <a href="https://www.bigbearvans.com"
                 style="
-                  display: inline-block;
-                  padding: 14px 24px;
-                  background: #001F3D;
-                  color: #fff;
-                  text-decoration: none;
-                  border-radius: 8px;
-                  font-weight: 700;
-                  font-size: 15px;
+                  display:inline-block;
+                  padding:14px 24px;
+                  background:#001F3D;
+                  color:#fff;
+                  text-decoration:none;
+                  border-radius:8px;
+                  font-weight:700;
                 ">
                 Visit Our Website
               </a>
+
             </div>
+
           </div>
 
-          <div style="text-align: center; padding: 20px; font-size: 12px; color: #888; background: #f9fafb; border-top: 1px solid #eee;">
+
+          <div style="
+            text-align:center;
+            padding:20px;
+            font-size:12px;
+            color:#888;
+            background:#f9fafb;
+          ">
             © ${new Date().getFullYear()} Big Bear Vans — All Rights Reserved
           </div>
+
         </div>
+
       </div>
     `;
 
-    // 5️⃣ Get all sub-admin emails from Lead collection
+
+
+    // ==========================
+    // Get Admin Emails
+    // ==========================
+
     const leads = await Lead.find({}, { email: 1, _id: 0 });
-    const leadEmails = leads.map(l => l.email).filter(Boolean);
 
-    // 6️⃣ Prepare all admin recipients (primary + sub-admins) & remove duplicates
-    const allAdminEmails = [...new Set([process.env.GMAIL_USER, ...leadEmails])];
+    const leadEmails = leads
+      .map(l => l.email)
+      .filter(Boolean);
 
-    // 7️⃣ Create transporter using Gmail SMTP
+
+    const allAdminEmails = [
+      ...new Set([
+        process.env.GMAIL_USER,
+        ...leadEmails
+      ])
+    ];
+
+
+
+    // ==========================
+    // Gmail Transporter
+    // ==========================
+
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -136,43 +374,82 @@ router.post("/", async (req, res) => {
       },
     });
 
-    // 8️⃣ Send email to all admins
+
+
+    // ==========================
+    // Send Admin Email
+    // ==========================
+
     await transporter.sendMail({
       from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
       to: allAdminEmails,
       subject: `[Inquiry Form] New Lead from ${clientName}`,
       html: adminHtmlTable,
     });
-    // console.log("Admin email sent to:", allAdminEmails);
 
-    // 9️⃣ Send confirmation email to user
+
+
+    // ==========================
+    // Send User Confirmation
+    // ==========================
+
     if (clientEmail) {
+
       await transporter.sendMail({
         from: `"Big Bear Vans" <${process.env.GMAIL_USER}>`,
         to: clientEmail,
         subject: "Thank You for Your Inquiry - Big Bear Vans",
         html: userHtml,
       });
-      console.log("User confirmation sent to:", clientEmail);
+
+
+      console.log(
+        "User confirmation sent:",
+        clientEmail
+      );
     }
 
-    // 🔟 Send response
+
+
+    // ==========================
+    // Response
+    // ==========================
+
     res.status(201).json({
+
       success: true,
-      message: "Inquiry saved, admin(s) notified, and user confirmation sent.",
+
+      message:
+        "Inquiry saved, admin(s) notified, and user confirmation sent.",
+
       data: newForm,
+
     });
 
+
+
   } catch (error) {
-    console.error("Error saving inquiry or sending emails:", error);
-    res.status(500).json({ success: false, error: error.message });
+
+    console.error(
+      "Error saving inquiry or sending emails:",
+      error
+    );
+
+
+    res.status(500).json({
+
+      success: false,
+
+      error: error.message,
+
+    });
+
   }
 });
 
 
-
 // 🟢 GET ALL INQUIRIES (for dashboard)
-router.get("/",  async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const leads = await Inquery.find().sort({ createdAt: -1 }); // newest first
     res.status(200).json({ success: true, data: leads });

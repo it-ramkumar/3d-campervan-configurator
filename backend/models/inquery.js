@@ -18,7 +18,55 @@ const InquerySchema = new mongoose.Schema(
     phone: { type: String },
     email: { type: String },
 
-    // ✅ Added new field
+    // ==========================
+    // Marketing / Tracking Data
+    // ==========================
+    leadSource: {
+      type: String,
+      default: "Direct",
+    },
+
+    gclid: {
+      type: String,
+      default: null,
+    },
+
+    utm_source: {
+      type: String,
+      default: null,
+    },
+
+    utm_medium: {
+      type: String,
+      default: null,
+    },
+
+    utm_campaign: {
+      type: String,
+      default: null,
+    },
+
+    utm_term: {
+      type: String,
+      default: null,
+    },
+
+    utm_content: {
+      type: String,
+      default: null,
+    },
+
+    referrer: {
+      type: String,
+      default: null,
+    },
+
+    landing_page: {
+      type: String,
+      default: null,
+    },
+
+    // Inquiry Status
     status: {
       type: String,
       enum: ["New", "Contacted", "In Progress", "Closed"],

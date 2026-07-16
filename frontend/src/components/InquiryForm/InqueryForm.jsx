@@ -197,9 +197,16 @@ export default function InquiryForm() {
       setIsLoading(false);
       return;
     }
+const tracking =
+  JSON.parse(localStorage.getItem("tracking")) || {};
+
+const payload = {
+  ...formData,
+  ...tracking,
+};
 
     try {
-      const result = await submitInquiry(formData);
+      const result = await submitInquiry(payload);
       if (result.success) {
 
         setFormData({});
