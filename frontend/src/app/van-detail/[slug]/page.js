@@ -41,7 +41,7 @@ export default async function Page({ params }) {
 
  const vanDetail = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/van/${slug}`,
-    { cache: "no-store" }
+    // { cache: "no-store" }
   ).then(res => res.json()).catch(() => null);
 
 
@@ -49,7 +49,7 @@ export default async function Page({ params }) {
 
     const variantsData = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/variants?vanSlug=${slug}`,
-    { cache: "no-store" }
+    // { cache: "no-store" }
   ).then(res => res.json()).catch(() => null);
 
   // console.log(vanDetail.van, "detail page ")

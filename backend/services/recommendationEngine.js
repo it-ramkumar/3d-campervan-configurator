@@ -161,9 +161,13 @@ async function getRecommendation(userInput) {
   const [inventoryVans, portfolioVans] = await Promise.all([
     Van.find({
       status: { $in: ['available', 'coming_soon'] },
+      is_published: true,
       ...capacityFilter(userInput.passengers)
     }),
-    PortfolioVan.find(capacityFilter(userInput.passengers))
+    PortfolioVan.find({
+      is_published: true,
+      ...capacityFilter(userInput.passengers)
+    })
   ]);
 
   let normInventory = inventoryVans.map(v => normalizeVanAsset(v, 'inventory'));
