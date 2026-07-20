@@ -26,12 +26,8 @@ export async function availableVans() {
     console.error("Error fetching available vans:", err);
 
     if (typeof window !== "undefined") {
-      const Swal = (await import("sweetalert2")).default;
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.message || "Failed to fetch available vans",
-      });
+      const toast = (await import("react-hot-toast")).default;
+      toast.error(err.message || "Failed to fetch available vans");
     }
 
     return {

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Email = require("../models/leadsEmail");
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-// POST — Save Email
-router.post("/emails", async (req, res) => {
+// POST — Save Email (admin-only: manually add a lead-notification recipient)
+router.post("/emails", protect, adminOnly, async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -35,7 +36,7 @@ router.post("/emails", async (req, res) => {
 });
 
 // GET — List All Emails
-router.get("/emails", async (req, res) => {
+router.get("/emails", protect, adminOnly, async (req, res) => {
   try {
     const emails = await Email.find().sort({ createdAt: -1 });
 
@@ -54,7 +55,7 @@ router.get("/emails", async (req, res) => {
 });
 
 // DELETE — Delete Email by ID
-router.delete("/emails/:id", async (req, res) => {
+router.delete("/emails/:id", protect, adminOnly, async (req, res) => {
   try {
     const deleted = await Email.findByIdAndDelete(req.params.id);
 

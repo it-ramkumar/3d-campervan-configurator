@@ -11,7 +11,9 @@
       "Bash(node *)",
       "Bash(curl *)",
       "Skill(artifact-design)",
-      "Bash(Get-Content *)"
+      "Bash(Get-Content *)",
+      "Bash(xargs grep -ilE \"csv|xlsx|\\\\bexport\\\\b|download.*report|file-saver\")",
+      "Bash(npx eslint *)"
     ]
   }
 }

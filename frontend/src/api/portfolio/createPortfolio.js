@@ -1,5 +1,5 @@
 import axios from "axios";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 
 // ✅ Create portfolio
@@ -11,19 +11,10 @@ const createPortfolio = async (formDataToSend) => {
 
         });
 
-        Swal.fire({
-            icon: "success",
-            title: "Successfully!",
-            text: res.data.message,
-            showConfirmButton: false
-        });
+        toast.success(res.data.message);
         return res.data;
     } catch (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error.response.data.message,
-        });
+        toast.error(error.response.data.message);
         throw error;
     }
 };
@@ -38,19 +29,10 @@ const updatePortfolio = async (editData, formDataToSend) => {
             { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
 
-        Swal.fire({
-            icon: "success",
-            title: "Successfully!",
-            text: res.data.message,
-            showConfirmButton: false
-        });
+        toast.success(res.data.message);
         return res.data;
     } catch (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: error.response.data.message,
-        });
+        toast.error(error.response.data.message);
         throw error;
     }
 };

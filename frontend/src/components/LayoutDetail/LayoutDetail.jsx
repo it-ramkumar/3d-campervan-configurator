@@ -157,7 +157,7 @@ export default function LayoutDetail({van,initialView}) {
 
                 <div className="flex flex-col gap-4 pt-4">
                   <SecondaryButton
-                    label="ORDER THIS BUILD"
+                    label="Build One Like This"
                     link={"/contact"}
                     className="!w-full"/>
                   <ShareButton

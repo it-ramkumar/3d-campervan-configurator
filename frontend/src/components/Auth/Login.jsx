@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
   const navigate = useRouter();
@@ -10,32 +10,6 @@ const LoginForm = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const showSuccessAlert = () => {
-    Swal.fire({
-      title: "Login Successful!",
-      text: "Welcome back to your dashboard",
-      icon: "success",
-      confirmButtonColor: "#000000",
-      background: "#ffffff",
-      color: "#000000",
-      confirmButtonText: "Continue to Dashboard",
-      timer: 3000,
-      timerProgressBar: true,
-    });
-  };
-
-  const showErrorAlert = (message) => {
-    Swal.fire({
-      title: "Login Failed",
-      text: message,
-      icon: "error",
-      confirmButtonColor: "#000000",
-      background: "#ffffff",
-      color: "#000000",
-      confirmButtonText: "Try Again",
-    });
   };
 
   const handleSubmit = async (e) => {
@@ -53,15 +27,12 @@ const LoginForm = () => {
       const data = await res.json();
 
       if (res.ok) {
-        showSuccessAlert();
-        setTimeout(() => {
-          navigate.push("/dashboard");
-        }, 2000);
+        navigate.push("/dashboard");
       } else {
-        showErrorAlert(data.message || "Invalid email or password");
+        toast.error(data.message || "Invalid email or password");
       }
     } catch (err) {
-      showErrorAlert("Network error. Please try again.");
+      toast.error("Network error. Please try again.");
     } finally {
       setIsLoading(false);
     }

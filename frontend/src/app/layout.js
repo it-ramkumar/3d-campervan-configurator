@@ -5,6 +5,7 @@ import ConditionalLayout from "@/components/ConditionalLayout/ConditionalLayout"
 import AnalyticsInit from "@/components/AnalyticsInit/AnalyticsInit";
 import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google'
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const barlowCond = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap", variable: "--font-barlow-cond" });
@@ -27,6 +28,17 @@ export default function RootLayout({ children }) {
         <Providers>
           <ConditionalLayout>{children}</ConditionalLayout>
         </Providers>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+            style: {
+              borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: 600,
+            },
+          }}
+        />
         <AnalyticsInit />
 
         {/* ✅ Script tags body ke baad, <head> se bahar */}

@@ -25,6 +25,7 @@ const ExteriorCategory = require("./routes/exteriorCat");
 const ExteriorSubCategory = require("./routes/exteriorSubCat")
 const ExteriorRoute = require("./routes/exteriorR")
 const ReceiveLeadsEmail = require("./routes/receiveLeadsEmail");
+const Newsletter = require("./routes/newsletter");
 const Job = require("./routes/job");
 const Application = require("./routes/application");
 const QuickLinks = require("./routes/quickLinks")
@@ -81,6 +82,7 @@ app.use("/api", SystemCategory)
 app.use("/api", SystemRoute)
 app.use("/api", SystemSubCategory)
 app.use("/api", ReceiveLeadsEmail)
+app.use("/api", Newsletter)
 app.use("/api/jobs", Job);
 app.use("/api/applications", Application);
 app.use("/api/quick-links", QuickLinks);

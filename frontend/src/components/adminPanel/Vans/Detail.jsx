@@ -8,13 +8,20 @@ export default function Detail({ setIsopen, detail }) {
   ).filter(Boolean);
   const blocks = detail.blocks || []; // Dynamic blocks array
 
-  console.log(detail);
-
   const formatDate = (dateString) => {
+    if (!dateString) return null;
     return new Date(dateString).toLocaleDateString(undefined, {
       year: 'numeric', month: 'short', day: 'numeric'
     });
   };
+
+  const STATUS_LABELS = {
+    available: { label: "Available", className: "bg-emerald-600" },
+    sale_pending: { label: "Sale Pending", className: "bg-amber-500" },
+    sold: { label: "Sold", className: "bg-red-600" },
+    coming_soon: { label: "Coming Soon", className: "bg-blue-600" },
+  };
+  const statusInfo = STATUS_LABELS[detail.status];
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end bg-slate-900/40 backdrop-blur-sm transition-opacity">
@@ -28,7 +35,8 @@ export default function Detail({ setIsopen, detail }) {
               {detail.van_listing?.title}
             </h2>
             <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-              ID: {detail._id?.slice(-6)} • {detail.category?.[0] || 'Van'}
+              Slug: {detail.slug} • {statusInfo?.label || detail.status}
+              {!detail.is_published && " • Draft"}
             </p>
           </div>
           <button
@@ -47,9 +55,9 @@ export default function Detail({ setIsopen, detail }) {
           {/* Hero Gallery Section */}
           <div className="space-y-4">
             <div className="relative aspect-video bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-              {detail.status === "sold" && (
-                <div className="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                  SOLD
+              {statusInfo && (
+                <div className={`absolute top-4 left-4 z-10 ${statusInfo.className} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase`}>
+                  {statusInfo.label}
                 </div>
               )}
               <ImageWithSkeleton
@@ -88,9 +96,17 @@ export default function Detail({ setIsopen, detail }) {
               {/* Basic Description */}
               <section>
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Description</h3>
-                <p className="text-slate-700 leading-relaxed bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                  {detail.van_listing?.description}
-                </p>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                  {detail.van_listing?.subtitle && (
+                    <p className="text-slate-500 text-sm italic">{detail.van_listing.subtitle}</p>
+                  )}
+                  {detail.van_listing?.tagline && (
+                    <p className="text-slate-800 font-semibold">{detail.van_listing.tagline}</p>
+                  )}
+                  <p className="text-slate-700 leading-relaxed">
+                    {detail.van_listing?.description}
+                  </p>
+                </div>
               </section>
 
               {/* Dynamic Blocks Section */}
@@ -293,12 +309,61 @@ export default function Detail({ setIsopen, detail }) {
                   )}
                 </div>
                 <div className="space-y-3">
+                  <SpecItem label="Roof" value={detail.van_listing?.roof} />
+                  <SpecItem label="Make/Model" value={detail.van_listing?.specifications?.make_model} />
                   <SpecItem label="Drivetrain" value={detail.van_listing?.specifications?.drivetrain} />
                   <SpecItem label="Wheelbase" value={detail.van_listing?.specifications?.wheelbase} />
-                  <SpecItem label="Capacity" value={`${detail.van_listing?.specifications?.capacity?.sits} Sits / ${detail.van_listing?.specifications?.capacity?.sleeps} Sleeps`} />
+                  <SpecItem label="Engine" value={detail.van_listing?.specifications?.engine} />
+                  <SpecItem label="Transmission" value={detail.van_listing?.specifications?.transmission} />
+                  <SpecItem label="Exterior Color" value={detail.van_listing?.specifications?.exterior_color} />
+                  <SpecItem label="Interior Color" value={detail.van_listing?.specifications?.interior_color} />
+                  <SpecItem label="Capacity" value={`${detail.van_listing?.specifications?.capacity?.sits ?? "?"} Sits / ${detail.van_listing?.specifications?.capacity?.sleeps ?? "?"} Sleeps`} />
+                </div>
+                <div className="border-t border-slate-100 pt-3 space-y-3">
+                  <SpecItem label="Status" value={statusInfo?.label || detail.status} />
+                  <SpecItem label="Published" value={detail.is_published ? "Yes" : "No"} />
+                  <SpecItem label="Delivery Date" value={formatDate(detail.delivery_date)} />
+                  <SpecItem label="Order" value={detail.order} />
+                  <SpecItem label="Created" value={formatDate(detail.createdAt)} />
                   <SpecItem label="Updated" value={formatDate(detail.updatedAt)} />
                 </div>
               </div>
+
+              {/* Media & Assets */}
+              {(detail.glbFile || detail.textures?.length > 0 || detail.media?.length > 0) && (
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Media &amp; Assets</h3>
+                  {detail.glbFile && (
+                    <a href={detail.glbFile} target="_blank" rel="noreferrer" className="block text-sm text-blue-600 hover:underline break-all">
+                      3D Model (.glb)
+                    </a>
+                  )}
+                  {detail.textures?.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-slate-500 mb-1">Textures ({detail.textures.length})</p>
+                      <ul className="space-y-1">
+                        {detail.textures.map((t, i) => (
+                          <li key={i}>
+                            <a href={t} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline break-all">{t}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {detail.media?.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-slate-500 mb-1">Media ({detail.media.length})</p>
+                      <ul className="space-y-1">
+                        {detail.media.map((m, i) => (
+                          <li key={i}>
+                            <a href={m} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline break-all">{m}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

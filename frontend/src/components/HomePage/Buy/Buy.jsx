@@ -118,7 +118,7 @@ export default function Buy({ initialVans = [] }) {
           className="!overflow-visible"
         >
           {initialVans
-        
+
             .map((van, i) => (
               <SwiperSlide key={i} className="h-auto">
                 <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
@@ -190,7 +190,7 @@ export default function Buy({ initialVans = [] }) {
                     <div className="flex flex-col md:flex-row justify-center gap-2">
                       <div>
                         <PrimaryButton
-                          label={"Get This Build"}
+                          label={"I'm Interested"}
                           onClick={() => {
                             setIsFormOpen(true);
                             setData(van);

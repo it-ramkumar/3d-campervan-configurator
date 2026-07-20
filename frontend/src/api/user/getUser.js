@@ -21,16 +21,6 @@ export const getUser = async () => {
     return data;
   } catch (err) {
     console.error("Error fetching quotes:", err);
-
-    if (typeof window !== 'undefined') {
-      const Swal = (await import('sweetalert2')).default;
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.message || "Failed to fetch quotes",
-      });
-    }
-
     throw err;
   }
 };

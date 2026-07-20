@@ -1,6 +1,15 @@
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Trash2 } from "lucide-react"; // delete icon
+import toast from "react-hot-toast";
+import AdminDataTable from "../shared/AdminDataTable";
+
+const CSV_COLUMNS = [
+  { key: "email", label: "Email" },
+  { key: "ipAddress", label: "IP Address" },
+  { key: "userAgent", label: "User Agent" },
+  { key: "createdAt", label: "Captured At", accessor: (r) => (r.createdAt ? new Date(r.createdAt).toLocaleString() : "") },
+];
 
 const EmailManager = () => {
   const [email, setEmail] = useState("");
@@ -11,10 +20,13 @@ const EmailManager = () => {
   // Fetch all emails
   const fetchEmails = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/emails`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/emails`, {
+        withCredentials: true,
+      });
       if (res.data.success) setEmails(res.data.data);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to load emails.");
     } finally {
       setLoading(false);
     }
@@ -29,75 +41,92 @@ const EmailManager = () => {
     e.preventDefault();
     setStatus("Submitting...");
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/emails`, { email });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_URL}/emails`,
+        { email },
+        { withCredentials: true }
+      );
       if (res.data.success) {
         setStatus("Email saved successfully!");
+        toast.success("Email saved successfully!");
         setEmail("");
         fetchEmails(); // refresh list
       }
     } catch (err) {
-      if (err.response?.data?.message) setStatus(err.response.data.message);
-      else setStatus("Server error, try again later");
+      const message = err.response?.data?.message || "Server error, try again later";
+      setStatus(message);
+      toast.error(message);
     }
   };
 
-  // Delete email
-  const deleteEmail = async (id) => {
-    if (!confirm("Are you sure you want to delete this email?")) return;
-    try {
-      const res = await axios.delete(`${process.env.NEXT_PUBLIC_URL}/emails/${id}`);
-      if (res.data.success) {
-        setEmails(emails.filter((e) => e._id !== id));
-      }
-    } catch (err) {
-      console.error("Delete error", err);
-    }
+  // Delete email (confirmation handled by AdminDataTable's built-in ConfirmDialog)
+  const deleteEmail = async (row) => {
+    await axios.delete(`${process.env.NEXT_PUBLIC_URL}/emails/${row._id}`, {
+      withCredentials: true,
+    });
+    setEmails((prev) => prev.filter((e) => e._id !== row._id));
   };
+
+  const columns = [
+    {
+      key: "email",
+      label: "Email",
+      render: (row) => <span className="text-sm font-bold text-slate-800">{row.email}</span>,
+    },
+    {
+      key: "createdAt",
+      label: "Captured At",
+      hideOnMobile: true,
+      render: (row) => (
+        <span className="text-xs font-medium text-slate-500">
+          {row.createdAt ? new Date(row.createdAt).toLocaleString() : "—"}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-white shadow-md rounded-md">
-      {/* Form */}
-      <h2 className="text-xl font-bold mb-4">Add Email</h2>
-      <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="flex-1 p-2 border border-gray-300 rounded-md"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          Submit
-        </button>
-      </form>
-      {status && <p className="mb-4 text-gray-700">{status}</p>}
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-black text-slate-800 tracking-tight">Lead Emails</h1>
+        <p className="text-sm text-slate-500 font-medium">Manually add emails or manage captured leads</p>
+      </div>
+
+      {/* Add Email Form */}
+      <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-6 space-y-4">
+        <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest">Add Email</h2>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="flex-1 bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-100"
+          />
+          <button
+            type="submit"
+            className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all"
+          >
+            Submit
+          </button>
+        </form>
+        {status && <p className="text-sm text-slate-500 font-medium">{status}</p>}
+      </div>
 
       {/* Email List */}
-      <h2 className="text-xl font-bold mb-2">All Emails</h2>
-      {loading ? (
-        <p>Loading emails...</p>
-      ) : emails.length === 0 ? (
-        <p>No emails found.</p>
-      ) : (
-        <ul className="space-y-2">
-          {emails.map((e) => (
-            <li
-              key={e._id}
-              className="flex justify-between items-center p-2 border rounded-md"
-            >
-              <span>{e.email}</span>
-              <Trash2
-                className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700"
-                onClick={() => deleteEmail(e._id)}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
+      <AdminDataTable
+        columns={columns}
+        rows={emails}
+        rowKey={(row) => row._id}
+        loading={loading}
+        emptyMessage="No emails found."
+        onDelete={deleteEmail}
+        deleteMessage={(row) => `Delete the email "${row.email}"? This cannot be undone.`}
+        exportColumns={CSV_COLUMNS}
+        exportFilename="lead-emails"
+      />
     </div>
   );
 };

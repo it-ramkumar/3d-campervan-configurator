@@ -1,5 +1,5 @@
 import axios from "axios";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 
 // ✅ Create Van
@@ -12,19 +12,10 @@ const createVan = async (formDataToSend) => {
 
     });
 
-    Swal.fire({
-      icon: "success",
-      title: "van Submitted!",
-      text: "Your van has been submitted successfully.",
-      showConfirmButton: false
-    });
+    toast.success("Your van has been submitted successfully.");
     return res.data;
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "error",
-      text: error.response.data.message,
-    });
+    toast.error(error.response.data.message);
 
     throw error;
   }
@@ -40,20 +31,11 @@ const updateVan = async (editData, formDataToSend) => {
       formDataToSend,
       { withCredentials: true } // keep cookie session
     );
-    Swal.fire({
-      icon: "success",
-      title: "Successfully!",
-      text: "Updated.",
-      showConfirmButton: false
-    });
+    toast.success("Updated.");
 
     return res.data;
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "error",
-      text: error.response.data.message,
-    });
+    toast.error(error.response.data.message);
 
     throw error;
   }

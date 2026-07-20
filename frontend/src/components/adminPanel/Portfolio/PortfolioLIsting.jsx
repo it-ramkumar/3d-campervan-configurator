@@ -6,35 +6,76 @@ import { setEditData, clearEditData } from "@/redux/slices/editData";
 import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 import { deletePortfolio } from "@/api/portfolio/deletePortfolio";
 import Detail from "./Detail";
-import Swal from "sweetalert2";
-import { ImageWithSkeleton } from "@/components/Common/Common";
+import toast from "react-hot-toast";
+import { Search, Plus, Eye, Pencil } from "lucide-react";
+import AdminDataTable from "../shared/AdminDataTable";
+import { useUrlPage } from "@/hooks/useUrlPage";
+
+const getPortfolioImage = (portfolio) => {
+  const img = portfolio.gallery?.[0];
+  if (!img) return null;
+  return typeof img === "string" ? img : img?.url;
+};
+
+const PORTFOLIO_CSV_COLUMNS = [
+  { key: "title", label: "Title", accessor: (p) => p.van_listing?.title || "" },
+  { key: "subtitle", label: "Subtitle", accessor: (p) => p.van_listing?.subtitle || "" },
+  { key: "description", label: "Description", accessor: (p) => p.van_listing?.description || "" },
+  { key: "bathroomType", label: "Bathroom Type", accessor: (p) => p.van_listing?.bathroomType || "" },
+  { key: "bedType", label: "Bed Type", accessor: (p) => p.van_listing?.bedType || "" },
+  { key: "size", label: "Size", accessor: (p) => p.van_listing?.size || "" },
+  { key: "roof", label: "Roof", accessor: (p) => p.van_listing?.roof || "" },
+  { key: "price", label: "Price", accessor: (p) => p.van_listing?.price || "" },
+  { key: "make_model", label: "Make/Model", accessor: (p) => p.van_listing?.specifications?.make_model || "" },
+  { key: "wheelbase", label: "Wheelbase", accessor: (p) => p.van_listing?.specifications?.wheelbase || "" },
+  { key: "drivetrain", label: "Drivetrain", accessor: (p) => p.van_listing?.specifications?.drivetrain || "" },
+  { key: "sits", label: "Sits", accessor: (p) => p.van_listing?.specifications?.capacity?.sits || "" },
+  { key: "sleeps", label: "Sleeps", accessor: (p) => p.van_listing?.specifications?.capacity?.sleeps || "" },
+  { key: "category", label: "Category", accessor: (p) => (Array.isArray(p.category) ? p.category.join(", ") : "") },
+  { key: "sold", label: "Sold", accessor: (p) => (p.sold ? "Yes" : "No") },
+  { key: "is_published", label: "Published", accessor: (p) => (p.is_published ? "Yes" : "No") },
+  { key: "slug", label: "Slug" },
+  { key: "gallery", label: "Gallery", accessor: (p) => (p.gallery || []).join("; ") },
+  { key: "rendering", label: "Renderings", accessor: (p) => (p.rendering || []).join("; ") },
+  { key: "media", label: "Media", accessor: (p) => (p.media || []).join("; ") },
+  {
+    key: "detailed_features",
+    label: "Detailed Features",
+    accessor: (p) => (p.detailed_features || []).map((f) => `${f.category}: ${(f.items || []).join(", ")}`).join(" | "),
+  },
+  { key: "createdAt", label: "Created At", accessor: (p) => (p.createdAt ? new Date(p.createdAt).toLocaleString() : "") },
+  { key: "updatedAt", label: "Updated At", accessor: (p) => (p.updatedAt ? new Date(p.updatedAt).toLocaleString() : "") },
+];
+
 export default function PortfolioListing({ setSelected }) {
   const dispatch = useDispatch();
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState(null);
   const [isOpen, setIsopen] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useUrlPage();
   const [pages, setPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [search, setSearch] = useState("");
+  const limit = 9;
 
   useEffect(() => {
     fetchData(page, search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const fetchData = async (pageNum = 1, searchQuery = "") => {
     setLoading(true);
     try {
-      // ✅ Sahi Tariqa: Poora data ek hi object ke andar wrap kar ke bhejein
       const res = await getAllPortfolio({
         page: pageNum,
-        limit: 9,
-        search: searchQuery // Agar aapka backend search query accept karta hai
+        limit,
+        search: searchQuery,
       });
 
       if (res.success && Array.isArray(res.data?.data)) {
         setPortfolios(res.data.data);
-        setPages(res.data.pages);
+        setPages(res.data.pages || 1);
       } else {
         setPortfolios([]);
         setPages(1);
@@ -42,36 +83,29 @@ export default function PortfolioListing({ setSelected }) {
     } catch (err) {
       console.error("Error fetching portfolios:", err);
       setPortfolios([]);
+      setPages(1);
+      toast.error("Failed to load portfolio items.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleSearch = () => {
+    setSearch(searchTerm);
     setPage(1);
-    fetchData(1, search);
+    fetchData(1, searchTerm);
   };
 
-  const handleDelete = (slug) => {
-    Swal.fire({
-      title: "Delete Portfolio?",
-      text: "Are you sure you want to remove this project?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#64748b",
-      confirmButtonText: "Yes, delete it",
-      customClass: { popup: 'rounded-[2rem]' }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deletePortfolio(slug);
-          fetchData(page, search);
-        } catch (err) {
-          Swal.fire("Error!", err.message, "error");
-        }
-      }
-    });
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setSearch("");
+    setPage(1);
+    fetchData(1, "");
+  };
+
+  const handleDelete = async (portfolio) => {
+    await deletePortfolio(portfolio.slug);
+    setPortfolios((prev) => prev.filter((p) => p._id !== portfolio._id));
   };
 
   const handleEdit = (portfolio) => {
@@ -84,15 +118,71 @@ export default function PortfolioListing({ setSelected }) {
     setIsopen(true);
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
-      <div className="animate-pulse">Loading portfolio showcase...</div>
-    </div>
-  );
+  // Portfolio list endpoint DOES honor a `limit` override server-side, so we can
+  // fetch the entire dataset in one call (same technique as VansListing.jsx).
+  const handleExportAll = async () => {
+    const res = await getAllPortfolio({ page: 1, limit: 10000, search });
+    if (!res.success || !Array.isArray(res.data?.data)) return [];
+    return res.data.data;
+  };
+
+  const columns = [
+    {
+      key: "title",
+      label: "Title",
+      render: (p) => (
+        <span className="font-bold text-slate-800 text-sm line-clamp-1 group-hover:text-blue-600">
+          {p.van_listing?.title || "Untitled Project"}
+        </span>
+      ),
+    },
+    {
+      key: "category",
+      label: "Category",
+      hideOnMobile: true,
+      render: (p) =>
+        p.category && p.category.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5">
+            {p.category.map((cat, index) => (
+              <span
+                key={index}
+                className="text-[11px] font-semibold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md"
+              >
+                {cat}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span className="text-sm text-slate-400 italic">Uncategorized</span>
+        ),
+    },
+    {
+      key: "subtitle",
+      label: "Subtitle",
+      hideOnMobile: true,
+      render: (p) => (
+        <p className="text-slate-500 text-sm line-clamp-1 max-w-xs italic">
+          {p.van_listing?.subtitle || "No subtitle provided."}
+        </p>
+      ),
+    },
+    {
+      key: "is_published",
+      label: "Status",
+      render: (p) => (
+        <span
+          className={`text-[11px] font-black uppercase tracking-wide px-2.5 py-1 rounded-full ${
+            p.is_published ? "bg-emerald-50 text-emerald-600" : "bg-slate-100 text-slate-500"
+          }`}
+        >
+          {p.is_published ? "Published" : "Unpublished"}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-
+    <div className="space-y-6 animate-in fade-in duration-500">
       {/* --- Header Section --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -105,153 +195,79 @@ export default function PortfolioListing({ setSelected }) {
             setSelected("portfolio-form");
             dispatch(clearEditData());
           }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2 self-start md:self-auto"
         >
-          <span className="text-lg">+</span> Add Project
+          <Plus size={18} /> Add Project
         </button>
       </div>
 
-      {/* --- Search Bar (bigbeartheme style) --- */}
+      {/* --- Search Bar --- */}
       <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100">
-        <div className="relative flex-1 min-w-[280px]">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
             type="text"
             placeholder="Search by title or description..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-white border-none rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-100 placeholder:text-slate-400 outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            className="w-full bg-white border-none rounded-xl pl-11 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-100 placeholder:text-slate-400 outline-none"
           />
         </div>
         <button
           onClick={handleSearch}
-          className="bg-white border border-slate-200 text-slate-700 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all shadow-sm"
+          className="bg-white border border-slate-200 text-slate-700 px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all"
         >
           Search
         </button>
+        {searchTerm && (
+          <button
+            onClick={handleClearSearch}
+            className="text-slate-400 hover:text-slate-600 text-sm font-semibold px-2"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
-      {/* --- Portfolio Grid --- */}
-      {portfolios.length === 0 ? (
-        <div className="text-center py-20 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
-          <p className="text-slate-400 font-medium font-sans">No portfolio items found.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {portfolios.map((portfolio) => (
-            <div
-              key={portfolio._id}
-              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col h-full"
-            >
-              {/* Image Header */}
-              <div className="relative h-56 overflow-hidden">
-                {portfolio.gallery?.[0] ? (
-                  <ImageWithSkeleton
-                    src={typeof portfolio.gallery[0] === "string" ? portfolio.gallery[0] : portfolio.gallery[0]?.url}
-                    alt={portfolio.van_listing?.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-                    <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">No Image</span>
-                  </div>
-                )}
-
-                {portfolio.formatted_price && (
-                  <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
-                    <span className="text-blue-700 font-black text-sm">{portfolio.formatted_price}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Content Body */}
-              <div className="p-6 flex flex-col flex-1">
-                <div className="mb-4">
-                  <h3 className="font-bold text-slate-800 text-lg mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                    {portfolio.van_listing?.title || "Untitled Project"}
-                  </h3>
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    {portfolio.category && portfolio.category.length > 0 ? (
-                      portfolio.category.map((cat, index) => (
-                        <span
-                          key={index}
-                          className="text-xs font-semibold bg-blue-50 text-blue-600 px-2.5 py-1 rounded-md transition-colors group-hover:bg-blue-100"
-                        >
-                          {cat}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-sm font-bold text-slate-400 italic">
-                        Untitled Project
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
-                    {portfolio.van_listing?.subtitle || "No subtitle provided."}
-                  </p>
-                  <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">
-                    {portfolio.is_published === true ? "Published" : "Unpublished"}
-                  </p>
-                </div>
-
-                {/* Buttons (Lite Styling) */}
-                <div className="mt-auto pt-4 flex items-center gap-2">
-                  <button
-                    onClick={() => handleView(portfolio)}
-                    className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs hover:bg-slate-100 transition-all active:scale-95"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => handleEdit(portfolio)}
-                    className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-xs hover:bg-blue-100 transition-all active:scale-95"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(portfolio.slug)}
-                    className="p-2.5 rounded-xl bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all active:scale-95"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* --- Pagination (BigBear Style) --- */}
-      {pages > 1 && (
-        <div className="flex justify-center items-center py-10">
-          <div className="flex items-center gap-2 bg-white p-2 rounded-2xl border border-slate-100 shadow-sm">
+      <AdminDataTable
+        columns={columns}
+        rows={portfolios}
+        rowKey={(p) => p._id}
+        loading={loading}
+        emptyMessage="No portfolio items found."
+        imageColumn={{
+          accessor: getPortfolioImage,
+          alt: (p) => p.van_listing?.title,
+          filename: (p) => p.slug || p.van_listing?.title || p._id,
+        }}
+        renderActions={(p) => (
+          <>
             <button
-              onClick={() => setPage((p) => Math.max(p - 1, 1))}
-              disabled={page === 1}
-              className="p-2 rounded-xl hover:bg-slate-50 disabled:opacity-30 transition-all text-slate-600"
+              onClick={() => handleView(p)}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="View"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              <Eye size={16} />
             </button>
-
-            <span className="px-4 text-sm font-bold text-slate-700">
-              {page} <span className="text-slate-300 mx-1">/</span> {pages}
-            </span>
-
             <button
-              onClick={() => setPage((p) => Math.min(p + 1, pages))}
-              disabled={page === pages}
-              className="p-2 rounded-xl hover:bg-slate-50 disabled:opacity-30 transition-all text-slate-600"
+              onClick={() => handleEdit(p)}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="Edit"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <Pencil size={16} />
             </button>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+        onDelete={handleDelete}
+        deleteMessage={(p) => `Delete "${p.van_listing?.title || "this project"}"? This action cannot be undone.`}
+        exportColumns={PORTFOLIO_CSV_COLUMNS}
+        exportFilename="portfolio-projects"
+        onExportAll={handleExportAll}
+        page={page}
+        totalPages={pages}
+        onPageChange={setPage}
+      />
 
       {/* Detail Modal */}
       {isOpen && <Detail setIsopen={setIsopen} detail={detail} />}

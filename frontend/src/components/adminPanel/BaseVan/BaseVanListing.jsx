@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, Trash2, Box, Info, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { Search, Plus, Box, Eye } from "lucide-react";
 import Detail from './Detail';
-import Image from "next/image";
+import AdminDataTable from "../shared/AdminDataTable";
 
+const BASE_VAN_CSV_COLUMNS = [
+  { key: "layout", label: "Layout" },
+  { key: "price", label: "Price" },
+  { key: "drivetrain", label: "Drivetrain", accessor: (v) => v.spec?.drivetrain || "" },
+  { key: "wheelBase", label: "Wheelbase", accessor: (v) => v.spec?.wheelBase || "" },
+  { key: "seats", label: "Seats", accessor: (v) => v.spec?.sitSleep || "" },
+  { key: "description", label: "Description", accessor: (v) => v.shortDescription || "" },
+];
 
-const BaseVanListing = ({setSelected}) => {
+const BaseVanListing = ({ setSelected }) => {
   const [vans, setVans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deletingId, setDeletingId] = useState(null);
-  const [selectedVan, setSelectedVan] = useState(null); // Modal ke liye state// Delete loading state ke liye
+  const [selectedVan, setSelectedVan] = useState(null); // Modal ke liye state
 
   const API_URL = process.env.NEXT_PUBLIC_URL;
 
@@ -24,34 +32,25 @@ const BaseVanListing = ({setSelected}) => {
       }
     } catch (err) {
       console.error("Error fetching vans:", err);
+      toast.error("Failed to load vans.");
     } finally {
       setLoading(false);
     }
   };
 
-  // 2. Delete Handler
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure? This will delete the 3D model and image from S3 permanently.")) {
-      return;
+  // 2. Delete Handler — actual delete + state update; confirmation is
+  // handled by AdminDataTable's built-in ConfirmDialog.
+  const handleDelete = async (van) => {
+    const res = await axios.delete(`${API_URL}/add-base-van/${van._id}`, {
+      withCredentials: true,
+    });
+
+    if (!res.data.success) {
+      throw new Error(res.data.message || "Failed to delete van.");
     }
 
-    try {
-      setDeletingId(id);
-     const res = await axios.delete(`${API_URL}/add-base-van/${id}`, {
-  withCredentials: true
-});
-
-      if (res.data.success) {
-        // UI se remove karein
-        setVans((prevVans) => prevVans.filter((van) => van._id !== id));
-        alert("Van and associated files deleted successfully!");
-      }
-    } catch (err) {
-      console.error("Delete error:", err);
-      alert("Failed to delete van. Please try again.");
-    } finally {
-      setDeletingId(null);
-    }
+    setVans((prevVans) => prevVans.filter((v) => v._id !== van._id));
+    if (selectedVan?._id === van._id) setSelectedVan(null);
   };
 
   useEffect(() => {
@@ -62,95 +61,110 @@ const BaseVanListing = ({setSelected}) => {
     van.layout.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const columns = [
+    {
+      key: "layout",
+      label: "Layout",
+      render: (van) => <span className="font-bold text-slate-800 text-sm">{van.layout}</span>,
+    },
+    {
+      key: "drivetrain",
+      label: "Drivetrain",
+      hideOnMobile: true,
+      render: (van) => <span className="text-xs font-bold text-slate-500">{van.spec?.drivetrain}</span>,
+    },
+    {
+      key: "wheelBase",
+      label: "Wheelbase",
+      hideOnMobile: true,
+      render: (van) => (
+        <span className="text-sm text-slate-500">{van.spec?.wheelBase ? `${van.spec.wheelBase}"` : "-"}</span>
+      ),
+    },
+    {
+      key: "seats",
+      label: "Seats",
+      hideOnMobile: true,
+      render: (van) => <span className="text-sm text-slate-500">{van.spec?.sitSleep ?? "-"}</span>,
+    },
+    {
+      key: "price",
+      label: "Price",
+      render: (van) => <span className="text-blue-700 font-black text-sm">${van.price?.toLocaleString()}</span>,
+    },
+    {
+      key: "description",
+      label: "Description",
+      hideOnMobile: true,
+      render: (van) => <p className="text-sm text-slate-500 line-clamp-1 max-w-xs">{van.shortDescription}</p>,
+    },
+  ];
+
   return (
-    <div className="p-6 bg-[#f8fafc] min-h-screen">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Base Vans Inventory</h1>
-          <p className="text-gray-500 text-sm">Manage your 3D models and van specifications</p>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight">Base Vans Inventory</h1>
+          <p className="text-sm text-slate-500 font-medium">Manage your 3D models and van specifications</p>
         </div>
 
-        <div className="relative w-full md:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4" />
+        <button
+          onClick={() => setSelected("BaseVan")}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2 self-start md:self-auto"
+        >
+          <Plus size={18} /> Add More
+        </button>
+      </div>
+
+      {/* Search Bar */}
+      <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
             type="text"
             placeholder="Search layout..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full bg-white border-none rounded-xl pl-11 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-100"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button
-        onClick={()=>setSelected("BaseVan")}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all shadow-md shadow-blue-100 font-medium whitespace-nowrap"
-          >
-            {/* <Plus size={18} /> */}
-            Add More
-          </button>
       </div>
 
-      {loading ? (
-        <div className="flex justify-center items-center h-64 text-gray-400">Loading inventory...</div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredVans?.map((van) => (
-            <div key={van._id}
-            onClick={() => setSelectedVan(van)} // Pura card click-able ban gaya
-            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-              <div className="h-48 bg-gray-100 relative group">
-                <Image src={van?.imgUrl} alt={van?.layout} className="w-full h-full object-cover" width={400} height={300} />
-                <div className="absolute top-2 right-2 flex gap-2">
-                   <span className="bg-black/60 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md">
-                      {van?.spec?.drivetrain}
-                   </span>
-                </div>
-              </div>
+      <AdminDataTable
+        columns={columns}
+        rows={filteredVans}
+        rowKey={(van) => van._id}
+        loading={loading}
+        emptyMessage="No vans found matching your search."
+        imageColumn={{
+          accessor: (van) => van.imgUrl,
+          alt: (van) => van.layout,
+          filename: (van) => van.layout,
+        }}
+        renderActions={(van) => (
+          <>
+            <button
+              onClick={() => window.open(van.glbFileUrl, "_blank")}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="View 3D Model"
+            >
+              <Box size={16} />
+            </button>
+            <button
+              onClick={() => setSelectedVan(van)}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="View Details"
+            >
+              <Eye size={16} />
+            </button>
+          </>
+        )}
+        onDelete={handleDelete}
+        deleteMessage={(van) => `Delete "${van.layout}"? This will delete the 3D model and image from S3 permanently.`}
+        exportColumns={BASE_VAN_CSV_COLUMNS}
+        exportFilename="base-vans"
+      />
 
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold text-gray-800 line-clamp-1">{van?.layout}</h3>
-                  <span className="text-blue-600 font-semibold text-sm">${van?.price?.toLocaleString()}</span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 mb-4 text-[11px] text-gray-500 font-medium">
-                  <div className="flex items-center gap-1"><Box size={14} /> {van?.spec?.wheelBase}" WB</div>
-                  <div className="flex items-center gap-1"><Info size={14} /> {van?.spec?.sitSleep} Seats</div>
-                </div>
-
-                <p className="text-xs text-gray-400 line-clamp-2 mb-4 min-h-[32px]">{van?.shortDescription}</p>
-
-                <div className="flex gap-2 pt-4 border-t border-gray-50">
-                  <button
-                    onClick={() => window.open(van.glbFileUrl, '_blank')}
-                    className="flex-1 bg-gray-900 text-white text-xs py-2 rounded-md hover:bg-black transition-colors font-medium"
-                  >
-                    View 3D Model
-                  </button>
-
-                  {/* Delete Button with Loading State */}
-                  <button
-                    onClick={() => handleDelete(van._id)}
-                    disabled={deletingId === van._id}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors border border-red-100 disabled:opacity-50"
-                  >
-                    {deletingId === van._id ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : (
-                      <Trash2 size={16} />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {filteredVans?.length === 0 && (
-            <div className="col-span-full py-20 text-center bg-white rounded-xl border-2 border-dashed border-gray-100">
-              <p className="text-gray-400">No vans found matching your search.</p>
-            </div>
-          )}
-        </div>
-      )}
       {/* 3. Modal ko end mein render karein */}
       {selectedVan && (
         <Detail

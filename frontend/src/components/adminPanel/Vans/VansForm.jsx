@@ -10,7 +10,6 @@ import { removeMediaUrl } from "@/CustomHooks/removeMediaUrl";
 import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
-import Swal from "sweetalert2";
 
 const emptyVanListing = {
   title: "",
@@ -237,16 +236,10 @@ const VansForm = ({ setSelected }) => {
         await createVan(formToSend);
       }
 
-      Swal.fire("Success", "Van saved successfully", "success");
       setSelected("Vans-listing");
       resetForm();
     } catch (err) {
       console.error("Submission Error:", err.response?.data || err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.response?.data?.error || "Check console for details",
-      });
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 // blogApi.js
 import axios from "axios";
-import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const config = {
   headers: { "Content-Type": "multipart/form-data" },
@@ -18,19 +18,10 @@ export const createBlog = async (formData) => {
       formData,
       config
     );
-    Swal.fire({
-      icon: "success",
-      title: "Blog Submitted!",
-      text: "Your blog has been submit successfully.",
-      showConfirmButton: false
-    });
+    toast.success("Your blog has been submit successfully.");
     return res.data;
   } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "error",
-      text: err.response.data.message,
-    });
+    toast.error(err.response.data.message);
 
     throw err;
   }
@@ -49,19 +40,10 @@ export const updateBlog = async (blogId, formData) => {
       formData,
       config
     );
-    Swal.fire({
-      icon: "success",
-      title: "Blog Updated!",
-      text: "Your blog has been updated successfully.",
-      showConfirmButton: false
-    });
+    toast.success("Your blog has been updated successfully.");
     return res.data;
   } catch (err) {
-    Swal.fire({
-      icon: "warning",
-      title: "warning",
-      text: err.response.data.message,
-    });
+    toast.error(err.response.data.message);
 
     throw err;
   }

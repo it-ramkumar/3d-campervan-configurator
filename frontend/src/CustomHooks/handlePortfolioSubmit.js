@@ -1,5 +1,4 @@
 import axios from "axios";
-import Swal from "sweetalert2";
 import { createPortfolio,updatePortfolio } from "@/api/portfolio/createPortfolio";
 
 export const handlePortfolioSubmit = async ({
@@ -108,21 +107,8 @@ export const handlePortfolioSubmit = async ({
     setRemovedExistingGallery([]);
     setRemovedExistingRendering([]); // 🆕 Reset renderings removal list
 
-    Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: editData ? "Portfolio updated successfully!" : "Portfolio created successfully!",
-      timer: 2000,
-      showConfirmButton: false
-    });
-
   } catch (error) {
     console.error("Portfolio submit error:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: error?.response?.data?.message || "Something went wrong",
-    });
   } finally {
     setLoading(false);
   }

@@ -47,7 +47,7 @@ export default function Footer() {
     }
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_URL}/emails`, {
+      await axios.post(`${process.env.NEXT_PUBLIC_URL}/newsletter`, {
         email: trimmedEmail,
       });
 

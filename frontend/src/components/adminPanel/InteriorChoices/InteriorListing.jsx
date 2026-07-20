@@ -1,21 +1,28 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
-import { Search, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { Search, Eye, Pencil } from "lucide-react";
 import DetailModal from "./Detail";
 import { useDispatch } from "react-redux";
-import { setEditData,clearEditData } from "@/redux/slices/editData";
-import Image from "next/image";
+import { setEditData, clearEditData } from "@/redux/slices/editData";
+import AdminDataTable from "../shared/AdminDataTable";
+
+const CSV_COLUMNS = [
+  { key: "category", label: "Category", accessor: (i) => i.subCategoryId?.categoryId?.title || "Interior" },
+  { key: "subcategory", label: "Subcategory", accessor: (i) => i.subCategoryId?.title || "" },
+  { key: "title", label: "Title" },
+  { key: "description", label: "Description", accessor: (i) => (Array.isArray(i.description) ? i.description.join(", ") : i.description || "") },
+  { key: "createdAt", label: "Created At", accessor: (i) => (i.createdAt ? new Date(i.createdAt).toLocaleString() : "") },
+];
 
 export default function InteriorList({ setSelected }) {
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [interiors, setInteriors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null); // Add this
-const [openModal, setOpenModal] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const fetchInteriors = async (query = "") => {
     try {
@@ -27,7 +34,7 @@ const [openModal, setOpenModal] = useState(false);
       setInteriors(res.data.data);
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "Failed to fetch interior items", "error");
+      toast.error("Failed to fetch interior items.");
     } finally {
       setLoading(false);
     }
@@ -41,73 +48,85 @@ const [openModal, setOpenModal] = useState(false);
     fetchInteriors(searchTerm);
   };
 
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Delete Interior Item?",
-      text: "This action cannot be undone.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#64748b",
-      confirmButtonText: "Yes, delete",
-      customClass: { popup: 'rounded-[2rem]' }
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      setDeleteLoading(id);
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_URL}/interior/${id}`
-      );
-      setInteriors(interiors.filter((item) => item._id !== id));
-      Swal.fire("Deleted", "Item removed successfully", "success");
-    } catch (err) {
-      Swal.fire("Error", "Failed to delete item", "error");
-    } finally {
-      setDeleteLoading(null);
-    }
+  const handleDelete = async (item) => {
+    await axios.delete(`${process.env.NEXT_PUBLIC_URL}/interior/${item._id}`, { withCredentials: true });
+    setInteriors((prev) => prev.filter((i) => i._id !== item._id));
+    if (selectedItem?._id === item._id) setSelectedItem(null);
   };
 
-const handleView = (item) => {
-  setSelectedItem(item); // Store the clicked item
-  setOpenModal(true);    // Open the modal
-};
-  if (loading) return (
-    <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
-      <div className="animate-pulse">Loading interior items...</div>
-    </div>
-  );
+  const handleView = (item) => {
+    setSelectedItem(item);
+    setOpenModal(true);
+  };
+
+  const columns = [
+    {
+      key: "category",
+      label: "Category",
+      render: (item) => (
+        <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
+          {item.subCategoryId?.categoryId?.title || "Interior"}
+        </span>
+      ),
+    },
+    {
+      key: "title",
+      label: "Title",
+      render: (item) => <span className="font-bold text-slate-800 text-sm">{item.title}</span>,
+    },
+    {
+      key: "subcategory",
+      label: "Subcategory",
+      hideOnMobile: true,
+      render: (item) => (
+        <span className="text-slate-400 text-xs font-medium italic">
+          {item.subCategoryId?.title || "No Subcategory"}
+        </span>
+      ),
+    },
+    {
+      key: "description",
+      label: "Description",
+      hideOnMobile: true,
+      render: (item) => (
+        <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-2 max-w-xs">
+          {Array.isArray(item.description) ? item.description.join(", ") : item.description || ""}
+        </p>
+      ),
+    },
+  ];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-6 animate-in fade-in duration-500">
 
-      {/* --- Header Section (Matching BlogsListing) --- */}
+      {/* --- Header Section --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-800 tracking-tight">Interior Items</h2>
           <p className="text-sm text-slate-500">Manage your interior customization choices</p>
         </div>
         <button
-          onClick={() =>{ setSelected("interior-form")
-                   dispatch(clearEditData());}
-          }
+          onClick={() => {
+            setSelected("interior-form");
+            dispatch(clearEditData());
+          }}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2"
         >
           <span className="text-lg">+</span> Add New Item
         </button>
       </div>
 
-      {/* --- Search Bar (Matching BlogsListing) --- */}
+      {/* --- Search Bar --- */}
       <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100">
-        <div className="relative flex-1 min-w-[280px]">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+        <div className="relative flex-1 min-w-[220px]">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
             type="text"
             placeholder="Search interior by title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border-none rounded-xl pl-11 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-100 placeholder:text-slate-400 outline-none"
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            className="w-full bg-white border-none rounded-xl pl-11 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-100 placeholder:text-slate-400"
           />
         </div>
         <button
@@ -118,95 +137,53 @@ const handleView = (item) => {
         </button>
       </div>
 
-      {/* --- Items Grid --- */}
-      {interiors.length === 0 ? (
-        <div className="text-center py-20 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400 font-medium">
-          No interior items found.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {interiors.map((item) => (
-            <div
-              key={item._id}
-              className="group bg-white rounded-[2rem] overflow-hidden border border-slate-100 hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col"
+      <AdminDataTable
+        columns={columns}
+        rows={interiors}
+        rowKey={(item) => item._id}
+        loading={loading}
+        emptyMessage="No interior items found."
+        imageColumn={{
+          accessor: (item) => item.images?.[0],
+          alt: (item) => item.title,
+          filename: (item) => item.title || item._id,
+        }}
+        renderActions={(item) => (
+          <>
+            <button
+              onClick={() => handleView(item)}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="View"
             >
-              {/* Image Section */}
-              <div className="relative h-44 overflow-hidden bg-slate-50">
-                <Image
-                  src={item.images?.[0]}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  width={400}
-                  height={300}
-                />
+              <Eye size={16} />
+            </button>
+            <button
+              onClick={() => {
+                setSelected("interior-form");
+                dispatch(setEditData(item));
+              }}
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+              title="Edit"
+            >
+              <Pencil size={16} />
+            </button>
+          </>
+        )}
+        onDelete={handleDelete}
+        deleteMessage={(item) => `Delete "${item.title}"? This action cannot be undone.`}
+        exportColumns={CSV_COLUMNS}
+        exportFilename="interior-items"
+      />
 
-                {/* Quick Delete Overlay */}
-                <button
-                  onClick={() => handleDelete(item._id)}
-                  disabled={deleteLoading === item._id}
-                  className="absolute top-3 right-3 bg-white/80 backdrop-blur-md text-red-500 p-2.5 rounded-xl shadow-sm hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"
-                >
-                  {deleteLoading === item._id ? (
-                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                  ) : (
-                    <Trash2 className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-
-              {/* Content Section */}
-              <div className="p-5 flex-1 flex flex-col">
-                <div className="mb-4">
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded-md">
-                        {item.subCategoryId?.categoryId?.title || "Interior"}
-                     </span>
-                   </div>
-                  <h3 className="font-bold text-slate-800 text-base line-clamp-1">{item.title}</h3>
-                  <p className="text-slate-400 text-xs mt-1 font-medium italic">
-                    {item.subCategoryId?.title || "No Subcategory"}
-                  </p>
-                </div>
-
-                {/* Description Snippet */}
-                {item.description?.length > 0 && (
-                  <p className="text-slate-500 text-[13px] leading-relaxed line-clamp-2 mb-4">
-                    {item.description.join(", ")}
-                  </p>
-                )}
-
-                {/* Actions */}
-                <div className="mt-auto flex gap-2">
-                  <button
-                    onClick={() => handleView(item)}
-                    className="flex-1 py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-[11px] hover:bg-slate-100 transition-all active:scale-95"
-                  >
-                    View
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSelected("interior-form")
-                      dispatch(setEditData(item))
-                    }}
-                    className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 font-bold text-[11px] hover:bg-blue-100 transition-all active:scale-95"
-                  >
-                    Edit
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
       {openModal && (
-  <DetailModal
-    item={selectedItem}
-    onClose={() => {
-      setOpenModal(false);
-      setSelectedItem(null);
-    }}
-  />
-)}
+        <DetailModal
+          item={selectedItem}
+          onClose={() => {
+            setOpenModal(false);
+            setSelectedItem(null);
+          }}
+        />
+      )}
     </div>
   );
 }

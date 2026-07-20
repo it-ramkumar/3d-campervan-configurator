@@ -182,7 +182,7 @@ className="space-y-6 w-full"
               ? `Interested in ${van.title}`
               : "Your Message"
           }
-          className="w-full p-4 rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none"
+          className="w-full p-4 text-black rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none"
         />
 
         {/* SUBMIT */}

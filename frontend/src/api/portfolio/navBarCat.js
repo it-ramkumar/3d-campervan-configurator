@@ -20,14 +20,10 @@ export async function getNavCat() {
   } catch (err) {
     console.error("❌ Error fetching navigation categories:", err);
 
-    // Swal only works in client components
+    // toast only works in client components
     if (typeof window !== 'undefined') {
-      const Swal = (await import('sweetalert2')).default;
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.message || "Failed to fetch navigation categories",
-      });
+      const toast = (await import('react-hot-toast')).default;
+      toast.error(err.message || "Failed to fetch navigation categories");
     }
 
     return null; // Return null to handle error gracefully

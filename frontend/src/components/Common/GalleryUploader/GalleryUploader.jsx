@@ -1,6 +1,19 @@
 "use client";
 import React from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  rectSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import ImageWithSkeleton from "../ImageWithSkeleton/ImageWithSkeleton";
 import { handleGalleryChange } from "../../../CustomHooks/handleGalleryChange";
 import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
@@ -8,6 +21,49 @@ import { removeNewGalleryImage } from "../../../CustomHooks/removeNewGallery";
 /*
   existingGallery  — string[]  (array of image URLs from DB)
 */
+
+const SortableImage = ({ url, index, onRemove }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: url });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={`relative group ${isDragging ? "z-50 shadow-2xl" : ""}`}
+    >
+      <div
+        className={`aspect-[4/4] overflow-hidden rounded-lg border-2 ${
+          isDragging ? "border-blue-500" : "border-transparent"
+        }`}
+      >
+        <ImageWithSkeleton
+          src={url}
+          alt={`gallery-existing-${index}`}
+          className="w-full h-32 object-cover transform transition-transform group-hover:scale-105"
+        />
+      </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove(index);
+        }}
+        className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold hover:bg-red-800 shadow-sm z-10"
+      >
+        ×
+      </button>
+    </div>
+  );
+};
+
 const GalleryUploader = ({
   id = "gallery",
   title = "Gallery Images",
@@ -25,12 +81,19 @@ const GalleryUploader = ({
 }) => {
 
   /* ── Drag-and-drop reorder ────────────────────────────────────────────── */
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const items = Array.from(existingGallery);
-    const [moved] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, moved);
-    setExistingGallery(items);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    })
+  );
+
+  const onDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = existingGallery.indexOf(active.id);
+    const newIndex = existingGallery.indexOf(over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+    setExistingGallery(arrayMove(existingGallery, oldIndex, newIndex));
   };
 
   /* ── Existing image actions ───────────────────────────────────────────── */
@@ -70,46 +133,15 @@ const GalleryUploader = ({
       {existingGallery.length > 0 && (
         <div className="mb-8">
           <h3 className="text-md font-medium text-gray-700 mb-4">Saved Photos (Draggable)</h3>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId={`${id}-grid`} direction="horizontal">
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
-                >
-                  {existingGallery.map((url, index) => (
-                    <Draggable key={url} draggableId={url} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={`relative group ${snapshot.isDragging ? "z-50 shadow-2xl" : ""}`}
-                        >
-                          <div className={`aspect-[4/4] overflow-hidden rounded-lg border-2 ${snapshot.isDragging ? "border-blue-500" : "border-transparent"}`}>
-                            <ImageWithSkeleton
-                              src={url}
-                              alt={`${id}-existing-${index}`}
-                              className="w-full h-32 object-cover transform transition-transform group-hover:scale-105"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => removeExisting(index)}
-                            className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold hover:bg-red-800 shadow-sm z-10"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+            <SortableContext items={existingGallery} strategy={rectSortingStrategy}>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {existingGallery.map((url, index) => (
+                  <SortableImage key={url} url={url} index={index} onRemove={removeExisting} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         </div>
       )}
 
