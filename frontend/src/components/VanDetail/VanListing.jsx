@@ -286,7 +286,7 @@ const VanPage = ({ vanDetail }) => {
                       <div key={i} className={`flex flex-col p-5 rounded-lg border-l-4 border-hover ${cardCls}`}>
                         <div className="flex items-start gap-2">
                           <SvgCheck />
-                          <RichParagraph className={`font-semibold leading-snug ${isDark ? "!text-secondary" : "!text-primary"}`}>{item.text}</RichParagraph>
+                          <RichParagraph className={` leading-snug ${isDark ? "!text-secondary" : "!text-primary"}`}>{item.text}</RichParagraph>
                         </div>
                         {item.sub_items?.filter(s => s).length > 0 && (
                           <ul className="mt-2 ml-6 space-y-1">
@@ -304,31 +304,53 @@ const VanPage = ({ vanDetail }) => {
               )}
 
               {/* TABLE */}
-              {block.block_type === "table" && block.table_data?.headers?.length > 0 && (
-                <div>
-                  {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
-                  <div className={`overflow-x-auto rounded-lg border ${isDark ? "border-white/10" : "border-primary/10"}`}>
-                    <table className="w-full text-left font-ui">
-                      <thead className={isDark ? "bg-white/10" : "bg-primary"}>
-                        <tr>
-                          {block.table_data.headers.map((h, i) => (
-                            <th key={i} className={`px-6 py-4 text-[10px] uppercase tracking-[0.22em] font-bold ${isDark ? "text-secondary/80" : "text-white"}`}>{h}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className={`divide-y ${isDark ? "divide-white/8" : "divide-primary/8"}`}>
-                        {block.table_data.rows?.map((row, ri) => (
-                          <tr key={ri} className={`transition-colors ${isDark ? "hover:bg-white/5" : "hover:bg-primary/3"}`}>
-                            {row.map((cell, ci) => (
-                              <td key={ci} className={`px-6 py-4 text-sm font-semibold ${isDark ? "text-secondary/75" : "text-primary"}`}>{cell}</td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+            {/* TABLE */}
+                         {block.block_type === "table" && block.table_data?.headers?.length > 0 && (
+                           <div>
+                             {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
+                             <div className={`overflow-x-auto rounded-lg border ${isDark ? "border-white/10" : "border-primary/10"}`}>
+                            <table className="w-full border-collapse">
+           <thead className={isDark ? "bg-white/10" : "bg-primary"}>
+             <tr>
+               {block.table_data.headers.map((h, i) => (
+                 <th
+                   key={i}
+                   className={`px-6 py-4 text-[10px] uppercase tracking-[0.22em] font-bold border ${
+                     isDark
+                       ? "border-white/10 text-secondary/80"
+                       : "border-primary/10 text-white"
+                   }`}
+                 >
+                   {h}
+                 </th>
+               ))}
+             </tr>
+           </thead>
+
+           <tbody>
+             {block.table_data.rows?.map((row, ri) => (
+               <tr key={ri}>
+                 {row.map((cell, ci) => (
+                   <td
+                     key={ci}
+                     className={`px-6 py-4 text-sm ${
+                       ci === 0 ? "font-bold" : "font-normal"
+                     } ${
+                       isDark
+                         ? "border border-white/10 text-secondary/75"
+                         : "border border-primary/10 text-primary"
+                     }`}
+                   >
+                     {cell}
+                   </td>
+                 ))}
+               </tr>
+             ))}
+           </tbody>
+         </table>
+                             </div>
+                           </div>
+                         )}
 
               {/* MEDIA */}
               {block.block_type === "media" && block.block_media?.length > 0 && (
