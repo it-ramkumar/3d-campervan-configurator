@@ -101,7 +101,7 @@ const TrendPortfolios = [
   {
     name: "Moto V2 Campervan",
     slug: "/layout-detail/moto-van-2-the-glen-helen-edition",
-    image: ["/navbar/motoV2.webp"],
+    image: ["/navbar/motov2.webp"],
   },
   {
     name: "Vermont Campervan",
@@ -111,7 +111,7 @@ const TrendPortfolios = [
     {
     name: "Montreal 1.0 Campervan",
     slug: "/layout-detail/montreal",
-    image: ["/navbar/montrealV1.webp"],
+    image: ["/navbar/montrealv1.webp"],
   },
 {
     name: "Amsterdam 2.0 Campervan",
