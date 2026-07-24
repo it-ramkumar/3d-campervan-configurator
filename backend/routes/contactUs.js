@@ -14,9 +14,9 @@ router.post("/", async (req, res) => {
       email,
       phone,
       message,
-      vanSlug,
       vanTitle,
       vanPrice,
+      pageUrl,
     } = req.body;
 
 
@@ -26,9 +26,10 @@ router.post("/", async (req, res) => {
         error: "All fields are required",
       });
     }
-const vanUrl = vanSlug
-  ? `${process.env.FRONTEND_URL.replace(/\/$/, "")}/layout-detail/${vanSlug}`
-  : null;
+
+    // pageUrl is the exact page the user submitted from (van-detail or layout-detail
+    // have different URL structures, so we can't safely rebuild it from vanSlug alone).
+    const vanUrl = pageUrl || null;
 
     // ==========================
     // Lead Tracking Detection
@@ -149,7 +150,11 @@ const adminHtml = `
         <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
           <p style="margin:5px 0;"><strong>Van:</strong> ${vanTitle}</p>
           <p style="margin:5px 0;"><strong>Price:</strong> $${vanPrice ? Number(vanPrice).toLocaleString() : "-"}</p>
-          <p style="margin:5px 0;"><strong>Slug:</strong> ${vanSlug}</p>
+          ${
+            vanUrl
+              ? `<p style="margin:5px 0;"><strong>Van URL:</strong> <a href="${vanUrl}" target="_blank">${vanUrl}</a></p>`
+              : ""
+          }
         </div>
       `
           : ""

@@ -109,6 +109,7 @@ export default function ContactForm({
       vanSlug: van?.slug,
       vanTitle: van?.title,
       vanPrice: van?.price,
+      pageUrl: typeof window !== "undefined" ? window.location.href : null,
     });
 
     // 🎯 Condition Khatam: Ab har haal me source "General Contact" hi jayega
