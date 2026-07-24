@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Heading2,
   Heading3,
@@ -19,6 +20,8 @@ import {
 } from "lucide-react";
 import VanGallery from "../VanDetail/GallerySection";
 import FeatureGridBlock from "../VanDetail/BlockFeatureCard";
+import ContactForm from "@/components/Consultation/ContactForm";
+import { contact } from "../../api/contact/contact";
 
 const SvgCheck = () => (
   <svg className="w-4 h-4 shrink-0" style={{ color: "#ED985F" }}
@@ -41,7 +44,10 @@ const HeroSpecItem = ({ icon: Icon, label, value }) => (
 );
 
 export default function LayoutDetail({ van, initialView }) {
-
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   // console.log(initialView, "ye initialView hai jo server se aaya");
   const getFeatureIcon = (cat) => {
     if (cat.includes("Electric")) return <Zap size={24} />;
@@ -50,6 +56,24 @@ export default function LayoutDetail({ van, initialView }) {
     return <LayoutIcon size={24} />;
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e, data) => {
+    e.preventDefault();
+    try {
+      if (!data.name?.trim() || !data.email?.trim() || !data.phone?.trim()) return;
+      setLoading(true);
+      await contact(data);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   // JSON-LD Schema for Google Rich Results
   const getEmbedUrl = (link) => {
     if (!link) return "";
@@ -158,8 +182,9 @@ export default function LayoutDetail({ van, initialView }) {
               <div className="flex flex-col gap-4 pt-4">
                 <SecondaryButton
                   label="Build One Like This"
-                  link={"/contact"}
-                  className="!w-full" />
+                  className="!w-full"
+                  onClick={() => { setIsFormOpen(true); setData(van); }}
+                />
                 <ShareButton
                   title={van?.van_listing?.title}
                 />
@@ -202,8 +227,8 @@ export default function LayoutDetail({ van, initialView }) {
             <section
               key={idx}
               className={`relative ${isFeatureGrid
-                  ? "bg-primary overflow-hidden"
-                  : `py-20 px-6 ${isDark ? "bbv-section-navy" : "bbv-section-light"}`
+                ? "bg-primary overflow-hidden"
+                : `py-20 px-6 ${isDark ? "bbv-section-navy" : "bbv-section-light"}`
                 }`}
             >
               {isDark ? <div className="bbv-dot-grid" /> : <div className="bbv-dot-grid-light" />}
@@ -263,45 +288,42 @@ export default function LayoutDetail({ van, initialView }) {
                   <div>
                     {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
                     <div className={`overflow-x-auto rounded-lg border ${isDark ? "border-white/10" : "border-primary/10"}`}>
-                   <table className="w-full border-collapse">
-  <thead className={isDark ? "bg-white/10" : "bg-primary"}>
-    <tr>
-      {block.table_data.headers.map((h, i) => (
-        <th
-          key={i}
-          className={`px-6 py-4 text-[10px] uppercase tracking-[0.22em] font-bold border ${
-            isDark
-              ? "border-white/10 text-secondary/80"
-              : "border-primary/10 text-white"
-          }`}
-        >
-          {h}
-        </th>
-      ))}
-    </tr>
-  </thead>
+                      <table className="w-full border-collapse">
+                        <thead className={isDark ? "bg-white/10" : "bg-primary"}>
+                          <tr>
+                            {block.table_data.headers.map((h, i) => (
+                              <th
+                                key={i}
+                                className={`px-6 py-4 text-[10px] uppercase tracking-[0.22em] font-bold border ${isDark
+                                    ? "border-white/10 text-secondary/80"
+                                    : "border-primary/10 text-white"
+                                  }`}
+                              >
+                                {h}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
 
-  <tbody>
-    {block.table_data.rows?.map((row, ri) => (
-      <tr key={ri}>
-        {row.map((cell, ci) => (
-          <td
-            key={ci}
-            className={`px-6 py-4 text-sm ${
-              ci === 0 ? "font-bold" : "font-normal"
-            } ${
-              isDark
-                ? "border border-white/10 text-secondary/75"
-                : "border border-primary/10 text-primary"
-            }`}
-          >
-            {cell}
-          </td>
-        ))}
-      </tr>
-    ))}
-  </tbody>
-</table>
+                        <tbody>
+                          {block.table_data.rows?.map((row, ri) => (
+                            <tr key={ri}>
+                              {row.map((cell, ci) => (
+                                <td
+                                  key={ci}
+                                  className={`px-6 py-4 text-sm ${ci === 0 ? "font-bold" : "font-normal"
+                                    } ${isDark
+                                      ? "border border-white/10 text-secondary/75"
+                                      : "border border-primary/10 text-primary"
+                                    }`}
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 )}
@@ -480,6 +502,24 @@ export default function LayoutDetail({ van, initialView }) {
             </div>
           </section>
         ) : ""}
+        {/* ── CONTACT FORM MODAL ── */}
+        {isFormOpen && (
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">
+            <div className="relative w-full max-w-2xl bbv-card max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setIsFormOpen(false)}
+                className="absolute top-4 right-4 text-primary hover:text-hover transition-colors cursor-pointer z-30 text-xl font-bold"
+              >✕</button>
+              <ContactForm
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                loading={loading}
+                initialVans={data}
+              />
+            </div>
+          </div>
+        )}
       </main>
 
 
