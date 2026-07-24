@@ -59,18 +59,18 @@ export default function ContactForm({
                 )}
               </div>
 
-              {/* PRICE */}
-              {van.price && (
-                <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between mt-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                    Base Investment
-                  </span>
+              {/* PRICE CONDITION: Agar price 1000 se ziada/equal ho to exact price, warna "Pricing Not Mentioned" */}
+              <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between mt-2">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Base Investment
+                </span>
 
-                  <span className="text-base font-black text-[#001F3D]">
-                    ${Number(van.price).toLocaleString("en-US")}
-                  </span>
-                </div>
-              )}
+                <span className="text-base font-black text-[#001F3D]">
+                  {van?.price && Number(van.price) >= 1000
+                    ? `$${Number(van.price).toLocaleString("en-US")}`
+                    : "Pricing Not Mentioned"}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -100,40 +100,49 @@ export default function ContactForm({
       {/* FORM */}
       <form
         onSubmit={async (e) => {
-  e.preventDefault();
+          e.preventDefault();
 
-  try {
-    // 1. Form data submit hone ka wait karein
-    await handleSubmit(e, {
-      ...formData,
-      vanSlug: van?.slug,
-      vanTitle: van?.title,
-      vanPrice: van?.price,
-      pageUrl: typeof window !== "undefined" ? window.location.href : null,
-    });
+          try {
+            // Check karein price 1000 se zyada/equal hai ya nahi
+            const isPriceValid = van?.price && Number(van.price) >= 1000;
 
-    // 🎯 Condition Khatam: Ab har haal me source "General Contact" hi jayega
-    const formSource = "contact";
-    const vanTitleText = van?.title || "No Van Selected";
+            const vanPriceText = isPriceValid ? van.price : 0;
+            const vanTitleText = van?.title
+              ? `${van.title} (${isPriceValid ? `$${van.price}` : "Pricing Not Mentioned"})`
+              : "No Van Selected";
 
-    // 3. Clean Redirect: Saara data URL parameters me bhej diya
-    router.push(
-      `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitleText)}`
-    );
+            // 1. Form data API submission (aage data smoothly chala jayega)
+            await handleSubmit(e, {
+              ...formData,
+              vanSlug: van?.slug,
+              vanTitle: van?.title,
+              vanPrice: vanPriceText,
+              pageUrl: typeof window !== "undefined" ? window.location.href : null,
+            });
 
-  } catch (error) {
-    // Agar API/Server me error aaye to redirect nahi hoga aur error console ho jayega
-    console.error("Form submission failed:", error);
-  }
-}}
-className="space-y-6 w-full"
+            const formSource = "contact";
+
+            // 2. Redirect with URL Params
+            router.push(
+              `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitleText)}`
+            );
+
+          } catch (error) {
+            console.error("Form submission failed:", error);
+          }
+        }}
+        className="space-y-6 w-full"
       >
         {/* HIDDEN INPUTS */}
         {hasSelectedVan && (
           <>
             <input type="hidden" name="vanSlug" value={van.slug || ""} />
             <input type="hidden" name="vanTitle" value={van.title || ""} />
-            <input type="hidden" name="vanPrice" value={van.price || ""} />
+            <input
+              type="hidden"
+              name="vanPrice"
+              value={van?.price && Number(van.price) >= 1000 ? van.price : 0}
+            />
           </>
         )}
 

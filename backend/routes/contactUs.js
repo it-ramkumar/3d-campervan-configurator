@@ -93,7 +93,7 @@ const vanCard = vanTitle
     </p>
 
     <p style="margin:4px 0;color:#666;">
-      Price: <strong>$${vanPrice ? Number(vanPrice).toLocaleString() : "-"}</strong>
+      Price: <strong>${vanPrice && Number(vanPrice) > 0 ? `$${Number(vanPrice).toLocaleString()}` : "Pricing Not Mentioned"}</strong>
     </p>
 
     ${
@@ -149,7 +149,7 @@ const adminHtml = `
           ? `
         <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
           <p style="margin:5px 0;"><strong>Van:</strong> ${vanTitle}</p>
-          <p style="margin:5px 0;"><strong>Price:</strong> $${vanPrice ? Number(vanPrice).toLocaleString() : "-"}</p>
+          <p style="margin:5px 0;"><strong>Price:</strong> ${vanPrice && Number(vanPrice) > 0 ? `$${Number(vanPrice).toLocaleString()}` : "Pricing Not Mentioned"}</p>
           ${
             vanUrl
               ? `<p style="margin:5px 0;"><strong>Van URL:</strong> <a href="${vanUrl}" target="_blank">${vanUrl}</a></p>`

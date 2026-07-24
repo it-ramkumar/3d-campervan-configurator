@@ -15,7 +15,7 @@ const CSV_COLUMNS = [
   { key: "message", label: "Message" },
   { key: "vanTitle", label: "Van Title" },
   { key: "vanSlug", label: "Van Slug" },
-  { key: "vanPrice", label: "Van Price" },
+  { key: "vanPrice", label: "Van Price", accessor: (r) => (r.vanPrice && Number(r.vanPrice) > 0 ? r.vanPrice : "Pricing Not Mentioned") },
   { key: "status", label: "Status" },
   { key: "leadSource", label: "Lead Source" },
   { key: "gclid", label: "GCLID" },
