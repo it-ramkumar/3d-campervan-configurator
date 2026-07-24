@@ -303,7 +303,6 @@ const VanPage = ({ vanDetail }) => {
                 </div>
               )}
 
-              {/* TABLE */}
             {/* TABLE */}
                          {block.block_type === "table" && block.table_data?.headers?.length > 0 && (
                            <div>

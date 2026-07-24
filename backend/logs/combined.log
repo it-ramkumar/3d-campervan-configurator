@@ -1144,3 +1144,16 @@
 {"level":"info","message":"127.0.0.1 - - [20/Jul/2026:06:53:56 +0000] \"GET /api/calendar/auth/url HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36\"","timestamp":"2026-07-20 11:53:56"}
 {"level":"info","message":"127.0.0.1 - - [20/Jul/2026:06:53:56 +0000] \"GET /api/calendar/status HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36\"","timestamp":"2026-07-20 11:53:56"}
 {"level":"info","message":"127.0.0.1 - - [20/Jul/2026:06:53:56 +0000] \"GET /api/calendar/slots?date=2026-07-21&timezone=Asia%2FKarachi HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36\"","timestamp":"2026-07-20 11:53:56"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-07-24 09:27:29"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:27:53 +0000] \"GET /api/van/available HTTP/1.1\" 200 256 \"-\" \"node\"","timestamp":"2026-07-24 09:27:53"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:28:10 +0000] \"POST /api/recommend HTTP/1.1\" 200 628 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36\"","timestamp":"2026-07-24 09:28:10"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:29:57 +0000] \"GET /api/portfolio?page=1&limit=12&is_published=true HTTP/1.1\" 200 172 \"-\" \"node\"","timestamp":"2026-07-24 09:29:57"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:29:57 +0000] \"GET /api/portfolio?page=1&limit=1 HTTP/1.1\" 200 171 \"-\" \"node\"","timestamp":"2026-07-24 09:29:57"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=1 HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=12&is_published=true HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=1 HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=12&is_published=true HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=1 HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=1 HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=12&is_published=true HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}
+{"level":"info","message":"127.0.0.1 - - [24/Jul/2026:04:30:11 +0000] \"GET /api//portfolio?page=1&limit=12&is_published=true HTTP/1.1\" 404 153 \"-\" \"node\"","timestamp":"2026-07-24 09:30:11"}

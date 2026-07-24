@@ -6,6 +6,7 @@ export const menuContent = {
         items: [
           { label: "3D Van Builder", link: "/configurator" },
           { label: "Send an Inquiry", link: "/inquiry" },
+          { label: "Van Matchmaker", link: "/van-matchmaker" },
           { label: "Custom Build", link: "/custom-build" },
 
 

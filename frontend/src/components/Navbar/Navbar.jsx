@@ -71,34 +71,53 @@ const TrendPortfolios = [
   {
     name: "MOTO Campervan ",
     slug: "/layout-detail/moto-van",
-    image: ["/family/moto(2).webp"],
+    image: ["/navbar/motov1.webp"],
   },
-  // {
-  //   name: "Cusco Campervan",
-  //   slug: "/van-layouts?category=flagship-long-van-montreal",
-  //   image: ["/family/cusco(3).webp"],
-  // },
-  {
-    name: "San Clemente",
-    slug: "/layout-detail/san-clemente",
-    image: ["/family/san(5).webp"],
-  },
-  {
-    name: "Santa Cruz",
-    slug: "/layout-detail/santa-cruz",
-    image: ["/family/santa(4).webp"],
-  },
-  {
+   {
     name: "Imperial Campervan",
     slug: "/layout-detail/imperial",
-    image: ["/long/imperial(8).webp"],
+    image: ["/navbar/imperial.webp"],
   },
   {
     name: "Lake Tohoe Campervan ",
     slug: "/layout-detail/lake-tahoe",
-    image: ["/short/lake(5).webp"],
+    image: ["/navbar/lakeTohoe.webp"],
   },
-
+  {
+    name: "San Clemente",
+    slug: "/layout-detail/san-clemente",
+    image: ["/navbar/sanCelement.webp"],
+  },
+  {
+    name: "Santa Cruz",
+    slug: "/layout-detail/santa-cruz",
+    image: ["/navbar/santaCruz.webp"],
+  },
+{
+    name: "Santa Monica Campervan",
+    slug: "/layout-detail/santa-monica-ford-transit-148-high-roof",
+    image: ["/navbar/edProject.webp"],
+  },
+  {
+    name: "Moto V2 Campervan",
+    slug: "/layout-detail/moto-van-2-the-glen-helen-edition",
+    image: ["/navbar/motoV2.webp"],
+  },
+  {
+    name: "Vermont Campervan",
+    slug: "/layout-detail/vermont",
+    image: ["/navbar/vermont.webp"],
+  },
+    {
+    name: "Montreal 1.0 Campervan",
+    slug: "/layout-detail/montreal",
+    image: ["/navbar/montrealV1.webp"],
+  },
+{
+    name: "Amsterdam 2.0 Campervan",
+    slug: "/layout-detail/amsterdam-20",
+    image: ["/navbar/amsterdam.webp"],
+  },
 ];
 
 const CategoryCard = ({ image, title, href, onClick,floorPlans }) => (

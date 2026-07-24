@@ -1,8 +1,10 @@
 import Hero from "@/components/HomePage/Hero/Hero";
 import { generateHomeSchema } from "../schema/homeSchema";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import { Heading2,RichParagraph, SpanTag } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Luxury Custom Camper Van Conversions | Big Bear Vans",
@@ -35,24 +37,24 @@ export const metadata = {
   },
 };
 
-const Buy = dynamic(() => import("@/components/HomePage/Buy/Buy"));
+const Buy = nextDynamic(() => import("@/components/HomePage/Buy/Buy"));
 // Dynamic Import for the new Front-end Matchmaker Quiz Component
-const VanRecommendation = dynamic(() => import("@/components/VanRecommendation/VanRecommendation"));
+const VanRecommendation = nextDynamic(() => import("@/components/VanRecommendation/VanRecommendation"));
 
-const Portfolio = dynamic(
+const Portfolio = nextDynamic(
   () => import("@/components/HomePage/Portfolio/Portfolio"),
 );
-const WhyChoose = dynamic(
+const WhyChoose = nextDynamic(
   () => import("@/components/HomePage/WhyChoose/WhyChoose"),
 );
-const OurProcess = dynamic(
+const OurProcess = nextDynamic(
   () => import("@/components/HomePage/OurProcess/OurProcess"),
 );
-const Testimonials = dynamic(
+const Testimonials = nextDynamic(
   () => import("@/components/HomePage/Testimonials/Testimonials"),
 );
-const Blog = dynamic(() => import("@/components/HomePage/Blog/Blog"));
-const FAQs = dynamic(() => import("@/components/Faqs/Faqs"));
+const Blog = nextDynamic(() => import("@/components/HomePage/Blog/Blog"));
+const FAQs = nextDynamic(() => import("@/components/Faqs/Faqs"));
 
 export default async function Home() {
   // FAQs Data
