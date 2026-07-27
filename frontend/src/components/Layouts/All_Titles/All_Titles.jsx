@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   FilterX,
@@ -13,8 +14,10 @@ import {
   LayoutTemplateIcon,
   X,
   SlidersHorizontal,
+  ChevronDown,
+  Check,
 } from "lucide-react";
-import { ImageWithSkeleton, SpanTag } from "../../Common/Common";
+import { ImageWithSkeleton, SpanTag, Heading3 } from "../../Common/Common";
 import FloorPlanHero from "./FloorPlanHero";
 
 export default function All_Titles_Client() {
@@ -37,6 +40,8 @@ export default function All_Titles_Client() {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hoveredId, setHoveredId] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const filterGridRef = useRef(null);
 
   // Backend se aane wale dynamic filter arrays ki states
   const [dbCategories, setDbCategories] = useState([]);
@@ -56,6 +61,20 @@ export default function All_Titles_Client() {
     setTempWheelbases(wheelbaseFilterFromURL ? wheelbaseFilterFromURL.split(",") : []);
     setTempSeatings(seatingFilterFromURL ? seatingFilterFromURL.split(",") : []);
   }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (filterGridRef.current && !filterGridRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, []);
 
   const updateURL = (params) => {
     const sp = new URLSearchParams(searchParams.toString());
@@ -80,6 +99,7 @@ export default function All_Titles_Client() {
 
   // 4. APPLY BUTTON LOGIC: Ek sath saare filters URL mein bhejta hai
   const handleApplyFilters = () => {
+    setOpenDropdown(null);
     updateURL({
       bathroomType: tempBathrooms.join(","),
       wheelbase: tempWheelbases.join(","),
@@ -93,6 +113,7 @@ export default function All_Titles_Client() {
     setTempBathrooms([]);
     setTempWheelbases([]);
     setTempSeatings([]);
+    setOpenDropdown(null);
     router.push(pathname);
   };
 
@@ -211,184 +232,279 @@ export default function All_Titles_Client() {
         <div className="max-w-7xl mx-auto px-6 py-16">
 
     {/* ── FILTER BAR ── */}
-{/* Yahan se overflow-hidden ko hata kar safe kiya gaya hai taaki dropdowns baahar float kar sakein */}
-<div className="bg-white border border-primary/8 rounded-2xl shadow-sm mb-8 relative">
-  {/* Rounded corners border match karne ke liye custom top bar divider */}
-  <div className="h-[2px] w-full bg-[#ED985F] rounded-t-2xl absolute top-0 left-0" />
+<div className="bg-white border border-primary/8 rounded-2xl shadow-sm mb-8 relative z-30">
+  <div className="h-[2px] w-full bg-[#ED985F] rounded-t-2xl" />
 
-  <div className="p-5 md:p-6 pt-6">
+  <div className="p-6 md:p-8">
 
     {/* Header & Results Count */}
-    <div className="flex items-center justify-between mb-5 pb-4 border-b border-primary/6">
+    <div className="flex items-center justify-between mb-8 pb-5 border-b border-primary/6">
       <div className="flex items-center gap-3">
         <div className="p-2 bg-[#ED985F]/10 rounded-lg">
-          <SlidersHorizontal size={16} className="text-[#ED985F]" />
+          <SlidersHorizontal size={18} className="text-[#ED985F]" />
         </div>
-        <SpanTag text="Browse Floor Plans" className="mb-0" />
+        <div>
+          <SpanTag text="Browse Floor Plans" className="mb-0.5" />
+          <Heading3 text="Filter Layouts" className="!mb-0 !text-xl md:!text-2xl !text-primary" />
+        </div>
       </div>
-      <span className="font-ui font-semibold text-xs text-primary/60 bg-secondary px-3 py-1.5 rounded-lg border border-primary/6">
-        {portfolios.length} {portfolios.length === 1 ? "Result" : "Results"}
-      </span>
-    </div>
 
-    {/* Search Input Box */}
-    <div className="relative w-full mb-5">
-      <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30" />
-      <input
-        type="text"
-        value={localSearch}
-        onChange={(e) => setLocalSearch(e.target.value)}
-        onKeyDown={handleSearchCommit}
-        onBlur={handleSearchCommit}
-        placeholder="Search layouts..."
-        className="w-full bg-secondary border border-primary/10 rounded-xl pl-11 pr-4 py-3 font-ui text-sm text-primary placeholder:text-primary/30 focus:outline-none focus:border-[#ED985F]/40 focus:ring-2 focus:ring-[#ED985F]/10 transition-all"
-      />
-    </div>
-
-    {/* ── DROPDOWNS ROW ── */}
-    {/* relative aur high z-index (z-40) ensure karega ki dropdown niche wale grid section se upar rahein */}
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 relative z-40">
-
-      {/* 1. Chassis Dropdown */}
-      <div className="relative group">
-        <button
-          type="button"
-          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
-        >
-          <span>Chassis {selectedChassis !== "ALL" ? `(${getCategoryLabel(selectedChassis)})` : "▼"}</span>
-        </button>
-        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
+      <div className="flex items-center gap-4">
+        <span className="font-ui font-semibold text-xs text-primary/60 bg-secondary px-3 py-1.5 rounded-lg border border-primary/6">
+          {portfolios.length} {portfolios.length === 1 ? "Result" : "Results"}
+        </span>
+        {isFilterActive && (
           <button
             type="button"
-            onClick={() => updateURL({ category: "ALL" })}
-            className={`w-full text-left font-ui text-xs uppercase tracking-wider px-3 py-2 rounded-lg transition-all mb-1 ${
-              selectedChassis === "ALL" ? "bg-primary text-secondary" : "hover:bg-secondary text-primary/70"
-            }`}
+            onClick={handleClearFilters}
+            className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-[#ED985F] hover:text-primary flex items-center gap-1.5 transition-colors"
           >
-            All Chassis
+            <X size={12} /> Reset All
           </button>
-          {dbCategories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => updateURL({ category: cat })}
-              className={`w-full text-left font-ui text-xs uppercase tracking-wider px-3 py-2 rounded-lg transition-all mb-1 ${
-                selectedChassis === cat ? "bg-primary text-secondary" : "hover:bg-secondary text-primary/70"
-              }`}
+        )}
+      </div>
+    </div>
+
+    {/* Click-to-toggle dropdowns (not hover) so they work on touch/mobile devices. Panels always
+        open downward below their trigger. */}
+    <div ref={filterGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-6">
+
+      {/* Search */}
+      <div className="space-y-2">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Search
+        </label>
+        <div className="relative">
+          <input
+            type="text"
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
+            onKeyDown={handleSearchCommit}
+            onBlur={handleSearchCommit}
+            placeholder="Search layouts..."
+            className="w-full pl-10 pr-4 py-3 bg-secondary border border-primary/10 rounded-xl font-ui text-sm text-primary placeholder:text-primary/30 focus:bg-white focus:border-[#ED985F]/40 focus:ring-2 focus:ring-[#ED985F]/10 outline-none transition-all"
+          />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/30" size={15} />
+        </div>
+      </div>
+
+      {/* Chassis (single-select, applies instantly) */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Chassis
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "chassis" ? null : "chassis")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "chassis" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
+        >
+          <span className={`truncate max-w-[140px] ${selectedChassis !== "ALL" ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {selectedChassis !== "ALL" ? getCategoryLabel(selectedChassis) : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "chassis" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
+        </div>
+        <AnimatePresence>
+          {openDropdown === "chassis" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
             >
-              {getCategoryLabel(cat)}
-            </button>
-          ))}
-        </div>
+              <button
+                type="button"
+                onClick={() => { updateURL({ category: "ALL" }); setOpenDropdown(null); }}
+                className={`w-full text-left font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-150 ${
+                  selectedChassis === "ALL" ? "text-[#ED985F] font-semibold bg-secondary" : "text-primary/70 hover:bg-secondary"
+                }`}
+              >
+                All Chassis
+              </button>
+              {dbCategories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => { updateURL({ category: cat }); setOpenDropdown(null); }}
+                  className={`w-full text-left font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-150 ${
+                    selectedChassis === cat ? "text-[#ED985F] font-semibold bg-secondary" : "text-primary/70 hover:bg-secondary"
+                  }`}
+                >
+                  {getCategoryLabel(cat)}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* 2. Bathroom Dropdown */}
-      <div className="relative group">
-        <button
-          type="button"
-          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+      {/* Bathroom */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Bathroom{tempBathrooms.length > 0 && ` (${tempBathrooms.length})`}
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "bathroom" ? null : "bathroom")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "bathroom" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
         >
-          <span>Bathroom {tempBathrooms.length > 0 ? `(${tempBathrooms.length})` : "▼"}</span>
-        </button>
-        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
-          {dbBathrooms.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {dbBathrooms.map((type) => (
-                <label key={type} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
-                  <input
-                    type="checkbox"
-                    checked={tempBathrooms.includes(type)}
-                    onChange={() => handleLocalCheckboxToggle(setTempBathrooms, tempBathrooms, type)}
-                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
-                  />
-                  {type}
-                </label>
-              ))}
-            </div>
-          ) : (
-            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
-          )}
+          <span className={`truncate max-w-[140px] ${tempBathrooms.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {tempBathrooms.length > 0 ? tempBathrooms.join(", ") : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "bathroom" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
+        <AnimatePresence>
+          {openDropdown === "bathroom" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+            >
+              {dbBathrooms.length === 0 ? (
+                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                  No options available
+                </div>
+              ) : (
+                dbBathrooms.map((type) => {
+                  const isChecked = tempBathrooms.includes(type);
+                  return (
+                    <label key={type} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleLocalCheckboxToggle(setTempBathrooms, tempBathrooms, type)}
+                        className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                      />
+                      <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                        {type}
+                      </span>
+                    </label>
+                  );
+                })
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* 3. Wheelbase Dropdown */}
-      <div className="relative group">
-        <button
-          type="button"
-          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+      {/* Wheelbase */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Wheelbase{tempWheelbases.length > 0 && ` (${tempWheelbases.length})`}
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "wheelbase" ? null : "wheelbase")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "wheelbase" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
         >
-          <span>Wheelbase {tempWheelbases.length > 0 ? `(${tempWheelbases.length})` : "▼"}</span>
-        </button>
-        <div className="absolute left-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
-          {dbWheelbases.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {dbWheelbases.map((wb) => (
-                <label key={wb} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
-                  <input
-                    type="checkbox"
-                    checked={tempWheelbases.includes(String(wb))}
-                    onChange={() => handleLocalCheckboxToggle(setTempWheelbases, tempWheelbases, wb)}
-                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
-                  />
-                  {getWheelbaseLabel(String(wb))}
-                </label>
-              ))}
-            </div>
-          ) : (
-            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
-          )}
+          <span className={`truncate max-w-[140px] ${tempWheelbases.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {tempWheelbases.length > 0 ? tempWheelbases.map((wb) => getWheelbaseLabel(wb)).join(", ") : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "wheelbase" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
+        <AnimatePresence>
+          {openDropdown === "wheelbase" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+            >
+              {dbWheelbases.length === 0 ? (
+                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                  No options available
+                </div>
+              ) : (
+                dbWheelbases.map((wb) => {
+                  const isChecked = tempWheelbases.includes(String(wb));
+                  return (
+                    <label key={wb} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleLocalCheckboxToggle(setTempWheelbases, tempWheelbases, wb)}
+                        className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                      />
+                      <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                        {getWheelbaseLabel(String(wb))}
+                      </span>
+                    </label>
+                  );
+                })
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* 4. Seats Dropdown */}
-      <div className="relative group">
-        <button
-          type="button"
-          className="w-full flex items-center justify-between bg-secondary border border-primary/10 rounded-xl px-4 py-2.5 font-ui text-xs font-semibold uppercase tracking-wider text-primary/80 hover:border-[#ED985F]/40 transition-all"
+      {/* Seats */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Seats{tempSeatings.length > 0 && ` (${tempSeatings.length})`}
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "seats" ? null : "seats")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "seats" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
         >
-          <span>Seats {tempSeatings.length > 0 ? `(${tempSeatings.length})` : "▼"}</span>
-        </button>
-        {/* Right side alignment safe layout for extreme or grid edge visibility */}
-        <div className="absolute right-0 mt-1 w-56 bg-white border border-primary/8 rounded-xl shadow-xl p-3 hidden group-hover:block hover:block z-50 max-h-60 overflow-y-auto">
-          {dbSeatings.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {dbSeatings.map((seat) => (
-                <label key={seat} className="flex items-center gap-2 font-ui text-xs text-primary/80 cursor-pointer hover:text-primary transition-colors py-0.5">
-                  <input
-                    type="checkbox"
-                    checked={tempSeatings.includes(String(seat))}
-                    onChange={() => handleLocalCheckboxToggle(setTempSeatings, tempSeatings, seat)}
-                    className="rounded border-primary/20 text-[#ED985F] focus:ring-[#ED985F]/30"
-                  />
-                  {seat} Seats
-                </label>
-              ))}
-            </div>
-          ) : (
-            <span className="font-ui text-xs text-primary/40 block text-center py-2">No options</span>
-          )}
+          <span className={`truncate max-w-[140px] ${tempSeatings.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {tempSeatings.length > 0 ? tempSeatings.map((s) => `${s} Seats`).join(", ") : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "seats" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
+        <AnimatePresence>
+          {openDropdown === "seats" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+            >
+              {dbSeatings.length === 0 ? (
+                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                  No options available
+                </div>
+              ) : (
+                dbSeatings.map((seat) => {
+                  const isChecked = tempSeatings.includes(String(seat));
+                  return (
+                    <label key={seat} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleLocalCheckboxToggle(setTempSeatings, tempSeatings, seat)}
+                        className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                      />
+                      <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                        {seat} Seats
+                      </span>
+                    </label>
+                  );
+                })
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
     </div>
 
-    {/* ── ACTION BUTTONS ROW ── */}
-    <div className="flex justify-end gap-3 pt-3 border-t border-primary/6 relative z-10">
-      {isFilterActive && (
-        <button
-          type="button"
-          onClick={handleClearFilters}
-          className="px-6 py-2 rounded-xl font-ui font-semibold text-[11px] uppercase tracking-[0.15em] bg-secondary text-primary/70 border border-primary/10 hover:border-[#ED985F]/40 hover:text-primary transition-all flex items-center gap-2 cursor-pointer"
-        >
-          <FilterX size={13} /> Clear Filters
-        </button>
-      )}
+    {/* Apply button */}
+    <div className="flex justify-end pt-5 border-t border-primary/6">
       <button
         type="button"
         onClick={handleApplyFilters}
-        className="px-6 py-2 rounded-xl font-ui font-semibold text-[11px] uppercase tracking-[0.15em] bg-[#ED985F] text-white hover:bg-primary transition-all shadow-sm cursor-pointer"
+        className="w-full md:w-auto bg-primary hover:bg-[#ED985F] text-secondary font-ui font-semibold text-[11px] uppercase tracking-[0.18em] px-8 py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
       >
-        Apply Filters
+        <Check size={14} /> Apply Filters
       </button>
     </div>
 
