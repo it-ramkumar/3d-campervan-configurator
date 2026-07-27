@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -70,6 +70,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
     search: ""
   });
   const [openDropdown, setOpenDropdown] = useState(null);
+  const filterGridRef = useRef(null);
 
   useEffect(() => {
     setLocalFilters({
@@ -82,11 +83,17 @@ export default function Van_layout({ layout, currentParams = {} }) {
   }, [currentParams]);
 
   useEffect(() => {
-    const handleOutsideClick = () => setOpenDropdown(null);
-    if (typeof window !== "undefined") {
-      window.addEventListener("click", handleOutsideClick);
-    }
-    return () => window.removeEventListener("click", handleOutsideClick);
+    const handleOutsideClick = (event) => {
+      if (filterGridRef.current && !filterGridRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
   }, []);
 
   const handleCheckboxChange = (key, optionValue) => {
@@ -162,7 +169,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
             </div>
 
             {/* Filter inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-6">
+            <div ref={filterGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-6">
 
               {/* Search */}
               <div className="space-y-2">
@@ -188,7 +195,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
                 const isOpen = openDropdown === f.key;
 
                 return (
-                  <div key={f.key} className="space-y-2 relative" onClick={(e) => e.stopPropagation()}>
+                  <div key={f.key} className="space-y-2 relative">
                     <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
                       {f.label}{currentValues.length > 0 && ` (${currentValues.length})`}
                     </label>

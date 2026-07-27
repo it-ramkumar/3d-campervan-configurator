@@ -11,6 +11,16 @@ import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
 
+// Mirrors backend/models/vanModel.js `generateSlug` (minus the DB collision suffix,
+// which can only be resolved server-side).
+const slugifyPreview = (title) =>
+  (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const emptyVanListing = {
   title: "",
   description: "",
@@ -59,6 +69,7 @@ const VansForm = ({ setSelected }) => {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [originalTitle, setOriginalTitle] = useState(null);
 
   const statusOptions = [
     { value: "available", label: "Available" },
@@ -121,6 +132,8 @@ const VansForm = ({ setSelected }) => {
           ? editData.detailed_features
           : [{ category: "", items: [""] }]
       );
+
+      setOriginalTitle(editData.van_listing?.title || "");
     }
   }, [editData]);
 
@@ -137,6 +150,7 @@ const VansForm = ({ setSelected }) => {
     setMediaUrls([""]);
     setBlocks([]);
     setFeatures([{ category: "", items: [""] }]);
+    setOriginalTitle(null);
     dispatch(clearEditData());
   };
 
@@ -275,6 +289,17 @@ const VansForm = ({ setSelected }) => {
                   placeholder="Enter van title"
                 />
                 {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title}</p>}
+                <p className="text-xs text-gray-500 mt-1.5">
+                  Slug:{" "}
+                  <span className="font-mono text-gray-700">
+                    {editData && formData.van_listing.title === originalTitle
+                      ? editData.slug
+                      : slugifyPreview(formData.van_listing.title) || "—"}
+                  </span>
+                  {editData && formData.van_listing.title !== originalTitle && (
+                    <span className="italic"> (updates automatically on save)</span>
+                  )}
+                </p>
               </div>
 
               <div>

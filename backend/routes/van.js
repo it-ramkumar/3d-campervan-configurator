@@ -243,7 +243,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     // Slug regeneration on title change
     let newSlug = van.slug;
     if (van_listing.title && van_listing.title !== van.van_listing.title) {
-      newSlug = await Van.generateSlug(van_listing.title);
+      newSlug = await Van.generateSlug(van_listing.title, van._id);
     }
 
     // ── GLB file ──────────────────────────────────────────────────────────────

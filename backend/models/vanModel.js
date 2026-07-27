@@ -254,7 +254,7 @@ vanSchema.pre("save", async function (next) {
 /* Statics & Methods                                                          */
 /* -------------------------------------------------------------------------- */
 
-vanSchema.statics.generateSlug = async function (title) {
+vanSchema.statics.generateSlug = async function (title, excludeId = null) {
   const baseSlug = title
     .toLowerCase()
     .replace(/[^a-z0-9 -]/g, "")
@@ -264,7 +264,7 @@ vanSchema.statics.generateSlug = async function (title) {
 
   let slug = baseSlug;
   let counter = 1;
-  while (await this.exists({ slug })) {
+  while (await this.exists(excludeId ? { slug, _id: { $ne: excludeId } } : { slug })) {
     slug = `${baseSlug}-${counter++}`;
   }
   return slug;
