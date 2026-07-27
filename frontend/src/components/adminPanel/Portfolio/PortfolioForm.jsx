@@ -10,6 +10,16 @@ import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
 
+// Mirrors backend/models/portfolio.js `generateSlug` (minus the DB collision suffix,
+// which can only be resolved server-side).
+const slugifyPreview = (title) =>
+  (title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+
 export default function PortfolioForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
   const [galleryFiles, setGalleryFiles] = useState([]);
@@ -40,6 +50,7 @@ export default function PortfolioForm({ setSelected }) {
   const [renderingPreviews, setRenderingPreviews] = useState([]);
   const [existingRendering, setExistingRendering] = useState([]);
   const [removedExistingRendering, setRemovedExistingRendering] = useState([]);
+  const [originalTitle, setOriginalTitle] = useState(null);
 
 
   const clearForm = () => {
@@ -65,11 +76,13 @@ export default function PortfolioForm({ setSelected }) {
     setRenderingPreviews([]);
     setExistingRendering([]);
     setRemovedExistingRendering([]);
+    setOriginalTitle(null);
   };
 
   useEffect(() => {
     if (editData?._id) {
       setTitle(editData.van_listing?.title || "");
+      setOriginalTitle(editData.van_listing?.title || "");
       setRoof(editData.van_listing?.roof || "");
       setBedType(editData.van_listing?.bedType || "");
       setBathroomType(editData.van_listing?.bathroomType || "");
@@ -245,6 +258,17 @@ export default function PortfolioForm({ setSelected }) {
                 className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
                 required
               />
+              <p className="text-xs text-gray-500 mt-1.5">
+                Slug:{" "}
+                <span className="font-mono text-gray-700">
+                  {editData && title === originalTitle
+                    ? editData.slug
+                    : slugifyPreview(title) || "—"}
+                </span>
+                {editData && title !== originalTitle && (
+                  <span className="italic"> (updates automatically on save)</span>
+                )}
+              </p>
             </div>
 
             <div>

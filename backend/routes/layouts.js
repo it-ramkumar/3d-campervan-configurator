@@ -430,6 +430,10 @@ router.put(
       const allImagesToDelete = [...deletedGalleryImages, ...deletedRenderingImages];
       allImagesToDelete.forEach(url => deleteFromS3(url));
 
+      // Slug logic ke liye original title ko update se pehle hi capture karlein,
+      // warna neeche van_listing replace hone ke baad comparison hamesha false aayega.
+      const originalTitle = portfolio.van_listing.title;
+
       // 5. Update portfolio data
       portfolio.van_listing = {
         ...portfolio.van_listing,
@@ -448,7 +452,7 @@ router.put(
       portfolio.media = media;
 
       // Slug logic (if title changed)
-      if (van_listing.title && van_listing.title !== portfolio.van_listing.title) {
+      if (van_listing.title && van_listing.title !== originalTitle) {
         portfolio.slug = await PortfolioVan.generateSlug(van_listing.title);
         // Note: Folder name wahi rahega jo pehle tha taake links break na hon.
       }
