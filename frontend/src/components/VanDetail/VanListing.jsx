@@ -121,6 +121,25 @@ const VanPage = ({ vanDetail }) => {
       <section className="bbv-section-light relative">
         <div className="bbv-dot-grid-light" />
         <div className="relative max-w-9xl mx-auto md:pt-4 pb-16 px-6 ">
+
+          {/* Mobile-only heading: shown above the gallery on small screens.
+              Hidden on lg+ where the title renders inside the info panel instead. */}
+          <div className="lg:hidden mb-5 space-y-3">
+            <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary !text-4xl sm:!text-5xl leading-[0.95]" />
+            {vanDetail?.van_listing?.subtitle && (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-0.5 bg-hover shrink-0" />
+                <RichParagraph className="italic !text-primary/55">{vanDetail.van_listing.subtitle}</RichParagraph>
+              </div>
+            )}
+            {vanDetail?.delivery_date && (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
+                <Calendar className="w-3 h-3 text-hover" />
+                <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             {/* LEFT: GALLERY */}
@@ -131,19 +150,19 @@ const VanPage = ({ vanDetail }) => {
             {/* RIGHT: INFO PANEL */}
             <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-6">
 
-              {/* Delivery date badge */}
+              {/* Delivery date badge (desktop only — mobile shows it above the gallery instead) */}
               {vanDetail?.delivery_date && (
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
+                <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
                   <Calendar className="w-3 h-3 text-hover" />
                   <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span>
                 </div>
               )}
 
-              {/* Title */}
+              {/* Title (desktop only — mobile shows it above the gallery instead) */}
               <div>
-                <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary !text-6xl mb-2 leading-[0.9]" />
+                <Heading1 text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary !text-6xl mb-2 leading-[0.9]" />
                 {vanDetail?.van_listing?.subtitle && (
-                  <div className="flex items-center gap-3 mt-4">
+                  <div className="hidden lg:flex items-center gap-3 mt-4">
                     <div className="w-8 h-0.5 bg-hover shrink-0" />
                     <RichParagraph className="italic !text-primary/55">{vanDetail.van_listing.subtitle}</RichParagraph>
                   </div>

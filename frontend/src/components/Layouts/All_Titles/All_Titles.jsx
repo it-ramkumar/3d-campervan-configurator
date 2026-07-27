@@ -27,7 +27,6 @@ export default function All_Titles_Client() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // 1. URL Se active values read karein
   const selectedChassis = searchParams.get("category") || "ALL";
   const searchQueryFromURL = searchParams.get("search") || "";
   const bathroomFilterFromURL = searchParams.get("bathroomType") || "";
