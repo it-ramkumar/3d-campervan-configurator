@@ -32,7 +32,7 @@ const floorPlans = [
    {
     name: "Imperial",
     slug: "/floorplans?search=imperial",
-    image: ["/renderings/imperial.webp"],
+    image: ["/renderings/imperialFinal.webp"],
   },
   {
     name: "Santa Monica",
