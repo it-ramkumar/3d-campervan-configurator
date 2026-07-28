@@ -109,7 +109,7 @@ export default async function page({ searchParams }) {
                       <div className="mt-8 pt-6 border-t border-secondary">
                         <SecondaryButton
                           label="Read Full Story"
-                          link={`/blog-detail/${blog.slug}`}
+                          link={`/blog/${blog.slug}`}
                           className="w-full text-center"
                         />
                       </div>

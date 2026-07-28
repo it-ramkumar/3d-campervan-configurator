@@ -55,7 +55,7 @@ const FamilySection = ({ imageData }) => {
               <Heading3 text="Lake Tahoe Campervan" className="font-display text-secondary uppercase tracking-wide mb-6" />
               <RichParagraph className="text-secondary/80 mb-6">
                 We designed this
-                <CustomLink href="/layout-detail/lake-tahoe" text={" 144 AWD Sprinter "} />
+                <CustomLink href="/van-layouts/lake-tahoe" text={" 144 AWD Sprinter "} />
                 van for a family of four. It's the perfect example of a family-first approach.
               </RichParagraph>
 
@@ -103,7 +103,7 @@ const FamilySection = ({ imageData }) => {
               <div className="bbv-divider mb-4" />
               <Heading3 text="Blue Whale Campervan" className="font-display text-secondary uppercase tracking-wide mb-6" />
               <RichParagraph className="text-secondary/80 mb-6">
-                <CustomLink href="/layout-detail/blue-whale-van" text={" Blue "} />
+                <CustomLink href="/van-layouts/blue-whale-van" text={" Blue "} />
                 Whale is our one-of-a-kind short campervan that offers seating and sleeping for six people. This short van features:
               </RichParagraph>
 

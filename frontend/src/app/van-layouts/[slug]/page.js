@@ -15,14 +15,16 @@ export async function generateMetadata({ params }) {
   const title = `${van.van_listing?.title} | Big Bear Vans`;
   const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
   const imageUrl = van.gallery?.[0] || "/default-og-image.webp";
+  const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}`;
 
   return {
     title,
     description,
+    alternates: { canonical },
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}`,
+      url: canonical,
       images: [{ url: imageUrl }],
       type: "website",
     },
@@ -61,7 +63,7 @@ export default async function Page({ params, searchParams }) {
   const hasPrice = vanDetail?.data?.van_listing?.price && vanDetail?.data?.van_listing?.price > 10;
 
   const jsonLd = {
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/layout-detail/${slug}#product`,
+    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}#product`,
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": vanDetail.data.van_listing?.title,

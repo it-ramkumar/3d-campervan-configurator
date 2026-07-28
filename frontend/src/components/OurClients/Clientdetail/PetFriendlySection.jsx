@@ -28,9 +28,9 @@ const PetFriendlySection = ({ imageData }) => {
             </RichParagraph>
             <RichParagraph className="mt-4 text-primary/80">
               With our pet-specific campervans, you can comfortably go shopping or hiking on a trail where pets are not allowed by leaving them in the van with the A/C or heater on and the engine off.
-              <CustomLink href="/layout-detail/cusco-campervan" text={" Cusco, "} />
-              <CustomLink href="/layout-detail/santa-barbara" text={"  Santa Barbara, "} />
-              <CustomLink href="/layout-detail/ventura-campervan" text={" Ventura, "} />
+              <CustomLink href="/van-layouts/cusco-campervan" text={" Cusco, "} />
+              <CustomLink href="/van-layouts/santa-barbara" text={"  Santa Barbara, "} />
+              <CustomLink href="/van-layouts/ventura-campervan" text={" Ventura, "} />
               etc, are our exclusive pet-friendly campervans.
             </RichParagraph>
           </div>
@@ -77,7 +77,7 @@ const PetFriendlySection = ({ imageData }) => {
               <div className="bbv-divider mb-4" />
               <Heading3 text="The Cusco Campervan" className="font-display text-primary uppercase tracking-wide mb-6" />
               <RichParagraph className="text-primary/80 my-6">
-                <CustomLink href="/layout-detail/cusco-campervan" text={" Cusco "} />
+                <CustomLink href="/van-layouts/cusco-campervan" text={" Cusco "} />
                 is our pet-friendly campervan designed for clients with two dogs, featuring dedicated pet areas and enhanced ventilation systems.
               </RichParagraph>
               <ul className="space-y-4">

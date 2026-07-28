@@ -515,7 +515,7 @@ export default function All_Titles_Client() {
             <div className="space-y-16">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {portfolios.map((item) => {
-                  const path = `/layout-detail/${item.slug}?view=floorplan`;
+                  const path = `/van-layouts/${item.slug}?view=floorplan`;
                   const hasRenderings = item.rendering && item.rendering.length > 0;
                   const displayImage = (hoveredId === item._id && item.rendering?.length > 1)
                     ? item.rendering[1]

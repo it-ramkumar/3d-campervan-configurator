@@ -70,52 +70,52 @@ const floorPlans = [
 const TrendPortfolios = [
   {
     name: "MOTO Campervan ",
-    slug: "/layout-detail/moto-van",
+    slug: "/van-layouts/moto-van",
     image: ["/navbar/motov1.webp"],
   },
    {
     name: "Imperial Campervan",
-    slug: "/layout-detail/imperial",
+    slug: "/van-layouts/imperial",
     image: ["/navbar/imperial.webp"],
   },
   {
     name: "Lake Tohoe Campervan ",
-    slug: "/layout-detail/lake-tahoe",
+    slug: "/van-layouts/lake-tahoe",
     image: ["/navbar/lakeTohoe.webp"],
   },
   {
     name: "San Clemente",
-    slug: "/layout-detail/san-clemente",
+    slug: "/van-layouts/san-clemente",
     image: ["/navbar/sanCelement.webp"],
   },
   {
     name: "Santa Cruz",
-    slug: "/layout-detail/santa-cruz",
+    slug: "/van-layouts/santa-cruz",
     image: ["/navbar/santaCruz.webp"],
   },
 {
     name: "Santa Monica Campervan",
-    slug: "/layout-detail/santa-monica-ford-transit-148-high-roof",
+    slug: "/van-layouts/santa-monica-ford-transit-148-high-roof",
     image: ["/navbar/edProject.webp"],
   },
   {
     name: "Moto V2 Campervan",
-    slug: "/layout-detail/moto-van-2-the-glen-helen-edition",
+    slug: "/van-layouts/moto-van-2-the-glen-helen-edition",
     image: ["/navbar/motov2.webp"],
   },
   {
     name: "Vermont Campervan",
-    slug: "/layout-detail/vermont",
+    slug: "/van-layouts/vermont",
     image: ["/navbar/vermont.webp"],
   },
     {
     name: "Montreal 1.0 Campervan",
-    slug: "/layout-detail/montreal",
+    slug: "/van-layouts/montreal",
     image: ["/navbar/montrealv1.webp"],
   },
 {
     name: "Amsterdam 2.0 Campervan",
-    slug: "/layout-detail/amsterdam-20",
+    slug: "/van-layouts/amsterdam-20",
     image: ["/navbar/amsterdam.webp"],
   },
 ];
@@ -298,7 +298,7 @@ const handleItemClick = () => {
             {data?.map((b) => (
               <BlogListItem
                 key={b.slug}
-                href={`/blog-detail/${b.slug}`}
+                href={`/blog/${b.slug}`}
                onClick={handleItemClick}
               >
                 {b.title}

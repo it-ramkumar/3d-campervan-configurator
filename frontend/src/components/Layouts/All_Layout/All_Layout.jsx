@@ -91,7 +91,7 @@ export default function All_Layout({ layout, LayoutText, text }) {
                   <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-hover opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/90 to-transparent p-6">
                     <Link href={img.label} className="font-bold text-secondary text-sm text-center uppercase tracking-wide">
-                      {img.label.replace('/layout-detail/', '')}
+                      {img.label.replace('/van-layouts/', '')}
                     </Link>
                   </div>
                 </div>

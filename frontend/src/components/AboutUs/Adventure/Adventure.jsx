@@ -139,7 +139,7 @@ export default function AboutPage() {
                   A Ford Transit 148 high roof with roof hammocks and rear
                   decks. View the{" "}
                   <Link
-                    href="/layout-detail/blue-whale-van"
+                    href="/van-layouts/blue-whale-van"
                     className="text-hover font-bold underline hover:text-secondary transition-colors"
                   >
                     Layout Details
@@ -167,7 +167,7 @@ export default function AboutPage() {
                   Our 144 Sprinter demo sleeps five and reflects our commitment
                   to innovation. View the{" "}
                   <Link
-                    href="/layout-detail/santa-monica-gray"
+                    href="/van-layouts/santa-monica-gray"
                     className="text-hover font-bold underline hover:text-secondary transition-colors"
                   >
                     Santa Monica

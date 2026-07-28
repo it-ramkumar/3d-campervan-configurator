@@ -155,7 +155,7 @@ export default async function LayoutsPage({ searchParams }) {
       "item": {
         "@type": "Product",
         "name": item.van_listing?.title || "Custom Camper Van Layout",
-        "url": `https://www.bigbearvans.com/layout-detail/${item.slug}`,
+        "url": `https://www.bigbearvans.com/van-layouts/${item.slug}`,
         "image": item.gallery?.[0]
           ? item.gallery[0].startsWith("http")
             ? encodeURI(item.gallery[0])

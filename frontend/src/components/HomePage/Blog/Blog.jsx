@@ -36,7 +36,7 @@ export default async function Blog() {
           {blogs.map((post) => (
             <Link
               key={post?.slug}
-              href={`/blog-detail/${post?.slug}`}
+              href={`/blog/${post?.slug}`}
               className="group flex flex-col h-full bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-500"
             >
               {/* Image Container */}

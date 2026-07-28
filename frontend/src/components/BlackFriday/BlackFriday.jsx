@@ -115,7 +115,7 @@ export default function BlackFridayCard() {
               </div>
             </div>
 
-            <Link href={"/van-detail/4x4-santa-monica-v6-turbo"}>
+            <Link href={"/camper-vans-for-sale/4x4-santa-monica-v6-turbo"}>
               <button
                 onClick={() => {
                   setShowPopup(false);

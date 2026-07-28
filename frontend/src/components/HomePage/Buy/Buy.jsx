@@ -123,7 +123,7 @@ export default function Buy({ initialVans = [] }) {
               <SwiperSlide key={i} className="h-auto">
                 <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
 
-                  <Link href={`/van-detail/${van?.slug}`}>
+                  <Link href={`/camper-vans-for-sale/${van?.slug}`}>
                     <>
                       {/* Image */}
                       <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">

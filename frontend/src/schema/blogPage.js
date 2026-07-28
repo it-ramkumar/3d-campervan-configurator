@@ -45,7 +45,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
 
       return {
         "@type": "BlogPosting",
-        "@id": `https://www.bigbearvans.com/blog-detail/${blog.slug}#blogposting`,
+        "@id": `https://www.bigbearvans.com/blog/${blog.slug}#blogposting`,
 
         "headline": blog.title,
 
@@ -57,7 +57,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
           blog.gallery?.[0] ||
           "https://www.bigbearvans.com/heroSlider/bloghero.webp",
 
-        "url": `https://www.bigbearvans.com/blog-detail/${blog.slug}`,
+        "url": `https://www.bigbearvans.com/blog/${blog.slug}`,
 
         "datePublished": publishDate,
         "dateModified": modifiedDate,
@@ -78,7 +78,7 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
 
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": `https://www.bigbearvans.com/blog-detail/${blog.slug}`
+          "@id": `https://www.bigbearvans.com/blog/${blog.slug}`
         }
       };
     })

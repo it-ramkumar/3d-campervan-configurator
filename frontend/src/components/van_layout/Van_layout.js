@@ -315,7 +315,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                       <div className="flex items-center justify-center lg:justify-start pt-2">
                         <Link
-                          href={`/layout-detail/${item.slug}`}
+                          href={`/van-layouts/${item.slug}`}
                           className="inline-flex items-center gap-2 font-ui font-semibold text-[11px] uppercase tracking-[0.18em] text-primary border border-primary/25 px-6 py-3 rounded-xl hover:bg-primary hover:text-secondary hover:border-primary transition-all duration-200 group"
                         >
                           Explore Configuration

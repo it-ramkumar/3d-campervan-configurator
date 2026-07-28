@@ -172,7 +172,7 @@ export default function SoldVans({
             >
               {/* Image Container */}
               <Link
-                href={`/van-detail/${van.slug}`}
+                href={`/camper-vans-for-sale/${van.slug}`}
                 className="relative block aspect-[4/3] overflow-hidden bg-[var(--color-primary)]/5 rounded-t-lg"
               >
                 {van?.gallery?.[0] ? (
@@ -225,7 +225,7 @@ export default function SoldVans({
 
                 <div className="flex items-center justify-between">
                   <CustomLink
-                    href={`/van-detail/${van.slug}`}
+                    href={`/camper-vans-for-sale/${van.slug}`}
                     text={"Full Specs →"}
                   />
                   <div className="w-2 h-2 rounded-lg  group-hover:animate-ping" />

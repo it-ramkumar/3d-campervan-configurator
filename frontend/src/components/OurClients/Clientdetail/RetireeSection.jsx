@@ -66,7 +66,7 @@ const RetireeSection = ({ imageData }) => {
               <div className="bbv-divider mb-4" />
               <Heading3 text="Vermont Campervan" className="font-display text-secondary uppercase tracking-wide mb-6" />
               <RichParagraph className="text-secondary/80 mb-10">
-                <CustomLink href="/layout-detail/vermont" text={" VERMONT "} />
+                <CustomLink href="/van-layouts/vermont" text={" VERMONT "} />
                 is a 170 AWD Sprinter campervan that we designed for a couple who wanted to travel with their grandchildren.
               </RichParagraph>
 

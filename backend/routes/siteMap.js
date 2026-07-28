@@ -34,9 +34,9 @@ router.get('/', async (req, res) => {
             });
         };
 
-        addLinks(VansLink, 'van-detail');
-        addLinks(PortfolioLink, 'layout-detail');
-        addLinks(BlogLink, 'blog-detail');
+        addLinks(VansLink, 'camper-vans-for-sale');
+        addLinks(PortfolioLink, 'van-layouts');
+        addLinks(BlogLink, 'blog');
         // wheelBase(PortfolioLink, 'wheel-base');
 
 

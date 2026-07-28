@@ -6,7 +6,7 @@ const PortfolioVan = require('../models/portfolio');
 /* -------------------------------------------------------------------------- */
 
 function buildFrontendUrl(type, slug) {
-  return type === 'inventory' ? `/van-detail/${slug}` : `/layout-detail/${slug}`;
+  return type === 'inventory' ? `/camper-vans-for-sale/${slug}` : `/van-layouts/${slug}`;
 }
 
 /* -------------------------------------------------------------------------- */

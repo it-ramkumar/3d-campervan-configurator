@@ -39,8 +39,8 @@ const FullTimeVanLifeSection = ({ imageData }) => {
               </RichParagraph>
               <div className="flex flex-wrap gap-3 pt-4">
                 <RichParagraph className="text-primary/50 -mt-1">Featured Models:</RichParagraph>
-                <CustomLink href="/layout-detail/calabasas" text={" Calabasas "} />
-                <CustomLink href="/layout-detail/san-diego-campervan" text={" San Diego "} />
+                <CustomLink href="/van-layouts/calabasas" text={" Calabasas "} />
+                <CustomLink href="/van-layouts/san-diego-campervan" text={" San Diego "} />
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@ const FullTimeVanLifeSection = ({ imageData }) => {
                 <Heading3 text="San Diego Campervan" className="font-display text-primary uppercase tracking-wide mb-4" />
                 <RichParagraph className="text-primary/80 my-4">
                   We built the
-                  <CustomLink href="/layout-detail/san-diego-campervan" text={" San Diego campervan "} />
+                  <CustomLink href="/van-layouts/san-diego-campervan" text={" San Diego campervan "} />
                   for an architect who worked
                   on two computers from his van and traveled. The van was
                   designed to be used both as a residence and a workspace.

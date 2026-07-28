@@ -72,6 +72,39 @@ const nextConfig = {
     destination: "/van-layouts",
     permanent: true, // This triggers a 301 permanent redirect
   },
+  // Van detail URL migration: /van-detail/{slug} -> /camper-vans-for-sale/{slug}
+  // Child pages first (must be matched before the exact-hub rule below).
+  // statusCode: 301 is used explicitly (instead of permanent: true, which this
+  // Next.js version maps to 308) so these are literal HTTP 301s.
+  {
+    source: "/van-detail/:slug+",
+    destination: "/camper-vans-for-sale/:slug+",
+    statusCode: 301,
+  },
+  {
+    source: "/van-detail{/}?",
+    destination: "/camper-vans-for-sale",
+    statusCode: 301,
+  },
+  // Layout detail URL migration: /layout-detail/{slug} -> /van-layouts/{slug}
+  // Query strings (e.g. ?view=floorplan) pass through automatically.
+  // No bare "/layout-detail" -> "/van-layouts" rule: there is no page at the
+  // bare path today (it 404s) and nothing in the codebase links to it without
+  // a slug, so that rule is intentionally omitted.
+  {
+    source: "/layout-detail/:slug+",
+    destination: "/van-layouts/:slug+",
+    statusCode: 301,
+  },
+  // Blog detail URL migration: /blog-detail/{slug} -> /blog/{slug}
+  // No bare "/blog-detail" -> "/blog" rule: there is no page at the bare path
+  // today (it 404s) and nothing live in the codebase links to it without a
+  // slug, so that rule is intentionally omitted (same reasoning as layout-detail).
+  {
+    source: "/blog-detail/:slug+",
+    destination: "/blog/:slug+",
+    statusCode: 301,
+  },
     ];
   },
 };

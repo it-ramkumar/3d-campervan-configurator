@@ -66,7 +66,7 @@ const AdventureSection = ({ imageData }) => {
               <div className="bbv-divider mb-6" />
               <Heading3 text="The MotoVan" className="font-display text-primary uppercase tracking-wide mb-4" />
               <RichParagraph className="text-primary/70 mb-8">
-                <CustomLink href="/layout-detail/moto-van" text={" Motovan "} />
+                <CustomLink href="/van-layouts/moto-van" text={" Motovan "} />
                 is one of our exclusive campervans built for riders, featuring both living space and a dedicated garage.
               </RichParagraph>
 

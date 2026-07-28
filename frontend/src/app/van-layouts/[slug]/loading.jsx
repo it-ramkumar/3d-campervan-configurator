@@ -8,7 +8,7 @@ export default function Loading() {
         {/* Aapka spinner component */}
         <Loader />
         <p className="text-primary/70 font-body text-sm animate-pulse uppercase tracking-wider">
-          Fetching Van Details...
+          Fetching Details...
         </p>
       </div>
     </div>

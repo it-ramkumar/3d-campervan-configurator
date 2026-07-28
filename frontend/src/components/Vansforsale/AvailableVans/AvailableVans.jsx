@@ -73,7 +73,7 @@ const filteredVans = availableVans ? [...availableVans] : [];
                 className="group relative flex flex-col bg-secondary overflow-hidden transition-all duration-500 hover:shadow-2xl"
                 style={{ borderRadius: 'var(--radius-md)' }}
               >
-                <Link href={`/van-detail/${van.slug}`} className="relative block aspect-[16/10] overflow-hidden bg-slate-100">
+                <Link href={`/camper-vans-for-sale/${van.slug}`} className="relative block aspect-[16/10] overflow-hidden bg-slate-100">
                   {/* Logic: Image or Coming Soon Placeholder */}
                   {van.gallery?.[0] ? (
                     <ImageWithSkeleton
@@ -120,7 +120,7 @@ const filteredVans = availableVans ? [...availableVans] : [];
                     {van?.van_listing?.subtitle || "A premium camper conversion crafted for the ultimate freedom."}
                   </RichParagraph>
                   <div className="h-[1px] w-full bg-slate-100 mb-6" />
-                  <CustomLink href={`/van-detail/${van.slug}`} text={"Explore Details +"} />
+                  <CustomLink href={`/camper-vans-for-sale/${van.slug}`} text={"Explore Details +"} />
 
                 </div>
               </div>
