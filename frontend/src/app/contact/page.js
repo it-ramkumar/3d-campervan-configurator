@@ -4,8 +4,10 @@ import { generateConsultationSchema } from "@/schema/consultationSchema";
 
 // ✅ 1, 2, 3. Metadata API (SEO aur Social Media Tags)
 export const metadata = {
-  title: "Book a Free Van Building Consultation | Big Bear Vans",
-  description: "Schedule your free consultation with Big Bear Vans. Book a showroom visit, discuss financing, or start your custom 3D van design journey in Big Bear City, CA.",
+  title: "Book a Free Custom Van Consultation | Big Bear Vans",
+  description: `Schedule a free consultation with Big Bear Vans.
+Discuss financing, book a showroom visit, or start your
+custom Sprinter or Transit build today.`,
   keywords: "book van consultation, campervan build inquiry, schedule showroom tour, Big Bear Vans contact, custom van building quote, Mercedes Sprinter conversion California",
   alternates: {
     canonical: "https://www.bigbearvans.com/contact",
@@ -13,21 +15,25 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/contact",
-    title: "Ready to Start Your Adventure? | Big Bear Vans Consultation",
-    description: "Talk to our experts about your dream rig. Schedule a call or visit our California workshop for a personalized tour.",
+      title: "Book a Free Custom Van Consultation | Big Bear Vans",
+  description: `Schedule a free consultation with Big Bear Vans.
+Discuss financing, book a showroom visit, or start your
+custom Sprinter or Transit build today.`,
     images: ["https://www.bigbearvans.com/heroSlider/bloghero.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Schedule Your Free Van Build Consultation",
-    description: "From 15-year financing to 3D layouts, let's discuss your custom Sprinter build today.",
+     title: "Book a Free Custom Van Consultation | Big Bear Vans",
+  description: `Schedule a free consultation with Big Bear Vans.
+Discuss financing, book a showroom visit, or start your
+custom Sprinter or Transit build today.`,
     images: ["https://www.bigbearvans.com/heroSlider/bloghero.webp"],
   },
 };
 
 export default function Contact() {
   const heroImage = "/heroSlider/bloghero.webp";
-  const newTitleText = "Contact Us | Custom Van Builders in Big Bear City, CA";
+  const newTitleText = "Book a Free Custom Van Consultation | Big Bear Vans";
   const newDescriptionText = "Contact Big Bear Vans today for your custom van conversion. Our team of expert van builders in Big Bear City, California, is ready to help you begin your dream van life.";
 
   const jsonld = generateConsultationSchema();

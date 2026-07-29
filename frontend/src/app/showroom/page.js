@@ -6,8 +6,10 @@ import { generateShowroomSchema } from "../../schema/showroom";
 
 // ✅ Next.js Metadata API for SEO
 export const metadata = {
-  title: "Visit Our Showroom | Custom Van Conversions | Big Bear Vans",
-  description: "Experience our luxury campervan builds in person. Visit the Big Bear Vans showroom in California for a 3D tour, workshop walkthrough, and expert consultation.",
+  title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+  description: `Tour Big Bear Vans' California showroom and workshop.
+ See finished camper van builds in person, meet our team,
+and start your custom conversion.`,
   keywords: "van conversion showroom california, big bear vans workshop, sprinter van tour, LAX airport pickup van build, virtual van tour, custom campervan gallery",
   alternates: {
     canonical: "https://www.bigbearvans.com/showroom",
@@ -15,14 +17,18 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/showroom",
-    title: "Experience Big Bear Vans | Showroom & Workshop Tour",
-    description: "See our latest Sprinter and Transit builds. Schedule your visit to our California showroom today.",
+    title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+  description: `Tour Big Bear Vans' California showroom and workshop.
+ See finished camper van builds in person, meet our team,
+and start your custom conversion.`,
     images: ["/heroSlider/Showroomhero.webp"], // Absolute path use karein agar possible ho
   },
   twitter: {
     card: "summary_large_image",
-    title: "Big Bear Vans Showroom | Custom Campervan Tour",
-    description: "Come see how we build dream rigs. From 3D design to the finished build, explore it all at our workshop.",
+     title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+  description: `Tour Big Bear Vans' California showroom and workshop.
+ See finished camper van builds in person, meet our team,
+and start your custom conversion.`,
     images: ["/heroSlider/Showroomhero.webp"],
   },
 };

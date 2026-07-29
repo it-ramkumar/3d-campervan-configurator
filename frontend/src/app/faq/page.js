@@ -32,12 +32,16 @@ const faqData = [
 ];
 // Metadata API
 export const metadata = {
-  title: "Frequently Asked Questions | Big Bear Vans",
-  description: "Get answers to all your campervan questions. From custom builds to financing, locations to warranties.",
+  title: "Camper Van Conversion FAQ | Big Bear Vans",
+  description: `Answers to the most common camper van conversion
+ questions - cost, financing, timelines, warranty, and legality
+ of full-time van living.`,
   alternates: { canonical: "https://www.bigbearvans.com/faq" },
   openGraph: {
-    title: "Frequently Asked Questions | Big Bear Vans",
-    description: "Your Comprehensive Guide to Big Bear Vans builds and services.",
+    title: "Camper Van Conversion FAQ | Big Bear Vans",
+  description: `Answers to the most common camper van conversion
+ questions - cost, financing, timelines, warranty, and legality
+ of full-time van living.`,
     url: "https://www.bigbearvans.com/faq",
     images: ["https://www.bigbearvans.com/images/w9.webp"],
   },

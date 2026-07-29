@@ -145,7 +145,7 @@ const filteredVans = availableVans ? [...availableVans] : [];
               <div className="bg-primary p-10 flex flex-col items-center text-center justify-center shadow-2xl">
                 <Heading3 text="Want a custom build?" className="text-secondary mb-4" />
                 <p className="text-secondary/60 text-sm mb-8 italic">Don't wait for these to finish. Secure your spot now.</p>
-                <PrimaryButton label="Inquire Now" link="/inquiry" />
+                <PrimaryButton label="Inquire Now" link="/build-your-own-camper-van" />
               </div>
             </div>
           </div>

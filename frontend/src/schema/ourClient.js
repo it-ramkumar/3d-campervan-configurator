@@ -1,8 +1,10 @@
 export const ClientschemaData =()=>( {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Client Stories & Custom Build Gallery | Big Bear Vans",
-  "description": "Explore our custom van builds: Lake Tahoe (Family), Blue Whale (6-Seater), Cusco (Pet-friendly), MotoVan (Adventure), and San Diego (Mobile Office).",
+  "name": "Client Stories & Custom Build Case Studies | Big Bear Vans",
+  "description": `Real Big Bear Vans client stories - pet-friendly rigs, mobile
+offices, and family Sprinters with elevator beds. See how
+ our clients live off-grid.`,
   "url": "https://www.bigbearvans.com/our-clients",
   "mainEntity": {
     "@type": "ItemList",

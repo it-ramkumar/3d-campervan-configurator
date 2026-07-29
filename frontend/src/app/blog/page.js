@@ -17,8 +17,10 @@ export async function generateMetadata({ searchParams }) {
   const pageSuffix = currentPage > 1 ? ` - Page ${currentPage}` : "";
   const searchSuffix = searchTerm ? ` for "${searchTerm}"` : "";
 
-  const title = `${searchTerm ? `Search: ${searchTerm}` : "Van Conversion Blog"}${pageSuffix} | Big Bear Vans`;
-  const description = `Explore expert van conversion guides${searchSuffix}. Tips on layouts, solar, and more.${pageSuffix}`;
+  const title = `Van Conversion & Van Life Blog | Big Bear Vans${searchSuffix}${pageSuffix}`;
+  const description = `Expert guides on van conversions, off-grid systems,
+ layouts, and van life from Big Bear Vans - Sprinter vs
+Transit comparisons, cost breakdowns, and more.`;
 
   return {
     title,

@@ -15,8 +15,10 @@ import MobileOfficeSection from "@/components//OurClients/Clientdetail/MobileOff
 
 // ✅ 1. Next.js Metadata API for SEO
 export const metadata = {
-  title: "Client Stories & Custom Build Gallery | Big Bear Vans",
-  description: "Real custom campervan case studies — pet-friendly rigs, mobile offices, and family Sprinters with elevator beds. See how our clients live off-grid.",
+  title: "Client Stories & Custom Build Case Studies | Big Bear Vans",
+  description: `Real Big Bear Vans client stories - pet-friendly rigs, mobile
+offices, and family Sprinters with elevator beds. See how
+ our clients live off-grid.`,
   keywords: "custom van stories, pet friendly campervans, mobile office sprinter, moto van garage, retiree rv adventure, Big Bear Vans reviews",
   alternates: {
     canonical: "https://www.bigbearvans.com/our-clients",
@@ -24,22 +26,26 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@bigbearvans",
-    title: "Custom Campervan Stories | Big Bear Vans",
-    description: "From pet sanctuaries to mobile offices—see how we build dream rigs for our clients.",
+  title: "Client Stories & Custom Build Case Studies | Big Bear Vans",
+  description: `Real Big Bear Vans client stories - pet-friendly rigs, mobile
+offices, and family Sprinters with elevator beds. See how
+ our clients live off-grid.`,
    images: ["https://www.bigbearvans.com/images2/about.webp"],
   },
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/our-clients",
-    title: "Real Stories, Real Adventures | Big Bear Vans",
-    description: "Explore our luxurious custom campervan conversions. Built for families, pets, and off-grid living.",
+    title: "Client Stories & Custom Build Case Studies | Big Bear Vans",
+  description: `Real Big Bear Vans client stories - pet-friendly rigs, mobile
+offices, and family Sprinters with elevator beds. See how
+ our clients live off-grid.`,
     images: ["https://www.bigbearvans.com/images2/about.webp"],
   },
 };
 
 export default function OurClients() {
   const heroImage = "/images2/about.webp";
-  const newTitleText = "Our Clients at Big Bear Vans";
+  const newTitleText = "Client Stories & Custom Build Case Studies ";
 
   const OurClientSchema = ClientschemaData()
   return (

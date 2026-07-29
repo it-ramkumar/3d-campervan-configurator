@@ -5,22 +5,28 @@ const PAGE_CONFIG = {
   "exterior-options": {
     api: "exterior",
     keyword: "bathroom",
-    title: "Campervan Exterior Upgrades",
-    desc: "The exterior of your campervan is all about looks and functionality. We equip your van with practical exterior accessories.",
+    title: `Camper Van Exterior Upgrades & Accessories | Big Bear Vans`,
+    desc: `Explore Big Bear Vans' exterior upgrade options - roof racks,
+awnings, storage boxes, window and door choices - for your
+ custom Sprinter or Transit build.`,
     heroImage: "/heroSlider/exteriorhero.webp",
     mobileHeroImage: "/heroSlider/exteriorhero_mobile.webp",
   },
   "interior-options": {
     api: "interior",
-    title: "Premium Interior Finishes",
-    desc: "Luxury meets comfort. Explore our range of interior linings, flooring, and bespoke cabinetry options.",
+    title: `Camper Van Interior Finishes & Cabinetry | Big Bear Vans`,
+    desc: `Explore premium camper van interior options - wall paneling,
+ flooring, cabinetry, and bathroom layouts - for your custom
+Big Bear Vans conversion.`,
     heroImage: "/heroSlider/interiorHero.webp",
     mobileHeroImage: "/heroSlider/interiorHero_mobile.webp",
   },
   "system-options": {
     api: "system",
-    title: "Electrical & Water Systems",
-    desc: "Reliable, high-performance electrical and water systems, installed in every custom van.",
+    title: `Camper Van Electrical & Water Systems | Big Bear Vans`,
+    desc: `Explore off-grid electrical and water systems for your
+custom camper van - lithium batteries, solar,
+inverters, and fresh/grey water tanks explained..`,
     heroImage: "/heroSlider/system.webp",
     mobileHeroImage: "/heroSlider/system_mobile.webp",
   },

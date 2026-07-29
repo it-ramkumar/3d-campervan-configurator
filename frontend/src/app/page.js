@@ -7,9 +7,9 @@ import { availableVans } from "@/api/van/availableVans";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Luxury Custom Camper Van Conversions | Big Bear Vans",
+  title: "Custom Camper Van Conversions in California | Big Bear Vans",
   description:
-    "Expertly crafted custom camper vans for off-grid living. We use 3D Scanning and CNC precision to build your dream Mercedes Sprinter or Ford Transit conversion.",
+    "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit camper vans in Big Bear, CA. Off-grid power, CNC precision & 105+ builds delivered. Get a free quote today.",
   keywords: [
     "custom camper vans",
     "van conversion USA",
@@ -21,9 +21,9 @@ export const metadata = {
     canonical: "https://www.bigbearvans.com",
   },
   openGraph: {
-    title: "Big Bear Vans | Premium Custom Builds & 3D Design",
-    description:
-      "From 3D renderings to the final build, we create high-end camper vans tailored to your lifestyle.",
+    title: "Custom Camper Van Conversions in California | Big Bear Vans",
+  description:
+    "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit camper vans in Big Bear, CA. Off-grid power, CNC precision & 105+ builds delivered. Get a free quote today.",
     url: "https://www.bigbearvans.com",
     siteName: "Big Bear Vans",
     images: [

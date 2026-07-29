@@ -492,7 +492,7 @@ export default function LayoutDetail({ van, initialView }) {
                         className="absolute top-0 left-0 w-full h-full"
                         frameBorder="0"
                         scrolling="no"
-                        allowTransparency="true"
+                        allowtransparency="true"
                         allowFullScreen
                       ></iframe>
                     </div>

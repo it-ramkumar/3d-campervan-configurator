@@ -6,8 +6,10 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata() {
 
   try {
-    const title = `Custom Camper Vans for Sale | Mercedes Sprinter & Transit`;
-    const description = `Shop 100+ sold custom camper vans on Mercedes Sprinter & Ford Transit — layouts for 2-7 people, elevator beds & AWD available.`;
+    const title = `Camper Vans for Sale - Sprinter & Transit | Big Bear Vans`;
+    const description = `Shop ready-to-buy custom camper vans on Mercedes
+Sprinter & Ford Transit chassis. Layouts for 2-8 people,
+ AWD available. Financing options. 100+ sold.`;
 
     return {
       title,
@@ -39,8 +41,10 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Custom Camper Vans for Sale | Mercedes Sprinter & Transit",
-      description: `Shop 100+ sold custom camper vans on Mercedes Sprinter & Ford Transit — layouts for 2-7 people, elevator beds & AWD available.`,
+      title: "Camper Vans for Sale - Sprinter & Transit | Big Bear Vans",
+      description: `Shop ready-to-buy custom camper vans on Mercedes
+Sprinter & Ford Transit chassis. Layouts for 2-8 people,
+ AWD available. Financing options. 100+ sold.`,
     };
   }
 }
@@ -65,8 +69,10 @@ export default async function VansForSale() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Custom Camper Vans for Sale | Big Bear Vans",
-    "description": "Shop 100+ sold custom camper vans on Mercedes Sprinter & Ford Transit — layouts for 2-7 people, elevator beds & AWD available.",
+      "name": "Camper Vans for Sale - Sprinter & Transit | Big Bear Vans",
+    "description": `Shop ready-to-buy custom camper vans on Mercedes
+Sprinter & Ford Transit chassis. Layouts for 2-8 people,
+ AWD available. Financing options. 100+ sold.`,
     "numberOfItems": allActiveVans.length,
     "itemListElement": allActiveVans.map((van, index) => {
 
@@ -90,7 +96,7 @@ export default async function VansForSale() {
         "item": {
           "@type": "Product",
           "name": van.van_listing.title,
-          "url": `https://www.bigbearvans.com/van/${van.slug}`,
+          "url": `https://www.bigbearvans.com/camper-vans-for-sale/${van.slug}`,
           "image": imageUrl,
           "description": description,
           "brand": {
@@ -127,7 +133,7 @@ export default async function VansForSale() {
               : van.status === "sale_pending"
                 ? "https://schema.org/SoldOut"
                 : "https://schema.org/PreOrder",
-            "url": `https://www.bigbearvans.com/van/${van.slug}`,
+            "url": `https://www.bigbearvans.com/camper-vans-for-sale/${van.slug}`,
             "seller": {
               "@type": "Organization",
               "name": "Big Bear Vans"
@@ -146,10 +152,10 @@ export default async function VansForSale() {
       />
 
       <HeroImage
-        title="Custom Camper Vans for Sale"
+        title="Camper Vans for Sale - Sprinter & Transit"
         description="At Big Bear Vans, we turn Mercedes Sprinter and Ford Transit vans into fully custom camper vans. From off-grid setups to luxury travel homes, everything is designed around how you want to live and travel. We’re proud to have 111+ happy owners across the US."
         image="/images2/vfs.webp"
-        link="/inquiry"
+        link="/build-your-own-camper-van"
         buttonText="Reserve your van"
         showButton={true}
       />

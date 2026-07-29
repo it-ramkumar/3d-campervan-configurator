@@ -167,3 +167,74 @@ export default function Hero() {
     </div>
   );
 }
+
+
+
+
+
+
+// "use client";
+
+// import { PrimaryButton, SecondaryButton } from "../../Common/Common";
+// import { slides } from "@/DataUseInComp/homeSlider";
+
+// export default function Hero() {
+//   const slide = slides[0];
+
+//   const scrollToQuiz = (e) => {
+//     e.preventDefault();
+//     const quizSection = document.getElementById("quiz-section");
+//     if (quizSection) {
+//       quizSection.scrollIntoView({ behavior: "smooth" });
+//     }
+//   };
+
+//   return (
+//     <div className="relative w-full h-[88vh] sm:h-[92vh] md:h-screen overflow-hidden bg-black">
+
+//       {/* YouTube Video Embed (Background) */}
+//       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+//         <iframe
+//           className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-screen min-w-[177.78vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+//           src="https://www.youtube.com/embed/bY5OoCvEIhI?autoplay=1&mute=1&loop=1&playlist=bY5OoCvEIhI&controls=0&showinfo=0&rel=0&enablejsapi=1&modestbranding=1"
+//           title="Hero Background Video"
+//           allow="autoplay; encrypted-media"
+//           allowFullScreen
+//         />
+//       </div>
+
+//       {/* Overlay for text legibility */}
+//       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+//       {/* Content */}
+//       <div className="relative z-20 h-full flex items-end md:items-center">
+//         <div className="w-full px-5 pb-16 md:pb-0 text-white md:pl-16 lg:pl-24">
+//           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+//             <span className="block">{slide.title}</span>
+//             <span className="block text-hover">{slide.titleColored}</span>
+//           </h1>
+
+//           <p className="mt-4 max-w-md text-sm sm:text-base text-white/85">
+//             {slide.desc}
+//           </p>
+
+//           <div className="flex flex-col sm:flex-row gap-3 mt-6 md:mt-8">
+//             <PrimaryButton
+//               label={slide.btnText}
+//               link={slide.link}
+//               className="w-full sm:w-auto !bg-transparent !border-2 !border-white !text-white hover:!bg-white/10"
+//             />
+//             <SecondaryButton
+//               label="Van Matchmaker Quiz"
+//               onClick={scrollToQuiz}
+//               className="w-full sm:w-auto"
+//             />
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Orange bottom accent line */}
+//       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ED985F] z-30" />
+//     </div>
+//   );
+// }

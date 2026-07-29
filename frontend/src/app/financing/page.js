@@ -5,9 +5,11 @@ import { generateFinancingSchema } from "../../schema/financing";
 
 // ✅ 1, 2, 3. Standard, Twitter, and Open Graph Metadata
 export const metadata = {
-  title: "Campervan Financing & RV Loans | Big Bear Vans",
+  title: "Camper Van Financing & RV Loan Options | Big Bear Vans",
   description:
-    "Flexible financing for your custom Sprinter build — 15-year RV loans via Trident Funding, 20-30% down. Get pre-qualified today.",
+    `Flexible financing for your custom Sprinter or Transit build.
+15-year RV loans via Trident Funding, 20-30% down.
+Get pre-qualified with Big Bear Vans today.`,
   keywords:
     "sprinter van financing, trident funding rv, campervan loan california",
   alternates: {
@@ -16,24 +18,28 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@bigbearvans",
-    title: "Financing Your Dream Campervan | Big Bear Vans",
-    description:
-      "Get pre-approved for specialized RV loans or all-in-one conversion financing. Flexible 15-year terms available.",
+    title: "Camper Van Financing & RV Loan Options | Big Bear Vans",
+  description:
+    `Flexible financing for your custom Sprinter or Transit build.
+15-year RV loans via Trident Funding, 20-30% down.
+Get pre-qualified with Big Bear Vans today.`,
     images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
   },
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/financing",
-    title: "Campervan Financing & RV Loans | Big Bear Vans",
-    description:
-      "Easy financing options for your custom van build. Partnered with Trident Funding & Mercedes-Benz Financial.",
+    title: "Camper Van Financing & RV Loan Options | Big Bear Vans",
+  description:
+    `Flexible financing for your custom Sprinter or Transit build.
+15-year RV loans via Trident Funding, 20-30% down.
+Get pre-qualified with Big Bear Vans today.`,
     images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
   },
 };
 
 export default function FinancingPage() {
   const heroImage = "/heroSlider/limage2.webp";
-  const newTitleText = "Financing For Your Campervan";
+  const newTitleText = "Camper Van Financing & RV Loan Options";
 
   const newDescriptionText =
     "Get flexible financing options and take home your dream campervan with ease.";

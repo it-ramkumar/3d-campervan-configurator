@@ -129,7 +129,7 @@ export default function WhereToCamp({campgrounds}) {
                     title="Where to Camp"
                     description="From lakeside retreats to alpine escapes, discover the perfect basecamp for your Big Bear adventure."
                     image="/whereToCamp/barton flats campground 3.webp"
-                    link="/inquiry"
+                    link="/build-your-own-camper-van"
                     showButton={false}
                 />
 

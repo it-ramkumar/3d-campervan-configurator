@@ -4,10 +4,11 @@ import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 
 export async function generateMetadata() {
   const res = await getAllPortfolio({ page: 1, limit: 1 });
-  const totalBuilds = res?.data?.total || 105;
 
   const title = `Custom Camper Van Layouts & Floor Plans | Big Bear Vans`;
-  const description = `Browse ${totalBuilds}+ Sprinter & Transit floor plans with detailed 3D views. Find the perfect layout for 2-7 people — families, couples, and full-time van lifers. Built in California.`;
+  const description = `Browse 40+ custom camper van layouts by Big Bear Vans -
+ family, pet-friendly, off-grid & solo builds on Sprinter, Transit
+& ProMaster chassis.`;
 
   return {
     title,
@@ -146,8 +147,10 @@ export default async function LayoutsPage({ searchParams }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Custom Camper Van Layouts",
-    "description": "Browse custom camper van layouts and floor plans designed by Big Bear Vans.",
+    "name": "Custom Camper Van Layouts & Floor Plans | Big Bear Vans",
+    "description": `Browse 40+ custom camper van layouts by Big Bear Vans -
+ family, pet-friendly, off-grid & solo builds on Sprinter, Transit
+& ProMaster chassis.`,
     "numberOfItems": initialData.total,
     "itemListElement": (initialData.data || []).map((item, index) => ({
       "@type": "ListItem",

@@ -8,11 +8,13 @@ export const generateBlogListingSchema = (blogs, currentPage) => {
     "@type": "Blog",
     "@id": `${currentUrl}#blog`,
     "name": currentPage > 1
-      ? `Big Bear Vans Journal - Page ${currentPage}`
-      : "Big Bear Vans Journal | Van Conversion Expert Guides",
+      ? `Van Conversion & Van Life Blog | Big Bear Vans - Page ${currentPage}`
+      : "Van Conversion & Van Life Blog | Big Bear Vans",
 
     "description":
-      "Expert guides on camper van materials, custom layout designs, and off-grid electrical systems.",
+      `Expert guides on van conversions, off-grid systems,
+ layouts, and van life from Big Bear Vans - Sprinter vs
+Transit comparisons, cost breakdowns, and more.`,
 
     "url": currentUrl,
 

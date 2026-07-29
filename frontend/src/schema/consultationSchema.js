@@ -6,7 +6,9 @@ export const generateConsultationSchema = () => ({
       "@id": "https://www.bigbearvans.com/contact/#webpage",
       "url": "https://www.bigbearvans.com/contact",
       "name": "Book a Free Custom Van Consultation | Big Bear Vans",
-      "description": "Schedule a call with our experts in Big Bear City, California to discuss your custom camper van build, financing, or 3D design.",
+      "description": `Schedule a free consultation with Big Bear Vans.
+Discuss financing, book a showroom visit, or start your
+custom Sprinter or Transit build today.`,
       "potentialAction": {
         "@type": "ScheduleAction",
         "target": {

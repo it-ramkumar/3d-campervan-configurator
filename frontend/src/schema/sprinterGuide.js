@@ -1,13 +1,15 @@
 // helpers/sprinterGuideSchema.js
 
 export const generateSprinterGuideSchema = () => {
-  const url = typeof window !== "undefined" ? window.location.href : "https://www.bigbearvans.com/sprinter-guide";
+  const url = typeof window !== "undefined" ? window.location.href : "https://www.bigbearvans.com/sprinter-van-buying-guide";
 
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "Choosing The Right Sprinter Van For Custom Conversion",
-    "description": "A comprehensive guide to selecting the perfect Mercedes Sprinter van configuration, wheelbase, roof height, and tech specs for your custom campervan build.",
+    "headline": "Sprinter Van Buying Guide for Conversions | Big Bear Vans",
+    "description": `Choosing a Mercedes Sprinter for conversion?
+Compare wheelbase, roof height, 2500 vs 3500,
+and 4x4 options with Big Bear Vans' complete buying guide.`,
     "url": url,
     "image": "https://www.bigbearvans.com/images/p4.webp", // Replace with actual image
     "author": {
@@ -77,10 +79,12 @@ export const generateSprinterGuideSchema = () => {
  */
 export const getSprinterGuideMetaTags = () => {
   return {
-    title: "Choosing The Right Sprinter Van for Conversion | Big Bear Vans Guide",
-    description: "Learn how to select the best Sprinter van for your custom build. Expert advice on Wheelbase, Roof Height, 2500 vs 3500, and Crew vs Cargo models.",
+    title: "Sprinter Van Buying Guide for Conversions | Big Bear Vans",
+    description: `Choosing a Mercedes Sprinter for conversion?
+Compare wheelbase, roof height, 2500 vs 3500,
+and 4x4 options with Big Bear Vans' complete buying guide.`,
     ogImage: "https://www.bigbearvans.com/images/p4.webp", // Replace with your guide's featured image
-    url: "https://www.bigbearvans.com/sprinter-guide",
+    url: "https://www.bigbearvans.com/sprinter-van-buying-guide",
     keywords: "Sprinter van conversion guide, choosing a sprinter van, 144 vs 170 wheelbase, cargo vs crew van, sprinter 2500 vs 3500, custom campervan base"
   };
 };

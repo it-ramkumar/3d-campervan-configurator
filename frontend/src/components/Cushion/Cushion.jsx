@@ -17,7 +17,7 @@ export default function Cushionpage() {
       {/* Page Sections */}
       <Navbar />
       <div className="tour-hero">
-      <HeroSection title={newTitleText} image={heroImage} link="/inquiry" buttonText="Get a Quote" showButton={false} />
+      <HeroSection title={newTitleText} image={heroImage} link="/build-your-own-camper-van" buttonText="Get a Quote" showButton={false} />
       </div>
       <div className="tour-detail">
         <Cushiondetail />

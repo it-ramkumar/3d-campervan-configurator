@@ -6,17 +6,22 @@ import { configuratorSchema } from "@/schema/configuratorSchema";
 export const metadata = {
   metadataBase: new URL("https://www.bigbearvans.com"),
 
-  title: "Free 3D Camper Van Configurator | Big Bear Vans",
+  title: "Free 3D Camper Van Configurator Tool | Big Bear Vans",
   description:
-    "Design your dream Mercedes Sprinter build in our free 3D configurator. Customize layouts, colors & features in real-time.",
+    `Design your dream Mercedes Sprinter camper van
+in our free 3D configurator. Customize layouts, colors,
+ and systems in real time - then get a custom quote.`,
 
   alternates: {
     canonical: "https://www.bigbearvans.com/configurator",
   },
 
   openGraph: {
-    title: "3D Camper Van Configurator | Big Bear Vans",
-    description: "Design your dream camper van in 3D with real-time customization tools.",
+   title: "Free 3D Camper Van Configurator Tool | Big Bear Vans",
+  description:
+    `Design your dream Mercedes Sprinter camper van
+in our free 3D configurator. Customize layouts, colors,
+ and systems in real time - then get a custom quote.`,
     url: "https://www.bigbearvans.com/configurator",
     siteName: "Big Bear Vans",
     type: "website",
@@ -30,8 +35,11 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "3D Camper Van Configurator | Big Bear Vans",
-    description: "Design your dream camper van in 3D.",
+    title: "Free 3D Camper Van Configurator Tool | Big Bear Vans",
+  description:
+    `Design your dream Mercedes Sprinter camper van
+in our free 3D configurator. Customize layouts, colors,
+ and systems in real time - then get a custom quote.`,
     images: ["https://www.bigbearvans.com/images2/fp.webp"],
   },
 };

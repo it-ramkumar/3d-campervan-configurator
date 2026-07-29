@@ -33,8 +33,10 @@ export const generateShowroomSchema = (heroImage) => ({
       "closes": "16:00"
     }
   ],
-  "menu": "https://www.bigbearvans.com/vans-layout",
-  "description": "Experience luxury custom campervan builds in person. Our California showroom offers 3D design tours and workshop walkthroughs.",
+  "menu": "https://www.bigbearvans.com/van-layouts",
+  "description": `Tour Big Bear Vans' California showroom and workshop.
+ See finished camper van builds in person, meet our team,
+and start your custom conversion.`,
  "sameAs": [
         "https://www.instagram.com/bigbearvans",
         "https://www.facebook.com/bigbearvans",

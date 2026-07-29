@@ -91,7 +91,7 @@ export default function HeroImage({
 
       {/* CONTENT */}
       <div className="relative z-[2] h-full flex items-center">
-        <div className="container px-6 md:px-12 lg:px-20 max-w-3xl text-white space-y-5">
+        <div className="container px-6 md:px-12 lg:px-20 max-w-4xl text-white space-y-5">
           {slogan && (
             <span className="inline-flex items-center font-ui font-semibold text-[10px] uppercase tracking-[0.28em] text-[#ED985F] border-l-2 border-[#ED985F] pl-3 py-0.5">
               {slogan}

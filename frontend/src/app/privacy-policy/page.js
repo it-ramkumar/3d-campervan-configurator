@@ -4,7 +4,9 @@ import PrivacyPolicy from "../../components/PrivacyPolicy/PrivacyPolicy";
 export const metadata = {
   title: "Privacy Policy | Big Bear Vans",
   description:
-    "Read Big Bear Vans' Privacy Policy to understand how we collect, use, and protect your personal information when you visit our website or inquire about our custom camper vans.",
+`Read how Big Bear Vans collects, uses, and protects your
+personal information when you visit our website or inquire
+about a custom camper van.`,
   alternates: {
     canonical: "https://www.bigbearvans.com/privacy-policy",
   },
@@ -12,14 +14,18 @@ export const metadata = {
     type: "website",
     url: "https://www.bigbearvans.com/privacy-policy",
     title: "Privacy Policy | Big Bear Vans",
-    description:
-      "Read Big Bear Vans' Privacy Policy to understand how we collect, use, and protect your personal information.",
+  description:
+`Read how Big Bear Vans collects, uses, and protects your
+personal information when you visit our website or inquire
+about a custom camper van.`,
   },
   twitter: {
     card: "summary",
-    title: "Privacy Policy | Big Bear Vans",
-    description:
-      "Read Big Bear Vans' Privacy Policy to understand how we collect, use, and protect your personal information.",
+      title: "Privacy Policy | Big Bear Vans",
+  description:
+`Read how Big Bear Vans collects, uses, and protects your
+personal information when you visit our website or inquire
+about a custom camper van.`,
   },
 };
 

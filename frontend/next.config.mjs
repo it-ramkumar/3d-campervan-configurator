@@ -105,6 +105,18 @@ const nextConfig = {
     destination: "/blog/:slug+",
     statusCode: 301,
   },
+  // Inquiry page URL migration: /inquiry -> /build-your-own-camper-van
+  {
+    source: "/inquiry",
+    destination: "/build-your-own-camper-van",
+    statusCode: 301,
+  },
+  // Sprinter guide URL migration: /sprinter-guide -> /sprinter-van-buying-guide
+  {
+    source: "/sprinter-guide",
+    destination: "/sprinter-van-buying-guide",
+    statusCode: 301,
+  },
     ];
   },
 };

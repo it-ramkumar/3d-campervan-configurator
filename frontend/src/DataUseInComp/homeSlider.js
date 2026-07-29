@@ -23,7 +23,7 @@ export const slides = [
     slogan: "You Dream It. We Build It.",
     desc: "Your vision, our engineering. Off-grid solar, full kitchens, and custom layouts.",
     btnText: "Build Your Own",
-    link: "/inquiry",
+    link: "/build-your-own-camper-van",
     objectPosition: "60% center",
     type: "custom",
   },

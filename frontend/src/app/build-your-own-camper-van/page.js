@@ -4,17 +4,21 @@ import { generateInquirySchema } from "@/schema/inquerySchema"
 
 // ✅ Next.js Metadata API for SEO
 export const metadata = {
-  title: 'Get a Custom Van Quote | Big Bear Vans',
-  description: 'Tell us your layout, budget & timeline and get a custom Sprinter or Transit quote from Big Bear Vans within 48 hours.',
+  title: 'Build Your Own Custom Camper Van - Get a Quote | Big Bear Vans',
+  description: `Configure your dream Mercedes Sprinter or Ford
+Transit camper van. Choose your layout, electrical system,
+and off-grid power needs, then get a custom quote.`,
   keywords: ['van build configurator', 'custom van conversion quote', 'sprinter van layout tool', 'campervan build cost', 'Big Bear Vans inquiry'],
   alternates: {
-    canonical: 'https://www.bigbearvans.com/inquiry',
+    canonical: 'https://www.bigbearvans.com/build-your-own-camper-van',
   },
   // ✅ Open Graph (Facebook/LinkedIn)
   openGraph: {
-    title: 'Design Your Custom Van | Big Bear Vans Configurator',
-    description: 'Start your journey with Big Bear Vans. Configure your van layout, shower options, and off-grid power needs in minutes.',
-    url: 'https://www.bigbearvans.com/inquiry',
+    title: 'Build Your Own Custom Camper Van | Big Bear Vans Configurator',
+    description: `Configure your dream Mercedes Sprinter or Ford
+Transit camper van. Choose your layout, electrical system,
+and off-grid power needs, then get a custom quote.`,
+    url: 'https://www.bigbearvans.com/build-your-own-camper-van',
     siteName: 'Big Bear Vans',
     images: [
       {
@@ -29,8 +33,10 @@ export const metadata = {
   // ✅ Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: 'Build Your Dream Van | Custom Configurator',
-    description: 'Configure your Mercedes Sprinter or Ford Transit layout and get an instant quote.',
+       title: 'Build Your Own Custom Camper Van | Big Bear Vans Configurator',
+    description: `Configure your dream Mercedes Sprinter or Ford
+Transit camper van. Choose your layout, electrical system,
+and off-grid power needs, then get a custom quote.`,
     site: '@bigbearvans',
     images: ['https://www.bigbearvans.com/images/w2.webp'],
   },
@@ -41,7 +47,7 @@ export default function Page() {
   return (
     <div>
       {/* ✅ JSON-LD Schema Script */}
-     <script
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />

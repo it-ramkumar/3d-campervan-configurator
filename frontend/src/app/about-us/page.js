@@ -5,9 +5,11 @@ import Adventure from "../../components/AboutUs/Adventure/Adventure";
 import { generateAboutSchema } from "@/schema/about";
 
 export const metadata = {
-  title: "Custom Camper Van Builders in California | Big Bear Vans",
+  title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
   description:
-    "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
+    `Meet the team behind Big Bear Vans. Founded by van lifers
+ Artur & Anna, we've delivered 105+ custom Sprinter and
+Transit camper van conversions.`,
   keywords:
     "Big Bear Vans founders, custom van builders California, 5 person sleeper van, sprinter elevator bed conversion, CNC engineered campervans",
   alternates: {
@@ -16,16 +18,20 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/about-us",
-    title: "Custom Camper Van Builders in California | Big Bear Vans",
-    description:
-      "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
+    title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+  description:
+    `Meet the team behind Big Bear Vans. Founded by van lifers
+ Artur & Anna, we've delivered 105+ custom Sprinter and
+Transit camper van conversions.`,
     images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Custom Camper Van Builders in California | Big Bear Vans",
-    description:
-      "Big Bear Vans builds 100% custom Sprinter & Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
+     title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+  description:
+    `Meet the team behind Big Bear Vans. Founded by van lifers
+ Artur & Anna, we've delivered 105+ custom Sprinter and
+Transit camper van conversions.`,
     images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
   },
 };
@@ -33,7 +39,7 @@ export const metadata = {
 export default function AboutUs() {
   const heroImage = "/heroSlider/aboutus.webp";
   const mobileHeroImage = "/heroSlider/aboutus_mobile.webp";
-  const newTitleText = "About Big Bear Vans | Custom Van Builders California";
+  const newTitleText = "About Big Bear Vans - Our Story & Team";
   const newSloganText = "You Dream It. We Build It.";
   const newDescriptionText =
     "Artur and Anna founded Big Bear Vans, building family-focused Sprinter conversions with smart elevator beds.";

@@ -7,11 +7,15 @@ import { Heart, Users } from "lucide-react";
 
 // ✅ 1. SEO Metadata
 export const metadata = {
-  title: "Careers | Join the Big Bear Vans Team",
-  description: "Build the future of mobile living. Explore open positions at Big Bear Vans and join our team of expert van builders and designers.",
+  title: "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+  description: `Explore career opportunities at Big Bear Vans. Join our
+ team of expert van builders, designers, and engineers in
+ Big Bear City, California.`,
   openGraph: {
-    title: "Careers at Big Bear Vans",
-    description: "Join us in redefining mobile living through precision engineering.",
+     title: "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+  description: `Explore career opportunities at Big Bear Vans. Join our
+ team of expert van builders, designers, and engineers in
+ Big Bear City, California.`,
     images: ["/images/blackLogo.webp"], // Replace with actual OG image
   },
 };
@@ -47,8 +51,10 @@ export default async function CareersPage() {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Careers at Big Bear Vans",
-  "description": "Explore remote job opportunities and join the Big Bear Vans team.",
+  "name": "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+  "description": `Explore career opportunities at Big Bear Vans. Join our
+ team of expert van builders, designers, and engineers in
+ Big Bear City, California.`,
   "url": "https://www.bigbearvans.com/careers",
   "mainEntity": {
     "@type": "ItemList",

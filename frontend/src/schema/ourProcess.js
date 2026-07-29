@@ -2,7 +2,9 @@ export const generateProcessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How We Build Your Custom Big Bear Van",
-  "description": "Our transparent 5-month custom van conversion process, from 3D visualization to final handover.",
+  "description": `From 3D design to final handover: see Big Bear Vans'
+ transparent 5-month custom camper van build process,
+including vehicle sourcing and lifetime support.`,
   "totalTime": "P5M", // Period: 5 Months
   "step": [
     {

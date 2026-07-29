@@ -14,7 +14,8 @@
       "Bash(Get-Content *)",
       "Bash(xargs grep -ilE \"csv|xlsx|\\\\bexport\\\\b|download.*report|file-saver\")",
       "Bash(npx eslint *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(npx next *)"
     ]
   }
 }

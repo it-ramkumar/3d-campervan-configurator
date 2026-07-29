@@ -14,7 +14,7 @@ export default function ConditionalLayout({ children }) {
 
   // 1. Exact paths jahan sab kuch hide karna hai
   const exactHideLayoutPaths = ["/van", "/configurator", "/dashboard"];
-  const exactHideConsultationPaths = ["/inquiry", "/thank-you"];
+  const exactHideConsultationPaths = ["/build-your-own-camper-van", "/thank-you"];
 
   // 2. Dynamic checks (Jo paths variable elements contain karte hain)
   const isQuotePreview = pathname.startsWith("/quote/preview/");
@@ -32,7 +32,7 @@ export default function ConditionalLayout({ children }) {
     isQuotePreview ||
     isConfiguratorPage;
   const hideShareBar = isConfiguratorPage;
-  const hideFloatingButtonPaths = ["/configurator", "/inquiry"];
+  const hideFloatingButtonPaths = ["/configurator", "/build-your-own-camper-van"];
 
   const hideFloatingButton = hideFloatingButtonPaths.includes(pathname);
 

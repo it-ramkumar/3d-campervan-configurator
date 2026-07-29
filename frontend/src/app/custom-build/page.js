@@ -3,8 +3,10 @@ import CustomBuild from "../../components/CustomBuild/CustomBuild"
 
 export async function generateMetadata() {
   try {
-    const title = `Custom Camper Vans Built From Scratch | Big Bear Vans`;
-    const description = `100% custom Mercedes Sprinter & Ford Transit camper vans — you choose the layout, materials & features. 105+ builds delivered. Get a free quote.`;
+    const title = `Custom Camper Van Builds - Sprinter & Transit | Big Bear Vans`;
+    const description = `100% custom Mercedes Sprinter & Ford Transit camper
+van conversions. You choose the layout, materials & systems.
+ 105+ builds delivered - get a free quote.`;
     return {
       title,
       description,
@@ -17,8 +19,10 @@ export async function generateMetadata() {
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Custom Camper Vans Built From Scratch | Big Bear Vans",
-      description: "100% custom Mercedes Sprinter & Ford Transit camper vans — you choose the layout, materials & features. 105+ builds delivered. Get a free quote.",
+      title: `Custom Camper Van Builds - Sprinter & Transit | Big Bear Vans`,
+      description: `100% custom Mercedes Sprinter & Ford Transit camper
+van conversions. You choose the layout, materials & systems.
+ 105+ builds delivered - get a free quote.`,
     };
   }
 }
@@ -47,7 +51,9 @@ const jsonLd = {
       "reviewCount": "105"
     }
   },
-  "description": "We build 100% custom Mercedes Sprinter & Ford Transit campervans from a blank slate. You choose every detail — layout, materials & features. 105+ builds delivered.",
+  "description": `100% custom Mercedes Sprinter & Ford Transit camper
+van conversions. You choose the layout, materials & systems.
+ 105+ builds delivered - get a free quote.`,
   "areaServed": {
     "@type": "Country",
     "name": "United States"

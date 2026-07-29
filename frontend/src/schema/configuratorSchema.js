@@ -6,7 +6,9 @@ export const configuratorSchema = () => {
     "operatingSystem": "Web Browser",
     "applicationCategory": "DesignApplication",
     "serviceType": "Custom Van Design",
-    "description": "Interactive 3D tool to design and customize your own Mercedes Sprinter camper van layout, materials, and features.",
+    "description": `Design your dream Mercedes Sprinter camper van
+in our free 3D configurator. Customize layouts, colors,
+ and systems in real time - then get a custom quote.`,
     "offers": {
       "@type": "Offer",
       "price": "0",

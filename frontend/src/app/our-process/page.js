@@ -5,9 +5,11 @@ import { generateProcessSchema } from "@/schema/ourProcess";
 
 // ✅ Next.js Metadata API (Standard way for Server Components)
 export const metadata = {
-  title: "Our Process: From 3D Design to Handover | Big Bear Vans",
+  title: "Our 5-Month Custom Van Build Process | Big Bear Vans",
   description:
-    "Explore our transparent 5-month custom van build process. From 3D visualization and vehicle sourcing to complimentary LAX valet pickup and lifetime care.",
+    `From 3D design to final handover: see Big Bear Vans'
+ transparent 5-month custom camper van build process,
+including vehicle sourcing and lifetime support.`,
   keywords:
     "custom van build timeline, sprinter van conversion process, 3D van design, Mercedes Sprinter sourcing, Big Bear Vans warranty, fly in drive out van build",
   alternates: {
@@ -16,16 +18,20 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/our-process",
-    title: "How We Build Your Dream Van | The Big Bear Process",
-    description:
-      "5 months. 3D precision. Lifetime care. See how we turn your vision into a high-end off-grid home.",
+   title: "Our 5-Month Custom Van Build Process | Big Bear Vans",
+  description:
+    `From 3D design to final handover: see Big Bear Vans'
+ transparent 5-month custom camper van build process,
+including vehicle sourcing and lifetime support.`,
     images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Your Custom Van Journey | Big Bear Vans",
-    description:
-      "From the first 3D sketch to your first campout. Learn about our 5-month build process and airport valet service.",
+    title: "Our 5-Month Custom Van Build Process | Big Bear Vans",
+  description:
+    `From 3D design to final handover: see Big Bear Vans'
+ transparent 5-month custom camper van build process,
+including vehicle sourcing and lifetime support.`,
     images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
   },
 };
@@ -33,7 +39,7 @@ export const metadata = {
 export default function OurProcess() {
   const heroImage = "/heroSlider/processhero.webp";
   const mobileHeroImage = "/heroSlider/processhero_mobile.webp";
-  const newTitleText = "Our Process At Big Bear Vans";
+  const newTitleText = "Our 5-Month Custom Van Build Process";
   const newDescriptionText =
     "A complete process of how we customize your dream custom van";
 

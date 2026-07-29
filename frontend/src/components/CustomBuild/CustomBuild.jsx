@@ -132,7 +132,7 @@ const CustomBuild = () => {
         title="Custom Campervan Builders"
         description="At Big Bear Vans, we build custom campervans from the chassis up. You choose the layout, features, and finishes — we handle the design, build, and quality checks."
         image="/images/s2.webp"
-        link="/inquiry"
+        link="/build-your-own-camper-van"
         showButton={false}
         overlay
         overlayOpacity="bg-black/40"

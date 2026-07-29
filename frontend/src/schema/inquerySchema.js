@@ -3,15 +3,17 @@ export const generateInquirySchema = () => ({
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://www.bigbearvans.com/inquiry#webpage",
-      "url": "https://www.bigbearvans.com/inquiry",
-      "name": "Build Your Dream Van | Custom Van Configurator",
-      "description": "Use our custom van configurator to design your dream Mercedes Sprinter or Ford Transit build. Choose your layout, electrical systems, and get a custom quote today.",
+      "@id": "https://www.bigbearvans.com/build-your-own-camper-van#webpage",
+      "url": "https://www.bigbearvans.com/build-your-own-camper-van",
+      "name": "Build Your Own Custom Camper Van - Get a Quote | Big Bear Vans",
+      "description": `Configure your dream Mercedes Sprinter or Ford
+Transit camper van. Choose your layout, electrical system,
+and off-grid power needs, then get a custom quote.`,
       "inLanguage": "en-US"
     },
     {
       "@type": "Service",
-      "@id": "https://www.bigbearvans.com/inquiry#service",
+      "@id": "https://www.bigbearvans.com/build-your-own-camper-van#service",
       "name": "Custom Van Configuration & Quote",
       "serviceType": "Campervan Conversion Design",
       "description": "Interactive tool to design custom van layouts and receive pricing estimates.",
@@ -41,7 +43,7 @@ export const generateInquirySchema = () => ({
       "areaServed": "US",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://www.bigbearvans.com/inquiry"
+        "@id": "https://www.bigbearvans.com/build-your-own-camper-van"
       }
     }
   ]

@@ -4,14 +4,18 @@ import QuickLinksClient from "../../components/QuickLinks/QuickLinks";
 
 // ✅ 1. SEO Metadata (Server Side)
 export const metadata = {
-  title: "Quick Links - Big Bear Vans | Official Resource Hub",
-  description: "Access all official Big Bear Vans resources, social media channels, and contact links in one place.",
+  title: "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+  description: `Jump to Big Bear Vans' inventory, layouts, configurator,
+and social channels - all official links and resources
+ in one place.`,
   alternates: {
     canonical: "https://www.bigbearvans.com/quick-links",
   },
   openGraph: {
-    title: "Quick Links - Big Bear Vans | Official Resource Hub",
-    description: "Access all official Big Bear Vans resources, social media channels, and contact links in one place.",
+     title: "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+  description: `Jump to Big Bear Vans' inventory, layouts, configurator,
+and social channels - all official links and resources
+ in one place.`,
     url: "https://www.bigbearvans.com/quick-links",
     type: "website",
     images: ["https://www.bigbearvans.com/images/blackLogo.webp"],
@@ -22,8 +26,10 @@ export const metadata = {
 const generateQuickLinksSchema = (links) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Quick Links - Big Bear Vans",
-  "description": "Official hub for all Big Bear Vans resources and social channels.",
+  "name": "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+  "description":`Jump to Big Bear Vans' inventory, layouts, configurator,
+and social channels - all official links and resources
+ in one place.`,
   "url": "https://www.bigbearvans.com/quick-links",
   "mainEntity": {
     "@type": "ItemList",
@@ -67,6 +73,6 @@ export default async function QuickLinksPage() {
       {/* Passing data to Client Component for animations */}
       <QuickLinksClient initialLinks={links} />
 
-\    </>
+    </>
   );
 }

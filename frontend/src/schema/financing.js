@@ -3,7 +3,9 @@ export const generateFinancingSchema = () => ({
   "@type": "FinancialService",
   "@id": "https://www.bigbearvans.com/financing/#service",
   "name": "Big Bear Vans Financing Options",
-  "description": "Flexible campervan financing with 15-year terms. Partnered with Trident Funding for specialized RV loans and all-in-one van conversion financing.",
+  "description": `Flexible financing for your custom Sprinter or Transit build.
+15-year RV loans via Trident Funding, 20-30% down.
+Get pre-qualified with Big Bear Vans today.`,
   "url": "https://www.bigbearvans.com/financing",
   "serviceType": [
     "RV Loans",

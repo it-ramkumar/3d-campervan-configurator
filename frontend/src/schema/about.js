@@ -5,8 +5,10 @@ export const generateAboutSchema = () => ({
       "@type": "AboutPage",
       "@id": "https://www.bigbearvans.com/about-us/#webpage",
       "url": "https://www.bigbearvans.com/about-us",
-      "name": "Custom Camper Van Builders in California | Big Bear Vans",
-      "description": "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit campervans in Big Bear City, CA. 105+ builds, 5-star rated, founded by van lifers Artur & Anna.",
+      "name": "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+      "description": `Meet the team behind Big Bear Vans. Founded by van lifers
+ Artur & Anna, we've delivered 105+ custom Sprinter and
+Transit camper van conversions.`,
       "publisher": { "@id": "https://www.bigbearvans.com/#organization" }
     },
     {
@@ -14,7 +16,9 @@ export const generateAboutSchema = () => ({
       "@id": "https://www.bigbearvans.com/#organization",
       "name": "Big Bear Vans",
       "image": "https://www.bigbearvans.com/images/mission.webp",
-      "description": "Specializing in family-friendly custom campervan builds with innovative space-saving solutions like elevator beds and compact aluminum bathrooms.",
+"description": `Meet the team behind Big Bear Vans. Founded by van lifers
+ Artur & Anna, we've delivered 105+ custom Sprinter and
+Transit camper van conversions.`,
       "url": "https://www.bigbearvans.com",
       "telephone": "+1-951-441-9719",
       "address": {

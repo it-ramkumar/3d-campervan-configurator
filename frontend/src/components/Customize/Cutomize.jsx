@@ -18,7 +18,7 @@ export default function Customize({
   image = "",
   descriptionList = [],
   orderButtonLabel = "Order Custom Build",
-  orderButtonLink = "/inquiry",
+  orderButtonLink = "/build-your-own-camper-van",
   showButton = true,
   className = ""
 }) {
