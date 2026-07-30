@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { ImageWithSkeleton, SpanTag, Heading3 } from "../../Common/Common";
 import FloorPlanHero from "./FloorPlanHero";
+import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 
 // --- WHEELBASE GROUPS --- (mirrors van_layout/Van_layout.js so both listings filter the same way)
 const WHEELBASE_GROUPS = [
@@ -59,9 +60,25 @@ export default function All_Titles_Client() {
 
   // Backend se aane wale dynamic filter arrays ki states
   // Wheelbase/Shower options are hardcoded groups (WHEELBASE_GROUPS/SHOWER_GROUPS) to match Portfolio, so no db state needed for them.
-  const [dbCategories, setDbCategories] = useState([]);
   const [dbSeatings, setDbSeatings] = useState([]);
   const [dbModels, setDbModels] = useState([]);
+
+  // Unfiltered catalog of every published build (slug + title) for the "Jump to Build" dropdown — same as Portfolio's Van_layout.js
+  const [catalogBuilds, setCatalogBuilds] = useState([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const res = await getAllPortfolio({ limit: 1000, is_published: true });
+      if (cancelled || !res?.success) return;
+      const allData = res.data?.data || [];
+      setCatalogBuilds(
+        allData
+          .filter((item) => item.slug && item.van_listing?.title)
+          .map((item) => ({ slug: item.slug, title: item.van_listing.title }))
+      );
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // 2. TEMPORARY STATES FOR CHECKBOXES (Apply button ke liye)
   const [tempBathrooms, setTempBathrooms] = useState([]);
@@ -185,7 +202,6 @@ export default function All_Titles_Client() {
       if (res.success) {
         setPortfolios(res.data || []);
         setHasMore(1 < res.pages);
-        if (res.categories) setDbCategories(res.categories);
 
         // Backend se dynamic unique options save karein
         if (res.filterOptions) {
@@ -219,17 +235,10 @@ export default function All_Titles_Client() {
     setLoading(false);
   };
 
-  const getCategoryLabel = (slug) => {
-    const map = {
-      "amsterdam": "Amsterdam",
-      "flagship-long-van-montreal": "Montreal",
-      "flagship-short-van-santa-monica": "Santa Monica",
-      "layouts-for-families-3-9-people": "Families",
-      "layouts-for-solo-and-couple-travelers": "Solo & Couples",
-      "portfolio-of-custom-builds": "Custom Builds",
-      "sugarloaf": "Sugarloaf",
-    };
-    return map[slug] || slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  const handleBuildJump = (slug) => {
+    if (!slug) return;
+    setOpenDropdown(null);
+    router.push(`/van-layouts/${slug}?view=floorplan`);
   };
 
   const getWheelbaseLabel = (wb) => {
@@ -318,24 +327,24 @@ export default function All_Titles_Client() {
         </div>
       </div>
 
-      {/* Chassis (single-select, applies instantly) */}
+      {/* Jump to Build (quick jump to a specific floor plan by name, same as Portfolio) */}
       <div className="space-y-2 relative">
         <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
-          Chassis
+          Jump to Build
         </label>
         <div
-          onClick={() => setOpenDropdown(openDropdown === "chassis" ? null : "chassis")}
+          onClick={() => setOpenDropdown(openDropdown === "build" ? null : "build")}
           className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
-            openDropdown === "chassis" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+            openDropdown === "build" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
           }`}
         >
-          <span className={`truncate max-w-[140px] ${selectedChassis !== "ALL" ? "text-[#ED985F]" : "text-primary/40"}`}>
-            {selectedChassis !== "ALL" ? getCategoryLabel(selectedChassis) : "All"}
+          <span className="truncate max-w-[140px] text-primary/40">
+            Select a build...
           </span>
-          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "chassis" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "build" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
         <AnimatePresence>
-          {openDropdown === "chassis" && (
+          {openDropdown === "build" && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -343,27 +352,24 @@ export default function All_Titles_Client() {
               transition={{ duration: 0.15 }}
               className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
             >
-              <button
-                type="button"
-                onClick={() => { updateURL({ category: "ALL" }); setOpenDropdown(null); }}
-                className={`w-full text-left font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-150 ${
-                  selectedChassis === "ALL" ? "text-[#ED985F] font-semibold bg-secondary" : "text-primary/70 hover:bg-secondary"
-                }`}
-              >
-                All Chassis
-              </button>
-              {dbCategories.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => { updateURL({ category: cat }); setOpenDropdown(null); }}
-                  className={`w-full text-left font-ui text-sm px-2 py-2 rounded-lg transition-colors duration-150 ${
-                    selectedChassis === cat ? "text-[#ED985F] font-semibold bg-secondary" : "text-primary/70 hover:bg-secondary"
-                  }`}
-                >
-                  {getCategoryLabel(cat)}
-                </button>
-              ))}
+              {catalogBuilds.length === 0 ? (
+                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                  Loading builds...
+                </div>
+              ) : (
+                catalogBuilds.map((build) => (
+                  <button
+                    type="button"
+                    key={build.slug}
+                    onClick={() => handleBuildJump(build.slug)}
+                    className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+                  >
+                    <span className="font-ui text-sm text-primary/70">
+                      {build.title}
+                    </span>
+                  </button>
+                ))
+              )}
             </motion.div>
           )}
         </AnimatePresence>
