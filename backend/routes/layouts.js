@@ -252,7 +252,8 @@ router.get("/titles-only", async (req, res) => {
       category,
       seating,
       bathroomType,
-      wheelbase
+      wheelbase,
+      model
     } = req.query;
 
     page = parseInt(page) || 1;
@@ -260,11 +261,12 @@ router.get("/titles-only", async (req, res) => {
 
     // ─── DYNAMIC OPTIONS FROM DATABASE ───
     // Ye poore database se unique options nikalega taaki frontend pe checkboxes ban sakein
-    const [uniqueCategories, uniqueBathrooms, uniqueWheelbases, uniqueSeatings] = await Promise.all([
+    const [uniqueCategories, uniqueBathrooms, uniqueWheelbases, uniqueSeatings, uniqueModels] = await Promise.all([
       PortfolioVan.distinct("category"),
       PortfolioVan.distinct("van_listing.bathroomType"),
       PortfolioVan.distinct("van_listing.specifications.wheelbase"),
-      PortfolioVan.distinct("van_listing.specifications.capacity.sits")
+      PortfolioVan.distinct("van_listing.specifications.capacity.sits"),
+      PortfolioVan.distinct("van_listing.specifications.make_model")
     ]);
 
     const filter = { is_published: true };
@@ -304,6 +306,12 @@ router.get("/titles-only", async (req, res) => {
       filter["van_listing.specifications.capacity.sits"] = {
         $in: parsedSeating
       };
+    }
+
+    // Make/Model Filter
+    const parsedModels = parseCheckboxFilter(model);
+    if (parsedModels?.length) {
+      filter["van_listing.specifications.make_model"] = { $in: parsedModels };
     }
 
     // Total count matching the filters
@@ -353,6 +361,7 @@ router.get("/titles-only", async (req, res) => {
         bathrooms: uniqueBathrooms.filter(Boolean), // filter(Boolean) null/empty values nikal dega
         wheelbases: uniqueWheelbases.filter(Boolean),
         seatings: uniqueSeatings.filter(Boolean).sort((a, b) => a - b), // Seating ko sort kar diya 2, 3, 4
+        models: uniqueModels.filter(Boolean),
       },
       data: vans,
     });

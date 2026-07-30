@@ -20,6 +20,20 @@ import {
 import { ImageWithSkeleton, SpanTag, Heading3 } from "../../Common/Common";
 import FloorPlanHero from "./FloorPlanHero";
 
+// --- WHEELBASE GROUPS --- (mirrors van_layout/Van_layout.js so both listings filter the same way)
+const WHEELBASE_GROUPS = [
+  { key: "short", label: "Short Vans", values: ["130", "144", "148"] },
+  { key: "long", label: "Long Vans", values: ["159", "148 ext", "170", "170 ext"] },
+];
+
+// --- SHOWER GROUPS --- (mirrors van_layout/Van_layout.js)
+const SHOWER_GROUPS = [
+  { key: "full-standing", label: "Full Standing Indoor Shower", values: ["Full Aluminum", "Full Acrilic", "Full Real Tile"] },
+  { key: "folding", label: "Folding / Hide Away Interior Shower", values: ["Folding Shower", "Shower in a Bench"] },
+  { key: "rear-outdoor", label: "Rear Outdoor Shower Only", values: ["Rear Shower"] },
+  { key: "rear-xl", label: "Rear XL Bathroom", values: ["Rear Bathroom"] },
+];
+
 export default function All_Titles_Client() {
   const LIMIT = 12;
 
@@ -32,6 +46,7 @@ export default function All_Titles_Client() {
   const bathroomFilterFromURL = searchParams.get("bathroomType") || "";
   const wheelbaseFilterFromURL = searchParams.get("wheelbase") || "";
   const seatingFilterFromURL = searchParams.get("seating") || "";
+  const modelFilterFromURL = searchParams.get("model") || "";
 
   const [localSearch, setLocalSearch] = useState(searchQueryFromURL);
   const [portfolios, setPortfolios] = useState([]);
@@ -43,15 +58,16 @@ export default function All_Titles_Client() {
   const filterGridRef = useRef(null);
 
   // Backend se aane wale dynamic filter arrays ki states
+  // Wheelbase/Shower options are hardcoded groups (WHEELBASE_GROUPS/SHOWER_GROUPS) to match Portfolio, so no db state needed for them.
   const [dbCategories, setDbCategories] = useState([]);
-  const [dbBathrooms, setDbBathrooms] = useState([]);
-  const [dbWheelbases, setDbWheelbases] = useState([]);
   const [dbSeatings, setDbSeatings] = useState([]);
+  const [dbModels, setDbModels] = useState([]);
 
   // 2. TEMPORARY STATES FOR CHECKBOXES (Apply button ke liye)
   const [tempBathrooms, setTempBathrooms] = useState([]);
   const [tempWheelbases, setTempWheelbases] = useState([]);
   const [tempSeatings, setTempSeatings] = useState([]);
+  const [tempModels, setTempModels] = useState([]);
 
   // URL badalne par temporary checkboxes ko sync rakhein
   useEffect(() => {
@@ -59,7 +75,8 @@ export default function All_Titles_Client() {
     setTempBathrooms(bathroomFilterFromURL ? bathroomFilterFromURL.split(",") : []);
     setTempWheelbases(wheelbaseFilterFromURL ? wheelbaseFilterFromURL.split(",") : []);
     setTempSeatings(seatingFilterFromURL ? seatingFilterFromURL.split(",") : []);
-  }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL]);
+    setTempModels(modelFilterFromURL ? modelFilterFromURL.split(",") : []);
+  }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -96,6 +113,15 @@ export default function All_Titles_Client() {
     }
   };
 
+  // Wheelbase/Shower are grouped (Short/Long, Full Standing/Folding/etc.) — same grouping as van_layout/Van_layout.js
+  const handleGroupToggle = (stateSetter, currentArray, groupValues) => {
+    const isActive = groupValues.some((v) => currentArray.includes(v));
+    const updated = isActive
+      ? currentArray.filter((v) => !groupValues.includes(v))
+      : [...new Set([...currentArray, ...groupValues])];
+    stateSetter(updated);
+  };
+
   // 4. APPLY BUTTON LOGIC: Ek sath saare filters URL mein bhejta hai
   const handleApplyFilters = () => {
     setOpenDropdown(null);
@@ -103,6 +129,7 @@ export default function All_Titles_Client() {
       bathroomType: tempBathrooms.join(","),
       wheelbase: tempWheelbases.join(","),
       seating: tempSeatings.join(","),
+      model: tempModels.join(","),
       page: 1, // Filters badalne par page reset 1 par
     });
   };
@@ -112,6 +139,7 @@ export default function All_Titles_Client() {
     setTempBathrooms([]);
     setTempWheelbases([]);
     setTempSeatings([]);
+    setTempModels([]);
     setOpenDropdown(null);
     router.push(pathname);
   };
@@ -122,7 +150,7 @@ export default function All_Titles_Client() {
     }
   };
 
-  const fetchPortfolios = useCallback(async (pageNum, category, search, bathroom, wb, seat) => {
+  const fetchPortfolios = useCallback(async (pageNum, category, search, bathroom, wb, seat, model) => {
     try {
       const url = `${process.env.NEXT_PUBLIC_URL}/portfolio/titles-only` +
         `?page=${pageNum}&limit=${LIMIT}` +
@@ -131,6 +159,7 @@ export default function All_Titles_Client() {
         `&bathroomType=${encodeURIComponent(bathroom || "")}` +
         `&wheelbase=${encodeURIComponent(wb || "")}` +
         `&seating=${encodeURIComponent(seat || "")}` +
+        `&model=${encodeURIComponent(model || "")}` +
         `&t=${Date.now()}`;
       const res = await fetch(url, { cache: "no-store" });
       return res.json();
@@ -150,7 +179,8 @@ export default function All_Titles_Client() {
         searchQueryFromURL,
         bathroomFilterFromURL,
         wheelbaseFilterFromURL,
-        seatingFilterFromURL
+        seatingFilterFromURL,
+        modelFilterFromURL
       );
       if (res.success) {
         setPortfolios(res.data || []);
@@ -159,15 +189,14 @@ export default function All_Titles_Client() {
 
         // Backend se dynamic unique options save karein
         if (res.filterOptions) {
-          setDbBathrooms(res.filterOptions.bathrooms || []);
-          setDbWheelbases(res.filterOptions.wheelbases || []);
           setDbSeatings(res.filterOptions.seatings || []);
+          setDbModels(res.filterOptions.models || []);
         }
       }
       setLoading(false);
     };
     load();
-  }, [selectedChassis, searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, fetchPortfolios]);
+  }, [selectedChassis, searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL, fetchPortfolios]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
@@ -179,7 +208,8 @@ export default function All_Titles_Client() {
       searchQueryFromURL,
       bathroomFilterFromURL,
       wheelbaseFilterFromURL,
-      seatingFilterFromURL
+      seatingFilterFromURL,
+      modelFilterFromURL
     );
     if (res.success) {
       setPortfolios((prev) => [...prev, ...(res.data || [])]);
@@ -217,7 +247,8 @@ export default function All_Titles_Client() {
     searchQueryFromURL !== "" ||
     bathroomFilterFromURL !== "" ||
     wheelbaseFilterFromURL !== "" ||
-    seatingFilterFromURL !== "";
+    seatingFilterFromURL !== "" ||
+    modelFilterFromURL !== "";
 
   return (
     <>
@@ -338,10 +369,10 @@ export default function All_Titles_Client() {
         </AnimatePresence>
       </div>
 
-      {/* Bathroom */}
+      {/* Shower (grouped, same as Portfolio) */}
       <div className="space-y-2 relative">
         <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
-          Bathroom{tempBathrooms.length > 0 && ` (${tempBathrooms.length})`}
+          Shower
         </label>
         <div
           onClick={() => setOpenDropdown(openDropdown === "bathroom" ? null : "bathroom")}
@@ -350,7 +381,12 @@ export default function All_Titles_Client() {
           }`}
         >
           <span className={`truncate max-w-[140px] ${tempBathrooms.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
-            {tempBathrooms.length > 0 ? tempBathrooms.join(", ") : "All"}
+            {tempBathrooms.length > 0
+              ? SHOWER_GROUPS.filter((g) => g.values.some((v) => tempBathrooms.includes(v)))
+                  .map((g) => g.label)
+                  .join(", ")
+              : "All"
+            }
           </span>
           <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "bathroom" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
@@ -363,37 +399,31 @@ export default function All_Titles_Client() {
               transition={{ duration: 0.15 }}
               className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
             >
-              {dbBathrooms.length === 0 ? (
-                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
-                  No options available
-                </div>
-              ) : (
-                dbBathrooms.map((type) => {
-                  const isChecked = tempBathrooms.includes(type);
-                  return (
-                    <label key={type} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => handleLocalCheckboxToggle(setTempBathrooms, tempBathrooms, type)}
-                        className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
-                      />
-                      <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
-                        {type}
-                      </span>
-                    </label>
-                  );
-                })
-              )}
+              {SHOWER_GROUPS.map((group) => {
+                const isChecked = group.values.some((v) => tempBathrooms.includes(v));
+                return (
+                  <label key={group.key} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => handleGroupToggle(setTempBathrooms, tempBathrooms, group.values)}
+                      className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                    />
+                    <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                      {group.label}
+                    </span>
+                  </label>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Wheelbase */}
+      {/* Wheelbase (grouped Short/Long, same as Portfolio) */}
       <div className="space-y-2 relative">
         <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
-          Wheelbase{tempWheelbases.length > 0 && ` (${tempWheelbases.length})`}
+          Wheelbase
         </label>
         <div
           onClick={() => setOpenDropdown(openDropdown === "wheelbase" ? null : "wheelbase")}
@@ -402,7 +432,12 @@ export default function All_Titles_Client() {
           }`}
         >
           <span className={`truncate max-w-[140px] ${tempWheelbases.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
-            {tempWheelbases.length > 0 ? tempWheelbases.map((wb) => getWheelbaseLabel(wb)).join(", ") : "All"}
+            {tempWheelbases.length > 0
+              ? WHEELBASE_GROUPS.filter((g) => g.values.some((v) => tempWheelbases.includes(v)))
+                  .map((g) => g.label)
+                  .join(", ")
+              : "All"
+            }
           </span>
           <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "wheelbase" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
@@ -415,23 +450,69 @@ export default function All_Titles_Client() {
               transition={{ duration: 0.15 }}
               className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
             >
-              {dbWheelbases.length === 0 ? (
+              {WHEELBASE_GROUPS.map((group) => {
+                const isChecked = group.values.some((v) => tempWheelbases.includes(v));
+                return (
+                  <label key={group.key} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => handleGroupToggle(setTempWheelbases, tempWheelbases, group.values)}
+                      className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                    />
+                    <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                      {group.label}
+                    </span>
+                  </label>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Make Model (same as Portfolio) */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Make Model{tempModels.length > 0 && ` (${tempModels.length})`}
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "model" ? null : "model")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "model" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
+        >
+          <span className={`truncate max-w-[140px] ${tempModels.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {tempModels.length > 0 ? tempModels.join(", ") : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "model" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
+        </div>
+        <AnimatePresence>
+          {openDropdown === "model" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+            >
+              {dbModels.length === 0 ? (
                 <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
                   No options available
                 </div>
               ) : (
-                dbWheelbases.map((wb) => {
-                  const isChecked = tempWheelbases.includes(String(wb));
+                dbModels.map((m) => {
+                  const isChecked = tempModels.includes(m);
                   return (
-                    <label key={wb} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                    <label key={m} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
                       <input
                         type="checkbox"
                         checked={isChecked}
-                        onChange={() => handleLocalCheckboxToggle(setTempWheelbases, tempWheelbases, wb)}
+                        onChange={() => handleLocalCheckboxToggle(setTempModels, tempModels, m)}
                         className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
                       />
                       <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
-                        {getWheelbaseLabel(String(wb))}
+                        {m}
                       </span>
                     </label>
                   );

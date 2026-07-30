@@ -38,7 +38,7 @@ const WHEELBASE_OPTIONS = [
   "170 ext",
 ];
 
-const DRIVETRAIN_OPTIONS = ["FWD", "RWD", "AWD", "4WD"];
+const DRIVETRAIN_OPTIONS = ["FWD", "RWD", "AWD", "4WD", "2WD"];
 
 export default function PortfolioForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
