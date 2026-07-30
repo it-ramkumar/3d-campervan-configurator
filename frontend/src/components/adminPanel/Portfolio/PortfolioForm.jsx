@@ -20,6 +20,26 @@ const slugifyPreview = (title) =>
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 
+const MAKE_MODEL_OPTIONS = [
+  "Mercedes-Benz Sprinter",
+  "Ford Transit",
+  "RAM ProMaster",
+];
+
+const WHEELBASE_OPTIONS = [
+  "130",
+  "136",
+  "139",
+  "144",
+  "148",
+  "148 ext",
+  "159",
+  "170",
+  "170 ext",
+];
+
+const DRIVETRAIN_OPTIONS = ["FWD", "RWD", "AWD", "4WD"];
+
 export default function PortfolioForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
   const [galleryFiles, setGalleryFiles] = useState([]);
@@ -30,6 +50,7 @@ export default function PortfolioForm({ setSelected }) {
   const [bedType, setBedType] = useState("");
   const [bathroomType, setBathroomType] = useState("");
   const [title, setTitle] = useState("");
+  const [clientName, setClientName] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -52,12 +73,12 @@ export default function PortfolioForm({ setSelected }) {
   const [removedExistingRendering, setRemovedExistingRendering] = useState([]);
   const [originalTitle, setOriginalTitle] = useState(null);
 
-
   const clearForm = () => {
     setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
     setTitle("");
+    setClientName("");
     setSubtitle("");
     setDescription("");
     setPrice("");
@@ -82,6 +103,7 @@ export default function PortfolioForm({ setSelected }) {
   useEffect(() => {
     if (editData?._id) {
       setTitle(editData.van_listing?.title || "");
+      setClientName(editData.van_listing?.clientName || "");
       setOriginalTitle(editData.van_listing?.title || "");
       setRoof(editData.van_listing?.roof || "");
       setBedType(editData.van_listing?.bedType || "");
@@ -212,6 +234,7 @@ export default function PortfolioForm({ setSelected }) {
       blocks: cleanBlocks(),
       van_listing: {
         title,
+        clientName,
         subtitle,
         description,
         price,
@@ -269,6 +292,17 @@ export default function PortfolioForm({ setSelected }) {
                   <span className="italic"> (updates automatically on save)</span>
                 )}
               </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Client Name</label>
+              <input
+                type="text"
+                placeholder="Enter client name"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
             </div>
 
             <div>
@@ -470,35 +504,53 @@ export default function PortfolioForm({ setSelected }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Make/Model</label>
-              <input
-                type="text"
-                placeholder="Enter make/model"
+              <select
                 value={makeModel}
                 onChange={(e) => setMakeModel(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Make/Model</option>
+                {makeModel && !MAKE_MODEL_OPTIONS.includes(makeModel) && (
+                  <option value={makeModel}>{makeModel}</option>
+                )}
+                {MAKE_MODEL_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Wheelbase</label>
-              <input
-                type="text"
-                placeholder="Enter wheelbase"
+              <select
                 value={wheelbase}
                 onChange={(e) => setWheelbase(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Wheelbase</option>
+                {wheelbase && !WHEELBASE_OPTIONS.includes(wheelbase) && (
+                  <option value={wheelbase}>{wheelbase}</option>
+                )}
+                {WHEELBASE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Drivetrain</label>
-              <input
-                type="text"
-                placeholder="Enter drivetrain"
+              <select
                 value={drivetrain}
                 onChange={(e) => setDrivetrain(e.target.value)}
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
-              />
+                className="border border-gray-300 p-3 rounded-lg w-full bg-white focus:outline-none focus:border-gray-500"
+              >
+                <option value="">Select Drivetrain</option>
+                {drivetrain && !DRIVETRAIN_OPTIONS.includes(drivetrain) && (
+                  <option value={drivetrain}>{drivetrain}</option>
+                )}
+                {DRIVETRAIN_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
             </div>
 
             <div>

@@ -11,6 +11,21 @@ import {
   SpanTag,
 } from '../Common/Common';
 import Link from "next/link";
+import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
+
+// --- WHEELBASE GROUPS ---
+const WHEELBASE_GROUPS = [
+  { key: "short", label: "Short Vans", values: ["130", "144", "148"] },
+  { key: "long", label: "Long Vans", values: ["159", "148 ext", "170", "170 ext"] },
+];
+
+// --- SHOWER GROUPS ---
+const SHOWER_GROUPS = [
+  { key: "full-standing", label: "Full Standing Indoor Shower", values: ["Full Aluminum", "Full Acrilic", "Full Real Tile"] },
+  { key: "folding", label: "Folding / Hide Away Interior Shower", values: ["Folding Shower", "Shower in a Bench"] },
+  { key: "rear-outdoor", label: "Rear Outdoor Shower Only", values: ["Rear Shower"] },
+  { key: "rear-xl", label: "Rear XL Bathroom", values: ["Rear Bathroom"] },
+];
 
 // --- SUB-COMPONENT: IMAGE GRID ---
 const ProjectImages = ({ images, alt }) => {
@@ -60,11 +75,11 @@ export default function Van_layout({ layout, currentParams = {} }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const { data: layouts, pages: totalPages, page: currentPage, filters } = layout;
+  const { data: layouts, pages: totalPages, page: currentPage } = layout;
 
   const [localFilters, setLocalFilters] = useState({
     wheelbase: [],
-    category: [],
+    model: [],
     sit: [],
     bathroomType: [],
     search: ""
@@ -72,10 +87,33 @@ export default function Van_layout({ layout, currentParams = {} }) {
   const [openDropdown, setOpenDropdown] = useState(null);
   const filterGridRef = useRef(null);
 
+  // Unfiltered baseline fetched once — keeps every dropdown showing ALL possible
+  // options regardless of which filters are currently applied (backend narrows
+  // `layout.filters` down to whatever matches the active query, so we don't use
+  // that for populating options — only for reading which options are active).
+  const [catalog, setCatalog] = useState({ models: [], sits: [], builds: [] });
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const res = await getAllPortfolio({ limit: 1000, is_published: true });
+      if (cancelled || !res?.success) return;
+      const allData = res.data?.data || [];
+      setCatalog({
+        models: res.data?.filters?.models || [],
+        sits: res.data?.filters?.sits || [],
+        builds: allData
+          .filter((item) => item.slug && item.van_listing?.title)
+          .map((item) => ({ slug: item.slug, title: item.van_listing.title }))
+      });
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
   useEffect(() => {
     setLocalFilters({
       wheelbase: currentParams.wheelbase ? currentParams.wheelbase.split(",") : [],
-      category: currentParams.category ? currentParams.category.split(",") : [],
+      model: currentParams.model ? currentParams.model.split(",") : [],
       sit: currentParams.sit ? currentParams.sit.split(",") : [],
       bathroomType: currentParams.bathroomType ? currentParams.bathroomType.split(",") : [],
       search: currentParams.search || ""
@@ -121,18 +159,44 @@ export default function Van_layout({ layout, currentParams = {} }) {
   };
 
   const handleClearAll = () => {
-    setLocalFilters({ wheelbase: [], category: [], sit: [], bathroomType: [], search: "" });
+    setLocalFilters({ wheelbase: [], model: [], sit: [], bathroomType: [], search: "" });
     setOpenDropdown(null);
     router.push(pathname);
+  };
+
+  const handleBuildJump = (slug) => {
+    if (!slug) return;
+    setOpenDropdown(null);
+    router.push(`/van-layouts/${slug}`);
+  };
+
+  const handleWheelbaseGroupToggle = (groupValues) => {
+    setLocalFilters(prev => {
+      const current = prev.wheelbase;
+      const isActive = groupValues.some(v => current.includes(v));
+      const updatedValues = isActive
+        ? current.filter(v => !groupValues.includes(v))
+        : [...new Set([...current, ...groupValues])];
+      return { ...prev, wheelbase: updatedValues };
+    });
+  };
+
+  const handleShowerGroupToggle = (groupValues) => {
+    setLocalFilters(prev => {
+      const current = prev.bathroomType;
+      const isActive = groupValues.some(v => current.includes(v));
+      const updatedValues = isActive
+        ? current.filter(v => !groupValues.includes(v))
+        : [...new Set([...current, ...groupValues])];
+      return { ...prev, bathroomType: updatedValues };
+    });
   };
 
   const filterOptions = (options = []) => options.filter(Boolean).sort();
 
   const filterConfig = [
-    { label: "Wheelbase", key: "wheelbase", options: filterOptions(filters?.wheelbase) },
-    { label: "Category", key: "category", options: filterOptions(filters?.category) },
-    { label: "Seating", key: "sit", options: filterOptions(filters?.sits) },
-    { label: "Sanitation", key: "bathroomType", options: filterOptions(filters?.bathroomType) },
+    { label: "Make Model", key: "model", options: filterOptions(catalog.models) },
+    { label: "Seating", key: "sit", options: filterOptions(catalog.sits) },
   ];
 
   const hasActiveFilters = Object.keys(currentParams).length > 0;
@@ -187,6 +251,183 @@ export default function Van_layout({ layout, currentParams = {} }) {
                   />
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/30" size={15} />
                 </div>
+              </div>
+
+              {/* Wheelbase (Short / Long) */}
+              <div className="space-y-2 relative">
+                <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+                  Wheelbase
+                </label>
+
+                <div
+                  onClick={() => setOpenDropdown(openDropdown === "wheelbase" ? null : "wheelbase")}
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+                    openDropdown === "wheelbase"
+                      ? "border-[#ED985F]/40 bg-white shadow-sm"
+                      : "border-primary/10 hover:border-primary/20"
+                  }`}
+                >
+                  <span className={`truncate max-w-[140px] ${localFilters.wheelbase.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+                    {localFilters.wheelbase.length > 0
+                      ? WHEELBASE_GROUPS.filter(g => g.values.some(v => localFilters.wheelbase.includes(v)))
+                          .map(g => g.label)
+                          .join(", ")
+                      : "All"
+                    }
+                  </span>
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform duration-200 ${openDropdown === "wheelbase" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`}
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {openDropdown === "wheelbase" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+                    >
+                      {WHEELBASE_GROUPS.map((group) => {
+                        const isChecked = group.values.some(v => localFilters.wheelbase.includes(v));
+                        return (
+                          <label
+                            key={group.key}
+                            className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleWheelbaseGroupToggle(group.values)}
+                              className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                            />
+                            <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                              {group.label}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Shower */}
+              <div className="space-y-2 relative">
+                <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+                  Shower
+                </label>
+
+                <div
+                  onClick={() => setOpenDropdown(openDropdown === "shower" ? null : "shower")}
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+                    openDropdown === "shower"
+                      ? "border-[#ED985F]/40 bg-white shadow-sm"
+                      : "border-primary/10 hover:border-primary/20"
+                  }`}
+                >
+                  <span className={`truncate max-w-[140px] ${localFilters.bathroomType.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+                    {localFilters.bathroomType.length > 0
+                      ? SHOWER_GROUPS.filter(g => g.values.some(v => localFilters.bathroomType.includes(v)))
+                          .map(g => g.label)
+                          .join(", ")
+                      : "All"
+                    }
+                  </span>
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform duration-200 ${openDropdown === "shower" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`}
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {openDropdown === "shower" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+                    >
+                      {SHOWER_GROUPS.map((group) => {
+                        const isChecked = group.values.some(v => localFilters.bathroomType.includes(v));
+                        return (
+                          <label
+                            key={group.key}
+                            className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleShowerGroupToggle(group.values)}
+                              className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                            />
+                            <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                              {group.label}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Build (quick jump to a specific layout by name) */}
+              <div className="space-y-2 relative">
+                <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+                  Jump to Build
+                </label>
+
+                <div
+                  onClick={() => setOpenDropdown(openDropdown === "build" ? null : "build")}
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+                    openDropdown === "build"
+                      ? "border-[#ED985F]/40 bg-white shadow-sm"
+                      : "border-primary/10 hover:border-primary/20"
+                  }`}
+                >
+                  <span className="truncate max-w-[140px] text-primary/40">
+                    Select a build...
+                  </span>
+                  <ChevronDown
+                    size={15}
+                    className={`transition-transform duration-200 ${openDropdown === "build" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`}
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {openDropdown === "build" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+                    >
+                      {catalog.builds.length === 0 ? (
+                        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                          Loading builds...
+                        </div>
+                      ) : (
+                        catalog.builds.map((build) => (
+                          <button
+                            type="button"
+                            key={build.slug}
+                            onClick={() => handleBuildJump(build.slug)}
+                            className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+                          >
+                            <span className="font-ui text-sm text-primary/70">
+                              {build.title}
+                            </span>
+                          </button>
+                        ))
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Dropdown filters */}
