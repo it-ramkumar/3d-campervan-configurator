@@ -15,7 +15,8 @@
       "Bash(xargs grep -ilE \"csv|xlsx|\\\\bexport\\\\b|download.*report|file-saver\")",
       "Bash(npx eslint *)",
       "Bash(npx tsc *)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(awk -F/ '{print $1\"/\"$2}')"
     ]
   }
 }

@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { clearEditData } from "@/redux/slices/editData";
+import { ArrowLeft, Plus } from "lucide-react";
 
-export default function VariantBuilder() {
+export default function VariantBuilder({ setSelected }) {
+  const dispatch = useDispatch();
+  const editData = useSelector((state) => state.editData.editData);
+
   const [vans, setVans] = useState([]);
   const [parts, setParts] = useState([]);
-  const [variants, setVariants] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -14,28 +19,60 @@ export default function VariantBuilder() {
   // 🔥 NEW: selected van id
   const [selectedVanId, setSelectedVanId] = useState(null);
 
+  // Set when the variant being edited is linked to a van that's no longer
+  // in the assignable (available + published) list, so the edit screen can
+  // still show/keep it instead of silently dropping the link.
+  const [lockedVan, setLockedVan] = useState(null);
+
   const [form, setForm] = useState({
     name: "",
     description: "",
     parts: []
   });
 
+  const applyVariant = (variant, vansData) => {
+    setSelectedVariant(variant);
+
+    setForm({
+      name: variant.name,
+      description: variant.description || "",
+      parts: variant.parts?.map(p =>
+        typeof p === "object" ? p._id : p
+      ) || []
+    });
+
+    // vanId comes back populated ({ _id, title, ... }) from the list/edit
+    // fetch, but as a plain id when a van is freshly picked from the select.
+    const vanObj = variant.vanId && typeof variant.vanId === "object" ? variant.vanId : null;
+    const vanId = vanObj ? vanObj._id : variant.vanId;
+
+    setSelectedVanId(vanId || null); // 🔥 important
+
+    const inAssignableList = vansData.some((v) => v.id === vanId);
+    setLockedVan(
+      vanObj && vanId && !inAssignableList
+        ? { id: vanId, title: vanObj.van_listing?.title || vanObj.slug || "Unavailable van" }
+        : null
+    );
+  };
+
   const fetchData = async () => {
     try {
-      const [vanRes, partsRes, variantRes] = await Promise.all([
+      const [vanRes, partsRes] = await Promise.all([
         axios.get(`${process.env.NEXT_PUBLIC_URL}/van/available`),
-        axios.get(`${process.env.NEXT_PUBLIC_URL}/van-parts`),
-        axios.get(`${process.env.NEXT_PUBLIC_URL}/variants`)
+        axios.get(`${process.env.NEXT_PUBLIC_URL}/van-parts`)
       ]);
 
       const vansData = vanRes.data.vans || [];
       setVans(vansData);
       setParts(partsRes.data.parts || []);
-      setVariants(variantRes.data.variants || []);
 
-      // 🔥 AUTO SELECT FIRST VAN
-      if (vansData.length > 0) {
-        setSelectedVanId(vansData[0]._id);
+      if (editData) {
+        // came here to edit a variant picked in the list
+        applyVariant(editData, vansData);
+      } else if (vansData.length > 0) {
+        // 🔥 AUTO SELECT FIRST VAN
+        setSelectedVanId(vansData[0].id);
       }
 
     } catch (err) {
@@ -47,25 +84,16 @@ export default function VariantBuilder() {
 
   useEffect(() => {
     fetchData();
+    return () => dispatch(clearEditData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectVariant = (variant) => {
-    setSelectedVariant(variant);
-
-    setForm({
-      name: variant.name,
-      description: variant.description || "",
-      parts: variant.parts?.map(p =>
-        typeof p === "object" ? p._id : p
-      ) || []
-    });
-
-    setSelectedVanId(variant.vanId); // 🔥 important
-  };
-
   const resetForm = () => {
+    dispatch(clearEditData());
     setSelectedVariant(null);
+    setLockedVan(null);
     setForm({ name: "", description: "", parts: [] });
+    setSelectedVanId(vans[0]?.id || null);
   };
 
   const togglePart = (id) => {
@@ -91,7 +119,10 @@ export default function VariantBuilder() {
       if (selectedVariant) {
         await axios.put(
           `${process.env.NEXT_PUBLIC_URL}/variants/${selectedVariant._id}`,
-          form,
+          {
+            ...form,
+            vanId: selectedVanId // 🔥 was missing, so edits silently dropped the van link
+          },
           { withCredentials: true }
         );
       } else {
@@ -105,8 +136,8 @@ export default function VariantBuilder() {
         );
       }
 
-      resetForm();
-      fetchData();
+      dispatch(clearEditData());
+      setSelected?.("VariantList");
 
     } catch (err) {
       console.error(err);
@@ -114,91 +145,116 @@ export default function VariantBuilder() {
     }
   };
 
-  if (loading) return <div className="p-10">Loading Data...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64 text-slate-400 font-medium italic">
+        <div className="animate-pulse">Loading builder data...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* LEFT - VARIANTS */}
-      <div className="w-1/4 border-r p-3 bg-white">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="font-bold">Variants</h2>
-          <button onClick={resetForm} className="text-xs bg-blue-500 text-white px-2 py-1 rounded">+ New</button>
-        </div>
-        {variants.map(v => (
-          <div
-            key={v._id}
-            onClick={() => handleSelectVariant(v)}
-            className={`p-3 border mb-2 cursor-pointer rounded transition ${selectedVariant?._id === v._id ? "border-black bg-gray-100" : "bg-white hover:bg-gray-50"
-              }`}
+    <div className="space-y-4 animate-in fade-in duration-500">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <button
+            onClick={() => setSelected?.("VariantList")}
+            className="flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-blue-600 transition-all mb-1"
           >
-            <p className="font-semibold">{v.name}</p>
-            <p className="text-xs text-gray-500">{v.parts?.length || 0} parts</p>
-          </div>
-        ))}
-      </div>
-
-      {/* CENTER - PARTS */}
-      <div className="w-2/4 p-4 overflow-auto">
-        <h2 className="font-bold mb-3">Select Parts</h2>
-        <div className="grid grid-cols-3 gap-3">
-          {parts.map(part => (
-            <div
-              key={part._id}
-              onClick={() => togglePart(part._id)}
-              className={`border p-2 cursor-pointer rounded-lg transition ${form.parts.includes(part._id) ? "border-green-500 bg-green-50 ring-2 ring-green-200" : "bg-white"
-                }`}
-            >
-              <img src={part.thumbnail} className="h-20 w-full object-cover rounded mb-2" alt={part.name} />
-              <p className="font-medium text-sm truncate">{part.name}</p>
-              <p className="text-[10px] uppercase text-gray-400">{part.category}</p>
-            </div>
-          ))}
+            <ArrowLeft size={15} /> Back to Variants
+          </button>
+          <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+            {selectedVariant ? "Edit Variant" : "Create Variant"}
+          </h2>
         </div>
+        {selectedVariant && (
+          <button
+            onClick={resetForm}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-blue-200 transition-all active:scale-95 flex items-center gap-2"
+          >
+            <Plus size={16} /> New Variant
+          </button>
+        )}
       </div>
 
-      {/* RIGHT - EDIT PANEL */}
-      <div className="w-1/4 border-l p-4 bg-white">
-        <h2 className="font-bold mb-4">{selectedVariant ? "Edit Variant" : "Create New Variant"}</h2>
-        <div className="space-y-3">
+      <div className="flex gap-4 rounded-2xl border border-slate-100 bg-white overflow-hidden min-h-[70vh]">
+        {/* LEFT - PARTS */}
+        <div className="w-3/4 p-4 overflow-y-auto">
+          <h3 className="text-xs font-bold uppercase text-slate-400 tracking-wide mb-3">
+            Select Parts
+          </h3>
+          {parts.length === 0 && (
+            <p className="text-sm text-slate-400">No parts available.</p>
+          )}
+          <div className="grid grid-cols-4 gap-3">
+            {parts.map(part => (
+              <div
+                key={part._id}
+                onClick={() => togglePart(part._id)}
+                className={`border p-2 cursor-pointer rounded-xl transition ${form.parts.includes(part._id)
+                    ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
+                    : "border-slate-100 hover:bg-slate-50"
+                  }`}
+              >
+                <img src={part.thumbnail} className="h-20 w-full object-cover rounded-lg mb-2" alt={part.name} />
+                <p className="font-bold text-xs text-slate-800 truncate">{part.name}</p>
+                <p className="text-[10px] uppercase text-slate-400">{part.category}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT - DETAILS PANEL */}
+        <div className="w-1/4 border-l border-slate-100 p-4 space-y-3 overflow-y-auto">
           <input
-            className="border p-2 w-full rounded"
+            className="border border-slate-200 rounded-xl p-2.5 w-full text-sm outline-none focus:ring-2 focus:ring-blue-100"
             placeholder="Variant Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
           <textarea
-            className="border p-2 w-full rounded h-24"
+            className="border border-slate-200 rounded-xl p-2.5 w-full text-sm outline-none focus:ring-2 focus:ring-blue-100 h-24"
             placeholder="Description"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
-         <div className="mb-4">
-  <label className="block text-sm font-medium mb-1">
-    Select Van
-  </label>
 
-  <select
-    value={selectedVanId || ""}
-    onChange={(e) => setSelectedVanId(e.target.value)}
-    className="w-full border p-2 rounded"
-  >
-    {/* Yeh raha khali (placeholder) option */}
-    <option value="">Select a van</option>
+          <div>
+            <label className="block text-xs font-bold uppercase text-slate-400 tracking-wide mb-1.5">
+              Van
+            </label>
+            <select
+              value={selectedVanId || ""}
+              onChange={(e) => setSelectedVanId(e.target.value)}
+              className="w-full border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-100"
+            >
+              <option value="">Select a van</option>
+              {lockedVan && (
+                <option value={lockedVan.id}>
+                  {lockedVan.title} (currently unavailable)
+                </option>
+              )}
+              {vans.map((van) => (
+                <option key={van.id} value={van.id}>
+                  {van?.title}
+                </option>
+              ))}
+            </select>
+            {lockedVan && (
+              <p className="text-[11px] text-amber-600 font-medium mt-1.5">
+                This variant&apos;s van isn&apos;t published/available right now — keep it or pick another.
+              </p>
+            )}
+          </div>
 
-    {vans.map((van) => (
-      <option key={van.id} value={van.id}>
-        {van?.title}
-      </option>
-    ))}
-  </select>
-</div>
-          <div className="p-3 bg-gray-100 rounded text-sm">
+          <div className="p-3 bg-slate-50 rounded-xl text-sm border border-slate-100">
             Selected Parts: <span className="font-bold">{form.parts.length}</span>
           </div>
+
           <button
             onClick={handleSave}
             disabled={!form.name}
-            className={`w-full py-3 rounded font-bold text-white transition ${!form.name ? "bg-gray-300" : "bg-black hover:bg-gray-800"
+            className={`w-full py-2.5 rounded-xl font-bold text-sm text-white transition-all active:scale-95 ${!form.name ? "bg-slate-300" : "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200"
               }`}
           >
             {selectedVariant ? "Update Variant" : "Save Variant"}
