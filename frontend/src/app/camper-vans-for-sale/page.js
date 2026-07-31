@@ -103,12 +103,10 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
             "@type": "Brand",
             "name": "Big Bear Vans"
           },
-          // ⭐ Stars Google search mein dikhenge
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "5",
-            "reviewCount": "111"
-          },
+          // No aggregateRating here on purpose — there's no real review data
+          // behind this yet, and Google's structured-data policy prohibits
+          // fabricated ratings. Add this back once reviews are a real, stored
+          // thing (backend has no Review/Testimonial model right now).
           "offers": {
             "@type": "Offer",
             "priceCurrency": "USD",

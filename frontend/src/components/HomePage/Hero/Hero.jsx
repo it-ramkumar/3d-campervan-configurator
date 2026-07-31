@@ -29,6 +29,11 @@ export default function Hero() {
 
   return (
     <div className="relative w-full h-[88vh] sm:h-[92vh] md:h-screen overflow-hidden bg-black">
+      {/* One real, permanent <h1> for the page — the slide titles below are
+          marketing copy that rotates, so they render as styled divs instead
+          of duplicating/hijacking the page's single semantic heading. */}
+      <h1 className="sr-only">Custom Camper Van Conversions in California | Big Bear Vans</h1>
+
       <Swiper
         onSwiper={(s) => (swiperRef.current = s)}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
@@ -80,9 +85,9 @@ export default function Hero() {
                     <SpanTag text={slide.slogan || "You Dream It. We Build It."} />
                   </div>
 
-                  {/* Title (stacked lines) */}
-                  <Heading1 textColor="text-white">
-                    <span className="text-white block">{slide.title}</span>
+                  {/* Title (stacked lines) — visual only; the page's real <h1> is above the carousel */}
+                  <Heading1 as="div" textColor="text-white">
+                    <span className="text-white block">{slide.title}</span>{" "}
                     <span className="text-hover block">{slide.titleColored}</span>
                   </Heading1>
 

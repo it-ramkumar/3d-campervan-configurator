@@ -158,9 +158,11 @@ const VanPage = ({ vanDetail }) => {
                 </div>
               )}
 
-              {/* Title (desktop only — mobile shows it above the gallery instead) */}
+              {/* Title (desktop only — mobile shows it above the gallery instead).
+                  Rendered as a div, not a second <h1>: the mobile heading above
+                  is the page's one real <h1>, this is just its desktop-viewport twin. */}
               <div>
-                <Heading1 text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary !text-6xl mb-2 leading-[0.9]" />
+                <Heading1 as="div" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary !text-6xl mb-2 leading-[0.9]" />
                 {vanDetail?.van_listing?.subtitle && (
                   <div className="hidden lg:flex items-center gap-3 mt-4">
                     <div className="w-8 h-0.5 bg-hover shrink-0" />

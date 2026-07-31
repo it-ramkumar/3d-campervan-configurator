@@ -83,17 +83,24 @@ export default async function Page({ params, searchParams }) {
     "keywords": vanDetail.data.van_listing?.tags?.join(", ") || "custom van, camper van, van conversion",
     "offers": {
       "@type": "Offer",
-      "price": hasPrice ? vanDetail?.data?.van_listing?.price : "0",
       "priceCurrency": "USD",
-      "availability": hasPrice
-        ? (vanDetail.data.status === "available"
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock")
-        : "https://schema.org/PreOrder",
+      // Layouts have no live inventory status (no `status` field on this model —
+      // they're made-to-order builds, not stock items), so PreOrder fits regardless
+      // of whether a reference price is set. A "0" price is invalid/misleading to
+      // Google, so when there's no real price we drop the field and explain via
+      // priceSpecification instead.
+      ...(hasPrice
+        ? { "price": vanDetail?.data?.van_listing?.price }
+        : {
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "USD",
+            "description": "Custom build — contact us for a quote"
+          }
+        }
+      ),
+      "availability": "https://schema.org/PreOrder",
       "itemCondition": "https://schema.org/NewCondition",
-      ...(hasPrice ? {} : {
-        "description": "Custom build price — contact us for a quote"
-      }),
       "seller": {
         "@type": "Organization",
         "name": "Big Bear Vans"

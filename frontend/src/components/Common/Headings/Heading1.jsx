@@ -6,10 +6,11 @@ const Heading1 = ({
   textColor = "text-secondary",
   className = "",
   inlineStyle = {},
-  children
+  children,
+  as: Tag = "h1"
 }) => {
   return (
-    <h1
+    <Tag
       className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95] tracking-wide font-display ${textColor} ${className}`}
       style={{
         ...inlineStyle,
@@ -17,7 +18,7 @@ const Heading1 = ({
       }}
     >
       {children ?? text}
-    </h1>
+    </Tag>
   );
 };
 

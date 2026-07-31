@@ -55,7 +55,10 @@ export default async function Page({ params }) {
   ).then(res => res.json()).catch(() => null);
 
   // console.log(vanDetail.van, "detail page ")
-  const hasPrice = vanDetail?.van?.van_listing?.price;
+  // Same >=10 floor the listing page uses — filters out placeholder prices
+  // (some listings were saved with a stray "1" or "2" before the real price was set).
+  const price = vanDetail?.van?.van_listing?.price;
+  const hasPrice = price && price >= 10;
   const jsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -69,11 +72,15 @@ export default async function Page({ params }) {
     ...(hasPrice && {
       "offers": {
         "@type": "Offer",
-        "price": vanDetail?.van?.van_listing?.price,
+        "price": price,
         "priceCurrency": "USD",
+        // Mirrors the listing page's mapping so a van's availability reads
+        // the same everywhere instead of collapsing sale_pending/coming_soon into OutOfStock.
         "availability": vanDetail?.van?.status === "available"
           ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
+          : vanDetail?.van?.status === "sale_pending"
+            ? "https://schema.org/SoldOut"
+            : "https://schema.org/PreOrder",
         "itemCondition": "https://schema.org/NewCondition"
       }
     }),

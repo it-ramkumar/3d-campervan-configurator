@@ -390,7 +390,7 @@ function Van() {
                       Active Build
                     </p>
                     <h1 className="font-display text-base font-bold text-[#FBFBF9] leading-none tracking-wide">
-                      {vans[isSanta]?.layout || "Loading…"}
+                      {vans[isSanta]?.layout || "3D Camper Van Configurator"}
                     </h1>
                     <p className="font-ui text-[9px] text-[#FBFBF9]/35 mt-0.5">
                       {vans[isSanta]?.spec?.wheelBase}" WB
