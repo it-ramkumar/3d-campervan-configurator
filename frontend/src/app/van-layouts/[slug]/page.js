@@ -44,7 +44,7 @@ export default async function Page({ params, searchParams }) {
   const resolvedSearchParams = await Promise.resolve(searchParams); // Safe Next.js asynchronous reading
 
   const slug = resolvedParams?.slug;
-  if (!slug) return { title: "Not Found" };
+  if (!slug) notFound();
 
   // ✅ Ab hum direct searchParams se query parameters read kar sakte hain bina hook ke
   const viewMode = resolvedSearchParams?.view || "photos";

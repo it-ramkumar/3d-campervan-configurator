@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   MapPin,
   Briefcase,
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (err) {
-    return { title: "Job Details | Big Bear Vans" };
+    return { title: "Job Details | Big Bear Vans", robots: { index: false, follow: false } };
   }
 }
 
@@ -46,14 +47,7 @@ export default async function JobPage({ params }) {
   const { id } =await params;
 
   const job = await getJob(id);
-  if (!job) {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-center p-4">
-        <h2 className="text-2xl font-bold text-slate-900">Position Not Found</h2>
-        <Link href="/careers" className="mt-4 text-primary hover:underline">Back to Careers</Link>
-      </div>
-    );
-  }
+  if (!job) notFound();
 
   const cleanText = (text) => text?.replace(/#/g, "");
 

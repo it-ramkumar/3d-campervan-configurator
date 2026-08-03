@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import ExteriorChoiceClient from "../../../components/Options/ExteriorChoiceClient";
 import { generateDynamicSchema } from "@/schema/optionsSchema";
 
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }) {
   const { options } = await params;
   const current = PAGE_CONFIG[options];
 
-  if (!current) return { title: "Options | Big Bear Vans" };
+  if (!current) return { title: "Options | Big Bear Vans", robots: { index: false, follow: false } };
 
   const title = `${current.title} | Big Bear Vans`;
   const description = current.desc;
@@ -83,7 +84,7 @@ export default async function Page({ params }) {
   const { options } = await params;
   const current = PAGE_CONFIG[options];
 
-  if (!current) return <div>Option not found</div>;
+  if (!current) notFound();
 
   let categoriesData = [];
   try {

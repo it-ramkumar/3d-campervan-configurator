@@ -1,4 +1,5 @@
 import axios from "axios";
+import { notFound } from "next/navigation";
 import BlogContentUI from "../../../components/BlogDetail/Blogdetail";
 import { generateBlogSchema } from "@/schema/blogDetail";
 import { Heading1, ImageWithSkeleton } from '@/components/Common/Common';
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch (e) {
-    return { title: "Blog Not Found" };
+    return { title: "Blog Not Found", robots: { index: false, follow: false } };
   }
 }
 
@@ -54,7 +55,7 @@ export default async function page({ params }) {
   } catch (err) {
     console.error("Fetch error:", err);
   }
-  if (!blog) return <div className="py-20 text-center">Blog post not found</div>;
+  if (!blog) notFound();
 
   const currentUrl = `https://www.bigbearvans.com/blog/${slug}`;
   const schemaData = generateBlogSchema(blog, currentUrl);
