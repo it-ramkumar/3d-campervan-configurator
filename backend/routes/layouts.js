@@ -147,7 +147,27 @@ router.get("/", async (req, res) => {
       filter["van_listing.specifications.wheelbase"] = { $in: parseMultiFilter(wheelbase) };
     }
     if (sit) {
-      filter["van_listing.specifications.capacity.sits"] = { $in: parseMultiFilter(sit) };
+      // Seating filter is "at least N seats" — selecting 5 should also
+      // surface vans that seat 5+ (uses the lowest selected value as the floor).
+      const seatValues = parseMultiFilter(sit)
+        .map((v) => parseInt(v, 10))
+        .filter((n) => !isNaN(n));
+      if (seatValues.length) {
+        const minSeats = Math.min(...seatValues);
+        filter.$expr = {
+          $gte: [
+            {
+              $convert: {
+                input: "$van_listing.specifications.capacity.sits",
+                to: "int",
+                onError: 0,
+                onNull: 0
+              }
+            },
+            minSeats
+          ]
+        };
+      }
     }
     if (sleep) {
       filter["van_listing.specifications.capacity.sleeps"] = { $in: parseMultiFilter(sleep) };
@@ -300,12 +320,29 @@ router.get("/titles-only", async (req, res) => {
       filter["van_listing.specifications.wheelbase"] = { $in: parsedWheelbase };
     }
 
-    // Seating Filter
+    // Seating Filter — "at least N seats", selecting 5 also surfaces vans
+    // that seat 5+ (uses the lowest selected value as the floor).
     const parsedSeating = parseCheckboxFilter(seating);
     if (parsedSeating?.length) {
-      filter["van_listing.specifications.capacity.sits"] = {
-        $in: parsedSeating
-      };
+      const seatValues = parsedSeating
+        .map((v) => parseInt(v, 10))
+        .filter((n) => !isNaN(n));
+      if (seatValues.length) {
+        const minSeats = Math.min(...seatValues);
+        filter.$expr = {
+          $gte: [
+            {
+              $convert: {
+                input: "$van_listing.specifications.capacity.sits",
+                to: "int",
+                onError: 0,
+                onNull: 0
+              }
+            },
+            minSeats
+          ]
+        };
+      }
     }
 
     // Make/Model Filter
