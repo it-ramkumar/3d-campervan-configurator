@@ -11,11 +11,28 @@ export const metadata = {
     },
 };
 
-export default function page() {
+export default async function page({ searchParams }) {
+    const sp = await searchParams;
+    const category = sp?.category && sp.category !== "ALL" ? sp.category : "";
+
+    const qs = new URLSearchParams({
+        page: "1",
+        limit: "12",
+        category,
+        search: sp?.search || "",
+        bathroomType: sp?.bathroomType || "",
+        wheelbase: sp?.wheelbase || "",
+        seating: sp?.seating || "",
+        model: sp?.model || "",
+    }).toString();
+
+    const initialData = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/titles-only?${qs}`, {
+        cache: "no-store",
+    }).then(res => res.json()).catch(() => null);
+
     return (
         <div>
-
-            <All_Titles_Client />
+            <All_Titles_Client initialData={initialData?.success ? initialData : null} />
         </div>
     )
 }

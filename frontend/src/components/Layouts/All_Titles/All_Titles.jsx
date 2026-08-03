@@ -35,7 +35,7 @@ const SHOWER_GROUPS = [
   { key: "rear-xl", label: "Rear XL Bathroom", values: ["Rear Bathroom"] },
 ];
 
-export default function All_Titles_Client() {
+export default function All_Titles_Client({ initialData = null }) {
   const LIMIT = 12;
 
   const router = useRouter();
@@ -50,18 +50,21 @@ export default function All_Titles_Client() {
   const modelFilterFromURL = searchParams.get("model") || "";
 
   const [localSearch, setLocalSearch] = useState(searchQueryFromURL);
-  const [portfolios, setPortfolios] = useState([]);
+  const [portfolios, setPortfolios] = useState(initialData?.data || []);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(initialData ? 1 < initialData.pages : false);
+  const [loading, setLoading] = useState(!initialData);
   const [hoveredId, setHoveredId] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
   const filterGridRef = useRef(null);
+  // Skip the first client fetch when the server already fetched matching data
+  // (page.js runs the same query server-side) — avoids a redundant round-trip / flash.
+  const skipNextFetch = useRef(!!initialData);
 
   // Backend se aane wale dynamic filter arrays ki states
   // Wheelbase/Shower options are hardcoded groups (WHEELBASE_GROUPS/SHOWER_GROUPS) to match Portfolio, so no db state needed for them.
-  const [dbSeatings, setDbSeatings] = useState([]);
-  const [dbModels, setDbModels] = useState([]);
+  const [dbSeatings, setDbSeatings] = useState(initialData?.filterOptions?.seatings || []);
+  const [dbModels, setDbModels] = useState(initialData?.filterOptions?.models || []);
 
   // Unfiltered catalog of every published build (slug + title) for the "Jump to Build" dropdown — same as Portfolio's Van_layout.js
   const [catalogBuilds, setCatalogBuilds] = useState([]);
@@ -187,6 +190,10 @@ export default function All_Titles_Client() {
   }, [LIMIT]);
 
   useEffect(() => {
+    if (skipNextFetch.current) {
+      skipNextFetch.current = false;
+      return;
+    }
     const load = async () => {
       setLoading(true);
       setPage(1);
