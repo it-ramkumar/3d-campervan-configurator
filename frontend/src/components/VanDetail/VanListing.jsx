@@ -189,21 +189,26 @@ const VanPage = ({ vanDetail }) => {
 
               {/* 3D Configurator CTA */}
               {vanDetail?.glbFile && (
-                <a
-                  href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
-                  className="relative inline-flex w-full items-center justify-center gap-3 rounded-lg bg-primary px-8 py-4 font-extrabold uppercase text-white transition-all duration-150 hover:bg-navy-mid active:translate-y-[2px] group overflow-hidden"
-                >
-                  <div className="bbv-amber-line" />
-                  <div className="relative flex h-5 w-5 items-center justify-center">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-lg bg-white opacity-25" />
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="relative transition-transform duration-700 group-hover:rotate-[360deg]">
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
-                      <path d="M12 3v18" /><path d="M3 12h18" />
-                    </svg>
-                  </div>
-                  <span className="font-ui font-extrabold text-xs tracking-[0.2em] animate-pulse">Launch 3D Configurator</span>
-                </a>
+                <div className="relative">
+                  <span className="absolute -top-3 -right-3 z-20 rounded-full bg-primary px-2 py-1 text-[10px] font-black uppercase text-secondary shadow-md animate-bounce pointer-events-none">
+                    New · 3D
+                  </span>
+                  <a
+                    href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
+                    className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-8 py-4 font-extrabold uppercase text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_6px_rgba(237,152,95,0.55)] active:scale-[0.98]"
+                  >
+                    <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                    <div className="relative flex h-5 w-5 items-center justify-center">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-lg bg-primary/25" />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="relative z-10 transition-transform duration-700 group-hover:rotate-[360deg]">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
+                        <path d="M12 3v18" /><path d="M3 12h18" />
+                      </svg>
+                    </div>
+                    <span className="relative z-10 font-ui font-extrabold text-xs tracking-[0.2em]">Launch 3D Configurator</span>
+                  </a>
+                </div>
               )}
 
               {/* Specs grid */}

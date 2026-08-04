@@ -11,7 +11,7 @@ import {
   SpanTag,
   SecondaryButton,
 } from "../../Common/Common";
-import { ArrowBigRightDash, ArrowBigLeftDash } from "lucide-react";
+import { ArrowBigRightDash, ArrowBigLeftDash, Rotate3d } from "lucide-react";
 import "swiper/css";
 import Image from "next/image";
 import ContactForm from "@/components/Consultation/ContactForm";
@@ -199,13 +199,29 @@ export default function Buy({ initialVans = [] }) {
                         />
                       </div>
 
-                      <div>
-                        <PrimaryButton
-                          label={"Explore in 3D"}
-                          link={`/camper-vans-for-sale/${van.slug}/configure`}
-                          className="w-full"
-                        />
-                      </div>
+                      {van?.glb ? (
+                        <div className="relative">
+                          <span className="absolute -top-2  z-20 bg-primary text-secondary text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-bounce pointer-events-none">
+                            3D
+                          </span>
+                          <Link
+                            href={`/camper-vans-for-sale/${van.slug}/configure`}
+                            className="group/3d relative w-full inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_20px_4px_rgba(237,152,95,0.55)] active:scale-95 md:py-3.5 md:px-8 sm:text-sm"
+                          >
+                            <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover/3d:translate-x-full" />
+                            <Rotate3d size={16} className="relative z-10" />
+                            <span className="relative z-10">Explore in 3D</span>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div>
+                          <PrimaryButton
+                            label={"View Details"}
+                            link={`/camper-vans-for-sale/${van.slug}`}
+                            className="w-full"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
 
