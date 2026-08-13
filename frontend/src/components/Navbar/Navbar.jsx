@@ -504,7 +504,17 @@ const handleItemClick = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            {!forceMobile && (
+              <a
+                href="tel:+19514419719"
+                aria-label="Call Big Bear Vans at 951-441-9719"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-[#ED985F] text-primary border border-[#ED985F] whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
+              >
+                <span className="sm:hidden">Call Now</span>
+                <span className="hidden sm:inline">Call Now · 951-441-9719</span>
+              </a>
+            )}
             {!forceMobile && (
               <Link
                 href="/contact"
