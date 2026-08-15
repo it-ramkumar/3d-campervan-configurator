@@ -398,36 +398,38 @@ export default function Van_layout({ layout, currentParams = {} }) {
                   />
                 </div>
 
-                <AnimatePresence>
-                  {openDropdown === "build" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
-                    >
-                      {catalog.builds.length === 0 ? (
-                        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
-                          Loading builds...
-                        </div>
-                      ) : (
-                        catalog.builds.map((build) => (
-                          <button
-                            type="button"
-                            key={build.slug}
-                            onClick={() => handleBuildJump(build.slug)}
-                            className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
-                          >
-                            <span className="font-ui text-sm text-primary/70">
-                              {build.title}
-                            </span>
-                          </button>
-                        ))
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+               <AnimatePresence>
+  {openDropdown === "build" && (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
+      transition={{ duration: 0.15 }}
+      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+    >
+      {catalog.builds.length === 0 ? (
+        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+          Loading builds...
+        </div>
+      ) : (
+        [...catalog.builds]
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((build) => (
+            <button
+              type="button"
+              key={build.slug}
+              onClick={() => handleBuildJump(build.slug)}
+              className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+            >
+              <span className="font-ui text-sm text-primary/70">
+                {build.title}
+              </span>
+            </button>
+          ))
+      )}
+    </motion.div>
+  )}
+</AnimatePresence>
               </div>
 
               {/* Dropdown filters */}

@@ -351,35 +351,37 @@ export default function All_Titles_Client({ initialData = null }) {
           <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "build" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
         </div>
         <AnimatePresence>
-          {openDropdown === "build" && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.15 }}
-              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+  {openDropdown === "build" && (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
+      transition={{ duration: 0.15 }}
+      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+    >
+      {catalogBuilds.length === 0 ? (
+        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+          Loading builds...
+        </div>
+      ) : (
+        [...catalogBuilds]
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((build) => (
+            <button
+              type="button"
+              key={build.slug}
+              onClick={() => handleBuildJump(build.slug)}
+              className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
             >
-              {catalogBuilds.length === 0 ? (
-                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
-                  Loading builds...
-                </div>
-              ) : (
-                catalogBuilds.map((build) => (
-                  <button
-                    type="button"
-                    key={build.slug}
-                    onClick={() => handleBuildJump(build.slug)}
-                    className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
-                  >
-                    <span className="font-ui text-sm text-primary/70">
-                      {build.title}
-                    </span>
-                  </button>
-                ))
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <span className="font-ui text-sm text-primary/70">
+                {build.title}
+              </span>
+            </button>
+          ))
+      )}
+    </motion.div>
+  )}
+</AnimatePresence>
       </div>
 
       {/* Shower (grouped, same as Portfolio) */}
