@@ -368,18 +368,7 @@ const handleItemClick = () => {
                 </span>
               </Link>
             </div>
-            {/* <div className="mt-10 mb-4 flex justify-center md:justify-start border-t border-primary/10 pt-6">
-              <Link
-                href="/layout-by-category"
-                onClick={closeMobile}
-                className="group flex items-center bg-primary py-2 px-4 rounded-lg text-secondary gap-2 text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-primary hover:text-hover transition-all"
-              >
-                View All Layout By Category
-                <span className="transform transition-transform group-hover:translate-x-2">
-                  →
-                </span>
-              </Link>
-            </div> */}
+
           </div>
         );
       }
@@ -512,7 +501,7 @@ const handleItemClick = () => {
                 className="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-[#ED985F] text-primary border border-[#ED985F] whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
               >
                 <span className="sm:hidden">Call Now</span>
-                <span className="hidden sm:inline">Call Now · 951-441-9719</span>
+                <span className="hidden sm:inline">Call Now</span>
               </a>
             )}
             {!forceMobile && (
