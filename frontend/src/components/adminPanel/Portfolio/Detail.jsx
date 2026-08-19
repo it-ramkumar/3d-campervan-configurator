@@ -5,6 +5,7 @@ export default function Detail({ setIsopen, detail }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [gallery, setGallery] = useState(detail.gallery || []);
     const [isMounted, setIsMounted] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     // Trigger slide-in animation on mount
     useEffect(() => {
@@ -31,6 +32,46 @@ export default function Detail({ setIsopen, detail }) {
     const prevImage = (e) => {
         e.stopPropagation();
         setCurrentImageIndex((prev) => (prev === 0 ? gallery.length - 1 : prev - 1));
+    };
+
+    // Extracts a filename from an image URL, falling back to a listing-based name
+    const getImageFilename = (url, index) => {
+        try {
+            const pathname = new URL(url, window.location.origin).pathname;
+            const base = pathname.split('/').pop();
+            if (base && base.includes('.')) return base;
+        } catch { /* fall through to default */ }
+        const slugPart = detail?.slug || detail?.van_listing?.title || 'image';
+        return `${slugPart}-${index + 1}.jpg`;
+    };
+
+    // Downloads the current (or a specific) gallery image as a file, not a new tab.
+    // Cross-origin <a download> links get ignored by the browser and just open the
+    // image instead, so we fetch the bytes ourselves and save from a blob URL.
+    const downloadImage = async (e, url = gallery[currentImageIndex], index = currentImageIndex) => {
+        if (e) e.stopPropagation();
+        if (!url || isDownloading) return;
+        setIsDownloading(true);
+        try {
+            const res = await fetch(url, { mode: 'cors' });
+            if (!res.ok) throw new Error(`Failed to fetch image: ${res.status}`);
+            const blob = await res.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = getImageFilename(url, index);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+        } catch (err) {
+            // Fallback: open in a new tab so the user can save it manually
+            // (handles CORS-blocked hosts that don't send Access-Control-Allow-Origin)
+            console.error('Image download failed, falling back to opening the image:', err);
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } finally {
+            setIsDownloading(false);
+        }
     };
 
     // Video ID extractor
@@ -84,6 +125,26 @@ export default function Detail({ setIsopen, detail }) {
                                 alt={detail.van_listing?.title}
                                 className="w-full h-full object-contain"
                             />
+
+                            {/* Download Button */}
+                            <button
+                                onClick={(e) => downloadImage(e)}
+                                disabled={isDownloading}
+                                title="Download image"
+                                aria-label="Download image"
+                                className="absolute top-4 left-4 bg-black/40 hover:bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all disabled:opacity-50 disabled:cursor-wait"
+                            >
+                                {isDownloading ? (
+                                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                    </svg>
+                                ) : (
+                                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                    </svg>
+                                )}
+                            </button>
 
                             {/* Navigation Controls */}
                             {gallery.length > 1 && (
@@ -208,8 +269,18 @@ export default function Detail({ setIsopen, detail }) {
                                 </h3>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     {rendering.map((url, i) => (
-                                        <div key={i} className="aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-100">
+                                        <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-100 group/render">
                                             <ImageWithSkeleton src={url} alt={`Rendering ${i + 1}`} className="w-full h-full object-cover" />
+                                            <button
+                                                onClick={(e) => downloadImage(e, url, i)}
+                                                title="Download rendering"
+                                                aria-label="Download rendering"
+                                                className="absolute top-2 right-2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover/render:opacity-100"
+                                            >
+                                                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                                </svg>
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
