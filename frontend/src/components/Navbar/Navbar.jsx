@@ -201,6 +201,12 @@ const navLinks = useMemo(
       path: "/floorplans",
       hasDropdown: true,
     },
+    {
+      name: "Mobile Power Systems",
+      label: "Mobile Power Systems",
+      path: "/mobile-power-systems",
+      hasDropdown: false,
+    },
     // Updated item below:
     {
       name: "DIY COMPONENTS",
