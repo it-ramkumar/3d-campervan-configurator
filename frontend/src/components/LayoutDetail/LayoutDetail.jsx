@@ -179,16 +179,41 @@ export default function LayoutDetail({ van, initialView }) {
 
               </div>
 
-              <div className="flex flex-col gap-4 pt-4">
-                <SecondaryButton
-                  label="Build One Like This"
-                  className="!w-full"
-                  onClick={() => { setIsFormOpen(true); setData(van); }}
-                />
-                <ShareButton
-                  title={van?.van_listing?.title}
-                />
-              </div>
+        <div className="flex flex-col gap-4 pt-4">
+  {/* Labor Day Offer */}
+  <div className="mt-1 rounded-lg border border-red-600/15 bg-red-50/60 px-4 py-4 text-center">
+    <div className="flex items-center justify-center gap-2">
+      <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
+
+      <span className="font-ui text-[9px] font-black uppercase tracking-[0.2em] text-red-600">
+        Labor Day Special
+      </span>
+    </div>
+
+    <p className="mt-2 text-sm font-black text-primary">
+      Save $9,999 on your custom build
+    </p>
+
+    <p className="mt-1 font-ui text-[9px] font-semibold uppercase tracking-[0.16em] text-primary/45">
+      Book before September 7, 2026 at 11:59 PM PT
+    </p>
+  </div>
+  <SecondaryButton
+    label="Build One Like This"
+    className="!w-full"
+    onClick={() => {
+      setIsFormOpen(true);
+      setData(van);
+    }}
+  />
+
+  <ShareButton
+    title={van?.van_listing?.title}
+  />
+
+
+
+</div>
             </div>
           </div>
         </div>

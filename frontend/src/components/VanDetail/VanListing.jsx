@@ -670,7 +670,7 @@ const VanPage = ({ vanDetail }) => {
           <div className="relative w-full max-w-2xl bbv-card max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setIsFormOpen(false)}
-              className="absolute top-4 right-4 text-primary hover:text-hover transition-colors cursor-pointer z-30 text-xl font-bold"
+              className="absolute top-4 right-4 text-primary  transition-colors cursor-pointer z-30 text-xl font-bold"
             >✕</button>
             <ContactForm
               formData={formData}
