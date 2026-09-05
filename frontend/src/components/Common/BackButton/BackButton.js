@@ -11,7 +11,7 @@ export default function BackButton({
   const router = useRouter();
 
   // Different style choices (optional)
-  const baseStyles = "absolute top-6 left-6 md:top-10 md:left-12 z-10 transition-all duration-300 rounded-full font-medium text-sm shadow-md border pointer-events-auto";
+  const baseStyles = "absolute z-10 transition-all duration-300 rounded-full font-medium text-sm shadow-md border pointer-events-auto";
 
   const variants = {
     default: "p-3 bg-white/80 backdrop-blur-xl border-white/40 text-primary hover:bg-primary hover:text-white",

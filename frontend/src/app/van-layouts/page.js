@@ -142,7 +142,8 @@ export default async function LayoutsPage({ searchParams }) {
   const initialData = res?.success
     ? res.data
     : { data: [], pages: 0, page: 1, total: 0, filters: {} };
-
+const heroProductImage =
+  initialData?.data?.[0]?.gallery?.[0] || currentContent.image;
   // SEO JSON-LD Microdata Layer
   const jsonLd = {
     "@context": "https://schema.org",
@@ -191,13 +192,13 @@ export default async function LayoutsPage({ searchParams }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <HeroSection
-        key={activeKey + (searchQuery || '')}
-        title={displayTitle}
-        description={currentContent.desc}
-        image={currentContent.image}
-        showButton={false}
-      />
+   <HeroSection
+  key={activeKey + (searchQuery || '')}
+  title={displayTitle}
+  description={currentContent.desc}
+  image={heroProductImage}
+  showButton={false}
+/>
 
       <Van_layout
         layout={initialData}

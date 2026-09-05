@@ -128,7 +128,7 @@ export default function WhereToCamp({campgrounds}) {
                 <HeroSection
                     title="Where to Camp"
                     description="From lakeside retreats to alpine escapes, discover the perfect basecamp for your Big Bear adventure."
-                    image="/whereToCamp/barton flats campground 3.webp"
+                    image="/Home/where-to-camp-big-bear-vans.webp"
                     link="/build-your-own-camper-van"
                     showButton={false}
                 />

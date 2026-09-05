@@ -201,12 +201,8 @@ const navLinks = useMemo(
       path: "/floorplans",
       hasDropdown: true,
     },
-    {
-      name: "Mobile Power Systems",
-      label: "Mobile Power Systems",
-      path: "/mobile-power-systems",
-      hasDropdown: false,
-    },
+
+
     // Updated item below:
     {
       name: "DIY COMPONENTS",
@@ -453,6 +449,78 @@ const handleItemClick = () => {
   return (
     <>
       {/* --- Main Navigation Bar --- */}
+      <div className="relative w-full overflow-hidden bg-primary text-white border-b border-white/10">
+  <div className="flex w-max animate-marquee whitespace-nowrap">
+    {/* First copy */}
+    <div className="flex items-center shrink-0">
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Labor Day Offer
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Save $9,999 on Qualifying Camper Vans
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Offer Ends September 7, 2026 at 11:59 PM PT
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Limited Build Slots Available
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+    </div>
+
+    {/* Duplicate copy for seamless loop */}
+    <div className="flex items-center shrink-0">
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Labor Day Offer
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Save $9,999 on Qualifying Camper Vans
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Offer Ends September 7, 2026 at 11:59 PM PT
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+
+      <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
+        Limited Build Slots Available
+      </span>
+
+      <span className="text-hover text-sm">✦</span>
+    </div>
+  </div>
+
+  <style jsx>{`
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-marquee {
+      animation: marquee 28s linear infinite;
+    }
+  `}</style>
+</div>
       <nav
         className={`sticky top-0 w-full font-ui z-[100] flex items-center ${forceMobile ? "bg-none h-[15px]" : "px-6 bg-secondary h-[65px] shadow-[0_1px_0_0_rgba(0,31,61,0.08),0_2px_12px_rgba(0,0,0,0.04)]"}`}
       >

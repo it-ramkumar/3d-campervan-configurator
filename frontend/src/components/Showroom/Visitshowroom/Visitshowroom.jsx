@@ -17,7 +17,6 @@ import {
 import Customize from "../../Customize/Cutomize";
 import { Heading2, PrimaryButton, RichParagraph, CustomLink } from '../../Common/Common'
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 export default function Showroom() {
 
@@ -31,7 +30,7 @@ export default function Showroom() {
         { text: "Our team is painting and assembling with expert craftsmanship.", icon: Paintbrush },
         { text: "The high-quality materials that go into every van.", icon: Layers },
       ],
-      image: "/images/s1.webp",
+      image: "/Home/home-build-and-assamble-big-bear-vans.webp",
       isReversed: false
     },
     {
@@ -45,7 +44,7 @@ export default function Showroom() {
       ],
       lastText:
         "This hands-on experience gives a clear picture of what features matter most for your van's interior and exterior.",
-      image: "/images/s2.webp",
+      image: "/Home/home-showroom-big-bear-vans.webp",
       isReversed: true
     },
     {
@@ -56,7 +55,7 @@ export default function Showroom() {
         { text: "How big should the bathroom be?", icon: Ruler },
         { text: "Which countertop and cabinet style feels right?", icon: Hammer },
       ],
-      image: "/images2/op3.webp",
+      image: "/Home/home-engineering-team-big-bear-vans.webp",
       isReversed: false
     },
   ];

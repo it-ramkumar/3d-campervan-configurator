@@ -3,8 +3,8 @@ import React from "react";
 import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton, SpanTag } from '../../Common/Common'
 
 const images = [
-  { id: 1, src: "/images/p1.webp",   alt: "Overhead view of kitchen",    tag: "Kitchenette"   },
-  { id: 2, src: "/images2/finance.webp", alt: "Spacious custom van interior", tag: "Living Space"  },
+  { id: 1, src: "/Home/home-portfolio-big-bear-vans.webp",   alt: "Overhead view of kitchen",    tag: "Kitchenette"   },
+  { id: 2, src: "/Home/home-elevator-bed-big-bear.webp", alt: "Spacious custom van interior", tag: "Living Space With Elevator Bed"  },
   { id: 3, src: "/images/p3.webp",   alt: "Compact kitchenette",          tag: "Details"       },
   { id: 4, src: "/images/p4.webp",   alt: "Storage solutions",            tag: "Storage"       },
   { id: 5, src: "/images/p5.webp",   alt: "Sleeping nook",                tag: "Comfort"       },
@@ -61,7 +61,7 @@ export default function Portfolio() {
           </div>
 
           {/* Right side complex grid */}
-          <div className="col-span-7 grid grid-rows-12 gap-4 h-full">
+          <div className="col-span-7 grid grid-rows-12 gap-4">
             <div className="row-span-7">
               <PortfolioImage img={images[1]} className="h-full" />
             </div>

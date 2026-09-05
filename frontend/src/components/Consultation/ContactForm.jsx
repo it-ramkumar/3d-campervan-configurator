@@ -60,16 +60,34 @@ export default function ContactForm({
               </div>
 
               {/* PRICE CONDITION: Agar price 1000 se ziada/equal ho to exact price, warna "Pricing Not Mentioned" */}
-              <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between mt-2">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Base Investment
-                </span>
+              <div className="pt-3 border-t border-slate-200/60 mt-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Labor Day Price
+                  </span>
 
-                <span className="text-base font-black text-[#001F3D]">
-                  {van?.price && Number(van.price) >= 1000
-                    ? `$${Number(van.price).toLocaleString("en-US")}`
-                    : "Pricing Not Mentioned"}
-                </span>
+                  {van?.price && Number(van.price) >= 1000 ? (
+                    <div className="text-right">
+                      <div className="text-xs font-semibold text-slate-400 line-through">
+                        ${Number(van.price).toLocaleString("en-US")}
+                      </div>
+
+                      <div className="text-lg font-black text-[#ED985F]">
+                        ${(Number(van.price) - 9999).toLocaleString("en-US")}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-base font-black text-[#001F3D]">
+                      Pricing Not Mentioned
+                    </span>
+                  )}
+                </div>
+
+                {van?.price && Number(van.price) >= 1000 && (
+                  <p className="mt-2 text-right text-[9px] font-black uppercase tracking-[0.15em] text-red-600">
+                    Save $9,999 · Labor Day Special
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -96,7 +114,24 @@ export default function ContactForm({
           }
         </RichParagraph>
       </div>
+      {/* LABOR DAY OFFER */}
+      <div className="mb-8 rounded-xl border border-red-600/10 bg-red-50/60 p-4 text-center">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
 
+          <span className="font-ui text-[10px] font-black uppercase tracking-[0.2em] text-red-600">
+            Labor Day Special
+          </span>
+        </div>
+
+        <p className="text-sm font-black text-[#001F3D]">
+          Save $9,999 on qualifying camper vans
+        </p>
+
+        <p className="mt-1 font-ui text-[9px] font-semibold uppercase tracking-[0.18em] text-primary/40">
+          Offer ends September 7, 2026 at 11:59 PM PT
+        </p>
+      </div>
       {/* FORM */}
       <form
         onSubmit={async (e) => {
@@ -106,19 +141,39 @@ export default function ContactForm({
             // Check karein price 1000 se zyada/equal hai ya nahi
             const isPriceValid = van?.price && Number(van.price) >= 1000;
 
-            const vanPriceText = isPriceValid ? van.price : 0;
-            const vanTitleText = van?.title
-              ? `${van.title} (${isPriceValid ? `$${van.price}` : "Pricing Not Mentioned"})`
-              : "No Van Selected";
+            const originalPrice = isPriceValid ? Number(van.price) : 0;
+            const salePrice = isPriceValid ? originalPrice - 9999 : 0;
 
+
+            const vanTitleText = van?.title
+              ? `${van.title} (${isPriceValid
+                ? `Labor Day Sale: $${salePrice.toLocaleString("en-US")} — Save $9,999`
+                : "Pricing Not Mentioned"
+              })`
+              : "No Van Selected";
+const saleMessage = `
+Labor Day Sale Inquiry
+
+Van: ${van?.title || "No Van Selected"}
+Original Price: $${originalPrice.toLocaleString("en-US")}
+Labor Day Price: $${salePrice.toLocaleString("en-US")}
+Discount: $9,999
+Offer Ends: September 7, 2026 at 11:59 PM PT
+
+Customer Message:
+${formData.message || ""}
+`;
             // 1. Form data API submission (aage data smoothly chala jayega)
-            await handleSubmit(e, {
-              ...formData,
-              vanSlug: van?.slug,
-              vanTitle: van?.title,
-              vanPrice: vanPriceText,
-              pageUrl: typeof window !== "undefined" ? window.location.href : null,
-            });
+          await handleSubmit(e, {
+  ...formData,
+  message: saleMessage,
+  vanSlug: van?.slug,
+  vanTitle: van?.title,
+  vanPrice: salePrice,
+  pageUrl: typeof window !== "undefined"
+    ? window.location.href
+    : null,
+});
 
             const formSource = "contact";
 
@@ -141,7 +196,11 @@ export default function ContactForm({
             <input
               type="hidden"
               name="vanPrice"
-              value={van?.price && Number(van.price) >= 1000 ? van.price : 0}
+              value={
+                van?.price && Number(van.price) >= 1000
+                  ? Number(van.price) - 9999
+                  : 0
+              }
             />
           </>
         )}

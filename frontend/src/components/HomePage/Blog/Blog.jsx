@@ -40,7 +40,7 @@ export default async function Blog() {
               className="group flex flex-col h-full bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-500"
             >
               {/* Image Container */}
-              <div className="relative aspect-[16/10] overflow-hidden">
+              <div className="relative aspect-square overflow-hidden">
                 <ImageWithSkeleton
                   src={post?.gallery[0] || "/images/blackLogo.webp"}
                   alt={post?.title}

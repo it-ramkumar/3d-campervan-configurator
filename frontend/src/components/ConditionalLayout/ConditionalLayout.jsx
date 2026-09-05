@@ -8,6 +8,7 @@ const Consultation = dynamic(() => import("@/components/Consultation/Consultatio
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
 import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
 import FloatingCallButton from "../Common/FloatingCallButton/FloatingCallButton";
+import LaborDayPopup from "../LaborDayPopup/LaborDayPopup";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
@@ -42,7 +43,7 @@ export default function ConditionalLayout({ children }) {
         {/* Cleaned: Client side loader events completely removed */}
 
         {!hideLayout && <Navbar />}
-
+        <LaborDayPopup />
         {!hideShareBar && hideShareBar && <SideShareBar />}
         {!hideFloatingButton && <FloatingCallButton />}
         <main className="flex-1">{children}</main>

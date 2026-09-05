@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -20,8 +21,7 @@ export default function HeroImage({
   showButton = true,
 
   // OVERLAY
-  overlay = true,
-  overlayOpacity = "bg-black/40",
+  overlay = false,
 
   // IMAGE
   priority = true,
@@ -35,82 +35,126 @@ export default function HeroImage({
   return (
     <section
       className={`
-        relative w-full overflow-hidden
-        h-[60vh] sm:h-[70vh] lg:h-[90vh]
+        relative w-full overflow-hidden bg-primary py-8 md:py-12 lg:py-16
         ${className}
       `}
     >
-      {/* 🛠️ BACK BUTTON WITH ABSOLUTE POSITION AND HIGH Z-INDEX */}
-      <div className="">
+      {/* BACK BUTTON */}
+      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-30">
         <BackButton variant="default" label="Go Back" />
       </div>
 
-      {/* HERO IMAGE */}
-      {/* MOBILE IMAGE */}
-      <Image
-        src={mobileImage || finalImage}
-        alt={alt}
-        fill
-        priority={priority}
-        fetchPriority={priority ? "high" : "auto"}
-        loading={priority ? "eager" : "lazy"}
-        quality={70}
-        sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
-        placeholder="blur"
-        blurDataURL="/images/blackLogo.webp"
-        style={{ objectPosition: imagePosition }}
-        className="block md:hidden object-cover"
-      />
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20 pt-10 md:pt-4">
+        {/* 50 / 50 GRID */}
+        <div
+          className="
+            grid grid-cols-1 lg:grid-cols-2
+            gap-8 lg:gap-12
+            items-center
+          "
+        >
+          {/* TEXT CONTENT AREA */}
+          <div className="order-2 lg:order-1 text-white space-y-4">
+            {/* SLOGAN */}
+            {slogan && (
+              <div>
+                <span className="inline-flex items-center font-ui font-semibold text-[10px] sm:text-xs uppercase tracking-[0.28em] text-secondary border-l-2 border-secondary pl-3 py-0.5">
+                  {slogan}
+                </span>
+              </div>
+            )}
 
-      {/* DESKTOP IMAGE */}
-      <Image
-        src={finalImage}
-        alt={alt}
-        fill
-        priority={priority}
-        fetchPriority={priority ? "high" : "auto"}
-        loading={priority ? "eager" : "lazy"}
-        quality={70}
-        sizes="(max-width: 768px) 100vw, (max-width: 1536px) 100vw, 1536px"
-        placeholder="blur"
-        blurDataURL="/images/blackLogo.webp"
-        style={{ objectPosition: imagePosition }}
-        className="hidden md:block object-cover"
-      />
+            {/* LABOR DAY OFFER */}
+            <div className="flex items-center gap-3 pt-1">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse shrink-0" />
 
-      {/* OVERLAY */}
-      {overlay && (
-        <>
-          <div className="absolute inset-0 z-[1] bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
-          <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-        </>
-      )}
+              <span className="font-ui text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-red-400">
+                Labor Day Special · Save $9,999
+              </span>
 
-      {/* Orange bottom accent — matches site-wide style */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ED985F] z-10" />
+              <span className="hidden sm:block h-px flex-1 max-w-16 bg-white/20" />
+            </div>
 
-      {/* CONTENT */}
-      <div className="relative z-[2] h-full flex items-center">
-        <div className="container px-6 md:px-12 lg:px-20 max-w-4xl text-white space-y-5">
-          {slogan && (
-            <span className="inline-flex items-center font-ui font-semibold text-[10px] uppercase tracking-[0.28em] text-[#ED985F] border-l-2 border-[#ED985F] pl-3 py-0.5">
-              {slogan}
-            </span>
-          )}
-          {/* TITLE */}
-          {title && <Heading1 text={title} />}
+            {/* TITLE */}
+            {title && (
+              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl leading-tight tracking-tight text-white">
+                <Heading1 text={title} />
+              </div>
+            )}
 
-          {/* DESCRIPTION */}
-          {description && (
-            <RichParagraph textColor="secondary" >{description}</RichParagraph>
-          )}
+            {/* DESCRIPTION */}
+            {description && (
+              <div className="max-w-xl">
+                <RichParagraph textColor="secondary">
+                  {description}
+                </RichParagraph>
+              </div>
+            )}
 
-          {/* BUTTON */}
-          {showButton && buttonText && (
-            <SecondaryButton link={link} label={buttonText} />
-          )}
+            {/* BUTTON */}
+            {showButton && buttonText && (
+              <div className="pt-2">
+                <SecondaryButton link={link} label={buttonText} />
+              </div>
+            )}
+          </div>
+
+          {/* IMAGE AREA — 50% WIDTH + SQUARE */}
+          <div className="order-1 lg:order-2 w-full">
+            <div
+              className="
+                relative w-full
+                aspect-square
+                rounded-xl
+                overflow-hidden
+                bg-primary/50
+                shadow-2xl
+              "
+            >
+              {/* MOBILE IMAGE */}
+              <Image
+                src={mobileImage || finalImage}
+                alt={alt}
+                fill
+                priority={priority}
+                fetchPriority={priority ? "high" : "auto"}
+                loading={priority ? "eager" : "lazy"}
+                quality={85}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL="/images/blackLogo.webp"
+                style={{ objectPosition: imagePosition }}
+                className="block md:hidden object-contain"
+              />
+
+              {/* DESKTOP IMAGE */}
+              <Image
+                src={finalImage}
+                alt={alt}
+                fill
+                priority={priority}
+                fetchPriority={priority ? "high" : "auto"}
+                loading={priority ? "eager" : "lazy"}
+                quality={85}
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL="/images/blackLogo.webp"
+                style={{ objectPosition: imagePosition }}
+                className="hidden md:block object-contain"
+              />
+
+              {/* OPTIONAL OVERLAY */}
+              {overlay && (
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none" />
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* BOTTOM ACCENT LINE */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-secondary z-20" />
     </section>
   );
 }
+

@@ -38,7 +38,7 @@ Get pre-qualified with Big Bear Vans today.`,
 };
 
 export default function FinancingPage() {
-  const heroImage = "/heroSlider/limage2.webp";
+  const heroImage = "/Home/home-family-van-big-bear-vans.webp";
   const newTitleText = "Camper Van Financing & RV Loan Options";
 
   const newDescriptionText =

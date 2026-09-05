@@ -7,7 +7,7 @@ import {
   Users, TentTree, Table, Utensils,
   BatteryCharging, Thermometer, Droplets, AirVent, Sun
 } from 'lucide-react';
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink, SpanTag } from '../../Common/Common';
+import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink } from '../../Common/Common';
 
 const sections = [
   {
@@ -22,7 +22,7 @@ const sections = [
       { text: "<strong>Exterior upgrades</strong> like suspension, wheels, tires, awning, storage boxes, etc.", icon: <Caravan size={18} /> },
     ],
     outro: "We're small, but high-tech. That's why we can customize layouts and features other shops won't even touch.",
-    images: ["/images2/wcu1.webp", "/images2/wcu2.webp"],
+    image: "/Home/home-custom-build-big-bear-vans.webp",
     isReverse: false,
   },
   {
@@ -32,7 +32,7 @@ const sections = [
       { text: "<strong>1-year or 3-year extended warranty</strong> on our craftsmanship.", icon: <ShieldCheck size={18} /> },
       { text: "<strong>Servicing and installing upgrades</strong> in our workshop.", icon: <Wrench size={18} /> },
     ],
-    images: ["/images2/wcu3.webp", "/images2/wcu4.webp"],
+    image: "/Home/home-garrage-big-bear-vans.webp",
     isReverse: true,
   },
   {
@@ -44,7 +44,7 @@ const sections = [
       { text: "We have several <strong>3D scanners</strong> for precise measurements.", icon: <Scan size={18} /> },
     ],
     outro: "The result? A fully custom campervan, exactly the way you want.",
-    images: ["/images2/cnc1.webp", "/images2/cnc2.webp"],
+    image: "/Home/home-cnc-machine-big-bear-vans.webp",
     isReverse: false,
   },
   {
@@ -57,7 +57,7 @@ const sections = [
       { text: "Have a <strong>dinette area</strong> for meals, games, and homework.", icon: <Table size={18} /> },
       { text: "Have a fully functional <strong>kitchen and a lightweight bathroom.</strong>", icon: <Utensils size={18} /> },
     ],
-    images: ["/images/w7.webp", "/images/w8.webp"],
+    image: "/Home/home-family-van-big-bear-vans.webp",
     isReverse: true,
   },
   {
@@ -72,7 +72,7 @@ const sections = [
       { text: "<strong>Solar panels</strong> on the roof and hood.", icon: <Sun size={18} /> },
     ],
     outro: "Off-grid freedom isn't an upgrade in our converted vans, it's a standard.",
-    images: ["/images2/wcu6.webp", "/images2/wcu5.webp"],
+    image: "/Home/home-off-grid-road-big-bear-vans.webp",
     isReverse: false,
   },
 ];
@@ -87,15 +87,15 @@ export default function WhyChoose() {
 
       {/* ── HEADER ── */}
       <div className="relative border-b border-primary/10 overflow-hidden">
-        <div className="container mx-auto px-6 max-w-7xl py-24 md:py-32 relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl py-20 md:py-20 relative z-10">
 
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-3 mb-3">
             <p className="text-hover text-xs uppercase tracking-widest font-bold">Our Advantage</p>
           </div>
 
           <Heading2
             textColor="text-primary"
-            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-8"
+            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-3"
           >
             Why Choose<br />
             <span className="text-hover">Big Bear Vans?</span>
@@ -127,33 +127,20 @@ export default function WhyChoose() {
             </div>
 
             <div className="container mx-auto px-6 max-w-7xl py-20 md:py-28 relative z-10">
-              <div className={`flex flex-col lg:flex-row items-center gap-12 xl:gap-20 ${section.isReverse ? 'lg:flex-row-reverse' : ''}`}>
+              {/* Equal 2-Column Grid (50% - 50%) */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 xl:gap-20">
 
                 {/* ── IMAGE SIDE ── */}
-                <div className="w-full lg:w-[55%] relative pb-8 lg:pb-0">
-
-                  {/* Primary image */}
-                  <div className="relative aspect-[8/5] rounded-lg overflow-hidden ring-1 ring-primary/10 shadow-xl">
-                    <ImageWithSkeleton src={section.images[0]} alt={section.title} zoom />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent pointer-events-none" />
+                <div className={`relative w-full ${section.isReverse ? 'lg:order-last' : 'lg:order-first'}`}>
+                  <div className="relative aspect-square w-full rounded-lg overflow-hidden ring-1 ring-primary/10 shadow-xl">
+                    <ImageWithSkeleton src={section.image} alt={section.title} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent pointer-events-none" />
                     <div className="bbv-amber-line" />
-                  </div>
-
-                  {/* Floating secondary — amber glow frame */}
-                  <div className={`
-                    absolute bottom-0 z-30
-                    ${section.isReverse ? '-left-4 md:-left-8' : '-right-4 md:-right-8'}
-                    w-36 h-28 md:w-52 md:h-40
-                    rounded-lg overflow-hidden
-                    ring-2 ring-hover/40
-                    shadow-[0_4px_32px_rgba(237,152,95,0.25)]
-                  `}>
-                    <ImageWithSkeleton src={section.images[1]} alt="Detail" zoom />
                   </div>
                 </div>
 
                 {/* ── CONTENT SIDE ── */}
-                <div className="w-full lg:w-[45%] flex flex-col gap-5">
+                <div className={`flex flex-col gap-5 w-full ${section.isReverse ? 'lg:order-first' : 'lg:order-last'}`}>
 
                   {/* Number badge */}
                   <div className="flex items-center gap-3">

@@ -44,7 +44,7 @@ const nextConfig = {
         hostname: "www.bigbearvans.com", // ← ADD THIS
         port: "",
         pathname: "/**",
-      },
+      }
     ],
   },
 

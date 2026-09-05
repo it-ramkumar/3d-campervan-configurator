@@ -37,7 +37,7 @@ including vehicle sourcing and lifetime support.`,
 };
 
 export default function OurProcess() {
-  const heroImage = "/heroSlider/processhero.webp";
+  const heroImage = "/Home/home-engineering-team-big-bear-vans.webp";
   const mobileHeroImage = "/heroSlider/processhero_mobile.webp";
   const newTitleText = "Our 5-Month Custom Van Build Process";
   const newDescriptionText =

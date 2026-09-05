@@ -172,20 +172,54 @@ const VanPage = ({ vanDetail }) => {
               </div>
 
               {/* Price card */}
-              {vanDetail.status === "available" && (
-                <div className="relative bbv-card p-6 overflow-hidden">
-                  <div className="bbv-amber-line-top" />
-                  <RichParagraph className="mb-3 font-bold !text-primary" >Total Listing Price</RichParagraph>
-                  {Number(vanDetail.van_listing.price) > 99 ? (
-                    <Heading2
-                      text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-                      className="!text-hover !text-4xl"
-                    />
-                  ) : (
-                    <RichParagraph className="font-display font-bold text-primary">Inquire for Price</RichParagraph>
-                  )}
-                </div>
-              )}
+          {/* Price card */}
+{vanDetail.status === "available" && (
+  <div className="relative bbv-card p-6 overflow-hidden">
+    <div className="bbv-amber-line-top" />
+
+    {/* Labor Day Sale Badge */}
+    <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5">
+      <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+      <span className="font-ui text-[9px] font-black uppercase tracking-[0.22em] text-white">
+        Labor Day Special
+      </span>
+    </div>
+
+    <RichParagraph className="mb-2 font-bold !text-primary">
+      Total Listing Price
+    </RichParagraph>
+
+    {Number(vanDetail.van_listing.price) > 99 ? (
+      <>
+        {/* Original Price */}
+        <div className="mb-1 text-sm font-semibold text-primary/40 line-through">
+          ${Number(vanDetail.van_listing.price).toLocaleString()}
+        </div>
+
+        {/* Sale Price */}
+        <Heading2
+          text={`$${(Number(vanDetail.van_listing.price) - 9999).toLocaleString()}`}
+          className="!text-hover !text-4xl"
+        />
+
+        {/* Savings */}
+        <div className="mt-2 flex items-center gap-2">
+          <span className="font-ui text-xs font-black uppercase tracking-[0.15em] text-red-600">
+            Save $9,999
+          </span>
+
+          <span className="text-[10px] font-medium text-primary/40">
+            through Sept. 7
+          </span>
+        </div>
+      </>
+    ) : (
+      <RichParagraph className="font-display font-bold text-primary">
+        Inquire for Price
+      </RichParagraph>
+    )}
+  </div>
+)}
 
               {/* 3D Configurator CTA */}
               {vanDetail?.glbFile && (

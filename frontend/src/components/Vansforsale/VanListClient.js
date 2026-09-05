@@ -60,7 +60,7 @@ export default function VanListClient({
       setLoading(false);
     }
   }, []);
- console.log(availableVans,"vans")
+
   return (
     <>
       {/* 1. Available Vans */}

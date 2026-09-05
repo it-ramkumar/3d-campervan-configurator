@@ -53,12 +53,15 @@ export const menuContent = {
       {
         title: "Company Info",
         items: [
+           { label: "Mobile Power Systems", link: "/mobile-power-systems" },
           { label: "Our Process", link: "/our-process" },
           { label: "Showroom", link: "/showroom" },
           { label: "Financing", link: "/financing" },
           { label: "Where To Camp", link: "/where-to-camp" },
           { label: "About Us", link: "/about-us" },
           { label: "Our Clients", link: "/our-clients" },
+
+
         ],
       },
       {

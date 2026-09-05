@@ -1,6 +1,7 @@
 import React from 'react';
 import { vansByStatus } from "@/api/van/van-by-status";
-import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew'; import VanListClient from "../../components/Vansforsale/VanListClient"
+import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
+import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
@@ -103,10 +104,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
             "@type": "Brand",
             "name": "Big Bear Vans"
           },
-          // No aggregateRating here on purpose — there's no real review data
-          // behind this yet, and Google's structured-data policy prohibits
-          // fabricated ratings. Add this back once reviews are a real, stored
-          // thing (backend has no Review/Testimonial model right now).
+
           "offers": {
             "@type": "Offer",
             "priceCurrency": "USD",
@@ -152,12 +150,11 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
       <HeroImage
         title="Camper Vans for Sale - Sprinter & Transit"
         description="At Big Bear Vans, we turn Mercedes Sprinter and Ford Transit vans into fully custom camper vans. From off-grid setups to luxury travel homes, everything is designed around how you want to live and travel. We’re proud to have 111+ happy owners across the US."
-        image="/images2/vfs.webp"
+        image="/Home/home-portfolio-elevator-bed-big-bear-vans.webp"
         link="/build-your-own-camper-van"
         buttonText="Reserve your van"
         showButton={true}
       />
-
       <VanListClient
         initialAvailable={availableData}
         initialSold={soldData}

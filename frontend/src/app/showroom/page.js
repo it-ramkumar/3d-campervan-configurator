@@ -34,7 +34,7 @@ and start your custom conversion.`,
 };
 
 export default function ShowroomPage() {
-  const heroImage = "/heroSlider/Showroomhero.webp";
+  const heroImage = "/Home/home-showroom-big-bear-vans.webp";
   const newTitleText = "Visit Our Showroom in Big Bear California";
   const newDescriptionText = "Want us to customize your van? The best way to get started is by visiting our van workshop in Big Bear City, California..";
 

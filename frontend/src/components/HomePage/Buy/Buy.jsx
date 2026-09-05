@@ -61,8 +61,14 @@ export default function Buy({ initialVans = [] }) {
 
         {/* ── HEADER ── */}
         <div className="mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <SpanTag text={"Premium Builds"} className="text-hover" />
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <SpanTag text="Premium Builds" className="text-hover" />
+
+            {/* Labor Day */}
+            <span className="inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-white">
+              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+              Labor Day · $9,999 Off
+            </span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
@@ -70,6 +76,7 @@ export default function Buy({ initialVans = [] }) {
               Premium Camper Vans<br />
               <span className="text-hover">Ready for Adventure</span>
             </Heading2>
+
             <RichParagraph className="max-w-md text-left md:text-right flex-shrink-0 !text-primary/60">
               Fully built premium camper vans available now — skip the wait and
               start your adventure today.
@@ -126,7 +133,7 @@ export default function Buy({ initialVans = [] }) {
                   <Link href={`/camper-vans-for-sale/${van?.slug}`}>
                     <>
                       {/* Image */}
-                      <div className="relative h-48 md:h-56 overflow-hidden bg-primary/5">
+                      <div className="relative overflow-hidden bg-primary/5">
                         <SpanTag
                           text={"Available for Sale"}
                           className="absolute top-4 left-4 z-10 bg-hover text-secondary font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md"
@@ -136,9 +143,9 @@ export default function Buy({ initialVans = [] }) {
                           <Image
                             src={van.image}
                             alt={van?.title || "Van"}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            width={800}
-                            height={600}
+                            className="transition-transform duration-700 group-hover:scale-110"
+                            width={1000}
+                            height={800}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-primary/20 italic text-xs">
@@ -162,18 +169,39 @@ export default function Buy({ initialVans = [] }) {
                         </RichParagraph>
 
                         {/* Price */}
-                        <div className="mb-6 flex items-baseline gap-1.5">
+                        {/* Price + Labor Day Sale */}
+                        <div className="mt-auto">
                           {van?.price ? (
                             <>
-                              <SpanTag
-                                text="From"
-                                className="font-bold text-primary/50"
-                              />
-                              <RichParagraph className="font-bold !text-primary/80">
-                                {typeof van?.price === "number"
-                                  ? `$${van?.price.toLocaleString()}`
-                                  : van?.price}
-                              </RichParagraph>
+                              {/* Labor Day label */}
+                              <div className="mb-2 flex items-center gap-2">
+                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-red-600">
+                                  Labor Day Special
+                                </span>
+
+                                <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-primary/35">
+                                  Save $9,999
+                                </span>
+                              </div>
+
+                              {/* Original + Sale Price */}
+                              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                                <span className="text-sm font-semibold text-primary/35 line-through">
+                                  {typeof van.price === "number"
+                                    ? `$${van.price.toLocaleString()}`
+                                    : van.price}
+                                </span>
+
+                                {typeof van.price === "number" && (
+                                  <RichParagraph className="font-black !text-hover text-xl">
+                                    ${(van.price - 9999).toLocaleString()}
+                                  </RichParagraph>
+                                )}
+                              </div>
+
+                              <p className="mt-1 font-ui text-[8px] font-semibold uppercase tracking-[0.18em] text-primary/40">
+                                Offer ends September 7, 2026
+                              </p>
                             </>
                           ) : (
                             <SpanTag
