@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef, Suspense, Component } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { Environment, Html, Preload } from "@react-three/drei";
+import { Environment, Html, Preload, useProgress } from "@react-three/drei";
 import { useDispatch, useSelector } from "react-redux";
 import MultiStepForm from "../multi-step-form/MultiStepForm";
 import InteriorCameraControls from "./VanInteriorCameraControls";
@@ -42,14 +42,6 @@ function isWebGLAvailable() {
   }
 }
 
-class CanvasErrorBoundary extends Component {
-  constructor(props) { super(props); this.state = { error: null }; }
-  static getDerivedStateFromError(error) { return { error }; }
-  render() {
-    if (this.state.error) return this.props.fallback;
-    return this.props.children;
-  }
-}
 
 const WebGLBlockedFallback = () => (
   <div className="w-full h-full flex flex-col items-center justify-center gap-4 px-8 text-center">
@@ -77,7 +69,6 @@ const WebGLBlockedFallback = () => (
   </div>
 );
 
-const STUDIO_BG = "radial-gradient(ellipse 80% 65% at 50% 58%, #0D2647 0%, #071423 55%, #020C18 100%)"
 
 function DynamicModel({ model, modelRefs }) {
   const { scene } = useGLTF(model.glbFile);
@@ -94,51 +85,99 @@ function DynamicModel({ model, modelRefs }) {
   );
 }
 
-const FLOOR_PULSES = 7;
 
-function AnimatedFloor() {
-  const pulseRefs = useRef([]);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() * 0.1;
-    pulseRefs.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const phase = (t + i / FLOOR_PULSES) % 1;
-      const s = 0.8 + phase * 5;
-      mesh.scale.set(s, s, s);
-      mesh.material.opacity = 0.15 * Math.sin(phase * Math.PI);
-    });
-  });
+function CanvasLoader() {
+  const { progress, item } = useProgress();
+  const pct = Math.min(100, Math.round(progress));
 
   return (
-    <group rotation={[-Math.PI / 2, 0, 0]}>
-      {/* Static concentric rings — subtle base grid */}
-      {[1.5, 2.5, 3.5, 4.5, 5.5].map((r) => (
-        <mesh key={r}>
-          <ringGeometry args={[r - 0.008, r, 96]} />
-          <meshBasicMaterial
-            color="#ED985F"
-            transparent
-            opacity={0.05}
-            side={THREE.DoubleSide}
-            depthWrite={false}
-          />
-        </mesh>
-      ))}
-      {/* Animated ripple pulse rings */}
-      {Array.from({ length: FLOOR_PULSES }).map((_, i) => (
-        <mesh key={i} ref={(el) => (pulseRefs.current[i] = el)}>
-          <ringGeometry args={[0.92, 1, 96]} />
-          <meshBasicMaterial
-            color="#ED985F"
-            transparent
-            opacity={0}
-            side={THREE.DoubleSide}
-            depthWrite={false}
-          />
-        </mesh>
-      ))}
-    </group>
+    <Html center>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 18,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        {/* Rotating 3D cube — represents the model being assembled */}
+        <div className="van-loader-scene">
+          <div className="van-loader-cube">
+            <div className="van-loader-face front" />
+            <div className="van-loader-face back" />
+            <div className="van-loader-face right" />
+            <div className="van-loader-face left" />
+            <div className="van-loader-face top" />
+            <div className="van-loader-face bottom" />
+          </div>
+        </div>
+
+        <div
+          style={{
+            background: "rgba(2,12,24,0.92)",
+            border: "1px solid rgba(237,152,95,0.3)",
+            borderRadius: "12px",
+            padding: "14px 22px",
+            color: "#FBFBF9",
+            fontFamily: "sans-serif",
+            textAlign: "center",
+            minWidth: 220,
+          }}
+        >
+          <div
+            style={{
+              fontSize: "11px",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              marginBottom: 10,
+            }}
+          >
+            Loading Experience
+          </div>
+
+          <div
+            style={{
+              width: "100%",
+              height: 4,
+              borderRadius: 999,
+              background: "rgba(255,255,255,0.08)",
+              overflow: "hidden",
+              marginBottom: 8,
+            }}
+          >
+            <div
+              style={{
+                width: `${pct}%`,
+                height: "100%",
+                background: "#ED985F",
+                borderRadius: 999,
+                transition: "width 0.2s ease-out",
+                boxShadow: "0 0 8px rgba(237,152,95,0.7)",
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(251,251,249,0.4)",
+            }}
+          >
+            <span style={{ maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {item || "Assets"}
+            </span>
+            <span style={{ color: "#ED985F", fontWeight: 700 }}>{pct}%</span>
+          </div>
+        </div>
+      </div>
+    </Html>
   );
 }
 
@@ -312,7 +351,7 @@ function Van() {
         {/* ── 3D Canvas Section ── */}
         <div
           className="relative h-[52vh] lg:h-full lg:w-2/3 flex-shrink-0 overflow-hidden"
-          style={{ background: STUDIO_BG }}
+
         >
           {/* Dot grid texture */}
           <div
@@ -333,6 +372,26 @@ function Van() {
               filter: "blur(40px)",
             }}
           />
+
+          {/* Studio gradient wash */}
+          <div
+            className="absolute inset-0 pointer-events-none z-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 65% at 50% 58%, #0D2647 0%, #071423 55%, #020C18 100%)",
+            }}
+          />
+
+          {/* Logo watermark — sits behind the (transparent) 3D canvas */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <img
+              src="/images/logoo.webp"
+              alt=""
+              aria-hidden="true"
+              className="w-[70%] max-w-[600px] object-contain opacity-[.5] grayscale select-none text-white"
+              draggable={false}
+            />
+          </div>
 
           {/* Orange top accent line */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ED985F] z-30" />
@@ -486,13 +545,13 @@ function Van() {
             {!webGLAvailable ? (
               <WebGLBlockedFallback />
             ) : (
-            <CanvasErrorBoundary fallback={<WebGLBlockedFallback />}>
             <Canvas
               className="h-full w-full"
-              gl={{ powerPreference: "high-performance", antialias: true, preserveDrawingBuffer: false }}
+              style={{ background: "transparent" }}
+              gl={{ powerPreference: "high-performance", antialias: true, alpha: true, preserveDrawingBuffer: false }}
             >
-              {/* Fix canvas background — no white flash */}
-              <color attach="background" args={["#020C18"]} />
+              {/* No scene.background set — canvas stays transparent so the
+                  studio gradient + logo watermark behind it show through */}
 
               <CameraAssigner cameraRef={cameraRef} />
 
@@ -500,28 +559,7 @@ function Van() {
 
               <Preload all />
 
-              <Suspense
-                fallback={
-                  <Html center>
-                    <div
-                      style={{
-                        background: "rgba(2,12,24,0.92)",
-                        border: "1px solid rgba(237,152,95,0.3)",
-                        borderRadius: "12px",
-                        padding: "14px 22px",
-                        color: "#FBFBF9",
-                        fontFamily: "sans-serif",
-                        fontSize: "11px",
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Loading Experience
-                    </div>
-                  </Html>
-                }
-              >
+              <Suspense fallback={<CanvasLoader />}>
                 <group
                   ref={groupRef}
                   position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}
@@ -532,7 +570,7 @@ function Van() {
                     background={false}
                   />
 
-                  <AnimatedFloor />
+
 
                   {currentVanUrl && (
                     <BaseVanModel
@@ -561,7 +599,7 @@ function Van() {
                 />
               )}
             </Canvas>
-            </CanvasErrorBoundary>
+
             )}
 
             {loading && webGLAvailable && <Loader />}
@@ -657,6 +695,38 @@ function Van() {
         .van-scrollbar::-webkit-scrollbar { height: 2px; }
         .van-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .van-scrollbar::-webkit-scrollbar-thumb { background: rgba(237,152,95,0.3); border-radius: 99px; }
+
+        .van-loader-scene {
+          width: 56px;
+          height: 56px;
+          perspective: 300px;
+        }
+        .van-loader-cube {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          transform-style: preserve-3d;
+          animation: van-loader-spin 3.2s linear infinite;
+        }
+        .van-loader-face {
+          position: absolute;
+          width: 56px;
+          height: 56px;
+          background: rgba(237,152,95,0.1);
+          border: 1px solid rgba(237,152,95,0.55);
+          box-shadow: 0 0 14px rgba(237,152,95,0.25) inset;
+        }
+        .van-loader-face.front  { transform: translateZ(28px); }
+        .van-loader-face.back   { transform: translateZ(-28px) rotateY(180deg); }
+        .van-loader-face.right  { transform: rotateY(90deg) translateZ(28px); }
+        .van-loader-face.left   { transform: rotateY(-90deg) translateZ(28px); }
+        .van-loader-face.top    { transform: rotateX(90deg) translateZ(28px); }
+        .van-loader-face.bottom { transform: rotateX(-90deg) translateZ(28px); }
+
+        @keyframes van-loader-spin {
+          from { transform: rotateX(-28deg) rotateY(0deg); }
+          to   { transform: rotateX(-28deg) rotateY(360deg); }
+        }
       `}</style>
     </>
   );

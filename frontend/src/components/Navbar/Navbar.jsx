@@ -450,7 +450,7 @@ const handleItemClick = () => {
     <>
       {/* --- Main Navigation Bar --- */}
       <div className="relative w-full overflow-hidden bg-primary text-white border-b border-white/10">
-  <div className="flex w-max animate-marquee whitespace-nowrap">
+{!forceMobile &&  <div className="flex w-max animate-marquee whitespace-nowrap">
     {/* First copy */}
     <div className="flex items-center shrink-0">
       <span className="mx-8 font-ui text-[10px] md:text-[11px] font-black uppercase tracking-[0.22em]">
@@ -504,9 +504,9 @@ const handleItemClick = () => {
 
       <span className="text-hover text-sm">✦</span>
     </div>
-  </div>
+  </div> }
 
-  <style jsx>{`
+  <style>{`
     @keyframes marquee {
       from {
         transform: translateX(0);
@@ -591,7 +591,7 @@ const handleItemClick = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`${forceMobile ? "block" : "block lg:hidden p-2"} text-primary transition-transform hover:scale-110`}
             >
-              {isMobileMenuOpen ? <X /> : <Menu />}
+              {isMobileMenuOpen ? <X /> : <Menu className={`${forceMobile && "text-white"}`}/>}
             </button>
           </div>
         </div>
