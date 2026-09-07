@@ -82,6 +82,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
     model: [],
     sit: [],
     bathroomType: [],
+    bedType: [],
     search: ""
   });
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -91,7 +92,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
   // options regardless of which filters are currently applied (backend narrows
   // `layout.filters` down to whatever matches the active query, so we don't use
   // that for populating options — only for reading which options are active).
-  const [catalog, setCatalog] = useState({ models: [], sits: [], builds: [] });
+  const [catalog, setCatalog] = useState({ models: [], sits: [], bedTypes: [], builds: [] });
 
   useEffect(() => {
     let cancelled = false;
@@ -102,6 +103,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
       setCatalog({
         models: res.data?.filters?.models || [],
         sits: res.data?.filters?.sits || [],
+        bedTypes: res.data?.filters?.bedType || [],
         builds: allData
           .filter((item) => item.slug && item.van_listing?.title)
           .map((item) => ({ slug: item.slug, title: item.van_listing.title }))
@@ -116,6 +118,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
       model: currentParams.model ? currentParams.model.split(",") : [],
       sit: currentParams.sit ? currentParams.sit.split(",") : [],
       bathroomType: currentParams.bathroomType ? currentParams.bathroomType.split(",") : [],
+      bedType: currentParams.bedType ? currentParams.bedType.split(",") : [],
       search: currentParams.search || ""
     });
   }, [currentParams]);
@@ -159,7 +162,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
   };
 
   const handleClearAll = () => {
-    setLocalFilters({ wheelbase: [], model: [], sit: [], bathroomType: [], search: "" });
+    setLocalFilters({ wheelbase: [], model: [], sit: [], bathroomType: [], bedType: [], search: "" });
     setOpenDropdown(null);
     router.push(pathname);
   };
@@ -197,6 +200,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
   const filterConfig = [
     { label: "Make Model", key: "model", options: filterOptions(catalog.models) },
     { label: "Seating", key: "sit", options: filterOptions(catalog.sits) },
+    { label: "Sleeping Arrangement", key: "bedType", options: filterOptions(catalog.bedTypes) },
   ];
 
   const hasActiveFilters = Object.keys(currentParams).length > 0;

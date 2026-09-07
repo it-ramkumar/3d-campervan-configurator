@@ -48,6 +48,7 @@ export default function All_Titles_Client({ initialData = null }) {
   const wheelbaseFilterFromURL = searchParams.get("wheelbase") || "";
   const seatingFilterFromURL = searchParams.get("seating") || "";
   const modelFilterFromURL = searchParams.get("model") || "";
+  const bedTypeFilterFromURL = searchParams.get("bedType") || "";
 
   const [localSearch, setLocalSearch] = useState(searchQueryFromURL);
   const [portfolios, setPortfolios] = useState(initialData?.data || []);
@@ -65,6 +66,7 @@ export default function All_Titles_Client({ initialData = null }) {
   // Wheelbase/Shower options are hardcoded groups (WHEELBASE_GROUPS/SHOWER_GROUPS) to match Portfolio, so no db state needed for them.
   const [dbSeatings, setDbSeatings] = useState(initialData?.filterOptions?.seatings || []);
   const [dbModels, setDbModels] = useState(initialData?.filterOptions?.models || []);
+  const [dbBedTypes, setDbBedTypes] = useState(initialData?.filterOptions?.bedTypes || []);
 
   // Unfiltered catalog of every published build (slug + title) for the "Jump to Build" dropdown — same as Portfolio's Van_layout.js
   const [catalogBuilds, setCatalogBuilds] = useState([]);
@@ -88,6 +90,7 @@ export default function All_Titles_Client({ initialData = null }) {
   const [tempWheelbases, setTempWheelbases] = useState([]);
   const [tempSeatings, setTempSeatings] = useState([]);
   const [tempModels, setTempModels] = useState([]);
+  const [tempBedTypes, setTempBedTypes] = useState([]);
 
   // URL badalne par temporary checkboxes ko sync rakhein
   useEffect(() => {
@@ -96,7 +99,8 @@ export default function All_Titles_Client({ initialData = null }) {
     setTempWheelbases(wheelbaseFilterFromURL ? wheelbaseFilterFromURL.split(",") : []);
     setTempSeatings(seatingFilterFromURL ? seatingFilterFromURL.split(",") : []);
     setTempModels(modelFilterFromURL ? modelFilterFromURL.split(",") : []);
-  }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL]);
+    setTempBedTypes(bedTypeFilterFromURL ? bedTypeFilterFromURL.split(",") : []);
+  }, [searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL, bedTypeFilterFromURL]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -150,6 +154,7 @@ export default function All_Titles_Client({ initialData = null }) {
       wheelbase: tempWheelbases.join(","),
       seating: tempSeatings.join(","),
       model: tempModels.join(","),
+      bedType: tempBedTypes.join(","),
       page: 1, // Filters badalne par page reset 1 par
     });
   };
@@ -160,6 +165,7 @@ export default function All_Titles_Client({ initialData = null }) {
     setTempWheelbases([]);
     setTempSeatings([]);
     setTempModels([]);
+    setTempBedTypes([]);
     setOpenDropdown(null);
     router.push(pathname);
   };
@@ -170,7 +176,7 @@ export default function All_Titles_Client({ initialData = null }) {
     }
   };
 
-  const fetchPortfolios = useCallback(async (pageNum, category, search, bathroom, wb, seat, model) => {
+  const fetchPortfolios = useCallback(async (pageNum, category, search, bathroom, wb, seat, model, bedType) => {
     try {
       const url = `${process.env.NEXT_PUBLIC_URL}/portfolio/titles-only` +
         `?page=${pageNum}&limit=${LIMIT}` +
@@ -180,6 +186,7 @@ export default function All_Titles_Client({ initialData = null }) {
         `&wheelbase=${encodeURIComponent(wb || "")}` +
         `&seating=${encodeURIComponent(seat || "")}` +
         `&model=${encodeURIComponent(model || "")}` +
+        `&bedType=${encodeURIComponent(bedType || "")}` +
         `&t=${Date.now()}`;
       const res = await fetch(url, { cache: "no-store" });
       return res.json();
@@ -204,7 +211,8 @@ export default function All_Titles_Client({ initialData = null }) {
         bathroomFilterFromURL,
         wheelbaseFilterFromURL,
         seatingFilterFromURL,
-        modelFilterFromURL
+        modelFilterFromURL,
+        bedTypeFilterFromURL
       );
       if (res.success) {
         setPortfolios(res.data || []);
@@ -214,12 +222,13 @@ export default function All_Titles_Client({ initialData = null }) {
         if (res.filterOptions) {
           setDbSeatings(res.filterOptions.seatings || []);
           setDbModels(res.filterOptions.models || []);
+          setDbBedTypes(res.filterOptions.bedTypes || []);
         }
       }
       setLoading(false);
     };
     load();
-  }, [selectedChassis, searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL, fetchPortfolios]);
+  }, [selectedChassis, searchQueryFromURL, bathroomFilterFromURL, wheelbaseFilterFromURL, seatingFilterFromURL, modelFilterFromURL, bedTypeFilterFromURL, fetchPortfolios]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
@@ -232,7 +241,8 @@ export default function All_Titles_Client({ initialData = null }) {
       bathroomFilterFromURL,
       wheelbaseFilterFromURL,
       seatingFilterFromURL,
-      modelFilterFromURL
+      modelFilterFromURL,
+      bedTypeFilterFromURL
     );
     if (res.success) {
       setPortfolios((prev) => [...prev, ...(res.data || [])]);
@@ -264,7 +274,8 @@ export default function All_Titles_Client({ initialData = null }) {
     bathroomFilterFromURL !== "" ||
     wheelbaseFilterFromURL !== "" ||
     seatingFilterFromURL !== "" ||
-    modelFilterFromURL !== "";
+    modelFilterFromURL !== "" ||
+    bedTypeFilterFromURL !== "";
 
   return (
     <>
@@ -580,6 +591,58 @@ export default function All_Titles_Client({ initialData = null }) {
                       />
                       <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
                         {seat} Seats
+                      </span>
+                    </label>
+                  );
+                })
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Sleeping Arrangement (bed type, same pattern as Make Model) */}
+      <div className="space-y-2 relative">
+        <label className="font-ui font-semibold text-[10px] uppercase tracking-[0.18em] text-primary/45 ml-1">
+          Sleeping Arrangement{tempBedTypes.length > 0 && ` (${tempBedTypes.length})`}
+        </label>
+        <div
+          onClick={() => setOpenDropdown(openDropdown === "bedType" ? null : "bedType")}
+          className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
+            openDropdown === "bedType" ? "border-[#ED985F]/40 bg-white shadow-sm" : "border-primary/10 hover:border-primary/20"
+          }`}
+        >
+          <span className={`truncate max-w-[140px] ${tempBedTypes.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
+            {tempBedTypes.length > 0 ? tempBedTypes.join(", ") : "All"}
+          </span>
+          <ChevronDown size={15} className={`transition-transform duration-200 ${openDropdown === "bedType" ? "rotate-180 text-[#ED985F]" : "text-primary/30"}`} />
+        </div>
+        <AnimatePresence>
+          {openDropdown === "bedType" && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+            >
+              {dbBedTypes.length === 0 ? (
+                <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                  No options available
+                </div>
+              ) : (
+                dbBedTypes.map((bt) => {
+                  const isChecked = tempBedTypes.includes(bt);
+                  return (
+                    <label key={bt} className="flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none">
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleLocalCheckboxToggle(setTempBedTypes, tempBedTypes, bt)}
+                        className="w-4 h-4 rounded border-primary/20 accent-[#ED985F] cursor-pointer"
+                      />
+                      <span className={`font-ui text-sm ${isChecked ? "text-[#ED985F] font-semibold" : "text-primary/70"}`}>
+                        {bt}
                       </span>
                     </label>
                   );

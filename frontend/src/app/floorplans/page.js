@@ -24,6 +24,7 @@ export default async function page({ searchParams }) {
         wheelbase: sp?.wheelbase || "",
         seating: sp?.seating || "",
         model: sp?.model || "",
+        bedType: sp?.bedType || "",
     }).toString();
 
     const initialData = await fetch(`${process.env.NEXT_PUBLIC_URL}/portfolio/titles-only?${qs}`, {

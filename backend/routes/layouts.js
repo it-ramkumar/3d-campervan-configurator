@@ -273,7 +273,8 @@ router.get("/titles-only", async (req, res) => {
       seating,
       bathroomType,
       wheelbase,
-      model
+      model,
+      bedType
     } = req.query;
 
     page = parseInt(page) || 1;
@@ -281,12 +282,13 @@ router.get("/titles-only", async (req, res) => {
 
     // ─── DYNAMIC OPTIONS FROM DATABASE ───
     // Ye poore database se unique options nikalega taaki frontend pe checkboxes ban sakein
-    const [uniqueCategories, uniqueBathrooms, uniqueWheelbases, uniqueSeatings, uniqueModels] = await Promise.all([
+    const [uniqueCategories, uniqueBathrooms, uniqueWheelbases, uniqueSeatings, uniqueModels, uniqueBedTypes] = await Promise.all([
       PortfolioVan.distinct("category"),
       PortfolioVan.distinct("van_listing.bathroomType"),
       PortfolioVan.distinct("van_listing.specifications.wheelbase"),
       PortfolioVan.distinct("van_listing.specifications.capacity.sits"),
-      PortfolioVan.distinct("van_listing.specifications.make_model")
+      PortfolioVan.distinct("van_listing.specifications.make_model"),
+      PortfolioVan.distinct("van_listing.bedType")
     ]);
 
     const filter = { is_published: true };
@@ -351,6 +353,12 @@ router.get("/titles-only", async (req, res) => {
       filter["van_listing.specifications.make_model"] = { $in: parsedModels };
     }
 
+    // Bed Type / Sleeping Arrangement Filter
+    const parsedBedTypes = parseCheckboxFilter(bedType);
+    if (parsedBedTypes?.length) {
+      filter["van_listing.bedType"] = { $in: parsedBedTypes };
+    }
+
     // Total count matching the filters
     const total = await PortfolioVan.countDocuments(filter);
 
@@ -381,6 +389,7 @@ router.get("/titles-only", async (req, res) => {
           "van_listing.title": 1,
           "van_listing.description": 1,
           "van_listing.bathroomType": 1,
+          "van_listing.bedType": 1,
           "van_listing.specifications.capacity.sits": 1,
           "van_listing.specifications.wheelbase": 1,
         },
@@ -399,6 +408,7 @@ router.get("/titles-only", async (req, res) => {
         wheelbases: uniqueWheelbases.filter(Boolean),
         seatings: uniqueSeatings.filter(Boolean).sort((a, b) => a - b), // Seating ko sort kar diya 2, 3, 4
         models: uniqueModels.filter(Boolean),
+        bedTypes: uniqueBedTypes.filter(Boolean),
       },
       data: vans,
     });
