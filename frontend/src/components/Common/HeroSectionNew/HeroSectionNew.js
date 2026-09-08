@@ -35,14 +35,14 @@ export default function HeroImage({
   return (
     <section
       className={`
-        relative w-full overflow-hidden bg-primary py-8 md:py-12 lg:py-16
+        relative w-full overflow-hidden bg-primary py-8
         ${className}
       `}
     >
-      {/* BACK BUTTON */}
+      {/* BACK BUTTON
       <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-30">
         <BackButton variant="default" label="Go Back" />
-      </div>
+      </div> */}
 
       <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20 pt-10 md:pt-4">
         {/* 50 / 50 GRID */}
@@ -64,16 +64,6 @@ export default function HeroImage({
               </div>
             )}
 
-            {/* LABOR DAY OFFER */}
-            <div className="flex items-center gap-3 pt-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse shrink-0" />
-
-              <span className="font-ui text-[9px] sm:text-[10px] font-black uppercase tracking-[0.18em] text-red-400">
-                Labor Day Special · Save $9,999
-              </span>
-
-              <span className="hidden sm:block h-px flex-1 max-w-16 bg-white/20" />
-            </div>
 
             {/* TITLE */}
             {title && (

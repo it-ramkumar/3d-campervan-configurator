@@ -105,7 +105,7 @@ export default function VanRecommendation() {
     };
 
     return (
-        <div className="w-full max-w-6xl mx-auto md:px-4 py-12" style={{ fontFamily: 'var(--font-heading)' }}>
+        <div className="w-full max-w-6xl mx-auto md:px-4 py-10" style={{ fontFamily: 'var(--font-heading)' }}>
 
             {/* ===== FORM CARD ===== */}
             <div className="overflow-hidden shadow-2xl mb-12 bg-primary rounded-lg">

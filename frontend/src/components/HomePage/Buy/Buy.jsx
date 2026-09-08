@@ -63,12 +63,6 @@ export default function Buy({ initialVans = [] }) {
         <div className="mb-10">
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <SpanTag text="Premium Builds" className="text-hover" />
-
-            {/* Labor Day */}
-            <span className="inline-flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-white">
-              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
-              Labor Day · $9,999 Off
-            </span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
@@ -168,48 +162,25 @@ export default function Buy({ initialVans = [] }) {
                             "High-end craftsmanship meeting rugged durability."}
                         </RichParagraph>
 
-                        {/* Price */}
-                        {/* Price + Labor Day Sale */}
-                        <div className="mt-auto">
-                          {van?.price ? (
-                            <>
-                              {/* Labor Day label */}
-                              <div className="mb-2 flex items-center gap-2">
-                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-red-600">
-                                  Labor Day Special
-                                </span>
+{/* Price */}
+<div className="mt-auto">
+  {van?.price ? (
+    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+      <span className="text-xl font-black text-hover">
+        {typeof van.price === "number"
+          ? `$${van.price.toLocaleString()}`
+          : van.price}
+      </span>
+    </div>
+  ) : (
+    <SpanTag
+      text="Pricing upon request"
+      className="text-primary/40 text-sm italic !normal-case !tracking-normal"
+    />
+  )}
+</div>
 
-                                <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-primary/35">
-                                  Save $9,999
-                                </span>
-                              </div>
 
-                              {/* Original + Sale Price */}
-                              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                                <span className="text-sm font-semibold text-primary/35 line-through">
-                                  {typeof van.price === "number"
-                                    ? `$${van.price.toLocaleString()}`
-                                    : van.price}
-                                </span>
-
-                                {typeof van.price === "number" && (
-                                  <RichParagraph className="font-black !text-hover text-xl">
-                                    ${(van.price - 9999).toLocaleString()}
-                                  </RichParagraph>
-                                )}
-                              </div>
-
-                              <p className="mt-1 font-ui text-[8px] font-semibold uppercase tracking-[0.18em] text-primary/40">
-                                Offer ends September 7, 2026
-                              </p>
-                            </>
-                          ) : (
-                            <SpanTag
-                              text="Pricing upon request"
-                              className="text-primary/40 text-sm italic !normal-case !tracking-normal"
-                            />
-                          )}
-                        </div>
                       </div>
                     </>
                   </Link>
@@ -234,7 +205,7 @@ export default function Buy({ initialVans = [] }) {
                           </span>
                           <Link
                             href={`/camper-vans-for-sale/${van.slug}/configure`}
-                            className="group/3d relative w-full inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-6 py-3 text-xs font-bold uppercase tracking-[0.12em] text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_20px_4px_rgba(237,152,95,0.55)] active:scale-95 md:py-3.5 md:px-8 sm:text-sm"
+                            className="group/3d relative w-full inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_20px_4px_rgba(237,152,95,0.55)] active:scale-95 md:py-3 md:px-6 sm:text-sm"
                           >
                             <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover/3d:translate-x-full" />
                             <Rotate3d size={16} className="relative z-10" />

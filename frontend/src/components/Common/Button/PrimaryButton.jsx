@@ -18,7 +18,7 @@ export default function PrimaryButton({
     text-secondary font-bold uppercase tracking-[0.12em]
     !rounded-lg transition-all duration-300 ease-in-out
     text-xs sm:text-sm
-    py-3 px-6 md:py-3.5 md:px-8
+    py-2.5 px-6 md:py-3 md:px-8
   `;
 
   const enabledClasses = `

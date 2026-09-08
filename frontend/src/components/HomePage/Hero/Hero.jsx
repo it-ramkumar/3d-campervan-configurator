@@ -82,13 +82,7 @@ export default function Hero() {
 
                   {/* Slogan */}
                 <div className="ml-2">
-  <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-red-500/30 bg-red-600/15 px-3 py-1.5">
-    <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
 
-    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">
-      Labor Day — Save $9,999
-    </span>
-  </div>
 
   <SpanTag
     text={slide.slogan || "You Dream It. We Build It."}
@@ -112,12 +106,12 @@ export default function Hero() {
                     <PrimaryButton
                       label={slide.btnText}
                       link={slide.link}
-                      className="w-full sm:w-auto bg-secondary !text-primary"
+                      className=" bg-secondary !text-primary"
                     />
                     <SecondaryButton
                       label={<><Sparkles size={14} className="animate-pulse mr-2" />Van Matchmaker Quiz</>}
                       onClick={scrollToQuiz}
-                      className="w-full sm:w-auto !bg-hover !text-secondary !border-hover hover:!bg-white hover:!text-black"
+                      className=" !bg-hover !text-secondary !border-hover hover:!bg-white hover:!text-black"
                     />
                   </div>
 

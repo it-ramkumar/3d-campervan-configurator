@@ -573,7 +573,12 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                     {/* Image side */}
                     <div className="w-full lg:w-7/12">
+                      <Link
+                          href={`/van-layouts/${item.slug}`}
+                        >
+
                       <ProjectImages images={item.gallery} alt={item.van_listing?.title} />
+                        </Link>
                     </div>
                   </motion.div>
                 );

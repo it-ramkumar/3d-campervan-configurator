@@ -87,7 +87,7 @@ export default function WhyChoose() {
 
       {/* ── HEADER ── */}
       <div className="relative border-b border-primary/10 overflow-hidden">
-        <div className="container mx-auto px-6 max-w-7xl py-20 md:py-20 relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl py-10 relative z-10">
 
           <div className="flex items-center gap-3 mb-3">
             <p className="text-hover text-xs uppercase tracking-widest font-bold">Our Advantage</p>
@@ -126,7 +126,7 @@ export default function WhyChoose() {
               <span className="text-[200px] font-black text-primary/[0.03] leading-none px-4">{num}</span>
             </div>
 
-            <div className="container mx-auto px-6 max-w-7xl py-20 md:py-28 relative z-10">
+            <div className="container mx-auto px-6 max-w-7xl py-20 md:py-10 relative z-10">
               {/* Equal 2-Column Grid (50% - 50%) */}
               <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 xl:gap-20">
 
@@ -195,12 +195,12 @@ export default function WhyChoose() {
                   {/* Expand toggle */}
                   <button
                     onClick={() => toggle(i)}
-                    className="group self-start flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-hover hover:text-secondary transition-colors"
+                    className="group self-start flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-hover hover:text-primary transition-colors"
                   >
                     <span className="w-8 h-8 rounded-lg border border-hover/40 flex items-center justify-center group-hover:bg-hover group-hover:border-hover transition-all">
                       {isOpen
-                        ? <ChevronUp size={13} className="group-hover:text-secondary transition-colors" />
-                        : <ChevronDown size={13} className="group-hover:text-secondary transition-colors" />
+                        ? <ChevronUp size={13} className="group-hover:text-primary transition-colors" />
+                        : <ChevronDown size={13} className="group-hover:text-primary transition-colors" />
                       }
                     </span>
                     {isOpen ? 'Show Less' : 'Explore Details'}

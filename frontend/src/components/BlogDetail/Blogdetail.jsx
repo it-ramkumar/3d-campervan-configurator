@@ -304,17 +304,23 @@ export default function BlogContentUI({ blog }) {
                 <ImageIcon size={16} className="text-hover" />
                 <p className="text-[10px] font-black uppercase tracking-widest text-primary">Visual Gallery</p>
               </div>
-              <div className="rounded-lg overflow-hidden aspect-square mb-4 border border-primary/10">
-                <Image src={blog.gallery[currentGalleryImage]} className="w-full h-full object-cover" alt="Active gallery" width={800} height={600} />
+              <div className="relative rounded-lg overflow-hidden aspect-square mb-4 border border-primary/10">
+                <Image
+                  src={blog.gallery[currentGalleryImage]}
+                  fill
+                  sizes="(max-width: 1024px) 90vw, 320px"
+                  className="object-cover"
+                  alt="Active gallery"
+                />
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {blog.gallery.slice(0, 8).map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentGalleryImage(idx)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${currentGalleryImage === idx ? 'border-hover scale-90' : 'border-transparent opacity-40 hover:opacity-100'}`}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${currentGalleryImage === idx ? 'border-hover scale-90' : 'border-transparent opacity-40 hover:opacity-100'}`}
                   >
-                    <Image src={img} className="w-full h-full object-cover" alt="thumb" width={200} height={200} />
+                    <Image src={img} fill sizes="100px" className="object-cover" alt="thumb" />
                   </button>
                 ))}
               </div>

@@ -68,7 +68,7 @@ export default function VanMatchmakerPage() {
       />
 
       <main className="bg-secondary">
-        <section className="py-16 md:py-24 px-4">
+        <section className="py-10 px-4">
           <div className="max-w-5xl mx-auto text-center">
             <SpanTag text="BBV Matchmaker Engine" className="font-bold uppercase" />
             <Heading1 className="!text-primary" text="Find Your Perfect Camper Van in Under 2 Minutes" />

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2 } from "lucide-react";
 import Image from "next/image";
 
 const VanGallery = ({ gallery = [], title = "" }) => {
@@ -13,7 +13,6 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   }, [gallery]);
 
   const hasImages = gallery && gallery.length > 0;
-  const currentImage = hasImages ? gallery[activeImage] : "";
 
   const nextImage = useCallback(() => {
     if (!hasImages) return;
@@ -77,23 +76,9 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   // 🖼️ ACTUAL GALLERY UI
   return (
     <div className="space-y-4">
-      {/* <div className="hidden" aria-hidden="true">
-        {gallery.map((img, i) =>
-          i !== activeImage ? (
-            <Image
-              key={img}
-              src={img}
-              width={1000}
-              height={800}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-              alt=""
-            />
-          ) : null,
-        )}
-      </div> */}
 
       {/* MAIN IMAGE CONTAINER */}
-<div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto min-h-[400px] md:min-h-[800px] max-h-[850px]">
+<div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto aspect-square bg-[#020C18]/95">
   {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
   {gallery.map((img, i) => (
     <Image
@@ -102,15 +87,28 @@ const VanGallery = ({ gallery = [], title = "" }) => {
       fill
       alt={`${title} - image ${i + 1}`}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-      onClick={() => activeImage === i && setIsFullscreen(true)}
       className={`object-contain transition-opacity duration-200 ${
         activeImage === i
-          ? "opacity-100 z-10 cursor-zoom-in"
+          ? "opacity-100 z-10"
           : "opacity-0 z-0 pointer-events-none"
       }`}
       priority={i === 0}
     />
   ))}
+
+  {/* EXPAND / FULL VIEW ICON */}
+  <button
+    onClick={() => setIsFullscreen(true)}
+    className="absolute bottom-3 right-3 p-2 rounded-full z-20 transition-colors hover:border-[#ED985F]/50"
+    style={{
+      background: "rgba(2,12,24,0.72)",
+      backdropFilter: "blur(16px)",
+      border: "1px solid rgba(255,255,255,0.07)",
+    }}
+    aria-label="View full image"
+  >
+    <Maximize2 size={16} className="text-[#FBFBF9]" />
+  </button>
 
   {/* Navigation Overlays (Keep these exactly as you have them) */}
   {gallery.length > 1 && (
@@ -176,28 +174,59 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
       {/* FULLSCREEN BOX */}
       {isFullscreen && (
-        <div className="fixed inset-0 bg-[#020C18]/95 z-[9999] flex items-center justify-center">
-          <Image
-            key={currentImage}
-            src={currentImage}
-            width={1400}
-            height={1000}
-            alt={title}
-            className="max-h-[90vh] w-auto object-contain"
-          />
-
-          <button
-            onClick={() => setIsFullscreen(false)}
-            className="absolute top-5 right-5 text-[#FBFBF9] text-3xl hover:text-[#ED985F] hover:scale-110 transition-all"
+        <div className="fixed inset-0 bg-[#020C18]/95 z-[9999] flex flex-col">
+          {/* TOP BAR */}
+          <div
+            className="flex items-center justify-between px-5 py-4 shrink-0"
+            style={{
+              background: "rgba(2,12,24,0.72)",
+              backdropFilter: "blur(16px)",
+              borderBottom: "1px solid rgba(255,255,255,0.07)",
+            }}
           >
-            ✕
-          </button>
+            <div className="flex flex-col">
+              <span className="text-[#FBFBF9] text-sm font-bold uppercase tracking-wide truncate max-w-[60vw]">
+                {title}
+              </span>
+              {gallery.length > 1 && (
+                <span className="text-[#FBFBF9]/50 text-xs font-medium">
+                  {activeImage + 1} / {gallery.length}
+                </span>
+              )}
+            </div>
+
+            <button
+              onClick={() => setIsFullscreen(false)}
+              className="text-[#FBFBF9] text-2xl hover:text-[#ED985F] hover:scale-110 transition-all"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="relative flex-1">
+            {/* SAME sizes AS THE MAIN GALLERY IMAGE SO THIS REUSES THE EXACT
+                SAME CACHED URL THE MAIN VIEW ALREADY LOADED — INSTANT SWITCH */}
+            {gallery.map((img, i) => (
+              <Image
+                key={img}
+                src={img}
+                fill
+                alt={`${title} - image ${i + 1}`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                className={`object-contain transition-opacity duration-150 ${
+                  activeImage === i
+                    ? "opacity-100 z-10"
+                    : "opacity-0 z-0 pointer-events-none"
+                }`}
+                priority={i === 0}
+              />
+            ))}
 
           {gallery.length > 1 && (
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full transition-colors"
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full z-20 transition-colors"
                 style={{
                   background: "rgba(13,38,71,0.4)",
                   backdropFilter: "blur(16px)",
@@ -209,7 +238,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
               <button
                 onClick={nextImage}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full transition-colors"
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full z-20 transition-colors"
                 style={{
                   background: "rgba(13,38,71,0.4)",
                   backdropFilter: "blur(16px)",
@@ -220,6 +249,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
               </button>
             </>
           )}
+          </div>
         </div>
       )}
     </div>

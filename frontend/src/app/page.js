@@ -116,11 +116,11 @@ export default async function Home() {
       <main>
         <Hero />
 
-        <div className="overflow-x-hidden bg-secondary flex flex-col space-y-16 ">
+        <div className="overflow-x-hidden bg-secondary flex flex-col space-y-10 ">
           <Buy initialVans={readyToGoVans} />
 
           {/* Replaced <Customize /> with the Matchmaker Quiz System */}
-          <section id="quiz-section" className="bg-secondary py-16 md:py-24 border-y border-slate-100 scroll-mt-20">
+          <section id="quiz-section" className="bg-secondary py-10 border-y border-slate-100 scroll-mt-20">
             <div className="max-w-7xl mx-auto">
               <div className="text-center px-4 mb-8">
                 <SpanTag text={"BBV Matchmaker Engine"} className="font-bold uppercas"/>
