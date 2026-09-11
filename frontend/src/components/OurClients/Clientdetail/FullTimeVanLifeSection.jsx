@@ -65,10 +65,10 @@ const FullTimeVanLifeSection = ({ imageData }) => {
         {/* Case Study Section */}
         <div className="bbv-card rounded-lg p-6 md:p-10 lg:p-16 border border-hover/20 shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="rounded-lg overflow-hidden shadow-2xl bbv-amber-line">
-                <ClassicImageGrid images={imageData.sanDiego} layout="standard" />
-              </div>
+                 <div className="lg:col-span-7 space-y-12">
+                         <div className="lg:col-span-3 ">
+                           <ClassicImageGrid images={imageData?.sanDiego} />
+                         </div>
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { icon: Zap, text: "Robust electrical & water" },

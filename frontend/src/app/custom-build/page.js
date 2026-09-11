@@ -13,7 +13,7 @@ van conversions. You choose the layout, materials & systems.
       openGraph: {
         title,
         description,
-        images: ["/renderings/imperial.webp"],
+        images: ["https://www.bigbearvans.com/Home/home-custom-build-big-bear-vans.webp"],
       },
     };
   } catch (error) {

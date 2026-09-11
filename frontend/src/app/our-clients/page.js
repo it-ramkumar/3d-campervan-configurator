@@ -30,7 +30,7 @@ offices, and family Sprinters with elevator beds. See how
   description: `Real Big Bear Vans client stories - pet-friendly rigs, mobile
 offices, and family Sprinters with elevator beds. See how
  our clients live off-grid.`,
-   images: ["https://www.bigbearvans.com/images2/about.webp"],
+   images: ["https://www.bigbearvans.com/OurClients/about-hero-big-bear-vans.webp"],
   },
   openGraph: {
     type: "website",
@@ -39,12 +39,12 @@ offices, and family Sprinters with elevator beds. See how
   description: `Real Big Bear Vans client stories - pet-friendly rigs, mobile
 offices, and family Sprinters with elevator beds. See how
  our clients live off-grid.`,
-    images: ["https://www.bigbearvans.com/images2/about.webp"],
+    images: ["https://www.bigbearvans.com/OurClients/about-hero-big-bear-vans.webp"],
   },
 };
 
 export default function OurClients() {
-  const heroImage = "/images2/about.webp";
+  const heroImage = "/OurClients/about-hero-big-bear-vans.webp";
   const newTitleText = "Client Stories & Custom Build Case Studies ";
 
   const OurClientSchema = ClientschemaData()

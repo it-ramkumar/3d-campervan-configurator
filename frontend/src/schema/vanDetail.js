@@ -35,7 +35,7 @@
 //       "@type": "Organization",
 //       "name": "Big Bear Vans",
 //       "url": "https://www.bigbearvans.com",
-//       "logo": "https://www.bigbearvans.com/images/logo.webp"
+//       "logo": "https://www.bigbearvans.com/images/logoo.webp"
 //     },
 //     "category": "Recreational Vehicle",
 //     "vehicleConfiguration": "Van",

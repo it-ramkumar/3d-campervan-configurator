@@ -56,9 +56,10 @@ const AdventureSection = ({ imageData }) => {
         <div className="bbv-card rounded-lg p-8 lg:p-12 border border-hover/20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             <div className="lg:col-span-7">
-              <div className="rounded-lg overflow-hidden bbv-amber-line shadow-lg">
-                <ClassicImageGrid images={imageData.motovan} layout="motovan" />
-              </div>
+               <div className="lg:col-span-3">
+                         <ClassicImageGrid images={imageData?.motovan}  />
+                       </div>
+
             </div>
 
             <div className="lg:col-span-5 pt-4">

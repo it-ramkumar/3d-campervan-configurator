@@ -22,7 +22,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         type: "website",
         images: [
           {
-            url: "https://www.bigbearvans.com/images2/vfs.webp",
+            url: "https://www.bigbearvans.com/Home/home-portfolio-elevator-bed-big-bear-vans.webp",
             width: 1200,
             height: 630,
             alt: "Custom Camper Vans for Sale | Big Bear Vans",
@@ -33,7 +33,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         card: "summary_large_image",
         title,
         description,
-        images: ["https://www.bigbearvans.com/images2/vfs.webp"],
+        images: ["https://www.bigbearvans.com/Home/home-portfolio-elevator-bed-big-bear-vans.webp"],
       },
       alternates: {
         canonical: "https://www.bigbearvans.com/camper-vans-for-sale",
@@ -85,7 +85,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         ? rawImage.startsWith("http")
           ? encodeURI(rawImage)
           : encodeURI(`https://www.bigbearvans.com${rawImage}`)
-        : "https://www.bigbearvans.com/images2/vfs.webp";
+        : "https://www.bigbearvans.com/Home/home-portfolio-elevator-bed-big-bear-vans.webp";
 
       const description = van.van_listing.subtitle
         || van.van_listing.title

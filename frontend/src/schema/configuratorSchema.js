@@ -17,7 +17,7 @@ in our free 3D configurator. Customize layouts, colors,
     "provider": {
       "@type": "LocalBusiness",
       "name": "Big Bear Vans",
-      "image": "/custom build/configurator.webp" // 3D tool ka screenshot URL
+      "image": "/custom build/3d-configurator-big-bear-vans.webp" // 3D tool ka screenshot URL
     }
   };
 };

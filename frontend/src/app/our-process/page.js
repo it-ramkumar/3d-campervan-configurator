@@ -23,7 +23,7 @@ including vehicle sourcing and lifetime support.`,
     `From 3D design to final handover: see Big Bear Vans'
  transparent 5-month custom camper van build process,
 including vehicle sourcing and lifetime support.`,
-    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
+    images: ["https://www.bigbearvans.com/Home/home-engineering-team-big-bear-vans.webp"],
   },
   twitter: {
     card: "summary_large_image",
@@ -32,13 +32,13 @@ including vehicle sourcing and lifetime support.`,
     `From 3D design to final handover: see Big Bear Vans'
  transparent 5-month custom camper van build process,
 including vehicle sourcing and lifetime support.`,
-    images: ["https://www.bigbearvans.com/heroSlider/processhero.webp"],
+    images: ["https://www.bigbearvans.com/Home/home-engineering-team-big-bear-vans.webp"],
   },
 };
 
 export default function OurProcess() {
   const heroImage = "/Home/home-engineering-team-big-bear-vans.webp";
-  const mobileHeroImage = "/heroSlider/processhero_mobile.webp";
+  const mobileHeroImage = "/Home/home-engineering-team-big-bear-vans.webp";
   const newTitleText = "Our 5-Month Custom Van Build Process";
   const newDescriptionText =
     "A complete process of how we customize your dream custom van";

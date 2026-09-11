@@ -16,7 +16,7 @@ Get pre-qualified with Big Bear Vans today.`,
     "@type": "LocalBusiness",
     "@id": "https://www.bigbearvans.com/#organization",
     "name": "Big Bear Vans",
-    "image": "https://www.bigbearvans.com/heroSlider/limage2.webp",
+    "image": "https://www.bigbearvans.com/Home/home-google-meet-big-bear-vans.webp",
     "telephone": "+1-951-441-9719",
     "address": {
       "@type": "PostalAddress",

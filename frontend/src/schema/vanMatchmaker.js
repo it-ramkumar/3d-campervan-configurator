@@ -48,7 +48,7 @@ export const generateVanMatchmakerSchema = (faqs) => {
         "@type": "LocalBusiness",
         "@id": `${baseUrl}/#organization`,
         "name": "Big Bear Vans",
-        "image": `${baseUrl}/images/custom4.webp`,
+        "image": `${baseUrl}/images/blackLogo.webp`,
         "url": baseUrl,
         "telephone": "+1-951-441-9719",
         "priceRange": "$$$",

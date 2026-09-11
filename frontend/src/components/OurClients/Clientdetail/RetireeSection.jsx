@@ -47,9 +47,9 @@ const RetireeSection = ({ imageData }) => {
 
         <div className="bg-primary/80 rounded-lg p-8 lg:p-16 shadow-2xl overflow-hidden relative border border-hover/20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 relative z-10">
-            <div className="lg:col-span-7 order-2 lg:order-1">
-              <div className="rounded-lg overflow-hidden bbv-amber-line shadow-inner">
-                <ClassicImageGrid images={imageData.vermont} layout="vermont" />
+            <div className="lg:col-span-7">
+              <div className="lg:col-span-3">
+                <ClassicImageGrid images={imageData?.vermont} />
               </div>
               <div className="mt-8 bbv-glass-light backdrop-blur-md p-8 rounded-lg border-l-4 border-hover">
                 <RichParagraph className="text-secondary/80 italic mb-4">

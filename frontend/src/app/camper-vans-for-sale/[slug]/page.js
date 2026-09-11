@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const van = data.van;
   const title = `${van.van_listing?.title} | Big Bear Vans`;
   const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
-  const imageUrl = van.gallery?.[0] || "/default-og-image.webp"; // Pehli image OG image ke liye
+  const imageUrl = van.gallery?.[0] || "/images/blackLogo.webp"; // Pehli image OG image ke liye
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/camper-vans-for-sale/${slug}`;
 
   return {

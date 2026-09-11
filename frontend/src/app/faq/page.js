@@ -43,7 +43,7 @@ export const metadata = {
  questions - cost, financing, timelines, warranty, and legality
  of full-time van living.`,
     url: "https://www.bigbearvans.com/faq",
-    images: ["https://www.bigbearvans.com/images/w9.webp"],
+    images: ["https://www.bigbearvans.com/OurClients/about-hero-big-bear-vans.webp"],
   },
 };
 

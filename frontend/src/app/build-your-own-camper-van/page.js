@@ -22,7 +22,7 @@ and off-grid power needs, then get a custom quote.`,
     siteName: 'Big Bear Vans',
     images: [
       {
-        url: 'https://www.bigbearvans.com/images/w2.webp',
+        url: 'https://www.bigbearvans.com/images/blackLogo.webp',
         width: 1200,
         height: 630,
       },
@@ -38,7 +38,7 @@ and off-grid power needs, then get a custom quote.`,
 Transit camper van. Choose your layout, electrical system,
 and off-grid power needs, then get a custom quote.`,
     site: '@bigbearvans',
-    images: ['https://www.bigbearvans.com/images/w2.webp'],
+    images: ['https://www.bigbearvans.com/images/blackLogo.webp'],
   },
 }
 const schemaData = generateInquirySchema();

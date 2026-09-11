@@ -21,7 +21,7 @@ and 4x4 options with Big Bear Vans' complete buying guide.`,
       "name": "Big Bear Vans",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/blackLogo.webp"
+        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
       }
     },
     "mainEntityOfPage": {

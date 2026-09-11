@@ -30,7 +30,7 @@ const SHOWER_GROUPS = [
 // --- SUB-COMPONENT: IMAGE GRID ---
 const ProjectImages = ({ images, alt }) => {
   const hasMultiple = images?.length > 1;
-  const displayImages = images?.length > 0 ? images : ["/images/blockLogo.webp"];
+  const displayImages = images?.length > 0 ? images : ["/images/blackLogo.webp"];
 
   return (
     <div className="group relative w-full h-[300px] md:h-[460px] flex gap-2 p-2 overflow-hidden bg-primary/5 rounded-xl">

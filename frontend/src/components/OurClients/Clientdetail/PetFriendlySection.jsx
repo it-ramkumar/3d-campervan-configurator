@@ -3,6 +3,7 @@ import React from "react";
 import { PawPrint, Users, Home, Shield, Car } from "lucide-react";
 import { ImageWithSkeleton, Heading2, Heading3, RichParagraph, CustomLink, Heading4 } from "../../Common/Common";
 import { motion } from "framer-motion";
+import ClassicImageGrid from "./ClassicImageGrid";
 
 
 const PetFriendlySection = ({ imageData }) => {
@@ -94,22 +95,17 @@ const PetFriendlySection = ({ imageData }) => {
               </ul>
             </div>
 
-            <div className="lg:col-span-7 p-6 bg-primary/60">
-              <div className="grid grid-cols-2 grid-rows-2 gap-4 h-[400px] md:h-[500px]">
-                <div className="col-span-1 row-span-2">
-                  <ImageWithSkeleton src={imageData?.cusco[0]} alt={"Cusco Campervan"} className="w-full h-full object-cover rounded-lg border-2 border-hover bbv-amber-line" />
-                </div>
-                <div className="col-span-1">
-                  <ImageWithSkeleton src={imageData?.cusco[1]} alt={"Cusco Campervan Interior"} className="w-full h-full object-cover rounded-lg border border-hover/30" />
-                </div>
-                <div className="col-span-1">
-                  <ImageWithSkeleton src={imageData?.cusco[2]} alt={"Cusco Campervan Exterior"} className="w-full h-full object-cover rounded-lg border border-hover/30" />
-                </div>
+
+            <div className="lg:col-span-7 grid-rows-2 gap-4 ">
+              <div className="lg:col-span-3">
+                <ClassicImageGrid images={imageData?.cusco} />
               </div>
+
             </div>
           </div>
         </div>
       </div>
+
 
     </section>
   );

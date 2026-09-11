@@ -7,58 +7,69 @@ import {
   ImageWithSkeleton,
   PrimaryButton,
 } from "@/components/Common/Common";
-import Image from "next/image";
 
 // Assets
-const ownersImage = "/images/anna.webp";
-const ambulanceImage = "/images/ambulance.webp";
-const prototypeImage = "/images/liftbed.webp";
-const blueWhaleImage = "/images/bluewhale.webp";
-const grayWolfImage = "/images/greywolf.webp";
+const ownersImage = "/custom build/anna-arthur-big-bear-vans.webp";
+const ambulanceImage = "/about/ambulance-big-bear-vans.webp";
+const prototypeImage = "/Home/home-elevator-bed-big-bear.webp";
+const blueWhaleImage = "/about/blue-whale-campervan-big-bear-van.webp";
+const grayWolfImage = "/about/gray-wolf-campervans-big-bear-vans.webp";
 const ctaBgImage = "/images2/vfs.webp";
 
 export default function AboutPage() {
   return (
     <div className="font-body overflow-x-hidden">
       {/* SECTION 1: Narrative Intro */}
-      <section className="bbv-section-light relative overflow-hidden">
-        <div className="bbv-dot-grid-light" />
-        <div className="container mx-auto px-6 py-24 lg:py-40 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-            <div className="w-full lg:w-1/2 relative">
-              <div className="aspect-[4/5] relative">
-                <ImageWithSkeleton src={ownersImage} alt="Artur and Anna" />
-                <div className="bbv-amber-line" />
-              </div>
-            </div>
+  <section className="bbv-section-light relative overflow-hidden">
+  <div className="bbv-dot-grid-light" />
 
-            <div className="w-full lg:w-1/2 space-y-8">
-              <div>
-                <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
-                  The Founders
-                </p>
-                <Heading2
-                  text="Artur and Anna"
-                  className="font-display text-primary uppercase tracking-wide mt-2"
-                />
-                <div className="bbv-divider mb-6" />
-              </div>
+  <div className="container mx-auto px-6 py-24 lg:py-40 relative z-10">
+    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
-              <RichParagraph className="text-xl font-medium leading-relaxed text-primary/90">
-                Our journey wasn't born in a factory—it was born on the open road
-                across Europe and the USA.
-              </RichParagraph>
+      {/* Image - 50% */}
+      <div className="w-full lg:w-1/2">
+        <div className="relative w-full">
+          <ImageWithSkeleton
+            src={ownersImage}
+            alt="Artur and Anna"
+            className="w-full h-auto rounded-lg"
+          />
 
-              <RichParagraph className="text-primary/60 leading-relaxed">
-                Combining all the knowledge from our travels in trailers, buses,
-                and fifth-wheels, we were eager to create the perfect compact van
-                space for a family of 5. Every build we create is a result of that
-                evolution.
-              </RichParagraph>
-            </div>
-          </div>
+          <div className="bbv-amber-line" />
         </div>
-      </section>
+      </div>
+
+      {/* Content - 50% */}
+      <div className="w-full lg:w-1/2 space-y-8">
+        <div>
+          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+            The Founders
+          </p>
+
+          <Heading2
+            text="Artur and Anna"
+            className="font-display text-primary uppercase tracking-wide mt-2"
+          />
+
+          <div className="bbv-divider mb-6" />
+        </div>
+
+        <RichParagraph className="text-xl font-medium leading-relaxed text-primary/90">
+          Our journey wasn't born in a factory—it was born on the open road
+          across Europe and the USA.
+        </RichParagraph>
+
+        <RichParagraph className="text-primary/60 leading-relaxed">
+          Combining all the knowledge from our travels in trailers, buses,
+          and fifth-wheels, we were eager to create the perfect compact van
+          space for a family of 5. Every build we create is a result of that
+          evolution.
+        </RichParagraph>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* SECTION 2: Van Evolution */}
       <section className="bg-primary py-24 lg:py-40 relative overflow-hidden">
@@ -78,7 +89,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             {/* Wide Card 1 */}
             <div className="md:col-span-7 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="aspect-[8/5] overflow-hidden relative">
+              <div className=" overflow-hidden relative">
                 <ImageWithSkeleton
                   src={ambulanceImage}
                   alt={"ambulance custom build"}
@@ -102,7 +113,7 @@ export default function AboutPage() {
 
             {/* Small Card 2 */}
             <div className="md:col-span-5 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="aspect-[8/5] overflow-hidden relative">
+              <div className="overflow-hidden relative">
                 <ImageWithSkeleton
                   src={prototypeImage}
                   alt={"prototype custom build"}
@@ -122,8 +133,8 @@ export default function AboutPage() {
             </div>
 
             {/* Small Card 3 */}
-            <div className="md:col-span-5 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="aspect-[8/5] overflow-hidden">
+            <div className="md:col-span-6 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+              <div className=" overflow-hidden">
                 <ImageWithSkeleton
                   src={blueWhaleImage}
                   alt={"blue whale custom build"}
@@ -150,8 +161,8 @@ export default function AboutPage() {
             </div>
 
             {/* Wide Card 4 */}
-            <div className="md:col-span-7 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
-              <div className="aspect-[8/5] overflow-hidden">
+            <div className="md:col-span-6 bbv-glass-light rounded-lg overflow-hidden group hover:shadow-2xl transition-all duration-500">
+              <div className=" overflow-hidden">
                 <ImageWithSkeleton
                   src={grayWolfImage}
                   alt={"gray wolf custom build"}

@@ -47,7 +47,7 @@ const FamilySection = ({ imageData }) => {
         <div className="bbv-glass-light rounded-lg p-8 md:p-12 border border-hover/20 shadow-xl mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-center">
             <div className="lg:col-span-3">
-              <ClassicImageGrid images={imageData?.lakeTahoe} layout="standard" />
+              <ClassicImageGrid images={imageData?.lakeTahoe} layout="vermont" />
             </div>
             <div className="lg:col-span-2">
               <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Featured Build</p>
@@ -95,7 +95,7 @@ const FamilySection = ({ imageData }) => {
         <div className="bbv-glass-light rounded-lg p-8 md:p-12 border border-hover/20 shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-center">
             <div className="lg:col-span-3">
-              <ClassicImageGrid images={imageData?.blueWhale} layout="blueWhale" />
+              <ClassicImageGrid images={imageData?.blueWhale}  />
             </div>
 
             <div className="lg:col-span-2">

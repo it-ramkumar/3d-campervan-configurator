@@ -13,19 +13,24 @@ export default function ImageWithSkeleton({
   sizes,
   overlay = true,
   skeleton = true,
+  width,
+  height,
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const finalSrc = error ? "/images/blackLogo.webp" : src;
-  // console.log(src,"scr")
+
+  const imageSrc = finalSrc || src;
 
   return (
     <>
       {/* Main Image */}
       <div
-        className="relative w-full h-full overflow-hidden bg-gray-100"
+        className={`relative overflow-hidden bg-gray-100 ${
+          zoom ? "cursor-zoom-in" : ""
+        }`}
         onClick={() => zoom && setIsModalOpen(true)}
       >
         {/* Skeleton */}
@@ -33,24 +38,45 @@ export default function ImageWithSkeleton({
           <div className="absolute inset-0 animate-pulse bg-gray-200" />
         )}
 
-        <Image
-          src={finalSrc || src}
-          alt={alt}
-          fill
-          priority={priority}
-          loading={priority ? "eager" : "lazy"}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className={`
-            object-cover object-center
-            transition-opacity duration-500
-            ${loaded ? "opacity-100" : "opacity-0"}
-            ${zoom ? "cursor-zoom-in" : ""}
-            ${className}
-          `}
-          quality={60}
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
-        />
+        {width && height ? (
+          <Image
+            src={imageSrc}
+            alt={alt}
+            width={width}
+            height={height}
+            priority={priority}
+            loading={priority ? "eager" : "lazy"}
+            sizes={sizes}
+            className={`
+              w-full h-auto object-cover object-center
+              transition-opacity duration-500
+              ${loaded ? "opacity-100" : "opacity-0"}
+              ${className}
+            `}
+            quality={60}
+            onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
+          />
+        ) : (
+          <Image
+            src={imageSrc}
+            alt={alt}
+            width={1200}
+            height={800}
+            priority={priority}
+            loading={priority ? "eager" : "lazy"}
+            sizes={sizes || "100vw"}
+            className={`
+              w-full h-auto object-cover object-center
+              transition-opacity duration-500
+              ${loaded ? "opacity-100" : "opacity-0"}
+              ${className}
+            `}
+            quality={60}
+            onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
+          />
+        )}
 
         {/* Optional Overlay */}
         {overlay && (
@@ -66,7 +92,6 @@ export default function ImageWithSkeleton({
             className="fixed inset-0 z-[99999] bg-black/90 flex items-center justify-center"
             onClick={() => setIsModalOpen(false)}
           >
-            {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-5 right-6 text-white text-4xl z-10"
@@ -74,13 +99,12 @@ export default function ImageWithSkeleton({
               ✕
             </button>
 
-            {/* Fullscreen Image */}
             <div
               className="relative w-[95vw] h-[95vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={finalSrc || src}
+                src={imageSrc}
                 alt={alt}
                 fill
                 className="object-contain"

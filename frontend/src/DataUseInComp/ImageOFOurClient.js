@@ -1,33 +1,39 @@
 // Image Data
 export const imageData = {
   vermont: [
-    "/OurClients/v1.webp",
-    "/OurClients/v2.webp",
-    "/OurClients/v3.webp",
-    "/OurClients/v4.webp",
-    "/OurClients/v5.webp",
+    "/OurClients/retiree-friendly/vermont-retiree-friendly-campervan-big-bear-vans (1).webp",
+    "/OurClients/retiree-friendly/vermont-retiree-friendly-campervan-big-bear-vans (2).webp",
+    "/OurClients/retiree-friendly/vermont-retiree-friendly-campervan-big-bear-vans (3).webp",
+    "/OurClients/retiree-friendly/vermont-retiree-friendly-campervan-big-bear-vans (4).webp",
   ],
   blueWhale: [
-    "/OurClients/blue1.webp",
-    "/OurClients/blue2.webp",
-    "/OurClients/blue3.webp",
+    "/OurClients/family-campervan/blue-whale-family-campervan-big-bear-vans (1).webp",
+    "/OurClients/family-campervan/blue-whale-family-campervan-big-bear-vans (2).webp",
+    "/OurClients/family-campervan/blue-whale-family-campervan-big-bear-vans (3).webp",
+    "/OurClients/family-campervan/blue-whale-family-campervan-big-bear-vans (4).webp",
+
   ],
-  cusco: ["/OurClients/c1.webp", "/OurClients/c2.webp", "/OurClients/c3.webp"],
+  cusco: ["/OurClients/pet-friendly/cusco-pet-friendly-campervan-big-bear-vans (1).webp",
+    "/OurClients/pet-friendly/cusco-pet-friendly-campervan-big-bear-vans (2).webp",
+    "/OurClients/pet-friendly/cusco-pet-friendly-campervan-big-bear-vans (3).webp",
+  "/OurClients/pet-friendly/cusco-pet-friendly-campervan-big-bear-vans (4).webp",],
   lakeTahoe: [
-    "/OurClients/lt1.webp",
-    "/OurClients/lt2.webp",
-    "/OurClients/lt3.webp",
+    "/OurClients/family-campervan/lake-tahoe-family-campervan-big-bear-vans (19).webp",
+    "/OurClients/family-campervan/lake-tahoe-family-campervan-big-bear-vans (20).webp",
+    "/OurClients/family-campervan/lake-tahoe-family-campervan-big-bear-vans (21).webp",
+    "/OurClients/family-campervan/lake-tahoe-family-campervan-big-bear-vans (22).webp",
   ],
   motovan: [
-    "/OurClients/mv1.webp",
-    "/OurClients/mv2.webp",
-    "/OurClients/mv3.webp",
-    "/OurClients/mv4.webp",
+    "/OurClients/adventure-lover/moto-campervans-glen-helen-big-bear-vans (1).webp",
+    "/OurClients/adventure-lover/moto-campervans-glen-helen-big-bear-vans (2).webp",
+    "/OurClients/adventure-lover/moto-campervans-glen-helen-big-bear-vans (3).webp",
+    "/OurClients/adventure-lover/moto-campervans-glen-helen-big-bear-vans (4).webp",
   ],
 
   sanDiego: [
-    "/OurClients/sd1.webp",
-    "/OurClients/sd2.webp",
-    "/OurClients/sd3.webp",
+    "/OurClients/4-season/san-diego-camepervan-big-bear-vans (8).webp",
+    "/OurClients/4-season/san-diego-camepervan-big-bear-vans (9).webp",
+    "/OurClients/4-season/san-diego-camepervan-big-bear-vans (10).webp",
+    "/OurClients/4-season/san-diego-camepervan-big-bear-vans (11).webp",
   ],
 };

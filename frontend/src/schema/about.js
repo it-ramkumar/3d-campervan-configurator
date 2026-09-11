@@ -44,7 +44,7 @@ Transit camper van conversions.`,
           "@type": "Person",
           "name": "Anna",
           "jobTitle": "Co-Founder & Design Lead",
-          "image": "https://www.bigbearvans.com/images/anna.webp"
+          "image": "https://www.bigbearvans.com/custom build/anna-arthur-big-bear-vans.webp"
         }
       ],
       "knowsAbout": [

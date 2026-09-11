@@ -3,7 +3,7 @@ import Van_layout from "@/components/van_layout/Van_layout";
 import { getAllPortfolio } from "@/api/portfolio/getAllPortfolio";
 
 export async function generateMetadata() {
-  const res = await getAllPortfolio({ page: 1, limit: 1 });
+  // const res = await getAllPortfolio({ page: 1, limit: 1 });
 
   const title = `Custom Camper Van Layouts & Floor Plans | Big Bear Vans`;
   const description = `Browse 40+ custom camper van layouts by Big Bear Vans -
@@ -23,7 +23,7 @@ export async function generateMetadata() {
     openGraph: {
       title,
       description,
-      images: ["/images2/layout2.webp"],
+      images: ["https://www.bigbearvans.com/meta-data/van-layouts-big-bear-vans.webp"],
       type: "website"
     },
     alternates: {
@@ -36,62 +36,62 @@ export async function generateMetadata() {
 const dynamicHeroData = {
   "144": {
     title: "Compact 144\" Wheelbase Designs",
-    image: "/heroSlider/144.webp",
+    // image: "/heroSlider/144.webp",
     desc: "Perfect for city driving, weekend getaways, and agile travel."
   },
   "flagship-short-van-santa-monica": {
     title: "Santa Monica Flagship Layouts",
-    image: "/heroSlider/144.webp",
+    // image: "/heroSlider/144.webp",
     desc: "Premium engineering packed inside an agile 144\" footprint."
   },
   "148": {
     title: "Standard 148\" Wheelbase Plans",
-    image: "/heroSlider/148.webp",
+    // image: "/heroSlider/148.webp",
     desc: "Versatile medium-wheelbase templates optimized for storage balanced living layouts."
   },
   "148-ext": {
     title: "Extended 148\" Wheelbase Blueprints",
-    image: "/heroSlider/148-ext.webp",
+    // image: "/heroSlider/148-ext.webp",
     desc: "Maximizing length and space management on the versatile Transit frame."
   },
   "170": {
     title: "Extra Long 170\" Wheelbase Plans",
-    image: "/heroSlider/170.webp",
+    // image: "/heroSlider/170.webp",
     desc: "The ultimate platform for off-grid luxury and full-time van life."
   },
   "170-ext": {
     title: "170\" Extended Workspace Layouts",
-    image: "/heroSlider/170-ext.webp",
+    // image: "/heroSlider/170-ext.webp",
     desc: "Maximum structural volume designed for comprehensive cargo configurations."
   },
   "flagship-long-van-montreal": {
     title: "Montreal Flagship Layouts",
-    image: "/heroSlider/170.webp",
+    // image: "/heroSlider/170.webp",
     desc: "Expansive high-end setups built directly on long-wheelbase platforms."
   },
   "159": {
     title: "Wide-Body 159\" Wheelbase Layouts",
-    image: "/heroSlider/159.webp",
+    // image: "/heroSlider/159.webp",
     desc: "Clever lateral width layouts perfect for custom fixed bed orientations."
   },
   "layouts-for-families-3-9-people": {
     title: "Spacious Family Van Layouts",
-    image: "/heroSlider/144.webp",
+    // image: "/heroSlider/144.webp",
     desc: "Smart multi-belt seating and modular sleeping modules designed for the whole crew."
   },
   "layouts-for-solo-and-couple-travelers": {
     title: "Solo & Couple Layout Concepts",
-    image: "/heroSlider/adventure.webp",
+    //  image: "/heroSlider/adventure.webp",
     desc: "Streamlined ergonomics mapped out for workspace freedom and intimate living comfort."
   },
   "portfolio-of-custom-builds": {
     title: "Custom Build Portfolio Maps",
-    image: "/heroSlider/adventure.webp",
+    // image: "/heroSlider/adventure.webp",
     desc: "One-of-a-kind bespoke creations tailor-made to rugged engineering specifications."
   },
   "default": {
     title: "Explore Custom Van Portfolios",
-    image: "/images2/layout2.webp",
+    // image: "/images2/layout2.webp",
     desc: "Browse our portfolio of custom van conversions, organized by wheelbase and category."
   }
 };
@@ -164,7 +164,7 @@ const heroProductImage =
           ? item.gallery[0].startsWith("http")
             ? encodeURI(item.gallery[0])
             : `https://www.bigbearvans.com${item.gallery[0]}`
-          : "https://www.bigbearvans.com/images2/layout2.webp",
+          : "https://www.bigbearvans.com/meta-data/van-layouts-big-bear-vans.webp",
         "description": item.van_listing?.description || "Custom camper van floor plan",
         "brand": {
           "@type": "Brand",

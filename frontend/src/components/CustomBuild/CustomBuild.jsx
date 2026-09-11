@@ -91,7 +91,7 @@ const imgPath = "/custom build/";
 const whyFeatures = [
   {
     title: "Customize Interior Layouts",
-    img: `${imgPath}buildProcess.webp`,
+    img: `${imgPath}customize-interior-layout-big-ear-vans.webp`,
     alt: "Interior Layout",
     desc: "You decide the floor plan; our engineers and renderers bring it to life in a photorealistic 3D render before a single tool is lifted.",
     bullets: [
@@ -102,19 +102,19 @@ const whyFeatures = [
   },
   {
     title: "Premium, Client-Selected Materials",
-    img: `${imgPath}IMG_9845.webp`,
+    img: `${imgPath}premium-material-big-bear-vans.webp`,
     alt: "Premium Materials",
     desc: "Sustainable hardwoods, custom cabinetry, self-heating Lithium batteries, advanced Glycol heating, and high-performance insulation — every component is built to last.",
   },
   {
     title: "CNC Precision Technology",
-    img: "/images2/cnc1.webp",
+    img: "/Home/home-cnc-machine-big-bear-vans.webp",
     alt: "CNC Technology",
     desc: "CAD/CAM software, 3D Scanners, and CNC routers ensure every cabinet is designed digitally and cut to the millimeter. Precision is not optional — it is standard.",
   },
   {
     title: "Post-Build Support",
-    img: "/images2/wcu4.webp",
+    img: "/Home/home-garrage-big-bear-vans.webp",
     alt: "Post-Build Support",
     desc: "1-Year Standard Warranty (3-Year Extended) on craftsmanship, plus remote assistance, future maintenance, and upgrades at our California workshop.",
     cta: true,
@@ -131,7 +131,7 @@ const CustomBuild = () => {
         slogan="You Dream It. We Build It."
         title="Custom Campervan Builders"
         description="At Big Bear Vans, we build custom campervans from the chassis up. You choose the layout, features, and finishes — we handle the design, build, and quality checks."
-        image="/images/s2.webp"
+        image="/Home/home-custom-build-big-bear-vans.webp"
         link="/build-your-own-camper-van"
         showButton={false}
         overlay
@@ -139,7 +139,7 @@ const CustomBuild = () => {
       />
 
       {/* ═══════════════ INTRO ═══════════════ */}
-      <section className="relative py-28 overflow-hidden" style={BG_LIGHT}>
+      <section className="relative py-20 overflow-hidden" style={BG_LIGHT}>
         <div className="absolute inset-0 pointer-events-none" style={DOT_GRID_LIGHT} />
 
         <div className="relative mx-auto px-6 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
@@ -161,10 +161,10 @@ const CustomBuild = () => {
           </div>
 
           <div
-            className="relative rounded-xl overflow-hidden aspect-[8/5] shadow-xl"
+            className="relative rounded-xl overflow-hidden aspect-square shadow-xl"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src="/images2/159.webp" alt="Big Bear Vans workshop" />
+            <ImageWithSkeleton src="/custom build/custom-build-big-bear-vans.webp" alt="Big Bear Vans workshop" />
             <div
               className="absolute inset-0 pointer-events-none"
               style={{ background: "linear-gradient(to top, rgba(237,152,95,0.08) 0%, transparent 55%)" }}
@@ -221,7 +221,7 @@ const CustomBuild = () => {
           </div>
 
           <div className="text-center mt-14">
-            <PrimaryButton link="/contact" label="Start a Custom Build" />
+            <SecondaryButton link="/contact" label="Start a Custom Build" />
           </div>
         </div>
       </section>
@@ -251,7 +251,7 @@ const CustomBuild = () => {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             {whyFeatures.slice(0, 2).map((feature, i) => (
               <div key={i} className="rounded-xl overflow-hidden" style={CARD}>
-                <div className="relative overflow-hidden aspect-[16/9]">
+                <div className="relative overflow-hidden aspect-square">
                   <ImageWithSkeleton src={feature.img} alt={feature.alt} />
                   <div
                     className="absolute inset-0"
@@ -283,7 +283,7 @@ const CustomBuild = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {whyFeatures.slice(2).map((feature, i) => (
               <div key={i} className="rounded-xl overflow-hidden" style={CARD}>
-                <div className="relative overflow-hidden aspect-[16/7]">
+                <div className="relative overflow-hidden aspect-square">
                   <ImageWithSkeleton src={feature.img} alt={feature.alt} />
                   <div
                     className="absolute inset-0"
@@ -337,10 +337,10 @@ const CustomBuild = () => {
           </div>
 
           <div
-            className="relative rounded-xl overflow-hidden aspect-[8/5]"
+            className="relative rounded-xl overflow-hidden aspect-square"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src={`${imgPath}configurator.webp`} alt="3D Configurator preview" />
+            <ImageWithSkeleton src={`${imgPath}3d-configurator-big-bear-vans.webp`} alt="3D Configurator preview" />
             <AmberLine />
           </div>
         </div>
@@ -366,10 +366,10 @@ const CustomBuild = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div
-              className="relative rounded-xl overflow-hidden aspect-[8/5] group"
+              className="relative rounded-xl overflow-hidden aspect-square group"
               style={{ border: "1px solid rgba(0,31,61,0.1)" }}
             >
-              <ImageWithSkeleton src="/images2/op4.webp" alt="Portfolio build" />
+              <ImageWithSkeleton src={`${imgPath}105-custom-build-big-bear-vans.webp`} alt="Portfolio build" />
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{ background: "linear-gradient(to top, rgba(0,31,61,0.35) 0%, transparent 60%)" }}
@@ -406,7 +406,7 @@ const CustomBuild = () => {
               pet-owners, bikers, full-time van lifers. Whatever layout you have in mind, we'll turn
               your idea into a spectacular reality.
             </RichParagraph>
-            <PrimaryButton link="/our-clients" label="See Client Stories" />
+            <SecondaryButton link="/our-clients" label="See Client Stories" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -425,45 +425,102 @@ const CustomBuild = () => {
         </div>
       </section>
 
-      {/* ═══════════════ SHOWROOM ═══════════════ */}
-      <section className="py-28 relative overflow-hidden" style={BG_LIGHT_ALT}>
-        <div className="absolute inset-0 pointer-events-none" style={DOT_GRID_LIGHT} />
+   {/* ═══════════════ SHOWROOM ═══════════════ */}
+<section className="relative py-24 md:py-32 bg-secodary overflow-hidden">
+  {/* Subtle background detail */}
+  <div
+    className="absolute inset-0 pointer-events-none opacity-[0.04]"
+    style={DOT_GRID_LIGHT}
+  />
 
-        <div className="relative mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-12">
-            <SpanTag text="Visit Us" />
-            <Heading2 textColor="text-primary" className="mt-4">
-              Our <span className="text-hover">Showroom</span>
-            </Heading2>
-          </div>
+  <div className="relative mx-auto max-w-7xl px-6">
 
-          <div
-            className="relative rounded-xl overflow-hidden aspect-[9/3] mb-12"
-            style={AMBER_BORDER}
-          >
-            <ImageWithSkeleton src={`${imgPath}40279.webp`} alt="Big Bear Vans Showroom" />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(to top, rgba(0,31,61,0.25) 0%, transparent 55%)" }}
-            />
-            <AmberLine />
-          </div>
+    {/* Header */}
+    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+      <div>
+        <SpanTag text="Visit Us" />
 
-          <div className="grid md:grid-cols-2 gap-12">
-            <RichParagraph textColor="text-primary" className="!opacity-60 leading-relaxed">
-              Visit our showroom in Big Bear City, California. See our building process, meet our team,
-              and explore ongoing and completed projects firsthand.
-            </RichParagraph>
-            <div className="space-y-6">
-              <RichParagraph textColor="text-primary" className="!opacity-60">
-                Walk through finished vans, try different layouts, and sit down for a personal design
-                session with our designers to turn your vision into a detailed plan.
-              </RichParagraph>
-              <SecondaryButton link="/showroom" label="Schedule a Visit" />
-            </div>
-          </div>
+        <Heading2 textColor="text-primary" className="mt-4">
+          Our <span className="text-hover">Showroom</span>
+        </Heading2>
+      </div>
+
+      <p className="max-w-md text-primary text-sm md:text-base leading-relaxed md:text-right">
+        See where your van comes to life, meet our team, and explore our
+        latest builds in person.
+      </p>
+    </div>
+
+    {/* Showroom Image */}
+    <div
+      className="relative rounded-2xl overflow-hidden"
+      style={AMBER_BORDER}
+    >
+      <ImageWithSkeleton
+        src={`${imgPath}showroom-ctr-big-bear-vans.webp`}
+        alt="Big Bear Vans Showroom"
+        className="w-full h-auto"
+      />
+
+      {/* Image gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(0,31,61,0.8) 0%, rgba(0,31,61,0.15) 45%, transparent 75%)",
+        }}
+      />
+
+      {/* Image label */}
+      <div className="absolute left-6 bottom-6 md:left-10 md:bottom-8">
+        <span className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs tracking-[0.2em] uppercase">
+          Big Bear City, California
+        </span>
+      </div>
+
+      <AmberLine />
+    </div>
+
+    {/* Content */}
+    <div className="grid md:grid-cols-2 gap-10 md:gap-20 mt-12 items-start">
+
+      <div>
+        <div className="text-5xl md:text-7xl font-light text-hover leading-none mb-4">
+          01
         </div>
-      </section>
+
+        <RichParagraph
+          textColor="text-primary"
+          className="!opacity-70 leading-relaxed max-w-xl"
+        >
+          Visit our showroom in Big Bear City, California. See our building
+          process, meet our team, and explore ongoing and completed projects
+          firsthand.
+        </RichParagraph>
+      </div>
+
+      <div className="md:pt-12">
+        <RichParagraph
+          textColor="text-primary"
+          className="!opacity-70 leading-relaxed max-w-xl"
+        >
+          Walk through finished vans, try different layouts, and sit down for
+          a personal design session with our designers to turn your vision
+          into a detailed plan.
+        </RichParagraph>
+
+        <div className="mt-8">
+          <SecondaryButton
+            link="/showroom"
+            label="Schedule a Visit"
+            className="!hover:bg-hover"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       {/* ═══════════════ MEET THE FOUNDERS (navy — keep) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
@@ -472,7 +529,7 @@ const CustomBuild = () => {
             className="relative rounded-xl overflow-hidden aspect-square"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src="/images/anna.webp" alt="Artur and Anna — Big Bear Vans founders" />
+            <ImageWithSkeleton src={`${imgPath}anna-arthur-big-bear-vans.webp`} alt="Artur and Anna — Big Bear Vans founders" />
             <AmberLine />
           </div>
 

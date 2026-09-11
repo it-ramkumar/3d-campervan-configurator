@@ -23,7 +23,7 @@ Get pre-qualified with Big Bear Vans today.`,
     `Flexible financing for your custom Sprinter or Transit build.
 15-year RV loans via Trident Funding, 20-30% down.
 Get pre-qualified with Big Bear Vans today.`,
-    images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
+    images: ["https://www.bigbearvans.com/Home/home-google-meet-big-bear-vans.webp"],
   },
   openGraph: {
     type: "website",
@@ -33,7 +33,7 @@ Get pre-qualified with Big Bear Vans today.`,
     `Flexible financing for your custom Sprinter or Transit build.
 15-year RV loans via Trident Funding, 20-30% down.
 Get pre-qualified with Big Bear Vans today.`,
-    images: ["https://www.bigbearvans.com/heroSlider/limage2.webp"],
+    images: ["https://www.bigbearvans.com/Home/home-google-meet-big-bear-vans.webp"],
   },
 };
 

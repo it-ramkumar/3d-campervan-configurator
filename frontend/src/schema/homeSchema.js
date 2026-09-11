@@ -18,7 +18,7 @@ export const generateHomeSchema = (faqData) => {
         "@id": "https://www.bigbearvans.com/#organization",
         "name": "Big Bear Vans",
         "url": "https://www.bigbearvans.com",
-        "logo": "https://www.bigbearvans.com/images/blackLogo.webp",
+        "logo": "https://www.bigbearvans.com/meta-data/home-meta-image.webp",
         "description": "Premium custom camper van conversions featuring 3D design and automated CNC manufacturing.",
         "sameAs": [
           "https://www.instagram.com/bigbearvans",
@@ -33,7 +33,7 @@ export const generateHomeSchema = (faqData) => {
         "@id": "https://www.bigbearvans.com/#localbusiness",
         "parentOrganization": { "@id": "https://www.bigbearvans.com/#organization" },
         "name": "Big Bear Vans",
-        "image": "https://www.bigbearvans.com/images/custom4.webp",
+        "image": "https://www.bigbearvans.com/meta-data/home-meta-image.webp",
         "priceRange": "$$$",
         "telephone": "+1-951-441-9719",
         "address": {

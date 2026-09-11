@@ -23,14 +23,14 @@ export const metadata = {
     title: "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout",
     description:
       "Take our free 2-minute quiz and get matched with in-stock camper vans or custom layout blueprints tailored to your build.",
-    images: ["https://www.bigbearvans.com/images/custom4.webp"],
+    images: ["https://www.bigbearvans.com/images/blackLogo.webp"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout",
     description:
       "Take our free 2-minute quiz and get matched with in-stock camper vans or custom layout blueprints tailored to your build.",
-    images: ["https://www.bigbearvans.com/images/custom4.webp"],
+    images: ["https://www.bigbearvans.com/images/blackLogo.webp"],
   },
 };
 

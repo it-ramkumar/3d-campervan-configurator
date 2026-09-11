@@ -82,7 +82,7 @@ const jsonLd = {
           "@type": "Organization",
           "name": "Big Bear Vans",
           "sameAs": "https://www.bigbearvans.com",
-          "logo": "https://www.bigbearvans.com/logo.webp"
+          "logo": "https://www.bigbearvans.com/images/blackLogo.webp"
         },
 
         "url": "https://www.bigbearvans.com/careers"

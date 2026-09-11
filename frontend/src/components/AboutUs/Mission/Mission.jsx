@@ -52,33 +52,37 @@ export default function Mission() {
             <div className="bbv-divider mb-6" />
           </div>
 
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            {/* Image Container */}
-            <div className="w-full lg:w-1/2 relative group">
-              <div className="absolute -bottom-4 -right-4 w-full h-full border border-hover/20 rounded-lg -z-10 group-hover:-bottom-2 group-hover:-right-2 transition-all duration-500"></div>
-              <div className="aspect-[4/5] relative rounded-lg overflow-hidden">
-                <ImageWithSkeleton
-                  src="/images/mission.webp"
-                  alt="Cozy interior of a custom campervan"
-                  className="rounded-lg w-full h-auto object-cover"
-                />
-                <div className="bbv-amber-line" />
-              </div>
-            </div>
+         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+  {/* Image - 50% */}
+  <div className="w-full lg:w-1/2">
+    <ImageWithSkeleton
+      src="/about/mission-of-big-bear-vans.webp"
+      alt="Cozy interior of a custom campervan"
+      className="w-full h-auto rounded-lg"
+    />
+  </div>
 
-            {/* Text Content */}
-            <div className="w-full lg:w-1/2 space-y-6">
-              <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
-                At Big Bear Vans, our mission is to help more people hit the road sooner in their dream rigs.
-              </RichParagraph>
-              <RichParagraph className="text-primary/60 leading-relaxed">
-                We focus on creating custom campervans that maximize space, especially for families needing to sit and sleep 4-5 people comfortably. Our camper builds feature innovative solutions like elevator beds, compact aluminum bathrooms, and custom kitchens to ensure optimal use of space and comfort.
-              </RichParagraph>
-              <RichParagraph className="text-primary/60 leading-relaxed">
-                Additionally, our vans feature beautiful interior designs with personalized finishes, making each campervan unique and tailored to our clients' tastes.
-              </RichParagraph>
-            </div>
-          </div>
+  {/* Content - 50% */}
+  <div className="w-full lg:w-1/2 space-y-6">
+    <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
+      At Big Bear Vans, our mission is to help more people hit the road sooner
+      in their dream rigs.
+    </RichParagraph>
+
+    <RichParagraph className="text-primary/60 leading-relaxed">
+      We focus on creating custom campervans that maximize space, especially
+      for families needing to sit and sleep 4-5 people comfortably. Our camper
+      builds feature innovative solutions like elevator beds, compact aluminum
+      bathrooms, and custom kitchens to ensure optimal use of space and comfort.
+    </RichParagraph>
+
+    <RichParagraph className="text-primary/60 leading-relaxed">
+      Additionally, our vans feature beautiful interior designs with
+      personalized finishes, making each campervan unique and tailored to our
+      clients' tastes.
+    </RichParagraph>
+  </div>
+</div>
         </div>
       </section>
 

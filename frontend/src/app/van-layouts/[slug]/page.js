@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
   const van = data?.data;
   const title = `${van.van_listing?.title} | Big Bear Vans`;
   const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
-  const imageUrl = van.gallery?.[0] || "/default-og-image.webp";
+  const imageUrl = van.gallery?.[0] || "/images/blackLogo.webp";
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}`;
 
   return {

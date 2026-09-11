@@ -23,7 +23,7 @@ Transit camper van conversions.`,
     `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
 Transit camper van conversions.`,
-    images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
+    images: ["https://www.bigbearvans.com/about/about-big-bear-vans.webp"],
   },
   twitter: {
     card: "summary_large_image",
@@ -32,13 +32,13 @@ Transit camper van conversions.`,
     `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
 Transit camper van conversions.`,
-    images: ["https://www.bigbearvans.com/heroSlider/aboutus.webp"],
+    images: ["https://www.bigbearvans.com/about/about-big-bear-vans.webp"],
   },
 };
 
 export default function AboutUs() {
-  const heroImage = "/heroSlider/aboutus.webp";
-  const mobileHeroImage = "/heroSlider/aboutus_mobile.webp";
+  const heroImage = "/about/about-big-bear-vans.webp";
+  const mobileHeroImage = "/about/about-big-bear-vans.webp";
   const newTitleText = "About Big Bear Vans - Our Story & Team";
   const newSloganText = "You Dream It. We Build It.";
   const newDescriptionText =

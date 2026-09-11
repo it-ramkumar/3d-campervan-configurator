@@ -10,8 +10,8 @@ const PAGE_CONFIG = {
     desc: `Explore Big Bear Vans' exterior upgrade options - roof racks,
 awnings, storage boxes, window and door choices - for your
  custom Sprinter or Transit build.`,
-    heroImage: "/heroSlider/exteriorhero.webp",
-    mobileHeroImage: "/heroSlider/exteriorhero_mobile.webp",
+    heroImage: "/options/imperial campervan big bear vans (2).webp",
+    mobileHeroImage: "/options/imperial campervan big bear vans (2).webp",
   },
   "interior-options": {
     api: "interior",
@@ -19,8 +19,8 @@ awnings, storage boxes, window and door choices - for your
     desc: `Explore premium camper van interior options - wall paneling,
  flooring, cabinetry, and bathroom layouts - for your custom
 Big Bear Vans conversion.`,
-    heroImage: "/heroSlider/interiorHero.webp",
-    mobileHeroImage: "/heroSlider/interiorHero_mobile.webp",
+    heroImage: "/options/montreal-pop-top-campervan-big-bear-vans (25).webp",
+    mobileHeroImage: "/options/montreal-pop-top-campervan-big-bear-vans (25).webp",
   },
   "system-options": {
     api: "system",
@@ -28,8 +28,8 @@ Big Bear Vans conversion.`,
     desc: `Explore off-grid electrical and water systems for your
 custom camper van - lithium batteries, solar,
 inverters, and fresh/grey water tanks explained..`,
-    heroImage: "/heroSlider/system.webp",
-    mobileHeroImage: "/heroSlider/system_mobile.webp",
+    heroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
+    mobileHeroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
   },
 };
 
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
   const canonical = `https://www.bigbearvans.com/van-options/${options}`;
 
   // ✅ Har option ke liye specific image ya default image path
-  const ogImage = current.heroImage || "/images/default-van.webp";
+  const ogImage = current.heroImage || "/images/blackLogo.webp";
 
   return {
     // 1. metadataBase lazmi hai (Iske bina WhatsApp/FB image pick nahi karte)

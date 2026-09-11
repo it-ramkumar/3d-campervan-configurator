@@ -28,7 +28,7 @@ export const metadata = {
     siteName: "Big Bear Vans",
     images: [
       {
-        url: "https://www.bigbearvans.com/images/custom4.webp",
+        url: "https://www.bigbearvans.com/meta-data/home-meta-image.webp",
         width: 1200,
         height: 630,
       },
