@@ -39,7 +39,7 @@ export const diyProducts = [
     image: "/diycomponent/fan.webp",
     storeName: "VanPartsOutlet",
     link: "https://vanpartsoutlet.com/products/cryonex-x700-roof-top-ac-unit-12v",
-    Price: "$1,679.00"
+    Price: "$2,860.00"
   },
    {
     id: 5,
@@ -56,7 +56,7 @@ export const diyProducts = [
     name: `Glacier View 170 Sprinter Passenger Side Solid Window`,
     category: "windows",
     description: `Optimize your visibility and driving confidence with the Glacier View Passenger Door Solid Window. Specifically engineered for Mercedes-Benz Sprinter conversions (2007–Present), this fixed glass panel replaces metal door panels with premium, high-clarity safety glass. Designed to match the precise contours of the Sprinter passenger sliding door, it ensures a sophisticated, factory-quality finish.`,
-    image: "/diycomponent/window1.webp",
+    image: "/diycomponent/window-170.webp",
     storeName: "VanPartsOutlet",
     link: "https://vanpartsoutlet.com/products/glacier-view-sprinter-passenger-side-solid-window",
     Price: "$279.99"
@@ -66,7 +66,7 @@ export const diyProducts = [
     name: `Glacier View Sprinter Flush Sliding Window – Passenger Sliding Door`,
     category: "windows",
     description: `Achieve a professional, factory-quality finish with the Glacier View Sprinter Flush Sliding Window. Specifically engineered for the passenger sliding door of Mercedes-Benz Sprinter vans (2007–Present), this premium window combines a sophisticated, flush-fit exterior with a high performance sliding vent to maximize refreshing cross ventilation in your cabin.`,
-    image: "/diycomponent/window2.webp",
+    image: "/diycomponent/flush-window.webp",
     storeName: "VanPartsOutlet",
     link: "https://vanpartsoutlet.com/products/glacier-view-sprinter-flush-sliding-window-passenger-sliding-door",
     Price: "$639.99 "

@@ -692,12 +692,12 @@ export default function All_Titles_Client({ initialData = null }) {
                         className="relative bg-white border border-primary/8 hover:border-[#ED985F]/30 rounded-xl transition-all duration-300 flex flex-col h-full overflow-hidden hover:shadow-xl hover:-translate-y-1"
                       >
                         {/* Image */}
-                        <div className="relative h-52 w-full overflow-hidden bg-primary/5">
+                        <div className="relative  w-full overflow-hidden bg-primary/5">
                           {hasRenderings ? (
                             <ImageWithSkeleton
                               src={displayImage}
                               alt={item.van_listing?.title || "Floor plan"}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full  transition-transform duration-500 group-hover:scale-105"
                             />
                           ) : (
                             <div className="flex flex-col items-center justify-center h-full">

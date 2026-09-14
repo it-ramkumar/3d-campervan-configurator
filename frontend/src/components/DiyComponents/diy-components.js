@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
-import Image from 'next/image';
+import { ImageWithSkeleton } from "../Common/Common";
 import { diyProducts } from '../../DataUseInComp/DiyProducts';
 
 export default function DIYComponentsPage() {
@@ -93,8 +93,8 @@ export default function DIYComponentsPage() {
                     className="bbv-card rounded-[8px] overflow-hidden flex flex-col group hover:border-hover/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                   >
                     {/* Image */}
-                    <div className="relative flex justify-center h-56 w-full overflow-hidden bg-primary/5">
-                      <Image
+                    <div className="relative flex justify-center aspect-square  w-full overflow-hidden bg-primary/5">
+                      <ImageWithSkeleton
                         src={p.image}
                         alt={p.name}
                         width={250}
