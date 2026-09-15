@@ -12,8 +12,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function ConfigurePage({ params }) {
+export default async function ConfigurePage({ params, searchParams }) {
   const { slug } = await params;
+  const { variant } = await searchParams;
 
   // 1. Van Detail Fetching
   const vanDetail = await fetch(
@@ -28,13 +29,13 @@ export default async function ConfigurePage({ params }) {
     `${process.env.NEXT_PUBLIC_URL}/variants?vanSlug=${slug}`,
     { cache: "no-store" }
   ).then(res => res.json()).catch(() => null);
-
   return (
     <div className="w-full h-screen bg-secondary">
       <VanCanvas
         url={vanDetail.van?.glbFile}
         variants={variantsData?.variants || []}
         vanTitle={vanDetail.van?.van_listing?.title}
+        initialVariantId={variant}
       />
     </div>
   );

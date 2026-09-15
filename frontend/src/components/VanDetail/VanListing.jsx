@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Settings2,
   Zap,
@@ -26,6 +27,212 @@ import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
 import FeatureGridBlock from "./BlockFeatureCard";
 
+function GalleryModelLoader({ progress, className = "" }) {
+  const percentage = Number.isFinite(progress) ? Math.min(100, Math.max(0, Math.round(progress))) : null;
+  const downloading = percentage !== null && percentage > 0 && percentage < 100;
+
+  return (
+    <div className={`flex items-center justify-center ${className}`}>
+      <div role="status" aria-live="polite" className="w-64 rounded-2xl border border-white/15 bg-[#020C18]/90 px-7 py-6 text-center text-white shadow-2xl backdrop-blur-md">
+        <div aria-hidden="true" className="relative mx-auto mb-5 flex h-20 w-20 items-center justify-center">
+          <div className="absolute inset-0 rounded-full border border-[#ED985F]/20" />
+          <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[#ED985F] border-r-[#ED985F]/50 motion-reduce:animate-none" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" className="h-9 w-9 animate-pulse text-[#ED985F] motion-reduce:animate-none">
+            <path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z" />
+            <path d="m3 7 9 5 9-5M12 12v10M7.5 4.5l9 5" />
+          </svg>
+        </div>
+        <p className="text-sm font-semibold tracking-wide">Preparing your van</p>
+        <p className="mt-1 text-xs text-white/60">{downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}</p>
+        <div role="progressbar" aria-label="3D assets loading" aria-valuemin={0} aria-valuemax={100} aria-valuenow={downloading ? percentage : undefined} className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+          <div className={`h-full rounded-full bg-[#ED985F] transition-[width] duration-300 ${downloading ? "" : "animate-pulse motion-reduce:animate-none"}`} style={{ width: downloading ? `${percentage}%` : "40%" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Load the 3D dependencies only when the model tab is opened.
+const GalleryModel = dynamic(async () => {
+  const [{ Canvas }, { OrbitControls, Html, Environment, useProgress }, { default: Model }, { default: PartModel }] = await Promise.all([
+    import("@react-three/fiber"),
+    import("@react-three/drei"),
+    import("./Models/Model"),
+    import("./Models/Parts"),
+  ]);
+
+  function ModelLoadingProgress() {
+    const { progress } = useProgress();
+    return <Html center><GalleryModelLoader progress={progress} /></Html>;
+  }
+
+  return function GalleryModelScene({ url, parts }) {
+    return (
+      <Canvas gl={{ alpha: true }} style={{ background: "transparent" }} camera={{ position: [15, 15, 15], fov: 50 }} fallback={<p className="p-6 text-white">Your browser does not support the 3D viewer.</p>}>
+        <Suspense fallback={<ModelLoadingProgress />}>
+          <OrbitControls makeDefault enableDamping minDistance={5} maxDistance={50} />
+          <Model url={url} />
+          {parts.filter(part => part?.model).map((part, index) => (
+            <PartModel key={part._id || `${part.model}-${index}`} url={part.model} position={[0, -2, 0]} rotation={[0, 0, 0]} />
+          ))}
+          <Environment preset="city" />
+        </Suspense>
+      </Canvas>
+    );
+  };
+}, { ssr: false, loading: () => <GalleryModelLoader className="absolute inset-0" /> });
+
+class GalleryModelBoundary extends React.Component {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    if (this.state.failed) {
+      return <p role="alert" className="p-6 text-white">The 3D model could not be loaded. Please switch tabs and try again.</p>;
+    }
+    return this.props.children;
+  }
+}
+
+const getGalleryVideo = (link) => {
+  if (typeof link !== "string" || !link.trim()) return null;
+  try {
+    const url = new URL(link.trim());
+    if (!["https:", "http:"].includes(url.protocol)) return null;
+    const host = url.hostname.replace(/^www\./, "");
+    if (/\.(mp4|webm|ogg|mov|m4v)$/i.test(url.pathname)) return { url: url.href, native: true };
+    if (["youtube.com", "m.youtube.com", "youtu.be", "youtube-nocookie.com"].includes(host)) {
+      const id = host === "youtu.be" ? url.pathname.split("/")[1] : url.searchParams.get("v") || url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1];
+      return id && /^[\w-]+$/.test(id) ? { url: `https://www.youtube.com/embed/${id}`, portrait: url.pathname.startsWith("/shorts/") } : null;
+    }
+    if (host === "vimeo.com" || host === "player.vimeo.com") {
+      const match = url.pathname.match(/\/(?:video\/)?(\d+)(?:\/([\w]+))?/);
+      if (!match) return null;
+      const embed = new URL(`https://player.vimeo.com/video/${match[1]}`);
+      const hash = url.searchParams.get("h") || match[2];
+      if (hash) embed.searchParams.set("h", hash);
+      return { url: embed.href };
+    }
+    if (host === "instagram.com" && /^\/(p|reel)\/[^/]+/.test(url.pathname)) {
+      return { url: `https://www.instagram.com/${url.pathname.split("/").filter(Boolean).slice(0, 2).join("/")}/embed/`, portrait: true, instagram: true };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+function GalleryVideoPlayer({ video, title }) {
+  const containerRef = useRef(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setSize({ width: entry.contentRect.width, height: entry.contentRect.height });
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // Keep Instagram's full embed viewport, but clip its footer outside the
+  // visible area. This crop matches the header + reel preview in our gallery.
+  const frameWidth = video.instagram ? 400 : video.portrait ? 360 : 960;
+  const frameHeight = video.instagram ? 800 : video.portrait ? 640 : 540;
+  const visibleHeight = video.instagram ? 556 : frameHeight;
+  const scale = Math.min(size.width / frameWidth, size.height / visibleHeight);
+  const playerUrl = new URL(video.url);
+  // Only the selected gallery video is mounted. Removing it on a tab or
+  // video change stops playback; Instagram has no supported autoplay option.
+  if (!video.native && !video.instagram) {
+    playerUrl.searchParams.set("autoplay", "1");
+    playerUrl.searchParams.set("playsinline", "1");
+    playerUrl.searchParams.set(playerUrl.hostname === "player.vimeo.com" ? "muted" : "mute", "1");
+  }
+
+  return (
+    <div ref={containerRef} className="relative flex aspect-square max-h-[600px] w-full items-center justify-center overflow-hidden rounded-xl bg-black">
+      {video.native ? (
+        <video key={video.url} src={video.url} controls autoPlay muted playsInline preload="metadata" aria-label={title} className="absolute inset-0 h-full w-full object-contain" />
+      ) : (
+        <div className="relative shrink-0 overflow-hidden" style={{ width: frameWidth * scale, height: visibleHeight * scale }}>
+          <iframe key={video.url} src={playerUrl.href} title={title} allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowFullScreen
+            className="absolute left-0 top-0 max-w-none origin-top-left border-0"
+            style={{ width: frameWidth, height: frameHeight, transform: `scale(${scale})`, visibility: scale > 0 ? "visible" : "hidden" }} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function VanMediaGallery({ gallery = [], media = [], modelUrl, variants = [], title }) {
+  const [selectedMode, setSelectedMode] = useState("gallery");
+  const [videoIndex, setVideoIndex] = useState(0);
+  const [variantId, setVariantId] = useState("");
+  const videos = [...new Map(media.map(getGalleryVideo).filter(Boolean).map(video => [video.url, video])).values()];
+  const modes = [
+    ...(gallery.length ? [{ id: "gallery", label: "Gallery" }] : []),
+    ...(videos.length ? [{ id: "video", label: "Videos" }] : []),
+    ...(modelUrl ? [{ id: "model", label: "3D Model" }] : []),
+  ];
+  const mode = modes.find(item => item.id === selectedMode)?.id || modes[0]?.id;
+  const video = videos[videoIndex] || videos[0];
+  const variant = variants.find(item => item._id === variantId) || variants[0];
+
+  return (
+    <div>
+      {modes.length > 1 && (
+        <div role="group" aria-label="Van media" className="mb-4 flex flex-wrap gap-2">
+          {modes.map(item => (
+            <button key={item.id} type="button" aria-pressed={mode === item.id} onClick={() => setSelectedMode(item.id)}
+              className={`rounded-full border px-5 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hover ${mode === item.id ? "border-hover bg-hover text-primary" : "border-primary/20 text-primary hover:bg-hover/10"}`}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+      {(!mode || mode === "gallery") && <VanGallery gallery={gallery} title={title} />}
+      {mode === "video" && video && (
+        <div>
+          <GalleryVideoPlayer video={video} title={`${title || "Van"} video ${videoIndex + 1}`} />
+          {videos.length > 1 && (
+            <div role="group" aria-label="Choose video" className="mt-3 flex flex-wrap gap-2">
+              {videos.map((item, index) => (
+                <button key={item.url} type="button" onClick={() => setVideoIndex(index)} aria-pressed={item.url === video.url}
+                  className={`rounded-lg border px-4 py-2 text-sm ${item.url === video.url ? "border-hover bg-hover/15" : "border-primary/20"}`}>
+                  Video {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {mode === "model" && (
+        <div>
+          {variants.length > 0 && (
+            <label className="mb-3 flex flex-wrap items-center gap-3 text-sm font-semibold">
+              Variant
+              <select value={variant?._id || ""} onChange={event => setVariantId(event.target.value)} className="min-w-0 max-w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-primary">
+                {variants.map((item, index) => <option key={item._id} value={item._id}>{item.name || `Variant ${index + 1}`}</option>)}
+              </select>
+            </label>
+          )}
+          <div className="relative isolate h-[360px] overflow-hidden rounded-xl bg-[#020C18] sm:h-[480px]">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-center bg-no-repeat opacity-20" style={{ backgroundImage: 'url("/images/logooFooter.webp")', backgroundSize: "80% auto" }} />
+            <GalleryModelBoundary key={`${modelUrl}-${variant?._id || "base"}`}>
+              <GalleryModel url={modelUrl} parts={variant?.parts || []} />
+            </GalleryModelBoundary>
+          </div>
+          <p className="mt-3 text-sm text-primary/60">Drag to rotate. Scroll or pinch to zoom.</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 
@@ -45,7 +252,7 @@ const HeroSpecItem = ({ label, value }) => (
   </div>
 );
 
-const VanPage = ({ vanDetail }) => {
+const VanPage = ({ vanDetail,variants }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
   const [loading, setLoading] = useState(false);
@@ -144,7 +351,14 @@ const VanPage = ({ vanDetail }) => {
 
             {/* LEFT: GALLERY */}
             <div className="lg:col-span-7">
-              <VanGallery gallery={gallery} title={vanDetail?.van_listing?.title} />
+              <VanMediaGallery
+                key={vanDetail?.slug || vanDetail?._id}
+                gallery={gallery}
+                media={vanDetail?.media || []}
+                modelUrl={vanDetail?.glbFile}
+                variants={variants || []}
+                title={vanDetail?.van_listing?.title}
+              />
             </div>
 
             {/* RIGHT: INFO PANEL */}
@@ -158,9 +372,7 @@ const VanPage = ({ vanDetail }) => {
                 </div>
               )}
 
-              {/* Title (desktop only — mobile shows it above the gallery instead).
-                  Rendered as a div, not a second <h1>: the mobile heading above
-                  is the page's one real <h1>, this is just its desktop-viewport twin. */}
+             
               <div>
                 <Heading1 as="div" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary !text-6xl mb-2 leading-[0.9]" />
                 {vanDetail?.van_listing?.subtitle && (
@@ -219,6 +431,7 @@ const VanPage = ({ vanDetail }) => {
                   </a>
                 </div>
               )}
+
 
               {/* Specs grid */}
               <div className="grid grid-cols-2 gap-x-8">

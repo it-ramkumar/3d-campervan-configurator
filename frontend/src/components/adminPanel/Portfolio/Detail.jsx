@@ -1,12 +1,20 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { ImageWithSkeleton } from '@/components/Common/Common';
+
 export default function Detail({ setIsopen, detail }) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [gallery, setGallery] = useState(detail.gallery || []);
     const [isMounted, setIsMounted] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
-console.log('Detail component rendered with detail:', detail);
+
+    // gallery/rendering are string[]; normalise legacy { url } objects from old data
+    const normalizeImages = (arr) =>
+        (arr || []).map((item) => (typeof item === "string" ? item : item?.url)).filter(Boolean);
+
+    const gallery = normalizeImages(detail.gallery);
+    const rendering = normalizeImages(detail.rendering);
+    const blocks = [...(detail.blocks || [])].filter((b) => b.is_active !== false).sort((a, b) => a.order - b.order);
+
     // Trigger slide-in animation on mount
     useEffect(() => {
         setIsMounted(true);
@@ -19,8 +27,7 @@ console.log('Detail component rendered with detail:', detail);
 
     const formatDate = (dateString) => {
         if (!dateString) return "N/A";
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        return new Date(dateString).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
     };
 
     // Navigation Logic
@@ -85,375 +92,403 @@ console.log('Detail component rendered with detail:', detail);
     }
 
     const videoIds = (detail?.media || []).map(getYouTubeVideoId).filter(Boolean);
-    const blocks = [...(detail.blocks || [])].filter((b) => b.is_active !== false).sort((a, b) => a.order - b.order);
-    const rendering = detail.rendering || [];
+    const isPublished = Boolean(detail.is_published);
+    const isSold = Boolean(detail.sold);
+
+    const formattedPrice = detail.formatted_price
+        || (Number(detail.van_listing?.price) > 0 ? `$${Number(detail.van_listing.price).toLocaleString()}` : null);
 
     return (
-        <div
-            className="fixed inset-0 z-[100] flex justify-end overflow-hidden"
-            role="dialog"
-            aria-modal="true"
-        >
+        <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden" role="dialog" aria-modal="true">
             {/* Backdrop */}
             <div
-                className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${isMounted ? 'opacity-100' : 'opacity-0'}`}
                 onClick={closeDrawer}
             />
 
             {/* Slide-over Panel */}
-            <div
-                className={`relative w-full max-w-2xl md:max-w-3xl lg:max-w-4xl bg-[#f8fafc] h-full shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMounted ? 'translate-x-0' : 'translate-x-full'}`}
-            >
-                {/* Header/Close Button */}
-                <div className="absolute top-4 right-4 z-50">
+            <div className={`relative w-full max-w-2xl md:max-w-3xl lg:max-w-4xl bg-[#f8fafc] h-full shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMounted ? 'translate-x-0' : 'translate-x-full'}`}>
+
+                {/* Fixed Header */}
+                <div className="sticky top-0 z-30 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <h2 className="text-xl font-bold text-slate-800 truncate max-w-md">
+                            {detail.van_listing?.title || "Untitled Project"}
+                        </h2>
+                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                            Slug: {detail.slug} • {isPublished ? "Published" : "Draft"}{isSold && " • Sold"}
+                        </p>
+                    </div>
                     <button
                         onClick={closeDrawer}
-                        className="bg-white/90 hover:bg-red-500 hover:text-white text-gray-900 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 group"
+                        className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600"
                     >
-                        <span className="text-2xl font-bold group-hover:rotate-90 transition-transform">&times;</span>
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
 
-                {/* Content Container */}
-                <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
 
-                    {/* Image Gallery Header */}
-                    {gallery.length > 0 && (
-                        <div className="relative w-full h-[300px] md:h-[450px] bg-gray-900 group">
-                            <ImageWithSkeleton
-                                src={gallery[currentImageIndex]}
-                                alt={detail.van_listing?.title}
-                                className="w-full h-full object-contain"
-                            />
-
-                            {/* Download Button */}
-                            <button
-                                onClick={(e) => downloadImage(e)}
-                                disabled={isDownloading}
-                                title="Download image"
-                                aria-label="Download image"
-                                className="absolute top-4 left-4 bg-black/40 hover:bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm transition-all disabled:opacity-50 disabled:cursor-wait"
-                            >
-                                {isDownloading ? (
-                                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                                    </svg>
-                                ) : (
-                                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
-                                    </svg>
-                                )}
-                            </button>
-
-                            {/* Navigation Controls */}
-                            {gallery.length > 1 && (
-                                <>
-                                    <button
-                                        onClick={prevImage}
-                                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
-                                        aria-label="Previous Image"
-                                    >
-                                        <span className="text-2xl">❮</span>
-                                    </button>
-                                    <button
-                                        onClick={nextImage}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
-                                        aria-label="Next Image"
-                                    >
-                                        <span className="text-2xl">❯</span>
-                                    </button>
-                                </>
-                            )}
-
-                            {/* Sold Status */}
-                            {detail.sold && (
-                                <div className="absolute top-6 left-6 bg-red-600 text-white px-4 py-1.5 rounded-md font-bold text-sm shadow-xl">
-                                    SOLD OUT
+                    {/* Hero Gallery */}
+                    <div className="space-y-4">
+                        <div className="relative aspect-square bg-slate-900 rounded-xl overflow-hidden border border-slate-200 shadow-sm group">
+                            {gallery.length > 0 ? (
+                                <ImageWithSkeleton
+                                    src={gallery[currentImageIndex]}
+                                    alt={detail.van_listing?.title}
+                                    className="w-full h-full object-contain"
+                                    overlay={false}
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-500 text-sm font-medium">
+                                    No gallery images
                                 </div>
                             )}
 
-                            {/* Image Counter Indicator */}
+                            {/* Status pills */}
+                            <div className="absolute top-4 left-4 z-10 flex gap-2">
+                                <span className={`${isPublished ? "bg-emerald-600" : "bg-slate-500"} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase`}>
+                                    {isPublished ? "Published" : "Draft"}
+                                </span>
+                                {isSold && (
+                                    <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase">
+                                        Sold
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Download current image */}
+                            {gallery.length > 0 && (
+                                <button
+                                    onClick={(e) => downloadImage(e)}
+                                    disabled={isDownloading}
+                                    title="Download image"
+                                    aria-label="Download image"
+                                    className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 shadow-md hover:bg-white text-slate-800 transition-all disabled:opacity-50 disabled:cursor-wait"
+                                >
+                                    {isDownloading ? (
+                                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                        </svg>
+                                    )}
+                                </button>
+                            )}
+
+                            {/* Prev/Next */}
                             {gallery.length > 1 && (
-                                <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-                                    <div className="bg-black/50 backdrop-blur-md px-4 py-1 rounded-full text-white text-xs font-medium border border-white/20">
+                                <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none">
+                                    <button onClick={prevImage} className="p-2 rounded-full bg-white/90 shadow-md pointer-events-auto hover:bg-white text-slate-800" aria-label="Previous Image">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                                    </button>
+                                    <button onClick={nextImage} className="p-2 rounded-full bg-white/90 shadow-md pointer-events-auto hover:bg-white text-slate-800" aria-label="Next Image">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Counter */}
+                            {gallery.length > 1 && (
+                                <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+                                    <div className="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-medium border border-white/20">
                                         {currentImageIndex + 1} / {gallery.length}
                                     </div>
                                 </div>
                             )}
                         </div>
-                    )}
 
-                    {/* Content Body */}
-                    <div className="p-6 md:p-10">
-                        {/* Title & Price */}
-                        <div className="mb-8">
-                            <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-2">
-                                {detail.van_listing?.title}
-                            </h1>
-                            <p className="text-xl text-gray-500 mb-4">{detail.van_listing?.subtitle}</p>
-                            <div className="flex items-center gap-4">
-                                <span className="text-3xl font-bold text-green-600">
-                                    {detail.formatted_price || detail.van_listing?.price}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Summary Info Grid */}
-                        <div className="grid grid-cols-2 gap-4 mb-8 text-sm">
-                            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                                <span className="text-gray-500 block text-xs uppercase tracking-wider mb-1">Slug</span>
-                                <span className="font-bold text-gray-800 break-all">{detail.slug}</span>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                                <span className="text-gray-500 block text-xs uppercase tracking-wider mb-1">Status</span>
-                                <span className="font-bold text-gray-800">
-                                    {detail.is_published ? "Published" : "Draft"}{detail.sold ? " · Sold" : ""}
-                                </span>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                                <span className="text-gray-500 block text-xs uppercase tracking-wider mb-1">Categories</span>
-                                <div className="flex flex-wrap gap-1.5 mt-1">
-                                    {detail.category?.length > 0
-                                        ? detail.category.map((cat, i) => (
-                                            <span key={i} className="text-[11px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md">{cat}</span>
-                                        ))
-                                        : <span className="font-bold text-gray-800">Uncategorized</span>}
-                                </div>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                                <span className="text-gray-500 block text-xs uppercase tracking-wider mb-1">Created / Updated</span>
-                                <span className="font-bold text-gray-800">{formatDate(detail.createdAt)}</span>
-                                <span className="text-gray-400"> / </span>
-                                <span className="font-bold text-gray-800">{formatDate(detail.updatedAt)}</span>
-                            </div>
-                        </div>
-
-                        {/* Description */}
-                        {detail.van_listing?.description && (
-                            <div className="mb-10">
-                                <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    <span className="w-1.5 h-6 bg-blue-600 rounded-full" /> Description
-                                </h3>
-                                <div className="text-gray-600 leading-relaxed bg-blue-50/30 p-5 rounded-2xl border border-blue-100 italic">
-                                    "{detail.van_listing.description}"
-                                </div>
+                        {/* Thumbnail strip */}
+                        {gallery.length > 1 && (
+                            <div className="flex gap-2 overflow-x-auto pb-1">
+                                {gallery.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => setCurrentImageIndex(idx)}
+                                        className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                                            idx === currentImageIndex ? "border-blue-500" : "border-transparent opacity-60 hover:opacity-100"
+                                        }`}
+                                    >
+                                        <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-cover" />
+                                    </button>
+                                ))}
                             </div>
                         )}
+                    </div>
 
-                        {/* Specs Grid */}
-                        {(detail.van_listing?.specifications || detail.van_listing?.bathroomType || detail.van_listing?.bedType || detail.van_listing?.size || detail.van_listing?.roof) && (
-                            <div className="mb-10">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                    <span className="w-1.5 h-6 bg-green-600 rounded-full" /> Specifications
-                                </h3>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <CompactSpec icon="🚐" label="Model" value={detail.van_listing.specifications?.make_model} />
-                                    <CompactSpec icon="📏" label="Wheelbase" value={detail.van_listing.specifications?.wheelbase ? `${detail.van_listing.specifications.wheelbase}"` : null} />
-                                    <CompactSpec icon="⚡" label="Drivetrain" value={detail.van_listing.specifications?.drivetrain} />
-                                    <CompactSpec icon="💺" label="Sits" value={detail.van_listing.specifications?.capacity?.sits} />
-                                    <CompactSpec icon="🛏️" label="Sleeps" value={detail.van_listing.specifications?.capacity?.sleeps} />
-                                    <CompactSpec icon="🏠" label="Roof" value={detail.van_listing.roof} />
-                                    <CompactSpec icon="🚿" label="Bathroom" value={detail.van_listing.bathroomType} />
-                                    <CompactSpec icon="🛌" label="Bed Type" value={detail.van_listing.bedType} />
-                                    <CompactSpec icon="📐" label="Size" value={detail.van_listing.size} />
-                                </div>
-                            </div>
-                        )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="md:col-span-2 space-y-8">
 
-                        {/* Renderings */}
-                        {rendering.length > 0 && (
-                            <div className="mb-10">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                    <span className="w-1.5 h-6 bg-cyan-600 rounded-full" /> Renderings
-                                </h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {rendering.map((url, i) => (
-                                        <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-100 group/render">
-                                            <ImageWithSkeleton src={url} alt={`Rendering ${i + 1}`} className="w-full h-full object-cover" />
-                                            <button
-                                                onClick={(e) => downloadImage(e, url, i)}
-                                                title="Download rendering"
-                                                aria-label="Download rendering"
-                                                className="absolute top-2 right-2 bg-black/50 hover:bg-black/80 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover/render:opacity-100"
-                                            >
-                                                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                            {/* Description */}
+                            {detail.van_listing?.description && (
+                                <section>
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Description</h3>
+                                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                                        {detail.van_listing?.subtitle && (
+                                            <p className="text-slate-500 text-sm italic">{detail.van_listing.subtitle}</p>
+                                        )}
+                                        <p className="text-slate-700 leading-relaxed italic">&ldquo;{detail.van_listing.description}&rdquo;</p>
+                                    </div>
+                                </section>
+                            )}
 
-                        {/* Dynamic Blocks */}
-                        {blocks.length > 0 && (
-                            <div className="mb-10 space-y-6">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                    <span className="w-1.5 h-6 bg-slate-700 rounded-full" /> Full Details
-                                </h3>
-                                {blocks.map((block, idx) => (
-                                    <div key={block._id || idx}>
-                                        {block.block_type === "heading" && (
-                                            <div>
-                                                <h2 className="text-2xl font-bold text-gray-900">{block.title}</h2>
-                                                {block.subtitle && <p className="text-gray-500 mt-1">{block.subtitle}</p>}
+                            {/* Renderings / Floor Plans */}
+                            {rendering.length > 0 && (
+                                <section>
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">Renderings</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        {rendering.map((url, i) => (
+                                            <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100 group/render">
+                                                <ImageWithSkeleton src={url} alt={`Rendering ${i + 1}`} className="w-full h-full object-cover" overlay={false} />
+                                                <button
+                                                    onClick={(e) => downloadImage(e, url, i)}
+                                                    title="Download rendering"
+                                                    aria-label="Download rendering"
+                                                    className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 shadow-md hover:bg-white text-slate-800 transition-all opacity-0 group-hover/render:opacity-100"
+                                                >
+                                                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                                    </svg>
+                                                </button>
                                             </div>
-                                        )}
-                                        {block.block_type === "subheading" && (
-                                            <h3 className="text-lg font-semibold text-gray-700">{block.title}</h3>
-                                        )}
-                                        {block.block_type === "paragraph" && (
-                                            <p className="text-gray-600 leading-relaxed">{block.content}</p>
-                                        )}
-                                        {block.block_type === "list" && (
-                                            <div>
-                                                {block.title && <h4 className="font-bold text-gray-800 mb-2">{block.title}</h4>}
-                                                <ul className="list-disc list-inside space-y-1 text-gray-600">
-                                                    {(block.list_items || []).map((item, i) => (
-                                                        <li key={i}>
-                                                            {item?.text}
-                                                            {item?.sub_items?.length > 0 && (
-                                                                <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-                                                                    {item.sub_items.map((sub, si) => <li key={si}>{sub}</li>)}
-                                                                </ul>
-                                                            )}
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Dynamic Blocks */}
+                            {blocks.length > 0 && (
+                                <section className="space-y-6">
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Full Details</h3>
+                                    <div className="space-y-6">
+                                        {blocks.map((block, idx) => (
+                                            <div key={block._id || idx}>
+
+                                                {block.block_type === "heading" && (
+                                                    <div className="mt-4">
+                                                        <h2 className="text-2xl font-bold text-slate-800">{block.title}</h2>
+                                                        {block.subtitle && <p className="text-slate-500 mt-1">{block.subtitle}</p>}
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "subheading" && (
+                                                    <h3 className="text-lg font-semibold text-slate-700 mt-2">{block.title}</h3>
+                                                )}
+
+                                                {block.block_type === "paragraph" && (
+                                                    <p className="text-slate-600 leading-relaxed">{block.content}</p>
+                                                )}
+
+                                                {block.block_type === "list" && (
+                                                    <div>
+                                                        {block.title && <h4 className="font-bold text-slate-800 mb-2">{block.title}</h4>}
+                                                        <ul className="list-disc list-inside space-y-1 text-slate-600">
+                                                            {(block.list_items || []).map((item, i) => (
+                                                                <li key={i}>
+                                                                    {item?.text}
+                                                                    {item?.sub_items?.length > 0 && (
+                                                                        <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                                                                            {item.sub_items.map((sub, si) => <li key={si}>{sub}</li>)}
+                                                                        </ul>
+                                                                    )}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "table" && block.table_data && (
+                                                    <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+                                                        {block.title && <div className="bg-slate-50 p-3 border-b font-bold text-slate-700">{block.title}</div>}
+                                                        <div className="overflow-x-auto">
+                                                            <table className="w-full text-left text-sm">
+                                                                <thead className="bg-slate-100 text-slate-600 font-bold">
+                                                                    <tr>{block.table_data.headers.map((h, i) => <th key={i} className="px-4 py-2 border-b">{h}</th>)}</tr>
+                                                                </thead>
+                                                                <tbody className="divide-y divide-slate-100 bg-white">
+                                                                    {block.table_data.rows.map((row, ri) => (
+                                                                        <tr key={ri} className="hover:bg-slate-50">
+                                                                            {row.map((cell, ci) => <td key={ci} className="px-4 py-2 text-slate-600">{cell}</td>)}
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "media" && (block.block_media || []).length > 0 && (
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        {block.block_media.map((m, mi) => (
+                                                            <div key={mi} className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                                                                {m.type === "image" && <img src={m.url} alt={m.alt || ""} className="w-full h-48 object-cover" />}
+                                                                {m.type === "video" && <video src={m.url} controls poster={m.thumbnail} className="w-full h-48 object-cover" />}
+                                                                {m.type === "iframe" && <iframe src={m.url} title={m.alt || "embed"} className="w-full h-48 border-0" allowFullScreen />}
+                                                                {m.type === "pdf" && (
+                                                                    <a href={m.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-4 text-blue-600 font-medium hover:underline">
+                                                                        <span>📄</span> {m.alt || "View PDF"}
+                                                                    </a>
+                                                                )}
+                                                                {m.caption && <p className="text-xs text-slate-500 p-2 bg-slate-50">{m.caption}</p>}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "feature-grid" && (
+                                                    <div>
+                                                        {block.title && <h3 className="text-lg font-bold text-slate-800 mb-1">{block.title}</h3>}
+                                                        {block.subtitle && <p className="text-sm text-slate-500 mb-3">{block.subtitle}</p>}
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                            {(block.items || []).map((item, ii) => (
+                                                                <div key={ii} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                                                                    {item.icon && <span className="text-2xl shrink-0">{item.icon}</span>}
+                                                                    <div>
+                                                                        {item.title && <p className="font-semibold text-slate-800 text-sm">{item.title}</p>}
+                                                                        {item.description && <p className="text-xs text-slate-500 mt-0.5">{item.description}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "stats" && (
+                                                    <div>
+                                                        {block.title && <h3 className="text-lg font-bold text-slate-800 mb-1">{block.title}</h3>}
+                                                        {block.subtitle && <p className="text-sm text-slate-500 mb-3">{block.subtitle}</p>}
+                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                                            {(block.items || []).map((item, ii) => (
+                                                                <div key={ii} className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm text-center">
+                                                                    <p className="text-2xl font-black text-slate-900">{item.value}</p>
+                                                                    <p className="text-xs font-semibold text-slate-600 mt-1">{item.title}</p>
+                                                                    {item.description && <p className="text-xs text-slate-400 mt-0.5">{item.description}</p>}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {block.block_type === "quote" && (
+                                                    <blockquote className="border-l-4 border-slate-300 pl-4 py-1">
+                                                        <p className="text-slate-600 italic leading-relaxed">&ldquo;{block.content}&rdquo;</p>
+                                                        {block.title && <footer className="text-xs text-slate-400 mt-2 font-semibold">— {block.title}</footer>}
+                                                    </blockquote>
+                                                )}
+
+                                                {block.block_type === "cta" && (
+                                                    <div className="p-6 bg-slate-800 text-white rounded-xl text-center space-y-3">
+                                                        {block.title && <h3 className="text-xl font-bold">{block.title}</h3>}
+                                                        {block.subtitle && <p className="text-slate-300 text-sm">{block.subtitle}</p>}
+                                                        {block.content && <p className="text-slate-400 text-sm">{block.content}</p>}
+                                                        {block.button?.label && (
+                                                            <a
+                                                                href={block.button.url || "#"}
+                                                                target={block.button.target === "blank" ? "_blank" : "_self"}
+                                                                rel="noreferrer"
+                                                                className="inline-block mt-2 px-6 py-2 bg-white text-slate-800 font-bold rounded-lg hover:bg-slate-100 transition-colors"
+                                                            >
+                                                                {block.button.label}
+                                                            </a>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Detailed Features */}
+                            {detail.detailed_features?.filter(f => f.items?.length > 0).length > 0 && (
+                                <section>
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Features Overview</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {detail.detailed_features.filter(f => f.items?.length > 0).map((feat, idx) => (
+                                            <div key={idx} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                                <h4 className="font-bold text-slate-800 text-sm mb-2">{feat.category}</h4>
+                                                <ul className="space-y-1">
+                                                    {feat.items.map((item, i) => (
+                                                        <li key={i} className="text-sm text-slate-600 flex items-center gap-2">
+                                                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full shrink-0" /> {item}
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </div>
-                                        )}
-                                        {block.block_type === "table" && block.table_data && (
-                                            <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-                                                {block.title && <div className="bg-gray-50 p-3 border-b font-bold text-gray-700">{block.title}</div>}
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-left text-sm">
-                                                        <thead className="bg-gray-100 text-gray-600 font-bold">
-                                                            <tr>{block.table_data.headers.map((h, i) => <th key={i} className="px-4 py-2 border-b">{h}</th>)}</tr>
-                                                        </thead>
-                                                        <tbody className="divide-y divide-gray-100 bg-white">
-                                                            {block.table_data.rows.map((row, ri) => (
-                                                                <tr key={ri} className="hover:bg-gray-50">
-                                                                    {row.map((cell, ci) => <td key={ci} className="px-4 py-2 text-gray-600">{cell}</td>)}
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {block.block_type === "media" && (block.block_media || []).length > 0 && (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                {block.block_media.map((m, mi) => (
-                                                    <div key={mi} className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                                                        {m.type === "image" && <img src={m.url} alt={m.alt || ""} className="w-full h-48 object-cover" />}
-                                                        {m.type === "video" && <video src={m.url} controls poster={m.thumbnail} className="w-full h-48 object-cover" />}
-                                                        {m.type === "iframe" && <iframe src={m.url} title={m.alt || "embed"} className="w-full h-48 border-0" allowFullScreen />}
-                                                        {m.type === "pdf" && (
-                                                            <a href={m.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 p-4 text-blue-600 font-medium hover:underline">
-                                                                <span>📄</span> {m.alt || "View PDF"}
-                                                            </a>
-                                                        )}
-                                                        {m.caption && <p className="text-xs text-gray-500 p-2 bg-gray-50">{m.caption}</p>}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                        {block.block_type === "feature-grid" && (
-                                            <div>
-                                                {block.title && <h3 className="text-lg font-bold text-gray-800 mb-1">{block.title}</h3>}
-                                                {block.subtitle && <p className="text-sm text-gray-500 mb-3">{block.subtitle}</p>}
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    {(block.items || []).map((item, ii) => (
-                                                        <div key={ii} className="flex items-start gap-3 p-3 bg-white rounded-xl border border-gray-200 shadow-sm">
-                                                            {item.icon && <span className="text-2xl shrink-0">{item.icon}</span>}
-                                                            <div>
-                                                                {item.title && <p className="font-semibold text-gray-800 text-sm">{item.title}</p>}
-                                                                {item.description && <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {block.block_type === "stats" && (
-                                            <div>
-                                                {block.title && <h3 className="text-lg font-bold text-gray-800 mb-1">{block.title}</h3>}
-                                                {block.subtitle && <p className="text-sm text-gray-500 mb-3">{block.subtitle}</p>}
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                                    {(block.items || []).map((item, ii) => (
-                                                        <div key={ii} className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm text-center">
-                                                            <p className="text-2xl font-black text-gray-900">{item.value}</p>
-                                                            <p className="text-xs font-semibold text-gray-600 mt-1">{item.title}</p>
-                                                            {item.description && <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {block.block_type === "quote" && (
-                                            <blockquote className="border-l-4 border-gray-300 pl-4 py-1">
-                                                <p className="text-gray-600 italic leading-relaxed">&ldquo;{block.content}&rdquo;</p>
-                                                {block.title && <footer className="text-xs text-gray-400 mt-2 font-semibold">— {block.title}</footer>}
-                                            </blockquote>
-                                        )}
-                                        {block.block_type === "cta" && (
-                                            <div className="p-6 bg-gray-800 text-white rounded-xl text-center space-y-3">
-                                                {block.title && <h3 className="text-xl font-bold">{block.title}</h3>}
-                                                {block.subtitle && <p className="text-gray-300 text-sm">{block.subtitle}</p>}
-                                                {block.content && <p className="text-gray-400 text-sm">{block.content}</p>}
-                                                {block.button?.label && (
-                                                    <a
-                                                        href={block.button.url || "#"}
-                                                        target={block.button.target === "blank" ? "_blank" : "_self"}
-                                                        rel="noreferrer"
-                                                        className="inline-block mt-2 px-6 py-2 bg-white text-gray-800 font-bold rounded-lg hover:bg-gray-100 transition-colors"
-                                                    >
-                                                        {block.button.label}
-                                                    </a>
-                                                )}
-                                            </div>
-                                        )}
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                </section>
+                            )}
 
-                        {/* Detailed Features */}
-                        {detail.detailed_features?.map((feature, i) => (
-                            <div key={i} className="mb-8">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                    <span className="w-1.5 h-6 bg-purple-600 rounded-full" /> {feature.category}
-                                </h3>
-                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4">
-                                    {feature.items?.map((item, idx) => (
-                                        <li key={idx} className="flex items-center text-sm text-gray-700 bg-white p-2 rounded-lg border border-gray-100 shadow-sm">
-                                            <span className="text-purple-500 mr-2 font-bold bg-purple-50 w-6 h-6 flex items-center justify-center rounded-full">✓</span> {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-
-                        {/* Video tour(s) */}
-                        {videoIds.length > 0 && (
-                            <div className="mt-12 space-y-6">
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">
-                                    Video Walkthrough{videoIds.length > 1 ? "s" : ""}
-                                </h3>
-                                {videoIds.map((id, i) => (
-                                    <div key={id + i} className="rounded-2xl overflow-hidden shadow-2xl aspect-video bg-black border-4 border-white">
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${id}`}
-                                            className="w-full h-full"
-                                            allowFullScreen
-                                            title={`Tour ${i + 1}`}
-                                        />
+                            {/* Video Walkthrough */}
+                            {videoIds.length > 0 && (
+                                <section>
+                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
+                                        Video Walkthrough{videoIds.length > 1 ? "s" : ""}
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {videoIds.map((id, i) => (
+                                            <div key={id + i} className="rounded-xl overflow-hidden border border-slate-200 shadow-sm aspect-video bg-black">
+                                                <iframe
+                                                    src={`https://www.youtube.com/embed/${id}`}
+                                                    className="w-full h-full"
+                                                    allowFullScreen
+                                                    title={`Tour ${i + 1}`}
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                </section>
+                            )}
+                        </div>
+
+                        {/* Sidebar */}
+                        <div className="space-y-4">
+                            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4 md:sticky md:top-20">
+                                <div className="border-b border-slate-100 pb-3">
+                                    <p className="text-xs text-slate-500 font-medium">Listing Price</p>
+                                    <p className="text-2xl font-black text-slate-900">{formattedPrice || "N/A"}</p>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <SpecItem label="Make/Model" value={detail.van_listing?.specifications?.make_model} />
+                                    <SpecItem label="Wheelbase" value={detail.van_listing?.specifications?.wheelbase} />
+                                    <SpecItem label="Drivetrain" value={detail.van_listing?.specifications?.drivetrain} />
+                                    <SpecItem label="Roof" value={detail.van_listing?.roof} />
+                                    <SpecItem label="Bathroom" value={detail.van_listing?.bathroomType} />
+                                    <SpecItem label="Bed Type" value={detail.van_listing?.bedType} />
+                                    <SpecItem label="Size" value={detail.van_listing?.size} />
+                                    <SpecItem label="Capacity" value={`${detail.van_listing?.specifications?.capacity?.sits ?? "?"} Sits / ${detail.van_listing?.specifications?.capacity?.sleeps ?? "?"} Sleeps`} />
+                                </div>
+
+                                <div className="border-t border-slate-100 pt-3 space-y-3">
+                                    <SpecItem label="Client Name" value={detail.van_listing?.clientName} />
+                                    <SpecItem label="Status" value={isPublished ? "Published" : "Draft"} />
+                                    <SpecItem label="Sold" value={isSold ? "Yes" : "No"} />
+                                    <SpecItem label="Created" value={formatDate(detail.createdAt)} />
+                                    <SpecItem label="Updated" value={formatDate(detail.updatedAt)} />
+                                </div>
+
+                                <div className="border-t border-slate-100 pt-3">
+                                    <p className="text-sm text-slate-500 mb-1.5">Categories</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {detail.category?.length > 0
+                                            ? detail.category.map((cat, i) => (
+                                                <span key={i} className="text-[11px] font-semibold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md">{cat}</span>
+                                            ))
+                                            : <span className="text-sm font-semibold text-slate-800">Uncategorized</span>}
+                                    </div>
+                                </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,16 +496,9 @@ console.log('Detail component rendered with detail:', detail);
     );
 }
 
-// Compact UI Helper
-function CompactSpec({ icon, label, value }) {
-    if (!value || value === "null" || value === "") return null;
-    return (
-        <div className="flex items-center p-3 bg-white border border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all cursor-default group">
-            <span className="text-2xl mr-3 group-hover:scale-110 transition-transform">{icon}</span>
-            <div>
-                <p className="text-[10px] uppercase text-gray-400 font-bold leading-none mb-1">{label}</p>
-                <p className="text-sm font-bold text-gray-800 leading-tight">{value}</p>
-            </div>
-        </div>
-    );
-}
+const SpecItem = ({ label, value }) => (
+    <div className="flex justify-between items-center text-sm">
+        <span className="text-slate-500">{label}</span>
+        <span className="font-semibold text-slate-800 text-right ml-2">{value || 'N/A'}</span>
+    </div>
+);

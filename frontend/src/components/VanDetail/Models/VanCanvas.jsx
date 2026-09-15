@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 
 const STUDIO_BG = "radial-gradient(ellipse 80% 65% at 50% 58%, #0D2647 0%, #071423 55%, #020C18 100%)"
 
-export default function VanCanvas({ url, variants }) {
+export default function VanCanvas({ url, variants, initialVariantId }) {
   const [activeVariant, setActiveVariant] = useState(null)
   const [activeParts, setActiveParts] = useState([])
   const [interiorMode, setInteriorMode] = useState(false)
@@ -23,12 +23,13 @@ export default function VanCanvas({ url, variants }) {
 
   useEffect(() => {
     if (variants && variants.length > 0 && !hasInitialized.current) {
-      const defaultVariant = variants[0]
+      const defaultVariant =
+        variants.find((v) => v._id === initialVariantId) || variants[0]
       setActiveVariant(defaultVariant)
       setActiveParts(defaultVariant.parts || [])
       hasInitialized.current = true
     }
-  }, [variants])
+  }, [variants, initialVariantId])
 
   useEffect(() => {
     setIsMainModelLoaded(false)

@@ -18,7 +18,7 @@ import {
   Users,
 
 } from "lucide-react";
-import VanGallery from "../VanDetail/GallerySection";
+import { VanMediaGallery } from "../VanDetail/VanListing";
 import FeatureGridBlock from "../VanDetail/BlockFeatureCard";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
@@ -116,16 +116,14 @@ export default function LayoutDetail({ van, initialView }) {
 
             {/* Gallery */}
             <div className="lg:col-span-7">
-              {initialView === "floorplan" ? (
-                // Agar view floorplan hai toh rendering array bhejenge (agar rendering khali ho toh fallback gallery)
-                <VanGallery
-                  gallery={van.rendering}
-                  title={`${van?.van_listing?.title} Blueprint`}
-                />
-              ) : (
-                // Default real photos gallery
-                <VanGallery gallery={van.gallery} title={van?.van_listing?.title} />
-              )}
+              <VanMediaGallery
+                key={`${van?.slug || van?._id || "layout"}-${initialView || "gallery"}`}
+                gallery={initialView === "floorplan" && van?.rendering?.length ? van.rendering : van?.gallery || []}
+                media={van?.media || []}
+                modelUrl={van?.glbFile}
+                variants={van?.variants || []}
+                title={initialView === "floorplan" ? `${van?.van_listing?.title || "Layout"} Blueprint` : van?.van_listing?.title}
+              />
             </div>
             {/* Info Panel */}
             <div className="lg:col-span-5 lg:sticky lg:top-24 h-fit space-y-8">

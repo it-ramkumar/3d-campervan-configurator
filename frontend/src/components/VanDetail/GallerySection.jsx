@@ -142,7 +142,12 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
       {/* THUMBNAILS */}
       {gallery.length > 1 && (
-        <div className="grid grid-cols-5 gap-3">
+        <div
+          role="region"
+          aria-label="Image thumbnails — scroll to see more"
+          tabIndex={0}
+          className="grid max-h-[180px] grid-cols-5 gap-3 overflow-y-auto overscroll-y-contain p-1 sm:max-h-[320px] focus-visible:outline-2 focus-visible:outline-[#ED985F]"
+        >
           {gallery.map((img, i) => (
             <div
               key={i}
