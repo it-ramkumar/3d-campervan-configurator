@@ -26,6 +26,11 @@ import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
 import FeatureGridBlock from "./BlockFeatureCard";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 function GalleryModelLoader({ progress, className = "" }) {
   const percentage = Number.isFinite(progress) ? Math.min(100, Math.max(0, Math.round(progress))) : null;
@@ -97,7 +102,7 @@ class GalleryModelBoundary extends React.Component {
   }
 }
 
-const getGalleryVideo = (link) => {
+export const getGalleryVideo = (link) => {
   if (typeof link !== "string" || !link.trim()) return null;
   try {
     const url = new URL(link.trim());
@@ -294,21 +299,9 @@ const VanPage = ({ vanDetail,variants }) => {
     return icons[category] || <Settings2 className="w-5 h-5" />;
   };
 
-  const getEmbedUrl = (link) => {
-    if (!link) return "";
-    if (link.includes("youtube.com/watch?v=")) {
-      const videoId = link.split("v=")[1].split("&")[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-    if (link.includes("instagram.com/p/") || link.includes("instagram.com/reel/")) {
-      let cleanUrl = link.split("?")[0];
-      if (!cleanUrl.endsWith("/")) cleanUrl += "/";
-      return `${cleanUrl}embed/`;
-    }
-    return link;
-  };
-
-  const uniqueMedia = [...new Set(vanDetail?.media || [])];
+  const galleryVideos = [...new Map(
+    (vanDetail?.media || []).map(getGalleryVideo).filter(Boolean).map(video => [video.url, video])
+  ).values()];
   const activeBlocks = blocks
     .filter(b => b.is_active !== false)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -812,7 +805,7 @@ const VanPage = ({ vanDetail,variants }) => {
       </div>
 
       {/* ── MEDIA GALLERY — light ── */}
-      {uniqueMedia.length > 0 && (
+      {galleryVideos.length > 0 && (
         <section className="bbv-section-light relative py-20 px-4">
           <div className="bbv-dot-grid-light" />
           <div className="relative">
@@ -821,15 +814,68 @@ const VanPage = ({ vanDetail,variants }) => {
               <Heading2 text="Media Gallery" className="!text-primary mt-4" />
               <div className="bbv-divider mx-auto mt-5" />
             </div>
-            <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
-              {uniqueMedia.map((link, i) => (
-                <div key={i} className={`w-full bbv-card overflow-hidden ${link.includes("youtube") ? "max-w-[700px]" : "max-w-[350px]"}`}>
-                  <div className="relative w-full" style={{ paddingBottom: link.includes("youtube") ? "56.25%" : "140%" }}>
-                    <iframe src={getEmbedUrl(link)} className="absolute top-0 left-0 w-full h-full" frameBorder="0" allowFullScreen />
+            {/* 3 or fewer videos: plain row, no slider needed. More than 3: swipeable slider. */}
+            {galleryVideos.length <= 3 ? (
+              <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
+                {galleryVideos.map((video) => (
+                  <div key={video.url} className={`w-full bbv-card overflow-hidden ${video.portrait ? "max-w-[350px]" : "max-w-[700px]"}`}>
+                    <div className="relative w-full" style={{ paddingBottom: video.portrait ? "140%" : "56.25%" }}>
+                      {video.native ? (
+                        <video src={video.url} controls className="absolute top-0 left-0 w-full h-full object-cover" />
+                      ) : (
+                        <iframe src={video.url} className="absolute top-0 left-0 w-full h-full" frameBorder="0" allowFullScreen />
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  navigation
+                  pagination={{ clickable: true }}
+                  spaceBetween={24}
+                  slidesPerView={1}
+                  breakpoints={{
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                  }}
+                  className="media-gallery-swiper max-w-7xl mx-auto !pb-12"
+                >
+                  {galleryVideos.map((video) => (
+                    <SwiperSlide key={video.url} className="!h-[300px] bbv-card overflow-hidden">
+                      <div className="relative h-full w-full">
+                        {video.native ? (
+                          <video src={video.url} controls className="absolute inset-0 h-full w-full object-cover" />
+                        ) : (
+                          <iframe src={video.url} className="absolute inset-0 h-full w-full" frameBorder="0" allowFullScreen />
+                        )}
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                <style>{`
+                  .media-gallery-swiper .swiper-button-next,
+                  .media-gallery-swiper .swiper-button-prev {
+                    color: #ED985F;
+                    background: rgba(2,12,24,0.72);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                  }
+                  .media-gallery-swiper .swiper-button-next::after,
+                  .media-gallery-swiper .swiper-button-prev::after {
+                    font-size: 16px;
+                    font-weight: 900;
+                  }
+                  .media-gallery-swiper .swiper-pagination-bullet-active {
+                    background: #ED985F !important;
+                  }
+                `}</style>
+              </>
+            )}
           </div>
         </section>
       )}

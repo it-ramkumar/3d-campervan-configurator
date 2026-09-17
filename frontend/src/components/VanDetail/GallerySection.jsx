@@ -1,16 +1,39 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2 } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { ChevronLeft, ChevronRight, ChevronDown, Image as ImageIcon, Maximize2 } from "lucide-react";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 const VanGallery = ({ gallery = [], title = "" }) => {
   const [activeImage, setActiveImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hasMoreThumbs, setHasMoreThumbs] = useState(false);
+  const mainSwiperRef = useRef(null);
+  const fullscreenSwiperRef = useRef(null);
+  const thumbScrollRef = useRef(null);
+
+  const checkThumbOverflow = useCallback(() => {
+    const el = thumbScrollRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 4;
+    setHasMoreThumbs(el.scrollHeight > el.clientHeight + 4 && !atBottom);
+  }, []);
 
   useEffect(() => {
     setActiveImage(0);
-  }, [gallery]);
+    checkThumbOverflow();
+  }, [gallery, checkThumbOverflow]);
+
+  useEffect(() => {
+    if (mainSwiperRef.current && mainSwiperRef.current.activeIndex !== activeImage) {
+      mainSwiperRef.current.slideTo(activeImage);
+    }
+    if (fullscreenSwiperRef.current && fullscreenSwiperRef.current.activeIndex !== activeImage) {
+      fullscreenSwiperRef.current.slideTo(activeImage);
+    }
+  }, [activeImage]);
 
   const hasImages = gallery && gallery.length > 0;
 
@@ -79,22 +102,26 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
       {/* MAIN IMAGE CONTAINER */}
 <div className="relative flex items-center justify-center overflow-hidden rounded-lg w-full h-auto aspect-square bg-[#020C18]/95">
-  {/* RENDER ALL IMAGES & TOGGLE OPACITY INSTANTLY */}
-  {gallery.map((img, i) => (
-    <Image
-      key={img}
-      src={img}
-      fill
-      alt={`${title} - image ${i + 1}`}
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-      className={`object-contain transition-opacity duration-200 ${
-        activeImage === i
-          ? "opacity-100 z-10"
-          : "opacity-0 z-0 pointer-events-none"
-      }`}
-      priority={i === 0}
-    />
-  ))}
+  {/* SWIPER: touch/swipe on mobile, arrow buttons below still work via ref */}
+  <Swiper
+    onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
+    onSlideChange={(swiper) => setActiveImage(swiper.activeIndex)}
+    initialSlide={activeImage}
+    className="absolute inset-0 h-full w-full"
+  >
+    {gallery.map((img, i) => (
+      <SwiperSlide key={img} className="relative h-full w-full">
+        <Image
+          src={img}
+          fill
+          alt={`${title} - image ${i + 1}`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+          className="object-contain"
+          priority={i === 0}
+        />
+      </SwiperSlide>
+    ))}
+  </Swiper>
 
   {/* EXPAND / FULL VIEW ICON */}
   <button
@@ -142,38 +169,57 @@ const VanGallery = ({ gallery = [], title = "" }) => {
 
       {/* THUMBNAILS */}
       {gallery.length > 1 && (
-        <div
-          role="region"
-          aria-label="Image thumbnails — scroll to see more"
-          tabIndex={0}
-          className="grid max-h-[180px] grid-cols-5 gap-3 overflow-y-auto overscroll-y-contain p-1 sm:max-h-[320px] focus-visible:outline-2 focus-visible:outline-[#ED985F]"
-        >
-          {gallery.map((img, i) => (
+        <div className="relative">
+          <div
+            ref={thumbScrollRef}
+            onScroll={checkThumbOverflow}
+            role="region"
+            aria-label="Image thumbnails — scroll to see more"
+            tabIndex={0}
+className="!scrollbar grid max-h-[180px] grid-cols-5 gap-3 !overflow-y-scroll !overscroll-y-contain !p-1 sm:max-h-[320px] !focus-visible:outline-5 !focus-visible:outline-hover"          >
+            {gallery.map((img, i) => (
+              <div
+                key={i}
+                onClick={() => setActiveImage(i)}
+                // FIX 2: Removed "opacity-40 hover:opacity-80" from the inactive state string below
+                className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                  activeImage === i
+                    ? "border-hover opacity-40 scale-[0.98]"
+                    : "border-transparent hover:border-hover/50"
+                }`}
+                style={
+                  activeImage === i
+                    ? { boxShadow: "0 0 12px rgba(237,152,95,0.25)" }
+                    : {}
+                }
+              >
+                <Image
+                  src={img}
+                  width={120}
+                  height={120}
+                  alt={`Thumbnail ${i}`}
+                  className="w-full h-full object-cover"
+                  priority={i < 5}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* MORE THUMBS INDICATOR */}
+          {hasMoreThumbs && (
             <div
-              key={i}
-              onClick={() => setActiveImage(i)}
-              // FIX 2: Removed "opacity-40 hover:opacity-80" from the inactive state string below
-              className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
-                activeImage === i
-                  ? "border-[#ED985F] scale-[0.98]"
-                  : "border-transparent hover:border-[#ED985F]/50"
-              }`}
-              style={
-                activeImage === i
-                  ? { boxShadow: "0 0 12px rgba(237,152,95,0.25)" }
-                  : {}
-              }
+              className="pointer-events-none absolute inset-x-0 bottom-0 flex h-8 items-end justify-center rounded-b-lg"
+              style={{
+                background:
+                  "linear-gradient(to bottom, rgba(2,12,24,0) 0%, rgba(2,12,24,0.85) 100%)",
+              }}
             >
-              <Image
-                src={img}
-                width={120}
-                height={120}
-                alt={`Thumbnail ${i}`}
-                className="w-full h-full object-cover"
-                priority={i < 5}
+              <ChevronDown
+                size={14}
+                className="mb-0.5 text-[#ED985F] animate-bounce"
               />
             </div>
-          ))}
+          )}
         </div>
       )}
 
@@ -211,21 +257,25 @@ const VanGallery = ({ gallery = [], title = "" }) => {
           <div className="relative flex-1">
             {/* SAME sizes AS THE MAIN GALLERY IMAGE SO THIS REUSES THE EXACT
                 SAME CACHED URL THE MAIN VIEW ALREADY LOADED — INSTANT SWITCH */}
-            {gallery.map((img, i) => (
-              <Image
-                key={img}
-                src={img}
-                fill
-                alt={`${title} - image ${i + 1}`}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-                className={`object-contain transition-opacity duration-150 ${
-                  activeImage === i
-                    ? "opacity-100 z-10"
-                    : "opacity-0 z-0 pointer-events-none"
-                }`}
-                priority={i === 0}
-              />
-            ))}
+            <Swiper
+              onSwiper={(swiper) => (fullscreenSwiperRef.current = swiper)}
+              onSlideChange={(swiper) => setActiveImage(swiper.activeIndex)}
+              initialSlide={activeImage}
+              className="absolute inset-0 h-full w-full"
+            >
+              {gallery.map((img, i) => (
+                <SwiperSlide key={img} className="relative h-full w-full">
+                  <Image
+                    src={img}
+                    fill
+                    alt={`${title} - image ${i + 1}`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                    className="object-contain"
+                    priority={i === 0}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
           {gallery.length > 1 && (
             <>

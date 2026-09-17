@@ -18,10 +18,15 @@ import {
   Users,
 
 } from "lucide-react";
-import { VanMediaGallery } from "../VanDetail/VanListing";
+import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
 import FeatureGridBlock from "../VanDetail/BlockFeatureCard";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const SvgCheck = () => (
   <svg className="w-4 h-4 shrink-0" style={{ color: "#ED985F" }}
@@ -74,28 +79,10 @@ export default function LayoutDetail({ van, initialView }) {
       setLoading(false);
     }
   };
-  // JSON-LD Schema for Google Rich Results
-  const getEmbedUrl = (link) => {
-    if (!link) return "";
-
-    // YouTube Logic
-    if (link.includes("youtube.com/watch?v=")) {
-      const videoId = link.split("v=")[1].split("&")[0];
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-
-    // Instagram Logic (Post aur Reel dono ke liye)
-    if (link.includes("instagram.com/p/") || link.includes("instagram.com/reel/")) {
-      let cleanUrl = link.split("?")[0]; // Query params hataye
-      if (!cleanUrl.endsWith('/')) cleanUrl += '/'; // Slash check
-      return `${cleanUrl}embed/`;
-    }
-
-    return link;
-  };
-
-  // Duplicate content check: Sirf unique links render honge
-  const uniqueMedia = [...new Set(van?.media)];
+  // Duplicate content check: resolve each link to a playable embed, dropping unsupported ones
+  const galleryVideos = [...new Map(
+    (van?.media || []).map(getGalleryVideo).filter(Boolean).map(video => [video.url, video])
+  ).values()];
   const activeBlocks = (van?.blocks || [])
     .filter((b) => b.is_active !== false)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -459,55 +446,100 @@ export default function LayoutDetail({ van, initialView }) {
           </div>
         </section>
 
-        {/* {videos} */}
-        {/* ============================ */}
-        {uniqueMedia.length > 0 ? (
-          <section className="py-12 px-4 flex flex-col items-center" style={{ backgroundColor: '#F5F5F0' }}>
+{galleryVideos.length > 0 ? (
+  <section className="flex flex-col items-center bg-[#F5F5F0] px-4 py-12">
+    {/* Heading */}
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold uppercase tracking-tighter text-[#001F3D]">
+        Media Gallery
+      </h2>
 
-            {/* Heading */}
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold uppercase tracking-tighter" style={{ color: '#001F3D' }}>
-                Media Gallery
-              </h2>
-              <div className="h-1 w-20 mx-auto mt-2" style={{ backgroundColor: '#001F3D' }}></div>
+      <div className="mx-auto mt-2 h-1 w-20 bg-[#001F3D]" />
+    </div>
+
+    {/* 3 or fewer media items */}
+    {galleryVideos.length <= 3 ? (
+      <div className="flex w-full max-w-7xl flex-wrap justify-center gap-8">
+        {galleryVideos.map((video) => (
+          <div
+            key={video.url}
+            className={`w-full overflow-hidden rounded-[15px] border-2 border-[#001F3D] bg-white shadow-lg transition-all duration-300 ${
+              video.portrait ? "max-w-[350px]" : "max-w-[700px]"
+            }`}
+          >
+            <div
+              className={`relative w-full ${
+                video.portrait ? "aspect-[3/4]" : "aspect-video"
+              }`}
+            >
+              {video.native ? (
+                <video
+                  src={video.url}
+                  controls
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : (
+                <iframe
+                  src={video.url}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder="0"
+                  scrolling="no"
+                  allowTransparency="true"
+                  allowFullScreen
+                />
+              )}
             </div>
-
-            {/* Grid: Isme humne flex-wrap use kiya hai taaki boxes center rahein */}
-            <div className="flex flex-wrap justify-center gap-8 w-full max-w-7xl">
-              {uniqueMedia.map((link, i) => {
-                const isYouTube = link.includes("youtube");
-
-                return (
-                  <div
-                    key={i}
-                    className={`w-full shadow-lg bg-white transition-all duration-300 ${isYouTube ? 'max-w-[700px]' : 'max-w-[350px]'
-                      }`}
-                    style={{
-                      borderRadius: '15px', // Normal Rounded Borders
-                      border: '2px solid #001F3D',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <div className="relative w-full" style={{
-                      // YouTube wide hai, Instagram lamba hai lekin ab width limited hai
-                      paddingBottom: isYouTube ? '56.25%' : '140%',
-                      height: 0
-                    }}>
-                      <iframe
-                        src={getEmbedUrl(link)}
-                        className="absolute top-0 left-0 w-full h-full"
-                        frameBorder="0"
-                        scrolling="no"
-                        allowtransparency="true"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
-                  </div>
-                );
-              })}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <Swiper
+        modules={[Navigation, Pagination]}
+        navigation
+        pagination={{ clickable: true }}
+        spaceBetween={24}
+        slidesPerView={1}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
+        className="w-full max-w-7xl !pb-14"
+      >
+        {galleryVideos.map((video) => (
+          <SwiperSlide
+            key={video.url}
+            className="!h-[420px] overflow-hidden rounded-[15px] border-2 border-[#001F3D] bg-white shadow-lg sm:!h-[460px] lg:!h-[500px]"
+          >
+            <div className="flex h-full w-full items-center justify-center bg-white">
+              {video.native ? (
+                <video
+                  src={video.url}
+                  controls
+                  className={`h-full w-full ${
+                    video.portrait ? "object-contain" : "object-cover"
+                  }`}
+                />
+              ) : (
+                <iframe
+                  src={video.url}
+                  className="h-full w-full"
+                  frameBorder="0"
+                  scrolling="no"
+                  allowTransparency="true"
+                  allowFullScreen
+                />
+              )}
             </div>
-          </section>
-        ) : ""}
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    )}
+  </section>
+) : null}
         {/* ── CONTACT FORM MODAL ── */}
         {isFormOpen && (
           <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">
