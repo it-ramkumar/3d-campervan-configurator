@@ -1,7 +1,7 @@
 "use client"
 import React, { Suspense, useState, useRef, useEffect } from "react"
 import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Html, Environment } from "@react-three/drei"
+import { OrbitControls, Html, Environment, useProgress } from "@react-three/drei"
 import { X } from "lucide-react"
 import InteriorCamera from "./MidCamera"
 import Model from "./Model"
@@ -104,6 +104,18 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
           }}
         />
 
+        {/* Logo watermark — sits behind the (transparent) 3D canvas */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          <img
+            src="/images/logoo.webp"
+            alt=""
+            aria-hidden="true"
+            className="w-[70%] max-w-[600px] object-contain opacity-[.14] select-none"
+            style={{ filter: "brightness(0) invert(1)" }}
+            draggable={false}
+          />
+        </div>
+
         {/* Orange top accent */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ED985F] z-30" />
 
@@ -180,32 +192,16 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
         </div>
 
         {/* R3F Canvas */}
-        <Canvas shadows camera={{ position: [15, 15, 15], fov: 50 }} style={{ position: "absolute", inset: 0 }}>
-          {/* Fix white canvas background */}
-          <color attach="background" args={["#020C18"]} />
+        <Canvas
+          shadows
+          camera={{ position: [15, 15, 15], fov: 50 }}
+          style={{ position: "absolute", inset: 0, background: "transparent" }}
+          gl={{ powerPreference: "high-performance", antialias: true, alpha: true, preserveDrawingBuffer: false }}
+        >
+          {/* No scene.background set — canvas stays transparent so the
+              studio gradient + logo watermark behind it show through */}
 
-          <Suspense
-            fallback={
-              <Html center>
-                <div
-                  style={{
-                    background: "rgba(0,31,61,0.92)",
-                    border: "1px solid rgba(237,152,95,0.3)",
-                    borderRadius: "12px",
-                    padding: "14px 22px",
-                    color: "#FBFBF9",
-                    fontFamily: "sans-serif",
-                    fontSize: "11px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    fontWeight: 600,
-                  }}
-                >
-                  Loading model…
-                </div>
-              </Html>
-            }
-          >
+          <Suspense fallback={<ModelLoadingProgress />}>
             {!interiorMode ? (
               <OrbitControls
                 makeDefault
@@ -386,13 +382,13 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
                     </span>
 
                     {/* Name */}
-                    <span className="font-ui text-xs font-semibold uppercase tracking-[0.12em] flex-1 truncate">
+                    <span className="font-ui text-xs font-semibold uppercase  flex-1">
                       {v.name}
                     </span>
 
                     {/* Active dot */}
                     {isActive && (
-                      <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#ED985F]" />
+                      <span className=" rounded-full bg-[#ED985F]" />
                     )}
                   </button>
                 )
@@ -420,6 +416,48 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
 
       </div>
     </div>
+  )
+}
+
+function ModelLoadingProgress() {
+  const { progress } = useProgress()
+  const percentage = Math.round(progress)
+  const downloading = percentage > 0 && percentage < 100
+
+  return (
+    <Html center>
+      <div
+        role="status"
+        aria-live="polite"
+        className="w-64 rounded-2xl border border-white/15 bg-[#020C18]/90 px-7 py-6 text-center text-white shadow-2xl backdrop-blur-md"
+      >
+        <div aria-hidden="true" className="relative mx-auto mb-5 flex h-20 w-20 items-center justify-center">
+          <div className="absolute inset-0 rounded-full border border-[#ED985F]/20" />
+          <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[#ED985F] border-r-[#ED985F]/50 motion-reduce:animate-none" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" className="h-9 w-9 animate-pulse text-[#ED985F] motion-reduce:animate-none">
+            <path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z" />
+            <path d="m3 7 9 5 9-5M12 12v10M7.5 4.5l9 5" />
+          </svg>
+        </div>
+        <p className="text-sm font-semibold tracking-wide">Preparing your van</p>
+        <p className="mt-1 text-xs text-white/60">
+          {downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}
+        </p>
+        <div
+          role="progressbar"
+          aria-label="3D assets loading"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={downloading ? percentage : undefined}
+          className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10"
+        >
+          <div
+            className={`h-full rounded-full bg-[#ED985F] transition-[width] duration-300 ${downloading ? "" : "animate-pulse motion-reduce:animate-none"}`}
+            style={{ width: downloading ? `${percentage}%` : "40%" }}
+          />
+        </div>
+      </div>
+    </Html>
   )
 }
 
