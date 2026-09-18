@@ -183,4 +183,20 @@ const FeatureGridBlock = ({ block }) => {
   );
 };
 
+export const isFaqFeatureBlock = (block) =>
+  block?.block_type === "feature-grid" &&
+  block.title?.trim().replace(/\s+/g, " ").toLowerCase() ===
+    "frequently asked questions (faqs)";
+
+export function FaqFeatureBlocks({ blocks }) {
+  return blocks.filter(isFaqFeatureBlock).map((block, index) => (
+    <section key={block._id || index} className="relative bg-primary overflow-hidden">
+      <div className="bbv-dot-grid" />
+      <div className="relative max-w-7xl mx-auto">
+        <FeatureGridBlock block={block} />
+      </div>
+    </section>
+  ));
+}
+
 export default FeatureGridBlock;

@@ -19,7 +19,7 @@ import {
 
 } from "lucide-react";
 import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
-import FeatureGridBlock from "../VanDetail/BlockFeatureCard";
+import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "../VanDetail/BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
@@ -205,7 +205,7 @@ export default function LayoutDetail({ van, initialView }) {
         </section>
 
         {/* ── DYNAMIC CONTENT BLOCKS — alternating light / dark ── */}
-        {activeBlocks.length > 0 && activeBlocks.map((block, idx) => {
+        {activeBlocks.filter(block => !isFaqFeatureBlock(block)).map((block, idx) => {
           if (!block) return null;
 
           const isFeatureGrid = block.block_type === "feature-grid";
@@ -446,6 +446,8 @@ export default function LayoutDetail({ van, initialView }) {
 
           </div>
         </section>
+
+        <FaqFeatureBlocks blocks={activeBlocks} />
 
 {galleryVideos.length > 0 ? (
   <section className="flex flex-col items-center bg-[#F5F5F0] px-4 py-12">

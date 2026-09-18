@@ -25,7 +25,7 @@ import VanGallery from "./GallerySection";
 import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
-import FeatureGridBlock from "./BlockFeatureCard";
+import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "./BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -472,7 +472,7 @@ const VanPage = ({ vanDetail,variants }) => {
       )}
 
       {/* ── BLOCKS — alternating light / dark ── */}
-      {activeBlocks.length > 0 && activeBlocks.map((block, idx) => {
+      {activeBlocks.filter(block => !isFaqFeatureBlock(block)).map((block, idx) => {
         if (!block) return null;
 
         const isFeatureGrid = block.block_type === "feature-grid";
@@ -806,6 +806,8 @@ const VanPage = ({ vanDetail,variants }) => {
       </div>
 
       {/* ── MEDIA GALLERY — light ── */}
+      <FaqFeatureBlocks blocks={activeBlocks} />
+
       {galleryVideos.length > 0 && (
         <section className="bbv-section-light relative py-20 px-4">
           <div className="bbv-dot-grid-light" />
