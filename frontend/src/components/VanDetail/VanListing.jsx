@@ -26,6 +26,7 @@ import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
 import FeatureGridBlock from "./BlockFeatureCard";
+import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -475,7 +476,7 @@ const VanPage = ({ vanDetail,variants }) => {
         if (!block) return null;
 
         const isFeatureGrid = block.block_type === "feature-grid";
-        const isDark = isFeatureGrid ? true : idx % 2 === 1;
+        const isDark = isFeatureGrid || idx % 2 === 0;
         const layout = block.layout || "left";
         const alignClass = layout === "center" ? "text-center items-center" : layout === "right" ? "text-right items-end" : "text-left items-start";
 
@@ -743,7 +744,7 @@ const VanPage = ({ vanDetail,variants }) => {
                             {feature.items.map((item, j) => (
                               <li key={j} className="flex items-start gap-2.5 py-1.5">
                                 <SvgCheck small />
-                                <span className="font-body text-sm text-primary/75 leading-snug">{item}</span>
+                                <span className="font-body text-sm text-primary/75 leading-snug"><FeatureItemText text={item} /></span>
                               </li>
                             ))}
                           </ul>

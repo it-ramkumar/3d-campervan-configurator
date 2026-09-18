@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import {
   Heading2,
   Heading3,
@@ -227,7 +228,7 @@ const handleViewVans = () => {
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
-                        <span className="!text-hover mr-2">•</span> {item}
+                        <span className="!text-hover mr-2">•</span> <FeatureItemText text={item} />
                       </li>
                     ))}
                   </ul>

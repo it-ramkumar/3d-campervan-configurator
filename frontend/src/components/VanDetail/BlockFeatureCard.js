@@ -11,14 +11,12 @@ import {
 const FeatureGridBlock = ({ block }) => {
   const [activeImg, setActiveImg] = useState(0);
 
-  if (!block) return null;
-
-  const layout = block.layout || "left";
+  const layout = block?.layout || "left";
   const imageRight = layout !== "right";
 
   const galleryImages = [
-    ...(block.items || []).map((it) => it?.media).filter(Boolean),
-    ...(block.block_media || [])
+    ...(block?.items || []).map((it) => it?.media).filter(Boolean),
+    ...(block?.block_media || [])
       .filter((m) => m?.type === "image" && m?.url)
       .map((m) => m.url),
   ].filter((url) => typeof url === "string" && url.trim() !== "");
@@ -33,7 +31,10 @@ const FeatureGridBlock = ({ block }) => {
     return () => clearInterval(interval);
   }, [galleryImages.length]);
 
-  const currentImageSrc = galleryImages[activeImg];
+  if (!block) return null;
+
+  const hasImages = galleryImages.length > 0;
+  const currentImageSrc = galleryImages[activeImg % galleryImages.length];
 
   // Supports **bold**
   const renderBold = (text = "") => {
@@ -51,7 +52,7 @@ const FeatureGridBlock = ({ block }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
+    <div className={`grid grid-cols-1 ${hasImages ? "lg:grid-cols-2 items-center" : ""}`}>
       {/* IMAGE PANEL */}
       {galleryImages.length > 0 &&
       currentImageSrc &&
@@ -110,18 +111,12 @@ const FeatureGridBlock = ({ block }) => {
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-hover" />
           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-hover/30" />
         </div>
-      ) : (
-        <div
-          className={`w-full aspect-[4/3] bg-gray-800 ${
-            imageRight ? "lg:order-2" : "lg:order-1"
-          }`}
-        />
-      )}
+      ) : null}
 
       {/* CONTENT PANEL */}
       <div
         className={`flex flex-col justify-center px-8 py-14 lg:px-12 lg:py-16 ${
-          imageRight ? "lg:order-1" : "lg:order-2"
+          hasImages ? (imageRight ? "lg:order-1" : "lg:order-2") : ""
         }`}
       >
         {(block.title || block.subtitle) && (
@@ -141,14 +136,19 @@ const FeatureGridBlock = ({ block }) => {
           </div>
         )}
 
-        <div className="divide-y divide-white/8">
+        <div className={hasImages ? "divide-y divide-white/8" : "divide-y divide-white/15"}>
           {(block.items || []).map((item, i) => (
             <div
               key={i}
-              className="group flex items-start gap-5 py-1 cursor-default"
+              className={`group flex items-start gap-5 cursor-default ${hasImages ? "py-1" : "py-6 first:pt-0"}`}
             >
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
+                <div className={`flex items-start gap-3 ${hasImages ? "mb-1" : "mb-3"}`}>
+                  {!hasImages && (
+                    <span className="font-mono font-bold text-hover shrink-0">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  )}
                   {item.icon && (
                     <span className="text-xl shrink-0">
                       {item.icon}
@@ -170,7 +170,7 @@ const FeatureGridBlock = ({ block }) => {
                 )}
 
                 {item.description && (
-                  <RichParagraph className="!text-secondary/50 leading-relaxed">
+                  <RichParagraph className={`${hasImages ? "!text-secondary/50" : "!text-secondary/70"} leading-relaxed`}>
                     {renderBold(item.description)}
                   </RichParagraph>
                 )}

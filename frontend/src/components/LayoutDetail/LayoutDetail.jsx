@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
 import FeatureGridBlock from "../VanDetail/BlockFeatureCard";
+import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { contact } from "../../api/contact/contact";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -208,7 +209,7 @@ export default function LayoutDetail({ van, initialView }) {
           if (!block) return null;
 
           const isFeatureGrid = block.block_type === "feature-grid";
-          const isDark = isFeatureGrid ? true : idx % 2 === 1;
+          const isDark = isFeatureGrid || idx % 2 === 0;
           const layout = block.layout || "left";
           const alignClass = layout === "center" ? "text-center items-center" : layout === "right" ? "text-right items-end" : "text-left items-start";
 
@@ -435,7 +436,7 @@ export default function LayoutDetail({ van, initialView }) {
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
-                        <span className="!text-hover mr-2">•</span> {item}
+                        <span className="!text-hover mr-2">•</span> <FeatureItemText text={item} />
                       </li>
                     ))}
                   </ul>
@@ -448,12 +449,12 @@ export default function LayoutDetail({ van, initialView }) {
 
 {galleryVideos.length > 0 ? (
   <section className="flex flex-col items-center bg-[#F5F5F0] px-4 py-12">
+
     {/* Heading */}
     <div className="mb-12 text-center">
       <h2 className="text-3xl font-bold uppercase tracking-tighter text-[#001F3D]">
         Media Gallery
       </h2>
-
       <div className="mx-auto mt-2 h-1 w-20 bg-[#001F3D]" />
     </div>
 
@@ -540,6 +541,7 @@ export default function LayoutDetail({ van, initialView }) {
     )}
   </section>
 ) : null}
+
         {/* ── CONTACT FORM MODAL ── */}
         {isFormOpen && (
           <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">
