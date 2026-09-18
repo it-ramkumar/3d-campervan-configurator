@@ -183,6 +183,116 @@ const FeatureGridBlock = ({ block }) => {
   );
 };
 
+// Supports **bold**
+const renderFaqBold = (text = "") => {
+  return text.split(/(\*\*.*?\*\*)/g).map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={index} className="font-bold text-secondary">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    return part;
+  });
+};
+
+const FaqAccordionBlock = ({ block }) => {
+  const items = (block?.items || []).filter((item) => item?.title);
+  const [openIndex, setOpenIndex] = useState(items.length > 0 ? 0 : -1);
+
+  if (!block || items.length === 0) return null;
+
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-16 lg:py-24">
+      {(block.title || block.subtitle) && (
+        <div className="text-center mb-12">
+          {block.subtitle && (
+            <SpanTag text={block.subtitle} className="!inline-flex justify-center mb-4" />
+          )}
+
+          {block.title && (
+            <Heading2
+              text={block.title}
+              className="!text-secondary mt-3 leading-[0.95]"
+            />
+          )}
+
+          <div className="w-12 h-0.5 bg-hover mt-5 mx-auto" />
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3">
+        {items.map((item, i) => {
+          const isOpen = openIndex === i;
+
+          return (
+            <div
+              key={i}
+              className={`rounded-xl border overflow-hidden transition-colors duration-300 ${
+                isOpen ? "border-hover/40" : "border-white/10"
+              }`}
+              style={{
+                background: "rgba(2,12,24,0.72)",
+                backdropFilter: "blur(24px)",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenIndex(isOpen ? -1 : i)}
+                aria-expanded={isOpen}
+                className="w-full flex items-center justify-between gap-4 px-5 sm:px-6 py-5 text-left cursor-pointer"
+              >
+                <span className="flex items-center gap-3 min-w-0">
+                  {item.icon && (
+                    <span className="text-lg shrink-0">{item.icon}</span>
+                  )}
+
+                  <Heading4
+                    text={item.title}
+                    className={`!text-base sm:!text-lg leading-snug transition-colors duration-300 ${
+                      isOpen ? "!text-hover" : "!text-secondary"
+                    }`}
+                  />
+                </span>
+
+                <span
+                  className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                    isOpen ? "bg-hover border-hover rotate-45" : "border-white/20"
+                  }`}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M7 1V13M1 7H13"
+                      stroke={isOpen ? "#001F3D" : "#FBFBF9"}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+
+              <div
+                className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+              >
+                <div className="overflow-hidden">
+                  {item.description && (
+                    <RichParagraph className="!text-secondary/60 leading-relaxed px-5 sm:px-6 pb-5 sm:pb-6 -mt-1">
+                      {renderFaqBold(item.description)}
+                    </RichParagraph>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 export const isFaqFeatureBlock = (block) =>
   block?.block_type === "feature-grid" &&
   block.title?.trim().replace(/\s+/g, " ").toLowerCase() ===
@@ -192,8 +302,8 @@ export function FaqFeatureBlocks({ blocks }) {
   return blocks.filter(isFaqFeatureBlock).map((block, index) => (
     <section key={block._id || index} className="relative bg-primary overflow-hidden">
       <div className="bbv-dot-grid" />
-      <div className="relative max-w-7xl mx-auto">
-        <FeatureGridBlock block={block} />
+      <div className="relative">
+        <FaqAccordionBlock block={block} />
       </div>
     </section>
   ));
