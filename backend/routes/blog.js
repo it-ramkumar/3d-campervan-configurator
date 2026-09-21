@@ -16,7 +16,7 @@ router.post(
     try {
 
 
-      const { title, description, content } = req.body;
+      const { title, description, content, status, category } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
       // 🔹 FIX: Create proper mapping from imageField to S3 URL
@@ -77,7 +77,9 @@ router.post(
         title,
         description,
         gallery: uploadedGalleryUrls,
-        content: finalBlocks
+        content: finalBlocks,
+        status,
+        category
       });
 
       await newBlog.save();
@@ -100,10 +102,23 @@ router.get("/", async (req, res) => {
     const limit = 8;
     const skip = (page - 1) * limit;
     const search = req.query.search || "";
+    const status = req.query.status || "";
 
     // Define the query
-    // If searching, use $text. If not, use an empty object to fetch all.
-    const query = search ? { $text: { $search: search } } : {};
+    const conditions = [];
+    if (search) conditions.push({ $text: { $search: search } });
+
+    // 🔹 Public listing passes ?status=Published so drafts stay admin-only.
+    // Admin listing omits it, so it still sees every blog regardless of status.
+    // Posts saved before the `status` field existed have no stored value, but the
+    // schema defaults them to "Published" — match those too, or old posts vanish.
+    if (status === "Published") {
+      conditions.push({ $or: [{ status: "Published" }, { status: { $exists: false } }] });
+    } else if (status) {
+      conditions.push({ status });
+    }
+
+    const query = conditions.length > 0 ? { $and: conditions } : {};
 
     // Execute query
     const blogs = await Blog.find(query)
@@ -131,7 +146,12 @@ router.get("/", async (req, res) => {
 router.get("/blog-links", async (req, res) => {
   try {
     console.log("Fetching blog links...");
-    const latestBlogs = await Blog.find({}, "title slug -_id")
+    // 🔹 Public navbar links — Drafts have no missing/older `status`,
+    // so match the default too (see the /blog-card and / routes for the same rule).
+    const latestBlogs = await Blog.find(
+      { $or: [{ status: "Published" }, { status: { $exists: false } }] },
+      "title slug -_id"
+    )
       .sort({ createdAt: -1 })
       .limit(5);
 
@@ -149,8 +169,9 @@ router.get("/blog-card", async (req, res) => {
     console.log("Fetching blog details...");
 
     // gallery: { $slice: 1 } ka matlab hai array ka pehla element
+    // 🔹 Homepage cards are public, so Drafts must stay excluded (same rule as /blog-links).
     const blogDetails = await Blog.find(
-      {},
+      { $or: [{ status: "Published" }, { status: { $exists: false } }] },
       { title: 1, description: 1, slug: 1, gallery: { $slice: 1 }, _id: 0 }
     )
     .sort({ createdAt: -1 })
@@ -173,7 +194,8 @@ router.get("/:slug", async (req, res) => {
     const { slug } = req.params
     const blog = await Blog.findOne({ slug });
     // const blog = await Blog.findById(req.params.slug);
-    if (!blog)
+    // 🔹 This route only feeds the public detail page, so Drafts 404 even with a direct link.
+    if (!blog || blog.status !== "Published")
       return res.status(404).json({ success: false, message: "Blog not found" });
 
     res.json({ success: true, data: blog });
@@ -196,7 +218,7 @@ router.put(
         return res.status(404).json({ success: false, message: "Blog not found" });
       // console.log("Blog found:", blog);
 
-      const { title, content, description, deleteGallery = [] } = req.body;
+      const { title, content, description, deleteGallery = [], status, category } = req.body;
       const blocksData = JSON.parse(content || "[]");
 
       // console.log("Received blocks data:", blocksData); // Debug log
@@ -277,6 +299,8 @@ router.put(
       blog.description = description;
       blog.content = updatedBlocks;
       blog.gallery = mergedGallery;
+      if (status !== undefined) blog.status = status;
+      if (category !== undefined) blog.category = category;
 
       await blog.save();
 

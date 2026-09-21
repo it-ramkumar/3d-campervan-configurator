@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import {
   Share2, Image as ImageIcon, FileText, ThumbsUp,
-  ThumbsDown, ChevronRight
+  ThumbsDown, ChevronRight, ChevronDown, HelpCircle, ArrowRight
 } from "lucide-react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
@@ -16,9 +16,38 @@ import {
 } from '@/components/Common/Common';
 import Image from "next/image";
 
+function FaqAccordionItem({ question, answer }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="bbv-glass border border-primary/10 rounded-lg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between gap-4 p-5 text-left"
+      >
+        <span className="font-bold text-primary text-base">{question}</span>
+        <ChevronDown
+          size={18}
+          className={`text-hover flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <div className="px-5 pb-5 text-primary/70 leading-relaxed text-sm font-sans">
+          {answer}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const CTA_BUTTON_STYLES = {
+  primary: "bg-hover text-primary hover:opacity-90 shadow-lg",
+  secondary: "bg-primary text-secondary hover:opacity-90",
+  outline: "bg-transparent border-2 border-hover text-hover hover:bg-hover hover:text-primary",
+};
+
 export default function BlogContentUI({ blog }) {
   const [currentGalleryImage, setCurrentGalleryImage] = useState(0);
-  console.log(blog);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -205,6 +234,47 @@ export default function BlogContentUI({ blog }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        );
+
+      case "button": {
+        const isExternal = block.buttonUrl?.startsWith("http");
+        return (
+          <div key={index} className="my-12 flex justify-center">
+            <a
+              href={block.buttonUrl}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+              className={`inline-flex items-center gap-2 px-10 py-4 rounded-lg font-black uppercase text-[11px] tracking-widest transition-all ${CTA_BUTTON_STYLES[block.buttonStyle] || CTA_BUTTON_STYLES.primary}`}
+            >
+              {block.buttonText}
+              <ArrowRight size={14} />
+            </a>
+          </div>
+        );
+      }
+
+      case "faq":
+        return (
+          <div key={index} className="my-16">
+            <div className="flex items-center gap-3 mb-6">
+              <HelpCircle className="text-hover" size={24} />
+              <Heading3 text="Frequently Asked Questions" className="!mb-0 !text-primary" />
+            </div>
+            <div className="space-y-4">
+              {block.faqs?.map((faq, idx) => (
+                <FaqAccordionItem key={idx} question={faq.question} answer={faq.answer} />
+              ))}
+            </div>
+          </div>
+        );
+
+      case "divider":
+        return (
+          <div key={index} className="my-16 flex items-center gap-4">
+            <div className="flex-1 h-px bg-primary/10" />
+            <div className="w-2 h-2 rounded-full bg-hover" />
+            <div className="flex-1 h-px bg-primary/10" />
           </div>
         );
 

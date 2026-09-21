@@ -9,12 +9,18 @@ const TestblogSchema = new mongoose.Schema({
     type: [String],
     default: undefined
   },
+  status: {
+    type: String,
+    enum: ["Draft", "Published"],
+    default: "Published"
+  },
+  category: { type: String, default: undefined },
   content: [
     {
       type: {
         type: String,
-        // ✅ "list" enum mein add kar diya hai
-        enum: ["heading", "subheading", "paragraph", "image", "table", "proscons", "mediaLink", "list"],
+        // ✅ "list", "button", "faq", "divider" enum mein add kar diya hai
+        enum: ["heading", "subheading", "paragraph", "image", "table", "proscons", "mediaLink", "list", "button", "faq", "divider"],
         required: true
       },
       text: { type: String, default: undefined },
@@ -26,7 +32,22 @@ const TestblogSchema = new mongoose.Schema({
       // ✅ List items ke liye naya field
       items: { type: [String], default: undefined },
       // Aap listStyle bhi add kar sakte hain (optional)
-      listStyle: { type: String, enum: ["ordered", "unordered"], default: undefined }
+      listStyle: { type: String, enum: ["ordered", "unordered"], default: undefined },
+      // ✅ Button / CTA ke liye fields
+      buttonText: { type: String, default: undefined },
+      buttonUrl: { type: String, default: undefined },
+      buttonStyle: { type: String, enum: ["primary", "secondary", "outline"], default: undefined },
+      // ✅ FAQ ke liye fields (question + answer pairs)
+      faqs: {
+        type: [
+          {
+            question: { type: String, default: undefined },
+            answer: { type: String, default: undefined }
+          }
+        ],
+        default: undefined
+      }
+      // ✅ "divider" type ke liye koi extra field nahi chahiye
     },
   ],
   createdAt: { type: Date, default: Date.now },

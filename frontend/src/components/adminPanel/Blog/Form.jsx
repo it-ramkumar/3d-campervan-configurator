@@ -11,12 +11,15 @@ import { addTableRow, addTableColumn } from "@/CustomHooks/addTableRow";
 import { addProsOrCons } from "@/CustomHooks/addProsOrCons";
 import { ImageWithSkeleton } from "@/components/Common/Common";
 import { addMediaLinkBlock } from "@/CustomHooks/mediaLinkInblock";
+import { addFaqItem, removeFaqItem, handleFaqChange } from "@/CustomHooks/faqBlock";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 
 export default function BlogForm({ setSelected }) {
   const editData = useSelector((state) => state.editData.editData);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Draft");
+  const [category, setCategory] = useState("");
   const [blocks, setBlocks] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,6 +32,8 @@ export default function BlogForm({ setSelected }) {
   const clearForm = () => {
     setTitle("");
     setDescription("");
+    setStatus("Draft");
+    setCategory("");
     setBlocks([]);
     setIsEditMode(false);
     setGalleryFiles([]);
@@ -43,6 +48,8 @@ export default function BlogForm({ setSelected }) {
       setIsEditMode(true);
       setTitle(editData.title || "");
       setDescription(editData.description || "");
+      setStatus(editData.status || "Draft");
+      setCategory(editData.category || "");
 
       // 🖼️ GALLERY HANDLING: Existing URLs ko set karna
       setExistingGallery(editData.gallery || []); // Assuming `editData.gallery` is an array of URLs
@@ -118,6 +125,8 @@ export default function BlogForm({ setSelected }) {
       const formDataToSend = new FormData();
       formDataToSend.append("title", title);
       formDataToSend.append("description", description);
+      formDataToSend.append("status", status);
+      formDataToSend.append("category", category);
       let imageIndex = 0;
       const cleanedBlocks = blocks
         .map((block) => {
@@ -184,6 +193,43 @@ export default function BlogForm({ setSelected }) {
 
           if (b.type === "mediaLink") {
             return b.url?.trim() ? b : null;
+          }
+
+          if (b.type === "button") {
+            delete b.text;
+            delete b.image;
+            delete b.rows;
+            delete b.pros;
+            delete b.cons;
+            delete b.url;
+            delete b.items;
+            return b.buttonText?.trim() && b.buttonUrl?.trim() ? b : null;
+          }
+
+          if (b.type === "faq") {
+            delete b.text;
+            delete b.image;
+            delete b.rows;
+            delete b.pros;
+            delete b.cons;
+            delete b.url;
+            delete b.items;
+            // Khali question/answer nikaal dein
+            b.faqs = (b.faqs || []).filter(
+              (f) => f.question?.trim() || f.answer?.trim()
+            );
+            return b.faqs.length > 0 ? b : null;
+          }
+
+          if (b.type === "divider") {
+            delete b.text;
+            delete b.image;
+            delete b.rows;
+            delete b.pros;
+            delete b.cons;
+            delete b.url;
+            delete b.items;
+            return b;
           }
 
           return b;
@@ -270,6 +316,36 @@ export default function BlogForm({ setSelected }) {
           className="w-full border p-2 rounded"
           rows="3"
         />
+
+        {/* Status & Category */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full border p-2 rounded"
+            >
+              <option value="Draft">Draft</option>
+              <option value="Published">Published</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Campervan Tips"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full border p-2 rounded"
+            />
+          </div>
+        </div>
+
         {/* GALLERY UPLOAD */}
         <GalleryUploader
           galleryFiles={galleryFiles}
@@ -544,6 +620,98 @@ export default function BlogForm({ setSelected }) {
               </div>
             )}
 
+            {/* Button / CTA */}
+            {block.type === "button" && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <input
+                  type="text"
+                  placeholder="Button text (e.g. Get a Quote)"
+                  value={block.buttonText || ""}
+                  onChange={(e) =>
+                    handleBlockChange(i, "buttonText", e.target.value, null, null, setBlocks)
+                  }
+                  className="w-full border p-2 rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="Button link (URL)"
+                  value={block.buttonUrl || ""}
+                  onChange={(e) =>
+                    handleBlockChange(i, "buttonUrl", e.target.value, null, null, setBlocks)
+                  }
+                  className="w-full border p-2 rounded"
+                />
+                <select
+                  value={block.buttonStyle || "primary"}
+                  onChange={(e) =>
+                    handleBlockChange(i, "buttonStyle", e.target.value, null, null, setBlocks)
+                  }
+                  className="w-full border p-2 rounded"
+                >
+                  <option value="primary">Primary</option>
+                  <option value="secondary">Secondary</option>
+                  <option value="outline">Outline</option>
+                </select>
+              </div>
+            )}
+
+            {/* FAQ */}
+            {block.type === "faq" && (
+              <div className="space-y-3">
+                <h4 className="font-semibold text-gray-700">FAQs</h4>
+                {(block.faqs || []).map((faq, idx) => (
+                  <div key={idx} className="border p-3 rounded bg-white space-y-2">
+                    <div className="flex gap-2 items-start">
+                      <input
+                        type="text"
+                        placeholder="Question"
+                        value={faq.question || ""}
+                        onChange={(e) =>
+                          handleFaqChange(i, idx, "question", e.target.value, setBlocks)
+                        }
+                        className="flex-1 border p-2 rounded"
+                      />
+                      {block.faqs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFaqItem(i, idx, setBlocks)}
+                          className="text-red-400 hover:text-red-600 px-2 transition-colors"
+                          title="Remove FAQ"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                    <textarea
+                      placeholder="Answer"
+                      value={faq.answer || ""}
+                      onChange={(e) =>
+                        handleFaqChange(i, idx, "answer", e.target.value, setBlocks)
+                      }
+                      className="w-full border p-2 rounded"
+                      rows="2"
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addFaqItem(i, setBlocks)}
+                  className="mt-1 px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded shadow-sm text-sm font-medium transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              </div>
+            )}
+
+            {/* Divider */}
+            {block.type === "divider" && (
+              <div className="flex items-center gap-2 py-2">
+                <hr className="flex-1 border-t-2 border-gray-300" />
+                <span className="text-xs text-gray-400">Divider</span>
+                <hr className="flex-1 border-t-2 border-gray-300" />
+              </div>
+            )}
+
             {/* ✅ New Add Block Section (Between Blocks) */}
             <div className="mt-4 border-t pt-3 flex flex-wrap gap-2">
               <span className="text-sm text-gray-500">Add block below:</span>
@@ -603,6 +771,27 @@ export default function BlogForm({ setSelected }) {
                 className="text-xs bg-yellow-600 text-white px-2 py-1 rounded"
               >
                 + List
+              </button>
+              <button
+                onClick={() => addBlock("button", setBlocks, i)}
+                type="button"
+                className="text-xs bg-indigo-600 text-white px-2 py-1 rounded"
+              >
+                + Button/CTA
+              </button>
+              <button
+                onClick={() => addBlock("faq", setBlocks, i)}
+                type="button"
+                className="text-xs bg-teal-600 text-white px-2 py-1 rounded"
+              >
+                + FAQ
+              </button>
+              <button
+                onClick={() => addBlock("divider", setBlocks, i)}
+                type="button"
+                className="text-xs bg-gray-400 text-white px-2 py-1 rounded"
+              >
+                + Divider
               </button>
             </div>
           </div>
@@ -666,6 +855,27 @@ export default function BlogForm({ setSelected }) {
             className="text-xs bg-yellow-600 text-white px-2 py-1 rounded"
           >
             + List
+          </button>
+          <button
+            onClick={() => addBlock("button", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-indigo-600 text-white rounded"
+          >
+            + Button/CTA
+          </button>
+          <button
+            onClick={() => addBlock("faq", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-teal-600 text-white rounded"
+          >
+            + FAQ
+          </button>
+          <button
+            onClick={() => addBlock("divider", setBlocks)}
+            type="button"
+            className="px-3 py-2 bg-gray-400 text-white rounded"
+          >
+            + Divider
           </button>
         </div>
 

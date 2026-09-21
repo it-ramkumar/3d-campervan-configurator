@@ -23,6 +23,17 @@ export const addBlock = (type, setBlocks, insertIndex = null) => {
     case "list":
       newBlock.items = [""]; // ✅ Yeh line hona zaroori hai
       break;
+    case "button":
+      newBlock.buttonText = "";
+      newBlock.buttonUrl = "";
+      newBlock.buttonStyle = "primary";
+      break;
+    case "faq":
+      newBlock.faqs = [{ question: "", answer: "" }];
+      break;
+    case "divider":
+      // Divider ko koi extra field nahi chahiye
+      break;
     default:
       break;
   }

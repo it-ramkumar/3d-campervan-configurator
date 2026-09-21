@@ -42,9 +42,12 @@ export default async function page({ searchParams }) {
   const currentPage = parseInt(page) || 1;
   const searchTerm = search || "";
 
-  // Data Fetching on Server
-  const data = await getAllBlogs(currentPage, searchTerm);
-  const blogs = data?.data || [];
+  // Data Fetching on Server (only Published posts on the public listing)
+  const data = await getAllBlogs(currentPage, searchTerm, "Published");
+  // 🔹 Safety net: exclude Drafts here too, in case the API ever returns one
+  // (stale cache, backend not yet restarted, etc). Posts with no status field
+  // are old pre-status posts and count as Published.
+  const blogs = (data?.data || []).filter((blog) => blog.status !== "Draft");
   const totalPages = data?.pagination?.totalPages || 1;
 
   const blogSchema = generateBlogListingSchema(blogs, currentPage);

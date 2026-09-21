@@ -6,9 +6,7 @@ export async function blogCard() {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/test-blog/blog-card`,
       {
-        cache: 'force-cache', // ✅ This enables Next.js Data Cache
-        next: { revalidate: 604800}, // Revalidate every hour
-        credentials: 'include',
+        cache: 'no-store',
       }
     );
 
