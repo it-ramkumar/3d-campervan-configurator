@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`h-full antialiased ${inter.variable} ${barlowCond.variable} ${dmSans.variable}`}>
       <head>
         <meta name="yandex-verification" content="94c87c5e22615ea1" />
+        <meta name="p:domain_verify" content="77c979538f9054ccc8160b98172edfc4" />
       </head>
       <body className="min-h-full flex flex-col">
         <Providers>
