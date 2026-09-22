@@ -347,6 +347,14 @@ export default function Footer() {
             </Link>
             <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
             <Link
+              href="/returns-cancellation-policy"
+              className="text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]"
+              style={{ color: "rgba(251,251,249,0.3)" }}
+            >
+              Returns & Cancellation
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
+            <Link
               href="/contact"
               className="text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]"
               style={{ color: "rgba(251,251,249,0.3)" }}
