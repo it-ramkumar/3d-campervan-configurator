@@ -3,6 +3,7 @@ import { vansByStatus } from "@/api/van/van-by-status";
 import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
 import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
+import FAQs from '@/components/Faqs/Faqs';
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
 
@@ -51,6 +52,23 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
 }
 export default async function VansForSale() {
   const limit = 9;
+ const faqs = [
+    {
+      question: "Do you build camper vans with elevator beds?",
+      answer: "Yes, we build custom camper vans featuring motorized or manual elevator bed systems. This layout allows you to raise the bed to the ceiling when you need maximum garage or cargo space for bikes and gear, and lower it down easily for sleeping at night.",
+    },
+    {
+      question: "How many watts does a camper van air conditioner use, and can it run off-grid?",
+      answer:
+        "A typical 12V or rooftop RV air conditioner draws between 600 to 1,200 watts depending on the compressor speed and setting. Our custom electrical systems are engineered with high-capacity Lithium battery banks and high-output inverters specifically to handle running an AC unit off-grid for extended periods.",
+    },
+    { question: "Can I get a custom moto van layout for hauling motorcycles?",
+      answer: "Yes, our garage spaces are fully customizable. We frequently design layouts optimized for moto van featuring reinforced heavy-duty tie-down tracks, waterproof and slip-resistant flooring, and specialized storage for gear, helmets, and ramps." },
+    {
+      question: "Can you legally live in an RV or camper van on your own property?",
+      answer: "Legalities regarding living in an RV or camper van on private property vary significantly by state, county, and local zoning laws. While some states and rural areas permit full-time living or building on your own land, many urban and suburban municipalities have restrictions or time limits. We always recommend checking with your local county zoning or code enforcement office before parking full-time.",
+    }
+  ];
 
   // 1. Next.js Fetching Pattern: Promise.all use karein taake saari requests parallel chalein (Fast load)
   // Hum pehle page ka data server par hi mangwa rahe hain
@@ -139,6 +157,19 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
       };
     })
   };
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer,
+      },
+    })),
+  };
+
   return (
     <main>
       {/* --- SEO Script --- */}
@@ -146,10 +177,14 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
 
       <HeroImage
-        title="Camper Vans for Sale - Sprinter & Transit"
-        description="At Big Bear Vans, we turn Mercedes Sprinter and Ford Transit vans into fully custom camper vans. From off-grid setups to luxury travel homes, everything is designed around how you want to live and travel. We’re proud to have 111+ happy owners across the US."
+        title="Custom Camper Vans for Sale | Sprinter & Ford Transit"
+        description="At Big Bear Vans, we transform Mercedes Sprinter and Ford Transit vans into fully custom, luxury camper vans for sale. Whether you are searching for a rugged off-grid setup to explore the backcountry or a high-end mobile home for full-time travel living, every build is meticulously engineered around how you want to live, work, and travel. We’re proud to have delivered dream rigs to 111+ happy owners across the US."
         image="/Home/home-portfolio-elevator-bed-big-bear-vans.webp"
         link="/build-your-own-camper-van"
         buttonText="Reserve your van"
@@ -161,6 +196,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         initialPending={pendingData}
         initialComing={comingData}
       />
+          <FAQs faqs={faqs} />
     </main>
   );
 }
