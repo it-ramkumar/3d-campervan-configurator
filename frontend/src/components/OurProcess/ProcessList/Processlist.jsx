@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Plane, Hammer, Tent, Sparkles, MapPin, ChevronRight, Truck } from "lucide-react";
 import AirService from "../../AirService/AirService";
-import { Heading2, RichParagraph, Heading3, Heading4,CustomLink } from '../../Common/Common';
+import { Heading2,Heading1,  RichParagraph, Heading3, Heading4,CustomLink } from '../../Common/Common';
 
 // --- STAGGER ANIMATIONS ---
 const staggerContainer = {
@@ -26,8 +26,8 @@ const InfoCard = ({ title, description, icon: Icon }) => (
     <div className="w-14 h-14 bg-secondary rounded-lg flex items-center justify-center mb-6 text-primary">
       <Icon size={28} strokeWidth={1.5} />
     </div>
-    <Heading3 text={title} className=" mb-3" />
-    <RichParagraph >
+    <Heading1 variant="card" text={title} className="!text-primary mb-3" />
+    <RichParagraph variant="card" >
       {description}
     </RichParagraph>
   </motion.div>
@@ -37,7 +37,7 @@ const ProcessStep = ({ time, title, details, isLast = false }) => (
   <div className="grid grid-cols-[80px_auto_1fr] md:grid-cols-[120px_auto_1fr] gap-x-6 md:gap-x-12 relative group">
     {/* Left: Time Label */}
     <div className="pt-2 text-right">
-      <RichParagraph className="uppercase !text-hover !text-sm tracking-wider font-bold group-hover:text-primary transition-colors">
+      <RichParagraph variant="sub" className="uppercase !text-hover  group-hover:text-primary transition-colors">
         {time}
       </RichParagraph>
     </div>
@@ -54,13 +54,13 @@ const ProcessStep = ({ time, title, details, isLast = false }) => (
     </div>
 
     {/* Right: Content Card */}
-    <div className={`${!isLast ? "pb-20" : "pb-10"} pt-1`}>
-      <Heading3 text={title} className=" mb-8" />
-      <div className="grid md:grid-cols-2 gap-8">
+    <div className={`${!isLast ? "pb-10" : "pb-10"} pt-1`}>
+      <Heading1 variant="card" text={title} className="!text-primary mb-8" />
+      <div className="grid md:grid-cols-2 gap-2">
         {details.map((item, index) => (
-          <div key={index} className="space-y-3 bg-white/50 p-6 rounded-lg border border-transparent hover:border-primary/10 hover:bg-white transition-all">
-            <Heading4 text={item.subtitle}  />
-            <RichParagraph className=" italic">
+          <div key={index} className="space-y-3 bg-white/90 p-3 rounded-lg border border-transparent hover:border-primary/10 hover:bg-white transition-all">
+            <Heading1 variant="sub" textColor="text-primary" text={item.subtitle}  />
+            <RichParagraph variant="sub" className=" italic">
               {item.description}
             </RichParagraph>
           </div>
@@ -86,7 +86,7 @@ const FlyInStep = ({ icon: Icon, text, isLast = false }) => (
 
     {/* Text Content - Changed to text-secondary for visibility on dark bg */}
     <div className="flex-1">
-      <RichParagraph className="text-secondary ">
+      <RichParagraph variant="body" className="text-secondary ">
         {text}
       </RichParagraph>
     </div>
@@ -158,7 +158,7 @@ export default function ProcessPage() {
         {/* --- Main Process Timeline --- */}
         <div className="max-w-5xl mx-auto mb-32">
           <div className="text-center mb-20">
-             <Heading2 text="Custom Build Process" className="text-primary" />
+             <Heading1 variant="section" text="Custom Build Process" className="!text-primary" />
              <div className="w-24 h-1 bg-primary mx-auto mt-4 rounded-lg" />
           </div>
 
@@ -180,7 +180,7 @@ export default function ProcessPage() {
 
           <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-10">
-              <Heading2 text="Fly in, Drive out" className="text-secondary" />
+              <Heading1 variant="section" text="Fly in, Drive out" className="text-secondary" />
               <div className="space-y-12">
                 <FlyInStep icon={Hammer} text="We precision-build your custom van." />
                 <FlyInStep icon={Plane} text="You fly in for the official handover." />
@@ -189,7 +189,7 @@ export default function ProcessPage() {
             </div>
 
             <div className="space-y-8">
-              <RichParagraph  className=" text-secondary">
+              <RichParagraph variant="body"  className=" text-secondary">
                 Logistics shouldn't be your headache. We handle the complexity so you can focus on the destination.
 
               </RichParagraph>
@@ -198,9 +198,9 @@ export default function ProcessPage() {
               <div className="bg-secondary/10 backdrop-blur-md border border-white/20 rounded-lg p-8 space-y-4">
                 <div className="flex items-center gap-3 !text-hover">
                   <Sparkles size={20} />
-                  <RichParagraph className="text-secondary uppercase !text-xs font-bold">Pro Tip</RichParagraph>
+                  <RichParagraph variant="body" className="text-secondary uppercase !text-xs font-bold">Pro Tip</RichParagraph>
                 </div>
-                <RichParagraph white={true} className="italic text-secondary">
+                <RichParagraph variant="body" className="italic text-secondary">
                   "Ship your personal gear (bikes, bedding, recovery kits) directly to our shop. We'll have everything loaded and ready for your maiden voyage."
                 </RichParagraph>
               </div>

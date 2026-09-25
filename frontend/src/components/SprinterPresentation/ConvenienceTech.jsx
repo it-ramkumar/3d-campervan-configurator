@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
-import { Heading2, Heading3 } from "../Common/Common";
+import { Heading2, Heading3,Heading1 } from "../Common/Common";
 
 const MBUX_IMAGE = "/sprinter/Rectangle 160.webp";
 const CAMERA_IMAGE = "/sprinter/pp3.webp";
@@ -12,13 +12,15 @@ const SwivelCard = ({ title, description, index }) => (
   <div className="bbv-card flex flex-col h-full p-5 lg:p-6 rounded-xl lg:rounded-2xl border-t border-hover/30 hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden">
     <div className="flex items-center mb-4 relative z-10">
       <div className="w-9 h-9 rounded-lg bg-primary/5 border border-hover/30 flex items-center justify-center mr-3 group-hover:bg-hover/20 transition-all duration-500">
-        <span className="font-display font-bold text-hover text-sm">{index}</span>
+<RichParagraph variant="sub" textColor="text-hover">
+{index}
+</RichParagraph>
       </div>
       <div className="h-px flex-1 bg-gradient-to-r from-hover/40 to-transparent rounded-full"></div>
     </div>
 
-    <Heading3 text={title} className="!text-primary mb-2 leading-snug relative z-10" />
-    <RichParagraph className="!text-primary/70 leading-relaxed flex-1 relative z-10">{description}</RichParagraph>
+    <Heading1 variant="card" text={title} className="!text-primary mb-2 leading-snug relative z-10" />
+    <RichParagraph variant="card" className="flex-1 relative z-10">{description}</RichParagraph>
 
     <div className="mt-4 relative z-10">
       <div className="h-px w-full bg-primary/10 rounded-full overflow-hidden">
@@ -31,9 +33,11 @@ const SwivelCard = ({ title, description, index }) => (
 const TechCard = ({ title, description, imageUrl }) => (
   <div className="bbv-card flex flex-col h-full rounded-xl lg:rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-500 group">
     <div className="p-4 flex-1 relative z-10">
-      <p className="text-hover text-xs uppercase tracking-widest font-bold mb-2">Feature</p>
-      <Heading3 text={title} className="!text-primary mb-2" />
-      <RichParagraph className="!text-primary/70 leading-relaxed">{description}</RichParagraph>
+      <RichParagraph variant="sub" textColor="text-hover">
+Feature
+      </RichParagraph>
+      <Heading1 variant="card" text={title} className="!text-primary mb-2" />
+      <RichParagraph variant="card" >{description}</RichParagraph>
     </div>
 
     <div className="relative mt-auto overflow-hidden">
@@ -147,13 +151,16 @@ export default function ConvenienceTech() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center mb-4">
+            <RichParagraph variant="sub" textColor="text-primary">
+Premium Components
+            </RichParagraph>
             <span className="text-hover text-xs uppercase tracking-widest font-bold">
-              Premium Components
+
             </span>
           </div>
           <div className="bbv-divider mb-6" />
-          <Heading2 text={"Tech & Conversion Ready Components"} className="!text-primary font-display uppercase tracking-wide" />
-          <RichParagraph className="!text-primary/70 mt-3">
+          <Heading1 variant="section" text={"Tech & Conversion Ready Components"} className="!text-primary uppercase"  />
+          <RichParagraph variant="body" className="font-bold mt-3">
             {"Stock Mercedes Swivel Seats – Uncompromised OEM Excellence"}
           </RichParagraph>
         </div>
@@ -177,8 +184,8 @@ export default function ConvenienceTech() {
             </span>
           </div>
           <div className="bbv-divider mb-6" />
-          <Heading2 text={"Safety & Convenience Technology"} className="!text-primary font-display uppercase tracking-wide" />
-          <RichParagraph className="!text-primary/70 mt-3">
+          <Heading1 variant="section" text={"Safety & Convenience Technology"} className="!text-primary font-display uppercase tracking-wide" />
+          <RichParagraph variant="body" className=" mt-3">
             {"Advanced systems designed to enhance your driving experience with cutting-edge safety and convenience features."}
           </RichParagraph>
         </div>

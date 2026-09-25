@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Plane, Car, MapPin, Navigation, Clock } from "lucide-react";
 import { airportData } from "../../DataUseInComp/AirportData";
-import { Heading2, Heading4, RichParagraph } from "../Common/Common";
+import { Heading2,Heading1, Heading4, RichParagraph } from "../Common/Common";
 
 const AirportCard = ({
   airport,
@@ -38,9 +38,9 @@ const AirportCard = ({
             />
           </div>
           <div>
-            <Heading4 text={airport} className="text-primary" />
+            <Heading1 variant="card" text={airport} className="!text-primary" />
             {code && (
-              <RichParagraph className="text-primary/40 uppercase">
+              <RichParagraph variant="sub" className="!text-primary/40 uppercase">
                 {code}
               </RichParagraph>
             )}
@@ -52,13 +52,13 @@ const AirportCard = ({
         </div>
       </div>
 
-      <RichParagraph className="!text-primary/70 mb-6">
+      <RichParagraph variant="card" className="!text-primary/70 mb-6">
         {description}
       </RichParagraph>
 
       {isPrivate && (
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-50 to-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border border-amber-200">
-          <RichParagraph className="w-1.5 h-1.5 bg-hoverrounded-lg animate-pulse"></RichParagraph>
+          <RichParagraph variant="sub" className="w-1.5 h-1.5 bg-hoverrounded-lg animate-pulse"></RichParagraph>
           Private Aviation Friendly
         </div>
       )}
@@ -89,8 +89,8 @@ export default function AirService() {
           >
             <Navigation size={32} strokeWidth={1.5} />
           </motion.div>
-          <Heading2 text="How to Get Here?" className="text-primary" />
-          <RichParagraph className="max-w-xl mx-auto mt-4 !text-primary/60 italic">
+          <Heading1 variant="section" text="How to Get Here?" className="!text-primary" />
+          <RichParagraph variant="body" className="max-w-xl mx-auto mt-4 !text-primary/60 italic">
             "Your adventure starts the moment you land. We've mapped out the
             easiest routes to our Big Bear facility."
           </RichParagraph>

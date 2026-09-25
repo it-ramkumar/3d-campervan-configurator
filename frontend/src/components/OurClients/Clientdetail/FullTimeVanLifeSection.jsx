@@ -2,7 +2,7 @@
 import React from "react";
 import { Home, Zap, Coffee, Briefcase, Star } from "lucide-react";
 import ClassicImageGrid from "./ClassicImageGrid";
-import { CustomLink, Heading2, Heading3, RichParagraph } from "../../Common/Common";
+import { CustomLink, Heading1, Heading3, RichParagraph } from "../../Common/Common";
 
 const FullTimeVanLifeSection = ({ imageData }) => {
   return (
@@ -15,9 +15,11 @@ const FullTimeVanLifeSection = ({ imageData }) => {
             <Home size={40} />
           </div>
           <div>
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Full-Time Living</p>
-            <Heading2 text="4-Season Ready Campervans" className="font-display text-primary uppercase tracking-wide" />
-            <RichParagraph className="text-primary/70 font-bold uppercase mt-1">
+            <RichParagraph variant="sub" className="!text-hover">
+Full-Time Living
+            </RichParagraph>
+            <Heading1 variant="section" text="4-Season Ready Campervans" className=" !text-primary uppercase" />
+            <RichParagraph variant="body" className="font-bold uppercase mt-1">
               Home on wheels for those who live the journey
             </RichParagraph>
           </div>
@@ -27,18 +29,18 @@ const FullTimeVanLifeSection = ({ imageData }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-20">
           <div className="lg:col-span-6 bbv-card p-8 md:p-12 rounded-lg border border-hover/20 flex flex-col justify-center">
             <div className="space-y-6">
-              <RichParagraph className="text-primary/80">
+              <RichParagraph variant="card" className="text-primary/80">
                 Sometimes, we also build campervans for full-time van lifers who
                 actually plan to live on the road for a year or more. These
                 clients are remote workers, interior designers, and people who
                 decided to visit different places and create travel content for
                 social media.
               </RichParagraph>
-              <RichParagraph className="text-primary/60 leading-relaxed">
+              <RichParagraph variant="card" className="text-primary/60 leading-relaxed">
                 For full-time living, you need a ton of storage and home-like power and water facilities. At Big Bear Vans, we go beyond the standard conversion to fulfill the demanding requirements of full-time living.
               </RichParagraph>
               <div className="flex flex-wrap gap-3 pt-4">
-                <RichParagraph className="text-primary/50 -mt-1">Featured Models:</RichParagraph>
+                <RichParagraph variant="card" className="text-primary/50 -mt-1">Featured Models:</RichParagraph>
                 <CustomLink href="/van-layouts/calabasas" text={" Calabasas "} />
                 <CustomLink href="/van-layouts/san-diego-campervan" text={" San Diego "} />
               </div>
@@ -50,13 +52,13 @@ const FullTimeVanLifeSection = ({ imageData }) => {
             <div className="absolute -top-4 left-8 inline-flex items-center gap-2 px-4 py-1.5 bg-hover text-primary rounded-full shadow-md">
               <span className="text-[10px] font-black uppercase tracking-[0.15em]">Testimonial</span>
             </div>
-            <RichParagraph className="text-lg italic leading-relaxed mb-8 relative z-10 text-primary/80 mt-4">
+            <RichParagraph variant="card" className="text-lg italic leading-relaxed mb-8 relative z-10 text-primary/80 mt-4">
               "Big Bear Vans did a full conversion for my MB Sprinter, and I could not be happier! I had very specific requests, and they met all of my requests and are truly a completely customizable conversion company. I went to about three different conversion companies, and I was only given certain planned layouts and certain colors. Not at Big Bear Vans, they accommodated my every wish. They are also extremely knowledgeable. I came back for a couple of upgrades, and they gladly accommodated me. I highly suggest Big Bear Vans for your conversion!"
             </RichParagraph>
             <div className="flex items-center gap-4 border-t border-hover/20 pt-6">
               <div>
-                <RichParagraph className="text-primary font-bold">Laura</RichParagraph>
-                <RichParagraph className="text-xs uppercase tracking-widest text-primary/60">Calabasas Campervan</RichParagraph>
+                <RichParagraph variant="card" className="text-primary font-bold">Laura</RichParagraph>
+                <RichParagraph variant="card" className="text-xs uppercase tracking-widest text-primary/60">Calabasas Campervan</RichParagraph>
               </div>
             </div>
           </div>
@@ -78,7 +80,10 @@ const FullTimeVanLifeSection = ({ imageData }) => {
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 bg-hover/10 p-4 rounded-lg border border-hover/20">
                     <item.icon size={18} className="text-hover" />
-                    <span className="text-xs font-bold text-primary/80 uppercase tracking-tight">{item.text}</span>
+                    <RichParagraph variant="sub" className="text-primary/80">
+{item.text}
+                    </RichParagraph>
+
                   </div>
                 ))}
               </div>
@@ -86,10 +91,12 @@ const FullTimeVanLifeSection = ({ imageData }) => {
 
             <div className="lg:col-span-5 flex flex-col space-y-6">
               <div>
-                <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Case Study</p>
+                <RichParagraph variant="sub" className="!text-hover ">
+Case Study
+                </RichParagraph>
                 <div className="bbv-divider mb-4" />
-                <Heading3 text="San Diego Campervan" className="font-display text-primary uppercase tracking-wide mb-4" />
-                <RichParagraph className="text-primary/80 my-4">
+                <Heading1 variant="section" text="San Diego Campervan" className=" !text-primary uppercase mb-4" />
+                <RichParagraph variant="body" className="my-4">
                   We built the
                   <CustomLink href="/van-layouts/san-diego-campervan" text={" San Diego campervan "} />
                   for an architect who worked
@@ -99,10 +106,10 @@ const FullTimeVanLifeSection = ({ imageData }) => {
               </div>
 
               <div className="bbv-card p-8 rounded-lg border-l-4 border-hover">
-                <RichParagraph className="text-primary/80 italic mb-4">
+                <RichParagraph variant="body" className=" italic mb-4">
                   "Big Bear Vans built an amazing custom campervan for me. They have a really nice team to work with, and I was able to really work closely with them on getting exactly what I wanted in my design. I am a remote worker, so I wanted to have an office space as well as a beefy electrical system, a full kitchen, a shower, and a bed area. I've gotten so many compliments on my buildout and couldn't be happier with how it turned out. Highly recommend Big Bear Vans if you're looking to buy a camper van."
                 </RichParagraph>
-                <RichParagraph className="text-hover text-sm font-bold uppercase tracking-wider">
+                <RichParagraph variant="sub" className="!text-hover font-bold uppercase">
                   — Remote Worker
                 </RichParagraph>
               </div>

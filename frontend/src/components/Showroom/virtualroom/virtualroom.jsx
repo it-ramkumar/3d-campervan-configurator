@@ -3,27 +3,28 @@ import React from "react";
 import Image from "next/image";
 import { Globe, Camera, Users, MapPin } from "lucide-react";
 import AirService from "../../AirService/AirService";
-import { Heading2, RichParagraph, Heading3, Heading4, SecondaryButton } from '../../Common/Common';
+import { Heading2, Heading1, RichParagraph, Heading3, Heading4, SecondaryButton } from '../../Common/Common';
 
 export default function ShowroomAndTours() {
   return (
     <div className="min-h-screen selection:bg-hover selection:text-primary">
 
       {/* --- Section 1: Minimalist Header --- */}
-      <section className="bbv-section-light pt-32 pb-20 px-6 relative">
+      <section className="bbv-section-light pt-10 pb-20 px-6 relative">
         <div className="bbv-dot-grid-light" />
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-8 relative z-10">
           <div className="max-w-2xl">
             <div className="flex items-center gap-4 mb-4">
               <span className="w-8 h-[2px] bg-hover"></span>
-              <p className="text-hover text-xs uppercase tracking-widest font-bold">
+              <RichParagraph variant="sub" textColor="text-hover">
                 Remote Design Studio
-              </p>
+              </RichParagraph>
+
             </div>
-            <Heading2 text="Virtual Tours For Distant Clients" className="text-primary" />
+            <Heading1 variant="section" text="Virtual Tours For Distant Clients" className="!text-primary" />
           </div>
           <div className="max-w-md">
-            <RichParagraph className="border-l-2 border-hover/30 pl-6 py-2 text-primary/70">
+            <RichParagraph variant="body" className="border-l-2 border-hover/30 pl-6 py-2 text-primary/70">
               If you're out of State, no problem. We'll bring the showroom to you. Jump on a video call with us via FaceTime or Zoom. We'll give you a full virtual tour of our workshop, just like you're here in person.
             </RichParagraph>
           </div>
@@ -53,7 +54,7 @@ export default function ShowroomAndTours() {
           {/* Right Column: Features & CTA (50% Width) */}
           <div className="flex flex-col gap-8 justify-between h-full">
             <div className="space-y-8">
-              <Heading3 text="What to expect in your session:" className="text-secondary" />
+              <Heading1 variant="card" text="What to expect in your session:" className="text-secondary" />
 
               <div className="space-y-6">
                 {[
@@ -66,8 +67,8 @@ export default function ShowroomAndTours() {
                       <item.icon size={22} />
                     </div>
                     <div className="space-y-1">
-                      <Heading4 text={item.title} className="text-secondary !mb-1 text-lg font-semibold" />
-                      <RichParagraph className="text-secondary/70 text-sm leading-relaxed">{item.desc}</RichParagraph>
+                      <Heading1 variant="sub" text={item.title} className="text-secondary !mb-1 text-lg font-semibold" />
+                      <RichParagraph variant="sub" className="text-secondary/70 text-sm leading-relaxed">{item.desc}</RichParagraph>
                     </div>
                   </div>
                 ))}
@@ -79,8 +80,8 @@ export default function ShowroomAndTours() {
               <div className="relative z-10">
                 <p className="text-hover text-xs uppercase tracking-widest font-bold mb-2">Book a Session</p>
                 <div className="bbv-divider mb-4" />
-                <Heading4 text="Ready to start?" className="text-secondary mb-3 text-xl font-bold" />
-                <RichParagraph className="mb-6 text-secondary/70 text-sm">
+                <Heading1 variant="sub" text="Ready to start?" className="text-secondary mb-3 text-xl font-bold" />
+                <RichParagraph variant="sub" className="mb-6 text-secondary/70 text-sm">
                   Book a personalized Zoom session and let's bring your vision to life.
                 </RichParagraph>
                 <SecondaryButton label="Schedule Your Tour" link={"/contact"} className="!rounded-xl" />
@@ -93,7 +94,7 @@ export default function ShowroomAndTours() {
       </section>
 
       {/* --- Section 3: The Big Bear Journey (Equal 50/50 Layout) --- */}
-   {/* --- Section 3: The Big Bear Journey --- */}
+      {/* --- Section 3: The Big Bear Journey --- */}
 
       <section className="max-w-7xl mx-auto px-6 py-24">
 
@@ -122,14 +123,16 @@ export default function ShowroomAndTours() {
             <div className="inline-flex items-center gap-3 bg-hover/20 backdrop-blur-md px-4 py-2 rounded-lg mb-6">
 
               <MapPin size={14} className="text-hover" />
+              <RichParagraph variant="sub" textColor="text-hover">
+                Big Bear Lake, CA
+              </RichParagraph>
 
-              <p className="text-hover text-xs uppercase tracking-widest font-bold">Big Bear Lake, CA</p>
 
             </div>
 
-            <Heading2 text="A Destination Worth the Drive" className="text-secondary" />
+            <Heading1 variant="section" text="A Destination Worth the Drive" className="text-secondary" />
 
-            <RichParagraph className="mt-6 text-secondary/70">
+            <RichParagraph variant="body" className="mt-6 text-secondary/70">
 
               Surrounded by mountains, ski resorts, and crystal-clear waters, visiting our workshop is the perfect excuse for a weekend getaway.
 
@@ -140,18 +143,23 @@ export default function ShowroomAndTours() {
             <div className="mt-6 flex gap-10">
 
               <div>
+                <RichParagraph variant="sub" textColor="text-hover">
+                  2
+                </RichParagraph>
+                <RichParagraph variant="sub" textColor="text-secondary/60">
+                  Ski Resorts
+                </RichParagraph>
 
-                <p className="text-hover text-2xl font-black">2</p>
-
-                <p className="text-secondary/60 text-xs uppercase tracking-wider mt-1">Ski Resorts</p>
 
               </div>
 
               <div>
-
-                <p className="text-hover text-2xl font-black">100+</p>
-
-                <p className="text-secondary/60 text-xs uppercase tracking-wider mt-1">Nature Trails</p>
+                <RichParagraph variant="sub" textColor="text-hover">
+                  100+
+                </RichParagraph>
+                <RichParagraph variant="sub" textColor="text-secondary/60">
+                  Nature Trails
+                </RichParagraph>
 
               </div>
 
@@ -167,8 +175,11 @@ export default function ShowroomAndTours() {
         <div className="bbv-dot-grid-light" />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Getting Here</p>
-            <Heading2 text="Travel Logistics" className="text-primary" />
+            <RichParagraph variant="sub" textColor="text-hover">
+              Getting Here
+            </RichParagraph>
+
+            <Heading1 variant="section" text="Travel Logistics" className="!text-primary" />
             <div className="bbv-divider mx-auto mt-4" />
           </div>
           <AirService />

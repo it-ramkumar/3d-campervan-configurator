@@ -3,7 +3,6 @@
 
 import Image from "next/image";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common";
-import BackButton from "../BackButton/BackButton";
 
 export default function HeroImage({
   image,
@@ -39,10 +38,7 @@ export default function HeroImage({
         ${className}
       `}
     >
-      {/* BACK BUTTON
-      <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-30">
-        <BackButton variant="default" label="Go Back" />
-      </div> */}
+
 
       <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20 pt-10 md:pt-4">
         {/* 50 / 50 GRID */}
@@ -58,9 +54,10 @@ export default function HeroImage({
             {/* SLOGAN */}
             {slogan && (
               <div>
-                <span className="inline-flex items-center font-ui font-semibold text-[10px] sm:text-xs uppercase tracking-[0.28em] text-secondary border-l-2 border-secondary pl-3 py-0.5">
-                  {slogan}
-                </span>
+                <RichParagraph variant="sub" textColor="text-secondary">
+ {slogan}
+                </RichParagraph>
+
               </div>
             )}
 
@@ -68,14 +65,14 @@ export default function HeroImage({
             {/* TITLE */}
             {title && (
               <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl leading-tight tracking-tight text-white">
-                <Heading1 text={title} />
+                <Heading1 variant="hero" text={title} />
               </div>
             )}
 
             {/* DESCRIPTION */}
             {description && (
               <div className="max-w-xl">
-                <RichParagraph textColor="secondary">
+                <RichParagraph variant="hero" textColor="secondary">
                   {description}
                 </RichParagraph>
               </div>

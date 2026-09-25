@@ -7,7 +7,7 @@ import {
   Users, TentTree, Table, Utensils,
   BatteryCharging, Thermometer, Droplets, AirVent, Sun
 } from 'lucide-react';
-import { Heading2, Heading3, RichParagraph, ImageWithSkeleton, CustomLink } from '../../Common/Common';
+import { Heading1, Heading3, RichParagraph, ImageWithSkeleton, CustomLink } from '../../Common/Common';
 
 const sections = [
   {
@@ -90,18 +90,20 @@ export default function WhyChoose() {
         <div className="container mx-auto px-6 max-w-7xl py-10 relative z-10">
 
           <div className="flex items-center gap-3 mb-3">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold">Our Advantage</p>
+            <RichParagraph variant="sub" className="uppercase tracking-widest !text-hover">
+              Our Advantage
+            </RichParagraph>
           </div>
 
-          <Heading2
+          <Heading1 variant="section"
             textColor="text-primary"
-            className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.95] mb-3"
+
           >
             Why Choose<br />
             <span className="text-hover">Big Bear Vans?</span>
-          </Heading2>
+          </Heading1>
 
-          <RichParagraph className="!text-primary/50 !text-sm md:!text-base leading-relaxed max-w-lg">
+          <RichParagraph variant="body" className="  leading-relaxed max-w-lg">
             Based in Big Bear, California, our team of expert builders and engineers
             deliver precision-crafted homes on wheels that stand in a class of their own.
           </RichParagraph>
@@ -121,10 +123,6 @@ export default function WhyChoose() {
         return (
           <div key={i} className="relative border-b border-primary/10 overflow-hidden">
 
-            {/* Ghost section number */}
-            <div className={`absolute inset-y-0 ${section.isReverse ? 'left-0' : 'right-0'} flex items-center pointer-events-none select-none overflow-hidden`}>
-              <span className="text-[200px] font-black text-primary/[0.03] leading-none px-4">{num}</span>
-            </div>
 
             <div className="container mx-auto px-6 max-w-7xl py-20 md:py-10 relative z-10">
               {/* Equal 2-Column Grid (50% - 50%) */}
@@ -144,23 +142,24 @@ export default function WhyChoose() {
 
                   {/* Number badge */}
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-black text-hover bg-hover/15 border border-hover/20 rounded-lg px-3 py-1.5 uppercase tracking-[0.15em]">
+                    <RichParagraph variant="sub" className=" text-hover bg-hover/35 border border-hover/20 rounded-lg px-3 py-1.5 uppercase">
                       {num}
-                    </span>
-                    <span className="text-xs font-bold text-primary/30 uppercase tracking-widest">
-                      / {sections.length} Features
-                    </span>
+                    </RichParagraph>
+                   <RichParagraph variant="sub" className=" text-primary/30 uppercase tracking-widest">
+                    / {sections.length} Features
+                    </RichParagraph>
+
                   </div>
 
                   {/* Title */}
-                  <Heading3 textColor="text-primary">
+                  <Heading1 as="h3" variant="card" textColor="text-primary">
                     {section.title}
-                  </Heading3>
+                  </Heading1>
 
                   {/* Expandable body */}
                   <div className={`relative overflow-hidden transition-all duration-500 ${!isOpen ? 'max-h-[320px]' : 'max-h-[2000px]'}`}>
 
-                    <RichParagraph className="!text-primary/55 !text-sm leading-relaxed mb-5">
+                    <RichParagraph variant="card" className="mb-5">
                       {section.intro}
                     </RichParagraph>
 
@@ -176,14 +175,14 @@ export default function WhyChoose() {
                           <span className="flex-shrink-0 p-2 rounded-lg bg-hover/20 text-hover group-hover:bg-hover group-hover:text-secondary transition-all mt-0.5">
                             {f.icon}
                           </span>
-                          <RichParagraph html={f.text} className="!text-primary/60 !text-sm leading-relaxed" />
+                          <RichParagraph variant="sub" html={f.text} className="!text-primary/60 " />
                         </div>
                       ))}
                     </div>
 
                     {section.outro && (
                       <div className="mt-5 p-5 rounded-lg border-l-2 border-hover" style={{ background: 'rgba(237,152,95,0.07)' }}>
-                        <RichParagraph html={section.outro} className="!text-primary/65 !text-sm italic" />
+                        <RichParagraph variant="card" html={section.outro} className="!text-primary/65 !text-sm italic" />
                       </div>
                     )}
 

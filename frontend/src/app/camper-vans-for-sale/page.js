@@ -183,8 +183,8 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
       />
 
       <HeroImage
-        title="Custom Camper Vans for Sale | Sprinter & Ford Transit"
-        description="At Big Bear Vans, we transform Mercedes Sprinter and Ford Transit vans into fully custom, luxury camper vans for sale. Whether you are searching for a rugged off-grid setup to explore the backcountry or a high-end mobile home for full-time travel living, every build is meticulously engineered around how you want to live, work, and travel. We’re proud to have delivered dream rigs to 111+ happy owners across the US."
+        title="Custom Sprinter & Ford Transit Camper Vans"
+        description="At Big Bear Vans, we build fully custom luxury Mercedes Sprinter and Ford Transit camper vans. From rugged off-grid setups to full-time travel homes, every rig is engineered around your lifestyle. Trusted by 111+ owners across the US."
         image="/Home/home-portfolio-elevator-bed-big-bear-vans.webp"
         link="/build-your-own-camper-van"
         buttonText="Reserve your van"

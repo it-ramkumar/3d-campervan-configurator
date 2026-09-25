@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import SecondaryButton from "../Common/Button/SecondaryButton";
-import { Heading2, RichParagraph } from "../Common/Common";
+import { Heading2, Heading1, RichParagraph } from "../Common/Common";
 import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
 export default function ContactForm({
   formData,
@@ -44,36 +44,35 @@ export default function ContactForm({
             {/* DETAILS */}
             <div className="w-full md:w-3/5 space-y-2 text-center md:text-left flex flex-col justify-between h-full">
               <div>
-                <span className="inline-block text-[9px] font-extrabold tracking-widest text-[#ED985F] uppercase bg-[#ED985F]/10 px-2.5 py-0.5 rounded-full border border-[#ED985F]/20 mb-1">
+                <RichParagraph variant="card">
                   Selected Configuration
-                </span>
+                </RichParagraph>
 
-                <h3 className="text-lg font-black text-[#001F3D] leading-snug">
-                  {van.title}
-                </h3>
 
+                <Heading1 variant="card" text={van.title} textColor="text-[#001F3D]" />
                 {van.subtitle && (
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                  <RichParagraph variant="card" className="text-xs text-slate-500 mt-1 line-clamp-2">
                     {van.subtitle}
-                  </p>
+                  </RichParagraph>
                 )}
               </div>
 
               {/* PRICE */}
               <div className="pt-3 border-t border-slate-200/60 mt-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                    Price
-                  </span>
+                  <RichParagraph variant="card">
+Price
+                  </RichParagraph>
+
 
                   {van?.price && Number(van.price) >= 1000 ? (
-                    <span className="text-lg font-black text-[#001F3D]">
+                    <RichParagraph variant="card" className="text-lg font-black text-[#001F3D]">
                       ${Number(van.price).toLocaleString("en-US")}
-                    </span>
+                    </RichParagraph>
                   ) : (
-                    <span className="text-base font-black text-[#001F3D]">
+                    <RichParagraph variant="card" className="text-base font-black text-[#001F3D]">
                       Pricing Not Mentioned
-                    </span>
+                    </RichParagraph>
                   )}
                 </div>
               </div>
@@ -83,9 +82,9 @@ export default function ContactForm({
           {/* DIVIDER */}
           <div className="relative flex py-5 items-center">
             <div className="flex-grow border-t border-slate-100"></div>
-            <span className="flex-shrink mx-4 text-[10px] text-primary/20 font-bold uppercase tracking-widest">
+            <RichParagraph variant="card" className=" text-primary/20 font-bold uppercase">
               Inquiry Details
-            </span>
+            </RichParagraph>
             <div className="flex-grow border-t border-slate-100"></div>
           </div>
         </div>
@@ -93,9 +92,9 @@ export default function ContactForm({
 
       {/* HEADING */}
       <div className="text-center mb-10">
-        <Heading2 text={hasSelectedVan ? "Let’s Custom Build It" : "Let’s Connect"} />
+        <Heading1 variant="section" textColor="text-primary" text={hasSelectedVan ? "Let’s Custom Build It" : "Let’s Connect"} />
 
-        <RichParagraph className="mt-2">
+        <RichParagraph variant="body" className="mt-2">
           {hasSelectedVan
             ? `Fill out the form below for ${van.title}.`
             : "Tell us what’s on your mind!"

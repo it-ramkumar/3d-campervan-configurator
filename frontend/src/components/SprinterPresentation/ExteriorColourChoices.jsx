@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ImageWithSkeleton, RichParagraph } from '../Common/Common';
+import { Heading1, ImageWithSkeleton, RichParagraph } from '../Common/Common';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 
 // Import Swiper styles
@@ -146,7 +146,7 @@ const ColorModal = ({ color, isOpen, onClose }) => {
             {/* Color Name on Image - REDUCED LG FONT SIZE */}
             <div className="absolute bottom-3 left-3 lg:bottom-6 lg:left-6">
               <Heading2 text={color.name} className='text-secondary!'/>
-              
+
               <div className="w-12 h-1 bg-white/80 rounded-full lg:w-16"></div>
             </div>
           </div>
@@ -158,17 +158,17 @@ const ColorModal = ({ color, isOpen, onClose }) => {
               <div>
                 {/* REDUCED LG FONT SIZE */}
                 <Heading4 text={"Color Description"} className='text-secondary! mb-2'/>
-                
+
                 {/* REDUCED LG FONT SIZE */}
                 <RichParagraph className='text-secondary!'> {color.description}</RichParagraph>
-                
+
               </div>
 
               {/* Features */}
               <div>
                 {/* REDUCED LG FONT SIZE */}
                 <Heading4 text={"Key Features"} className='text-secondary! mb-2'/>
-                
+
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {color.features.map((feature, index) => (
                     <div
@@ -230,14 +230,15 @@ export default function ExteriorColourChoices() {
       <div className="container mx-auto px-4 py-10 md:py-16">
         {/* Main Title - REDUCED DESKTOP FONT SIZE */}
         <div className="text-center mb-4 sm:mb-5">
-          <Heading2 text={"Key Features & Upgrades"}/>
-          
+          <Heading1 variant="section" textColor="text-primary" text={"Key Features & Upgrades"}/>
+
         </div>
 
         {/* Subtitle - REDUCED MARGIN: mb-16 (from mb-24/mb-32) and REDUCED DESKTOP FONT SIZE */}
         <div className="text-center mb-24 md:mb-20">
-          <Heading3 text={"Rear Steps, Hitch Options, & Towing Capacity"}/>
-          
+          <RichParagraph variant='body' className='font-bold'>
+           Rear Steps, Hitch Options, & Towing Capacity" </RichParagraph>
+
         </div>
 
         {/* Features Card Grid - REDUCED VERTICAL GAP: gap-y-16 (from gap-y-28/gap-y-24) */}
@@ -265,20 +266,20 @@ export default function ExteriorColourChoices() {
               <StepIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <Heading4 text={"Rear Steps"} className='text-secondary!'/>
+            <Heading1 variant="card" text={"Rear Steps"} className='!text-secondary!'/>
             {/* <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Rear Steps</h4> */}
             <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
-            <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <RichParagraph className='text-secondary!'> Factory rear steps available on 2025 Sprinter models.</RichParagraph>
-              <RichParagraph className='text-secondary!'> Step height ranges from <strong>21 to 25 inches</strong>, depending on model.</RichParagraph>
-              <RichParagraph className='text-secondary!'> Example: Cargo Van 2500 and 3500 variants.</RichParagraph>
-              <RichParagraph className='text-secondary! !mt-4 '> Aftermarket rear steps also available:</RichParagraph>
-              
+            <div className=" space-y-2 text-left">
+              <RichParagraph variant="card" className='!text-secondary'> Factory rear steps available on 2025 Sprinter models.</RichParagraph>
+              <RichParagraph variant="card" className='!text-secondary'> Step height ranges from <strong>21 to 25 inches</strong>, depending on model.</RichParagraph>
+              <RichParagraph variant="card" className='!text-secondary'> Example: Cargo Van 2500 and 3500 variants.</RichParagraph>
+              <RichParagraph variant="card" className='!text-secondary !mt-4 '> Aftermarket rear steps also available:</RichParagraph>
+
               {/* REDUCED DESKTOP FONT SIZE */}
-              <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Improve <strong>accessibility</strong>.</RichParagraph></li>
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Offer added convenience for cargo loading and unloading.</RichParagraph></li>
+              <ul className=" list-disc pl-5">
+                <li><RichParagraph variant='sub' className='text-secondary'>Improve <strong>accessibility</strong>.</RichParagraph></li>
+                <li><RichParagraph variant='sub' className='text-secondary'>Offer added convenience for cargo loading and unloading.</RichParagraph></li>
                 {/* <li>Offer added convenience for cargo loading and unloading.</li> */}
               </ul>
             </div>
@@ -305,25 +306,25 @@ export default function ExteriorColourChoices() {
               <HitchIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <Heading4 text={"Hitch Options"} className='text-secondary!'/>
+            <Heading1 variant='card' text={"Hitch Options"} c/>
                         <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
-            <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <RichParagraph className='text-secondary!'><strong>Class III Hitch</strong>:</RichParagraph>
-              
+            <div className="space-y-2 text-left">
+              <RichParagraph variant='card' className='text-secondary!'><strong>Class III Hitch</strong>:</RichParagraph>
+
               {/* REDUCED DESKTOP FONT SIZE */}
-              <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Available for Cargo Van 2500 models.</RichParagraph></li>
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Maximum tongue weight: <strong>500 lbs</strong>.</RichParagraph></li>
-                
+              <ul className="list-disc pl-5">
+                <li><RichParagraph variant='sub' className='text-secondary! '>Available for Cargo Van 2500 models.</RichParagraph></li>
+                <li><RichParagraph variant='sub' className='text-secondary! '>Maximum tongue weight: <strong>500 lbs</strong>.</RichParagraph></li>
+
               </ul>
-              <RichParagraph className='text-secondary! mt-3'><strong>Class IV Hitch</strong>:</RichParagraph>
-              
+              <RichParagraph variant='card' className='text-secondary! mt-3'><strong>Class IV Hitch</strong>:</RichParagraph>
+
               {/* REDUCED DESKTOP FONT SIZE */}
-              <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Available for 3500, 3500XD, and 4500 models.</RichParagraph></li>
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Maximum tongue weight: <strong>750 lbs</strong>.</RichParagraph></li>
-                
+              <ul className=" list-disc pl-5">
+                <li><RichParagraph variant='sub' className='text-secondary! '>Available for 3500, 3500XD, and 4500 models.</RichParagraph></li>
+                <li><RichParagraph variant='sub' className='text-secondary! '>Maximum tongue weight: <strong>750 lbs</strong>.</RichParagraph></li>
+
               </ul>
             </div>
           </div>
@@ -349,24 +350,24 @@ export default function ExteriorColourChoices() {
               <TowingIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <Heading4 text={"Towing Capacity"} className='text-secondary!'/>
-            
+            <Heading1 variant='card' text={"Towing Capacity"} className='text-secondary!'/>
+
             <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
-            <div className="font-serif text-sm sm:text-base md:text-sm font-medium space-y-2 text-left">
-              <RichParagraph className='text-secondary! '><strong>Cargo Van 2500:</strong></RichParagraph>
-              
+            <div className=" space-y-2 text-left">
+              <RichParagraph variant='card' className='text-secondary! '><strong>Cargo Van 2500:</strong></RichParagraph>
+
               {/* REDUCED DESKTOP FONT SIZE */}
-              <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Towing capacity: Up to <strong>5,000 lbs</strong>.</RichParagraph></li>
-                
+              <ul className="s list-disc pl-5">
+                <li><RichParagraph variant='sub' className='text-secondary! '>Towing capacity: Up to <strong>5,000 lbs</strong>.</RichParagraph></li>
+
               </ul>
               <RichParagraph className='text-secondary! mt-4'><strong>Cargo Van 3500, 3500XD, and 4500:</strong></RichParagraph>
-             
+
               {/* REDUCED DESKTOP FONT SIZE */}
-              <ul className="text-xs sm:text-sm md:text-xs list-disc pl-5">
-                <li><RichParagraph className='text-secondary! !text-[14px]'>Towing capacity: Up to <strong>7,500 lbs</strong>.</RichParagraph></li>
-                
+              <ul className=" list-disc pl-5">
+                <li><RichParagraph variant='sub' className='text-secondary! '>Towing capacity: Up to <strong>7,500 lbs</strong>.</RichParagraph></li>
+
               </ul>
             </div>
           </div>
@@ -379,10 +380,8 @@ export default function ExteriorColourChoices() {
         <div className="container mx-auto px-4">
           {/* Section Title - REDUCED DESKTOP FONT SIZE */}
           <div className="text-center mb-8 sm:mb-10">
-            <Heading2 text={"Exterior Color Choices"} className='text-secondary!'/>
-            {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-4xl font-bold text-white">
-              Exterior Color Choices
-            </h2> */}
+            <Heading1 variant='section' text={"Exterior Color Choices"} className='text-secondary!'/>
+
           </div>
 
           {/* Color Swiper */}
@@ -442,14 +441,16 @@ export default function ExteriorColourChoices() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-500 flex items-center justify-center">
                       <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 text-white text-center">
                         <div className="bg-black/60 backdrop-blur-sm rounded-lg p-2 mx-3">
-                          <span className="font-semibold text-sm">Click to View Details</span>
+                        <RichParagraph variant='sub' textColor='text-secondary'>
+Click to View Details
+                        </RichParagraph>
                         </div>
                       </div>
                     </div>
                   </div>
                   {/* Text part - REDUCED PADDING/FONT SIZE */}
                   <div className="p-3 rounded-b-xl" style={{ backgroundColor: veryDarkCharcoal }}>
-                    <Heading4 text={color.name} className='text-secondary! text-center'/>
+                    <Heading1 variant='card' text={color.name} className='text-secondary! text-center'/>
                     {/* <h3 className="font-serif font-medium text-xl sm:text-2xl text-white text-center">
                       {color.name}
                     </h3> */}

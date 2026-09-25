@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {
   Heading2,
+   Heading1,
   Heading3,
   RichParagraph,
   ImageWithSkeleton,
@@ -42,24 +43,27 @@ export default function AboutPage() {
       {/* Content - 50% */}
       <div className="w-full lg:w-1/2 space-y-8">
         <div>
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
-            The Founders
-          </p>
 
-          <Heading2
+      <RichParagraph variant="sub" className="!text-hover">
+The Founders
+      </RichParagraph>
+
+
+          <Heading1
+          variant="section"
             text="Artur and Anna"
-            className="font-display text-primary uppercase tracking-wide mt-2"
+            className=" !text-primary uppercase mt-2"
           />
 
           <div className="bbv-divider mb-6" />
         </div>
 
-        <RichParagraph className="text-xl font-medium leading-relaxed text-primary/90">
+        <RichParagraph variant="body">
           Our journey wasn't born in a factory—it was born on the open road
           across Europe and the USA.
         </RichParagraph>
 
-        <RichParagraph className="text-primary/60 leading-relaxed">
+        <RichParagraph variant="body">
           Combining all the knowledge from our travels in trailers, buses,
           and fifth-wheels, we were eager to create the perfect compact van
           space for a family of 5. Every build we create is a result of that
@@ -76,12 +80,14 @@ export default function AboutPage() {
         <div className="bbv-dot-grid" />
         <div className="container mx-auto px-6 relative z-10">
           <div className="mb-20">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+            <RichParagraph variant="sub" className="!text-hover">
               Our Journey
-            </p>
-            <Heading2
+            </RichParagraph>
+
+            <Heading1
+            variant="section"
               text="The Evolution of Our Vans"
-              className="font-display text-secondary uppercase tracking-wide mt-2"
+              className=" text-secondary uppercase mt-2"
             />
             <div className="bbv-divider mb-6" />
           </div>
@@ -94,16 +100,15 @@ export default function AboutPage() {
                   src={ambulanceImage}
                   alt={"ambulance custom build"}
                 />
-                <div className="absolute top-4 left-4 bg-hover text-primary px-4 py-1 rounded-lg text-xs font-bold uppercase">
-                  Build 01
-                </div>
+
               </div>
               <div className="p-10">
-                <Heading3
+                <Heading1
+                variant="card"
                   text="Ambulance Afterlife"
                   className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-secondary/60">
+                <RichParagraph variant="card" className="text-secondary/60">
                   Our journey began in 2020 with a Sprinter ambulance
                   conversion. We crafted this for family use, retiring it only
                   after 300,000 miles of memories.
@@ -121,11 +126,12 @@ export default function AboutPage() {
                 />
               </div>
               <div className="p-10">
-                <Heading3
+                <Heading1
+                variant="card"
                   text="Lift Bed Prototype"
                   className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-secondary/60">
+                <RichParagraph variant="card" className="text-secondary/60">
                   This build featured our first attempt at an elevator bed—a
                   feature that now defines the Santa Monica layout.
                 </RichParagraph>
@@ -142,11 +148,12 @@ export default function AboutPage() {
                 />
               </div>
               <div className="p-10">
-                <Heading3
+                <Heading1
+                variant="card"
                   text="Blue Whale"
                   className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-secondary/60">
+                <RichParagraph variant="card" className="text-secondary/60">
                   A Ford Transit 148 high roof with roof hammocks and rear
                   decks. View the{" "}
                   <Link
@@ -170,11 +177,12 @@ export default function AboutPage() {
                 />
               </div>
               <div className="p-10">
-                <Heading3
+                <Heading1
+                variant="card"
                   text="Gray Wolf"
                   className="font-display text-secondary uppercase tracking-wide mb-4"
                 />
-                <RichParagraph className="text-secondary/60">
+                <RichParagraph variant="card" className="text-secondary/60">
                   Our 144 Sprinter demo sleeps five and reflects our commitment
                   to innovation. View the{" "}
                   <Link
@@ -205,26 +213,30 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 text-center max-w-4xl px-6">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+          <RichParagraph variant="sub" className="!text-hover">
             Ready to Roll
-          </p>
-          <Heading2
+          </RichParagraph>
+          <Heading1
+          variant="section"
             text="Join the Adventure"
             className="font-display text-secondary uppercase tracking-wide mb-4"
           />
           <div className="bbv-divider mb-6" />
 
-          <p className="text-hover text-lg md:text-xl font-semibold italic tracking-wide mb-6">
-            You Dream It. We Build It.
-          </p>
-          <RichParagraph className="text-secondary/80 mb-10 text-lg">
+          <div className="bbv-divider mb-6" />
+
+         <RichParagraph variant="body" className="!text-hover mb-10">
+           You Dream It. We Build It.
+          </RichParagraph>
+
+          <RichParagraph variant="body" className="text-secondary/80 mb-10 text-lg">
             Become a creator of your own home on wheels. Design your floor plan,
             select materials, and customize finishes for your dream rig.
           </RichParagraph>
           <div className="flex justify-center">
             <Link
               href="/contact"
-              className="bg-hover text-primary font-bold uppercase tracking-wider px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"
+              className="bg-hover text-secondary uppercase  px-8 py-4 rounded-lg hover:opacity-50 transition-opacity"
             >
               Start Your Build
             </Link>

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Heading2,
+  Heading1,
   RichParagraph,
   Heading3,
   ImageWithSkeleton,
@@ -27,13 +27,16 @@ export default function SoldVans({
         <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-12 gap-10">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <SpanTag text={"The Archive"} />
+              <RichParagraph variant="sub" textColor="text-hover" >
+                The Archive
+              </RichParagraph>
+
             </div>
-            <Heading2 text={soldHeading} className="text-primary" />
-            <div className="mt-8">
+            <Heading1 variant="section" text={soldHeading} textColor="text-primary" />
+            <div>
               {/* Check if at least one van is sold before rendering the content */}
               {vans.some((van) => van.status === "sold") && (
-                <RichParagraph>
+                <RichParagraph variant="body">
                   Take a look at our gallery of 111+ sold custom camper vans and
                   recently completed projects. Our portfolio includes a wide
                   range of specialized builds, from heavy-duty cargo
@@ -71,9 +74,11 @@ export default function SoldVans({
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-primary">
+              <RichParagraph variant="body">
                 Off-Grid Adventurers
-              </span>
+              </RichParagraph>
+
+
             </div>
 
             {/* Feature 2 */}
@@ -92,9 +97,10 @@ export default function SoldVans({
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-primary">
+              <RichParagraph variant="body">
                 Family Campers
-              </span>
+              </RichParagraph>
+
             </div>
 
             {/* Feature 3 */}
@@ -113,9 +119,10 @@ export default function SoldVans({
                   <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 9.36l-7.1 7.1a1 1 0 0 1-1.4 0l-2.8-2.8a1 1 0 0 1 0-1.4l7.1-7.1a6 6 0 0 1 9.36-7.94l-3.77 3.77z"></path>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-primary">
+              <RichParagraph variant="body">
                 Couple Campers
-              </span>
+              </RichParagraph>
+
             </div>
 
             {/* Feature 4 */}
@@ -135,9 +142,10 @@ export default function SoldVans({
                   <polyline points="9 22 9 12 15 12 15 22"></polyline>
                 </svg>
               </div>
-              <span className="text-sm font-medium text-primary">
+              <RichParagraph variant="body">
                 Custom Builds
-              </span>
+              </RichParagraph>
+
             </div>
           </div>
         </div>
@@ -145,7 +153,7 @@ export default function SoldVans({
         <div className="my-8 max-w-2xl">
           {/* Check for "coming-soon" status to show the upcoming builds text */}
           {vans.some((van) => van.status === "coming_soon") && (
-            <RichParagraph>
+            <RichParagraph variant="body">
               Exciting new projects are on the horizon at Big Bear Vans. Our
               upcoming custom camper builds are currently in the workshop,
               featuring our latest innovations in off-grid living and
@@ -183,10 +191,10 @@ export default function SoldVans({
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--color-primary)]/10">
-                    <SpanTag
-                      text={"Gallery Coming Soon"}
-                      className="text-primary opacity-40 "
-                    />
+<RichParagraph variant="body" textColor="text-primary" >
+Gallery Coming Soon
+</RichParagraph>
+
                   </div>
                 )}
 
@@ -212,11 +220,11 @@ export default function SoldVans({
               {/* Info Bottom */}
               <div className="p-6">
                 <div className="mb-4">
-                  <Heading3
+                  <Heading1 variant="card"
                     text={van?.van_listing?.title || "Signature Build"}
-                    className="text-primary mb-1"
+                    className="!text-primary mb-1"
                   />
-                  <RichParagraph>
+                  <RichParagraph variant="card">
                     {van?.van_listing?.subtitle || "Premium Conversion"}
                   </RichParagraph>
                 </div>

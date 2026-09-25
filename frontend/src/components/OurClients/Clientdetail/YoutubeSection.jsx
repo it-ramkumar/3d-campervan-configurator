@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { Heading2 } from '../../Common/Common'
+import { Heading1, RichParagraph } from '../../Common/Common'
 import { motion } from "framer-motion";
 
 export default function YoutubeSection() {
@@ -9,8 +9,10 @@ export default function YoutubeSection() {
       <div className="bbv-dot-grid" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Watch & Explore</p>
-          <Heading2 text="See Our Vans in Action" className="font-display text-secondary uppercase tracking-wide" />
+          <RichParagraph variant="sub" className="!text-hover uppercase mb-2">
+Watch & Explore
+          </RichParagraph>
+          <Heading1 variant="section" text="See Our Vans in Action" className=" text-secondary uppercase " />
           <div className="bbv-divider mt-6" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

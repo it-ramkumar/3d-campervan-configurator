@@ -15,7 +15,7 @@ import {
   Coffee
 } from "lucide-react";
 import Customize from "../../Customize/Cutomize";
-import { Heading2, PrimaryButton, RichParagraph, CustomLink } from '../../Common/Common'
+import { Heading2,Heading1, PrimaryButton, RichParagraph, CustomLink } from '../../Common/Common'
 import Link from "next/link";
 
 export default function Showroom() {
@@ -67,15 +67,16 @@ export default function Showroom() {
         {/* --- Header Section --- */}
         <div className="text-center mb-24 max-w-4xl mx-auto">
           <div className="space-y-6">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold">
-              Experience the Craftsmanship
-            </p>
+            <RichParagraph variant="sub" textColor="text-hover">
+Experience the Craftsmanship
+            </RichParagraph>
 
-            <Heading2 text="Why visit us?" className="text-primary" />
+
+            <Heading1 variant="section" text="Why visit us?" className="!text-primary" />
 
             <div className="bbv-divider mx-auto" />
 
-            <RichParagraph className="text-primary/70 mt-8">
+            <RichParagraph variant="body" className="mt-8">
               Browsing websites is a good start, but the real thing is seeing the materials and testing the layouts firsthand. When you step into our workshop, you become part of the{" "}
               <CustomLink href="/our-process" text={" build process."} />
             </RichParagraph>
@@ -83,7 +84,7 @@ export default function Showroom() {
         </div>
 
         {/* --- Card Sections --- */}
-        <div className="space-y-20">
+        <div className="">
           {cardData.map((card, index) => (
             <div key={index}>
               <Customize
@@ -100,13 +101,16 @@ export default function Showroom() {
         </div>
 
         {/* --- Design Session CTA --- */}
-        <div className="mt-32 bbv-card rounded-lg p-10 md:p-16 text-primary text-center relative overflow-hidden border border-hover/20">
-          <div className="relative z-10 space-y-6">
+        <div className="mt-10 bbv-card rounded-lg p-10 md:p-16 text-primary text-center relative overflow-hidden border border-hover/20">
+          <div className="relative z-10 space-y-3">
             <Coffee className="mx-auto text-hover" size={48} />
-            <p className="text-hover text-xs uppercase tracking-widest font-bold">Private Workshop Tour</p>
+            <RichParagraph variant="sub" textColor="text-hover">
+Private Workshop Tour
+            </RichParagraph>
+
             <div className="bbv-divider mx-auto" />
-            <Heading2 text="Ready to touch and feel?" className="text-primary" />
-            <RichParagraph className="max-w-xl mx-auto text-primary/70">
+            <Heading1 variant="section" text="Ready to touch and feel?" className="!text-primary" />
+            <RichParagraph variant="body" className="max-w-xl mx-auto text-primary/70">
               Schedule your private workshop tour today. The coffee is on us.
             </RichParagraph>
             <Link href="/contact">

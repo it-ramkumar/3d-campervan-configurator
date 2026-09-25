@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading4, RichParagraph } from '../../Common/Common'
+import { Heading1, RichParagraph } from '../../Common/Common'
 import { DollarSign } from "lucide-react"
 
 export default function FinancialSection() {
@@ -9,8 +9,8 @@ export default function FinancialSection() {
         <DollarSign className="text-hover w-8 h-8" />
       </div>
       <div className="flex-grow">
-        <Heading4 text="Financial Efficiency After Purchase" className="font-display text-primary uppercase tracking-wide mb-4 font-bold" />
-        <RichParagraph className="text-primary/70">
+        <Heading1 variant="card" text="Financial Efficiency After Purchase" className=" !text-primary uppercase mb-4" />
+        <RichParagraph variant="card">
           Unlike money spent on flights and hotels, a campervan is a physical asset you retain. The major investment is upfront. After that, you eliminate recurring costs for flights, hotels, and restaurant-heavy trips. You control your daily travel budget, often drastically reducing it.
         </RichParagraph>
       </div>

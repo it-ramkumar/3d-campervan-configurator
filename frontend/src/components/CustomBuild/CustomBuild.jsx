@@ -5,6 +5,7 @@ import OurProcess from "../HomePage/OurProcess/OurProcess";
 import {
   RichParagraph,
   Heading2,
+  Heading1,
   Heading3,
   Heading4,
   SecondaryButton,
@@ -145,16 +146,16 @@ const CustomBuild = () => {
         <div className="relative mx-auto px-6 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
             <SpanTag text="Our Philosophy" />
-            <Heading2 textColor="text-primary">
+            <Heading1 variant="section" textColor="text-primary">
               Built From a<br />
               <span className="text-hover">Blank Slate</span>
-            </Heading2>
+            </Heading1>
             <SectionDivider />
-            <RichParagraph textColor="text-primary" className="!opacity-60">
+            <RichParagraph variant="body" >
               Our team manages everything in-house — from electrical and plumbing to cabinetry and
               painting — so your van is truly yours at the end.
             </RichParagraph>
-            <RichParagraph textColor="text-primary" className="!opacity-60">
+            <RichParagraph variant="body" >
               At Big Bear Vans, "Custom" means every detail is decided by you and built by us. It's
               about co-creating a campervan that is a perfect mirror of your lifestyle and personality.
             </RichParagraph>
@@ -178,11 +179,14 @@ const CustomBuild = () => {
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
-            <SpanTag text="The Process" />
-            <Heading2 textColor="text-secondary" className="mt-4 mb-4">
+            <RichParagraph variant="sub" className="!text-hover">
+              The Process
+            </RichParagraph>
+
+            <Heading1 variant="section" textColor="text-secondary" className="mt-4 mb-4">
               This Is Exactly<br />
               <span className="text-hover">How We Do It</span>
-            </Heading2>
+            </Heading1>
             <div className="w-12 h-[2px] bg-[#ED985F] mx-auto" />
           </div>
 
@@ -209,11 +213,9 @@ const CustomBuild = () => {
                 className="p-8 rounded-xl group transition-all duration-300"
                 style={{ background: "rgba(2,12,24,0.72)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "2px solid #ED985F" }}
               >
-                <span className="font-display text-5xl font-black text-[#ED985F]/20 group-hover:text-[#ED985F]/40 transition-colors block">
-                  {card.num}
-                </span>
-                <Heading4 text={card.title} textColor="text-secondary" className="mt-3 mb-4 uppercase tracking-wide" />
-                <RichParagraph textColor="text-secondary" className="!opacity-55">
+
+                <Heading1 variant="card" text={card.title} textColor="text-secondary" className="mt-3 mb-4 uppercase tracking-wide" />
+                <RichParagraph variant="card" textColor="text-secondary" className="!opacity-55">
                   {card.desc}
                 </RichParagraph>
               </div>
@@ -236,13 +238,16 @@ const CustomBuild = () => {
         <div className="relative mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-10 border-b border-primary/10 gap-6">
             <div className="max-w-xl">
-              <SpanTag text="Why Choose Us" />
-              <Heading2 textColor="text-primary" className="mt-4">
+              <RichParagraph variant="sub" textColor="text-hover">
+                Why Choose Us
+              </RichParagraph>
+
+              <Heading1 variant="section" textColor="text-primary" className="mt-4">
                 Built Different,<br />
                 <span className="text-hover">By Design</span>
-              </Heading2>
+              </Heading1>
             </div>
-            <RichParagraph textColor="text-primary" className="max-w-xs md:text-right !opacity-50">
+            <RichParagraph variant="body" textColor="text-primary" className="max-w-xs md:text-right !opacity-50">
               Every system, surface, and detail is engineered for life on the road.
             </RichParagraph>
           </div>
@@ -260,8 +265,8 @@ const CustomBuild = () => {
                   <AmberLine />
                 </div>
                 <div className="p-8 space-y-4">
-                  <Heading3 text={feature.title} textColor="text-primary" className="uppercase" />
-                  <RichParagraph textColor="text-primary" className="!opacity-60">
+                  <Heading1 variant="card" text={feature.title} textColor="text-primary" className="uppercase" />
+                  <RichParagraph variant="card">
                     {feature.desc}
                   </RichParagraph>
                   {feature.bullets && (
@@ -292,8 +297,8 @@ const CustomBuild = () => {
                   <AmberLine />
                 </div>
                 <div className="p-8 space-y-4">
-                  <Heading3 text={feature.title} textColor="text-primary" className="uppercase" />
-                  <RichParagraph textColor="text-primary" className="!opacity-60">
+                  <Heading1 variant="card" text={feature.title} textColor="text-primary" className="uppercase" />
+                  <RichParagraph variant="card" >
                     {feature.desc}
                   </RichParagraph>
                   {feature.cta && (
@@ -312,15 +317,18 @@ const CustomBuild = () => {
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
-            <SpanTag text="Try It Now" />
-            <Heading2 textColor="text-secondary">
+            <RichParagraph variant="sub" textColor="text-primary">
+              Try It Now
+            </RichParagraph>
+
+            <Heading1 variant="section" textColor="text-secondary">
               Our 3D<br />
               <span className="text-hover">Configurator</span>
-            </Heading2>
+            </Heading1>
             <SectionDivider />
-            <RichParagraph textColor="text-secondary" className="!opacity-60">
+            <RichParagraph variant="body" textColor="text-secondary/80">
               Start designing your dream campervan right now. Try different layouts, finishes, and
-              features — all in our interactive 3D tool.
+              features all in our interactive 3D tool.
             </RichParagraph>
             <ul className="space-y-3">
               {[
@@ -353,13 +361,16 @@ const CustomBuild = () => {
         <div className="relative mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-10 border-b border-primary/10 gap-6">
             <div>
-              <SpanTag text="Our Builds" />
-              <Heading2 textColor="text-primary" className="mt-4">
+              <RichParagraph variant="sub" textColor="text-hover">
+                Our Builds
+              </RichParagraph>
+
+              <Heading1 variant="section" textColor="text-primary" className="mt-4">
                 105+ Campervans<br />
                 <span className="text-hover">Delivered</span>
-              </Heading2>
+              </Heading1>
             </div>
-            <RichParagraph textColor="text-primary" className="max-w-xs md:text-right !opacity-50">
+            <RichParagraph variant="body"  >
               Every van is designed for a specific person with different requirements.
             </RichParagraph>
           </div>
@@ -381,10 +392,13 @@ const CustomBuild = () => {
               className="rounded-xl flex flex-col items-center justify-center p-16 text-center gap-6"
               style={{ ...CARD, borderTop: "2px solid #ED985F" }}
             >
-              <SpanTag text="Consistent 5-Star Rating" />
-              <Heading3 textColor="text-primary" className="font-display leading-tight">
+              <RichParagraph variant="sub" textColor="text-hover">
+                Consistent 5-Star Rating
+              </RichParagraph>
+
+              <Heading1 variant="card" textColor="text-primary" >
                 See the full collection of our builds
-              </Heading3>
+              </Heading1>
               <PrimaryButton link="/van-layouts" label="View Portfolio" />
             </div>
           </div>
@@ -395,13 +409,15 @@ const CustomBuild = () => {
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
-            <SpanTag text="Who We Build For" />
-            <Heading2 textColor="text-secondary">
+            <RichParagraph variant="sub" textColor="text-hover">
+              Who We Build For
+            </RichParagraph>
+            <Heading1 variant="section" textColor="text-secondary">
               Built for<br />
               <span className="text-hover">Everyone</span>
-            </Heading2>
+            </Heading1>
             <SectionDivider />
-            <RichParagraph textColor="text-secondary" className="!opacity-60">
+            <RichParagraph variant="body" textColor="text-secondary" className="!opacity-60">
               We've designed custom campervans for clients from all walks of life — families, couples,
               pet-owners, bikers, full-time van lifers. Whatever layout you have in mind, we'll turn
               your idea into a spectacular reality.
@@ -425,102 +441,105 @@ const CustomBuild = () => {
         </div>
       </section>
 
-   {/* ═══════════════ SHOWROOM ═══════════════ */}
-<section className="relative py-24 md:py-32 bg-secodary overflow-hidden">
-  {/* Subtle background detail */}
-  <div
-    className="absolute inset-0 pointer-events-none opacity-[0.04]"
-    style={DOT_GRID_LIGHT}
-  />
+      {/* ═══════════════ SHOWROOM ═══════════════ */}
+      <section className="relative py-24 md:py-32 bg-secodary overflow-hidden">
+        {/* Subtle background detail */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={DOT_GRID_LIGHT}
+        />
 
-  <div className="relative mx-auto max-w-7xl px-6">
+        <div className="relative mx-auto max-w-7xl px-6">
 
-    {/* Header */}
-    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-      <div>
-        <SpanTag text="Visit Us" />
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+            <div>
+              <RichParagraph variant="sub" textColor="text-hover">
+                Visit Us
+              </RichParagraph>
 
-        <Heading2 textColor="text-primary" className="mt-4">
-          Our <span className="text-hover">Showroom</span>
-        </Heading2>
-      </div>
+              <Heading1 variant="section" textColor="text-primary" className="mt-4">
+                Our <span className="text-hover">Showroom</span>
+              </Heading1>
+            </div>
 
-      <p className="max-w-md text-primary text-sm md:text-base leading-relaxed md:text-right">
-        See where your van comes to life, meet our team, and explore our
-        latest builds in person.
-      </p>
-    </div>
+            <RichParagraph variant="body" className="max-w-md md:text-right">
+              See where your van comes to life, meet our team, and explore our
+              latest builds in person.
+            </RichParagraph>
 
-    {/* Showroom Image */}
-    <div
-      className="relative rounded-2xl overflow-hidden"
-      style={AMBER_BORDER}
-    >
-      <ImageWithSkeleton
-        src={`${imgPath}showroom-ctr-big-bear-vans.webp`}
-        alt="Big Bear Vans Showroom"
-        className="w-full h-auto"
-      />
 
-      {/* Image gradient */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(0,31,61,0.8) 0%, rgba(0,31,61,0.15) 45%, transparent 75%)",
-        }}
-      />
+          </div>
 
-      {/* Image label */}
-      <div className="absolute left-6 bottom-6 md:left-10 md:bottom-8">
-        <span className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs tracking-[0.2em] uppercase">
-          Big Bear City, California
-        </span>
-      </div>
+          {/* Showroom Image */}
+          <div
+            className="relative rounded-2xl overflow-hidden"
+            style={AMBER_BORDER}
+          >
+            <ImageWithSkeleton
+              src={`${imgPath}showroom-ctr-big-bear-vans.webp`}
+              alt="Big Bear Vans Showroom"
+              className="w-full h-auto"
+            />
 
-      <AmberLine />
-    </div>
+            {/* Image gradient */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0,31,61,0.8) 0%, rgba(0,31,61,0.15) 45%, transparent 75%)",
+              }}
+            />
 
-    {/* Content */}
-    <div className="grid md:grid-cols-2 gap-10 md:gap-20 mt-12 items-start">
+            {/* Image label */}
+            <div className="absolute left-6 bottom-6 md:left-10 md:bottom-8">
+              <RichParagraph variant="sub" textColor="text-secondary" className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 uppercase">
+                Big Bear City, California
+              </RichParagraph>
 
-      <div>
-        <div className="text-5xl md:text-7xl font-light text-hover leading-none mb-4">
-          01
+            </div>
+
+            <AmberLine />
+          </div>
+
+          {/* Content */}
+          <div className="grid md:grid-cols-2 gap-10 md:gap-20 mt-12 items-start">
+
+            <div>
+
+
+              <RichParagraph
+                variant="body"
+                className="max-w-xl"
+              >
+                Visit our showroom in Big Bear City, California. See our building
+                process, meet our team, and explore ongoing and completed projects
+                firsthand.
+              </RichParagraph>
+            </div>
+
+            <div>
+              <RichParagraph
+               variant="body"
+                className=" max-w-xl"
+              >
+                Walk through finished vans, try different layouts, and sit down for
+                a personal design session with our designers to turn your vision
+                into a detailed plan.
+              </RichParagraph>
+
+              <div className="mt-8">
+                <SecondaryButton
+                  link="/showroom"
+                  label="Schedule a Visit"
+                  className="!hover:bg-hover"
+                />
+              </div>
+            </div>
+
+          </div>
         </div>
-
-        <RichParagraph
-          textColor="text-primary"
-          className="!opacity-70 leading-relaxed max-w-xl"
-        >
-          Visit our showroom in Big Bear City, California. See our building
-          process, meet our team, and explore ongoing and completed projects
-          firsthand.
-        </RichParagraph>
-      </div>
-
-      <div className="md:pt-12">
-        <RichParagraph
-          textColor="text-primary"
-          className="!opacity-70 leading-relaxed max-w-xl"
-        >
-          Walk through finished vans, try different layouts, and sit down for
-          a personal design session with our designers to turn your vision
-          into a detailed plan.
-        </RichParagraph>
-
-        <div className="mt-8">
-          <SecondaryButton
-            link="/showroom"
-            label="Schedule a Visit"
-            className="!hover:bg-hover"
-          />
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ═══════════════ MEET THE FOUNDERS (navy — keep) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
@@ -534,16 +553,19 @@ const CustomBuild = () => {
           </div>
 
           <div className="space-y-6">
-            <SpanTag text="Our Story" />
-            <Heading2 textColor="text-secondary" className="uppercase tracking-tighter">
+            <RichParagraph variant="sub" textColor="text-hover">
+Our Story
+            </RichParagraph>
+
+            <Heading1 variant="section" textColor="text-secondary" className="uppercase tracking-tighter">
               Meet the <span className="text-hover">Founders</span>
-            </Heading2>
+            </Heading1>
             <SectionDivider />
-            <RichParagraph textColor="text-secondary" className="!opacity-55 italic">
+            <RichParagraph variant="body" textColor="text-secondary/80" className="italic">
               As lifelong van enthusiasts, we (Artur and Anna) started Big Bear Vans as a family
               business with a simple purpose: to build the vans we always wished existed.
             </RichParagraph>
-            <RichParagraph textColor="text-secondary" className="!opacity-60">
+            <RichParagraph variant="body" textColor="text-secondary/80">
               Before founding Big Bear Vans, we lived on the road through Europe and the USA,
               converting our own RVs. That hands-on experience taught us what truly matters in a
               mobile home — and it's built into every van we create.

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Quote, X, Copy, Check } from 'lucide-react';
-import { Heading2, RichParagraph, Heading3, SpanTag } from '../../Common/Common'
+import { Heading1, RichParagraph, Heading3, SpanTag } from '../../Common/Common'
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -47,8 +47,11 @@ const handleCopy = (e) => {
 
         {/* --- Header --- */}
         <div className="text-center mb-16 md:mb-24">
-          <SpanTag text={"Testimonials"} className="mb-4 flex justify-center"/>
-          <Heading2 text={"Voices of the Van Life"} />
+          <RichParagraph variant="sub" className="!text-hover">
+        Testimonials
+          </RichParagraph>
+          {/* <SpanTag text={""} className="mb-4 flex justify-center"/> */}
+          <Heading1 variant="section" text={"Voices of the Van Life"} textColor="text-primary" />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg mt-6"></div>
         </div>
 
@@ -88,7 +91,7 @@ const handleCopy = (e) => {
                 </div>
 
                 {/* Review Text */}
-                <RichParagraph className="mb-8 flex-grow italic">
+                <RichParagraph variant="body" className="mb-8  italic">
                   "{review?.text.length > 140 ? review?.text.substring(0, 140) + '...' : review?.text}"
                 </RichParagraph>
 
@@ -98,8 +101,8 @@ const handleCopy = (e) => {
                     {review?.initial}
                   </div>
                   <div>
-                    <RichParagraph className="font-bold text-primary">{review?.name}</RichParagraph>
-                    <RichParagraph className='!text-hover'>Verified Owner</RichParagraph>
+                    <RichParagraph variant="sub" className="font-bold text-primary">{review?.name}</RichParagraph>
+                    <RichParagraph variant="sub" className='!text-hover'>Verified Owner</RichParagraph>
                   </div>
                 </div>
               </div>

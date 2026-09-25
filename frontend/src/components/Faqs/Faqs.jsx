@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
-import { Heading2, RichParagraph } from '../Common/Common'
+import { Heading1, RichParagraph } from '../Common/Common'
 
 export default function FAQs({ faqs }) {
   const [openIndex, setOpenIndex] = useState(null);
@@ -20,13 +20,13 @@ export default function FAQs({ faqs }) {
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-hover/10 border border-hover/30 text-hover mb-6">
             <HelpCircle size={24} />
           </div>
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Support</p>
-          <Heading2
+          <RichParagraph variant="sub" className="!text-hover">Support</RichParagraph>
+          <Heading1
+          variant="section"
             text="Frequently Asked Questions"
-            className="font-display text-primary uppercase tracking-wide"
+            className=" !text-primary uppercase "
           />
-          <div className="bbv-divider mb-6" />
-          <RichParagraph className="text-primary/60">
+          <RichParagraph variant="body" >
             Everything you need to know about our custom build process and services.
           </RichParagraph>
         </div>
@@ -50,7 +50,7 @@ export default function FAQs({ faqs }) {
                   onClick={() => handleToggle(index)}
                   className="w-full flex justify-between items-center gap-4 p-6 md:p-8 text-left focus:outline-none"
                 >
-                  <RichParagraph className={`font-bold transition-colors duration-300 ${
+                  <RichParagraph variant="body" className={`font-bold transition-colors duration-300 ${
                     isOpen ? "text-hover" : "text-primary group-hover:text-hover"
                   }`}>
                     {faq.question}
@@ -74,7 +74,7 @@ export default function FAQs({ faqs }) {
                 >
                   <div className="px-6 pb-8 md:px-8 md:pb-10">
                     <div className="h-px bg-hover/20 mb-6"></div>
-                    <RichParagraph className="text-primary/60 leading-relaxed">
+                    <RichParagraph variant="body" >
                       {faq.answer}
                     </RichParagraph>
                   </div>
@@ -86,10 +86,12 @@ export default function FAQs({ faqs }) {
 
         {/* --- Footer Support --- */}
         <div className="mt-16 text-center p-8 bbv-card rounded-lg border border-dashed border-primary/20">
-          <p className="text-sm text-primary/60 mb-2 font-medium">Still have questions?</p>
+      <RichParagraph variant="body" className="mb-2 !text-primary/60">
+Still have questions?
+      </RichParagraph>
           <a
             href="/contact"
-            className="text-hover font-black uppercase tracking-widest text-xs hover:text-secondary transition-colors flex items-center justify-center gap-2"
+            className="text-hover font-black uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center justify-center gap-2"
           >
             Contact Our Support Team <span>→</span>
           </a>

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, ArrowRight, X, ChevronDown, Check } from "lucide-react";
 import {
   Heading2,
+  Heading1,
   Heading3,
   RichParagraph,
   SpanTag,
@@ -212,17 +213,18 @@ export default function Van_layout({ layout, currentParams = {} }) {
         {/* ── FILTER PANEL ── */}
         <div className="bg-white border border-primary/8 rounded-2xl shadow-sm mb-20 relative z-30">
           {/* Orange top accent */}
-          <div className="h-[2px] w-full bg-[#ED985F] rounded-t-2xl" />
+          <div className="h-[2px] w-full bg-hover rounded-t-2xl" />
 
           <div className="p-6 md:p-8">
             <div className="flex items-center justify-between mb-8 pb-5 border-b border-primary/6">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#ED985F]/10 rounded-lg">
-                  <SlidersHorizontal size={18} className="text-[#ED985F]" />
-                </div>
+
                 <div>
-                  <SpanTag text="Browse Layouts" className="mb-0.5" />
-                  <Heading3 text="Filter Custom Builds" className="!mb-0 !text-primary" />
+                  <RichParagraph variant="card" textColor="text-hover">
+                    Browse Layouts
+                  </RichParagraph>
+
+                  <Heading1 variant="section" text="Filter Custom Builds" textColor="text-primary" />
                 </div>
               </div>
 
@@ -265,17 +267,16 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                 <div
                   onClick={() => setOpenDropdown(openDropdown === "wheelbase" ? null : "wheelbase")}
-                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
-                    openDropdown === "wheelbase"
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${openDropdown === "wheelbase"
                       ? "border-[#ED985F]/40 bg-white shadow-sm"
                       : "border-primary/10 hover:border-primary/20"
-                  }`}
+                    }`}
                 >
                   <span className={`truncate max-w-[140px] ${localFilters.wheelbase.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
                     {localFilters.wheelbase.length > 0
                       ? WHEELBASE_GROUPS.filter(g => g.values.some(v => localFilters.wheelbase.includes(v)))
-                          .map(g => g.label)
-                          .join(", ")
+                        .map(g => g.label)
+                        .join(", ")
                       : "All"
                     }
                   </span>
@@ -326,17 +327,16 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                 <div
                   onClick={() => setOpenDropdown(openDropdown === "shower" ? null : "shower")}
-                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
-                    openDropdown === "shower"
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${openDropdown === "shower"
                       ? "border-[#ED985F]/40 bg-white shadow-sm"
                       : "border-primary/10 hover:border-primary/20"
-                  }`}
+                    }`}
                 >
                   <span className={`truncate max-w-[140px] ${localFilters.bathroomType.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
                     {localFilters.bathroomType.length > 0
                       ? SHOWER_GROUPS.filter(g => g.values.some(v => localFilters.bathroomType.includes(v)))
-                          .map(g => g.label)
-                          .join(", ")
+                        .map(g => g.label)
+                        .join(", ")
                       : "All"
                     }
                   </span>
@@ -387,11 +387,10 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                 <div
                   onClick={() => setOpenDropdown(openDropdown === "build" ? null : "build")}
-                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
-                    openDropdown === "build"
+                  className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${openDropdown === "build"
                       ? "border-[#ED985F]/40 bg-white shadow-sm"
                       : "border-primary/10 hover:border-primary/20"
-                  }`}
+                    }`}
                 >
                   <span className="truncate max-w-[140px] text-primary/40">
                     Select a build...
@@ -402,38 +401,38 @@ export default function Van_layout({ layout, currentParams = {} }) {
                   />
                 </div>
 
-               <AnimatePresence>
-  {openDropdown === "build" && (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 8 }}
-      transition={{ duration: 0.15 }}
-      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
-    >
-      {catalog.builds.length === 0 ? (
-        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
-          Loading builds...
-        </div>
-      ) : (
-        [...catalog.builds]
-          .sort((a, b) => a.title.localeCompare(b.title))
-          .map((build) => (
-            <button
-              type="button"
-              key={build.slug}
-              onClick={() => handleBuildJump(build.slug)}
-              className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
-            >
-              <span className="font-ui text-sm text-primary/70">
-                {build.title}
-              </span>
-            </button>
-          ))
-      )}
-    </motion.div>
-  )}
-</AnimatePresence>
+                <AnimatePresence>
+                  {openDropdown === "build" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-primary/10 shadow-xl rounded-xl p-3 max-h-60 overflow-y-auto z-50 space-y-1"
+                    >
+                      {catalog.builds.length === 0 ? (
+                        <div className="font-ui text-xs text-primary/30 italic py-2 text-center">
+                          Loading builds...
+                        </div>
+                      ) : (
+                        [...catalog.builds]
+                          .sort((a, b) => a.title.localeCompare(b.title))
+                          .map((build) => (
+                            <button
+                              type="button"
+                              key={build.slug}
+                              onClick={() => handleBuildJump(build.slug)}
+                              className="w-full text-left flex items-center gap-3 px-2 py-2 hover:bg-secondary rounded-lg cursor-pointer transition-colors select-none"
+                            >
+                              <span className="font-ui text-sm text-primary/70">
+                                {build.title}
+                              </span>
+                            </button>
+                          ))
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Dropdown filters */}
@@ -449,11 +448,10 @@ export default function Van_layout({ layout, currentParams = {} }) {
 
                     <div
                       onClick={() => setOpenDropdown(isOpen ? null : f.key)}
-                      className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${
-                        isOpen
+                      className={`w-full px-4 py-3 bg-secondary border rounded-xl font-ui text-sm font-medium cursor-pointer flex items-center justify-between transition-all select-none ${isOpen
                           ? "border-[#ED985F]/40 bg-white shadow-sm"
                           : "border-primary/10 hover:border-primary/20"
-                      }`}
+                        }`}
                     >
                       <span className={`truncate max-w-[140px] ${currentValues.length > 0 ? "text-[#ED985F]" : "text-primary/40"}`}>
                         {currentValues.length > 0
@@ -529,8 +527,9 @@ export default function Van_layout({ layout, currentParams = {} }) {
               animate={{ opacity: 1 }}
               className="text-center py-32 bg-white border border-primary/8 rounded-2xl"
             >
+
               <Search size={40} className="mx-auto text-primary/15 mb-5" />
-              <Heading3 text="No matching builds found." className="!text-primary/40" />
+              <Heading1 variant="section" text="No matching builds found." className="!text-primary/40" />
               <button
                 onClick={handleClearAll}
                 className="mt-5 font-ui font-semibold text-[11px] uppercase tracking-[0.18em] text-[#ED985F] hover:text-primary transition-colors"
@@ -554,9 +553,10 @@ export default function Van_layout({ layout, currentParams = {} }) {
                   >
                     {/* Text side */}
                     <div className="w-full lg:w-5/12 space-y-5 text-center lg:text-left">
-                      <SpanTag text={`Build No. ${String(index + 1).padStart(2, "0")}`} />
-                      <Heading2 text={item.van_listing?.title || "Custom Layout"} />
-                      <RichParagraph>
+                    <RichParagraph variant="sub"> {`Build No. ${String(index + 1).padStart(2, "0")}`}</RichParagraph>
+
+                      <Heading1 variant="section" textColor="text-primary" text={item.van_listing?.title || "Custom Layout"} />
+                      <RichParagraph variant="body">
                         {item.van_listing?.description}
                       </RichParagraph>
 
@@ -574,11 +574,11 @@ export default function Van_layout({ layout, currentParams = {} }) {
                     {/* Image side */}
                     <div className="w-full lg:w-7/12">
                       <Link
-                          href={`/van-layouts/${item.slug}`}
-                        >
+                        href={`/van-layouts/${item.slug}`}
+                      >
 
-                      <ProjectImages images={item.gallery} alt={item.van_listing?.title} />
-                        </Link>
+                        <ProjectImages images={item.gallery} alt={item.van_listing?.title} />
+                      </Link>
                     </div>
                   </motion.div>
                 );

@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heading2, Heading3, Heading4 } from "../Common/Common";
+import { Heading1, Heading3, Heading4 } from "../Common/Common";
 import { RichParagraph } from "../Common/Common";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -107,10 +107,8 @@ export default function Table() {
       <section className="anim-section container mx-auto px-4 sm:px-6 pt-6 md:pt-8 mt-0 pb-12 md:pb-16">
         <div className="text-center mb-6 sm:mb-8 pt-4">
           {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-          <Heading3 text={"Cargo Van vs Crew Van"}/>
-          {/* // <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3 mt-0">
-          //   Cargo Van vs Crew Van
-          // </h2> */}
+          <Heading1 variant="section" textColor="!text-primary" text={"Cargo Van vs Crew Van"}/>
+
           <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
         </div>
 
@@ -125,9 +123,7 @@ export default function Table() {
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Feature"} className="!text-secondary !text-[18px] !font-bold"/></th>
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Cargo Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Crew Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Feature</th> */}
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Cargo Van</th> */}
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Crew Van</th> */}
+
                   </tr>
                 </thead>
               </table>
@@ -185,10 +181,8 @@ export default function Table() {
 
           <div className="mb-8">
             {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-            <Heading3 text={"2500 Vs 3500 & Dually"}  className="!text-secondary" />
-            {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black mb-3 text-white drop-shadow-lg">
-              2500 Vs 3500 & Dually
-            </h2> */}
+            <Heading1 variant="section" text={"2500 Vs 3500 & Dually"}  className="!text-secondary" />
+         
             <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
           </div>
 
@@ -197,9 +191,10 @@ export default function Table() {
             <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 h-0.5 bg-white/30 rounded-full"></div>
             {[1, 2, 3].map((num) => (
               <div key={num} className="relative w-4 h-4 bg-white rounded-full z-10 border-2 border-[#364153] shadow transform hover:scale-110 transition-transform duration-300">
-                <span className="absolute inset-0 flex items-center justify-center text-[#364153] font-black text-xs">
-                  {num}
-                </span>
+                <RichParagraph variant="sub" className="absolute inset-0 flex items-center justify-center !text-primary">
+   {num}
+                </RichParagraph>
+
               </div>
             ))}
           </div>
@@ -224,20 +219,16 @@ export default function Table() {
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-3 h-0.5 bg-white/60"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) */}
-              <Heading4 text={"2500"}/>
-              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">2500</h3> */}
+              <Heading1 variant="card" textColor="text-primary" text={"2500"}/>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xs (from text-xs) and reduced margin */}
-              <RichParagraph className="!text-[12px] mb-2">
+              <RichParagraph variant="sub" className="mb-2">
                 (We Usually Build On These)
               </RichParagraph>
-              {/* <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(We Usually Build On These)</p> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <RichParagraph className="!text-[13px]">
+              <RichParagraph variant="card">
                 Lighter GVWR, Gross Vehicle Weight Rating (9,050 lbs), suitable for standard builds.
               </RichParagraph>
-              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
-                Lighter GVWR, Gross Vehicle Weight Rating (9,050 lbs), suitable for standard builds.
-              </p> */}
+
             </div>
 
             {/* Card 2: 3500 - Pulsing Heavy Weights */}
@@ -257,15 +248,12 @@ export default function Table() {
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 w-4 h-0.5 bg-white/60"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) and reduced margin */}
-              <Heading4 text={"3500"}/>
-              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-3 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">3500</h3> */}
+              <Heading1 variant="card" textColor="text-primary" text={"3500"}/>
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <RichParagraph className=" !text-[13px] mt-7">
+              <RichParagraph variant="card" className=" !text-[13px] mt-7">
                 Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
               </RichParagraph>
-              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700 mt-auto">
-                Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
-              </p> */}
+
             </div>
 
             {/* Card 3: Dually - Rotating Wheels */}
@@ -289,20 +277,16 @@ export default function Table() {
                 <div className="dually-wheel-4 absolute top-1/2 right-1 transform -translate-y-1/2 w-1.5 h-1.5 bg-white/90 rounded-full"></div>
               </div>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xl (from text-2xl) */}
-              <Heading4 text={"Dually"} className="!text-[18px]"/>
-              {/* <h3 className="font-serif text-xl sm:text-2xl md:text-xl font-black mb-1 bg-gradient-to-r from-gray-900 to-[#364153] bg-clip-text text-transparent">Dually</h3> */}
+              <Heading1 variant="card" textColor="text-primary" text={"Dually"} className="!text-[18px]"/>
               {/* REDUCED DESKTOP FONT SIZE: md:text-xs (from text-xs) and reduced margin */}
-              <RichParagraph className="!text-[12px] mb-2">
+              <RichParagraph variant="sub" className="!text-[12px] mb-2">
                 (Dual Rear Wheels)
               </RichParagraph>
-              {/* <p className="font-semibold text-gray-600 mb-3 text-xs md:text-xs tracking-wide">(Dual Rear Wheels)</p> */}
               {/* REDUCED DESKTOP FONT SIZE: md:text-sm (from text-sm) */}
-              <RichParagraph className="!text-[13px]" >
+              <RichParagraph variant="card" className="!text-[13px]" >
                 Higher payload (GVWR: 9,990 lbs - 11,030 lbs), ideal for heavy conversions
               </RichParagraph>
-              {/* <p className="text-sm md:text-sm font-medium leading-relaxed text-center text-gray-700">
-                Enhanced stability for towing/heavy loads. The wheels can not be upgraded to R17 bigger radius in the future
-              </p> */}
+
             </div>
 
           </div>
@@ -315,10 +299,8 @@ export default function Table() {
       <section className="anim-section container mx-auto px-4 sm:px-6 py-12 md:py-16">
         <div className="text-center mb-6 sm:mb-8">
           {/* REDUCED DESKTOP FONT SIZE: md:text-3xl (from md:text-5xl) */}
-          <Heading3 text={"Manual Vs Electric Sliding Door"}/>
-          {/* <h2 className="font-serif text-3xl sm:text-4xl md:text-3xl font-black text-gray-900 mb-3">
-            Manual Vs Electric Sliding Door
-          </h2> */}
+          <Heading1 variant="section"  textColor="text-primary" text={"Manual Vs Electric Sliding Door"}/>
+
           <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
         </div>
 
@@ -333,9 +315,7 @@ export default function Table() {
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Aspect"} className="!text-secondary"/></th>
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Manual Sliding Door"} className="!text-secondary "/></th>
                     <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Electric Sliding Doors"} className="!text-secondary"/></th>
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Aspect</th> */}
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center border-r-2 border-[#364153]">Manual Sliding Doors</th> */}
-                    {/* <th className="w-1/3 p-3 md:p-4 text-sm md:text-base font-black text-center">Electric Sliding Doors</th> */}
+
                   </tr>
                 </thead>
               </table>

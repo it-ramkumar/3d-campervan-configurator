@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
 import {
-  Heading2,
+  Heading1,
   Heading3,
   RichParagraph,
   PrimaryButton,
   CustomLink,
   SpanTag,
-  SecondaryButton,
 } from "../../Common/Common";
 import { ArrowBigRightDash, ArrowBigLeftDash, Rotate3d } from "lucide-react";
 import "swiper/css";
@@ -62,16 +61,19 @@ export default function Buy({ initialVans = [] }) {
         {/* ── HEADER ── */}
         <div className="mb-10">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <SpanTag text="Premium Builds" className="text-hover" />
+            <RichParagraph variant="sub" textColor="text-hover">
+              Premium Builds
+            </RichParagraph>
+
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <Heading2>
-              Premium Camper Vans<br />
-              <span className="text-hover">Ready for Adventure</span>
-            </Heading2>
+            <Heading1 as="h2" variant="section" >
+              <span className="text-primary">Premium Camper Vans</span>
+              <p className="text-hover">Ready for Adventure</p>
+            </Heading1>
 
-            <RichParagraph className="max-w-md text-left md:text-right flex-shrink-0 !text-primary/60">
+            <RichParagraph variant="body" className="max-w-md text-left md:text-right">
               Fully built premium camper vans available now — skip the wait and
               start your adventure today.
             </RichParagraph>
@@ -83,9 +85,9 @@ export default function Buy({ initialVans = [] }) {
           <CustomLink
             href="/camper-vans-for-sale"
             text={
-              <span className="flex items-center gap-1">
-                Browse Full Inventory <span className="text-base leading-none">→</span>
-              </span>
+            <RichParagraph variant="sub" textColor="text-hover" className="hover:underline">
+            Browse all available camper vans for sale.
+            </RichParagraph>
             }
           />
           <div className="flex gap-2">
@@ -128,10 +130,9 @@ export default function Buy({ initialVans = [] }) {
                     <>
                       {/* Image */}
                       <div className="relative overflow-hidden bg-primary/5">
-                        <SpanTag
-                          text={"Available for Sale"}
-                          className="absolute top-4 left-4 z-10 bg-hover text-secondary font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md"
-                        />
+                      <RichParagraph variant="sub" textColor="text-hover" className="absolute top-4 left-4 z-10 bg-hover text-secondary font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md">
+                        Available for Sale
+                      </RichParagraph>
 
                         {van?.image ? (
                           <Image
@@ -152,34 +153,42 @@ export default function Buy({ initialVans = [] }) {
 
                       {/* Content */}
                       <div className="p-5 flex flex-col flex-grow">
-                        <Heading3
+                        <Heading1
                           text={van?.title || "New Build"}
-                          className="truncate block"
+                          as="h3"
+                          variant="card"
+                          className="mb-1 !text-primary"
                         />
 
-                        <RichParagraph className="mt-2 mb-4 line-clamp-2 h-12 !text-primary/60">
+                        <RichParagraph variant="card" className="mb-3">
                           {van?.subtitle ||
                             "High-end craftsmanship meeting rugged durability."}
                         </RichParagraph>
 
-{/* Price */}
-<div className="mt-auto">
+                        {/* Price */}
+                     <div className="mt-auto">
   {van?.price ? (
     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <span className="text-xl font-black text-hover">
+      <RichParagraph
+        variant="card"
+        textColor="text-hover"
+        className="!font-black !text-xl"
+      >
         {typeof van.price === "number"
           ? `$${van.price.toLocaleString()}`
           : van.price}
-      </span>
+      </RichParagraph>
     </div>
   ) : (
-    <SpanTag
-      text="Pricing upon request"
-      className="text-primary/40 text-sm italic !normal-case !tracking-normal"
-    />
+    <RichParagraph
+      variant="card"
+      textColor="text-primary/40"
+      className="italic !normal-case !tracking-normal"
+    >
+      Pricing upon request
+    </RichParagraph>
   )}
 </div>
-
 
                       </div>
                     </>

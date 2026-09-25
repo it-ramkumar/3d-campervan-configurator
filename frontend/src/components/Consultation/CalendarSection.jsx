@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ImageWithSkeleton from "../Common/ImageWithSkeleton/ImageWithSkeleton";
 import Link from "next/link";
 import PrimaryButton from "../Common/Button/PrimaryButton";
-import { Heading4, Heading3, RichParagraph } from "../Common/Common";
+import { Heading4, Heading3, RichParagraph, Heading1 } from "../Common/Common";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
 
@@ -158,9 +157,9 @@ export default function BookingPage() {
       const meetLink = data.meetLink || ""; // Agar meet link use karna ho
 
       // 2. Redirect with all details (Humne pixel/dataLayer yahan se remove kar diya)
-    router.push(
-  `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitle)}`
-);
+      router.push(
+        `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitle)}`
+      );
 
     } catch (err) {
       console.error("❌ Network error:", err);
@@ -289,10 +288,10 @@ export default function BookingPage() {
         {/* Sidebar: Deep Navy Theme */}
         <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-secondary p-10 flex-col justify-between relative">
           <div>
-            <Heading3
+            <Heading1 variant="card"
               text="Consultation Call"
               textColor="text-secondary"
-              className="mb-8 font-display uppercase tracking-wide"
+              className="mb-8 uppercase tracking-wide"
             />
 
             {/* Step Indicators */}
@@ -305,9 +304,7 @@ export default function BookingPage() {
                   >
                     {s}
                   </div>
-                  <span
-                    className={`text-[10px] font-bold uppercase tracking-[0.2em] ${bookingStep >= s ? "text-secondary" : "text-secondary/30"}`}
-                  >
+                  <RichParagraph variant="sub" className={` font-bold uppercase ${bookingStep >= s ? "!text-secondary" : "!text-secondary/30"}`}>
                     {s === 1
                       ? "Date"
                       : s === 2
@@ -315,17 +312,19 @@ export default function BookingPage() {
                         : s === 3
                           ? "Details"
                           : "Review"}
-                  </span>
+                  </RichParagraph>
+
                 </div>
               ))}
             </div>
           </div>
 
           <div className="p-4 rounded-lg border border-secondary/10 bg-secondary/5">
-            <p className="text-[10px] uppercase font-bold tracking-widest text-hover mb-1">
+            <RichParagraph variant="sub" className="!text-hover mb-1">
               Support Line
-            </p>
-            <p className="text-sm font-medium text-secondary">+1 (951) 441-9719</p>
+            </RichParagraph>
+            <RichParagraph variant="sub" className="!text-secondary mb-1">+1 (951) 441-9719</RichParagraph>
+
           </div>
         </div>
 
@@ -334,8 +333,8 @@ export default function BookingPage() {
           {!isLoggedIn ? (
             <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
               <div className="text-center">
-                <Heading3 text="Welcome Back" textColor="text-secondary" />
-                <RichParagraph className="text-secondary/70">
+                <Heading1 variant="card" text="Welcome Back" textColor="text-secondary" />
+                <RichParagraph variant="card" className="text-secondary/70">
                   Please sign in with Google to manage your bookings.
                 </RichParagraph>
               </div>
@@ -359,10 +358,11 @@ export default function BookingPage() {
               {bookingStep === 1 && (
                 <div className="animate-in slide-in-from-right-4 duration-500">
                   <header className="text-center mb-8">
-                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
+                    <RichParagraph variant="sub" className="!text-hover mb-1">
                       Schedule
-                    </span>
-                    <Heading4 text="Select a Date" textColor="text-primary" />
+                    </RichParagraph>
+
+                    <Heading1 variant="card" text="Select a Date" textColor="text-primary" />
                   </header>
 
                   <div className="bbv-glass p-6 rounded-lg">
@@ -373,12 +373,12 @@ export default function BookingPage() {
                       >
                         ←
                       </button>
-                      <h3 className="font-bold text-sm uppercase tracking-widest text-primary">
+                      <Heading1 variant="sub" className=" uppercase  !text-primary">
                         {currentMonth.toLocaleString("default", {
                           month: "long",
                           year: "numeric",
                         })}
-                      </h3>
+                      </Heading1>
                       <button
                         onClick={() => navigateMonth(1)}
                         className="p-2 hover:bg-secondary/10 rounded-lg transition-all text-primary/70 hover:text-hover"
@@ -427,13 +427,15 @@ export default function BookingPage() {
               {bookingStep === 2 && (
                 <div className="animate-in slide-in-from-right-4">
                   <header className="text-center mb-8">
-                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
+                    <RichParagraph variant="sub" className="!text-hover mb-1">
                       Time
-                    </span>
-                    <Heading4 text="Available Slots" textColor="text-primary" />
-                    <p className="text-xs font-bold text-primary/50 mt-2">
+                    </RichParagraph>
+
+                    <Heading1 variant="card" text="Available Slots" textColor="text-primary" />
+                    <RichParagraph variant="sub" className="!text-primary/70 mb-1">
                       {formatDate(selectedDate)}
-                    </p>
+                    </RichParagraph>
+
                   </header>
 
                   {slots.length === 0 ? (
@@ -453,9 +455,10 @@ export default function BookingPage() {
                           />
                         </svg>
                       </div>
-                      <p className="text-sm text-primary/50 mb-4">
+                      <RichParagraph variant="sub" className="!text-primary/70 mb-2">
                         No slots available for this date
-                      </p>
+                      </RichParagraph>
+
                       <button
                         onClick={() => setBookingStep(1)}
                         className="text-hover font-bold text-xs uppercase tracking-widest hover:underline"
@@ -499,10 +502,11 @@ export default function BookingPage() {
               {bookingStep === 3 && (
                 <div className="animate-in slide-in-from-right-4 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
+                    <RichParagraph variant="sub" className="!text-hover mb-1">
                       Details
-                    </span>
-                    <Heading4 text="Meeting Information" textColor="text-primary" />
+                    </RichParagraph>
+
+                    <Heading1 variant="card" text="Meeting Information" textColor="text-primary" />
                   </header>
 
                   <div className="space-y-4">
@@ -599,75 +603,63 @@ export default function BookingPage() {
               {bookingStep === 4 && (
                 <div className="animate-in zoom-in-95 space-y-6">
                   <header className="text-center mb-8">
-                    <span className="text-hover font-bold text-[10px] uppercase tracking-widest">
-                      Review
-                    </span>
-                    <Heading4 text="Confirm Details" textColor="text-secondary" />
+                    <RichParagraph variant="sub" className="!text-hover mb-1">
+                      Please review your booking details below.
+                    </RichParagraph>
+
+                    <Heading1 variant="card" text="Confirm Details" textColor="text-primary" />
                   </header>
 
                   <div className="bbv-glass rounded-lg p-6 space-y-4">
                     <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50">
+                      <RichParagraph variant="sub" >
                         Date
-                      </span>
-                      <span className="text-sm font-bold text-primary">
+                      </RichParagraph>
+                      <RichParagraph variant="sub" className="!text-primary font-bold">
                         {formatDate(selectedDate)}
-                      </span>
+                      </RichParagraph>
+
                     </div>
                     <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50">
+                      <RichParagraph variant="sub">
                         Time
-                      </span>
-                      <span className="text-sm font-bold text-secondary">
-                        {selectedSlot && formatTimeSlot(selectedSlot.start)}
-                      </span>
+                      </RichParagraph>
+   <RichParagraph variant="sub" className="!text-primary font-bold">
+                       {selectedSlot && formatTimeSlot(selectedSlot.start)}
+                      </RichParagraph>
+
                     </div>
                     <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50">
+
+                      <RichParagraph variant="sub">
                         Name
-                      </span>
-                      <span className="text-sm font-bold text-secondary">
-                        {formData.name}
-                      </span>
+                      </RichParagraph>
+                         <RichParagraph variant="sub" className="!text-primary font-bold">
+                          {formData.name}
+                      </RichParagraph>
+
                     </div>
                     <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50">
+                      <RichParagraph variant="sub">
                         Email
-                      </span>
-                      <span className="text-sm font-bold text-primary">
-                        {formData.email}
-                      </span>
+                      </RichParagraph>
+   <RichParagraph variant="sub" className="!text-primary font-bold">
+                         {formData.email}
+                      </RichParagraph>
+
                     </div>
                     {formData.phone && (
                       <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50">
-                          Phone
-                        </span>
-                        <span className="text-sm font-bold text-primary">
+                       <RichParagraph variant="sub">
+Phone
+                       </RichParagraph>
+
+                        <RichParagraph variant="sub" className="!text-primary font-bold">
                           {formData.phone}
-                        </span>
+                        </RichParagraph>
                       </div>
                     )}
-                    {formData.summary && (
-                      <div className="border-b border-secondary/10 pb-3">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-secondary/50 block mb-2">
-                          Topic
-                        </span>
-                        <span className="text-sm text-primary/80">
-                          {formData.summary}
-                        </span>
-                      </div>
-                    )}
-                    {formData.description && (
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary/50 block mb-2">
-                          Notes
-                        </span>
-                        <span className="text-sm text-primary/80">
-                          {formData.description}
-                        </span>
-                      </div>
-                    )}
+                 
                   </div>
 
                   <div className="flex gap-3">

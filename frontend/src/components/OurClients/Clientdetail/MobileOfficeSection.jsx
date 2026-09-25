@@ -2,7 +2,7 @@
 import React from "react";
 import { Briefcase, Camera, Heart, Users, Zap, Home, Video } from "lucide-react";
 import { motion } from "framer-motion";
-import { Heading2, Heading4, RichParagraph } from "../../Common/Common";
+import { Heading1, Heading4, RichParagraph } from "../../Common/Common";
 
 const MobileOfficeSection = () => {
   const businessUnits = [
@@ -19,19 +19,21 @@ const MobileOfficeSection = () => {
       <div className="bbv-dot-grid" />
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex flex-col items-center text-center mb-16">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Business on the Road</p>
+          <RichParagraph variant="sub" className="!text-hover uppercase mb-2" >
+Business on the Road
+          </RichParagraph>
           <div className="p-4 bbv-glass-light rounded-lg text-hover shadow-xl mb-6">
             <Briefcase size={36} />
           </div>
-          <Heading2 text="Mobile Office Campervans" className="font-display text-secondary uppercase tracking-wide mb-4" />
+          <Heading1 variant="section" text="Mobile Office Campervans" className=" text-secondary uppercase mb-4" />
           <div className="bbv-divider mb-6" />
-          <RichParagraph className="font-bold text-secondary/70 uppercase">
+          <RichParagraph variant="body" className="font-bold text-secondary/70 uppercase">
             Smart business investments that double as personal escapes
           </RichParagraph>
         </div>
 
         <div className="max-w-4xl mx-auto text-center mb-20 space-y-6">
-          <RichParagraph className="text-secondary/80">
+          <RichParagraph variant="body" className="text-secondary/80">
             A campervan can be more than just a camper. It can be a smart business investment that doubles as a personal escape.
           </RichParagraph>
           <div className="inline-block px-6 py-2 bg-hover text-primary rounded-lg font-black text-xs uppercase tracking-widest">
@@ -52,7 +54,7 @@ const MobileOfficeSection = () => {
               <div className="w-20 h-20 bg-hover/20 rounded-lg flex items-center justify-center mb-6 group-hover:bg-hover group-hover:rotate-6 transition-all duration-300">
                 <item.icon className="w-10 h-10 text-hover group-hover:text-primary transition-colors duration-300" />
               </div>
-              <Heading4 text={item.title} className="font-display text-secondary uppercase tracking-wide group-hover:text-hover transition-colors" />
+              <Heading1 variant="card" text={item.title} className=" !text-secondary uppercase group-hover:text-hover transition-colors" />
             </motion.div>
           ))}
         </div>
@@ -65,7 +67,7 @@ const MobileOfficeSection = () => {
                 <Zap className="text-hover" size={40} />
               </div>
             </div>
-            <RichParagraph className="text-secondary/80 text-center md:text-left">
+            <RichParagraph variant="card" className="text-secondary/80 text-center md:text-left">
               A Big Bear Van serves as both a personal luxury and a business asset for you. It's a smart way to enjoy a camper while also investing in a versatile business tool.
             </RichParagraph>
           </div>

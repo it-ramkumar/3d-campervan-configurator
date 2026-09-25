@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
-import { Heading2, Heading3, Heading4 } from "../Common/Common";
+import { Heading2, Heading3, Heading1 } from "../Common/Common";
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -603,12 +603,8 @@ const InfoCard = ({ image, title, items, largeText = false }) => {
         {" "}
         {/* Further reduced padding */}
         {/* This is for after market seats headings */}
-        <Heading3 text={title} className="text-secondary! text-center"/>
-        {/* <h3 className="text-base font-bold text-center mb-2 sm:mb-3 text-white group-hover:text-emerald-50 transition-colors duration-300">
-          {" "}
-          {/* Set title to base font size, removed desktop scaling */}
-          {/* {title}
-        </h3> */} */
+        <Heading1 variant="card" text={title} className="text-secondary! text-center"/>
+
         <ul className="space-y-1 sm:space-y-2">
           {" "}
           {/* Reduced space between items */}
@@ -621,11 +617,8 @@ const InfoCard = ({ image, title, items, largeText = false }) => {
               <div className="mt-0.5 group-hover/item:scale-110 transition-transform duration-300">
                 {getIconForContent(item)}
               </div>
-              <RichParagraph className="text-secondary! pt-0.5">{item}</RichParagraph>
-              {/* <span
-                className="text-xs leading-relaxed flex-1 group-hover/item:translate-x-1.5 transition-transform duration-300" // Forced all list text to text-xs
-                dangerouslySetInnerHTML={{ __html: item }}
-              /> */}
+              <RichParagraph variant="card" className="text-secondary! pt-0.5">{item}</RichParagraph>
+
             </li>
           ))}
         </ul>
@@ -696,10 +689,8 @@ const FeatureItem = ({ text, index }) => {
         {getIconForContent(text)}
       </div>
       {/* This is for both paras of roof track */}
-      <RichParagraph className="text-secondary!">{text}</RichParagraph> 
-      {/* <p className="text-sm md:text-base leading-relaxed flex-1 transition-all duration-300">
-       
-      </p> */} 
+      <RichParagraph variant="card" className="text-secondary!">{text}</RichParagraph>
+
     </div>
   );
 };
@@ -752,7 +743,7 @@ export default function SeatOption() {
   return (
     <main
       ref={mainRef}
-      className="bg-white text-gray-900 font-serif min-h-screen overflow-hidden"
+      className="bg-white text-gray-900  min-h-screen overflow-hidden"
     >
       {/* REDUCED VERTICAL PADDING */}
       <div className="container mx-auto px-4 py-10 md:py-16">
@@ -761,17 +752,15 @@ export default function SeatOption() {
         {/* ==================================== */}
         <section className="mb-12 md:mb-16">
           {/* REDUCED TITLE FONT SIZE */}
-          <Heading2 text={"Seat Options"} className="text-center"/>
-          {/* <h1 className="section-title text-3xl sm:text-4xl md:text-5xl font-bold text-center text-[#1a1f2e] mb-5 md:mb-6">
-            Seat Options
-          </h1> */}
+          <Heading1 variant="section" text={"Seat Options"} className="text-center !text-primary"/>
+
 
           {/* REDUCED MARGIN AND PILL SIZE */}
           <div className="text-center mb-6 md:mb-10">
-            <Heading3 text={"Stock Seats"}/>
-            {/* <h3 className="text-lg md:text-3xl text-gray-600 font-medium">
-              Stock Seats
-            </h3> */}
+
+<RichParagraph variant="body" className="font-bold">
+Stock Seats
+</RichParagraph>
 
             <div className="w-10 h-1 bg-hover mx-auto mt-2 rounded-full"></div>
           </div>
@@ -864,7 +853,7 @@ export default function SeatOption() {
         {/* ==================================== */}
         <section className="pt-10 md:pt-12">
           {/* REDUCED TITLE FONT SIZE AND MARGIN */}
-          <Heading2 text={"Roof Tracks & 180-Degree Rear Door Hinges"} className="text-center mb-8"/>
+          <Heading1 variant="section" textColor="text-primary" text={"Roof Tracks & 180-Degree Rear Door Hinges"} className="text-center mb-8"/>
           {/* <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1a1f2e] mb-10 md:mb-12 max-w-4xl mx-auto leading-tight">
             Roof Tracks & 180-Degree Rear Door Hinges
           </h1> */}
@@ -876,7 +865,7 @@ export default function SeatOption() {
                 {/* REDUCED PADDING */}
                 <div className="p-5 lg:p-8 flex flex-col justify-center order-2 lg:order-1">
                   {/* REDUCED TITLE FONT SIZE */}
-                  <Heading3 text={"Roof Tracks"} className="text-secondary! mb-4"/>
+                  <Heading1 variant="card" text={"Roof Tracks"} className="text-secondary! mb-4"/>
                   {/* <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
                     Roof Tracks
                   </h2> */}
@@ -921,7 +910,7 @@ export default function SeatOption() {
                 {/* REDUCED PADDING */}
                 <div className="p-5 lg:p-8 flex flex-col justify-center">
                   {/* REDUCED TITLE FONT SIZE */}
-                  <Heading3 text={"180-Degree Rear Door Hinges"} className="text-secondary! mb-4"/>
+                  <Heading1 variant="card" text={"180-Degree Rear Door Hinges"} className="text-secondary! mb-4"/>
                   {/* <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
                     180-Degree Rear Door Hinges
                   </h2> */}

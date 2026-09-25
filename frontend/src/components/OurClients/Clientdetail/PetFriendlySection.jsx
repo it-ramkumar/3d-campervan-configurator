@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import { PawPrint, Users, Home, Shield, Car } from "lucide-react";
-import { ImageWithSkeleton, Heading2, Heading3, RichParagraph, CustomLink, Heading4 } from "../../Common/Common";
+import { ImageWithSkeleton, Heading1, Heading3, RichParagraph, CustomLink, Heading4 } from "../../Common/Common";
 import { motion } from "framer-motion";
 import ClassicImageGrid from "./ClassicImageGrid";
 
@@ -16,18 +16,20 @@ const PetFriendlySection = ({ imageData }) => {
             <PawPrint size={32} />
           </div>
           <div>
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-1">Pet Owners</p>
-            <Heading2 text="Pet-friendly Campervans" className="font-display text-primary uppercase tracking-wide" />
+            <RichParagraph variant="sub" className="!text-hover mb-1">
+Pet Owners
+            </RichParagraph>
+            <Heading1 variant="section" text="Pet-friendly Campervans" className=" !text-primary uppercase " />
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-16">
           <div className="lg:col-span-3 bbv-card border border-hover/20 text-primary p-10 rounded-lg shadow-xl">
-            <Heading3 text="Travel Without Compromise" className="font-display text-primary uppercase tracking-wide mb-4" />
-            <RichParagraph className="text-primary/80">
+            <Heading1 variant="card" text="Travel Without Compromise" className=" !text-primary uppercase  mb-4" />
+            <RichParagraph variant="card" >
               Traveling with pets means expensive boarding, stressful logistics, and unwelcoming hotels. Moreover, pets often struggle in different hotel rooms when being left behind by their owners. That's why, at Big Bear Vans, we've built various mobile sanctuaries for pet owners to give their pets a home-like comfort on the road.
             </RichParagraph>
-            <RichParagraph className="mt-4 text-primary/80">
+            <RichParagraph variant="card" className="mt-4 text-primary/80">
               With our pet-specific campervans, you can comfortably go shopping or hiking on a trail where pets are not allowed by leaving them in the van with the A/C or heater on and the engine off.
               <CustomLink href="/van-layouts/cusco-campervan" text={" Cusco, "} />
               <CustomLink href="/van-layouts/santa-barbara" text={"  Santa Barbara, "} />
@@ -36,10 +38,10 @@ const PetFriendlySection = ({ imageData }) => {
             </RichParagraph>
           </div>
           <div className="lg:col-span-2 bbv-card border-l-4 border-hover p-8 rounded-lg">
-            <RichParagraph className="italic text-primary/80 mb-4">
+            <RichParagraph variant="card" className="italic  mb-4">
               "We love our camper van. We probably looked at 10 or 12 different kinds of Sprinter layouts and couldn't find exactly what we wanted till we found Big Bear Vans. One of the big reasons why we decided to go with a van was that we have four dogs, and it's a challenge to find something for your dog to sit on when you want to go on a trip. But these people make it possible for us to go on vacation with our dogs."
             </RichParagraph>
-            <RichParagraph className="font-bold text-hover">
+            <RichParagraph variant="card" className="font-bold text-hover">
               — Cathy and Ben (Sasha Campervan)
             </RichParagraph>
           </div>
@@ -63,47 +65,53 @@ const PetFriendlySection = ({ imageData }) => {
               <div className="w-12 h-12 bg-hover/20 rounded-xl flex items-center justify-center mb-4">
                 <feature.icon className="w-6 h-6 text-hover" />
               </div>
-              <Heading4 text={feature.title} className="font-display text-primary uppercase tracking-wide mb-2" />
-              <RichParagraph className="text-primary/70">
+              <Heading1 variant="card" text={feature.title} className="!text-primary uppercase mb-2" />
+              <RichParagraph variant="card" >
                 {feature.desc}
               </RichParagraph>
             </motion.div>
           ))}
         </div>
 
-        <div className="bbv-card rounded-lg overflow-hidden border border-hover/20">
-          <div className="grid grid-cols-1 lg:grid-cols-12">
-            <div className="lg:col-span-5 p-10 flex flex-col justify-center">
-              <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Featured Build</p>
-              <div className="bbv-divider mb-4" />
-              <Heading3 text="The Cusco Campervan" className="font-display text-primary uppercase tracking-wide mb-6" />
-              <RichParagraph className="text-primary/80 my-6">
-                <CustomLink href="/van-layouts/cusco-campervan" text={" Cusco "} />
-                is our pet-friendly campervan designed for clients with two dogs, featuring dedicated pet areas and enhanced ventilation systems.
-              </RichParagraph>
-              <ul className="space-y-4">
-                {[
-                  { icon: Users, text: "Seating and sleeping for 4 with pet accommodations" },
-                  { icon: PawPrint, text: "Dedicated pet bench with fridge and water bowls" },
-                  { icon: Home, text: "Awnings windows for maximum view and airflow" }
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-3">
-                    <item.icon size={20} className="text-hover" />
-                    <RichParagraph className="text-primary/80">{item.text}</RichParagraph>
-                  </li>
-                ))}
-              </ul>
-            </div>
+       <div className="bbv-card rounded-lg overflow-hidden border border-hover/20">
+  <div className="grid grid-cols-1 lg:grid-cols-12">
 
+    {/* Left Column (Content - 5 Cols) */}
+    <div className="lg:col-span-5 p-10 flex flex-col justify-center">
+      <RichParagraph variant="sub" className="!text-hover mb-3">
+        Featured Build
+      </RichParagraph>
+      <div className="bbv-divider mb-4" />
+      <Heading1 variant="section" text="The Cusco Campervan" className="!text-primary uppercase mb-6" />
+      <RichParagraph variant="body" className="my-6">
+        <CustomLink href="/van-layouts/cusco-campervan" text={" Cusco "} />
+        is our pet-friendly campervan designed for clients with two dogs, featuring dedicated pet areas and enhanced ventilation systems.
+      </RichParagraph>
+      <ul className="space-y-4">
+        {[
+          { icon: Users, text: "Seating and sleeping for 4 with pet accommodations" },
+          { icon: PawPrint, text: "Dedicated pet bench with fridge and water bowls" },
+          { icon: Home, text: "Awnings windows for maximum view and airflow" }
+        ].map((item, idx) => (
+          <li key={idx} className="flex items-center gap-3">
+            <item.icon size={20} className="text-hover flex-shrink-0" />
+            <RichParagraph variant="body">
+              {item.text}
+            </RichParagraph>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-            <div className="lg:col-span-7 grid-rows-2 gap-4 ">
-              <div className="lg:col-span-3">
-                <ClassicImageGrid images={imageData?.cusco} />
-              </div>
+    {/* Right Column (Image Grid - 7 Cols) */}
+    <div className="lg:col-span-7 flex items-center justify-center p-6 lg:p-0">
+      <div className="w-full h-full">
+        <ClassicImageGrid images={imageData?.cusco} />
+      </div>
+    </div>
 
-            </div>
-          </div>
-        </div>
+  </div>
+</div>
       </div>
 
 

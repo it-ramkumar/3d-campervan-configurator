@@ -1,10 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ImageWithSkeleton, RichParagraph } from "../Common/Common"; // Register ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
-import { Heading2, Heading3, Heading4 } from "../Common/Common";
+import { useState } from "react";
+import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
+import { Heading1 } from "../Common/Common";
 
 const packagesData = [
   {
@@ -671,7 +668,7 @@ const IntegrationIcon = () => (
 );
 
 // Icon mapping for each specific feature line
-const getFeatureIcon = (featureText, index) => {
+const getFeatureIcon = (featureText) => {
   const text = featureText.toLowerCase();
 
   // X55PKG - AWD Package
@@ -880,7 +877,7 @@ const ComfortIcon = () => (
   </svg>
 );
 
-const getAvailabilityIcon = (availabilityText, index) => {
+const getAvailabilityIcon = (availabilityText) => {
   const text = availabilityText.toLowerCase();
   if (
     text.includes("models") ||
@@ -893,7 +890,7 @@ const getAvailabilityIcon = (availabilityText, index) => {
   return <VanModelIcon />;
 };
 
-const getBenefitIcon = (benefitText, index) => {
+const getBenefitIcon = (benefitText) => {
   const text = benefitText.toLowerCase();
   if (
     text.includes("grip") ||
@@ -954,8 +951,6 @@ const ToggleButton = ({ isCollapsed, onClick, sectionName }) => (
 // --- END: Collapse/Toggle Button Components ---
 
 export default function Speclist() {
-  const containerRef = useRef(null);
-
   // State to manage the collapsed status for each package and section
   const [collapsedState, setCollapsedState] = useState({});
 
@@ -967,57 +962,12 @@ export default function Speclist() {
     }));
   };
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const sections = gsap.utils.toArray(".spec-section");
-
-      sections.forEach((section) => {
-        gsap.fromTo(
-          section,
-          { opacity: 0, y: 80 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 80%",
-              toggleActions: "play none none reverse",
-            },
-          },
-        );
-      });
-
-      gsap.fromTo(
-        ".feature-item",
-        { opacity: 0, x: -20 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: ".spec-section",
-            start: "top 70%",
-            toggleActions: "play none none reverse",
-          },
-        },
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   // Define the number of items to show when collapsed
   const collapsedItemCount = 2; // Show only the first 2 items by default
 
   return (
     // REDUCED VERTICAL PADDING
-    <section
-      ref={containerRef}
-      className="w-full bg-gradient-to-br from-gray-50 via-white to-gray-100 py-16 overflow-hidden"
-    >
+    <section className="w-full bg-gradient-to-br from-gray-50 via-white to-gray-100 py-16 overflow-hidden">
       <div className="container mx-auto px-4 mb-12 text-center">
         {" "}
         {/* Reduced margin */}
@@ -1029,16 +979,16 @@ export default function Speclist() {
           {/* <div className="w-14 h-0.5 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full opacity-80"></div> Reduced size */}
         </div>
         {/* REDUCED MAIN TITLE FONT SIZE */}
-        <Heading2 text={"Packages & Codes: Decoding The Sprinter Spec List"} />
-        <RichParagraph>
-          {
-            "Explore the comprehensive range of Mercedes-Benz Sprinter packages designed to enhance your driving experience"
-          }
+        <Heading1 variant="section" textColor="text-primary" text={"Packages & Codes: Decoding The Sprinter Spec List"} />
+        <RichParagraph variant="body">
+
+            Explore the comprehensive range of Mercedes-Benz Sprinter packages designed to enhance your driving experience
+
         </RichParagraph>
       </div>
 
       <div className="flex flex-col gap-16">
-        {" "}
+
         {/* REDUCED GAP */}
         {packagesData.map((pkg, index) => {
           const isEven = index % 2 === 0;
@@ -1090,18 +1040,19 @@ export default function Speclist() {
                 {/* Package ID Badge (Reduced size) */}
                 <div className="inline-flex items-center px-3 py-2 bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm mb-6 group hover:shadow-md transition-all duration-300">
                   <span className="w-2 h-2 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full mr-2"></span>
-                  <span className="font-mono text-xs font-semibold text-gray-700 tracking-wide">
-                    {pkg.id}
-                  </span>
+                  <RichParagraph variant="sub">
+ {pkg.id}
+                  </RichParagraph>
+
                 </div>
 
                 {/* Package Title (REDUCED FONT SIZE) */}
-                <Heading3 text={pkg.title} className="mb-2" />
+                <Heading1 variant="card" textColor="text-primary" text={pkg.title} className="mb-2" />
 
                 {/* Package Description (REDUCED FONT SIZE AND MARGIN) */}
                 <div className="relative mb-8">
                   <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full"></div>
-                  <RichParagraph className="pl-4 py-1.5 bg-gradient-to-r from-gray-50/80 to-gray-100/50 rounded-r-xl border-l-2 border-transparent">
+                  <RichParagraph variant="card" className="pl-4 py-1.5 bg-gradient-to-r from-gray-50/80 to-gray-100/50 rounded-r-xl border-l-2 border-transparent">
                     {pkg.description}
                   </RichParagraph>
                 </div>
@@ -1134,7 +1085,7 @@ export default function Speclist() {
                           />
                         </svg>
                       </div>
-                      <Heading4 text={"Key Features"} />
+                      <Heading1 variant="sub" textColor="text-primary" text={"Key Features"} />
                       {/* Reduced font size */}
                     </div>
                     {/* Features List (REDUCED FONT SIZE) */}
@@ -1153,7 +1104,7 @@ export default function Speclist() {
                             {/* Reduced size */}
                             {getFeatureIcon(feature, i)}
                           </div>
-                          <RichParagraph className="pt-0.5">
+                          <RichParagraph variant="sub" className="pt-0.5">
                             {feature}
                           </RichParagraph>
                         </div>
@@ -1190,8 +1141,7 @@ export default function Speclist() {
                           />
                         </svg>
                       </div>
-                      <Heading4 text={"Availability & Pricing"} />
-                      {/* <h4 className="font-bold text-base md:text-lg text-gray-900">Availability & Pricing</h4> Reduced font size */}
+                      <Heading1 variant="sub" textColor="text-primary" text={"Availability & Pricing"} />
                     </div>
                     {/* Availability List (REDUCED FONT SIZE) */}
                     <div className="space-y-3">
@@ -1209,10 +1159,9 @@ export default function Speclist() {
                             {/* Reduced size */}
                             {getAvailabilityIcon(item, i)}
                           </div>
-                          <RichParagraph className="pt-0.5">
+                          <RichParagraph variant="sub" className="pt-0.5">
                             {item}
                           </RichParagraph>
-                          {/* <span className="text-sm md:text-base text-gray-700 leading-relaxed pt-0.5">{item}</span> Reduced font size */}
                         </div>
                       ))}
                     </div>
@@ -1243,8 +1192,7 @@ export default function Speclist() {
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                       </div>
-                      <Heading4 text={"Key Benefits"} />
-                      {/* <h4 className="font-bold text-base md:text-lg text-gray-900">Key Benefits</h4> Reduced font size */}
+                      <Heading1 variant="sub" textColor="text-primary" text={"Key Benefits"} />
                     </div>
                     {/* Benefits List (REDUCED FONT SIZE) */}
                     <div className="space-y-3">
@@ -1262,10 +1210,9 @@ export default function Speclist() {
                             {/* Reduced size */}
                             {getBenefitIcon(benefit, i)}
                           </div>
-                          <RichParagraph className="pt-0.5">
+                          <RichParagraph variant="sub" className="pt-0.5">
                             {benefit}
                           </RichParagraph>
-                          {/* <span className="text-sm md:text-base text-gray-700 leading-relaxed pt-0.5">{benefit}</span> Reduced font size */}
                         </div>
                       ))}
                     </div>
@@ -1325,7 +1272,6 @@ export default function Speclist() {
         <RichParagraph>
           {"Mercedes-Benz Sprinter Packages & Specifications"}
         </RichParagraph>
-        {/* <p className="text-gray-500 text-xs font-medium tracking-wide">Mercedes-Benz Sprinter Packages & Specifications</p> Reduced text size */}
       </div>
     </section>
   );

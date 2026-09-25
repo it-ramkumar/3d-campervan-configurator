@@ -15,18 +15,11 @@ import {
   Heading2,
   RichParagraph,
   Heading3,
-  Heading4,
-} from "../Common/Common";
+Heading1} from "../Common/Common";
 import Image from "next/image";
 
-const MAX_INITIAL_ITEMS = 50;
 
-// ── Shared dark tokens ────────────────────────────────────────────────────────
-const GLASS = {
-  background: "rgba(2,12,24,0.72)",
-  backdropFilter: "blur(24px)",
-  border: "1px solid rgba(255,255,255,0.07)",
-};
+
 const GLASS_LIGHT = {
   background: "rgba(0,31,61,0.05)",
   border: "1px solid rgba(0,31,61,0.1)",
@@ -48,7 +41,7 @@ const RenderBlocks = ({ blocks }) => {
             case "subheading":
               return (
                 <div key={idx} className="mb-1">
-                  <Heading4
+                  <Heading1 variants="card"
                     text={block.title}
                     textColor="text-primary"
                     className="font-bold text-[11px]"
@@ -59,9 +52,10 @@ const RenderBlocks = ({ blocks }) => {
             case "paragraph":
               return (
                 <RichParagraph
+                variant="body"
                   key={idx}
-                  textColor="text-primary"
-                  className="!opacity-60 leading-relaxed font-medium"
+
+
                 >
                   {block.content}
                 </RichParagraph>
@@ -76,8 +70,7 @@ const RenderBlocks = ({ blocks }) => {
                 >
                   {block.title && (
                     <RichParagraph
-                      textColor="text-primary"
-                      className="font-black !opacity-35 uppercase !text-[10px] tracking-widest mb-1.5"
+                 variant="body"
                     >
                       {block.title}
                     </RichParagraph>
@@ -87,8 +80,7 @@ const RenderBlocks = ({ blocks }) => {
                       <li key={iIdx} className="flex items-start gap-1.5">
                         <CheckCircle2 className="h-2.5 w-2.5 text-[#ED985F] mt-0.5 shrink-0" />
                         <RichParagraph
-                          textColor="text-primary"
-                          className="!text-[12px] font-semibold leading-tight !opacity-75"
+                         variant="body"
                         >
                           {item.text}
                         </RichParagraph>
@@ -413,14 +405,15 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                     </div>
 
                     <div>
-                      <Heading2
+                      <Heading1 variant="section"
                         text={cat.title}
                         textColor="text-primary"
-                        className="!text-2xl md:!text-3xl"
+
                       />
-                      <p className="mt-1 font-ui font-bold text-[10px] uppercase tracking-[0.25em] text-primary/30">
-                        {(cat.subCategories?.length || 0) + (cat.items?.length || 0)} Options Available
-                      </p>
+                      <RichParagraph variant="sub">
+{(cat.subCategories?.length || 0) + (cat.items?.length || 0)} Options Available
+                      </RichParagraph>
+
                     </div>
                   </div>
 
@@ -524,16 +517,12 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                   </div>
 
                                   <div className="flex-1 min-w-0 pr-1">
-                                    <Heading3
-                                      text={
-                                        item.heading ||
-                                        item.title ||
+                                    <RichParagraph  variant="sub" textColor={isActive ? "text-secondary" : "text-primary"}>
+                                       { item.title ||
                                         item.blocks?.find((b) => b.block_type === "heading")?.title ||
-                                        "Untitled Option"
-                                      }
-                                      textColor={isActive ? "text-secondary" : "text-primary"}
-                                      className={`!text-[12px] leading-tight transition-colors duration-300 ${isActive ? "!opacity-100" : "!opacity-55"}`}
-                                    />
+                                        "Untitled Option"}
+                                    </RichParagraph>
+
                                   </div>
 
                                   {isActive && (
@@ -588,7 +577,7 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                         {/* amber top accent */}
                                         <div className="w-8 h-[2px] bg-[#ED985F]" />
 
-                                        <Heading3
+                                        <Heading1 variant="card"
                                           text={
                                             activeItem.heading ||
                                             activeItem.title ||
@@ -596,15 +585,16 @@ export default function ExteriorChoicesList({ initialData, heading }) {
                                             "Untitled Option"
                                           }
                                           textColor="text-primary"
-                                          className="font-bold leading-tight"
+
                                         />
 
                                         <div className="space-y-3">
                                           {activeItem.description?.map((desc, i) => (
                                             <RichParagraph
+                                            variant="card"
                                               key={i}
                                               textColor="text-primary"
-                                              className="!opacity-60 leading-relaxed border-l-2 border-[#ED985F]/20 pl-4"
+                                             
                                             >
                                               {desc}
                                             </RichParagraph>

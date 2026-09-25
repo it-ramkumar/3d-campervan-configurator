@@ -8,7 +8,7 @@ import {
   Calendar,
 } from "lucide-react";
 import {
-  Heading2,
+  Heading1,
   Heading3,
   Heading4,
   RichParagraph,
@@ -138,15 +138,18 @@ export default function OurProcess() {
       ref={containerRef}
       className="relative bg-[#F8F8F6] py-20 antialiased font-sans overflow-hidden"
     >
-      <div className="container relative z-10 mx-auto px-4 max-w-7xl">
+      <div className=" mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3 flex justify-center">
-            Our Methodology
-          </p>
-          <Heading2 text="Big Bear Vans Custom Build Process" />
-          <div className="bbv-divider mb-6 mx-auto" />
-          <RichParagraph className="!text-primary/70">
+          <RichParagraph variant="sub" className="!text-hover">
+               Our Methodology
+          </RichParagraph>
+
+          <Heading1 as="h2" variant="section" textColor="text-primary">
+            Big Bear Vans Custom Build Process
+          </Heading1>
+
+          <RichParagraph variant="body" className="mt-6 ">
             Our transparent, collaborative process ensures your vision comes to life, from initial ideas to keys in your hand.
           </RichParagraph>
         </div>
@@ -188,9 +191,10 @@ export default function OurProcess() {
                         }}
                       >
                         <Calendar size={14} className="text-hover" />
-                        <span className="text-xs font-bold text-secondary uppercase tracking-wider">
-                          {step.time}
-                        </span>
+                        <RichParagraph variant="sub" className="font-bold text-secondary/100 ">
+{step.time}
+                        </RichParagraph>
+
                       </div>
                       <div className="bbv-amber-line" />
                     </div>
@@ -202,23 +206,24 @@ export default function OurProcess() {
                       isEven ? "lg:order-first" : "lg:order-last"
                     }`}
                   >
-                    <div className="inline-flex items-center gap-2 mb-3">
+                    <div className="inline-flex items-center gap-2 mb-3 ">
                       <CheckCircle2 size={16} className="text-hover" />
-                      <span className="font-bold uppercase text-xs text-hover tracking-widest">
-                        Step 0{index + 1}
-                      </span>
+                      <RichParagraph variant="sub" className="font-bold !text-hover ">
+                        {step.time}
+                      </RichParagraph>
+
                     </div>
 
-                    <Heading3 text={step.title} className="mb-6" />
+                    <Heading1 variant="card" text={step.title} className="mb-6 !text-primary" />
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 md:max-w-lg">
                       {step.details.map((detail, dIdx) => (
                         <div
                           key={dIdx}
                           className="relative pl-5 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-hover before:rounded-full"
                         >
-                          <Heading4 text={detail.subtitle} className="mb-1" />
-                          <RichParagraph className="!text-primary/70">
+                          <Heading1 variant="sub" text={detail.subtitle} className="mb-1 !text-primary" />
+                          <RichParagraph variant="card" >
                             {detail.description}
                           </RichParagraph>
                         </div>
@@ -246,12 +251,14 @@ export default function OurProcess() {
 
           {/* Content */}
           <div className="relative z-10 text-center p-8 md:p-14 max-w-2xl mx-auto flex flex-col items-center justify-center">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
-              Take The Next Step
-            </p>
-            <Heading3
+        <RichParagraph variant="sub" className="!text-hover">
+                Take The Next Step
+            </RichParagraph>
+
+            <Heading1
+            variant="section"
               text="Ready to start your build?"
-              className="mb-6 text-secondary !text-3xl md:!text-4xl"
+              className="mb-6 text-secondary"
             />
             <SecondaryButton label="Get a Custom Quote" link="/contact" />
           </div>

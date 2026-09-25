@@ -1,7 +1,7 @@
 import React from "react";
 import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import { ClientschemaData } from "@/schema/ourClient";
-import { Heading2, RichParagraph } from '@/components/Common/Common';
+import { Heading2, Heading1, RichParagraph } from '@/components/Common/Common';
 import YoutubeSection from "@/components/OurClients/Clientdetail/YoutubeSection";
 import CTRSection from "@/components/OurClients/Clientdetail/CTRSection";
 import WhyChoose from "@/components/OurClients/Clientdetail/WhyChoose";
@@ -70,13 +70,13 @@ export default function OurClients() {
           <section className="py-20 md:py-24 lg:py-28 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-              <Heading2 text="Our Client Stories" className="my-4" />
-              <RichParagraph className="max-w-3xl mx-auto my-4">
+              <Heading1 variant="section" textColor="text-primary" text="Our Client Stories" className="my-4" />
+              <RichParagraph variant="body" className="max-w-3xl mx-auto my-4">
                 At Big Bear Vans, we build premium custom campervans. These luxurious
                 vans enable our clients to hit the road, explore, and live off the
                 grid for as long as they want.
               </RichParagraph>
-              <RichParagraph className="max-w-3xl mx-auto my-4">
+              <RichParagraph variant="body" className="max-w-3xl mx-auto my-4">
                 Our clients come from different backgrounds. That's why every Big
                 Bear Van is a custom reflection of its owner's specific style and
                 adventure goals.

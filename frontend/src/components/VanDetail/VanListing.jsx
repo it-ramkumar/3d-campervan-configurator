@@ -251,8 +251,11 @@ const SvgCheck = ({ small = false }) => (
 
 const HeroSpecItem = ({ label, value }) => (
   <div className="group py-3 border-b border-primary/10 hover:border-hover/50 transition-all duration-200">
-    <SpanTag text={label} className=" uppercase tracking-[0.3em] font-semibold text-primary/45 mb-1 "/>
-    <RichParagraph className="font-display font-bold  text-primary group-hover:text-hover transition-colors">
+   <RichParagraph variant="sub" className="font-semibold">
+{label}
+</RichParagraph>
+    {/* <SpanTag  className=" uppercase tracking-[0.3em]  text-primary/45 mb-1 "/> */}
+    <RichParagraph variant="card" className=" font-bold  group-hover:text-hover transition-colors">
       {value}
     </RichParagraph>
   </div>
@@ -326,7 +329,7 @@ const VanPage = ({ vanDetail,variants }) => {
           {/* Mobile-only heading: shown above the gallery on small screens.
               Hidden on lg+ where the title renders inside the info panel instead. */}
           <div className="lg:hidden mb-5 space-y-3">
-            <Heading1 text={vanDetail?.van_listing?.title} className="!text-primary !text-4xl sm:!text-5xl leading-[0.95]" />
+            <Heading1 variant="section" text={vanDetail?.van_listing?.title} className="!text-primary " />
             {vanDetail?.van_listing?.subtitle && (
               <div className="flex items-center gap-3">
                 <div className="w-8 h-0.5 bg-hover shrink-0" />
@@ -336,7 +339,8 @@ const VanPage = ({ vanDetail,variants }) => {
             {vanDetail?.delivery_date && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
                 <Calendar className="w-3 h-3 text-hover" />
-                <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span>
+                        <RichParagraph variant="body" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
+                {/* <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span> */}
               </div>
             )}
           </div>
@@ -362,17 +366,17 @@ const VanPage = ({ vanDetail,variants }) => {
               {vanDetail?.delivery_date && (
                 <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
                   <Calendar className="w-3 h-3 text-hover" />
-                  <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span>
+                  <RichParagraph variant="body" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
                 </div>
               )}
 
-             
+
               <div>
-                <Heading1 as="div" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary !text-6xl mb-2 leading-[0.9]" />
+                <Heading1 as="h1" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
                 {vanDetail?.van_listing?.subtitle && (
                   <div className="hidden lg:flex items-center gap-3 mt-4">
-                    <div className="w-8 h-0.5 bg-hover shrink-0" />
-                    <RichParagraph className="italic !text-primary/55">{vanDetail.van_listing.subtitle}</RichParagraph>
+                    {/* <div className="w-8 h-0.5 bg-hover shrink-0" /> */}
+                    <RichParagraph variant="body" className="italic">{vanDetail.van_listing.subtitle}</RichParagraph>
                   </div>
                 )}
               </div>
@@ -383,17 +387,18 @@ const VanPage = ({ vanDetail,variants }) => {
   <div className="relative bbv-card p-6 overflow-hidden">
     <div className="bbv-amber-line-top" />
 
-    <RichParagraph className="mb-2 font-bold !text-primary">
+    <RichParagraph variant="body" className="mb-2 font-bold ">
       Total Listing Price
     </RichParagraph>
 
     {Number(vanDetail.van_listing.price) > 99 ? (
-      <Heading2
+      <Heading1
+      variant="section"
         text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-        className="!text-hover !text-4xl"
+        className="!text-hover !font-bold"
       />
     ) : (
-      <RichParagraph className="font-display font-bold text-primary">
+      <RichParagraph variant="body" className=" font-bold ">
         Inquire for Price
       </RichParagraph>
     )}
@@ -405,9 +410,10 @@ const VanPage = ({ vanDetail,variants }) => {
               {/* 3D Configurator CTA */}
               {vanDetail?.glbFile && (
                 <div className="relative">
-                  <span className="absolute -top-3 -right-3 z-20 rounded-full bg-primary px-2 py-1 text-[10px] font-black uppercase text-secondary shadow-md animate-bounce pointer-events-none">
-                    New · 3D
-                  </span>
+                  <RichParagraph variant="sub" textColor="text-primary" className="absolute -top-3 -right-3 z-20 rounded-full bg-primary px-2 py-1 uppercase text-secondary shadow-md animate-bounce pointer-events-none">
+ New · 3D
+                  </RichParagraph>
+
                   <a
                     href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
                     className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-8 py-4 font-extrabold uppercase text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_6px_rgba(237,152,95,0.55)] active:scale-[0.98]"
@@ -446,9 +452,10 @@ const VanPage = ({ vanDetail,variants }) => {
                   className="w-full"
                 />
                 <ShareButton title={vanDetail?.van_listing?.title} />
-                <p className="text-center font-ui text-[9px] uppercase tracking-[0.3em] font-bold text-hover">
-                  Limited 2026 Build Slots
-                </p>
+                <RichParagraph variant="sub" className="text-center uppercase font-bold">
+ Limited 2026 Build Slots
+                </RichParagraph>
+
               </div>
             </div>
           </div>
@@ -461,10 +468,12 @@ const VanPage = ({ vanDetail,variants }) => {
         <section className="bbv-section-light-alt relative py-20 px-6">
           <div className="bbv-dot-grid-light" />
           <div className="relative max-w-4xl mx-auto text-center">
-            <SpanTag text="The Design Philosophy" className="justify-center mb-5" />
-            <Heading2 text="Build Overview" className="text-primary mt-4" />
+            <RichParagraph variant="sub">
+The Design Philosophy
+            </RichParagraph>
+            <Heading1 variant="section" text="Build Overview" className="!text-primary mt-4" />
             <div className="bbv-divider mx-auto mt-5 mb-10" />
-            <RichParagraph className="text-primary/60 italic leading-relaxed">
+            <RichParagraph variant="body" className=" italic">
               "{vanDetail.van_listing.description}"
             </RichParagraph>
           </div>
@@ -499,36 +508,36 @@ const VanPage = ({ vanDetail,variants }) => {
               {/* HEADING */}
               {block.block_type === "heading" && block.title && (
                 <div className={`flex flex-col gap-3 ${alignClass}`}>
-                  <Heading2 text={block.title} className={titleCls} />
+                  <Heading1 variant="section" text={block.title} className={titleCls} />
                   <div className={`w-12 h-0.5 bg-hover rounded-full ${layout === "center" ? "mx-auto" : layout === "right" ? "ml-auto" : ""}`} />
-                  {block.subtitle && <RichParagraph className={subCls}>{block.subtitle}</RichParagraph>}
+                  {block.subtitle && <RichParagraph variant="body" className={subCls}>{block.subtitle}</RichParagraph>}
                 </div>
               )}
 
               {/* SUBHEADING */}
               {block.block_type === "subheading" && block.title && (
                 <div className={`flex flex-col gap-1 ${alignClass}`}>
-                  <Heading3 text={block.title} className={`${titleCls} opacity-85`} />
+                  <Heading1 variant="section" text={block.title} className={`${titleCls} opacity-85`} />
                 </div>
               )}
 
               {/* PARAGRAPH */}
               {block.block_type === "paragraph" && block.content && (
                 <div className={`p-8 md:p-10 rounded-lg leading-relaxed ${cardCls}`}>
-                  <RichParagraph className={isDark ? "!text-secondary/80" : "!text-primary/80"}>{block.content}</RichParagraph>
+                  <RichParagraph variant="body" className={isDark ? "!text-secondary/80" : "!text-primary/80"}>{block.content}</RichParagraph>
                 </div>
               )}
 
               {/* LIST */}
               {block.block_type === "list" && block.list_items?.length > 0 && (
                 <div>
-                  {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
+                  {block.title && <Heading1 variant="section" text={block.title} className={`${titleCls} mb-6`} />}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {block.list_items.map((item, i) => (
                       <div key={i} className={`flex flex-col p-5 rounded-lg border-l-4 border-hover ${cardCls}`}>
                         <div className="flex items-start gap-2">
                           <SvgCheck />
-                          <RichParagraph className={` leading-snug ${isDark ? "!text-secondary" : "!text-primary"}`}>{item.text}</RichParagraph>
+                          <RichParagraph variant="body" className={` leading-snug ${isDark ? "!text-secondary" : "!text-primary"}`}>{item.text}</RichParagraph>
                         </div>
                         {item.sub_items?.filter(s => s).length > 0 && (
                           <ul className="mt-2 ml-6 space-y-1">
@@ -548,7 +557,7 @@ const VanPage = ({ vanDetail,variants }) => {
             {/* TABLE */}
                          {block.block_type === "table" && block.table_data?.headers?.length > 0 && (
                            <div>
-                             {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
+                             {block.title && <Heading1 variant="section" text={block.title} className={`${titleCls} mb-6`} />}
                              <div className={`overflow-x-auto rounded-lg border ${isDark ? "border-white/10" : "border-primary/10"}`}>
                             <table className="w-full border-collapse">
            <thead className={isDark ? "bg-white/10" : "bg-primary"}>

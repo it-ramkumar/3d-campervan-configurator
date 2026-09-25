@@ -17,19 +17,20 @@ export default function FloorPlanHero({ title, description, image }) {
         <div className="lg:col-span-6 space-y-6 text-center lg:text-left order-2 lg:order-1">
 
           {/* SpanTag-style label */}
-          <span className="inline-flex items-center font-ui font-semibold text-[10px] uppercase tracking-[0.28em] text-[#ED985F] border-l-2 border-[#ED985F] pl-3 py-0.5">
-            Big Bear Vans Studio
-          </span>
-
-          <Heading1 text={title} textColor="text-secondary" />
-
-          <RichParagraph textColor="secondary" className="!text-secondary/65 max-w-xl mx-auto lg:mx-0">
-            {description}
+           <RichParagraph variant="sub" textColor="text-hover">
+             You Dream It, We Build It.
           </RichParagraph>
 
-          <p className="font-ui font-semibold text-[10px] uppercase tracking-[0.22em] text-secondary/30 text-center lg:text-left">
+
+          <Heading1 variant="hero" text={title} textColor="text-secondary" />
+
+          <RichParagraph variant="hero" textColor="secondary" className="!text-secondary/65 max-w-xl mx-auto lg:mx-0">
+            {description}
+          </RichParagraph>
+          <RichParagraph variant="sub">
             You Dream It, We Build It.
-          </p>
+          </RichParagraph>
+
         </div>
 
         {/* RIGHT: Image */}

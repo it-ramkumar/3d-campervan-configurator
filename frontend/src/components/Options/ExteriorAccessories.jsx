@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from 'framer-motion';
-import { Heading2, RichParagraph, Heading4, Heading3, ImageWithSkeleton, SecondaryButton } from '../Common/Common';
+import { Heading1, RichParagraph, Heading4, Heading3, ImageWithSkeleton, SecondaryButton } from '../Common/Common';
 import {
   Waves, Lightbulb, ShowerHead, Camera, Maximize,
   Activity, Disc, Zap, Droplets, ArrowRight
@@ -56,12 +56,14 @@ export default function AdditionalAccessories() {
             className="flex items-center gap-4 mb-4"
           >
             <div className="h-[2px] w-12 bg-hover" />
-            <p className="text-hover text-xs uppercase tracking-widest font-bold">Customization</p>
+<RichParagraph variant="sub" className="!text-hover uppercase">
+Customization
+</RichParagraph>
           </motion.div>
 
-          <Heading2 text="Additional Exterior Accessories" className="font-display text-primary uppercase tracking-wide" />
+          <Heading1 variant="section" text="Additional Exterior Accessories" className=" !text-primary uppercase" />
           <div className="bbv-divider mb-6" />
-          <RichParagraph className="mt-6 max-w-2xl text-primary/60">
+          <RichParagraph variant="body" className="mt-6 max-w-2xl text-primary/60">
             Beyond our standard packages, we offer curated accessories to refine your van's utility.
             Choose from our tested selections or share your custom vision with us.
           </RichParagraph>
@@ -101,16 +103,18 @@ export default function AdditionalAccessories() {
                 {/* Content */}
                 <div className="p-8 flex-grow flex flex-col">
                   <div className="flex justify-between items-start mb-4">
-                    <Heading4 text={item.title} className="group-hover:!text-hover transition-colors text-primary" />
+                    <Heading1 variant="card" text={item.title} className="group-hover:!text-hover transition-colors !text-primary" />
                   </div>
 
-                  <RichParagraph className="text-primary/60 mb-6">
+                  <RichParagraph variant="card" className="text-primary/60 mb-6">
                     {item.description}
                   </RichParagraph>
 
                   {/* Footer */}
                   <div className="pt-6 border-t border-primary/10 flex items-center justify-between">
-                    <p className="text-hover uppercase text-xs tracking-widest font-bold">Verified Accessory</p>
+                  <RichParagraph variant="sub" className="!text-hover">
+                    Verified Accessory
+                  </RichParagraph>
                   </div>
                 </div>
               </motion.div>
@@ -125,8 +129,8 @@ export default function AdditionalAccessories() {
           className="mt-20 p-8 bg-primary rounded-lg border border-hover/20 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
         >
           <div className="text-center md:text-left">
-            <Heading3 text={"Have a specific accessory in mind?"} className="mb-2 text-primary font-display uppercase tracking-wide" />
-            <RichParagraph className="text-primary/60">We can source and install custom equipment tailored to your build.</RichParagraph>
+            <Heading1 variant="card" text={"Have a specific accessory in mind?"} className="mb-2 !text-secondary uppercase" />
+            <RichParagraph variant="card" className="text-secondary/60">We can source and install custom equipment tailored to your build.</RichParagraph>
           </div>
           <SecondaryButton label={"Discuss Custom Ideas"} link={"/contact"} />
         </motion.div>

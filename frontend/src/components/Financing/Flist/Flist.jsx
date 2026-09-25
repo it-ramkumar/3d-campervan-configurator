@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Car, Home, CreditCard, Building, Wallet, BadgeCheck, ArrowRight, ShieldCheck, Landmark } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heading2, Heading3, RichParagraph, Heading4, PrimaryButton, CustomLink, SecondaryButton } from '../../Common/Common';
+import { Heading2,Heading1, Heading3, RichParagraph, Heading4, PrimaryButton, CustomLink, SecondaryButton } from '../../Common/Common';
 import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -56,18 +56,18 @@ export default function Flist() {
           </motion.div>
 
           <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Financing Options</p>
-          <Heading2 text="Financing Your Dream Van" className="!text-primary" />
+          <Heading1 variant="section" text="Financing Your Dream Van" className="!text-primary" />
 
           <div className="flex items-center justify-center gap-3 mt-4">
             <span className="h-px w-12 bg-hover"></span>
-            <RichParagraph className="!text-sm tracking-wider font-bold uppercase !text-hover">Premium Funding</RichParagraph>
+            <RichParagraph variant="body" className="!text-sm tracking-wider font-bold uppercase !text-hover">Premium Funding</RichParagraph>
             <span className="h-px w-12 bg-hover"></span>
           </div>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-8 relative z-10">
           <div className="text-center">
-            <RichParagraph className="!text-primary/80">
+            <RichParagraph variant="body">
               You've completed your research and decided to trust Big Bear Vans for your dream campervan.
               Before choosing your
               <CustomLink href="/van-options/interior-options" text={" interior "} />
@@ -79,7 +79,7 @@ export default function Flist() {
 
           {/* Info Box */}
           <div className="bbv-card p-8 rounded-lg border-t-[2px] border-t-hover">
-            <RichParagraph className="text-center !text-primary/80">
+            <RichParagraph variant="body" className="text-center">
               Traditional auto loans often do not cover the conversion. However, we have several trusted options and partners to help you fund your dream van.
             </RichParagraph>
           </div>
@@ -120,8 +120,8 @@ export default function Flist() {
           {activeSection === "new-builds" && (
             <motion.div key="new-builds" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="text-center mb-12">
-                <Heading3 text="Financing for New Custom Builds" className="mb-4 !text-primary" />
-                <RichParagraph className="!text-primary/70">
+                <Heading1 variant="section" text="Financing for New Custom Builds" className="mb-4 !text-primary" />
+                <RichParagraph variant="body" className="!text-primary/70">
                   If you are starting a new custom build with us, you have two common paths for financing.
                 </RichParagraph>
               </div>
@@ -135,12 +135,12 @@ export default function Flist() {
                       <Wallet className="text-hover" size={28} />
                     </div>
                     <div>
-                      <Heading3 text="Finance the Van Only" className="mb-0 !text-primary" />
+                      <Heading1 variant="card" text="Finance the Van Only" className="mb-0 !text-primary" />
                       <p className="text-primary/50 text-xs italic">(Most Common Method)</p>
                     </div>
                   </div>
 
-                  <RichParagraph className="!text-primary/80 mb-8 border-b border-primary/10 pb-4">
+                  <RichParagraph variant="card" className=" mb-8 border-b border-primary/10 pb-4">
                     This is the most common route our clients take. The process is simple:
                   </RichParagraph>
 
@@ -148,8 +148,8 @@ export default function Flist() {
                     <div className="flex gap-4">
                       <BadgeCheck className="text-hover shrink-0" size={24} />
                       <div>
-                        <Heading4 text="Finance the Van" className="mb-1 !text-primary" />
-                        <RichParagraph className="!text-primary/70 text-sm">
+                        <Heading1 variant="sub" text="Finance the Van" className="mb-1 !text-primary" />
+                        <RichParagraph variant="sub" className="!text-primary/70 text-sm">
                           You secure your own financing for the new Sprinter van chassis, often directly through Mercedes-Benz Financial Services.
                         </RichParagraph>
                       </div>
@@ -157,8 +157,8 @@ export default function Flist() {
                     <div className="flex gap-4">
                       <BadgeCheck className="text-hover shrink-0" size={24} />
                       <div>
-                        <Heading4 text="Pay for Conversion" className="mb-1 !text-primary" />
-                        <RichParagraph className="!text-primary/70 text-sm">
+                        <Heading1 variant="sub" text="Pay for Conversion" className="mb-1 !text-primary" />
+                        <RichParagraph variant="sub" className=" text-sm">
                           You pay for the custom conversion (typically $90,000 - $150,000) using cash or a separate line of credit.
                         </RichParagraph>
                       </div>
@@ -173,8 +173,11 @@ export default function Flist() {
                       <Landmark className="text-hover" size={28} />
                     </div>
                     <div>
-                      <Heading4 text="All-in-One Loan" className="mb-0 !text-primary" />
-                      <p className="text-primary/50 text-xs italic">(Mercedes Sprinter Van + Conversion)</p>
+                      <Heading1 variant="card" text="All-in-One Loan" className="mb-0 !text-primary" />
+                      <RichParagraph variant="sub">
+(Mercedes Sprinter Van + Conversion)
+                      </RichParagraph>
+
                     </div>
                   </div>
 
@@ -182,28 +185,28 @@ export default function Flist() {
                     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors">
                       <ArrowRight size={18} className="text-hover mt-1" />
                       <div>
-                        <Heading4 text="Partner" className="!text-primary text-base mb-0" />
-                        <RichParagraph className="!text-primary/70 text-sm">We work directly with a partner Mercedes dealership.</RichParagraph>
+                        <Heading1 variant="sub" text="Partner" className="!text-primary text-base mb-0" />
+                        <RichParagraph variant="sub" className="!text-primary/70 text-sm">We work directly with a partner Mercedes dealership.</RichParagraph>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors">
                       <ArrowRight size={18} className="text-hover mt-1" />
                       <div>
-                        <Heading4 text="Loan" className="!text-primary text-base mb-0" />
-                        <RichParagraph className="!text-primary/70 text-sm">They can include our estimate for the custom build into one extended 6-year car loan.</RichParagraph>
+                        <Heading1 variant="sub" text="Loan" className="!text-primary text-base mb-0" />
+                        <RichParagraph variant="sub" className="!text-primary/70 text-sm">They can include our estimate for the custom build into one extended 6-year car loan.</RichParagraph>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-3 rounded-lg hover:bg-primary/5 transition-colors">
                       <ArrowRight size={18} className="text-hover mt-1" />
                       <div>
-                        <Heading4 text="Requirements" className="!text-primary text-base mb-0" />
-                        <RichParagraph className="!text-primary/70 text-sm">This loan covers both the new Sprinter and the conversion, and typically requires a 30% down payment.</RichParagraph>
+                        <Heading1 variant="sub" text="Requirements" className="!text-primary text-base mb-0" />
+                        <RichParagraph variant="sub" className="!text-primary/70 text-sm">This loan covers both the new Sprinter and the conversion, and typically requires a 30% down payment.</RichParagraph>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/10">
-                    <RichParagraph className="!text-primary/70 text-sm italic">
+                    <RichParagraph variant="sub" className="!text-primary/70 text-sm italic">
                       How to apply: please call us, we will go over the quote for a custom build, and then submit it together to the dealership.
                     </RichParagraph>
                   </div>
@@ -217,8 +220,8 @@ export default function Flist() {
           {activeSection === "pre-built" && (
             <motion.div key="pre-built" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="text-center mb-12">
-                <Heading3 text="Financing for Pre-Built Vans" className="!text-primary mb-4" />
-                <RichParagraph className="!text-primary/70">
+                <Heading1 variant="section" text="Financing for Pre-Built Vans" className="!text-primary mb-4" />
+                <RichParagraph variant="body" className="!text-primary/70">
                   If you are purchasing one of our completed, ready-to-go campervans, here are your primary financing options.
                 </RichParagraph>
               </div>
@@ -226,7 +229,7 @@ export default function Flist() {
               <div className="bbv-card p-10 rounded-lg max-w-3xl mx-auto border-t-[2px] border-t-hover">
                 <div className="flex items-center gap-4 mb-10 border-b border-primary/10 pb-6">
                   <ShieldCheck className="text-hover" size={40} />
-                  <Heading3 text="RV Loan Financing" className="!mb-0 !text-primary" />
+                  <Heading1 variant="card" text="RV Loan Financing" className="!mb-0 !text-primary" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
@@ -237,15 +240,15 @@ export default function Flist() {
                     { title: "Process", text: "Quick pre-approval with soft credit check that doesn't affect your credit score" }
                   ].map((item, i) => (
                     <div key={i} className="group">
-                      <Heading3 text={item.title} className="text-sm uppercase tracking-widest !text-primary/40 mb-2" />
-                      <RichParagraph className="!text-primary font-medium">{item.text}</RichParagraph>
+                      <Heading1 variant="sub" text={item.title} className="text-sm uppercase tracking-widest !text-primary/40 mb-2" />
+                      <RichParagraph variant="sub" className="!text-primary font-medium">{item.text}</RichParagraph>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-10 p-6 bg-primary/5 rounded-lg border border-primary/10">
-                  <Heading3 text="Benefits" className="mb-4 !text-primary text-xl" />
-                  <RichParagraph className="!text-primary/70">
+                  <Heading1 variant="sub" text="Benefits" className="mb-4 !text-primary text-xl" />
+                  <RichParagraph variant="sub" className="!text-primary/70">
                     Competitive interest rates, flexible terms (up to 15 years), quick approval process, specialized understanding of campervan values
                   </RichParagraph>
                 </div>
@@ -257,18 +260,18 @@ export default function Flist() {
           {activeSection === "alternative" && (
             <motion.div key="alternative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="text-center mb-12">
-                <Heading3 text="Alternative Financing" className="!text-primary mb-4" />
-                <RichParagraph className="!text-primary/70">
+                <Heading1 variant="section" text="Alternative Financing" className="!text-primary mb-4" />
+                <RichParagraph variant="body" className="!text-primary/70">
                   Using Real Estate for Better Rates
-                </RichParagraph>
-              </div>
+                  </RichParagraph>
+                </div>
 
               <div className="bbv-card text-primary p-12 rounded-lg max-w-2xl mx-auto text-center relative overflow-hidden border-t-[2px] border-t-hover">
                 <div className="absolute top-0 left-0 w-2 h-full bg-hover opacity-10"></div>
                 <Home className="mx-auto mb-6 text-hover" size={48} />
 
-                <Heading3 text="Real Estate Collateral" className="mb-4 !text-primary" />
-                <RichParagraph className="!text-primary/70 mb-8">
+                <Heading1 variant="card" text="Real Estate Collateral" className="mb-4 !text-primary" />
+                <RichParagraph variant="sub" className="!text-primary/70 mb-8">
                   Leverage your property for better terms
                 </RichParagraph>
 
@@ -297,12 +300,14 @@ export default function Flist() {
       <section className="anim-section py-24 bbv-section-navy relative">
         <div className="bbv-dot-grid" />
         <div className="container mx-auto px-4 text-center relative z-10">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Get in Touch</p>
-          <Heading2 text="Have Questions?" className="mb-6 !text-secondary" />
-          <RichParagraph className="max-w-2xl mx-auto !text-secondary/60 mb-12">
+          <RichParagraph variant="sub" textColor="text-hover">
+Get in Touch
+          </RichParagraph>
+          <Heading1 variant="section" text="Have Questions?" className="mb-6 !text-secondary" />
+          <RichParagraph variant="body" textColor="text-secondary/60" className="max-w-2xl mx-auto mb-12">
             Contact us and we will help you choose the best financing path for your project.
           </RichParagraph>
-          <SecondaryButton label="Contact Us Today" link={"/contact"} />
+          <SecondaryButton label="Contact Us Today" link={"/contact"}/>
         </div>
       </section>
 

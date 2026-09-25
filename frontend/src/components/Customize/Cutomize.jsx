@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Heading2, RichParagraph, SecondaryButton, ImageWithSkeleton } from "../Common/Common";
+import { Heading2,Heading1, RichParagraph, SecondaryButton, ImageWithSkeleton } from "../Common/Common";
 
 export default function Customize({
   sectionTitle = "Personalize Your Build",
@@ -89,12 +89,15 @@ export default function Customize({
 
             {/* Category/Badge Tag */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide uppercase w-fit mb-4">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              Customization Options
+<RichParagraph variant="sub" textColor="text-hover">
+Customization Options
+</RichParagraph>
+
+
             </div>
 
             {/* Section Title */}
-            <Heading2 text={sectionTitle} className="!mb-6 text-primary !text-3xl md:!text-4xl font-bold leading-tight" />
+            <Heading1 variant="card" text={sectionTitle} className="!mb-6 !text-primary !text-3xl md:!text-4xl font-bold leading-tight" />
 
             {/* Feature Bullet Points */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 mb-8">
@@ -106,7 +109,7 @@ export default function Customize({
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <RichParagraph className="!mb-0 text-sm text-gray-700 leading-snug font-medium">
+                  <RichParagraph variant="card" className="!mb-0 text-sm text-gray-700 leading-snug font-medium">
                     {item.text}
                   </RichParagraph>
                 </div>

@@ -2,7 +2,7 @@
 import React from "react";
 import { Users, Home, Zap, Shield, Coffee, Mountain } from "lucide-react";
 import ClassicImageGrid from "./ClassicImageGrid";
-import { Heading2, Heading3, Heading4, RichParagraph, CustomLink } from "../../Common/Common";
+import { Heading1, Heading3, Heading4, RichParagraph, CustomLink } from "../../Common/Common";
 
 const FamilySection = ({ imageData }) => {
   const topFeatures = [
@@ -17,13 +17,15 @@ const FamilySection = ({ imageData }) => {
       <div className="bbv-dot-grid" />
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Families</p>
+          <RichParagraph variant="sub" className="!text-hover">
+            Families
+          </RichParagraph>
           <div className="inline-flex p-3 bbv-glass-light rounded-lg text-hover mb-4">
             <Users size={32} />
           </div>
-          <Heading2 text="Family-friendly Campervans" className="font-display text-secondary uppercase tracking-wide mb-4" />
+          <Heading1 variant="section" textColor="text-secondary" text="Family-friendly Campervans" className=" text-secondary uppercase  mb-4" />
           <div className="bbv-divider mb-6" />
-          <RichParagraph className="text-secondary/70">
+          <RichParagraph variant="body" className="text-secondary/70">
             Turn family trips into unforgettable adventures
           </RichParagraph>
         </div>
@@ -35,8 +37,8 @@ const FamilySection = ({ imageData }) => {
               <div className="w-12 h-12 bg-hover/20 rounded-lg flex items-center justify-center text-hover mb-4">
                 <f.icon size={24} />
               </div>
-              <Heading3 text={f.title} className="font-display text-secondary uppercase tracking-wide mb-2" />
-              <RichParagraph className="text-secondary/70">
+              <Heading1 variant="card" text={f.title} className=" text-secondary uppercase mb-2" />
+              <RichParagraph variant="card" className="text-secondary/70">
                 {f.desc}
               </RichParagraph>
             </div>
@@ -50,10 +52,13 @@ const FamilySection = ({ imageData }) => {
               <ClassicImageGrid images={imageData?.lakeTahoe} layout="vermont" />
             </div>
             <div className="lg:col-span-2">
-              <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Featured Build</p>
+              <RichParagraph variant="sub" className="!text-hover mb-3">
+                Featured Build
+              </RichParagraph>
+
               <div className="bbv-divider mb-4" />
-              <Heading3 text="Lake Tahoe Campervan" className="font-display text-secondary uppercase tracking-wide mb-6" />
-              <RichParagraph className="text-secondary/80 mb-6">
+              <Heading1 variant="section" text="Lake Tahoe Campervan" className=" text-secondary uppercase mb-6" />
+              <RichParagraph variant="body" className="text-secondary/80 mb-6">
                 We designed this
                 <CustomLink href="/van-layouts/lake-tahoe" text={" 144 AWD Sprinter "} />
                 van for a family of four. It's the perfect example of a family-first approach.
@@ -64,7 +69,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Users size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Seating and sleeping arrangements for 4 people
                   </RichParagraph>
                 </div>
@@ -73,7 +78,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Home size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Comes with an elevator & dinette bed system, and a fully functional kitchen
                   </RichParagraph>
                 </div>
@@ -82,7 +87,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Zap size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Off-grid ready with dual 400Ah batteries and a Glycol diesel heater for all-season comfort
                   </RichParagraph>
                 </div>
@@ -95,14 +100,16 @@ const FamilySection = ({ imageData }) => {
         <div className="bbv-glass-light rounded-lg p-8 md:p-12 border border-hover/20 shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-center">
             <div className="lg:col-span-3">
-              <ClassicImageGrid images={imageData?.blueWhale}  />
+              <ClassicImageGrid images={imageData?.blueWhale} />
             </div>
 
             <div className="lg:col-span-2">
-              <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Featured Build</p>
+              <RichParagraph variant="sub" className="!text-hover mb-3">
+                Featured Build
+              </RichParagraph>
               <div className="bbv-divider mb-4" />
-              <Heading3 text="Blue Whale Campervan" className="font-display text-secondary uppercase tracking-wide mb-6" />
-              <RichParagraph className="text-secondary/80 mb-6">
+              <Heading1 variant="section" text="Blue Whale Campervan" className=" text-secondary uppercase mb-6" />
+              <RichParagraph variant="body" className="text-secondary/80 mb-6">
                 <CustomLink href="/van-layouts/blue-whale-van" text={" Blue "} />
                 Whale is our one-of-a-kind short campervan that offers seating and sleeping for six people. This short van features:
               </RichParagraph>
@@ -112,7 +119,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Home size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Elevator bed, kids' bunk bed, and 4 belted seats
                   </RichParagraph>
                 </div>
@@ -121,7 +128,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Coffee size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Complete kitchen and bathroom facilities
                   </RichParagraph>
                 </div>
@@ -130,7 +137,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Mountain size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Retractable balcony and rooftop hammock
                   </RichParagraph>
                 </div>
@@ -139,7 +146,7 @@ const FamilySection = ({ imageData }) => {
                   <div className="mt-1 bg-hover/20 p-1.5 rounded-lg text-hover">
                     <Zap size={16} />
                   </div>
-                  <RichParagraph className="text-secondary/70">
+                  <RichParagraph variant="body" className="text-secondary/70">
                     Solar panels and 12V AC for off-grid capability
                   </RichParagraph>
                 </div>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   Heading2,
   Heading4,
+  Heading1,
   RichParagraph,
   SpanTag,
 } from "../Common/Common";
@@ -55,12 +56,11 @@ const FeatureGridBlock = ({ block }) => {
     <div className={`grid grid-cols-1 ${hasImages ? "lg:grid-cols-2 items-center" : ""}`}>
       {/* IMAGE PANEL */}
       {galleryImages.length > 0 &&
-      currentImageSrc &&
-      currentImageSrc.trim() !== "" ? (
+        currentImageSrc &&
+        currentImageSrc.trim() !== "" ? (
         <div
-          className={`relative w-full aspect-[4/3] overflow-hidden ${
-            imageRight ? "lg:order-2" : "lg:order-1"
-          }`}
+          className={`relative w-full aspect-[4/3] overflow-hidden ${imageRight ? "lg:order-2" : "lg:order-1"
+            }`}
         >
           <Image
             src={currentImageSrc}
@@ -89,11 +89,10 @@ const FeatureGridBlock = ({ block }) => {
                     key={i}
                     type="button"
                     onClick={() => setActiveImg(i)}
-                    className={`shrink-0 w-14 aspect-[4/3] rounded overflow-hidden border-2 transition-all duration-200 relative ${
-                      i === activeImg
-                        ? "border-hover scale-95"
-                        : "border-white/20 opacity-50 hover:opacity-100"
-                    }`}
+                    className={`shrink-0 w-14 aspect-[4/3] rounded overflow-hidden border-2 transition-all duration-200 relative ${i === activeImg
+                      ? "border-hover scale-95"
+                      : "border-white/20 opacity-50 hover:opacity-100"
+                      }`}
                   >
                     <Image
                       src={img}
@@ -115,20 +114,22 @@ const FeatureGridBlock = ({ block }) => {
 
       {/* CONTENT PANEL */}
       <div
-        className={`flex flex-col justify-center px-8 py-14 lg:px-12 lg:py-16 ${
-          hasImages ? (imageRight ? "lg:order-1" : "lg:order-2") : ""
-        }`}
+        className={`flex flex-col justify-center px-8 py-14 lg:px-12 lg:py-16 ${hasImages ? (imageRight ? "lg:order-1" : "lg:order-2") : ""
+          }`}
       >
         {(block.title || block.subtitle) && (
           <div className="mb-10">
             {block.subtitle && (
-              <SpanTag text={block.subtitle} className="mb-4" />
+              <RichParagraph variant="sub" className="mb-4 !text-hover">
+                {block.subtitle}
+              </RichParagraph>
             )}
 
             {block.title && (
-              <Heading2
+              <Heading1
+                variant="card"
                 text={block.title}
-                className="!text-secondary mt-3 leading-[0.95]"
+                className="!text-secondary mt-3"
               />
             )}
 
@@ -145,9 +146,11 @@ const FeatureGridBlock = ({ block }) => {
               <div className="flex-1 min-w-0">
                 <div className={`flex items-start gap-3 ${hasImages ? "mb-1" : "mb-3"}`}>
                   {!hasImages && (
-                    <span className="font-mono font-bold text-hover shrink-0">
+
+                    <RichParagraph variant="sub" textColor="text-hover">
                       {String(i + 1).padStart(2, "0")}
-                    </span>
+                    </RichParagraph>
+
                   )}
                   {item.icon && (
                     <span className="text-xl shrink-0">
@@ -156,21 +159,23 @@ const FeatureGridBlock = ({ block }) => {
                   )}
 
                   {item.title && (
-                    <Heading4
+                    <Heading1
+                      variant="card"
                       text={item.title}
-                      className="!text-secondary !text-base leading-tight"
+                      className="!text-secondary "
                     />
                   )}
                 </div>
 
                 {item.value && (
-                  <p className="font-display font-black text-2xl text-hover mb-1">
+                  <RichParagraph variant="sub" textColor="text-hover">
                     {item.value}
-                  </p>
+                  </RichParagraph>
+
                 )}
 
                 {item.description && (
-                  <RichParagraph className={`${hasImages ? "!text-secondary/50" : "!text-secondary/70"} leading-relaxed`}>
+                  <RichParagraph variant="card" className={`${hasImages ? "!text-secondary/50" : "!text-secondary/70"}`}>
                     {renderBold(item.description)}
                   </RichParagraph>
                 )}
@@ -209,11 +214,15 @@ const FaqAccordionBlock = ({ block }) => {
       {(block.title || block.subtitle) && (
         <div className="text-center mb-12">
           {block.subtitle && (
-            <SpanTag text={block.subtitle} className="!inline-flex justify-center mb-4" />
+            <RichParagraph variant="body" className="!inline-flex justify-center mb-4" >
+              {block.subtitle}
+            </RichParagraph>
+
           )}
 
           {block.title && (
-            <Heading2
+            <Heading1
+            variant="body"
               text={block.title}
               className="!text-secondary mt-3 leading-[0.95]"
             />
@@ -230,9 +239,8 @@ const FaqAccordionBlock = ({ block }) => {
           return (
             <div
               key={i}
-              className={`rounded-xl border overflow-hidden transition-colors duration-300 ${
-                isOpen ? "border-hover/40" : "border-white/10"
-              }`}
+              className={`rounded-xl border overflow-hidden transition-colors duration-300 ${isOpen ? "border-hover/40" : "border-white/10"
+                }`}
               style={{
                 background: "rgba(2,12,24,0.72)",
                 backdropFilter: "blur(24px)",
@@ -246,21 +254,20 @@ const FaqAccordionBlock = ({ block }) => {
               >
                 <span className="flex items-center gap-3 min-w-0">
                   {item.icon && (
-                    <span className="text-lg shrink-0">{item.icon}</span>
+                    <span className="text-lg shrink-0 text-hover">{item.icon}</span>
                   )}
 
-                  <Heading4
+                  <Heading1
+                  variant="sub"
                     text={item.title}
-                    className={`!text-base sm:!text-lg leading-snug transition-colors duration-300 ${
-                      isOpen ? "!text-hover" : "!text-secondary"
-                    }`}
+                    className={`  transition-colors duration-300 ${isOpen ? "!text-hover" : "!text-secondary"
+                      }`}
                   />
                 </span>
 
                 <span
-                  className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${
-                    isOpen ? "bg-hover border-hover rotate-45" : "border-white/20"
-                  }`}
+                  className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isOpen ? "bg-hover border-hover rotate-45" : "border-white/20"
+                    }`}
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path
@@ -279,7 +286,7 @@ const FaqAccordionBlock = ({ block }) => {
               >
                 <div className="overflow-hidden">
                   {item.description && (
-                    <RichParagraph className="!text-secondary/60 leading-relaxed px-5 sm:px-6 pb-5 sm:pb-6 -mt-1">
+                    <RichParagraph variant="card" className="!text-secondary/60 leading-relaxed px-5 sm:px-6 pb-5 sm:pb-6 -mt-1">
                       {renderFaqBold(item.description)}
                     </RichParagraph>
                   )}
@@ -296,7 +303,7 @@ const FaqAccordionBlock = ({ block }) => {
 export const isFaqFeatureBlock = (block) =>
   block?.block_type === "feature-grid" &&
   block.title?.trim().replace(/\s+/g, " ").toLowerCase() ===
-    "frequently asked questions (faqs)";
+  "frequently asked questions (faqs)";
 
 export function FaqFeatureBlocks({ blocks }) {
   return blocks.filter(isFaqFeatureBlock).map((block, index) => (

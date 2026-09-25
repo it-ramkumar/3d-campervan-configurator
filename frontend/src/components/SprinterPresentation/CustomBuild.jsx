@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
-import { Heading2, Heading3, Heading4 } from "../Common/Common";
+import { Heading2, Heading3, Heading4,Heading1 } from "../Common/Common";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- DATA: Step Details for the Modal Logic ---
@@ -174,7 +174,61 @@ export default function CustomBuild() {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
-
+const TIMELINE_STEPS = [
+  {
+    id: "step1",
+    title: "Vehicle Sourcing",
+    description: "Bring your Sprinter for inspection, or let us source a discounted new van via our Mercedes dealership partnerships that perfectly matches your needs and requirements.",
+    buttonText: "View Details",
+    image: STEP_DATA.step1.image,
+    badgeText: "Immediate",
+    badgeBg: "bg-primary",
+    badgeBorder: "",
+  },
+  {
+    id: "step2",
+    title: "Collaborative Design",
+    description: "Define needs via Zoom, visualize with 3D renderings, and refine until your vision is perfect.",
+    buttonText: "See Process",
+    image: STEP_DATA.step2.image,
+    badgeText: "1 Month",
+    badgeBg: "bg-primary",
+    badgeBorder: "border border-[#1a1f2e]",
+  },
+  {
+    id: "step3",
+    title: "Engineering & Planning",
+    description: "Optimize safety and functionality with engineers, then approve final blueprints and premium materials.",
+    buttonText: "View Specs",
+    image: STEP_DATA.step3.image,
+    badgeText: "2 Months",
+    badgeBg: "bg-[#001F3D]",
+    badgeBorder: "border border-[#1a1f2e]",
+  },
+  {
+    id: "step4",
+    title: "Build & Assembly",
+    description: "Craft interiors (2 months), upgrade exteriors (1 month), with weekly progress updates.",
+    buttonText: "Construction Details",
+    image: STEP_DATA.step4.image,
+    badgeText: "3-4 Months",
+    badgeBg: "bg-[#001F3D]",
+    badgeBorder: "border border-[#1a1f2e]",
+    // Dynamic callout content for specific steps if needed
+    callout: {
+      title: "Every step is designed to tailor the van to your lifestyle",
+      description: "We work hand in hand with our clients to ensure that we are producing something that is according to the requirements and expectations of our clients..."
+    }
+  },
+  {
+    id: "step5",
+    title: "Delivery & Beyond",
+    description: "Master your van with a walkthrough and test drive, backed by comprehensive warranties and 24/7 support.",
+    buttonText: "Warranty Info",
+    image: STEP_DATA.step5.image,
+    badgeText: null, // Last step lacks badge
+  },
+];
   return (
     <section
       ref={containerRef}
@@ -218,13 +272,13 @@ export default function CustomBuild() {
                   <span>{STEP_DATA[activeModal].duration}</span>
                 </div>
                 <Heading4 text={STEP_DATA[activeModal].title} className="mb-2"/>
-                
+
                 <RichParagraph className="!text-sm mb-4">{STEP_DATA[activeModal].description}</RichParagraph>
-                
+
 
                 <div className="space-y-2">
                   <Heading4 text={"Key Deliverables:"}/>
-                  
+
                   {STEP_DATA[activeModal].deliverables.map((item, idx) => (
                     <div
                       key={idx}
@@ -232,7 +286,7 @@ export default function CustomBuild() {
                     >
                       <CheckCircle className="w-3.5 h-3.5 text-green-600 shrink-0 mt-0.5" />
                       <RichParagraph className="">{item}</RichParagraph>
-                      
+
                     </div>
                   ))}
                 </div>
@@ -301,278 +355,125 @@ export default function CustomBuild() {
       <div className="header-section flex flex-col items-center justify-center pt-20 pb-10 px-6 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-32 bg-gradient-to-b from-transparent to-[#1a1f2e]/10"></div>
 
-        <span className="header-anim mb-6 px-3 py-1 border border-hover/30 rounded-full text-[10px] font-bold tracking-[0.25em] uppercase text-[var(--color-hover)] bg-[var(--color-hover)]/10">
-          Bespoke Conversions
-        </span>
-        <Heading2 text={"Our Custom Build Process"}/>
-        
+<RichParagraph variant="sub" textColor="text-hover">
+  Bespoke Conversions
+</RichParagraph>
+
+        <Heading1 variant="section" textColor="text-primary" text={"Our Custom Build Process"}/>
+
 
         <div className="header-anim w-[1px] h-8 bg-[#1a1f2e]/20 mb-6"></div>
-          <RichParagraph className="!text-[24px]">{"Click on any stage below to explore the details of our craftsmanship."}</RichParagraph>
-        
+
+          <RichParagraph variant="body">{"Click on any stage below to explore the details of our craftsmanship."}</RichParagraph>
+
       </div>
 
       {/* --- Timeline Section --- */}
-      <div className="relative max-w-[1200px] mx-auto px-4 md:px-10">
-        {/* ROW 1: Vehicle Sourcing */}
-        <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0">
-          {/* MODIFIED: Changed alignment from md:text-right to md:text-left and md:self-end to md:self-start */}
-          <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-1 py-8">
-            <Heading3 text={"Vehicle Sourcing"} className="mb-2"/>
-            
-            <RichParagraph className="mb-2">{"Bring your Sprinter for inspection, or let us source a discounted new van via our Mercedes dealership partnerships that perfectly matches your needs and requirements."}</RichParagraph>
-            
-            <button
-              onClick={() => setActiveModal("step1")}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
-            >
-              View Details <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
+     <div className="relative max-w-[1200px] mx-auto px-4 md:px-10">
+  {TIMELINE_STEPS.map((step, index) => {
+    // Check if the current row index is even or odd for desktop layout alternating
+    const isEven = index % 2 === 0;
+    const isLast = index === TIMELINE_STEPS.length - 1;
 
-          <div className="flex flex-col items-center order-1 md:order-2 relative h-full min-h-[350px]">
-            <div className="relative w-[3px] h-28">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-            <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
-              <div className="w-1 h-1 bg-white rounded-full"></div>
-            </div>
-
-            <div
-              onClick={() => setActiveModal("step1")}
-              className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
-            >
-              <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <ImageWithSkeleton
-                  click={true}
-                  src={STEP_DATA.step1.image}
-                  alt="Vehicle Sourcing"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary text-secondary px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
-                Immediate
-              </div>
-            </div>
-
-            <div className="relative w-[3px] flex-grow min-h-28 mt-4">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-bottom absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-          </div>
-          <div className="hidden md:block order-3"></div>
-        </div>
-
-        {/* ROW 2: Collaborative Design */}
-        <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0">
-          <div className="hidden md:block order-1"></div>
-          <div className="flex flex-col items-center order-1 md:order-2 relative h-full min-h-[350px]">
-            <div className="relative w-[3px] h-28">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-            <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
-              <div className="w-1 h-1 bg-white rounded-full"></div>
-            </div>
-
-            <div
-              onClick={() => setActiveModal("step2")}
-              className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
-            >
-              <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <ImageWithSkeleton
-                  click={true}
-                  src={STEP_DATA.step2.image}
-                  alt="Design Phase"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-primary text-secondary border border-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
-                1 Month
-              </div>
-            </div>
-
-            <div className="relative w-[3px] flex-grow min-h-28 mt-4">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-bottom absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-          </div>
-
-          <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8">
-            <Heading3 text={"Collaborative Design"} className="mb-2"/>
-            
-            <RichParagraph className="mb-2">{"Define needs via Zoom, visualize with 3D renderings, and refine until your vision is perfect."}</RichParagraph>
-            
-            <button
-              onClick={() => setActiveModal("step2")}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
-            >
-              See Process <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-
-        {/* ROW 3: Engineering */}
-        <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0">
-          {/* MODIFIED: Changed alignment from md:text-right to md:text-left and md:self-end to md:self-start */}
-          <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-1 py-8">
-            <Heading3 text={"Engineering & Planning"} className="mb-2"/>
-            
-            <RichParagraph className="mb-2">{"Optimize safety and functionality with engineers, then approve final blueprints and premium materials."}</RichParagraph>
-            
-            <button
-              onClick={() => setActiveModal("step3")}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
-            >
-              View Specs <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          <div className="flex flex-col items-center order-1 md:order-2 relative h-full min-h-[350px]">
-            <div className="relative w-[3px] h-28">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-            <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
-              <div className="w-1 h-1 bg-white rounded-full"></div>
-            </div>
-
-            <div
-              onClick={() => setActiveModal("step3")}
-              className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
-            >
-              <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <ImageWithSkeleton
-                  click={true}
-                  src={STEP_DATA.step3.image}
-                  alt="Engineering"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#001F3D] text-secondary border border-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
-                2 Months
-              </div>
-            </div>
-
-            <div className="relative w-[3px] flex-grow min-h-28 mt-4">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-bottom absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-          </div>
-          <div className="hidden md:block order-3"></div>
-        </div>
-
-        {/* ROW 4: Build & Assembly */}
-        <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0">
-          <div className="fade-content flex flex-col justify-center md:text-right order-3 md:order-1 py-8">
+    return (
+      <div
+        key={step.id}
+        className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12 mb-0"
+      >
+        {/* Left Column (Content or Callout/Empty Slot) */}
+        <div className={`fade-content flex flex-col justify-center py-8 ${isEven ? 'order-2 md:order-1 md:text-left' : 'order-3 md:order-1 md:text-right'}`}>
+          {isEven ? (
+            <>
+              <Heading1 variant="card" textColor="text-primary" text={step.title} className="mb-2" />
+              <RichParagraph variant="card" className="mb-2">{step.description}</RichParagraph>
+              <button
+                onClick={() => setActiveModal(step.id)}
+                className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
+              >
+                {step.buttonText} <ChevronRight className="w-3 h-3" />
+              </button>
+            </>
+          ) : step.callout ? (
             <div className="relative p-6 bg-gray-50 rounded-xl border-l-3 border-[#1a1f2e]">
-              <Heading4 text={"Every step is designed to tailor the van to your lifestyle"} className="!text-base mb-2"/>
-              
-              <RichParagraph>{"We work hand in hand with our clients to ensure that we are producing something that is according to the requirements and expectations of our clients. Our aim is to bring your imagination into reality using our expert craftsmanship, years of experience, and state-of-the-art technology."}</RichParagraph>
-              
+              <Heading1 variant="card" textColor="text-primary" text={step.callout.title} className="!text-base mb-2" />
+              <RichParagraph variant="card">{step.callout.description}</RichParagraph>
             </div>
+          ) : (
+            <div className="hidden md:block" />
+          )}
+        </div>
+
+        {/* Center Timeline Visuals */}
+        <div className="flex flex-col items-center order-1 md:order-2 relative h-full min-h-[350px]">
+          <div className="relative w-[3px] h-28">
+            <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
+            <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
           </div>
 
-          <div className="flex flex-col items-center order-1 md:order-2 relative h-full min-h-[350px]">
-            <div className="relative w-[3px] h-28">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-            <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
-              <div className="w-1 h-1 bg-white rounded-full"></div>
-            </div>
+          <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
+            <div className="w-1 h-1 bg-white rounded-full"></div>
+          </div>
 
-            <div
-              onClick={() => setActiveModal("step4")}
-              className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
-            >
-              <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <ImageWithSkeleton
-                  click={true}
-                  src={STEP_DATA.step4.image}
-                  alt="Build Assembly"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-              <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-[#001F3D] text-secondary border border-[#1a1f2e] px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md">
-                3-4 Months
-              </div>
+          <div
+            onClick={() => setActiveModal(step.id)}
+            className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
+          >
+            <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
+              <ImageWithSkeleton
+                click={true}
+                src={step.image}
+                alt={step.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+              />
             </div>
+            {step.badgeText && (
+              <div className={`absolute -bottom-2.5 left-1/2 -translate-x-1/2 ${step.badgeBg} ${step.badgeBorder} text-secondary px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest whitespace-nowrap shadow-md`}>
+                {step.badgeText}
+              </div>
+            )}
+          </div>
 
+          {!isLast ? (
             <div className="relative w-[3px] flex-grow min-h-28 mt-4">
               <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
               <div className="line-fill-bottom absolute top-0 left-0 w-full bg-hover h-0"></div>
             </div>
-          </div>
-
-          <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8">
-            <Heading3 text={" Build & Assembly"} className="mb-2"/>
-           
-            <RichParagraph className="mb-2">{"Craft interiors (2 months), upgrade exteriors (1 month), with weekly progress updates."}</RichParagraph>
-            
-            <button
-              onClick={() => setActiveModal("step4")}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
-            >
-              Construction Details <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
+          ) : (
+            <div className="w-[3px] h-32 bg-gradient-to-b from-[#1a1f2e] to-transparent mt-4 opacity-20"></div>
+          )}
         </div>
 
-        {/* ROW 5: Delivery */}
-        <div className="timeline-row grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-y-6 gap-x-0 md:gap-x-12">
-          <div className="hidden md:block order-1"></div>
-          <div className="flex flex-col items-center order-1 md:order-2 relative h-full">
-            <div className="relative w-[3px] h-28">
-              <div className="absolute inset-0 bg-gray-100 w-full h-full"></div>
-              <div className="line-fill-top absolute top-0 left-0 w-full bg-hover h-0"></div>
-            </div>
-            <div className="connector-dot relative z-20 w-5 h-5 rounded-full border-[2px] border-gray-200 bg-white flex items-center justify-center transition-colors duration-300 my-[-3px]">
-              <div className="w-1 h-1 bg-white rounded-full"></div>
-            </div>
-
-            <div
-              onClick={() => setActiveModal("step5")}
-              className="fade-content relative z-10 p-1.5 bg-white rounded-[1.5rem] shadow-[0_15px_30px_-6px_rgba(26,31,46,0.15)] border border-gray-100 mt-3 cursor-pointer group transition-transform hover:scale-105 duration-300"
-            >
-              <div className="w-[120px] h-[120px] rounded-[1rem] overflow-hidden">
-                <ImageWithSkeleton
-                  click={true}
-                  src={STEP_DATA.step5.image}
-                  alt="Delivery"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-              </div>
-            </div>
-            <div className="w-[3px] h-32 bg-gradient-to-b from-[#1a1f2e] to-transparent mt-4 opacity-20"></div>
-          </div>
-
-          <div className="fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8">
-            <Heading3 text={" Delivery & Beyond"} className="mb-2"/>
-            
-            <RichParagraph className="mb-2">{"Master your van with a walkthrough and test drive, backed by comprehensive warranties and 24/7 support."}</RichParagraph>
-            
-            <button
-              onClick={() => setActiveModal("step5")}
-              className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
-            >
-              Warranty Info <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
+        {/* Right Column (Content or Empty Slot) */}
+        <div className={`fade-content flex flex-col justify-center md:text-left order-2 md:order-3 py-8`}>
+          {!isEven ? (
+            <>
+              <Heading1 variant="card" textColor="text-primary" text={step.title} className="mb-2" />
+              <RichParagraph variant="card" className="mb-2">{step.description}</RichParagraph>
+              <button
+                onClick={() => setActiveModal(step.id)}
+                className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#1a1f2e] md:self-start hover:opacity-60 transition-opacity"
+              >
+                {step.buttonText} <ChevronRight className="w-3 h-3" />
+              </button>
+            </>
+          ) : (
+            <div className="hidden md:block" />
+          )}
         </div>
       </div>
-
+    );
+  })}
+</div>
       {/* --- Pre-Build Vans Section (With Click Functionality) --- */}
       <div className="pre-build-section pt-6 pb-8 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto flex flex-col items-center border-t border-gray-100 pt-6">
-          <Heading4 text={" Ready for Adventure"} className="text-hover! mb-2 !text-base"/>
-          
-          <Heading2 text={"  Our Pre-Build Vans"} className="mb-2"/>
-          
+          <RichParagraph variant="sub" className="!text-hover mb-2 ">Ready for Adventure</RichParagraph>
+
+          <Heading1 variant="section" textColor="text-primary" text={"  Our Pre-Build Vans"} className="mb-2"/>
+
           <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-hover to-[#f4a261] mx-auto mb-4 md:mt-4 rounded-full"></div>
-          <RichParagraph className="mb-8">{"Click the van below to request a spec sheet and reserve your adventure vehicle today."}</RichParagraph>
-          
+          <RichParagraph variant="body" className="mb-8">{"Click the van below to request a spec sheet and reserve your adventure vehicle today."}</RichParagraph>
+
 
           <div
             onClick={() => setShowInquiry(true)}

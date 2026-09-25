@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaCog, FaFeatherAlt, FaRulerCombined, FaBolt, FaBed, FaPalette } from 'react-icons/fa';
-import { Heading2, RichParagraph, ImageWithSkeleton, Heading3 } from '@/components/Common/Common';
+import { Heading2,Heading1, RichParagraph, ImageWithSkeleton, Heading3 } from '@/components/Common/Common';
 
 export default function Mission() {
   const advantages = [
@@ -44,45 +44,49 @@ export default function Mission() {
         <div className="bbv-dot-grid-light" />
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-20 relative z-10">
           <div className="text-center mb-16">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Our Core Values</p>
-            <Heading2
+            <RichParagraph variant="sub" className="!text-hover">
+              Our Core Values
+            </RichParagraph>
+            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3"></p>
+            <Heading1
+            variant="section"
               text="Mission and Purpose"
-              className="font-display text-primary uppercase tracking-wide mt-2"
+              className=" !text-primary uppercase mt-2"
             />
             <div className="bbv-divider mb-6" />
           </div>
 
-         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-  {/* Image - 50% */}
-  <div className="w-full lg:w-1/2">
-    <ImageWithSkeleton
-      src="/about/mission-of-big-bear-vans.webp"
-      alt="Cozy interior of a custom campervan"
-      className="w-full h-auto rounded-lg"
-    />
-  </div>
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+            {/* Image - 50% */}
+            <div className="w-full lg:w-1/2">
+              <ImageWithSkeleton
+                src="/about/mission-of-big-bear-vans.webp"
+                alt="Cozy interior of a custom campervan"
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
 
-  {/* Content - 50% */}
-  <div className="w-full lg:w-1/2 space-y-6">
-    <RichParagraph className="text-xl text-primary font-medium leading-relaxed">
-      At Big Bear Vans, our mission is to help more people hit the road sooner
-      in their dream rigs.
-    </RichParagraph>
+            {/* Content - 50% */}
+            <div className="w-full lg:w-1/2 space-y-6">
+              <RichParagraph variant="body" >
+                At Big Bear Vans, our mission is to help more people hit the road sooner
+                in their dream rigs.
+              </RichParagraph>
 
-    <RichParagraph className="text-primary/60 leading-relaxed">
-      We focus on creating custom campervans that maximize space, especially
-      for families needing to sit and sleep 4-5 people comfortably. Our camper
-      builds feature innovative solutions like elevator beds, compact aluminum
-      bathrooms, and custom kitchens to ensure optimal use of space and comfort.
-    </RichParagraph>
+              <RichParagraph variant="body" >
+                We focus on creating custom campervans that maximize space, especially
+                for families needing to sit and sleep 4-5 people comfortably. Our camper
+                builds feature innovative solutions like elevator beds, compact aluminum
+                bathrooms, and custom kitchens to ensure optimal use of space and comfort.
+              </RichParagraph>
 
-    <RichParagraph className="text-primary/60 leading-relaxed">
-      Additionally, our vans feature beautiful interior designs with
-      personalized finishes, making each campervan unique and tailored to our
-      clients' tastes.
-    </RichParagraph>
-  </div>
-</div>
+              <RichParagraph variant="body">
+                Additionally, our vans feature beautiful interior designs with
+                personalized finishes, making each campervan unique and tailored to our
+                clients tastes.
+              </RichParagraph>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -91,10 +95,13 @@ export default function Mission() {
         <div className="bbv-dot-grid" />
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-20 relative z-10">
           <div className="text-center mb-16">
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">Why Choose Us</p>
-            <Heading2
+            <RichParagraph variant="sub" className="!text-hover">
+              Why Choose U
+            </RichParagraph>
+            <Heading1
+            variant="section"
               text="Our Advantages"
-              className="font-display text-secondary uppercase tracking-wide mt-2"
+              className=" text-secondary uppercase mt-2"
             />
             <div className="bbv-divider mb-6" />
           </div>
@@ -110,12 +117,13 @@ export default function Mission() {
                   {advantage.icon}
                 </div>
 
-                <Heading3
+                <Heading1
+                  variant="card"
                   text={advantage.title}
-                  className="font-display text-secondary uppercase tracking-wide mb-4"
+                  className=" text-secondary uppercase mb-4"
                 />
 
-                <RichParagraph className="text-secondary/60">
+                <RichParagraph variant="card" className="text-secondary/60">
                   {advantage.text}
                 </RichParagraph>
               </div>

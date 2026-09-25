@@ -81,16 +81,15 @@ export default function Hero() {
                 <div className="w-full px-5 pb-24 md:pb-0 text-white flex flex-col justify-end md:justify-center h-auto md:h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
 
                   {/* Slogan */}
-                <div className="ml-2">
+                  <div className="ml-2">
 
 
-  <SpanTag
-    text={slide.slogan || "You Dream It. We Build It."}
-  />
-</div>
-
+                  </div>
+                  <RichParagraph variant="sub" textColor="text-hover">
+                    {slide.slogan || "You Dream It. We Build It."}
+                  </RichParagraph>
                   {/* Title (stacked lines) — visual only; the page's real <h1> is above the carousel */}
-                  <Heading1 as="div" textColor="text-white">
+                  <Heading1 as="hero">
                     <span className="text-white block">{slide.title}</span>{" "}
                     <span className="text-hover block">{slide.titleColored}</span>
                   </Heading1>
@@ -99,7 +98,9 @@ export default function Hero() {
                   <div className="w-12 h-[3px] bg-hover rounded-full my-3 md:my-4 animate-fade-up delay-200" />
 
                   {/* Description */}
-                  <HeroParagraph text={slide.desc} />
+                  <RichParagraph variant="hero" textColor="text-secondary/90" className="max-w-2xl animate-fade-up delay-300">
+                    {slide.desc}
+                  </RichParagraph>
 
                   {/* Buttons Container: pr-20 taake navigation buttons k sath wrap/overlap na ho */}
                   <div className="flex flex-col sm:flex-row gap-3 w-full pr-16 sm:pr-0 sm:w-auto mt-5 md:mt-8 animate-fade-up delay-300">

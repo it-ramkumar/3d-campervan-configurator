@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { formQuestions } from "../../DataUseInComp/InquiryFormData";
 import { useRouter } from "next/navigation";
-import { Heading2, Heading1 } from "../Common/Common";
+import { Heading2, Heading1, RichParagraph } from "../Common/Common";
 
 // --------------------------- SUB-COMPONENTS --------------------------- //
 
@@ -26,9 +26,9 @@ const QuestionGroup = ({ question, selected, onSelect }) => {
     <div className="form-group mb-10 animate-fadeIn">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-1.5 h-6 bg-hover rounded-full" />
-        <h3 className="text-xl lg:text-2xl font-bold text-primary tracking-tight">
+        <Heading1 variant="sub" className="font-bold !text-primary ">
           {question.question}
-        </h3>
+        </Heading1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {question.options.map((option, i) => (
@@ -42,13 +42,14 @@ const QuestionGroup = ({ question, selected, onSelect }) => {
             />
             <div
               className={`flex items-center justify-between p-5 border-2 rounded-[var(--radius-md)] transition-all duration-300
-              ${
-                isChecked(option)
-                  ? "bg-primary text-white border-primary shadow-xl scale-[1.02]"
+              ${isChecked(option)
+                  ? " !text-secondary border-primary shadow-xl scale-[1.02]"
                   : "bg-white text-primary border-primary/10 hover:border-hover hover:bg-secondary/50"
-              }`}
+                }`}
             >
-              <span className="font-semibold tracking-wide">{option}</span>
+              <RichParagraph variant="sub" className="font-semibold ">
+                {option}
+              </RichParagraph>
               <div
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
                 ${isChecked(option) ? "bg-hover border-hover" : "border-primary/20 group-hover:border-hover"}`}
@@ -86,7 +87,7 @@ const Summary = ({ formData }) => (
   <div className="space-y-4 animate-fadeIn">
     <div className="flex items-center gap-3 mb-8 border-b border-primary/10 pb-4">
       <ClipboardCheck className="!text-hover" size={28} />
-      <Heading2 text="Review Configuration" className="!mb-0 !text-primary" />
+      <Heading1 variant="section" text="Review Configuration" className="!mb-0 !text-primary" />
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {Object.entries(formData).map(([key, val]) => (
@@ -94,21 +95,23 @@ const Summary = ({ formData }) => (
           key={key}
           className="bg-secondary/50 p-5 rounded-[var(--radius-md)] border border-primary/5"
         >
-          <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest mb-1">
+          <RichParagraph variant="sub" className="text-primary/60 uppercase font-semibold mb-1"   >
             {key.replace(/_/g, " ")}
-          </p>
-          <p className="font-bold text-primary">
+          </RichParagraph>
+          <RichParagraph variant="sub" className="!text-primary uppercase font-semibold mb-1"   >
             {Array.isArray(val) ? val.join(", ") : val}
-          </p>
+          </RichParagraph>
+
         </div>
       ))}
     </div>
     <div className="mt-8 p-4 bg-hover/5 rounded-[var(--radius-sm)] flex gap-3 items-start">
       <Info size={20} className="!text-hover flex-shrink-0 mt-0.5" />
-      <p className="text-sm text-primary/60 italic">
+      <RichParagraph variant="sub" className="italic">
         Please double-check your selections. You can still go back to any step
         if you need to make changes.
-      </p>
+      </RichParagraph>
+
     </div>
   </div>
 );
@@ -197,13 +200,13 @@ export default function InquiryForm() {
       setIsLoading(false);
       return;
     }
-const tracking =
-  JSON.parse(sessionStorage.getItem("tracking")) || {};
+    const tracking =
+      JSON.parse(sessionStorage.getItem("tracking")) || {};
 
-const payload = {
-  ...formData,
-  ...tracking,
-};
+    const payload = {
+      ...formData,
+      ...tracking,
+    };
 
     try {
       const result = await submitInquiry(payload);
@@ -212,9 +215,9 @@ const payload = {
         setFormData({});
         setCurrentStep(0);
         // Bas user ko bhej dein, baaki kaam Thank-You page ka useEffect khud sambhal lega
-    navigate.push(
-      `/thank-you?email=${encodeURIComponent(formData.email)}&source=inquiry`
-    );
+        navigate.push(
+          `/thank-you?email=${encodeURIComponent(formData.email)}&source=inquiry`
+        );
       } else {
         console.log(result.error);
         console.log(result);
@@ -247,7 +250,7 @@ const payload = {
             <p className="!text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">
               Configurator.
             </p>
-            <Heading1 text="Build Your Dream Van" className="!text-primary" />
+            <Heading1 variant="section" text="Build Your Dream Van" className="!text-primary" />
             <div className="w-24 h-1 bg-hover mx-auto mt-6 rounded-full" />
           </div>
 
@@ -255,31 +258,31 @@ const payload = {
             {/* --- LEFT SIDEBAR: PROGRESS --- */}
             <aside className="lg:w-1/3 order-2 lg:order-1">
               <div className="bg-white p-8 rounded-[var(--radius-lg)] border border-primary/5 shadow-sm sticky top-32">
-                <h3 className="font-black text-primary uppercase text-[10px] tracking-widest mb-6 flex items-center gap-2">
+                <RichParagraph variant="sub" className="uppercase  mb-6 flex items-center gap-2">
                   <div className="w-2 h-2 bg-hover rounded-full animate-pulse" />
                   Your Journey
-                </h3>
+                </RichParagraph>
                 <div className="space-y-3">
                   {formQuestions.map((f, i) => (
                     <div
                       key={i}
                       onClick={() => i <= currentStep && setCurrentStep(i)}
                       className={`group relative pl-6 py-3 border-l-2 transition-all duration-500 cursor-pointer
-                        ${
-                          i === currentStep
-                            ? "border-hover text-primary font-bold"
-                            : i < currentStep
-                              ? "border-primary text-primary/40"
-                              : "border-primary/10 text-primary/20"
+                        ${i === currentStep
+                          ? "border-hover text-primary font-bold"
+                          : i < currentStep
+                            ? "border-primary text-primary/40"
+                            : "border-primary/10 text-primary/20"
                         }`}
                     >
                       <div
                         className={`absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-500
                         ${i <= currentStep ? "bg-hover scale-125" : "bg-primary/10"}`}
                       />
-                      <span className="text-xs uppercase tracking-widest">
+                      <RichParagraph variant="sub">
                         {f.title}
-                      </span>
+                      </RichParagraph>
+
                     </div>
                   ))}
                 </div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heading2, Heading3, Heading4, RichParagraph } from "../Common/Common";
+import { Heading1, Heading3, Heading4, RichParagraph } from "../Common/Common";
 gsap.registerPlugin(ScrollTrigger);
 
 const bgImageTechSafety = "/sprinter/image22.webp";
@@ -113,12 +113,12 @@ const getGraphicForContent = (content) => {
 const FeatureCard = ({ title, description }) => (
     <div className="group relative bbv-glass-light rounded-lg p-2.5 border border-white/10 hover:border-hover/30 transition-all duration-300 hover:shadow-lg">
         <div className="relative z-10">
-            <Heading4 text={title} className="!text-secondary !text-base mb-1.5" />
+            <Heading1 variant="card" text={title} className="!text-secondary !text-base mb-1.5" />
             <ul className="space-y-1">
                 {description.map((line, lineIndex) => (
                     <li key={lineIndex} className="flex items-start gap-2 group/item p-1 rounded hover:bg-white/5 transition-all duration-200">
                         <div className="content-graphic flex-shrink-0 mt-[2px]">{getGraphicForContent(line)}</div>
-                        <RichParagraph className="!text-secondary/70 !text-xs">{line}</RichParagraph>
+                        <RichParagraph variant="sub" className="!text-secondary/70">{line}</RichParagraph>
                     </li>
                 ))}
             </ul>
@@ -172,10 +172,13 @@ export default function SprinterUpgrade() {
 
     const SectionTitle = ({ title, subtitle, className = "" }) => (
         <div className={`text-center max-w-4xl mx-auto mb-4 px-3 ${className}`}>
-            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-2">2025 Updates</p>
-            <Heading3 text={title} className="!text-secondary font-display uppercase tracking-wide" />
+            <RichParagraph variant="sub" textColor="text-hover">
+                2025 Updates
+            </RichParagraph>
+            {/* <p className="text-hover text-xs uppercase tracking-widest font-bold mb-2"></p> */}
+            <Heading1 variant="section" text={title} className="!text-secondary  uppercase" />
             <div className="bbv-divider mt-3 mb-2" />
-            <RichParagraph className="!text-secondary/70">{subtitle}</RichParagraph>
+            <RichParagraph variant="body" className="!text-secondary/70">{subtitle}</RichParagraph>
         </div>
     );
 

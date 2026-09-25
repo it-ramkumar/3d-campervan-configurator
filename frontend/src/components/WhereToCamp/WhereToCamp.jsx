@@ -2,6 +2,7 @@ import React from "react";
 import HeroSection from "../Common/HeroSectionNew/HeroSectionNew";
 import {
     Heading2,
+        Heading1,
     Heading3,
     Heading4,
     RichParagraph,
@@ -25,7 +26,7 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
                             />
                             {index === 0 && (
                                 <div className="absolute top-4 left-4">
-                                    <RichParagraph className="bg-primary text-secondary px-3 py-1 rounded-lg !text-sm font-bold uppercase tracking-wider">
+                                    <RichParagraph variant="sub" className="bg-primary text-secondary px-3 py-1 rounded-lg !text-sm font-bold uppercase tracking-wider">
                                         {categoryTitle.includes("RV") ? "RV Park" : "Campground"}
                                     </RichParagraph>
                                 </div>
@@ -35,20 +36,20 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
                 </div>
 
                 {/* Right: Info Section */}
-                <div className="lg:w-1/2 p-6 lg:p-10 flex flex-col justify-center">
-                    <Heading3 text={loc.name} className="mb-4" />
-                    <RichParagraph className=" mb-8">
+                <div className="lg:w-1/2 p-6 flex flex-col justify-center">
+                    <Heading1 variant="card" textColor="text-primary" text={loc.name} className="mb-4" />
+                    <RichParagraph variant="card"  className=" mb-8" >
                         {loc.desc}
                     </RichParagraph>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <div className="flex items-center gap-2 mb-3">
-                                <Heading4 text="Facilities" />
+                                <Heading1 variant="card" text="Facilities" textColor="text-primary"/>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {loc.facilities.map((f, i) => (
-                                    <RichParagraph key={i} className="px-2 py-1 bg-secondary text-primary rounded-lg !text-sm border border-primary/30">
+                                    <RichParagraph variant="card"  key={i} className="px-2 py-1 bg-secondary text-primary rounded-lg !text-sm border border-primary/30">
                                         {f}
                                     </RichParagraph>
                                 ))}
@@ -57,11 +58,11 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
 
                         <div>
                             <div className="flex items-center gap-2 mb-3">
-                                <Heading4 text="Activities" />
+                                <Heading1 variant="card" text="Activities" textColor="text-primary"/>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {loc.activities.map((a, i) => (
-                                    <RichParagraph key={i} className="px-2 py-1 bg-secondary text-primary rounded-lg !text-sm border border-secondary">
+                                    <RichParagraph variant="card" key={i} className="px-2 py-1 bg-secondary text-primary rounded-lg !text-sm border border-secondary">
                                         {a}
                                     </RichParagraph>
                                 ))}
@@ -71,7 +72,7 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
 
                     {loc.notes && (
                         <div className="mt-8 p-4 bg-[#F5F5F0] rounded-lg border-l-4 border-hover">
-                            <RichParagraph className="text-xs italic">
+                            <RichParagraph variant="sub" className=" italic">
                                 <strong>Note:</strong> {loc.notes}
                             </RichParagraph>
                         </div>
@@ -83,7 +84,7 @@ const LocationCard = ({ loc, categoryTitle, tableData }) => {
             {tableData && tableData.length > 0 && (
                 <div className="border-t border-primary/20 bg-white p-6 lg:p-10">
                     <div className="mb-4">
-                        <RichParagraph className="!text-sm font-bold uppercase tracking-widest !text-hover">Site Logistics</RichParagraph>
+                        <RichParagraph variant="sub" className="font-bold uppercase tracking-widest !text-hover">Site Logistics</RichParagraph>
                         <div className="h-1 w-8 bg-hover mt-1 rounded-full"></div>
                     </div>
 
@@ -146,14 +147,15 @@ export default function WhereToCamp({campgrounds}) {
                         </div>
 
                         <div className="space-y-6">
-                            <Heading2 text="Big Bear has many tourist attractions, including its stunning mountains, Big Bear Lake, and two beautiful ski resorts." textColor="text-[#001F3D]" />
+                            <Heading1 variant="section" text="Big Bear has many tourist attractions, including its stunning mountains, Big Bear Lake, and two beautiful ski resorts." textColor="text-[#001F3D]" />
                             <div className="h-0.5 w-16 bg-hover mx-auto rounded-full" />
-                            <RichParagraph className="text-primary/40 max-w-2xl mx-auto">
+                            <RichParagraph variant="body" className="max-w-2xl mx-auto">
                                 If you’re coming here to visit our showroom or to pick up your campervan, why not make a trip out of it? Big Bear has some beautiful campgrounds and RV parks nearby where you can stay to check that everything works great and meets your expectations.
                             </RichParagraph>
-                            <p className="text-xs font-bold !text-hover uppercase tracking-wider pt-4">
-                                Start Your Adventure Below
-                            </p>
+                            <RichParagraph variant="sub" textColor="text-hover" >
+Start Your Adventure Below
+                            </RichParagraph>
+
                         </div>
                     </div>
                 </section>
@@ -162,12 +164,17 @@ export default function WhereToCamp({campgrounds}) {
                     {campgrounds.map((category, catIndex) => (
                         <div key={catIndex} className="mb-20">
                             <div className="flex items-center gap-4 mb-10">
-                                <div className="flex flex-col">
-                                    <RichParagraph className="!text-sm uppercase font-bold !text-hover tracking-wider mb-1">
-                                        Explore Category {String(catIndex + 1).padStart(2, '0')}
-                                    </RichParagraph>
-                                    <Heading2 text={category.categoryTitle} />
-                                </div>
+                           <div className="flex flex-col justify-center items-center text-center w-full">
+    <RichParagraph variant="sub" textColor="text-hover" className="!text-sm uppercase font-bold tracking-wider mb-1">
+        Explore Category {String(catIndex + 1).padStart(2, '0')}
+    </RichParagraph>
+    <Heading1
+        variant="section"
+        text={category.categoryTitle}
+        textColor="text-primary"
+        className="max-w-2xl mx-auto text-center"
+    />
+</div>
                             </div>
 
                             <div className="flex flex-col">
