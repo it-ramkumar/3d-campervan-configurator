@@ -27,13 +27,17 @@ export default function PrivacyPolicy() {
       {/* Hero Header */}
       <div className="bg-primary py-20 px-6">
         <div className="max-w-4xl mx-auto">
-          <SpanTag text={" Legal"} className="text-hover   uppercase mb-4"/>
+          <RichParagraph textColor='text-hover'>
+            Legal
+          </RichParagraph>
+
           <Heading1 textColor="text-secondary" className="mb-4">
             Privacy Policy
           </Heading1>
-          <p className="text-secondary opacity-50 text-sm font-medium tracking-widest uppercase">
-            Last updated: June 23, 2026
-          </p>
+          <RichParagraph variant='hero' textColor='text-secondary'>
+ Last updated: June 23, 2026
+          </RichParagraph>
+
         </div>
       </div>
 
@@ -42,7 +46,7 @@ export default function PrivacyPolicy() {
 
         {/* Intro */}
         <div className="mb-14">
-          <RichParagraph textColor="text-primary" className="mb-5">
+          <RichParagraph variant='body' textColor="text-primary" className="mb-5">
             This Privacy Notice for <strong>Big Bear Vans Corp</strong> ("we," "us," or "our"), describes how and why we might access, collect, store, use, and/or share ("process") your personal information when you use our services ("Services"), including when you visit our website at{' '}
             <a href="https://www.bigbearvans.com/" target="_blank" rel="noopener noreferrer"
               className="text-primary font-semibold underline underline-offset-2">
@@ -50,7 +54,7 @@ export default function PrivacyPolicy() {
             </a>{' '}
             or any website of ours that links to this Privacy Notice.
           </RichParagraph>
-          <RichParagraph textColor="text-primary" className="opacity-70">
+          <RichParagraph variant='body' textColor="text-primary" className="opacity-70">
             Questions or concerns? Reading this Privacy Notice will help you understand your privacy rights and choices. If you do not agree with our policies and practices, please do not use our Services. If you still have any questions or concerns, please contact us at{' '}
             <a href="mailto:visit.bigbearvans@gmail.com"
               className="text-primary font-semibold underline underline-offset-2">
@@ -64,10 +68,14 @@ export default function PrivacyPolicy() {
 
         {/* Summary of Key Points */}
         <div className="mb-14">
-          <SectionLabel>Summary</SectionLabel>
-          <Heading3 textColor="text-primary" className="mb-8">
+          <RichParagraph variant='sub' textColor='text-hover'>
+            Summary
+          </RichParagraph>
+          {/* <SectionLabel>Summary</SectionLabel> */}
+
+          <Heading1 variant='card' textColor="text-primary" className="mb-8">
             SUMMARY OF KEY POINTS
-          </Heading3>
+          </Heading1>
           <div className="space-y-4">
             {[
               { q: 'What personal information do we process?', a: 'When you visit or use our Services, we may process personal information (like names, emails, and phone numbers) that you voluntarily submit through our inquiry forms.' },
@@ -76,11 +84,11 @@ export default function PrivacyPolicy() {
               { q: 'How do we process your information?', a: 'We process your information solely to respond to your inquiries, offer customer support, and analyze general website traffic.' },
               { q: 'Do we use cookies?', a: 'Yes, we use basic operational cookies and Google Analytics to monitor website traffic and user locations.' },
             ].map(({ q, a }, i) => (
-              <div key={i} className="flex gap-4 p-5 border border-[var(--color-primary)] border-opacity-10 rounded-[var(--radius-lg)]">
+              <div key={i} className=" gap-4 p-5 border border-[var(--color-primary)] border-opacity-10 rounded-[var(--radius-lg)]">
                 <span className="text-primary font-black text-lg mt-0.5 shrink-0">—</span>
-                <p className="text-primary text-sm leading-relaxed">
-                  <strong className="">{q}</strong>{' '}{a}
-                </p>
+               <RichParagraph variant='sub' textColor='text-primary'>{q}</RichParagraph>
+               <RichParagraph variant='sub'>{a}</RichParagraph>
+
               </div>
             ))}
           </div>
@@ -91,10 +99,11 @@ export default function PrivacyPolicy() {
 
         {/* Table of Contents */}
         <div className="mb-14">
-          <SectionLabel>Navigation</SectionLabel>
-          <Heading3 textColor="text-primary" className="mb-8">
+
+             <RichParagraph variant='sub' textColor='text-hover'>Navigation</RichParagraph>
+          <Heading1 textColor="text-primary" className="mb-8">
             TABLE OF CONTENTS
-          </Heading3>
+          </Heading1>
           <ol className="space-y-2">
             {sections.map(({ id, title }) => (
               <li key={id}>
@@ -102,8 +111,10 @@ export default function PrivacyPolicy() {
                   href={`#section-${id}`}
                   className="flex items-center gap-3 text-sm text-primary opacity-60 hover:opacity-100 hover:text-primary transition-all duration-200 font-medium group"
                 >
+
                   <span className="text-primary font-black w-5 shrink-0">{id}.</span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">{title}</span>
+
+                  <RichParagraph className="group-hover:translate-x-1 transition-transform duration-200">{title}</RichParagraph>
                 </a>
               </li>
             ))}
@@ -115,6 +126,7 @@ export default function PrivacyPolicy() {
 
         {/* Section 1 */}
         <PolicySection id={1} title="WHAT INFORMATION DO WE COLLECT?">
+
           <SubHeading>Personal information you disclose to us</SubHeading>
           <Body>
             We collect personal information that you voluntarily provide to us when you express an interest
@@ -302,11 +314,12 @@ function PolicySection({ id, title, children }) {
     <div id={`section-${id}`} className="mb-14 scroll-mt-8">
       <div className="flex items-start gap-4 mb-6">
         <span className="text-primary font-black text-sm mt-1 shrink-0">{id}.</span>
-        <h2 className="text-primary text-xl font-black tracking-tight leading-snug">
+        <Heading1 variant='section' className="!text-primary ">
           {title}
-        </h2>
+        </Heading1>
       </div>
       <div className="pl-8 space-y-4">
+
         {children}
       </div>
       <div className="h-px bg-primary opacity-10 mt-14" />
@@ -316,15 +329,15 @@ function PolicySection({ id, title, children }) {
 
 function SubHeading({ children }) {
   return (
-    <Heading4 textColor="text-primary" className="mt-6 mb-2">
+    <Heading1 variant='card' textColor="text-primary" className="mt-6 mb-2">
       {children}
-    </Heading4>
+    </Heading1>
   )
 }
 
 function Body({ children }) {
   return (
-    <RichParagraph textColor="text-primary" className="opacity-70">
+    <RichParagraph variant='body' className="opacity-70">
       {children}
     </RichParagraph>
   )
@@ -336,7 +349,9 @@ function BulletList({ items }) {
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-3 text-sm text-primary opacity-70 leading-relaxed">
           <span className="text-primary font-black mt-0.5 shrink-0">—</span>
-          <span>{item}</span>
+
+          <span><RichParagraph>
+            {item}</RichParagraph></span>
         </li>
       ))}
     </ul>

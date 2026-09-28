@@ -2,6 +2,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Heading1, RichParagraph } from "../Common/Common";
 
 const containerVars = {
   hidden: { opacity: 0 },
@@ -25,22 +26,21 @@ export default function QuickLinksClient({ initialLinks }) {
             animate={{ scale: 1, opacity: 1 }}
             className="p-1 border-2 border-[#001F3D] rounded-full mb-8"
           >
-            <Image src="/images/logoo.webp" alt="Logo" className="object-contain grayscale" width={80} height={80}  />
+            <Image src="/images/logoo.webp" alt="Logo" className="object-contain grayscale" width={80} height={80} />
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4 text-center"
+          <Heading1
+
+            className="!text-primary tracking-tighter uppercase mb-4 text-center"
           >
             Quick Links
-          </motion.h1>
+          </Heading1>
 
-          <div className="h-1.5 w-20 bg-[#001F3D] mb-6" />
-
-          <p className="max-w-md text-center text-gray-500 font-medium uppercase text-sm tracking-wide">
-            The official hub for all resources and connections.
-          </p>
+          <div className="h-1.5 w-20 bg-primary  mb-6" />
+<RichParagraph>
+The official hub for all resources and connections.
+</RichParagraph>
+       
         </section>
 
         {/* Links Grid */}
@@ -79,7 +79,7 @@ export default function QuickLinksClient({ initialLinks }) {
 
                   <div className="flex-shrink-0 ml-2 transition-transform group-hover:translate-x-1">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12H19M19 12L13 6M19 12L13 18" strokeLinecap="square"/>
+                      <path d="M5 12H19M19 12L13 6M19 12L13 18" strokeLinecap="square" />
                     </svg>
                   </div>
                 </motion.a>
