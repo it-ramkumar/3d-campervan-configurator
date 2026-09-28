@@ -339,7 +339,7 @@ const VanPage = ({ vanDetail,variants }) => {
             {vanDetail?.delivery_date && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
                 <Calendar className="w-3 h-3 text-hover" />
-                        <RichParagraph variant="body" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
+                        <RichParagraph variant="sub" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
                 {/* <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span> */}
               </div>
             )}
@@ -366,7 +366,7 @@ const VanPage = ({ vanDetail,variants }) => {
               {vanDetail?.delivery_date && (
                 <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
                   <Calendar className="w-3 h-3 text-hover" />
-                  <RichParagraph variant="body" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
+                  <RichParagraph variant="sub" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
                 </div>
               )}
 
