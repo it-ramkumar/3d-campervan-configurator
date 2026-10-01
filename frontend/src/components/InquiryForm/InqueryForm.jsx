@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { submitInquiry } from "../../api/inquiry/submitInquiry";
+import { validateLead } from "@/lib/validateLead";
+import { trackLead, withTracking, saveLeadEmail } from "@/lib/track";
 import {
   ArrowUpRight,
   X,
@@ -195,33 +197,24 @@ export default function InquiryForm() {
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setValidationMessage("⚠️ Please enter a valid e-mail address.");
+    const fieldErrors = validateLead(formData);
+    if (fieldErrors.email || fieldErrors.phone) {
+      setValidationMessage(`⚠️ ${fieldErrors.email || fieldErrors.phone}`);
       setIsLoading(false);
       return;
     }
-    const tracking =
-      JSON.parse(sessionStorage.getItem("tracking")) || {};
 
-    const payload = {
-      ...formData,
-      ...tracking,
-    };
+    const payload = withTracking(formData);
 
     try {
       const result = await submitInquiry(payload);
       if (result.success) {
-
+        trackLead({ source: "build_your_own", email, phone: formData.phone });
+        saveLeadEmail(email);
         setFormData({});
         setCurrentStep(0);
-        // Bas user ko bhej dein, baaki kaam Thank-You page ka useEffect khud sambhal lega
-        navigate.push(
-          `/thank-you?email=${encodeURIComponent(formData.email)}&source=inquiry`
-        );
+        navigate.push("/thank-you?source=build_your_own");
       } else {
-        console.log(result.error);
-        console.log(result);
-
         setMessage({
           type: "error",
           text: "Something went wrong. Please try again.",

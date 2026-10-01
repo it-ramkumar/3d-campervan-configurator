@@ -5,6 +5,7 @@ import PrimaryButton from "../Common/Button/PrimaryButton";
 import { Heading4, Heading3, RichParagraph, Heading1 } from "../Common/Common";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
+import { trackLead, withTracking, saveLeadEmail } from "@/lib/track";
 
 
 export default function BookingPage() {
@@ -113,14 +114,14 @@ export default function BookingPage() {
 
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    const bookingData = {
+    const bookingData = withTracking({
       ...formData,
       startTime: selectedSlot.start,
       endTime: selectedSlot.end,
       timezone: userTimezone,
       summary: formData.summary || "Meeting",
       description: formData.description || "",
-    };
+    });
 
     setSubmitting(true);
     try {
@@ -136,7 +137,6 @@ export default function BookingPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        console.error("❌ Backend error:", data);
         alert(data.message || `Error: ${res.status}`);
         setSubmitting(false);
         return;
@@ -149,20 +149,12 @@ export default function BookingPage() {
         ),
       );
 
-      setSubmitting(false);
-
-      // 1. Parameters tayar karein (Source: "Calendar Booking")
-      const formSource = "Calendar Booking";
-      const vanTitle = "No Van Selected";
-      const meetLink = data.meetLink || ""; // Agar meet link use karna ho
-
-      // 2. Redirect with all details (Humne pixel/dataLayer yahan se remove kar diya)
-      router.push(
-        `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitle)}`
-      );
+      // Booking confirmed by the API: track once, then redirect without PII in the URL
+      trackLead({ source: "booking", email: formData.email, phone: formData.phone });
+      saveLeadEmail(formData.email);
+      router.push("/thank-you?source=booking");
 
     } catch (err) {
-      console.error("❌ Network error:", err);
       alert("Network error - check console");
       setSubmitting(false);
     }

@@ -2,6 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { Heading1, RichParagraph, SpanTag, SecondaryButton } from '../Common/Common';
 import { ShowerHead, Armchair, Ruler, Zap } from "lucide-react"
+import { validateLead } from '@/lib/validateLead';
+import { trackLead, withTracking } from '@/lib/track';
 
 const OPTIONS = {
     van_length: [
@@ -16,8 +18,6 @@ const OPTIONS = {
 };
 
 const STEP_LABELS = ['Van Length', 'Passengers', 'Bathroom', 'Battery & AC', 'Contact Info'];
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function VanRecommendation() {
     const [formData, setFormData] = useState({
@@ -52,38 +52,35 @@ export default function VanRecommendation() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.customer_name.trim() || !formData.customer_phone.trim() || !formData.customer_email.trim()) {
-            setError('Please fill in your name, phone and email so our team can reach you back.');
-            return;
-        }
-        if (!EMAIL_REGEX.test(formData.customer_email.trim())) {
-            setError('Please enter a valid email address.');
+        if (loading) return;
+        const fieldErrors = validateLead(
+            { name: formData.customer_name, email: formData.customer_email, phone: formData.customer_phone },
+            { requirePhone: true }
+        );
+        const firstError = fieldErrors.name || fieldErrors.phone || fieldErrors.email;
+        if (firstError) {
+            setError(firstError);
             return;
         }
 
         setLoading(true);
         setError('');
         try {
-            const tracking =
-                typeof window !== 'undefined'
-                    ? JSON.parse(sessionStorage.getItem('tracking')) || {}
-                    : {};
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/recommend`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...formData, ...tracking }),
+                body: JSON.stringify(withTracking(formData)),
             });
             const data = await response.json();
-            if (data.success) {
+            if (response.ok && data.success) {
+                trackLead({ source: 'quiz', email: formData.customer_email, phone: formData.customer_phone });
                 setRecommendation(data);
                 setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth' }), 150);
             } else {
                 setError(data.message || 'No matching configurations found.');
             }
         } catch (err) {
-            setError('Something went wrong. Please check your backend connection.');
-            console.error(err);
+            setError('Something went wrong. Please try again, or call us at (951) 441-9719.');
         } finally {
             setLoading(false);
         }
