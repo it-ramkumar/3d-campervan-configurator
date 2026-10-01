@@ -1,74 +1,34 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common/Common";
-import { useEffect, useState } from "react";
-import { sendGTMEvent } from '@next/third-parties/google';
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { readLeadEmail } from "@/lib/track";
 
+const SOURCE_LABELS = {
+  contact: "Contact Request",
+  inventory: "Van Inquiry",
+  layout: "Build Inquiry",
+  quiz: "Van Matchmaker",
+  booking: "Consultation Booking",
+  build_your_own: "Custom Build Inquiry",
+};
+
+const noopSubscribe = () => () => {};
+
+// No conversion tracking here: generate_lead fires from the form after the API confirms the save.
 const ThankYou = () => {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email") || "user@van-life.com";
-  const source = searchParams.get("source") || "unknown";
-  const vanTitle = searchParams.get("van") || "No Van Selected";
+  const source = searchParams.get("source") || "";
+  const isCalendar = source === "booking";
 
+  // Client-only read of the email saved by the form; "" during SSR
+  const email = useSyncExternalStore(noopSubscribe, readLeadEmail, () => "");
   // State for Reference ID to avoid hydration mismatch
   const [referenceId, setReferenceId] = useState("");
 
-  // Clean source for UI checks (Tension free matching)
-  const isCalendar = source.toLowerCase().includes("calendar");
-
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    // 1. Generate Reference ID safely on client side
-    setReferenceId("BBV-" + Math.random().toString(36).substr(2, 9).toUpperCase());
-
-    // 🔴 DEBUG LOGS
-    console.log("--- TRACKING DEBUG START ---");
-    console.log("RAW SOURCE FROM URL:", source);
-
-    if (!source || source === "unknown") {
-      console.log("TRACKING SKIPPED: Source is empty or unknown");
-      return;
-    }
-
-    const currentSource = source.toLowerCase();
-    console.log("LOWERCASE SOURCE:", currentSource);
-    console.log("--- TRACKING DEBUG END ---");
-
-    // 🔐 DEBUNCE / SESSION LOCK SYSTEM
-    window.__FIRED_CONVERSIONS__ = window.__FIRED_CONVERSIONS__ || {};
-    if (window.__FIRED_CONVERSIONS__[currentSource]) {
-      console.log(`LOCK ACTIVE: Conversion for [${currentSource}] already sent.`);
-      return;
-    }
-
-    // Target variables
-    let targetLabel = "";
-
-    // 🎯 URL SOURCE MATCHING
-    if (currentSource.includes("calendar")) {
-      targetLabel = "AW-16677332528/YAHAN_CALENDAR_KA_LABEL_DEIN";
-    } else if (currentSource.includes("inquiry")) {
-      targetLabel = "AW-16677332528/tfm6CM_S-MQcELDMr5A-";
-    } else if (currentSource.includes("contact")) {
-      targetLabel = "AW-16677332528/zNLyCKCpjsUcELDMr5A-";
-    }
-
-    // 🚀 FIRE EVENT TO GTM
-    if (targetLabel) {
-      window.__FIRED_CONVERSIONS__[currentSource] = true; // Lock immediately
-
-      sendGTMEvent({
-        event: "conversion",
-        send_to: targetLabel,
-      });
-
-      console.log(`🚀 NEXT.JS GTM EVENT SENT for label: ${targetLabel}`);
-    } else {
-      console.log("NO MATCHING SOURCE FOUND FOR GOOGLE ADS");
-    }
-
-  }, [source, vanTitle]);
+    setReferenceId("BBV-" + Math.random().toString(36).slice(2, 11).toUpperCase());
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-primary p-6 relative">
@@ -103,15 +63,17 @@ const ThankYou = () => {
                   Submission Details
                 </RichParagraph>
 
-                <div className="flex justify-between items-start border-b border-white/10 pb-2 mb-2">
+                <div className={`flex justify-between items-start ${email ? "border-b border-white/10 pb-2 mb-2" : ""}`}>
                   <span className="text-secondary/60">Type:</span>
-                  <span className="text-secondary font-semibold">{source}</span>
+                  <span className="text-secondary font-semibold">{SOURCE_LABELS[source] || "Inquiry"}</span>
                 </div>
 
-                <div className="flex justify-between items-start">
-                  <span className="text-secondary/60">Sent To:</span>
-                  <span className="break-all text-right ml-4 font-semibold text-secondary">{email}</span>
-                </div>
+                {email && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-secondary/60">Sent To:</span>
+                    <span className="break-all text-right ml-4 font-semibold text-secondary">{email}</span>
+                  </div>
+                )}
               </div>
             </div>
 
