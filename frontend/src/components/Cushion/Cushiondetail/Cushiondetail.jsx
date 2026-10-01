@@ -766,7 +766,7 @@ export default function CushionCatalog() {
                 className="absolute inset-1.5 sm:inset-2 border-2 border-white/20 rounded-2xl sm:rounded-3xl"
               />
             </motion.div>
-            <Heading2 text={"Cushion Fabric"}/>
+            <Heading2 as="h1" text={"Cushion Fabric"}/>
             <Heading2 text={"Catalog"} className="mb-4"/>
             {/* <motion.h1
               initial={{ opacity: 0, y: 40 }}

@@ -30,6 +30,7 @@ export default function QuickLinksClient({ initialLinks }) {
           </motion.div>
 
           <Heading1
+            as="h1"
 
             className="!text-primary tracking-tighter uppercase mb-4 text-center"
           >

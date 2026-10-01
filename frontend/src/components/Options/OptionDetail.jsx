@@ -121,7 +121,7 @@ export default function OptionDetail({ item, basePath, listingLabel, related }) 
               </div>
             )}
 
-            <Heading1 variant="section" text={title} textColor="text-primary" />
+            <Heading1 as="h1" variant="section" text={title} textColor="text-primary" />
             <div className="w-10 h-[2px] bg-[#ED985F]" />
 
             <div className="space-y-3">

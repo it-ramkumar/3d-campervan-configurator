@@ -48,6 +48,7 @@ const ThankYou = () => {
             </div>
 
             <Heading1
+              as="h1"
               text={isCalendar ? "Action Required: Check Your Inbox!" : "Thank You for Your Inquiry!"}
               className="!text-primary text-center"
             />

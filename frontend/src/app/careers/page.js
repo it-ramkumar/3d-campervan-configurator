@@ -80,6 +80,7 @@ const jsonLd = {
       <section className="relative bg-primary text-secondary py-24 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 text-center">
           <Heading2
+            as="h1"
             className="text-5xl md:text-7xl uppercase tracking-tight"
             text="Build the Future"
             textColor="text-secondary"

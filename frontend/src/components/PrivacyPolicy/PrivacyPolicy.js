@@ -31,7 +31,7 @@ export default function PrivacyPolicy() {
             Legal
           </RichParagraph>
 
-          <Heading1 textColor="text-secondary" className="mb-4">
+          <Heading1 as="h1" textColor="text-secondary" className="mb-4">
             Privacy Policy
           </Heading1>
           <RichParagraph variant='hero' textColor='text-secondary'>

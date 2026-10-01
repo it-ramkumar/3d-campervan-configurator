@@ -74,7 +74,7 @@ export default async function page({ params }) {
         <div className="absolute inset-0 flex items-end pb-20 px-4">
           <div className="max-w-5xl mx-auto w-full text-center">
             <p className="!text-hover font-black text-xs lg:text-sm tracking-[0.5em] uppercase mb-6">Expert Journal</p>
-            <Heading1 text={blog.title} className="!text-white !leading-[1.1] !mb-8 drop-shadow-2xl" />
+            <Heading1 as="h1" text={blog.title} className="!text-white !leading-[1.1] !mb-8 drop-shadow-2xl" />
             <div className="flex flex-wrap justify-center gap-8 text-white/60 text-[10px] lg:text-xs uppercase tracking-widest font-sans">
               <span className="flex items-center gap-2 border-r border-white/20 pr-8">
                 <CalendarDays size={14} className="!text-hover" />

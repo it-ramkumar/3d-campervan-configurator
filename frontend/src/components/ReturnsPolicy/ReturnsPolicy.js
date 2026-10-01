@@ -11,7 +11,7 @@ export default function ReturnsPolicy() {
       <div className="bg-primary py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <SpanTag text={" Legal"} className="text-hover uppercase mb-4" />
-          <Heading1 textColor="text-secondary" className="mb-4">
+          <Heading1 as="h1" textColor="text-secondary" className="mb-4">
             Returns & Cancellation Policy
           </Heading1>
         </div>

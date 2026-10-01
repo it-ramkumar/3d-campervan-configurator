@@ -244,7 +244,7 @@ export default function InquiryForm() {
             <p className="!text-hover font-black text-xs uppercase tracking-[0.4em] mb-4">
               Configurator.
             </p>
-            <Heading1 variant="section" text="Build Your Dream Van" className="!text-primary" />
+            <Heading1 as="h1" variant="section" text="Build Your Dream Van" className="!text-primary" />
             <div className="w-24 h-1 bg-hover mx-auto mt-6 rounded-full" />
           </div>
 

@@ -22,7 +22,7 @@ export default function FloorPlanHero({ title, description, image }) {
           </RichParagraph>
 
 
-          <Heading1 variant="hero" text={title} textColor="text-secondary" />
+          <Heading1 as="h1" variant="hero" text={title} textColor="text-secondary" />
 
           <RichParagraph variant="hero" textColor="secondary" className="!text-secondary/65 max-w-xl mx-auto lg:mx-0">
             {description}

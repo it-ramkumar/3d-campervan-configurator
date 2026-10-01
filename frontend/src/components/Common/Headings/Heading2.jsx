@@ -2,6 +2,7 @@
 import React from "react";
 
 const Heading2 = ({
+  as: Tag = "h2",
   text = "Section Title",
   textColor = "text-primary",
   className = "",
@@ -9,7 +10,7 @@ const Heading2 = ({
   children
 }) => {
   return (
-    <h2
+    <Tag
       className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide leading-[0.95] font-display ${textColor} ${className}`}
       style={{
         ...inlineStyle,
@@ -17,7 +18,7 @@ const Heading2 = ({
       }}
     >
       {children ?? text}
-    </h2>
+    </Tag>
   );
 };
 

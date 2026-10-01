@@ -1,7 +1,9 @@
 import React from "react";
 
+// Styling comes from `variant`, never from the tag, so `as` only changes semantics.
+// Defaults to h2: pass as="h1" on exactly one heading per page (the page title).
 const Heading = ({
-  as: Tag = "h1",
+  as: Tag = "h2",
   variant = "hero", // 'hero' | 'section' | 'card' | 'sub'
   textColor = "text-slate-900 dark:text-white",
   className = "",

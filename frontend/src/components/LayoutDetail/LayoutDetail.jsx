@@ -101,7 +101,7 @@ export default function LayoutDetail({ van, initialView }) {
                 </RichParagraph>
 
 
-                <Heading1 text={van?.van_listing.title} className="!text-primary mb-4 !text-5xl" />
+                <Heading1 as="h1" text={van?.van_listing.title} className="!text-primary mb-4 !text-5xl" />
 
 
                 <RichParagraph className="mt-6 text-primary/60  italic border-l-2 border-hover pl-6">

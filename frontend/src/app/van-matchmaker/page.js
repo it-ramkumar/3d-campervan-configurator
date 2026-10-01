@@ -71,7 +71,7 @@ export default function VanMatchmakerPage() {
         <section className="py-10 px-4">
           <div className="max-w-5xl mx-auto text-center">
             <SpanTag text="BBV Matchmaker Engine" className="font-bold uppercase" />
-            <Heading1 variant="section" className="!text-primary" text="Find Your Perfect Camper Van in Under 2 Minutes" />
+            <Heading1 as="h1" variant="section" className="!text-primary" text="Find Your Perfect Camper Van in Under 2 Minutes" />
             <RichParagraph variant="body" className="mx-auto text-center max-w-2xl mt-4">
               Answer a few simple build questions to view live inventory pricing
               matching or portfolio configuration blueprints instantly — no
