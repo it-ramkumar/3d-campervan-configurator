@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { X, User, Mail, Phone, Clock, CheckCircle, RotateCcw, Ruler, Armchair, ShowerHead, Zap } from "lucide-react";
+import { toE164 } from "@/lib/track";
 
 export default function Detail({ lead, onClose, onStatusChange }) {
   if (!lead) return null;
@@ -57,7 +58,7 @@ export default function Detail({ lead, onClose, onStatusChange }) {
             </div>
             <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
               <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Phone Number</label>
-              <a href={`tel:${lead.phone}`} className="flex items-center gap-2 text-sm text-slate-800 font-bold">
+              <a href={`tel:${toE164(lead.phone) || lead.phone}`} className="flex items-center gap-2 text-sm text-slate-800 font-bold">
                 <Phone size={14} className="text-slate-400" /> {lead.phone}
               </a>
             </div>
