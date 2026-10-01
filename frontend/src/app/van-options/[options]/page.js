@@ -1,37 +1,8 @@
 import { notFound } from "next/navigation";
 import ExteriorChoiceClient from "../../../components/Options/ExteriorChoiceClient";
 import { generateDynamicSchema } from "@/schema/optionsSchema";
+import { PAGE_CONFIG, fetchOptionItems } from "@/components/Options/optionsConfig";
 
-const PAGE_CONFIG = {
-  "exterior-options": {
-    api: "exterior",
-    keyword: "bathroom",
-    title: `Camper Van Exterior Upgrades & Accessories | Big Bear Vans`,
-    desc: `Explore Big Bear Vans' exterior upgrade options - roof racks,
-awnings, storage boxes, window and door choices - for your
- custom Sprinter or Transit build.`,
-    heroImage: "/options/imperial campervan big bear vans (2).webp",
-    mobileHeroImage: "/options/imperial campervan big bear vans (2).webp",
-  },
-  "interior-options": {
-    api: "interior",
-    title: `Camper Van Interior Finishes & Cabinetry | Big Bear Vans`,
-    desc: `Explore premium camper van interior options - wall paneling,
- flooring, cabinetry, and bathroom layouts - for your custom
-Big Bear Vans conversion.`,
-    heroImage: "/options/montreal-pop-top-campervan-big-bear-vans (25).webp",
-    mobileHeroImage: "/options/montreal-pop-top-campervan-big-bear-vans (25).webp",
-  },
-  "system-options": {
-    api: "system",
-    title: `Camper Van Electrical & Water Systems | Big Bear Vans`,
-    desc: `Explore off-grid electrical and water systems for your
-custom camper van - lithium batteries, solar,
-inverters, and fresh/grey water tanks explained..`,
-    heroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
-    mobileHeroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
-  },
-};
 
 export async function generateMetadata({ params }) {
   const { options } = await params;
@@ -86,17 +57,7 @@ export default async function Page({ params }) {
 
   if (!current) notFound();
 
-  let categoriesData = [];
-  try {
-    // Variable name fix: NEXT_PUBLIC_URL
-    const apiUrl = `${process.env.NEXT_PUBLIC_URL}/${current.api}`;
-
-    const res = await fetch(apiUrl, { next: { revalidate: 604800 } });
-    const result = await res.json();
-    categoriesData = result.data || [];
-  } catch (error) {
-    console.error("Fetch error:", error);
-  }
+  const categoriesData = await fetchOptionItems(current.api);
   const jsonLd = generateDynamicSchema(options, current, categoriesData);
   return (
     <>

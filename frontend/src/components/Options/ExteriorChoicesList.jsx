@@ -1,284 +1,167 @@
 "use client";
-import React, { useState, useMemo, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  Tag,
-  Search,
-  Filter,
-  CheckCircle2,
-  ArrowRight,
-  ArrowLeft,
-} from "lucide-react";
+import React, { useState, useMemo, useRef } from "react";
+import { motion } from "framer-motion";
+import { Tag, Search, X, ArrowRight, ArrowLeft, ImageOff } from "lucide-react";
 import Link from "next/link";
-import {
-  Heading2,
-  RichParagraph,
-  Heading3,
-Heading1} from "../Common/Common";
+import { RichParagraph, Heading1 } from "../Common/Common";
+import { BORDER, getItemTitle, RenderBlocks } from "./optionBlocks";
 import Image from "next/image";
 
-
-
-const GLASS_LIGHT = {
-  background: "rgba(0,31,61,0.05)",
-  border: "1px solid rgba(0,31,61,0.1)",
-};
-
-// ── RenderBlocks ──────────────────────────────────────────────────────────────
-const RenderBlocks = ({ blocks }) => {
-  if (!blocks || !Array.isArray(blocks)) return null;
-
-  return (
-    <div className="space-y-3 mt-3">
-      {blocks
-        .filter((block) => block.is_active !== false)
-        .sort((a, b) => a.order - b.order)
-        .map((block, idx) => {
-          switch (block.block_type) {
-            case "heading":
-              return null;
-
-            case "subheading":
-              return (
-                <div key={idx} className="mb-1">
-                  <Heading1 variants="card"
-                    text={block.title}
-                    textColor="text-primary"
-                    className="font-bold text-[11px]"
-                  />
-                </div>
-              );
-
-            case "paragraph":
-              return (
-                <RichParagraph
-                variant="body"
-                  key={idx}
-
-
-                >
-                  {block.content}
-                </RichParagraph>
-              );
-
-            case "list":
-              return (
-                <div
-                  key={idx}
-                  className="p-3 rounded-lg"
-                  style={GLASS_LIGHT}
-                >
-                  {block.title && (
-                    <RichParagraph
-                 variant="body"
-                    >
-                      {block.title}
-                    </RichParagraph>
-                  )}
-                  <ul className="space-y-1.5">
-                    {block.list_items?.map((item, iIdx) => (
-                      <li key={iIdx} className="flex items-start gap-1.5">
-                        <CheckCircle2 className="h-2.5 w-2.5 text-[#ED985F] mt-0.5 shrink-0" />
-                        <RichParagraph
-                         variant="body"
-                        >
-                          {item.text}
-                        </RichParagraph>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-
-            default:
-              return null;
-          }
-        })}
-    </div>
+const itemMatches = (item, query) =>
+  getItemTitle(item).toLowerCase().includes(query) ||
+  item.description?.some((d) => d?.toLowerCase().includes(query)) ||
+  activeBlocks(item).some(
+    (b) => b.title?.toLowerCase().includes(query) || b.content?.toLowerCase().includes(query),
   );
+
+// every item of a category, optionally limited to one subcategory
+const getCategoryItems = (cat, subId = "all") => {
+  if (subId !== "all") return cat.subCategories?.find((s) => s._id === subId)?.items || [];
+  return [...(cat.subCategories || []).flatMap((s) => s.items || []), ...(cat.items || [])];
 };
 
-// ── SubCategoryNav ────────────────────────────────────────────────────────────
-const SubCategoryNav = ({ subCategories, activeSubId, onSelect }) => {
+const countItems = (cat) => getCategoryItems(cat).length;
+
+// ── ScrollRow: horizontal pill row with arrow buttons ─────────────────────────
+const ScrollRow = ({ children }) => {
   const scrollRef = useRef(null);
+  const scroll = (dir) =>
+    scrollRef.current?.scrollBy({ left: dir === "left" ? -250 : 250, behavior: "smooth" });
 
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft } = scrollRef.current;
-      const scrollAmount = 250;
-      scrollRef.current.scrollTo({
-        left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  const arrowClass =
+    "hidden md:flex w-9 h-9 rounded-full items-center justify-center flex-shrink-0 transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] text-primary/50";
 
   return (
-    <div
-      className="md:sticky md:top-[65px] z-40 py-3 md:py-4 mb-4 md:mb-8 border-b md:border md:rounded-lg relative"
-      style={{
-        background: "#ffffff",
-        borderColor: "rgba(0,31,61,0.1)",
-      }}
-    >
-      <div className="grid grid-cols-[40px_1fr_40px] md:grid-cols-[50px_1fr_50px] items-center w-full px-1">
-        {/* Left Arrow */}
-        <button
-          onClick={() => scroll("left")}
-          className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] text-primary/50"
-          style={{ border: "1px solid rgba(0,31,61,0.1)" }}
-          aria-label="Scroll Left"
-        >
-          <ArrowLeft size={16} />
-        </button>
-
-        {/* Scrollable pills */}
-        <div
-          ref={scrollRef}
-          className="flex gap-2 md:gap-3 overflow-x-auto no-scrollbar py-1 scroll-smooth px-2 w-full"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          {subCategories.map((sub) => {
-            const isActive = activeSubId === sub._id;
-            return (
-              <button
-                key={sub._id}
-                onClick={() => onSelect(sub)}
-                className={`px-4 py-2.5 md:py-2.5 rounded-lg font-bold text-[10px] md:text-[11px] uppercase tracking-wider transition-all duration-300 min-w-max flex-shrink-0 whitespace-nowrap
-                  ${isActive
-                    ? "bg-[#ED985F] text-[#001F3D] shadow-lg"
-                    : "text-primary/50 hover:text-[#ED985F]"
-                  }`}
-                style={
-                  isActive
-                    ? { border: "1px solid #ED985F" }
-                    : { border: "1px solid rgba(0,31,61,0.1)" }
-                }
-              >
-                {sub.title}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right Arrow */}
-        <button
-          onClick={() => scroll("right")}
-          className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] text-primary/50"
-          style={{ border: "1px solid rgba(0,31,61,0.1)" }}
-          aria-label="Scroll Right"
-        >
-          <ArrowRight size={16} />
-        </button>
+    <div className="flex items-center gap-2">
+      <button onClick={() => scroll("left")} className={arrowClass} style={{ border: BORDER }} aria-label="Scroll Left">
+        <ArrowLeft size={15} />
+      </button>
+      <div
+        ref={scrollRef}
+        className="flex gap-2 overflow-x-auto no-scrollbar py-1 scroll-smooth flex-1"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        {children}
       </div>
+      <button onClick={() => scroll("right")} className={arrowClass} style={{ border: BORDER }} aria-label="Scroll Right">
+        <ArrowRight size={15} />
+      </button>
     </div>
   );
 };
 
-// ── Animation variants ────────────────────────────────────────────────────────
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
+const Pill = ({ active, onClick, children, small }) => (
+  <button
+    onClick={onClick}
+    className={`rounded-lg font-bold uppercase tracking-wider transition-all duration-300 min-w-max flex-shrink-0 whitespace-nowrap
+      ${small ? "px-3 py-1.5 text-[10px]" : "px-4 py-2.5 text-[10px] md:text-[11px]"}
+      ${active ? "bg-[#ED985F] text-[#001F3D] shadow-lg" : "text-primary/50 hover:text-[#ED985F]"}`}
+    style={{ border: active ? "1px solid #ED985F" : BORDER }}
+  >
+    {children}
+  </button>
+);
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+// ── OptionCard: full description + blocks stay in the page HTML ──────────────
+const OptionCard = ({ item, label, href }) => {
+  const title = getItemTitle(item);
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="group break-inside-avoid mb-4 md:mb-6 rounded-xl overflow-hidden bg-white flex flex-col transition-shadow duration-300 hover:shadow-xl hover:shadow-[#001F3D]/5"
+      style={{ border: BORDER }}
+    >
+      <Link
+        href={href}
+        className="relative block aspect-[4/3] w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#ED985F]"
+        style={{ background: "rgba(0,31,61,0.04)" }}
+        aria-label={title}
+        tabIndex={-1}
+      >
+        {item.images?.[0] ? (
+          <Image
+            src={item.images[0]}
+            alt={title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <span className="absolute inset-0 flex items-center justify-center text-primary/20">
+            <ImageOff size={28} />
+          </span>
+        )}
+        {label && (
+          <span className="absolute top-3 left-3 px-2 py-1 rounded-md bg-white/90 text-[9px] font-bold uppercase tracking-wider text-primary">
+            {label}
+          </span>
+        )}
+      </Link>
+
+      <div className="flex flex-col p-4 gap-2" style={{ borderTop: "1px solid rgba(237,152,95,0.15)" }}>
+        <RichParagraph variant="sub" textColor="text-primary" className="font-bold !opacity-100">
+          <Link href={href} className="hover:text-[#ED985F] transition-colors">
+            {title}
+          </Link>
+        </RichParagraph>
+
+        {item.description?.filter((d) => d?.trim()).map((desc, i) => (
+          <RichParagraph variant="card" key={i}>
+            {desc}
+          </RichParagraph>
+        ))}
+        <RenderBlocks blocks={item.blocks} compact />
+
+        <Link
+          href={href}
+          className="self-start pt-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#ED985F] hover:underline"
+          aria-label={`View details: ${title}`}
+        >
+          View details
+          <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      </div>
+    </motion.article>
+  );
 };
 
 // ── Main export ───────────────────────────────────────────────────────────────
-export default function ExteriorChoicesList({ initialData, heading }) {
-  const [activeSubCategoryMap, setActiveSubCategoryMap] = useState(
-    initialData?.activeSubCategoryMap || {},
+export default function ExteriorChoicesList({ initialData, basePath }) {
+  // newest category first, same order as before
+  const categories = useMemo(
+    () => (initialData?.categories || []).slice().reverse(),
+    [initialData],
   );
-  const [activeItemMap, setActiveItemMap] = useState(
-    initialData?.activeItemMap || {},
-  );
-  const [expandedCategories, setExpandedCategories] = useState(
-    initialData?.expandedCategories || {},
-  );
+
+  const [activeCatId, setActiveCatId] = useState(categories[0]?._id || null);
+  const [activeSubId, setActiveSubId] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("all");
 
-  useEffect(() => {
-    if (initialData) {
-      setActiveSubCategoryMap(initialData.activeSubCategoryMap || {});
-      setActiveItemMap(initialData.activeItemMap || {});
-      if (
-        initialData.categories?.length > 0 &&
-        Object.keys(expandedCategories).length === 0
-      ) {
-        setExpandedCategories({ [initialData.categories[0]._id]: true });
-      }
+  const query = searchQuery.trim().toLowerCase();
+  const activeCat = categories.find((c) => c._id === activeCatId) || categories[0];
+
+  // cards currently on screen: search results across all categories, or the active tab
+  const visibleItems = useMemo(() => {
+    if (query) {
+      return categories.flatMap((cat) =>
+        getCategoryItems(cat)
+          .filter((item) => cat.title.toLowerCase().includes(query) || itemMatches(item, query))
+          .map((item) => ({ item, label: cat.title })),
+      );
     }
-  }, [initialData]);
+    if (!activeCat) return [];
+    return getCategoryItems(activeCat, activeSubId).map((item) => ({ item, label: null }));
+  }, [categories, activeCat, activeSubId, query]);
 
-  const categories = initialData?.categories || [];
-
-  const toggleCategory = (categoryId) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [categoryId]: !prev[categoryId],
-    }));
+  const selectCategory = (id) => {
+    setActiveCatId(id);
+    setActiveSubId("all");
+    setSearchQuery("");
   };
 
-  const filteredCategories = useMemo(() => {
-    let filtered = [...categories];
-    if (selectedCategoryFilter !== "all") {
-      filtered = filtered.filter((cat) => cat._id === selectedCategoryFilter);
-    }
-    if (!searchQuery.trim()) return filtered.slice().reverse();
-
-    const query = searchQuery.toLowerCase();
-    return filtered
-      .map((cat) => {
-        const categoryMatch = cat.title.toLowerCase().includes(query);
-        const filteredSubCategories =
-          cat.subCategories
-            ?.map((sub) => {
-              const filteredItems =
-                sub.items?.filter(
-                  (item) =>
-                    item.title?.toLowerCase().includes(query) ||
-                    item.description?.some((d) => d.toLowerCase().includes(query)) ||
-                    item.blocks?.some(
-                      (b) =>
-                        b.title?.toLowerCase().includes(query) ||
-                        b.content?.toLowerCase().includes(query),
-                    ),
-                ) || [];
-              return {
-                ...sub,
-                items: filteredItems,
-                hasMatch: sub.title.toLowerCase().includes(query) || filteredItems.length > 0,
-              };
-            })
-            .filter((sub) => sub.hasMatch) || [];
-
-        const filteredDirectItems =
-          cat.items?.filter(
-            (item) =>
-              item.title?.toLowerCase().includes(query) ||
-              item.description?.some((d) => d.toLowerCase().includes(query)),
-          ) || [];
-
-        return {
-          ...cat,
-          subCategories: filteredSubCategories,
-          items: filteredDirectItems,
-          hasMatch:
-            categoryMatch ||
-            filteredSubCategories.length > 0 ||
-            filteredDirectItems.length > 0,
-        };
-      })
-      .filter((cat) => cat.hasMatch)
-      .slice()
-      .reverse();
-  }, [categories, searchQuery, selectedCategoryFilter]);
-
-  if (!categories || categories.length === 0) {
+  if (categories.length === 0) {
     return (
       <div className="text-center py-20 font-bold text-primary/25 animate-pulse font-ui">
         Loading configurations...
@@ -287,373 +170,103 @@ export default function ExteriorChoicesList({ initialData, heading }) {
   }
 
   return (
-    <div
-      className="rounded-none md:rounded-xl p-0 md:p-8"
-      style={{ background: "transparent" }}
-    >
-      {/* ── SEARCH + FILTER BAR ── */}
-      <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10 relative z-50"
+    <div className="px-4 md:px-8 py-8 md:py-12 max-w-[1440px] mx-auto">
+      {/* ── STICKY BAR: search + category tabs ── */}
+      <div
+        className="sticky top-[65px] z-40 -mx-4 md:mx-0 px-4 md:px-4 py-3 md:rounded-xl mb-8 space-y-3"
+        style={{ background: "rgba(255,255,255,0.92)", backdropFilter: "blur(12px)", border: BORDER }}
       >
-        <div
-          className="rounded-xl p-3 flex flex-col lg:flex-row gap-3"
-          style={{
-            background: "#ffffff",
-            border: "1px solid rgba(0,31,61,0.1)",
-          }}
-        >
-          {/* Search input */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/30" />
-            <input
-              type="text"
-              placeholder="Search by keyword, material, or style…"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-13 pr-6 py-4 rounded-lg outline-none font-ui font-semibold text-sm text-primary placeholder:text-primary/30 transition-all"
-              style={{
-                background: "#F8F9FA",
-                border: "1px solid rgba(0,31,61,0.1)",
-              }}
-              onFocus={(e) => (e.target.style.boxShadow = "0 0 0 2px rgba(237,152,95,0.3)")}
-              onBlur={(e) => (e.target.style.boxShadow = "none")}
-            />
-          </div>
-
-          {/* Category filter */}
-          <div className="relative">
-            <Filter className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/30 pointer-events-none" />
-            <select
-              value={selectedCategoryFilter}
-              onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-              className="w-full lg:w-64 pl-12 pr-10 py-4 rounded-lg outline-none appearance-none font-ui font-black text-[11px] uppercase tracking-widest cursor-pointer transition-colors text-primary"
-              style={{
-                background: "#F8F9FA",
-                border: "1px solid rgba(0,31,61,0.1)",
-              }}
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/30" />
+          <input
+            type="text"
+            placeholder="Search by keyword, material, or style…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-11 pr-10 py-3 rounded-lg outline-none font-ui font-semibold text-sm text-primary placeholder:text-primary/30 transition-shadow focus:shadow-[0_0_0_2px_rgba(237,152,95,0.3)]"
+            style={{ background: "#F8F9FA", border: BORDER }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-primary/40 hover:text-primary"
+              aria-label="Clear search"
             >
-              <option value="all">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.title}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/40 pointer-events-none" />
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        <ScrollRow>
+          {categories.map((cat) => (
+            <Pill key={cat._id} active={!query && cat._id === activeCat?._id} onClick={() => selectCategory(cat._id)}>
+              {cat.title}
+              <span className="ml-1.5 opacity-60">{countItems(cat)}</span>
+            </Pill>
+          ))}
+        </ScrollRow>
+      </div>
+
+      {/* ── SECTION HEADER ── */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div className="flex items-center gap-4">
+          <div
+            className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-xl flex-shrink-0 bg-[#ED985F]"
+            style={{ border: "1px solid rgba(237,152,95,0.2)" }}
+          >
+            {query ? <Search className="h-5 w-5 text-[#001F3D]" /> : <Tag className="h-5 w-5 text-[#001F3D]" />}
+          </div>
+          <div>
+            <Heading1
+              variant="section"
+              text={query ? `Results for “${searchQuery.trim()}”` : activeCat?.title}
+              textColor="text-primary"
+            />
+            <RichParagraph variant="sub">
+              {visibleItems.length} Options Available
+            </RichParagraph>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* ── CATEGORY ACCORDION FEED ── */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-4"
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredCategories?.map((cat) => {
-            const activeSubId = activeSubCategoryMap?.[cat?._id];
-            const currentSub = cat.subCategories?.find((s) => s._id === activeSubId);
-            const items = activeSubId != null ? currentSub?.items || [] : cat.items || [];
-            const activeItem = activeItemMap?.[cat._id] || items[0] || null;
-            const isExpanded = expandedCategories?.[cat._id] || false;
+      {/* ── SUBCATEGORY CHIPS ── */}
+      {!query && activeCat?.subCategories?.length > 0 && (
+        <div className="mb-6">
+          <ScrollRow>
+            <Pill small active={activeSubId === "all"} onClick={() => setActiveSubId("all")}>
+              All
+            </Pill>
+            {activeCat.subCategories.map((sub) => (
+              <Pill small key={sub._id} active={activeSubId === sub._id} onClick={() => setActiveSubId(sub._id)}>
+                {sub.title}
+              </Pill>
+            ))}
+          </ScrollRow>
+        </div>
+      )}
 
-            return (
-              <motion.div
-                key={cat._id}
-                variants={itemVariants}
-                layout
-                className="rounded-xl overflow-hidden"
-                style={{
-                  background: "#ffffff",
-                  border: isExpanded
-                    ? "1px solid rgba(237,152,95,0.35)"
-                    : "1px solid rgba(0,31,61,0.1)",
-                  transition: "border-color 0.3s ease",
-                }}
-              >
-                {/* CATEGORY HEADER */}
-                <div
-                  onClick={() => toggleCategory(cat._id)}
-                  className="p-6 md:p-8 cursor-pointer flex items-center justify-between gap-6 group transition-all duration-300"
-                  style={{
-                    background: isExpanded
-                      ? "rgba(0,31,61,0.04)"
-                      : "#ffffff",
-                    borderBottom: isExpanded
-                      ? "1px solid rgba(237,152,95,0.15)"
-                      : "1px solid transparent",
-                  }}
-                >
-                  <div className="flex items-center gap-5">
-                    {/* Icon box */}
-                    <div
-                      className="w-14 h-14 flex items-center justify-center rounded-xl transition-all duration-500 flex-shrink-0"
-                      style={{
-                        background: isExpanded
-                          ? "#ED985F"
-                          : "rgba(0,31,61,0.08)",
-                        border: "1px solid rgba(237,152,95,0.2)",
-                      }}
-                    >
-                      <Tag
-                        className="h-5 w-5 transition-colors duration-300"
-                        style={{ color: isExpanded ? "#001F3D" : "#ED985F" }}
-                      />
-                    </div>
-
-                    <div>
-                      <Heading1 variant="section"
-                        text={cat.title}
-                        textColor="text-primary"
-
-                      />
-                      <RichParagraph variant="sub">
-{(cat.subCategories?.length || 0) + (cat.items?.length || 0)} Options Available
-                      </RichParagraph>
-
-                    </div>
-                  </div>
-
-                  {/* Chevron toggle */}
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                    style={{
-                      background: isExpanded ? "#ED985F" : "rgba(0,31,61,0.08)",
-                      border: isExpanded
-                        ? "1px solid #ED985F"
-                        : "1px solid rgba(0,31,61,0.1)",
-                    }}
-                  >
-                    <ChevronDown
-                      className="h-5 w-5 transition-transform duration-500"
-                      style={{
-                        transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-                        color: isExpanded ? "#001F3D" : "#001F3D",
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* EXPANDABLE CONTENT */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="p-4 md:p-8">
-                        {/* Sub-category nav */}
-                        {cat.subCategories?.length > 0 && (
-                          <SubCategoryNav
-                            catId={cat._id}
-                            subCategories={cat.subCategories}
-                            activeSubId={activeSubId}
-                            onSelect={(sub) => {
-                              setActiveSubCategoryMap((prev) => ({
-                                ...prev,
-                                [cat._id]: sub._id,
-                              }));
-                              setActiveItemMap((prev) => ({
-                                ...prev,
-                                [cat._id]: sub.items?.[0] || null,
-                              }));
-                            }}
-                          />
-                        )}
-
-                        {/* MASTER–DETAIL GRID */}
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-                          {/* Master: item list */}
-                          <div className="lg:col-span-3 space-y-2.5 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar lg:sticky lg:top-64 mt-6">
-                            {items.map((item) => {
-                              const isActive = activeItem?._id === item._id;
-                              return (
-                                <motion.div
-                                  key={item._id}
-                                  whileHover={{ x: 4 }}
-                                  onClick={() =>
-                                    setActiveItemMap((prev) => ({
-                                      ...prev,
-                                      [cat._id]: item,
-                                    }))
-                                  }
-                                  className="relative p-3 rounded-xl cursor-pointer flex items-center gap-3 overflow-hidden transition-all duration-300"
-                                  style={
-                                    isActive
-                                      ? {
-                                          background: "rgba(0,31,61,0.9)",
-                                          border: "1px solid rgba(237,152,95,0.5)",
-                                          boxShadow: "0 0 20px rgba(237,152,95,0.08)",
-                                        }
-                                      : {
-                                          background: "rgba(0,31,61,0.04)",
-                                          border: "1px solid rgba(0,31,61,0.1)",
-                                        }
-                                  }
-                                >
-                                  {/* Thumbnail */}
-                                  <div
-                                    className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 transition-all duration-300"
-                                    style={{
-                                      border: isActive
-                                        ? "1px solid rgba(237,152,95,0.4)"
-                                        : "1px solid rgba(0,31,61,0.1)",
-                                      transform: isActive ? "scale(1.05)" : "scale(1)",
-                                    }}
-                                  >
-                                    <Image
-                                      src={item.images?.[0]}
-                                      alt={item.title || "Van option"}
-                                      className="w-full h-full object-cover"
-                                      width={100}
-                                      height={100}
-                                    />
-                                  </div>
-
-                                  <div className="flex-1 min-w-0 pr-1">
-                                    <RichParagraph  variant="sub" textColor={isActive ? "text-secondary" : "text-primary"}>
-                                       { item.title ||
-                                        item.blocks?.find((b) => b.block_type === "heading")?.title ||
-                                        "Untitled Option"}
-                                    </RichParagraph>
-
-                                  </div>
-
-                                  {isActive && (
-                                    <div
-                                      className="p-1 rounded-full flex-shrink-0"
-                                      style={{ background: "#ED985F" }}
-                                    >
-                                      <CheckCircle2 size={12} color="#001F3D" />
-                                    </div>
-                                  )}
-                                </motion.div>
-                              );
-                            })}
-                          </div>
-
-                          {/* Detail panel */}
-                          <div className="lg:col-span-9 lg:sticky lg:top-24 mt-4 md:mt-6">
-                            <AnimatePresence mode="wait">
-                              {activeItem ? (
-                                <motion.div
-                                  key={activeItem._id}
-                                  initial={{ opacity: 0, scale: 0.99 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  exit={{ opacity: 0, scale: 0.99 }}
-                                  className="rounded-xl overflow-hidden"
-                                  style={{
-                                    background: "#ffffff",
-                                    border: "1px solid rgba(237,152,95,0.2)",
-                                  }}
-                                >
-                                  <div className="grid grid-cols-1 md:grid-cols-12 gap-0 md:gap-0">
-                                    {/* Image */}
-                                    <div
-                                      className="md:col-span-8 flex items-center justify-center min-h-[280px]"
-                                      style={{ background: "rgba(0,31,61,0.03)" }}
-                                    >
-                                      <Image
-                                        width={1000}
-                                        height={1000}
-                                        src={activeItem.images?.[0]}
-                                        alt={activeItem.title || "Van option"}
-                                        className="w-full h-full object-contain"
-                                      />
-                                    </div>
-
-                                    {/* Info */}
-                                    <div
-                                      className="md:col-span-4 flex flex-col justify-center p-6"
-                                      style={{ borderLeft: "1px solid rgba(237,152,95,0.1)" }}
-                                    >
-                                      <div className="space-y-4">
-                                        {/* amber top accent */}
-                                        <div className="w-8 h-[2px] bg-[#ED985F]" />
-
-                                        <Heading1 variant="card"
-                                          text={
-                                            activeItem.heading ||
-                                            activeItem.title ||
-                                            activeItem.blocks?.find((b) => b.block_type === "heading")?.title ||
-                                            "Untitled Option"
-                                          }
-                                          textColor="text-primary"
-
-                                        />
-
-                                        <div className="space-y-3">
-                                          {activeItem.description?.map((desc, i) => (
-                                            <RichParagraph
-                                            variant="card"
-                                              key={i}
-                                              textColor="text-primary"
-                                             
-                                            >
-                                              {desc}
-                                            </RichParagraph>
-                                          ))}
-                                          <RenderBlocks blocks={activeItem.blocks} />
-                                        </div>
-                                      </div>
-
-                                      {/* CTA */}
-                                      {activeItem.link && (
-                                        <Link
-                                          href={activeItem.link}
-                                          target="_blank"
-                                          className="mt-6 block"
-                                        >
-                                          <button
-                                            className="w-full group flex items-center justify-between p-1.5 rounded-lg font-black text-[9px] uppercase tracking-widest transition-all"
-                                            style={{
-                                              background: "#001F3D",
-                                              border: "1px solid rgba(237,152,95,0.25)",
-                                              color: "#FBFBF9",
-                                            }}
-                                            onMouseEnter={(e) => {
-                                              e.currentTarget.style.background = "#ED985F";
-                                              e.currentTarget.style.color = "#001F3D";
-                                            }}
-                                            onMouseLeave={(e) => {
-                                              e.currentTarget.style.background = "#001F3D";
-                                              e.currentTarget.style.color = "#FBFBF9";
-                                            }}
-                                          >
-                                            <span className="pl-4">View Complete Catalog</span>
-                                            <div className="w-8 h-8 rounded flex items-center justify-center" style={{ background: "rgba(0,31,61,0.08)" }}>
-                                              <ArrowRight size={14} />
-                                            </div>
-                                          </button>
-                                        </Link>
-                                      )}
-                                    </div>
-                                  </div>
-                                </motion.div>
-                              ) : (
-                                <div className="h-[400px] flex items-center justify-center font-ui italic font-bold text-primary/20">
-                                  Select an option to view details
-                                </div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </motion.div>
+      {/* ── CARD GRID ── */}
+      {visibleItems.length > 0 ? (
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6">
+          {visibleItems.map(({ item, label }) => (
+            <OptionCard key={item._id} item={item} label={label} href={`${basePath}/${item.slug}`} />
+          ))}
+        </div>
+      ) : (
+        <div className="py-20 text-center rounded-xl" style={{ border: "1px dashed rgba(0,31,61,0.15)" }}>
+          <RichParagraph variant="card" className="font-ui font-bold">
+            No options found{query ? ` for “${searchQuery.trim()}”` : ""}.
+          </RichParagraph>
+          {query && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-4 text-[10px] font-bold uppercase tracking-widest text-[#ED985F] hover:underline"
+            >
+              Clear search
+            </button>
+          )}
+        </div>
+      )}
 
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -667,7 +280,6 @@ export default function ExteriorChoicesList({ initialData, heading }) {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(237,152,95,0.35);
         }
-        .pl-13 { padding-left: 3.25rem; }
       `}</style>
     </div>
   );

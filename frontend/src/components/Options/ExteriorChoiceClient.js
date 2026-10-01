@@ -81,6 +81,7 @@ export default function ExteriorChoiceClient({
             // Yahan mistake thi, 'processedData' ki jagah 'dataState' aayega
             initialData={dataState}
             heading={current.api}
+            basePath={`/van-options/${options}`}
           />
         </div>
 

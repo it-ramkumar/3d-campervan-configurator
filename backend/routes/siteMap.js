@@ -1,6 +1,9 @@
 const Vans = require('../models/vanModel');
 const Portfolio = require("../models/portfolio");
 const Blog = require("../models/testBlog");
+const ExteriorChoice = require("../models/ExteriorRoute");
+const InteriorChoice = require("../models/InteriorChoices");
+const SystemChoice = require("../models/systemRoute");
 
 const router = require('express').Router();
 
@@ -9,10 +12,13 @@ router.get('/', async (req, res) => {
         const staticPages = ['', '/custom-build', '/configurator', '/build-your-own-camper-van', '/van-options/exterior-options', '/van-options/interior-options', '/van-options/system-options', '/sprinter-van-buying-guide', '/van-layouts', '/contact', '/our-process', '/showroom', '/financing', '/about-us', '/our-clients', '/blog', '/quick-links', '/faq', '/careers', '/camper-vans-for-sale', '/where-to-camp', '/floorplans', '/privacy-policy', '/diy-components', '/van-matchmaker'];
 
         // Data fetch karein
-        const [VansLink, PortfolioLink, BlogLink] = await Promise.all([
+        const [VansLink, PortfolioLink, BlogLink, ExteriorLink, InteriorLink, SystemLink] = await Promise.all([
             Vans.find({ is_published: true }).select('slug updatedAt'),
             Portfolio.find({ is_published: true }).select('slug updatedAt van_listing.specifications.wheelbase').lean(),
-            Blog.find({}).select('slug updatedAt')
+            Blog.find({}).select('slug updatedAt'),
+            ExteriorChoice.find({ slug: { $ne: null } }).select('slug updatedAt').lean(),
+            InteriorChoice.find({ slug: { $ne: null } }).select('slug updatedAt').lean(),
+            SystemChoice.find({ slug: { $ne: null } }).select('slug updatedAt').lean()
 
 
         ]);
@@ -37,6 +43,9 @@ router.get('/', async (req, res) => {
         addLinks(VansLink, 'camper-vans-for-sale');
         addLinks(PortfolioLink, 'van-layouts');
         addLinks(BlogLink, 'blog');
+        addLinks(ExteriorLink, 'van-options/exterior-options');
+        addLinks(InteriorLink, 'van-options/interior-options');
+        addLinks(SystemLink, 'van-options/system-options');
         // wheelBase(PortfolioLink, 'wheel-base');
 
 
