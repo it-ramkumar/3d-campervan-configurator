@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { submitInquiry } from "../../api/inquiry/submitInquiry";
 import { validateLead } from "@/lib/validateLead";
-import { trackLead, withTracking, saveLeadEmail } from "@/lib/track";
+import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
 import {
   ArrowUpRight,
   X,
@@ -204,12 +204,13 @@ export default function InquiryForm() {
       return;
     }
 
-    const payload = withTracking(formData);
+    const eventId = createEventId();
+    const payload = withTracking({ ...formData, event_id: eventId, lead_source: "build_your_own" });
 
     try {
       const result = await submitInquiry(payload);
       if (result.success) {
-        trackLead({ source: "build_your_own", email, phone: formData.phone });
+        trackLead({ source: "build_your_own", email, phone: formData.phone, eventId });
         saveLeadEmail(email);
         setFormData({});
         setCurrentStep(0);

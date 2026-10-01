@@ -1,21 +1,41 @@
+const TRACKING_KEY = "tracking";
+const PARAMS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "fbclid",
+];
+
+// First touch only: stored once per session on the landing page, never overwritten.
+// Read back through withTracking() in lib/track.js.
 export const saveTrackingData = () => {
   if (typeof window === "undefined") return;
+  try {
+    if (window.sessionStorage.getItem(TRACKING_KEY)) return;
 
-  const params = new URLSearchParams(window.location.search);
-  const hasNewTracking = params.get("gclid") || params.get("utm_source");
+    const params = new URLSearchParams(window.location.search);
+    const tracking = { landing_page: window.location.pathname };
 
-  if (!hasNewTracking) return;
+    PARAMS.forEach((key) => {
+      const value = params.get(key);
+      if (value) tracking[key] = value.slice(0, 500);
+    });
 
-  const tracking = {
-    gclid: params.get("gclid"),
-    utm_source: params.get("utm_source"),
-    utm_medium: params.get("utm_medium"),
-    utm_campaign: params.get("utm_campaign"),
-    utm_term: params.get("utm_term"),
-    utm_content: params.get("utm_content"),
-    referrer: document.referrer,
-    landing_page: window.location.href,
-  };
+    // Referrer without its query string (it can carry PII from other sites)
+    if (document.referrer) {
+      try {
+        const ref = new URL(document.referrer);
+        tracking.referrer = `${ref.origin}${ref.pathname}`;
+      } catch {
+        // malformed referrer; skip it
+      }
+    }
 
-  sessionStorage.setItem("tracking", JSON.stringify(tracking));
+    window.sessionStorage.setItem(TRACKING_KEY, JSON.stringify(tracking));
+  } catch {
+    // storage blocked; leads still submit without attribution
+  }
 };

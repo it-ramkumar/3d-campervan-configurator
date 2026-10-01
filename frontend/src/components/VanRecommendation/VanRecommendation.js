@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Heading1, RichParagraph, SpanTag, SecondaryButton } from '../Common/Common';
 import { ShowerHead, Armchair, Ruler, Zap } from "lucide-react"
 import { validateLead } from '@/lib/validateLead';
-import { trackLead, withTracking } from '@/lib/track';
+import { trackLead, withTracking, createEventId } from '@/lib/track';
 
 const OPTIONS = {
     van_length: [
@@ -63,17 +63,18 @@ export default function VanRecommendation() {
             return;
         }
 
+        const eventId = createEventId();
         setLoading(true);
         setError('');
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/recommend`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(withTracking(formData)),
+                body: JSON.stringify(withTracking({ ...formData, event_id: eventId, lead_source: 'quiz' })),
             });
             const data = await response.json();
             if (response.ok && data.success) {
-                trackLead({ source: 'quiz', email: formData.customer_email, phone: formData.customer_phone });
+                trackLead({ source: 'quiz', email: formData.customer_email, phone: formData.customer_phone, eventId });
                 setRecommendation(data);
                 setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth' }), 150);
             } else {

@@ -7,7 +7,8 @@ const LEAD_EMAIL_KEY = "bbv_lead_email";
 
 const isBrowser = () => typeof window !== "undefined";
 
-const makeEventId = () => {
+// Generate before the API call so the backend can store the same id Meta/Ads dedupe on
+export const createEventId = () => {
   try {
     if (isBrowser() && window.crypto?.randomUUID) return window.crypto.randomUUID();
   } catch {
@@ -28,9 +29,8 @@ export const toE164 = (phone) => {
   return `+${digits}`;
 };
 
-export const trackLead = ({ source, email, phone } = {}) => {
+export const trackLead = ({ source, email, phone, eventId = createEventId() } = {}) => {
   if (!isBrowser()) return;
-  const eventId = makeEventId();
 
   const userData = {};
   if (email) userData.email = String(email).trim().toLowerCase();

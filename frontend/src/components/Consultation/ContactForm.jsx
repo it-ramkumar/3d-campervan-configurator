@@ -7,7 +7,7 @@ import { Heading1, RichParagraph } from "../Common/Common";
 import { useRouter } from "next/navigation";
 import { contact } from "@/api/contact/contact";
 import { validateLead } from "@/lib/validateLead";
-import { trackLead, saveLeadEmail, cleanPageUrl } from "@/lib/track";
+import { trackLead, saveLeadEmail, cleanPageUrl, createEventId } from "@/lib/track";
 
 const EMPTY_FORM = { name: "", email: "", phone: "", message: "" };
 
@@ -46,6 +46,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
       formData.message.trim() ||
       (van?.title ? `Interested in ${van.title}` : "No message provided");
 
+    const eventId = createEventId();
     setLoading(true);
     try {
       await contact({
@@ -57,6 +58,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
         vanTitle: van?.title,
         vanPrice: isPriceValid ? Number(van.price) : 0,
         pageUrl: cleanPageUrl(),
+        event_id: eventId,
+        lead_source: leadSource,
       });
     } catch (error) {
       setSubmitError(error.message || "We couldn't send your message.");
@@ -64,7 +67,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
       return;
     }
 
-    trackLead({ source: leadSource, email: formData.email, phone: formData.phone });
+    trackLead({ source: leadSource, email: formData.email, phone: formData.phone, eventId });
     saveLeadEmail(formData.email);
     router.push(`/thank-you?source=${encodeURIComponent(leadSource)}`);
   };
