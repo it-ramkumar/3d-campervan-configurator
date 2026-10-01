@@ -235,7 +235,7 @@ export default function Footer() {
                   {["+1 (951) 441-9748", "+1 (951) 441-9719"].map((num) => (
                     <div key={num} className="flex items-center gap-2 group">
                       <Link
-                        href={`tel:${num.replace(/\D/g, "")}`}
+                        href={`tel:+${num.replace(/\D/g, "")}`}
                         className="text-sm hover:text-[#ED985F] transition-colors"
                         style={{ color: "rgba(251,251,249,0.6)" }}
                       >

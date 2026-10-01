@@ -32,7 +32,7 @@ export default function FloatingCallButton() {
         }`}
       >
         <a
-          href="tel:+1 (951) 441-9719"
+          href="tel:+19514419719"
           onClick={() => setIsMenuOpen(false)}
           className="flex items-center gap-3 bg-primary border border-white/10 text-white/90 px-4 py-3 rounded-xl shadow-lg hover:border-hover/40 hover:text-hover transition-all group"
         >
