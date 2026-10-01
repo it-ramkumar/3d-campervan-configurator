@@ -168,15 +168,23 @@
 }
 
 /* Dark form inputs */
+/* Solid backgrounds so text/placeholder contrast is predictable (WCAG AA 4.5:1) */
 .bbv-input {
-  background:  rgba(13, 38, 71, 0.5);
+  background:  #0D2647;
   border:      1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color:       #FBFBF9;
+  color:       #FBFBF9;                /* 14.6:1 on #0D2647 */
   font-family: var(--font-ui);
   transition:  box-shadow 0.2s ease, border-color 0.2s ease;
 }
-.bbv-input::placeholder { color: rgba(251, 251, 249, 0.25); }
+.bbv-input::placeholder { color: #A3ABB6; opacity: 1; } /* 6.5:1 */
+/* Light variant for inputs on white cards (booking form) */
+.bbv-input--light {
+  background:  #FFFFFF;
+  border-color: rgba(0, 31, 61, 0.3);
+  color:       #001F3D;                /* 16.6:1 on white */
+}
+.bbv-input--light::placeholder { color: #5B6B7C; } /* 5.5:1 on white */
 .bbv-input:focus {
   outline:     none;
   border-color: rgba(237, 152, 95, 0.5);

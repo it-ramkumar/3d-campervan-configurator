@@ -5,7 +5,33 @@ import PrimaryButton from "../Common/Button/PrimaryButton";
 import { Heading4, Heading3, RichParagraph, Heading1 } from "../Common/Common";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
-import { trackLead, withTracking, saveLeadEmail } from "@/lib/track";
+import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
+import { validateLead } from "@/lib/validateLead";
+
+const PACIFIC_TZ = "America/Los_Angeles";
+
+const getBrowserTz = () => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || PACIFIC_TZ;
+  } catch {
+    return PACIFIC_TZ;
+  }
+};
+
+// e.g. "Pacific Time (PDT)" or "Europe/Berlin (GMT+2)"
+const formatTzLabel = (tz, date = new Date()) => {
+  let abbr = "";
+  try {
+    abbr =
+      new Intl.DateTimeFormat("en-US", { timeZone: tz, timeZoneName: "short" })
+        .formatToParts(date)
+        .find((p) => p.type === "timeZoneName")?.value || "";
+  } catch {
+    // unknown zone; show the name only
+  }
+  const name = tz === PACIFIC_TZ ? "Pacific Time" : tz.replace(/_/g, " ");
+  return abbr ? `${name} (${abbr})` : name;
+};
 
 
 export default function BookingPage() {
@@ -51,6 +77,14 @@ export default function BookingPage() {
     summary: "",
     description: "",
   });
+  const [errors, setErrors] = useState({});
+  const [bookingError, setBookingError] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  // "local" = visitor's browser time zone, "pacific" = our office time
+  const [tzMode, setTzMode] = useState("local");
+  const browserTz = getBrowserTz();
+  const displayTz = tzMode === "pacific" ? PACIFIC_TZ : browserTz;
 
   // All your existing useEffect and handler functions...
   useEffect(() => {
@@ -70,57 +104,88 @@ export default function BookingPage() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const formatTimeSlot = (slotTime) => {
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const date = new Date(slotTime);
-    return date.toLocaleTimeString([], {
+    return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      timeZone: userTimeZone,
+      timeZone: displayTz,
     });
   };
 
-  useEffect(() => {
-    if (isLoggedIn && selectedDate) {
-      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // Date of a slot in the shown time zone (late-night slots can land on the next day)
+  const formatSlotDate = (slotTime) =>
+    new Date(slotTime).toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: displayTz,
+    });
 
-      fetch(
-        `${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(userTimeZone)}`,
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            console.error("Backend Error fetching slots:", data.error);
-            setSlots([]);
-          } else {
-            setSlots(data);
-          }
-        })
-        .catch((err) => {
-          console.error("Network error fetching slots:", err);
-          setSlots([]);
-        });
-    }
-  }, [isLoggedIn, selectedDate]);
+  useEffect(() => {
+    if (!isLoggedIn || !selectedDate) return;
+    let cancelled = false;
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(displayTz)}`,
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setSlots(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (!cancelled) setSlots([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isLoggedIn, selectedDate, displayTz]);
+
+  const handleReview = (e) => {
+    e.preventDefault();
+    const fieldErrors = validateLead(formData);
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length) return;
+    setBookingError("");
+    setBookingStep(4);
+  };
 
   const handleBooking = async () => {
-    if (!selectedSlot) return alert("Please select a time slot.");
-    if (!formData.name || !formData.email)
-      return alert("Name and Email are required.");
+    if (submitting) return;
+    setBookingError("");
 
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (!selectedSlot) {
+      setBookingError("Please pick a time slot first.");
+      return;
+    }
+    const fieldErrors = validateLead(formData);
+    if (Object.keys(fieldErrors).length) {
+      setErrors(fieldErrors);
+      setBookingStep(3);
+      return;
+    }
 
+    const eventId = createEventId();
     const bookingData = withTracking({
       ...formData,
+      name: formData.name.trim(),
+      email: formData.email.trim(),
       startTime: selectedSlot.start,
       endTime: selectedSlot.end,
-      timezone: userTimezone,
+      timezone: browserTz,
+      displayTimezone: displayTz,
       summary: formData.summary || "Meeting",
       description: formData.description || "",
+      event_id: eventId,
+      lead_source: "booking",
     });
 
     setSubmitting(true);
@@ -134,28 +199,21 @@ export default function BookingPage() {
         },
       );
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
-      if (!res.ok) {
-        alert(data.message || `Error: ${res.status}`);
+      if (!res.ok || data.success === false) {
+        setBookingError(data.message || data.error || "We couldn't book this time slot.");
         setSubmitting(false);
         return;
       }
 
-      // Slots state update (Optional, kyunki page change ho raha hai)
-      setSlots(
-        slots.map((s) =>
-          s.start === selectedSlot.start ? { ...s, available: false } : s,
-        ),
-      );
-
-      // Booking confirmed by the API: track once, then redirect without PII in the URL
-      trackLead({ source: "booking", email: formData.email, phone: formData.phone });
+      // Booking confirmed by the API: track once, then redirect without PII in the URL.
+      // submitting stays true so the button can't be pressed again during navigation.
+      trackLead({ source: "booking", email: formData.email, phone: formData.phone, eventId });
       saveLeadEmail(formData.email);
       router.push("/thank-you?source=booking");
-
-    } catch (err) {
-      alert("Network error - check console");
+    } catch {
+      setBookingError("We couldn't reach our booking system.");
       setSubmitting(false);
     }
   };
@@ -163,8 +221,8 @@ export default function BookingPage() {
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(meetLink)
-      .then(() => alert("Meeting link copied to clipboard!"))
-      .catch((err) => console.error("Failed to copy: ", err));
+      .then(() => setCopied(true))
+      .catch(() => setCopied(false));
   };
 
   const resetBooking = () => {
@@ -179,6 +237,9 @@ export default function BookingPage() {
     });
     setBookingStep(1);
     setMeetLink("");
+    setErrors({});
+    setBookingError("");
+    setCopied(false);
   };
 
   const getDaysInMonth = (date) => {
@@ -424,10 +485,21 @@ export default function BookingPage() {
                     </RichParagraph>
 
                     <Heading1 variant="card" text="Available Slots" textColor="text-primary" />
-                    <RichParagraph variant="sub" className="!text-primary/70 mb-1">
-                      {formatDate(selectedDate)}
-                    </RichParagraph>
-
+                    <p className="mt-2 text-xs text-primary/70">
+                      Times shown in{" "}
+                      <strong className="text-primary">{formatTzLabel(displayTz)}</strong>
+                    </p>
+                    {browserTz !== PACIFIC_TZ && (
+                      <button
+                        type="button"
+                        onClick={() => setTzMode((m) => (m === "pacific" ? "local" : "pacific"))}
+                        className="mt-1 text-xs font-bold text-primary underline hover:text-hover"
+                      >
+                        {tzMode === "pacific"
+                          ? `Show in my time zone (${formatTzLabel(browserTz)})`
+                          : "Show in Pacific Time"}
+                      </button>
+                    )}
                   </header>
 
                   {slots.length === 0 ? (
@@ -448,7 +520,7 @@ export default function BookingPage() {
                         </svg>
                       </div>
                       <RichParagraph variant="sub" className="!text-primary/70 mb-2">
-                        No slots available for this date
+                        No slots available for {formatDate(selectedDate)}
                       </RichParagraph>
 
                       <button
@@ -460,25 +532,39 @@ export default function BookingPage() {
                     </div>
                   ) : (
                     <>
-                      <div className="grid grid-cols-2 gap-3 mb-8">
-                        {slots
+                      {Object.entries(
+                        slots
                           .filter((s) => s.available !== false)
-                          .map((s, i) => (
-                            <button
-                              key={i}
-                              onClick={() => {
-                                setSelectedSlot(s);
-                                setBookingStep(3);
-                              }}
-                              className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot?.start === s.start
-                                ? "border-hover bg-hover/10 text-hover"
-                                : "border-secondary/10 hover:border-hover hover:text-hover bg-primary/5 text-primary/70"
-                                }`}
-                            >
-                              {formatTimeSlot(s.start)}
-                            </button>
-                          ))}
-                      </div>
+                          .reduce((groups, s) => {
+                            const day = formatSlotDate(s.start);
+                            (groups[day] ||= []).push(s);
+                            return groups;
+                          }, {}),
+                      ).map(([day, daySlots]) => (
+                        <div key={day} className="mb-6">
+                          <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary/70">
+                            {day}
+                          </h3>
+                          <div className="grid grid-cols-2 gap-3">
+                            {daySlots.map((s) => (
+                              <button
+                                key={s.start}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedSlot(s);
+                                  setBookingStep(3);
+                                }}
+                                className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot && new Date(selectedSlot.start).getTime() === new Date(s.start).getTime()
+                                  ? "border-hover bg-hover/10 text-hover"
+                                  : "border-secondary/10 hover:border-hover hover:text-hover bg-primary/5 text-primary/70"
+                                  }`}
+                              >
+                                {formatTimeSlot(s.start)}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                       <button
                         onClick={() => setBookingStep(1)}
                         className="w-full py-3 text-[10px] font-bold uppercase tracking-widest text-primary/30 hover:text-primary transition-colors"
@@ -501,93 +587,83 @@ export default function BookingPage() {
                     <Heading1 variant="card" text="Meeting Information" textColor="text-primary" />
                   </header>
 
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-primary/70 text-sm font-medium mb-1 block">
-                        Full Name *
-                      </label>
-                      <input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Enter your full name"
-                        className="bbv-input w-full px-4 py-3"
-                        required
-                      />
+                  <form onSubmit={handleReview} noValidate className="space-y-6">
+                    <div className="space-y-4">
+                      {[
+                        { name: "name", label: "Full Name *", type: "text", autoComplete: "name", placeholder: "Enter your full name" },
+                        { name: "email", label: "Email Address *", type: "email", autoComplete: "email", placeholder: "your.email@example.com" },
+                        { name: "phone", label: "Phone Number (optional)", type: "tel", autoComplete: "tel", placeholder: "+1 (555) 123-4567" },
+                      ].map((f) => (
+                        <div key={f.name}>
+                          <label htmlFor={`booking-${f.name}`} className="text-primary/70 text-sm font-medium mb-1 block">
+                            {f.label}
+                          </label>
+                          <input
+                            id={`booking-${f.name}`}
+                            name={f.name}
+                            type={f.type}
+                            autoComplete={f.autoComplete}
+                            value={formData[f.name]}
+                            onChange={handleChange}
+                            placeholder={f.placeholder}
+                            aria-invalid={!!errors[f.name]}
+                            aria-describedby={errors[f.name] ? `booking-${f.name}-error` : undefined}
+                            className="bbv-input bbv-input--light w-full px-4 py-3"
+                          />
+                          {errors[f.name] && (
+                            <p id={`booking-${f.name}-error`} role="alert" className="mt-1 text-xs font-semibold text-red-700">
+                              {errors[f.name]}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+
+                      <div>
+                        <label htmlFor="booking-summary" className="text-primary/70 text-sm font-medium mb-1 block">
+                          Meeting Topic
+                        </label>
+                        <input
+                          id="booking-summary"
+                          name="summary"
+                          value={formData.summary}
+                          onChange={handleChange}
+                          placeholder="Brief topic or purpose of meeting"
+                          className="bbv-input bbv-input--light w-full px-4 py-3"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="booking-description" className="text-primary/70 text-sm font-medium mb-1 block">
+                          Additional Notes
+                        </label>
+                        <textarea
+                          id="booking-description"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleChange}
+                          placeholder="Any specific topics or questions you'd like to discuss..."
+                          className="bbv-input bbv-input--light w-full px-4 py-3 resize-none"
+                          rows="3"
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="text-primary/70 text-sm font-medium mb-1 block">
-                        Email Address *
-                      </label>
-                      <input
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="your.email@example.com"
-                        className="bbv-input w-full px-4 py-3"
-                        required
-                      />
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => setBookingStep(2)}
+                        className="flex-1 py-4 rounded-lg bbv-glass text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary transition-colors"
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="submit"
+                        className="flex-1 py-4 rounded-lg bg-hover text-primary text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all"
+                      >
+                        Review Booking
+                      </button>
                     </div>
-
-                    <div>
-                      <label className="text-primary/70 text-sm font-medium mb-1 block">
-                        Phone Number
-                      </label>
-                      <input
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="+1 (555) 123-4567"
-                        className="bbv-input w-full px-4 py-3"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-primary/70 text-sm font-medium mb-1 block">
-                        Meeting Topic
-                      </label>
-                      <input
-                        name="summary"
-                        value={formData.summary}
-                        onChange={handleChange}
-                        placeholder="Brief topic or purpose of meeting"
-                        className="bbv-input w-full px-4 py-3"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-primary/70 text-sm font-medium mb-1 block">
-                        Additional Notes
-                      </label>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Any specific topics or questions you'd like to discuss..."
-                        className="bbv-input w-full px-4 py-3 resize-none"
-                        rows="3"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 pt-4">
-                    <button
-                      onClick={() => setBookingStep(2)}
-                      className="flex-1 py-4 rounded-lg bbv-glass text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary transition-colors"
-                    >
-                      Back
-                    </button>
-                    <button
-                      onClick={() => setBookingStep(4)}
-                      disabled={!formData.name || !formData.email}
-                      className="flex-1 py-4 rounded-lg bg-hover text-primary text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Review Booking
-                    </button>
-                  </div>
+                  </form>
                 </div>
               )}
 
@@ -608,7 +684,7 @@ export default function BookingPage() {
                         Date
                       </RichParagraph>
                       <RichParagraph variant="sub" className="!text-primary font-bold">
-                        {formatDate(selectedDate)}
+                        {selectedSlot ? formatSlotDate(selectedSlot.start) : formatDate(selectedDate)}
                       </RichParagraph>
 
                     </div>
@@ -620,6 +696,14 @@ export default function BookingPage() {
                        {selectedSlot && formatTimeSlot(selectedSlot.start)}
                       </RichParagraph>
 
+                    </div>
+                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
+                      <RichParagraph variant="sub">
+                        Time Zone
+                      </RichParagraph>
+                      <RichParagraph variant="sub" className="!text-primary font-bold text-right">
+                        {formatTzLabel(displayTz, selectedSlot ? new Date(selectedSlot.start) : undefined)}
+                      </RichParagraph>
                     </div>
                     <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
 
@@ -654,16 +738,30 @@ Phone
                  
                   </div>
 
+                  {bookingError && (
+                    <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                      {bookingError} Please try another time, or call us at{" "}
+                      <a href="tel:+19514419719" className="font-bold underline">
+                        (951) 441-9719
+                      </a>
+                      .
+                    </div>
+                  )}
+
                   <div className="flex gap-3">
                     <button
+                      type="button"
                       onClick={() => setBookingStep(3)}
+                      disabled={submitting}
                       className="flex-1 py-4 rounded-lg bbv-glass text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary transition-colors"
                     >
                       Edit Details
                     </button>
                     <button
+                      type="button"
                       onClick={handleBooking}
                       disabled={submitting}
+                      aria-busy={submitting}
                       className="flex-1 py-4 rounded-lg bg-hover text-primary text-[10px] font-bold uppercase tracking-widest hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submitting ? "Booking..." : "Confirm & Schedule"}
@@ -705,7 +803,7 @@ Phone
                         onClick={copyToClipboard}
                         className="text-hover font-bold text-[10px] uppercase tracking-widest hover:underline whitespace-nowrap"
                       >
-                        Copy Link
+                        {copied ? "Copied!" : "Copy Link"}
                       </button>
                     </div>
                   )}
