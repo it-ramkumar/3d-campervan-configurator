@@ -62,31 +62,10 @@ const jsonLd = {
     "itemListElement": initialJobs.map((job, index) => ({
       "@type": "ListItem",
       "position": index + 1,
-      "item": {
-        "@type": "JobPosting",
-        "title": job.title,
-        "description": job.description,
-        "datePosted": job.createdAt || new Date().toISOString(),
-        "employmentType": job.type || "FULL_TIME",
-
-        // ✅ Remote job key field
-        "jobLocationType": "TELECOMMUTE",
-
-        // ✅ Optional (global applicants allowed)
-        "applicantLocationRequirements": {
-          "@type": "Country",
-          "name": "Worldwide"
-        },
-
-        "hiringOrganization": {
-          "@type": "Organization",
-          "name": "Big Bear Vans",
-          "sameAs": "https://www.bigbearvans.com",
-          "logo": "https://www.bigbearvans.com/images/blackLogo.webp"
-        },
-
-        "url": "https://www.bigbearvans.com/careers"
-      }
+      // JobPosting lives on each job's own page (/careers/[id]) — Google
+      // doesn't allow JobPosting markup on listing pages
+      "name": job.title,
+      "url": `https://www.bigbearvans.com/careers/${job._id}`
     }))
   }
 };
@@ -144,7 +123,7 @@ const jsonLd = {
             <div className="bg-primary text-secondary p-8 rounded-lg shadow-lg">
               <Heading4 text="Benefits" textColor="text-secondary" />
               <ul className="space-y-3 text-sm mt-4">
-                <li className="flex items-center gap-2">✔ 100% Remote Workflow</li>
+                <li className="flex items-center gap-2">✔ Remote & Onsite Roles</li>
                 <li className="flex items-center gap-2">✔ Competitive Salary (USD)</li>
                 <li className="flex items-center gap-2">✔ Global Impact</li>
               </ul>

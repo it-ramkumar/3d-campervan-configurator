@@ -58,7 +58,7 @@ export default function MapSection() {
           Big Bear Vans Location
         </h3>
         <p className="text-sm text-white/70 leading-relaxed">
-          320 W Big Bear Blvd, Big Bear City, CA 92314, USA
+          320 W Big Bear Blvd, Big Bear, CA 92314, USA
         </p>
       </div>
     </div>

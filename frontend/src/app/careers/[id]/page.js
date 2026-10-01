@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Heading2, Heading3, Heading4, RichParagraph } from "@/components/Common/Common";
 import JobDetailsClient from "../../../components/Career/CareerDetail";
+import { generateJobPostingSchema } from "@/schema/jobPosting";
 
 // ✅ 1. Dynamic SEO Metadata
 export async function generateMetadata({ params }) {
@@ -49,10 +50,17 @@ export default async function JobPage({ params }) {
   const job = await getJob(id);
   if (!job) notFound();
 
+  const jobSchema = generateJobPostingSchema(job, id);
   const cleanText = (text) => text?.replace(/#/g, "");
 
   return (
     <div className="min-h-screen bg-secondary">
+      {jobSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jobSchema) }}
+        />
+      )}
       {/* Header Section */}
       <div className="bg-white border-b border-primary/10">
         <div className="max-w-7xl mx-auto px-4 py-10">

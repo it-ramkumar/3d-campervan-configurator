@@ -1,3 +1,5 @@
+import { PUBLISHER } from "./business";
+
 // helpers/sprinterGuideSchema.js
 
 export const generateSprinterGuideSchema = () => {
@@ -16,14 +18,7 @@ and 4x4 options with Big Bear Vans' complete buying guide.`,
       "@type": "Organization",
       "name": "Big Bear Vans"
     },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Big Bear Vans",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
-      }
-    },
+    "publisher": PUBLISHER,
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": url

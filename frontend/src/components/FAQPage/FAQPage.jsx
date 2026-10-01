@@ -80,7 +80,7 @@ Address
           <div className="bbv-divider mb-4" />
 
           <RichParagraph variant='sub' className="flex items-center justify-center md:justify-start gap-2">
-            <MapPin size={16} className="text-hover shrink-0" /> 320 W Big Bear Blvd, CA
+            <MapPin size={16} className="text-hover shrink-0" /> 320 W Big Bear Blvd, Big Bear, CA 92314
           </RichParagraph>
         </div>
         <div>

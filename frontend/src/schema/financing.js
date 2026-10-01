@@ -1,45 +1,30 @@
+import { SITE_URL, BUSINESS_REF, AREA_SERVED } from "./business";
+
 export const generateFinancingSchema = () => ({
   "@context": "https://schema.org",
   "@type": "FinancialService",
-  "@id": "https://www.bigbearvans.com/financing/#service",
+  "@id": `${SITE_URL}/financing/#service`,
   "name": "Big Bear Vans Financing Options",
   "description": `Flexible financing for your custom Sprinter or Transit build.
 15-year RV loans via Trident Funding, 20-30% down.
 Get pre-qualified with Big Bear Vans today.`,
-  "url": "https://www.bigbearvans.com/financing",
+  "url": `${SITE_URL}/financing`,
+  "image": `${SITE_URL}/Home/home-google-meet-big-bear-vans.webp`,
   "serviceType": [
     "RV Loans",
     "Custom Van Conversion Financing",
     "All-in-one Chassis & Build Loans"
   ],
-  "provider": {
-    "@type": "LocalBusiness",
-    "@id": "https://www.bigbearvans.com/#organization",
-    "name": "Big Bear Vans",
-    "image": "https://www.bigbearvans.com/Home/home-google-meet-big-bear-vans.webp",
-    "telephone": "+1-951-441-9719",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "320 W Big Bear Blvd, Big Bear, CA 92314, United States",
-      "addressLocality": "Big Bear City",
-      "addressRegion": "CA",
-      "postalCode": "92314",
-      "addressCountry": "US"
-    }
-  },
-  "areaServed": {
-    "@type": "Country",
-    "name": "United States"
-  },
+  "provider": BUSINESS_REF,
+  "areaServed": AREA_SERVED,
   "offers": {
     "@type": "Offer",
     "description": "Specialized RV financing with 20-30% down payment and terms up to 180 months (15 years).",
     "category": "RV Finance",
-    "priceCurrency": "USD",
-    "url": "https://www.bigbearvans.com/financing"
+    "url": `${SITE_URL}/financing`
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://www.bigbearvans.com/financing"
+    "@id": `${SITE_URL}/financing`
   }
 });

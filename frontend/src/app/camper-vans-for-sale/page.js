@@ -1,4 +1,5 @@
 import React from 'react';
+import { SITE_URL, BUSINESS_REF } from "@/schema/business";
 import { vansByStatus } from "@/api/van/van-by-status";
 import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
 import VanListClient from "../../components/Vansforsale/VanListClient"
@@ -109,51 +110,51 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         || van.van_listing.title
         || "Custom camper van by Big Bear Vans.";
 
+      const url = `${SITE_URL}/camper-vans-for-sale/${van.slug}`;
+      const base = {
+        "name": van.van_listing.title,
+        "url": url,
+        "image": imageUrl,
+        "description": description,
+      };
+
+      // Only available vans have a real price → Product + Offer.
+      // Pending / coming-soon vans have no buyable price, so they're a Service
+      // (a Product without a price is flagged invalid, and "0" is misleading).
+      const item = van.status === "available" && hasPrice
+        ? {
+          ...base,
+          "@type": "Product",
+          "brand": { "@type": "Brand", "name": "Big Bear Vans" },
+          "offers": {
+            "@type": "Offer",
+            "url": url,
+            "price": price,
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            // Vans are picked up at the workshop, never shipped
+            "availableDeliveryMethod": "https://schema.org/OnSitePickup",
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "doesNotShip": true,
+              "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+            },
+            "seller": BUSINESS_REF
+          }
+        }
+        : {
+          ...base,
+          "@type": "Service",
+          "serviceType": "Custom Camper Van Conversion",
+          "provider": BUSINESS_REF,
+          "areaServed": "US"
+        };
+
       return {
         "@type": "ListItem",
         "position": index + 1,
-        "item": {
-          "@type": "Product",
-          "name": van.van_listing.title,
-          "url": `https://www.bigbearvans.com/camper-vans-for-sale/${van.slug}`,
-          "image": imageUrl,
-          "description": description,
-          "brand": {
-            "@type": "Brand",
-            "name": "Big Bear Vans"
-          },
-
-          "offers": {
-            "@type": "Offer",
-            "priceCurrency": "USD",
-            // ✅ Price fix — Google ko number chahiye
-            ...(hasPrice
-              ? {
-                "price": price,
-                "priceValidUntil": "2026-12-31"
-              }
-              : {
-                "price": "0",
-                "priceSpecification": {
-                  "@type": "PriceSpecification",
-                  "price": "0",
-                  "priceCurrency": "USD",
-                  "description": "Contact for pricing"
-                }
-              }
-            ),
-            "availability": van.status === "available"
-              ? "https://schema.org/InStock"
-              : van.status === "sale_pending"
-                ? "https://schema.org/SoldOut"
-                : "https://schema.org/PreOrder",
-            "url": `https://www.bigbearvans.com/camper-vans-for-sale/${van.slug}`,
-            "seller": {
-              "@type": "Organization",
-              "name": "Big Bear Vans"
-            }
-          }
-        }
+        "item": item
       };
     })
   };

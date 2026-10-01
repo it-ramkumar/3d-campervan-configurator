@@ -1,39 +1,22 @@
+import { SITE_URL, BUSINESS } from "./business";
+
 export const generateAboutSchema = () => ({
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "AboutPage",
-      "@id": "https://www.bigbearvans.com/about-us/#webpage",
-      "url": "https://www.bigbearvans.com/about-us",
+      "@id": `${SITE_URL}/about-us/#webpage`,
+      "url": `${SITE_URL}/about-us`,
       "name": "About Big Bear Vans - Our Story & Team | Big Bear Vans",
       "description": `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
 Transit camper van conversions.`,
-      "publisher": { "@id": "https://www.bigbearvans.com/#organization" }
+      "inLanguage": "en-US",
+      "about": { "@id": BUSINESS["@id"] },
+      "publisher": { "@id": BUSINESS["@id"] }
     },
     {
-      "@type": "LocalBusiness",
-      "@id": "https://www.bigbearvans.com/#organization",
-      "name": "Big Bear Vans",
-      "image": "https://www.bigbearvans.com/images/mission.webp",
-"description": `Meet the team behind Big Bear Vans. Founded by van lifers
- Artur & Anna, we've delivered 105+ custom Sprinter and
-Transit camper van conversions.`,
-      "url": "https://www.bigbearvans.com",
-      "telephone": "+1-951-441-9719",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "320 W Big Bear Blvd",
-        "addressLocality": "Big Bear City",
-        "addressRegion": "CA",
-        "postalCode": "92314",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 34.260751,
-        "longitude": -116.8497999
-      },
+      ...BUSINESS,
       "founder": [
         {
           "@type": "Person",
@@ -44,7 +27,7 @@ Transit camper van conversions.`,
           "@type": "Person",
           "name": "Anna",
           "jobTitle": "Co-Founder & Design Lead",
-          "image": "https://www.bigbearvans.com/custom build/anna-arthur-big-bear-vans.webp"
+          "image": `${SITE_URL}/custom%20build/anna-arthur-big-bear-vans.webp`
         }
       ],
       "knowsAbout": [
@@ -53,13 +36,6 @@ Transit camper van conversions.`,
         "Ford Transit Conversions",
         "Family Campervans",
         "CNC Engineered Cabinetry"
-      ],
-      "sameAs": [
-        "https://www.instagram.com/bigbearvans",
-        "https://www.facebook.com/bigbearvans",
-        "https://twitter.com/bigbearvans",
-        "https://www.linkedin.com/company/big-bear-vans",
-        "https://www.tiktok.com/@bigbearvans_"
       ]
     }
   ]

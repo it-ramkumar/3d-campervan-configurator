@@ -215,10 +215,10 @@ export default function Footer() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm leading-snug" style={{ color: "rgba(251,251,249,0.6)" }}>
-                    320 W Big Bear Blvd, Big Bear City, California, 92314, USA
+                    320 W Big Bear Blvd, Big Bear, CA 92314, USA
                   </span>
                   <button
-                    onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear City, California, 92314, USA")}
+                    onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear, CA 92314, USA")}
                     className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#ED985F] opacity-40 hover:opacity-100 transition-opacity mt-2 w-fit"
                   >
                     <FaCopy /> Copy Address

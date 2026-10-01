@@ -1,10 +1,14 @@
+import { SITE_URL, BUSINESS_REF } from "./business";
+
+const PAGE_URL = `${SITE_URL}/build-your-own-camper-van`;
+
 export const generateInquirySchema = () => ({
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://www.bigbearvans.com/build-your-own-camper-van#webpage",
-      "url": "https://www.bigbearvans.com/build-your-own-camper-van",
+      "@id": `${PAGE_URL}#webpage`,
+      "url": PAGE_URL,
       "name": "Build Your Own Custom Camper Van - Get a Quote | Big Bear Vans",
       "description": `Configure your dream Mercedes Sprinter or Ford
 Transit camper van. Choose your layout, electrical system,
@@ -13,38 +17,13 @@ and off-grid power needs, then get a custom quote.`,
     },
     {
       "@type": "Service",
-      "@id": "https://www.bigbearvans.com/build-your-own-camper-van#service",
+      "@id": `${PAGE_URL}#service`,
       "name": "Custom Van Configuration & Quote",
       "serviceType": "Campervan Conversion Design",
       "description": "Interactive tool to design custom van layouts and receive pricing estimates.",
-      "provider": {
-        "@type": "LocalBusiness",
-        "@id": "https://www.bigbearvans.com/#organization",
-        "name": "Big Bear Vans",
-        "url": "https://www.bigbearvans.com",
-        "logo": "https://www.bigbearvans.com/images/blackLogo.webp",
-        "telephone": "+1-951-441-9719",
-         "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "320 W Big Bear Blvd, Big Bear, CA 92314, United States",
-        "addressLocality": "Big Bear City",
-        "addressRegion": "CA",
-        "postalCode": "92314",
-        "addressCountry": "US"
-      },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "customer service",
-          "telephone": "+1-951-441-9719",
-          "areaServed": "US",
-          "availableLanguage": "en"
-        }
-      },
+      "provider": BUSINESS_REF,
       "areaServed": "US",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://www.bigbearvans.com/build-your-own-camper-van"
-      }
+      "mainEntityOfPage": { "@id": `${PAGE_URL}#webpage` }
     }
   ]
 });

@@ -1,3 +1,5 @@
+import { PUBLISHER } from "./business";
+
 export const generateProcessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "HowTo",
@@ -38,9 +40,5 @@ including vehicle sourcing and lifetime support.`,
       "url": "https://www.bigbearvans.com/our-process#step5"
     }
   ],
-  "publisher": {
-    "@type": "Organization",
-    "name": "Big Bear Vans",
-    "logo": "https://www.bigbearvans.com/images/blackLogo.webp"
-  }
+  "publisher": PUBLISHER
 })

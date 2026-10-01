@@ -6,7 +6,7 @@ const faqData = [
   {
     category: "About Big Bear Vans",
     questions: [
-      { q: "Where is Big Bear Vans located? What are your working hours?", a: "The exact location of Big Bear Vans is 320 W Big Bear Blvd, Big Bear City, CA 92314, USA. We’re available Mon-Fri from 9 AM to 6 PM and on Saturday from 10 AM to 4 PM." },
+      { q: "Where is Big Bear Vans located? What are your working hours?", a: "The exact location of Big Bear Vans is 320 W Big Bear Blvd, Big Bear, CA 92314, USA. We’re available Mon-Fri from 9 AM to 6 PM and on Saturday from 10 AM to 4 PM. Sunday visits are by appointment." },
       // Duplicate removed: "What models of vans do you work on?"
       { q: "What makes you different?", a: "Unlike other companies, we are true custom builders. We don’t hand over general templates or fixed layouts; instead, our campervans are built exactly according to our clients’ choice." },
       { q: "Can you install van components for me?", a: "Yes, at Big Bear Vans, we also install various van components, including swivel seats, aluminum bathrooms, custom cabinets, etc." },

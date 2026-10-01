@@ -124,7 +124,7 @@ export default function ShowroomAndTours() {
 
               <MapPin size={14} className="text-hover" />
               <RichParagraph variant="sub" textColor="text-hover">
-                Big Bear Lake, CA
+                Big Bear, CA
               </RichParagraph>
 
 

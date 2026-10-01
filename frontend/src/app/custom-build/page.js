@@ -1,4 +1,5 @@
 import React from 'react'
+import { BUSINESS_REF } from "@/schema/business";
 import CustomBuild from "../../components/CustomBuild/CustomBuild"
 
 export async function generateMetadata() {
@@ -32,25 +33,7 @@ const jsonLd = {
   "@type": "Service",
   "name": "Custom Camper Van Build",
   "serviceType": "Custom Camper Van Conversion",
-  "provider": {
-    "@type": "LocalBusiness",
-    "name": "Big Bear Vans",
-    "url": "https://www.bigbearvans.com",
-    "telephone": "+1-951-441-9719",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "320 W Big Bear Blvd",
-      "addressLocality": "Big Bear City",
-      "addressRegion": "CA",
-      "postalCode": "92314",
-      "addressCountry": "US"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "reviewCount": "105"
-    }
-  },
+  "provider": BUSINESS_REF,
   "description": `100% custom Mercedes Sprinter & Ford Transit camper
 van conversions. You choose the layout, materials & systems.
  105+ builds delivered - get a free quote.`,

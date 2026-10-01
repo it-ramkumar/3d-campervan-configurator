@@ -89,19 +89,6 @@ export default async function Home() {
 
   const homeSchemaData = generateHomeSchema(faqs);
 
-  // FAQs JSON-LD structured data
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  };
 
   return (
     <>
@@ -109,7 +96,7 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([homeSchemaData, faqSchema]),
+          __html: JSON.stringify(homeSchemaData),
         }}
       />
 

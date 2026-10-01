@@ -1,47 +1,24 @@
+import { SITE_URL, BUSINESS } from "./business";
+
+// Showroom is the same physical location as the business, so it reuses the
+// main entity instead of declaring a second LocalBusiness at the same address
 export const generateShowroomSchema = (heroImage) => ({
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Big Bear Vans Showroom & Workshop",
-  "image": heroImage,
-  "@id": "https://www.bigbearvans.com/showroom",
-  "url": "https://www.bigbearvans.com/showroom",
-  "telephone": "+1-951-441-9719",
-   "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "320 W Big Bear Blvd, Big Bear, CA 92314, United States",
-        "addressLocality": "Big Bear City",
-        "addressRegion": "CA",
-        "postalCode": "92314",
-        "addressCountry": "US"
-      },
-   "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 34.260751,
-        "longitude": -116.8497999
-      },
-  "openingHoursSpecification": [
+  "@graph": [
     {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "18:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Saturday",
-      "opens": "10:00",
-      "closes": "16:00"
-    }
-  ],
-  "menu": "https://www.bigbearvans.com/van-layouts",
-  "description": `Tour Big Bear Vans' California showroom and workshop.
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/showroom/#webpage`,
+      "url": `${SITE_URL}/showroom`,
+      "name": "Big Bear Vans Showroom & Workshop",
+      "description": `Tour Big Bear Vans' California showroom and workshop.
  See finished camper van builds in person, meet our team,
 and start your custom conversion.`,
- "sameAs": [
-        "https://www.instagram.com/bigbearvans",
-        "https://www.facebook.com/bigbearvans",
-        "https://twitter.com/bigbearvans",
-        "https://www.linkedin.com/company/big-bear-vans",
-        "https://www.tiktok.com/@bigbearvans_"
-      ]
+      "inLanguage": "en-US",
+      "about": { "@id": BUSINESS["@id"] },
+      ...(heroImage && {
+        "primaryImageOfPage": heroImage.startsWith("http") ? heroImage : `${SITE_URL}${heroImage}`
+      })
+    },
+    BUSINESS
+  ]
 });

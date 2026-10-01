@@ -1,3 +1,5 @@
+import { BUSINESS } from "./business";
+
 export const generateVanMatchmakerSchema = (faqs) => {
   const baseUrl = "https://www.bigbearvans.com";
   const currentUrl = `${baseUrl}/van-matchmaker`;
@@ -37,35 +39,14 @@ export const generateVanMatchmakerSchema = (faqs) => {
             "@type": "EntryPoint",
             "urlTemplate": currentUrl,
             "actionPlatform": [
-              "http://schema.org/DesktopWebPlatform",
-              "http://schema.org/MobileWebPlatform",
+              "https://schema.org/DesktopWebPlatform",
+              "https://schema.org/MobileWebPlatform",
             ],
           },
           "name": "Take the Van Matchmaker Quiz",
         },
       },
-      {
-        "@type": "LocalBusiness",
-        "@id": `${baseUrl}/#organization`,
-        "name": "Big Bear Vans",
-        "image": `${baseUrl}/images/blackLogo.webp`,
-        "url": baseUrl,
-        "telephone": "+1-951-441-9719",
-        "priceRange": "$$$",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "320 W Big Bear Blvd",
-          "addressLocality": "Big Bear City",
-          "addressRegion": "CA",
-          "postalCode": "92314",
-          "addressCountry": "US",
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 34.260751,
-          "longitude": -116.8497999,
-        },
-      },
+      BUSINESS,
     ],
   };
 

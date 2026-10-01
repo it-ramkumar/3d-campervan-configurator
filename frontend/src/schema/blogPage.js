@@ -1,3 +1,5 @@
+import { PUBLISHER, SITE_URL } from "./business";
+
 export const generateBlogListingSchema = (blogs, currentPage) => {
 
   const baseUrl = "https://www.bigbearvans.com/blog";
@@ -23,14 +25,7 @@ Transit comparisons, cost breakdowns, and more.`,
       "@id": currentUrl
     },
 
-    "publisher": {
-      "@type": "Organization",
-      "name": "Big Bear Vans",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
-      }
-    },
+    "publisher": PUBLISHER,
 
     // 👇 Google ko ordered content structure milta hai
     "blogPost": blogs.map((blog, index) => {
@@ -61,22 +56,15 @@ Transit comparisons, cost breakdowns, and more.`,
 
         "url": `https://www.bigbearvans.com/blog/${blog.slug}`,
 
-        "datePublished": publishDate,
-        "dateModified": modifiedDate,
+        ...(publishDate && { "datePublished": publishDate }),
+        ...(modifiedDate && { "dateModified": modifiedDate }),
 
-        "author": {
-          "@type": "Person",
-          "name": "Artur & Anna"
-        },
+        "author": [
+          { "@type": "Person", "name": "Artur", "url": `${SITE_URL}/about-us` },
+          { "@type": "Person", "name": "Anna", "url": `${SITE_URL}/about-us` }
+        ],
 
-        "publisher": {
-          "@type": "Organization",
-          "name": "Big Bear Vans",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://www.bigbearvans.com/images/blackLogo.webp"
-          }
-        },
+        "publisher": PUBLISHER,
 
         "mainEntityOfPage": {
           "@type": "WebPage",

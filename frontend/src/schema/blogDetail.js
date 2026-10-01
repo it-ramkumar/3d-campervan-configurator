@@ -1,7 +1,10 @@
+import { PUBLISHER, SITE_URL } from "./business";
+
 export const generateBlogSchema = (blog, currentUrl) => {
   if (!blog) return null;
 
-  const publishDate = blog.date || blog.createdAt || new Date().toISOString();
+  // no `new Date()` fallback — a fake "today" date changes on every crawl
+  const publishDate = blog.date || blog.createdAt;
   const modifiedDate = blog.updatedAt || publishDate;
 
   return {
@@ -21,23 +24,15 @@ export const generateBlogSchema = (blog, currentUrl) => {
       ? blog.gallery
       : ["https://www.bigbearvans.com/images/blackLogo.webp"],
 
-    "datePublished": publishDate,
-    "dateModified": modifiedDate,
+    ...(publishDate && { "datePublished": publishDate }),
+    ...(modifiedDate && { "dateModified": modifiedDate }),
 
-    "author": {
-      "@type": "Person",
-      "name": "Artur & Anna",
-      "url": "https://www.bigbearvans.com/about-us"
-    },
+    "author": [
+      { "@type": "Person", "name": "Artur", "url": `${SITE_URL}/about-us` },
+      { "@type": "Person", "name": "Anna", "url": `${SITE_URL}/about-us` }
+    ],
 
-    "publisher": {
-      "@type": "Organization",
-      "name": "Big Bear Vans",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.bigbearvans.com/images/blackLogo.webp"
-      }
-    },
+    "publisher": PUBLISHER,
 
     "articleSection": "Camper Van Guides",
     "inLanguage": "en-US",

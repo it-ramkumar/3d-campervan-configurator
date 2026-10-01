@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { SITE_URL, BUSINESS_REF } from "@/schema/business";
 import VanPage from "../../../components/VanDetail/VanListing";
 
 // --- Dynamic Metadata for SEO ---
@@ -59,44 +60,54 @@ export default async function Page({ params }) {
   // (some listings were saved with a stray "1" or "2" before the real price was set).
   const price = vanDetail?.van?.van_listing?.price;
   const hasPrice = price && price >= 10;
-  const jsonLd = {
+  const listing = vanDetail.van.van_listing;
+  const url = `${SITE_URL}/camper-vans-for-sale/${slug}`;
+  const base = {
     "@context": "https://schema.org/",
-    "@type": "Product",
-    "name": vanDetail.van.van_listing?.title,
-    "image": vanDetail.van.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
-    "description": vanDetail.van.van_listing?.subtitle,
-    "brand": {
-      "@type": "Brand",
-      "name": "Big Bear Vans"
-    },
-    ...(hasPrice && {
+    "name": listing?.title,
+    "url": url,
+    // Google needs absolute image URLs; some gallery entries are site-relative
+    "image": vanDetail.van.gallery?.length
+      ? vanDetail.van.gallery.map((img) => encodeURI(img.startsWith("http") ? img : `${SITE_URL}${img}`))
+      : [`${SITE_URL}/images/blackLogo.webp`],
+    "description": listing?.subtitle || listing?.title,
+  };
+
+  // Only available vans have a real price → Product + Offer.
+  // Pending / coming-soon vans → Service (a Product without offers is invalid).
+  const jsonLd = vanDetail?.van?.status === "available" && hasPrice
+    ? {
+      ...base,
+      "@type": "Product",
+      "brand": { "@type": "Brand", "name": "Big Bear Vans" },
       "offers": {
         "@type": "Offer",
+        "url": url,
         "price": price,
         "priceCurrency": "USD",
-        // Mirrors the listing page's mapping so a van's availability reads
-        // the same everywhere instead of collapsing sale_pending/coming_soon into OutOfStock.
-        "availability": vanDetail?.van?.status === "available"
-          ? "https://schema.org/InStock"
-          : vanDetail?.van?.status === "sale_pending"
-            ? "https://schema.org/SoldOut"
-            : "https://schema.org/PreOrder",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    }),
-    "additionalProperty": [
-      {
-        "@type": "PropertyValue",
-        "name": "Chassis",
-        "value": vanDetail.van.van_listing?.specifications?.make_model
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        // Vans are picked up at the workshop, never shipped
+        "availableDeliveryMethod": "https://schema.org/OnSitePickup",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "doesNotShip": true,
+          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+        },
+        "seller": BUSINESS_REF
       },
-      {
-        "@type": "PropertyValue",
-        "name": "Transmission",
-        "value": vanDetail.van.van_listing?.specifications?.transmission
-      }
-    ]
-  };
+      "additionalProperty": [
+        { "@type": "PropertyValue", "name": "Chassis", "value": listing?.specifications?.make_model },
+        { "@type": "PropertyValue", "name": "Transmission", "value": listing?.specifications?.transmission }
+      ].filter((p) => p.value)
+    }
+    : {
+      ...base,
+      "@type": "Service",
+      "serviceType": "Custom Camper Van Conversion",
+      "provider": BUSINESS_REF,
+      "areaServed": "US"
+    };
 
   return (
     <>
