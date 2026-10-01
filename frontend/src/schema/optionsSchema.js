@@ -42,13 +42,14 @@ export const generateDynamicSchema = (options, current, categories) => {
             "@type": "ListItem",
             "position": index + 1,
             "item": {
-              "@type": "Product",
+              // Service, not Product: options have no price/reviews (see detail page)
+              "@type": "Service",
               "name": getItemTitle(item),
               "url": `${currentUrl}/${item.slug}`,
-              "image": item.images?.[0] || "/images/blackLogo.webp",
+              "image": item.images?.[0] || `${baseUrl}/images/blackLogo.webp`,
               "description": getItemText(item) || current.desc,
-              "brand": {
-                "@type": "Brand",
+              "provider": {
+                "@type": "Organization",
                 "name": "Big Bear Vans"
               }
             }

@@ -87,13 +87,17 @@ export default async function Page({ params }) {
         },
       },
       {
-        "@type": "Product",
+        // Service, not Product: options have no price/reviews, and a Product without
+        // offers/review/aggregateRating is flagged invalid by Google's Product snippets
+        "@type": "Service",
+        "@id": `${url}/#service`,
         name: title,
         url,
         image: item.images?.length ? item.images : [`${BASE_URL}/images/blackLogo.webp`],
         description: getItemText(item, 500) || current.desc,
-        category: [item.categoryId?.title, item.subCategoryId?.title].filter(Boolean).join(" > ") || current.label,
-        brand: { "@type": "Brand", name: "Big Bear Vans" },
+        serviceType: [item.categoryId?.title, item.subCategoryId?.title].filter(Boolean).join(" > ") || current.label,
+        provider: { "@type": "Organization", name: "Big Bear Vans", url: BASE_URL },
+        mainEntityOfPage: { "@id": `${url}/#webpage` },
       },
     ],
   };

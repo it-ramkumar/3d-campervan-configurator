@@ -157,7 +157,10 @@ const heroProductImage =
       "@type": "ListItem",
       "position": index + 1,
       "item": {
-        "@type": "Product",
+        // Service, not Product: most layouts are quote-only (no price), and a
+        // shared hardcoded aggregateRating on every item violates Google's
+        // structured data policy
+        "@type": "Service",
         "name": item.van_listing?.title || "Custom Camper Van Layout",
         "url": `https://www.bigbearvans.com/van-layouts/${item.slug}`,
         "image": item.gallery?.[0]
@@ -166,14 +169,9 @@ const heroProductImage =
             : `https://www.bigbearvans.com${item.gallery[0]}`
           : "https://www.bigbearvans.com/meta-data/van-layouts-big-bear-vans.webp",
         "description": item.van_listing?.description || "Custom camper van floor plan",
-        "brand": {
-          "@type": "Brand",
+        "provider": {
+          "@type": "Organization",
           "name": "Big Bear Vans"
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "5",
-          "reviewCount": "111"
         }
       }
     }))

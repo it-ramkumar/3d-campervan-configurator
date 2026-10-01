@@ -60,53 +60,64 @@ export default async function Page({ params, searchParams }) {
   // console.log(vanDetail.data, "viewMode Server Side par read ho gaya!");
 
   // --- JSON-LD Structured Data ---
-  const hasPrice = vanDetail?.data?.van_listing?.price && vanDetail?.data?.van_listing?.price > 10;
+  const listing = vanDetail.data.van_listing;
+  const hasPrice = listing?.price && listing.price > 10;
+  const pageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}`;
 
-  const jsonLd = {
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}#product`,
+  const baseLd = {
     "@context": "https://schema.org/",
-    "@type": "Product",
-    "name": vanDetail.data.van_listing?.title,
+    "name": listing?.title,
+    "url": pageUrl,
     "image": vanDetail.data.gallery || ['https://www.bigbearvans.com/images/blackLogo.webp'],
-    "description": vanDetail.data.van_listing?.subtitle || vanDetail.data.van_listing?.description,
-    "sku": vanDetail.data.van_listing?.slug || slug,
-    "brand": {
-      "@type": "Brand",
-      "name": "Big Bear Vans"
-    },
-    "manufacturer": {
-      "@type": "Organization",
-      "name": "Big Bear Vans",
-      "url": process.env.NEXT_PUBLIC_SITE_URL
-    },
-    "category": "Custom Camper Vans",
-    "keywords": vanDetail.data.van_listing?.tags?.join(", ") || "custom van, camper van, van conversion",
-    "offers": {
-      "@type": "Offer",
-      "priceCurrency": "USD",
-      // Layouts have no live inventory status (no `status` field on this model —
-      // they're made-to-order builds, not stock items), so PreOrder fits regardless
-      // of whether a reference price is set. A "0" price is invalid/misleading to
-      // Google, so when there's no real price we drop the field and explain via
-      // priceSpecification instead.
-      ...(hasPrice
-        ? { "price": vanDetail?.data?.van_listing?.price }
-        : {
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "priceCurrency": "USD",
-            "description": "Custom build — contact us for a quote"
-          }
-        }
-      ),
-      "availability": "https://schema.org/PreOrder",
-      "itemCondition": "https://schema.org/NewCondition",
-      "seller": {
-        "@type": "Organization",
+    "description": listing?.subtitle || listing?.description,
+  };
+
+  // Google requires `price` on a Product's Offer — without it Product snippets are
+  // flagged invalid. So: real price → Product + Offer, custom quote → Service
+  // (not a rich result type, so no validation errors).
+  const jsonLd = hasPrice
+    ? {
+      ...baseLd,
+      "@id": `${pageUrl}#product`,
+      "@type": "Product",
+      "sku": listing?.slug || slug,
+      "brand": {
+        "@type": "Brand",
         "name": "Big Bear Vans"
+      },
+      "manufacturer": {
+        "@type": "Organization",
+        "name": "Big Bear Vans",
+        "url": process.env.NEXT_PUBLIC_SITE_URL
+      },
+      "category": "Custom Camper Vans",
+      "keywords": listing?.tags?.join(", ") || "custom van, camper van, van conversion",
+      "offers": {
+        "@type": "Offer",
+        "url": pageUrl,
+        "price": listing.price,
+        "priceCurrency": "USD",
+        // made-to-order builds, not stock items
+        "availability": "https://schema.org/PreOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "Big Bear Vans"
+        }
       }
     }
-  };
+    : {
+      ...baseLd,
+      "@id": `${pageUrl}#service`,
+      "@type": "Service",
+      "serviceType": "Custom Camper Van Conversion",
+      "provider": {
+        "@type": "Organization",
+        "name": "Big Bear Vans",
+        "url": process.env.NEXT_PUBLIC_SITE_URL
+      },
+      "areaServed": "US"
+    };
 
   return (
     <>
