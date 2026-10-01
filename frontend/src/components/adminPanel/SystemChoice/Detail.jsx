@@ -51,7 +51,7 @@ export default function DetailModal({ item, onClose }) {
 
           {/* Dynamic Blocks Rendering */}
           <div className="space-y-6">
-            {item.blocks?.map((block, idx) => {
+            {item.blocks?.filter((block) => block.is_active !== false).map((block, idx) => {
               switch (block.block_type) {
                 case "heading":
                   return <h3 key={idx} className="text-lg font-semibold text-slate-800 border-b pb-2">{block.title}</h3>;

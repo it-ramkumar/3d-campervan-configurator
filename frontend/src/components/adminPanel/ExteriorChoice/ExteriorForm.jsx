@@ -84,7 +84,7 @@ export default function AdminForms({ setSelected }) {
         images: editData.images || [],
         link: editData.link || "",
         // Blocks agar backend se aa rahe hain
-        blocks: editData.blocks || []
+        blocks: (editData.blocks || []).map((b) => ({ ...b, is_active: b.is_active !== false }))
       });
     }
   }, [editData]);
@@ -243,7 +243,7 @@ export default function AdminForms({ setSelected }) {
         await axios.post(
           `${process.env.NEXT_PUBLIC_URL}/exterior`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
       }
 
@@ -487,6 +487,7 @@ export default function AdminForms({ setSelected }) {
             <DynamicBlocks
               blocks={interiorForm.blocks}
               setBlocks={updateBlocksState}
+              allowedTypes={["heading", "subheading", "paragraph", "list", "table"]}
             />
           </div>
           {/* Images */}

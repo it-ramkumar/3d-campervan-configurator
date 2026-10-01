@@ -118,7 +118,7 @@ router.put('/system/:id', protect, adminOnly, upload.array("images"), async (req
     // Update fields (POST route ke hisab se)
     interior.categoryId = data.categoryId || interior.categoryId;
     interior.subCategoryId = data.subCategoryId || interior.subCategoryId;
-    interior.blocks = blocks.length > 0 ? blocks : interior.blocks;
+    if (req.body.blocks !== undefined) interior.blocks = blocks;
     interior.link = data.link || interior.link;
 
     await interior.save();

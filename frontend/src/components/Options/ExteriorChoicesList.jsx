@@ -32,6 +32,7 @@ const RenderBlocks = ({ blocks }) => {
   return (
     <div className="space-y-3 mt-3">
       {blocks
+        .filter((block) => block.is_active !== false)
         .sort((a, b) => a.order - b.order)
         .map((block, idx) => {
           switch (block.block_type) {

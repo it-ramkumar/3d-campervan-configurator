@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Trash2 } from "lucide-react";
 
 const BLOCK_TYPES = [
   "heading", "subheading", "paragraph", "list", "table",
@@ -46,7 +47,7 @@ const defaultBlock = (type, order) => {
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-const DynamicBlocks = ({ blocks, setBlocks }) => {
+const DynamicBlocks = ({ blocks, setBlocks, allowedTypes = BLOCK_TYPES }) => {
 
   /* ── generic ──────────────────────────────────────────────────────────── */
   const addBlock   = (type) => setBlocks(prev => [...prev, defaultBlock(type, prev.length)]);
@@ -113,7 +114,7 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
 
       {/* ── Add-block buttons ── */}
       <div className="flex flex-wrap gap-2">
-        {BLOCK_TYPES.map(type => (
+        {allowedTypes.map(type => (
           <button
             key={type}
             type="button"
@@ -170,9 +171,10 @@ const DynamicBlocks = ({ blocks, setBlocks }) => {
               <button
                 type="button"
                 onClick={() => removeBlock(bi)}
-                className="text-gray-400 hover:text-red-500 transition-colors text-xl leading-none"
+                title="Delete block"
+                className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors"
               >
-                ×
+                <Trash2 size={14} /> Delete
               </button>
             </div>
 

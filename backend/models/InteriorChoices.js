@@ -10,6 +10,7 @@ const blockSchema = new mongoose.Schema({
   },
   title: { type: String, default: undefined },
   content: { type: String, default: undefined },
+  is_active: { type: Boolean, default: true },
 
   // ✅ default: undefined arrays ke liye aise likhein
 // ✅ Updated list_items: Ab ye objects ki array hogi

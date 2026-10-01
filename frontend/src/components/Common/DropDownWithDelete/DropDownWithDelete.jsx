@@ -32,7 +32,7 @@ const deleteItem = async (id, title) => {
       // value = "interior" | "exterior" | "system"
       const url = `${process.env.NEXT_PUBLIC_URL}/${value}/${apiEndpoint}/${id}`;
 
-      await axios.delete(url);
+      await axios.delete(url, { withCredentials: true });
 
       alert(`${label} deleted successfully!`);
       setItems(items.filter((c) => c._id !== id));

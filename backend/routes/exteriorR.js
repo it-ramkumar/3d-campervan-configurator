@@ -121,7 +121,7 @@ router.put('/exterior/:id', protect, adminOnly, upload.array("images"), async (r
     interior.categoryId = data.categoryId || interior.categoryId;
     interior.subCategoryId = data.subCategoryId || interior.subCategoryId;
     interior.description = description.length > 0 ? description : interior.description;
-    interior.blocks = blocks.length > 0 ? blocks : interior.blocks;
+    if (req.body.blocks !== undefined) interior.blocks = blocks;
     interior.link = data.link || interior.link;
 
     await interior.save();

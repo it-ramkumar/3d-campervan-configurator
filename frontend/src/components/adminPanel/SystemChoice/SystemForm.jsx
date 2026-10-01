@@ -75,7 +75,7 @@ export default function AdminForms({ setSelected }) {
           : [""],
         images: editData.images || [],
         link: editData.link || "",
-        blocks: editData.blocks || []
+        blocks: (editData.blocks || []).map((b) => ({ ...b, is_active: b.is_active !== false }))
       });
     }
   }, [editData]);
@@ -90,7 +90,7 @@ export default function AdminForms({ setSelected }) {
       await axios.post(`${process.env.NEXT_PUBLIC_URL}/system/category`, {
         title: categoryForm.title,
         description: categoryForm.description
-      });
+      }, { withCredentials: true });
       showPopup("success", "Category Created Successfully!", "The new category is now available in the dropdowns.");
       setCategoryForm({ title: "", description: "" });
       fetchCategories();
@@ -113,7 +113,7 @@ export default function AdminForms({ setSelected }) {
         title: subCategoryForm.title,
         description: subCategoryForm.description,
         categoryId: subCategoryForm.categoryId
-      });
+      }, { withCredentials: true });
       showPopup("success", "SubCategory Created Successfully!", "The new subcategory is now available in the dropdowns.");
       setSubCategoryForm({ title: "", description: "", categoryId: "" });
       fetchSubCategories();
@@ -207,7 +207,7 @@ export default function AdminForms({ setSelected }) {
         await axios.post(
           `${process.env.NEXT_PUBLIC_URL}/system`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
       }
 
@@ -412,6 +412,7 @@ export default function AdminForms({ setSelected }) {
             <DynamicBlocks
               blocks={interiorForm.blocks}
               setBlocks={updateBlocksState}
+              allowedTypes={["heading", "subheading", "paragraph", "list", "table"]}
             />
           </div>
           {/* Images */}

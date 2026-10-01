@@ -77,7 +77,7 @@ export default function AdminForms({ setSelected }) {
           : [""],
         images: editData.images || [],
         link: editData.link || "",
-        blocks: editData.blocks || []
+        blocks: (editData.blocks || []).map((b) => ({ ...b, is_active: b.is_active !== false }))
       });
     }
   }, [editData]);
@@ -475,6 +475,7 @@ export default function AdminForms({ setSelected }) {
             <DynamicBlocks
               blocks={interiorForm.blocks}
               setBlocks={updateBlocksState}
+              allowedTypes={["heading", "subheading", "paragraph", "list", "table"]}
             />
           </div>
           {/* Images */}

@@ -9,6 +9,7 @@ const blockSchema = new mongoose.Schema({
   },
   title: { type: String, default: undefined },
   content: { type: String, default: undefined },
+  is_active: { type: Boolean, default: true },
   list_items: {
     type: [{
       text: { type: String, required: true },
