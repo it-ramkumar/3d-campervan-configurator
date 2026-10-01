@@ -10,6 +10,8 @@ import { validateLead } from "@/lib/validateLead";
 import { trackLead, saveLeadEmail, cleanPageUrl, createEventId } from "@/lib/track";
 
 const EMPTY_FORM = { name: "", email: "", phone: "", message: "" };
+const FALLBACK_VAN_IMAGE = "/images/blackLogo.webp";
+const NON_IMAGE_EXT = /\.(mp4|mov|webm|m4v|pdf|glb|gltf)(\?|#|$)/i;
 
 // leadSource: "contact" | "inventory" | "layout"
 export default function ContactForm({ leadSource = "contact", initialVans }) {
@@ -18,6 +20,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [failedImage, setFailedImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +32,9 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
 
   const hasSelectedVan = !!van?.id && !!van?.title;
 
-  const imageSrc = van?.image;
+  // Swap to the logo if the selected van's image fails to load
+  const imageSrc = van?.image && van.image !== failedImage ? van.image : FALLBACK_VAN_IMAGE;
+  const isInventory = leadSource === "inventory";
 
   const isPriceValid = van?.price && Number(van.price) >= 1000;
 
@@ -85,10 +90,11 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               <div className="relative w-full md:w-2/5 aspect-[16/10] bg-white rounded-lg overflow-hidden border border-primary/10 shadow-sm flex-shrink-0 group">
                 <Image
                   src={imageSrc}
+                  onError={() => setFailedImage(van.image)}
                   alt={van.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 300px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`${imageSrc === FALLBACK_VAN_IMAGE ? "object-contain p-6" : "object-cover"} transition-transform duration-500 group-hover:scale-105`}
                   priority
                 />
               </div>
@@ -145,7 +151,13 @@ Price
 
       {/* HEADING */}
       <div className="text-center mb-10">
-        <Heading1 variant="section" textColor="text-primary" text={hasSelectedVan ? "Let’s Custom Build It" : "Let’s Connect"} />
+        <Heading1 variant="section" textColor="text-primary" text={
+            hasSelectedVan
+              ? isInventory
+                ? `Ask about ${van.title}`
+                : "Let’s Custom Build It"
+              : "Let’s Connect"
+          } />
 
         <RichParagraph variant="body" className="mt-2">
           {hasSelectedVan
@@ -250,7 +262,7 @@ Price
           <SecondaryButton
             type="submit"
             disabled={loading}
-            label={loading ? "Submitting..." : "Send Message"}
+            label={loading ? "Submitting..." : isInventory && hasSelectedVan ? "Check Availability" : "Send Message"}
           />
         </div>
       </form>
@@ -273,7 +285,11 @@ const normalizeVan = (data) => {
 
     price: listing?.price,
 
-    image: data.image || data.gallery?.[0] || null,
+    // First gallery entry that is actually an image (galleries can hold video/PDF links)
+    image:
+      [data.image, ...(Array.isArray(data.gallery) ? data.gallery : [])].find(
+        (src) => typeof src === "string" && src.trim() && !NON_IMAGE_EXT.test(src)
+      ) || null,
     gallery: data.gallery || [],
 
     raw: data, // optional debug fallback
