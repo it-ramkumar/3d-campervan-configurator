@@ -49,22 +49,7 @@ export default function RootLayout({ children }) {
           strategy="lazyOnload"
         />
 
-        {/* ✅ GTM - pehle main script */}
-        {/* <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-16677332528"
-          strategy="lazyOnload"
-        /> */}
         <GoogleTagManager gtmId="GTM-WCMSZ3TJ" />
-
-        {/* ✅ GTM config - afterLoading
-        <Script id="google-ads-script" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-16677332528');
-          `}
-        </Script> */}
 
         {/* ✅ Meta Pixel Code */}
         <Script id="facebook-pixel" strategy="lazyOnload">

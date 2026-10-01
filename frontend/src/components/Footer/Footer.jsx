@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { sendGTMEvent } from "@next/third-parties/google";
 const Swal = async () => (await import("sweetalert2")).default;
 import Link from "next/link";
 import {
@@ -62,8 +63,7 @@ export default function Footer() {
 
       if (typeof window !== "undefined") {
         if (window.fbq) window.fbq("track", "Subscribe");
-        if (window.gtag)
-          window.gtag("event", "sign_up", { method: "newsletter" });
+        sendGTMEvent({ event: "sign_up", method: "newsletter" });
       }
     } catch (error) {
       const isDuplicate = error?.response?.status === 400;

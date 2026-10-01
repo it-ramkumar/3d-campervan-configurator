@@ -1,20 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
 const NotFound = () => {
-  useEffect(() => {
-    // Analytics tracking (optional - agar Google Analytics hai)
-    if (window.gtag) {
-      window.gtag('event', 'page_view', {
-        page_title: '404 Not Found',
-        page_location: window.location.href,
-        page_path: window.location.pathname
-      });
-    }
-  }, []);
-
   return (
     <>
       <title>404 - Page Not Found | BigBear Vans</title>

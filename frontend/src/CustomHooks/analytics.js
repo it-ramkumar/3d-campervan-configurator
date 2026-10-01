@@ -1,20 +1,15 @@
+import { sendGTMEvent } from "@next/third-parties/google";
+
 // Track karo ke already initialized hai ya nahi
 let isInitialized = false;
 
-export const pageView = (url) => {
-  if (typeof window.gtag === "function") {
-    window.gtag("event", "page_view", { page_path: url });
-  }
-};
-
-export const event = ({ action, category, label, value }) => {
-  if (typeof window.gtag === "function") {
-    window.gtag("event", action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-  }
+// Page views are sent by the Google tag in GTM; this file only pushes interaction events.
+export const event = ({ action, category, label }) => {
+  sendGTMEvent({
+    event: action,
+    event_category: category,
+    event_label: label,
+  });
 };
 
 // Event delegation use karo - better performance
@@ -31,42 +26,26 @@ const setupEventDelegation = () => {
 
       // External link
       if (href.startsWith('http') && !href.includes(window.location.hostname)) {
-        event({
-          action: 'click',
-          category: 'External Link',
-          label: href,
-          value: 1,
-        });
+        event({ action: 'outbound_click', category: 'External Link', label: href });
+      }
+      // Phone
+      else if (href.startsWith('tel:')) {
+        event({ action: 'phone_click', category: 'Phone Link', label: href });
       }
       // Mailto
       else if (href.startsWith('mailto:')) {
-        event({
-          action: 'click',
-          category: 'Email Link',
-          label: href,
-          value: 1,
-        });
+        event({ action: 'email_click', category: 'Email Link', label: href });
       }
       // Downloads
       else if (/\.(pdf|zip|jpg|png|doc|docx)$/i.test(href)) {
-        event({
-          action: 'download',
-          category: 'File Download',
-          label: href,
-          value: 1,
-        });
+        event({ action: 'file_download', category: 'File Download', label: href });
       }
     }
 
     // Buttons
     if (target.tagName === 'BUTTON') {
-      const label = target.innerText || target.getAttribute('aria-label') || 'Unnamed Button';
-      event({
-        action: 'click',
-        category: 'Button',
-        label: label,
-        value: 1,
-      });
+      const label = (target.innerText || target.getAttribute('aria-label') || 'Unnamed Button').trim().slice(0, 100);
+      event({ action: 'button_click', category: 'Button', label });
     }
   }, true); // Use capture phase
 
@@ -74,35 +53,14 @@ const setupEventDelegation = () => {
   document.addEventListener('submit', (e) => {
     if (e.target.tagName === 'FORM') {
       const name = e.target.getAttribute('name') || 'Unnamed Form';
-      event({
-        action: 'submit',
-        category: 'Form',
-        label: name,
-        value: 1,
-      });
+      event({ action: 'form_submit', category: 'Form', label: name });
     }
   }, true);
 };
 
 // Initialize only once
 export const initAnalytics = () => {
-  // Prevent multiple initializations
-  if (isInitialized) {
-    console.warn('Analytics already initialized');
-    return;
-  }
-
-  // // Check if gtag is loaded
-  // if (typeof window.gtag !== 'function') {
-  //   console.warn('gtag not loaded, analytics disabled');
-  //   return;
-  // }
-
+  if (isInitialized) return;
   isInitialized = true;
-
-  // First page view
-  pageView(window.location.pathname + window.location.search);
-
-  // Setup event delegation (single listener instead of multiple)
   setupEventDelegation();
 };
