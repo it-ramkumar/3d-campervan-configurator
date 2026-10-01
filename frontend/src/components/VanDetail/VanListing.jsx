@@ -305,9 +305,10 @@ const VanPage = ({ vanDetail,variants }) => {
         <div className="relative max-w-9xl mx-auto md:pt-4 pb-16 px-6 ">
 
           {/* Mobile-only heading: shown above the gallery on small screens.
-              Hidden on lg+ where the title renders inside the info panel instead. */}
+              Hidden on lg+ where the title renders inside the info panel instead.
+              This is the page's single <h1> (Google indexes the mobile layout). */}
           <div className="lg:hidden mb-5 space-y-3">
-            <Heading1 variant="section" text={vanDetail?.van_listing?.title} className="!text-primary " />
+            <Heading1 as="h1" variant="section" text={vanDetail?.van_listing?.title} className="!text-primary " />
             {vanDetail?.van_listing?.subtitle && (
               <div className="flex items-center gap-3">
                 <div className="w-8 h-0.5 bg-hover shrink-0" />
@@ -350,7 +351,8 @@ const VanPage = ({ vanDetail,variants }) => {
 
 
               <div>
-                <Heading1 as="h1" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
+                {/* Desktop copy of the title: visual only, the <h1> is the mobile heading above */}
+                <Heading1 as="p" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
                 {vanDetail?.van_listing?.subtitle && (
                   <div className="hidden lg:flex items-center gap-3 mt-4">
                     {/* <div className="w-8 h-0.5 bg-hover shrink-0" /> */}
