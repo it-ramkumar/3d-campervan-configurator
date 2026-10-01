@@ -12,4 +12,4 @@ Disallow: /register/
 Allow: /
 
 # Sitemap ka link
-Sitemap: https://api.bigbearvans.com/sitemap.xml
+Sitemap: https://www.bigbearvans.com/sitemap.xml
