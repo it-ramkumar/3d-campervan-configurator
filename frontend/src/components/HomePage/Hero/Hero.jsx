@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
@@ -14,6 +14,38 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+
+const FALLBACK_IMAGE = "/images/blackLogo.webp";
+
+// One <picture> per slide so the browser downloads only the mobile OR desktop image.
+// Slide 0 is the LCP candidate: eager + high priority; the rest stay lazy.
+function HeroPicture({ slide, isFirst }) {
+  const common = { alt: slide.title, fill: true, sizes: "100vw", quality: 70 };
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({ ...common, src: slide.image || FALLBACK_IMAGE });
+  const {
+    props: { srcSet: mobileSrcSet, style, ...imgProps },
+  } = getImageProps({
+    ...common,
+    src: slide.mobileImage || slide.image || FALLBACK_IMAGE,
+    loading: isFirst ? "eager" : "lazy",
+    fetchPriority: isFirst ? "high" : undefined,
+  });
+
+  return (
+    <picture>
+      <source media="(min-width: 768px)" srcSet={desktopSrcSet} />
+      <img
+        {...imgProps}
+        alt={slide.title}
+        srcSet={mobileSrcSet}
+        className="object-cover [object-position:var(--hero-pos)] md:[object-position:center]"
+        style={{ ...style, "--hero-pos": slide.objectPosition || "center center" }}
+      />
+    </picture>
+  );
+}
 
 export default function Hero() {
   const swiperRef = useRef(null);
@@ -46,31 +78,7 @@ export default function Hero() {
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id} className="relative">
             <div className="relative w-full h-full overflow-hidden">
-              <Image
-                src={
-                  slide.mobileImage || slide.image || "/images/blackLogo.webp"
-                }
-                alt={slide.title}
-                fill
-                priority={index === 0}
-                quality={70}
-                sizes="100vw"
-                className="block md:hidden object-cover"
-                style={{
-                  objectPosition: slide.objectPosition || "center center",
-                }}
-              />
-              {/* Desktop Image */}
-              <Image
-                src={slide.image || "/images/blackLogo.webp"}
-                alt={slide.title}
-                fill
-                priority={index === 0}
-                quality={70}
-                sizes="(min-width: 768px) 100vw"
-                className="hidden md:block object-cover"
-
-              />
+              <HeroPicture slide={slide} isFirst={index === 0} />
 
               {/* Overlay */}
               <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
