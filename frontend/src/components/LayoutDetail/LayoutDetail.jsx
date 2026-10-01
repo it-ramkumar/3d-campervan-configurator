@@ -22,7 +22,6 @@ import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "../VanDetail/BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import ContactForm from "@/components/Consultation/ContactForm";
-import { contact } from "../../api/contact/contact";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -50,10 +49,8 @@ const HeroSpecItem = ({ icon: Icon, label, value }) => (
 );
 
 export default function LayoutDetail({ van, initialView }) {
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   // console.log(initialView, "ye initialView hai jo server se aaya");
   const getFeatureIcon = (cat) => {
     if (cat.includes("Electric")) return <Zap size={24} />;
@@ -62,24 +59,6 @@ export default function LayoutDetail({ van, initialView }) {
     return <LayoutIcon size={24} />;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e, data) => {
-    e.preventDefault();
-    try {
-      if (!data.name?.trim() || !data.email?.trim() || !data.phone?.trim()) return;
-      setLoading(true);
-      await contact(data);
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
   // Duplicate content check: resolve each link to a playable embed, dropping unsupported ones
   const galleryVideos = [...new Map(
     (van?.media || []).map(getGalleryVideo).filter(Boolean).map(video => [video.url, video])
@@ -553,10 +532,7 @@ export default function LayoutDetail({ van, initialView }) {
                 className="absolute top-4 right-4 text-primary hover:text-hover transition-colors cursor-pointer z-30 text-xl font-bold"
               >✕</button>
               <ContactForm
-                formData={formData}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                loading={loading}
+                leadSource="layout"
                 initialVans={data}
               />
             </div>

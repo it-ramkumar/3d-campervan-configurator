@@ -1,20 +1,25 @@
-import axios from "axios"
-import toast from "react-hot-toast";
+import axios from "axios";
+import { withTracking } from "@/lib/track";
+
+// Resolves only when the API confirms the lead was saved; throws an Error with .status otherwise.
 export const contact = async (formData) => {
+  let res;
   try {
-    const tracking =
-      typeof window !== "undefined"
-        ? JSON.parse(sessionStorage.getItem("tracking")) || {}
-        : {};
-
-    const payload = { ...formData, ...tracking };
-
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/contact`, payload, {
+    res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/contact`, withTracking(formData), {
       withCredentials: true,
-    })
-    return res.data
+    });
   } catch (error) {
-    toast.error(error.response.data.message);
-    throw error.response?.data || { message: "Something went wrong" }
+    const data = error.response?.data;
+    const err = new Error(data?.message || data?.error || "We couldn't send your message.");
+    err.status = error.response?.status ?? 0;
+    throw err;
   }
-}
+
+  if (res.data?.success === false) {
+    const err = new Error(res.data.message || res.data.error || "We couldn't send your message.");
+    err.status = res.status;
+    throw err;
+  }
+
+  return res.data;
+};

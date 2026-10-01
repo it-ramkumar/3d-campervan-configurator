@@ -14,40 +14,11 @@ import { ArrowBigRightDash, ArrowBigLeftDash, Rotate3d } from "lucide-react";
 import "swiper/css";
 import Image from "next/image";
 import ContactForm from "@/components/Consultation/ContactForm";
-import { contact } from "../../../api/contact/contact";
 
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e, data) => {
-    e.preventDefault();
-    try {
-      if (!data.name?.trim() || !data.email?.trim() || !data.phone?.trim()) return;
-      setLoading(true);
-      await contact(data);
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <section className="bg-white py-12 md:py-20 antialiased overflow-hidden relative rounded-lg">
@@ -254,10 +225,7 @@ export default function Buy({ initialVans = [] }) {
               ✕
             </button>
             <ContactForm
-              formData={formData}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              loading={loading}
+              leadSource="inventory"
               initialVans={data}
             />
           </div>

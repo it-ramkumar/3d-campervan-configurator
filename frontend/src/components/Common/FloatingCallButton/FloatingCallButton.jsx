@@ -1,52 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import ContactForm from "@/components/Consultation/ContactForm";
-import { contact } from "../../../api/contact/contact";
 
 export default function FloatingCallButton() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const menuRef = useRef(null);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      !formData.name.trim() ||
-      !formData.email.trim() ||
-      !formData.phone.trim()
-    ) {
-      return;
-    }
-
-    setLoading(true);
-    try {
-      console.log("FORM SUBMIT STARTED");
-      const result = await contact(formData);
-
-      if (typeof window !== "undefined" && window.fbq) {
-        window.fbq("track", "Lead", { source: "consultation" });
-      }
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      setIsFormOpen(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -178,12 +137,7 @@ export default function FloatingCallButton() {
               </svg>
             </button>
 
-            <ContactForm
-              formData={formData}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              loading={loading}
-            />
+            <ContactForm leadSource="contact" />
           </div>
         </div>
       )}

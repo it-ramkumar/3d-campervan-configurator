@@ -1,54 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
-import { contact } from "../../api/contact/contact";
 import { Heading1, RichParagraph } from "../Common/Common";
 
 export default function Consultation() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    // alert("HANDLE SUBMIT RUNNING");
-    e.preventDefault();
-    if (
-      !formData.name.trim() ||
-      !formData.email.trim() ||
-      !formData.phone.trim()
-    ) {
-      return;
-    }
-
-    setLoading(true);
-    try {
-      console.log("FORM SUBMIT STARTED");
-      const result = await contact(formData);
-      // console.log("CONTACT RESULT:", result); // TEMPORARY TEST
-      if (typeof window !== "undefined" && window.fbq) {
-        console.log("META PIXEL FIRED");
-        window.fbq("track", "Lead", { source: "consultation" });
-        // console.log("META PIXEL FIRED SUCCESS");
-      }
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="bg-[#F8F8F6] min-h-screen py-20 flex flex-col items-center space-y-16 relative">
       {/* ===== Header Text ===== */}
@@ -76,10 +33,7 @@ export default function Consultation() {
       {/* ===== Contact Form Section ===== */}
       <div className="w-full max-w-4xl relative z-10">
         <ContactForm
-          formData={formData}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          loading={loading}
+          leadSource="contact"
         />
       </div>
 

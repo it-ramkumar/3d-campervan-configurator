@@ -1,23 +1,73 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import SecondaryButton from "../Common/Button/SecondaryButton";
-import { Heading2, Heading1, RichParagraph } from "../Common/Common";
-import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
-export default function ContactForm({
-  formData,
-  handleChange,
-  handleSubmit,
-  loading,
-  initialVans,
-}) {
+import { Heading1, RichParagraph } from "../Common/Common";
+import { useRouter } from "next/navigation";
+import { contact } from "@/api/contact/contact";
+import { validateLead } from "@/lib/validateLead";
+import { trackLead, saveLeadEmail, cleanPageUrl } from "@/lib/track";
+
+const EMPTY_FORM = { name: "", email: "", phone: "", message: "" };
+
+// leadSource: "contact" | "inventory" | "layout"
+export default function ContactForm({ leadSource = "contact", initialVans }) {
   const router = useRouter();
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
+
   const van = normalizeVan(initialVans);
 
   const hasSelectedVan = !!van?.id && !!van?.title;
 
   const imageSrc = van?.image;
+
+  const isPriceValid = van?.price && Number(van.price) >= 1000;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+
+    const fieldErrors = validateLead(formData, { requirePhone: true });
+    setErrors(fieldErrors);
+    setSubmitError("");
+    if (Object.keys(fieldErrors).length) return;
+
+    const message =
+      formData.message.trim() ||
+      (van?.title ? `Interested in ${van.title}` : "No message provided");
+
+    setLoading(true);
+    try {
+      await contact({
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message,
+        vanSlug: van?.slug,
+        vanTitle: van?.title,
+        vanPrice: isPriceValid ? Number(van.price) : 0,
+        pageUrl: cleanPageUrl(),
+      });
+    } catch (error) {
+      setSubmitError(error.message || "We couldn't send your message.");
+      setLoading(false);
+      return;
+    }
+
+    trackLead({ source: leadSource, email: formData.email, phone: formData.phone });
+    saveLeadEmail(formData.email);
+    router.push(`/thank-you?source=${encodeURIComponent(leadSource)}`);
+  };
 
   return (
     <div className="bg-white p-6 md:p-12 rounded-xl border border-primary/5 shadow-sm max-w-[760px] mx-auto w-full">
@@ -103,42 +153,8 @@ Price
       </div>
       {/* FORM */}
       <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-
-          try {
-            const isPriceValid = van?.price && Number(van.price) >= 1000;
-
-            const vanTitleText = van?.title
-              ? `${van.title} (${isPriceValid
-                ? `$${Number(van.price).toLocaleString("en-US")}`
-                : "Pricing Not Mentioned"
-              })`
-              : "No Van Selected";
-
-            // 1. Form data API submission (aage data smoothly chala jayega)
-            await handleSubmit(e, {
-              ...formData,
-              message: formData.message || "",
-              vanSlug: van?.slug,
-              vanTitle: van?.title,
-              vanPrice: isPriceValid ? Number(van.price) : 0,
-              pageUrl: typeof window !== "undefined"
-                ? window.location.href
-                : null,
-            });
-
-            const formSource = "contact";
-
-            // 2. Redirect with URL Params
-            router.push(
-              `/thank-you?email=${encodeURIComponent(formData.email)}&source=${encodeURIComponent(formSource)}&van=${encodeURIComponent(vanTitleText)}`
-            );
-
-          } catch (error) {
-            console.error("Form submission failed:", error);
-          }
-        }}
+        onSubmit={handleSubmit}
+        noValidate
         className="space-y-6 w-full"
       >
         {/* HIDDEN INPUTS */}
@@ -162,7 +178,7 @@ Price
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--gap-sm)]">
           {["name", "email", "phone"].map((field) => (
             <div key={field} className="flex flex-col">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
+              <label htmlFor={`contact-${field}`} className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
                 {field}
               </label>
 
@@ -174,7 +190,11 @@ Price
                       ? "email"
                       : "text"
                 }
+                id={`contact-${field}`}
                 name={field}
+                autoComplete={field === "phone" ? "tel" : field}
+                aria-invalid={!!errors[field]}
+                aria-describedby={errors[field] ? `contact-${field}-error` : undefined}
                 value={formData[field]}
                 onChange={(e) => {
                   if (field === "phone") {
@@ -189,6 +209,11 @@ Price
                 required
                 className="w-full p-4 rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none"
               />
+              {errors[field] && (
+                <p id={`contact-${field}-error`} role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
+                  {errors[field]}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -206,6 +231,16 @@ Price
           }
           className="w-full p-4 text-black rounded-lg bg-secondary/50 border border-transparent focus:border-hover focus:bg-white focus:outline-none"
         />
+
+        {submitError && (
+          <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {submitError} Please try again, or call us at{" "}
+            <a href="tel:+19514419719" className="font-bold underline">
+              (951) 441-9719
+            </a>
+            .
+          </div>
+        )}
 
         {/* SUBMIT */}
         <div className="pt-4 flex justify-center">

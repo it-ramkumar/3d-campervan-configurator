@@ -24,7 +24,6 @@ import {
 import VanGallery from "./GallerySection";
 import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
-import { contact } from "../../api/contact/contact";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "./BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -264,30 +263,9 @@ const HeroSpecItem = ({ label, value }) => (
 const VanPage = ({ vanDetail,variants }) => {
   const blocks = vanDetail?.blocks || [];
   const gallery = vanDetail?.gallery || [];
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e, data) => {
-    e.preventDefault();
-    try {
-      if (!data.name?.trim() || !data.email?.trim() || !data.phone?.trim()) return;
-      setLoading(true);
-      await contact(data);
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const specs = vanDetail?.van_listing?.specifications;
 
@@ -919,10 +897,7 @@ The Design Philosophy
               className="absolute top-4 right-4 text-primary  transition-colors cursor-pointer z-30 text-xl font-bold"
             >✕</button>
             <ContactForm
-              formData={formData}
-              handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              loading={loading}
+              leadSource="inventory"
               initialVans={data}
             />
           </div>
