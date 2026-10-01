@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import DropDownWithDelete from "@/components/Common/DropDownWithDelete/DropDownWithDelete";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
 import { useSelector, useDispatch } from "react-redux";
+import { clearEditData } from "@/redux/slices/editData";
+import StatusDialog from "../shared/StatusDialog";
 
-export default function AdminForms() {
+export default function AdminForms({ setSelected }) {
    const editData = useSelector((state) => state.editData.editData);
    const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
@@ -21,6 +23,15 @@ export default function AdminForms() {
 
   const [activeTab, setActiveTab] = useState("category");
   const [loading, setLoading] = useState(false);
+  const [popup, setPopup] = useState({ open: false, type: "success", title: "", message: "", redirect: false });
+
+  const showPopup = (type, title, message = "", redirect = false) =>
+    setPopup({ open: true, type, title, message, redirect });
+
+  const closePopup = useCallback(() => {
+    setPopup((prev) => ({ ...prev, open: false }));
+    if (popup.redirect) setSelected?.("system-choices");
+  }, [popup.redirect, setSelected]);
 
   // ============================
   const fetchCategories = async () => {
@@ -80,12 +91,12 @@ export default function AdminForms() {
         title: categoryForm.title,
         description: categoryForm.description
       });
-      alert("Category Created Successfully!");
+      showPopup("success", "Category Created Successfully!", "The new category is now available in the dropdowns.");
       setCategoryForm({ title: "", description: "" });
       fetchCategories();
     } catch (err) {
       console.error(err);
-      alert("Error creating category");
+      showPopup("error", "Error creating category", err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
@@ -103,12 +114,12 @@ export default function AdminForms() {
         description: subCategoryForm.description,
         categoryId: subCategoryForm.categoryId
       });
-      alert("SubCategory Created Successfully!");
+      showPopup("success", "SubCategory Created Successfully!", "The new subcategory is now available in the dropdowns.");
       setSubCategoryForm({ title: "", description: "", categoryId: "" });
       fetchSubCategories();
     } catch (err) {
       console.error(err);
-      alert("Error creating subcategory");
+      showPopup("error", "Error creating subcategory", err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
@@ -181,22 +192,23 @@ export default function AdminForms() {
       });
 
       // 4. API Call - Create or Edit
-      if (isEdit) {
-        // PUT request for edit
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_URL}/system/${editData._id}`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-        alert("Updated Successfully!");
-      } else {
+     if (isEdit) {
+  // PUT request for edit
+  await axios.put(
+    `${process.env.NEXT_PUBLIC_URL}/system/${editData._id}`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true, // Cookies automatically browser se request ke sath bhejne ke liye
+    }
+  );
+} else {
         // POST request for create
         await axios.post(
           `${process.env.NEXT_PUBLIC_URL}/system`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
-        alert("Created Successfully!");
       }
 
       // 5. Reset Form & Clear Edit State
@@ -206,11 +218,18 @@ export default function AdminForms() {
       });
 
       // Clear Redux edit state
-      dispatch({ type: 'CLEAR_EDIT_DATA' });
+      dispatch(clearEditData());
+
+      showPopup(
+        "success",
+        isEdit ? "Updated Successfully!" : "Created Successfully!",
+        "Redirecting you to the System Choice listing...",
+        true
+      );
 
     } catch (err) {
       console.error("Submission Error:", err);
-      alert(err.response?.data?.message || "Error saving data");
+      showPopup("error", "Error saving data", err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
@@ -428,6 +447,16 @@ export default function AdminForms() {
           </button>
         </form>
       )}
+
+      <StatusDialog
+        open={popup.open}
+        type={popup.type}
+        title={popup.title}
+        message={popup.message}
+        buttonLabel={popup.redirect ? "Go to listing" : "OK"}
+        autoCloseMs={popup.redirect ? 1800 : undefined}
+        onClose={closePopup}
+      />
     </div>
   );
 }
