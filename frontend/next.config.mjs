@@ -116,6 +116,12 @@ const nextConfig = {
     destination: "/build-your-own-camper-van",
     statusCode: 301,
   },
+  // Short alias for the sitemap: /site -> /sitemap.xml
+  {
+    source: "/site",
+    destination: "/sitemap.xml",
+    statusCode: 301,
+  },
   // Sprinter guide URL migration: /sprinter-guide -> /sprinter-van-buying-guide
   {
     source: "/sprinter-guide",

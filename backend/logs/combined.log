@@ -1973,3 +1973,7 @@
 {"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:13:43 +0000] \"POST /api/inquery HTTP/1.1\" 201 132 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36\"","timestamp":"2026-10-02 12:13:43"}
 {"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:16:03 +0000] \"GET /api/test-blog/blog-links HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36\"","timestamp":"2026-10-02 12:16:03"}
 {"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:16:16 +0000] \"GET /api/test-blog/blog-links HTTP/1.1\" 304 - \"http://localhost:3000/\" \"Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1\"","timestamp":"2026-10-02 12:16:16"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-10-02 12:39:11"}
+{"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:42:41 +0000] \"GET /api/quick-links HTTP/1.1\" 200 57 \"-\" \"axios/1.18.0\"","timestamp":"2026-10-02 12:42:41"}
+{"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:42:41 +0000] \"GET /api/jobs HTTP/1.1\" 200 2 \"-\" \"axios/1.18.0\"","timestamp":"2026-10-02 12:42:41"}
+{"level":"info","message":"127.0.0.1 - - [02/Oct/2026:07:42:43 +0000] \"GET /sitemap.xml HTTP/1.1\" 200 3473 \"-\" \"node\"","timestamp":"2026-10-02 12:42:43"}
