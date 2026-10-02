@@ -352,7 +352,7 @@ const VanPage = ({ vanDetail,variants }) => {
 
               <div>
                 {/* Desktop copy of the title: visual only, the <h1> is the mobile heading above */}
-                <Heading1 as="p" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
+                <Heading1 as="h1" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
                 {vanDetail?.van_listing?.subtitle && (
                   <div className="hidden lg:flex items-center gap-3 mt-4">
                     {/* <div className="w-8 h-0.5 bg-hover shrink-0" /> */}

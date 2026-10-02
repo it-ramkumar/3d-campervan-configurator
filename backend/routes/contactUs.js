@@ -5,6 +5,7 @@ const Contact = require("../models/contactUs");
 const nodemailer = require("nodemailer");
 const { protect, adminOnly } = require("../middleware/authMiddleware")
 const Lead = require("../models/leadsEmail");
+const { detectLeadSource, trackingFields } = require("../services/leadSource");
 
 
 router.post("/", async (req, res) => {
@@ -35,28 +36,7 @@ router.post("/", async (req, res) => {
     // Lead Tracking Detection
     // ==========================
 
-    let leadSource = "Direct";
-
-    if (req.body.gclid) {
-      leadSource = "Google Ads";
-    }
-    else if (
-      req.body.utm_source === "google" &&
-      req.body.utm_medium === "cpc"
-    ) {
-      leadSource = "Google Ads";
-    }
-    else if (
-      req.body.utm_source === "google"
-    ) {
-      leadSource = "Organic Search";
-    }
-    else if (
-      req.body.referrer &&
-      req.body.referrer.includes("google")
-    ) {
-      leadSource = "Organic Search";
-    }
+    const leadSource = detectLeadSource(req.body);
 
     // Save contact
     const newContact = new Contact({
@@ -68,14 +48,8 @@ router.post("/", async (req, res) => {
       vanTitle: vanTitle || null,
       vanPrice: vanPrice || null,
       leadSource,
-      gclid: req.body.gclid || null,
-      utm_source: req.body.utm_source || null,
-      utm_medium: req.body.utm_medium || null,
-      utm_campaign: req.body.utm_campaign || null,
-      utm_term: req.body.utm_term || null,
-      utm_content: req.body.utm_content || null,
-      referrer: req.body.referrer || null,
-      landing_page: req.body.landing_page || null,
+      lead_source: req.body.lead_source,
+      ...trackingFields(req.body),
     });
 
     await newContact.save();
@@ -162,7 +136,9 @@ const adminHtml = `
 
       <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
         <p style="margin:5px 0;"><strong>Lead Source:</strong> ${leadSource}</p>
+        <p style="margin:5px 0;"><strong>Form Type:</strong> ${req.body.lead_source || "N/A"}</p>
         <p style="margin:5px 0;"><strong>Gclid:</strong> ${req.body.gclid || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>Fbclid:</strong> ${req.body.fbclid || "N/A"}</p>
         <p style="margin:5px 0;"><strong>UTM Source:</strong> ${req.body.utm_source || "N/A"}</p>
         <p style="margin:5px 0;"><strong>UTM Medium:</strong> ${req.body.utm_medium || "N/A"}</p>
         <p style="margin:5px 0;"><strong>UTM Campaign:</strong> ${req.body.utm_campaign || "N/A"}</p>

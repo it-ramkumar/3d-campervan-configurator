@@ -3,6 +3,7 @@ const router = express.Router();
 const { getRecommendation } = require('../services/recommendationEngine');
 const { sendMatchmakerResultEmail } = require('../services/matchmakerMailer');
 const MatchmakerLead = require('../models/matchmakerLead');
+const { detectLeadSource, trackingFields } = require('../services/leadSource');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 const VALID_VAN_LENGTH = ['long', 'short', 'no_preference'];
@@ -46,17 +47,7 @@ router.post('/recommend', async (req, res) => {
     // ==========================
     // Lead Tracking Detection
     // ==========================
-    let leadSource = 'Direct';
-
-    if (req.body.gclid) {
-      leadSource = 'Google Ads';
-    } else if (req.body.utm_source === 'google' && req.body.utm_medium === 'cpc') {
-      leadSource = 'Google Ads';
-    } else if (req.body.utm_source === 'google') {
-      leadSource = 'Organic Search';
-    } else if (req.body.referrer && req.body.referrer.includes('google')) {
-      leadSource = 'Organic Search';
-    }
+    const leadSource = detectLeadSource(req.body);
 
     try {
       await MatchmakerLead.create({
@@ -71,14 +62,7 @@ router.post('/recommend', async (req, res) => {
         primary_match: result?.primary_match || null,
         alternatives: result?.alternatives || [],
         leadSource,
-        gclid: req.body.gclid || null,
-        utm_source: req.body.utm_source || null,
-        utm_medium: req.body.utm_medium || null,
-        utm_campaign: req.body.utm_campaign || null,
-        utm_term: req.body.utm_term || null,
-        utm_content: req.body.utm_content || null,
-        referrer: req.body.referrer || null,
-        landing_page: req.body.landing_page || null,
+        ...trackingFields(req.body),
       });
     } catch (dbErr) {
       // A DB hiccup should never block the matchmaker response

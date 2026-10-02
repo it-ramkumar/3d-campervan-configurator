@@ -31,6 +31,23 @@ const InquerySchema = new mongoose.Schema(
       default: null,
     },
 
+    fbclid: {
+      type: String,
+      default: null,
+    },
+
+    // Same id sent to GTM / Meta Pixel; used to dedupe CAPI / offline conversions
+    event_id: {
+      type: String,
+      default: null,
+    },
+
+    // Which form the lead came from (contact, inventory, layout, quiz, build_your_own)
+    lead_source: {
+      type: String,
+      default: null,
+    },
+
     utm_source: {
       type: String,
       default: null,
