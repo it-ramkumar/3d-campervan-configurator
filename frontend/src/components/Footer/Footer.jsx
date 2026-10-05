@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { sendGTMEvent } from "@next/third-parties/google";
-const Swal = async () => (await import("sweetalert2")).default;
 import Link from "next/link";
 import {
   FaTwitter,
@@ -19,6 +18,10 @@ import {
 import { FooterListItem } from "../Common/Li/FooterLiItem";
 import { Heading3, RichParagraph, Heading4 } from "../Common/Common";
 import Image from "next/image";
+import { EMAIL_REGEX } from "@/lib/validateLead";
+
+// 44px tap targets on mobile, 24px minimum from md up (WCAG 2.5.8)
+const TAP_TARGET = "inline-flex items-center min-h-11 md:min-h-6";
 
 const DOT_GRID = {
   backgroundImage: "radial-gradient(circle, rgba(251,251,249,0.035) 1px, transparent 1px)",
@@ -33,48 +36,46 @@ export default function Footer() {
     alert(`Copied: ${text}`);
   };
 
-  const handleSubscribe = async () => {
-    const MySwal = await Swal();
+  // { type: "invalid" | "error" | "success", text }
+  const [newsletterStatus, setNewsletterStatus] = useState(null);
+  const [subscribing, setSubscribing] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (subscribing) return;
     const trimmedEmail = email.trim();
 
     if (!trimmedEmail) {
-      MySwal.fire({
-        icon: "warning",
-        title: "Email Required",
-        text: "Please enter your email address first!",
-        confirmButtonColor: "var(--color-primary)",
-      });
+      setNewsletterStatus({ type: "invalid", text: "Please enter your email address." });
+      return;
+    }
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      setNewsletterStatus({ type: "invalid", text: "Please enter a valid email address." });
       return;
     }
 
+    setSubscribing(true);
+    setNewsletterStatus(null);
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_URL}/newsletter`, {
         email: trimmedEmail,
       });
 
-      MySwal.fire({
-        icon: "success",
-        title: "Subscribed!",
-        text: "You'll receive notifications and updates soon 🎉",
-        confirmButtonColor: "var(--color-primary)",
-      });
-
+      setNewsletterStatus({ type: "success", text: "You're subscribed! Watch your inbox for updates." });
       setEmail("");
 
-      if (typeof window !== "undefined") {
-        if (window.fbq) window.fbq("track", "Subscribe");
-        sendGTMEvent({ event: "sign_up", method: "newsletter" });
-      }
+      if (window.fbq) window.fbq("track", "Subscribe");
+      sendGTMEvent({ event: "sign_up", method: "newsletter" });
     } catch (error) {
       const isDuplicate = error?.response?.status === 400;
-      MySwal.fire({
-        icon: isDuplicate ? "info" : "error",
-        title: isDuplicate ? "Already Subscribed" : "Error",
+      setNewsletterStatus({
+        type: "error",
         text: isDuplicate
-          ? "This email is already on our list!"
+          ? "This email is already on our list."
           : "Something went wrong. Please try again.",
-        confirmButtonColor: "var(--color-primary)",
       });
+    } finally {
+      setSubscribing(false);
     }
   };
 
@@ -157,7 +158,7 @@ export default function Footer() {
                   key={index}
                   href={item.link}
                   aria-label={item.label}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] hover:-translate-y-0.5"
+                  className="w-11 h-11 md:w-9 md:h-9 flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] hover:-translate-y-0.5"
                   style={{
                     color: "rgba(251,251,249,0.55)",
                     background: "rgba(255,255,255,0.06)",
@@ -176,7 +177,7 @@ export default function Footer() {
               <span className="w-4 h-[2px] bg-[#ED985F] inline-block" />
               Quick Links
             </p>
-            <ul className="grid grid-cols-2 lg:grid-cols-1 gap-y-2.5 gap-x-4">
+            <ul className="grid grid-cols-2 lg:grid-cols-1 gap-y-1 md:gap-y-2.5 gap-x-4">
               {[
                 { href: "/", label: "Home" },
                 { href: "/camper-vans-for-sale", label: "Vans For Sale" },
@@ -190,7 +191,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm transition-colors duration-200 flex items-center gap-2 group"
+                    className={`${TAP_TARGET} text-sm transition-colors duration-200 gap-2 group`}
                     style={{ color: "rgba(251,251,249,0.55)" }}
                   >
                     <span className="w-0 group-hover:w-3 h-[1px] bg-[#ED985F] transition-all duration-300 inline-block" />
@@ -219,7 +220,8 @@ export default function Footer() {
                   </span>
                   <button
                     onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear, CA 92314, USA")}
-                    className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#ED985F] opacity-40 hover:opacity-100 transition-opacity mt-2 w-fit"
+                    type="button"
+                    className={`${TAP_TARGET} gap-1 text-[10px] uppercase tracking-wider text-[#ED985F] opacity-40 hover:opacity-100 transition-opacity mt-1 w-fit`}
                   >
                     <FaCopy /> Copy Address
                   </button>
@@ -231,21 +233,25 @@ export default function Footer() {
                   style={{ background: "rgba(237,152,95,0.12)", border: "1px solid rgba(237,152,95,0.2)" }}>
                   <FaPhoneAlt className="text-[#ED985F] text-xs" />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col md:gap-2">
                   {["+1 (951) 441-9748", "+1 (951) 441-9719"].map((num) => (
                     <div key={num} className="flex items-center gap-2 group">
                       <Link
                         href={`tel:+${num.replace(/\D/g, "")}`}
-                        className="text-sm hover:text-[#ED985F] transition-colors"
+                        className={`${TAP_TARGET} text-sm hover:text-[#ED985F] transition-colors`}
                         style={{ color: "rgba(251,251,249,0.6)" }}
                       >
                         {num}
                       </Link>
-                      <FaCopy
+                      <button
+                        type="button"
                         onClick={() => handleCopy(num.replace(/\D/g, ""))}
-                        className="cursor-pointer text-xs hover:text-[#FBFBF9] transition-colors"
+                        aria-label={`Copy phone number ${num}`}
+                        className="flex items-center justify-center w-11 h-11 md:w-6 md:h-6 text-xs hover:text-[#FBFBF9] transition-colors"
                         style={{ color: "rgba(255,255,255,0.2)" }}
-                      />
+                      >
+                        <FaCopy />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -258,7 +264,7 @@ export default function Footer() {
                 </div>
                 <Link
                   href="mailto:bigbearvans@gmail.com"
-                  className="text-sm truncate hover:text-[#ED985F] transition-colors"
+                  className={`${TAP_TARGET} text-sm truncate hover:text-[#ED985F] transition-colors`}
                   style={{ color: "rgba(251,251,249,0.6)" }}
                 >
                   bigbearvans@gmail.com
@@ -306,25 +312,51 @@ export default function Footer() {
               <p className="text-[#ED985F] text-xs uppercase tracking-widest font-bold mb-1">
                 Stay Updated
               </p>
-              <p className="text-[11px] text-[#FBFBF9]/45 mb-3">
+              <p id="newsletter-hint" className="text-[11px] text-[#FBFBF9]/45 mb-3">
                 New builds, tips & offers — straight to you.
               </p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bbv-input flex-1 min-w-0 text-sm"
-                />
-                <button
-                  onClick={handleSubscribe}
-                  aria-label="Subscribe"
-                  className="p-2.5 bg-[#ED985F] text-[#001F3D] rounded-lg transition-all duration-200 flex items-center justify-center hover:brightness-110 shrink-0"
-                >
-                  <FaArrowRight />
-                </button>
-              </div>
+              <form name="newsletter" onSubmit={handleSubscribe} noValidate>
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email address
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="newsletter-email"
+                    name="email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (newsletterStatus) setNewsletterStatus(null);
+                    }}
+                    aria-invalid={newsletterStatus?.type === "invalid"}
+                    aria-describedby={newsletterStatus ? "newsletter-hint newsletter-status" : "newsletter-hint"}
+                    className="bbv-input flex-1 min-w-0 min-h-11 px-3 text-sm"
+                  />
+                  <button
+                    type="submit"
+                    disabled={subscribing}
+                    aria-label="Subscribe to newsletter"
+                    className="w-11 h-11 bg-[#ED985F] text-[#001F3D] rounded-lg transition-all duration-200 flex items-center justify-center hover:brightness-110 shrink-0 disabled:opacity-60"
+                  >
+                    <FaArrowRight />
+                  </button>
+                </div>
+                {newsletterStatus && (
+                  <p
+                    id="newsletter-status"
+                    role={newsletterStatus.type === "success" ? "status" : "alert"}
+                    className={`mt-2 text-xs font-semibold ${
+                      newsletterStatus.type === "success" ? "text-emerald-300" : "text-red-300"
+                    }`}
+                  >
+                    {newsletterStatus.text}
+                  </p>
+                )}
+              </form>
             </div>
           </div>
         </div>
@@ -337,10 +369,10 @@ export default function Footer() {
           <p className="text-[11px] tracking-[0.18em] uppercase" style={{ color: "rgba(251,251,249,0.3)" }}>
             © {new Date().getFullYear()} Big Bear Vans. All Rights Reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-6">
             <Link
               href="/privacy-policy"
-              className="text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]"
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Privacy Policy
@@ -348,7 +380,7 @@ export default function Footer() {
             <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
             <Link
               href="/returns-cancellation-policy"
-              className="text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]"
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Returns & Cancellation
@@ -356,7 +388,7 @@ export default function Footer() {
             <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
             <Link
               href="/contact"
-              className="text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]"
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Contact Us

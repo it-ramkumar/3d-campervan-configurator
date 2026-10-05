@@ -11,11 +11,25 @@ const nextConfig = {
       fullUrl: true,
     },
   },
-  // next.config.mjs mein images section ke bahar yeh headers section add karo
+  poweredByHeader: false,
 
   async headers() {
     return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Fullscreen/autoplay stay allowed for the YouTube and Maps embeds
           {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(), usb=(), browsing-topics=()",
+          },
+        ],
+      },
+      {
         source: "/:all*(jpg|jpeg|png|webp|svg|ico|gif)",
         headers: [
           {

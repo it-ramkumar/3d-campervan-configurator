@@ -2,10 +2,54 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContactForm from "@/components/Consultation/ContactForm";
 
+// Matches the button's fixed bottom-4 right-4 w-14 h-14 box, plus a small buffer
+const FAB_OFFSET = 16;
+const FAB_SIZE = 56;
+const FAB_BUFFER = 8;
+const FORM_CONTROLS = "form button, form input:not([type=hidden]), form select, form textarea, form a";
+
+const overlapsFab = (el) => {
+  const r = el.getBoundingClientRect();
+  if (!r.width || !r.height) return false;
+  const vw = document.documentElement.clientWidth;
+  const vh = window.innerHeight;
+  const left = vw - FAB_OFFSET - FAB_SIZE - FAB_BUFFER;
+  const top = vh - FAB_OFFSET - FAB_SIZE - FAB_BUFFER;
+  return r.right > left && r.left < vw && r.bottom > top && r.top < vh;
+};
+
 export default function FloatingCallButton() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isCoveringForm, setIsCoveringForm] = useState(false);
   const menuRef = useRef(null);
+
+  // Step out of the way whenever a form control scrolls under the button
+  useEffect(() => {
+    let frame = null;
+    const check = () => {
+      frame = null;
+      const covering = Array.from(document.querySelectorAll(FORM_CONTROLS)).some(
+        (el) => !menuRef.current?.contains(el) && overlapsFab(el)
+      );
+      setIsCoveringForm(covering);
+      if (covering) setIsMenuOpen(false);
+    };
+    const schedule = () => {
+      if (frame === null) frame = requestAnimationFrame(check);
+    };
+    const events = ["scroll", "resize", "focusin", "click", "input"];
+    events.forEach((type) => window.addEventListener(type, schedule, { passive: true, capture: true }));
+    // Forms mount and change step without scrolling
+    const observer = new MutationObserver(schedule);
+    observer.observe(document.body, { childList: true, subtree: true });
+    schedule();
+    return () => {
+      events.forEach((type) => window.removeEventListener(type, schedule, { capture: true }));
+      observer.disconnect();
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -77,10 +121,16 @@ export default function FloatingCallButton() {
       {/* 2. MAIN FLOATING BUTTON */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className={`pointer-events-auto flex items-center justify-center bg-primary border text-hover shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 ease-out transform hover:scale-110 active:scale-95 w-14 h-14 rounded-full group ${
+        className={`flex items-center justify-center bg-primary border text-hover shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-300 ease-out transform hover:scale-110 active:scale-95 w-14 h-14 rounded-full group ${
           isMenuOpen ? "border-hover rotate-90" : "border-white/10"
+        } ${
+          isCoveringForm && !isFormOpen
+            ? "opacity-0 translate-x-20 pointer-events-none"
+            : "pointer-events-auto"
         }`}
         aria-label="Contact Options"
+        aria-hidden={isCoveringForm && !isFormOpen ? true : undefined}
+        tabIndex={isCoveringForm && !isFormOpen ? -1 : undefined}
       >
         {isMenuOpen ? (
           <svg

@@ -8,7 +8,7 @@ export async function availableVans() {
       `${process.env.NEXT_PUBLIC_URL}/van/available`,
       {
         method: "GET",
-        cache: "no-store",
+        next: { revalidate: 300 },
       },
     );
 

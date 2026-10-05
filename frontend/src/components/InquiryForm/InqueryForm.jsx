@@ -68,7 +68,7 @@ const QuestionGroup = ({ question, selected, onSelect }) => {
   );
 };
 
-const ContactField = ({ question, value, onSelect }) => (
+const ContactField = ({ question, value, onSelect, invalid }) => (
   <div className="form-group mb-8 animate-fadeIn">
     <div className="max-w-xl mx-auto">
       <h3 className="text-lg font-bold mb-3 text-primary uppercase tracking-widest text-center">
@@ -78,6 +78,7 @@ const ContactField = ({ question, value, onSelect }) => (
         type={question.type}
         value={value}
         onChange={(e) => onSelect(question.id, e.target.value)}
+        aria-invalid={invalid}
         className="w-full bg-secondary border-2 border-primary/10 rounded-[var(--radius-md)] p-5 text-lg transition-all duration-300 focus:ring-4 focus:ring-hover/10 focus:border-hover outline-none text-primary placeholder:text-primary/30 shadow-inner"
         placeholder={question.placeholder}
       />
@@ -126,6 +127,7 @@ export default function InquiryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [validationMessage, setValidationMessage] = useState(null);
+  const [invalidField, setInvalidField] = useState(null);
   const navigate = useRouter();
 
   const handleSelect = (id, value) => {
@@ -133,6 +135,7 @@ export default function InquiryForm() {
     const question = group.questions.find((q) => q.id === id);
 
     if (!question.inputType) {
+      if (id === invalidField) setInvalidField(null);
       setFormData((prev) => ({ ...prev, [id]: value }));
       return;
     }
@@ -186,6 +189,7 @@ export default function InquiryForm() {
 
     if (!formData.name?.trim()) {
       setValidationMessage("⚠️ Please enter your name to continue.");
+      setInvalidField("name");
       setIsLoading(false);
       return;
     }
@@ -193,6 +197,7 @@ export default function InquiryForm() {
     const email = formData.email?.trim();
     if (!email) {
       setValidationMessage("⚠️ Please provide your e-mail address.");
+      setInvalidField("email");
       setIsLoading(false);
       return;
     }
@@ -200,10 +205,12 @@ export default function InquiryForm() {
     const fieldErrors = validateLead(formData);
     if (fieldErrors.email || fieldErrors.phone) {
       setValidationMessage(`⚠️ ${fieldErrors.email || fieldErrors.phone}`);
+      setInvalidField(fieldErrors.email ? "email" : "phone");
       setIsLoading(false);
       return;
     }
 
+    setInvalidField(null);
     const eventId = createEventId();
     const payload = withTracking({ ...formData, event_id: eventId, lead_source: "build_your_own" });
 
@@ -329,6 +336,7 @@ export default function InquiryForm() {
                             question={q}
                             value={formData[q.id] || ""}
                             onSelect={handleSelect}
+                            invalid={invalidField === q.id}
                           />
                         ) : (
                           <QuestionGroup

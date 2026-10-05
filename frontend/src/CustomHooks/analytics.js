@@ -49,12 +49,17 @@ const setupEventDelegation = () => {
     }
   }, true); // Use capture phase
 
-  // Form submissions
+  // Form submissions. React validates inside onSubmit and marks bad fields with
+  // aria-invalid, so wait until its handlers and re-render have run, then skip
+  // attempts that failed validation.
   document.addEventListener('submit', (e) => {
-    if (e.target.tagName === 'FORM') {
-      const name = e.target.getAttribute('name') || 'Unnamed Form';
+    const form = e.target;
+    if (form.tagName !== 'FORM') return;
+    setTimeout(() => {
+      if (form.querySelector('[aria-invalid="true"]')) return;
+      const name = form.getAttribute('name') || 'Unnamed Form';
       event({ action: 'form_submit', category: 'Form', label: name });
-    }
+    }, 0);
   }, true);
 };
 

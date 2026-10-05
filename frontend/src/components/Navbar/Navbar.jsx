@@ -210,7 +210,7 @@ const navLinks = useMemo(
       path: "/diy-components", // Ye aapka naya internal page path hoga
       hasDropdown: false,
     },
-    { name: "discover", label: "Discover", path: "#", hasDropdown: true },
+    { name: "discover", label: "Discover", path: "/about-us", hasDropdown: true },
   ],
   [],
 );

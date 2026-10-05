@@ -33,7 +33,7 @@ custom Sprinter or Transit build today.`,
 
 export default function Contact() {
   const heroImage = "/heroSlider/bloghero.webp";
-  const newTitleText = "Book a Free Custom Van Consultation | Big Bear Vans";
+  const newTitleText = "Book a Free Custom Van Consultation";
   const newDescriptionText = "Contact Big Bear Vans today for your custom van conversion. Our team of expert van builders in Big Bear City, California, is ready to help you begin your dream van life.";
 
   const jsonld = generateConsultationSchema();

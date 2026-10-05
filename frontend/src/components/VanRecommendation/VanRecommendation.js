@@ -19,6 +19,15 @@ const OPTIONS = {
 
 const STEP_LABELS = ['Van Length', 'Passengers', 'Bathroom', 'Battery & AC', 'Contact Info'];
 
+const CONTACT_FIELDS = [
+    { field: 'name', key: 'customer_name', label: 'Full Name', type: 'text', autoComplete: 'name', placeholder: 'John Doe' },
+    { field: 'phone', key: 'customer_phone', label: 'Phone Number', type: 'tel', autoComplete: 'tel', placeholder: '+1 (555) 123-4567' },
+    { field: 'email', key: 'customer_email', label: 'Email Address', type: 'email', autoComplete: 'email', placeholder: 'you@example.com' },
+];
+
+// Amber fill so the forward action stands out on the navy card (navy on amber ≈ 7:1)
+const PRIMARY_ACTION_CLASSES = '!bg-hover !text-primary !border-hover hover:!bg-secondary hover:!border-secondary';
+
 export default function VanRecommendation() {
     const [formData, setFormData] = useState({
         van_length: 'no_preference',
@@ -34,10 +43,16 @@ export default function VanRecommendation() {
     const [loading, setLoading] = useState(false);
     const [recommendation, setRecommendation] = useState(null);
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const resultsRef = useRef(null);
     const totalSteps = 5;
 
     const handleInputChange = (key, value) => setFormData((prev) => ({ ...prev, [key]: value }));
+
+    const handleContactChange = (field, key, value) => {
+        handleInputChange(key, value);
+        if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+    };
 
     const handleCounter = (type) => {
         setFormData((prev) => {
@@ -53,13 +68,15 @@ export default function VanRecommendation() {
         e.preventDefault();
 
         if (loading) return;
-        const fieldErrors = validateLead(
+        const errors = validateLead(
             { name: formData.customer_name, email: formData.customer_email, phone: formData.customer_phone },
             { requirePhone: true }
         );
-        const firstError = fieldErrors.name || fieldErrors.phone || fieldErrors.email;
-        if (firstError) {
-            setError(firstError);
+        setFieldErrors(errors);
+        const firstInvalid = ['name', 'phone', 'email'].find((field) => errors[field]);
+        if (firstInvalid) {
+            setError('');
+            document.getElementById(`quiz-${firstInvalid}`)?.focus();
             return;
         }
 
@@ -89,6 +106,8 @@ export default function VanRecommendation() {
 
     const handleReset = () => {
         setRecommendation(null);
+        setFieldErrors({});
+        setError('');
         setCurrentStep(1);
         setFormData({
             van_length: 'no_preference',
@@ -146,7 +165,7 @@ export default function VanRecommendation() {
                     <RichParagraph
                         variant="sub"
                         className={`mt-1 hidden md:block transition-colors duration-300 !normal-case !tracking-normal ${
-                            isActive ? '!text-hover font-semibold' : 'text-secondary/30'
+                            isActive ? '!text-hover font-semibold' : '!text-secondary/70'
                         }`}
                     >
                         {label}
@@ -173,13 +192,13 @@ export default function VanRecommendation() {
                 </div>
 
                 {/* Form body */}
-               <form onSubmit={handleSubmit} className="px-4 py-8">
+               <form name="van-matchmaker" onSubmit={handleSubmit} noValidate className="px-4 py-8">
     <div className="min-h-[260px] flex flex-col justify-between">
 
         {/* STEP 1: VAN LENGTH */}
         {currentStep === 1 && (
             <div>
-                <RichParagraph variant="body" className="font-bold tracking-widest uppercase mb-5 text-secondary/40">
+                <RichParagraph variant="body" textColor="text-secondary" className="!opacity-100 font-bold tracking-widest uppercase mb-5">
                     Do you have a preferred van length?
                 </RichParagraph>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -201,14 +220,14 @@ export default function VanRecommendation() {
                                     <RichParagraph
                                         variant="sub"
                                         className={`!text-sm font-black uppercase !normal-case !tracking-normal transition-colors duration-300 ${
-                                            active ? '!text-hover ' : 'text-secondary'
+                                            active ? '!text-hover ' : '!text-secondary'
                                         }`}
                                     >
                                         {opt.label}
                                     </RichParagraph>
                                     <RichParagraph
                                         variant="sub"
-                                        className="!text-[12px] !text-secondary/30 mt-1 !normal-case !tracking-normal"
+                                        textColor="text-secondary/80" className="!opacity-100 !text-[12px] mt-1 !normal-case !tracking-normal"
                                     >
                                         {opt.desc}
                                     </RichParagraph>
@@ -223,15 +242,15 @@ export default function VanRecommendation() {
         {/* STEP 2: PASSENGERS */}
         {currentStep === 2 && (
             <div className="max-w-md mx-auto text-center w-full">
-                <RichParagraph variant="body" className="font-bold tracking-widest uppercase mb-6 text-secondary/40">
+                <RichParagraph variant="body" textColor="text-secondary" className="!opacity-100 font-bold tracking-widest uppercase mb-6">
                     How many passengers do you need to seat at minimum?
                 </RichParagraph>
                 <div className="flex items-center justify-between p-6 bg-secondary/5 border border-secondary/10 rounded-lg max-w-sm mx-auto">
                     <div className="text-left">
-                        <RichParagraph variant="sub" className="!text-secondary font-black text-sm tracking-wide !normal-case !tracking-normal">
+                        <RichParagraph variant="sub" textColor="text-secondary" className="!opacity-100 font-black text-sm tracking-wide !normal-case !tracking-normal">
                             Passengers
                         </RichParagraph>
-                        <RichParagraph variant="sub" className="!text-secondary/35 !text-[12px] !normal-case !tracking-normal">
+                        <RichParagraph variant="sub" textColor="text-secondary/80" className="!opacity-100 !text-[12px] !normal-case !tracking-normal">
                             Minimum seating capacity
                         </RichParagraph>
                     </div>
@@ -239,18 +258,21 @@ export default function VanRecommendation() {
                         <button
                             type="button"
                             onClick={() => handleCounter('dec')}
-                            className="w-10 h-10 flex items-center justify-center font-black text-base transition-all rounded-[4px] border border-secondary/15 bg-secondary/5 text-secondary hover:bg-secondary/10"
+                            aria-label="Fewer passengers"
+                            className="w-10 h-10 flex items-center justify-center font-black text-base transition-all rounded-[4px] border border-secondary/40 bg-secondary/10 text-secondary hover:bg-secondary/20"
                         >−</button>
-                        <RichParagraph
-                            variant="sub"
-                            className="!text-2xl font-black w-6 text-center text-hover !normal-case !tracking-normal"
+                        <output
+                            aria-live="polite"
+                            aria-label={`${formData.passengers} passengers`}
+                            className="text-2xl font-black w-6 text-center text-secondary font-body"
                         >
                             {formData.passengers}
-                        </RichParagraph>
+                        </output>
                         <button
                             type="button"
                             onClick={() => handleCounter('inc')}
-                            className="w-10 h-10 flex items-center justify-center font-black text-base transition-all rounded-[4px] border border-secondary/15 bg-secondary/5 text-secondary hover:bg-secondary/10"
+                            aria-label="More passengers"
+                            className="w-10 h-10 flex items-center justify-center font-black text-base transition-all rounded-[4px] border border-secondary/40 bg-secondary/10 text-secondary hover:bg-secondary/20"
                         >+</button>
                     </div>
                 </div>
@@ -261,7 +283,7 @@ export default function VanRecommendation() {
         {currentStep === 3 && (
             <div className="space-y-8 max-w-3xl mx-auto w-full">
                 <div>
-                    <RichParagraph variant="body" className="text-center font-bold tracking-widest uppercase mb-4 text-secondary/40">
+                    <RichParagraph variant="body" textColor="text-secondary" className="!opacity-100 text-center font-bold tracking-widest uppercase mb-4">
                         Do you need an Indoor Bathroom / Shower Setup?
                     </RichParagraph>
                     <div className="flex justify-center gap-4 mb-4">
@@ -275,7 +297,7 @@ export default function VanRecommendation() {
                                     className={`px-6 py-3 font-black uppercase tracking-wider border rounded-md transition-all w-48 ${
                                         active
                                             ? 'border-hover bg-hover/15 text-hover shadow-md shadow-hover/10'
-                                            : 'border-secondary/10 bg-secondary/[0.03] text-secondary/45'
+                                            : 'border-secondary/30 bg-secondary/[0.03] text-secondary/85'
                                     }`}
                                 >
                                     {opt.value === 'yes' ? `${opt.label} 🚿` : opt.label}
@@ -291,10 +313,10 @@ export default function VanRecommendation() {
         {currentStep === 4 && (
             <div className="space-y-8 max-w-3xl mx-auto w-full">
                 <div>
-                    <RichParagraph variant="body" className="text-center font-bold tracking-widest uppercase mb-2 text-secondary/40">
+                    <RichParagraph variant="body" textColor="text-secondary" className="!opacity-100 text-center font-bold tracking-widest uppercase mb-2">
                         Do you want an Off-Grid Battery & AC System?
                     </RichParagraph>
-                    <RichParagraph variant="sub" className="text-center mb-4 !text-secondary/30 !text-[13px] !normal-case !tracking-normal">
+                    <RichParagraph variant="sub" textColor="text-secondary/80" className="!opacity-100 text-center mb-4 !text-[13px] !normal-case !tracking-normal">
                         Helps us understand your budget for a complex electrical build — doesn't affect which layouts you're shown.
                     </RichParagraph>
                     <div className="flex justify-center gap-4 mb-4">
@@ -308,7 +330,7 @@ export default function VanRecommendation() {
                                     className={`px-6 py-3 font-black uppercase tracking-wider border rounded-md transition-all w-48 flex items-center justify-center gap-2 ${
                                         active
                                             ? 'border-hover bg-hover/15 text-hover shadow-md shadow-hover/10'
-                                            : 'border-secondary/10 bg-secondary/[0.03] text-secondary/45'
+                                            : 'border-secondary/30 bg-secondary/[0.03] text-secondary/85'
                                     }`}
                                 >
                                     {opt.value === 'yes' && <Zap className="w-4 h-4" />}
@@ -324,50 +346,43 @@ export default function VanRecommendation() {
         {/* STEP 5: CONTACT INFO (GATE BEFORE RESULTS) */}
         {currentStep === 5 && (
             <div className="max-w-md mx-auto w-full space-y-4">
-                <RichParagraph variant="body" className="text-center font-bold tracking-widest uppercase mb-2 text-secondary/40">
+                <RichParagraph variant="body" textColor="text-secondary" className="!opacity-100 text-center font-bold tracking-widest uppercase mb-2">
                     Almost there — where should we send your matches?
                 </RichParagraph>
-                <RichParagraph variant="sub" className="text-center mb-4 !text-secondary/30 !text-[13px] !normal-case !tracking-normal">
+                <RichParagraph variant="sub" textColor="text-secondary/80" className="!opacity-100 text-center mb-4 !text-[13px] !normal-case !tracking-normal">
                     So our BBV team can follow up and answer any questions about your build.
                 </RichParagraph>
 
                 <div className="space-y-3">
-                    <div>
-                        <RichParagraph variant="sub" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1 !normal-case">
-                            Full Name
-                        </RichParagraph>
-                        <input
-                            type="text"
-                            value={formData.customer_name}
-                            onChange={(e) => handleInputChange('customer_name', e.target.value)}
-                            placeholder="John Doe"
-                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all border border-secondary/15 bg-secondary/5 focus:border-hover"
-                        />
-                    </div>
-                    <div>
-                        <RichParagraph variant="sub" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1 !normal-case">
-                            Phone Number
-                        </RichParagraph>
-                        <input
-                            type="tel"
-                            value={formData.customer_phone}
-                            onChange={(e) => handleInputChange('customer_phone', e.target.value)}
-                            placeholder="+1 (555) 123-4567"
-                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all border border-secondary/15 bg-secondary/5 focus:border-hover"
-                        />
-                    </div>
-                    <div>
-                        <RichParagraph variant="sub" className="!text-secondary/40 font-bold tracking-wide uppercase !text-[11px] block mb-1 !normal-case">
-                            Email Address
-                        </RichParagraph>
-                        <input
-                            type="email"
-                            value={formData.customer_email}
-                            onChange={(e) => handleInputChange('customer_email', e.target.value)}
-                            placeholder="you@example.com"
-                            className="w-full px-4 py-3 rounded-md text-secondary outline-none transition-all border border-secondary/15 bg-secondary/5 focus:border-hover"
-                        />
-                    </div>
+                    {CONTACT_FIELDS.map(({ field, key, label, type, autoComplete, placeholder }) => (
+                        <div key={field}>
+                            <label
+                                htmlFor={`quiz-${field}`}
+                                className="block mb-1 font-body font-bold tracking-wide text-[11px] sm:text-xs text-secondary/85"
+                            >
+                                {label}
+                            </label>
+                            <input
+                                id={`quiz-${field}`}
+                                name={field}
+                                type={type}
+                                autoComplete={autoComplete}
+                                value={formData[key]}
+                                onChange={(e) => handleContactChange(field, key, e.target.value)}
+                                placeholder={placeholder}
+                                aria-invalid={!!fieldErrors[field]}
+                                aria-describedby={fieldErrors[field] ? `quiz-${field}-error` : undefined}
+                                className={`w-full px-4 py-3 rounded-md text-secondary placeholder:text-secondary/60 outline-none transition-all border bg-secondary/5 focus:border-hover ${
+                                    fieldErrors[field] ? 'border-red-300' : 'border-secondary/30'
+                                }`}
+                            />
+                            {fieldErrors[field] && (
+                                <p id={`quiz-${field}-error`} role="alert" className="mt-1 font-body text-xs font-semibold text-red-300">
+                                    {fieldErrors[field]}
+                                </p>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
         )}
@@ -385,27 +400,31 @@ export default function VanRecommendation() {
 
             {currentStep < totalSteps ? (
                 <SecondaryButton
+                    key="continue"
                     label="Continue →"
                     onClick={handleNext}
                     type="button"
+                    className={PRIMARY_ACTION_CLASSES}
                 />
             ) : (
                 <SecondaryButton
-                    label={loading ? 'BBV Cluster Syncing...' : 'Match Build Architecture →'}
+                    key="submit"
+                    label={loading ? 'Finding Your Matches...' : 'See My Matching Vans'}
                     disabled={loading}
                     type="submit"
+                    className={loading ? '' : PRIMARY_ACTION_CLASSES}
                 />
             )}
         </div>
     </div>
 
     {error && (
-        <RichParagraph
-            variant="sub"
-            className="mt-4 font-bold text-center p-3 tracking-wide !text-red-400 border border-red-500/20 bg-red-500/10 rounded-[6px] !normal-case !tracking-normal"
+        <p
+            role="alert"
+            className="mt-4 font-body text-xs sm:text-sm font-bold text-center p-3 text-red-200 border border-red-300/40 bg-red-500/10 rounded-[6px]"
         >
             {error}
-        </RichParagraph>
+        </p>
     )}
 </form>
             </div>

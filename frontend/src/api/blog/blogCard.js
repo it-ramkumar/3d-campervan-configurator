@@ -6,7 +6,7 @@ export async function blogCard() {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/test-blog/blog-card`,
       {
-        cache: 'no-store',
+        next: { revalidate: 300 },
       }
     );
 

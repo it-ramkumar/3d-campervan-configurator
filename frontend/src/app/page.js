@@ -4,7 +4,8 @@ import nextDynamic from "next/dynamic";
 import { Heading2,RichParagraph, SpanTag } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
 
-export const dynamic = "force-dynamic";
+// ISR: serve a cached copy, regenerate in the background at most every 5 minutes
+export const revalidate = 300;
 
 export const metadata = {
   title: "Custom Camper Van Conversions in California | Big Bear Vans",
