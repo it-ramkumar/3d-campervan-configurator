@@ -5,7 +5,7 @@ import Adventure from "../../components/AboutUs/Adventure/Adventure";
 import { generateAboutSchema } from "@/schema/about";
 
 export const metadata = {
-  title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+  title: "About Us - Our Story and Team | Big Bear Vans",
   description:
     `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
@@ -18,7 +18,7 @@ Transit camper van conversions.`,
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/about-us",
-    title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+    title: "About Us - Our Story and Team | Big Bear Vans",
   description:
     `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
@@ -27,7 +27,7 @@ Transit camper van conversions.`,
   },
   twitter: {
     card: "summary_large_image",
-     title: "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+     title: "About Us - Our Story and Team | Big Bear Vans",
   description:
     `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and

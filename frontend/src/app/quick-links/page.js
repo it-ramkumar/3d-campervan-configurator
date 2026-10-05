@@ -4,7 +4,7 @@ import QuickLinksClient from "../../components/QuickLinks/QuickLinks";
 
 // ✅ 1. SEO Metadata (Server Side)
 export const metadata = {
-  title: "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+  title: "Quick Links - All Big Bear Vans Resources",
   description: `Jump to Big Bear Vans' inventory, layouts, configurator,
 and social channels - all official links and resources
  in one place.`,
@@ -12,7 +12,7 @@ and social channels - all official links and resources
     canonical: "https://www.bigbearvans.com/quick-links",
   },
   openGraph: {
-     title: "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+     title: "Quick Links - All Big Bear Vans Resources",
   description: `Jump to Big Bear Vans' inventory, layouts, configurator,
 and social channels - all official links and resources
  in one place.`,
@@ -26,7 +26,7 @@ and social channels - all official links and resources
 const generateQuickLinksSchema = (links) => ({
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Quick Links - All Big Bear Vans Resources | Big Bear Vans",
+  "name": "Quick Links - All Big Bear Vans Resources",
   "description":`Jump to Big Bear Vans' inventory, layouts, configurator,
 and social channels - all official links and resources
  in one place.`,

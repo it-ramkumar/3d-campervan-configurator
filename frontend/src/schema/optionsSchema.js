@@ -11,7 +11,7 @@ export const generateDynamicSchema = (options, current, categories) => {
         "@type": "CollectionPage",
         "@id": `${currentUrl}/#webpage`,
         "url": currentUrl,
-        "name": `${current.title} | Big Bear Vans`,
+        "name": current.title,
         "description": current.desc,
         "breadcrumb": {
           "@type": "BreadcrumbList",

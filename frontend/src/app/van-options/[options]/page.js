@@ -8,9 +8,9 @@ export async function generateMetadata({ params }) {
   const { options } = await params;
   const current = PAGE_CONFIG[options];
 
-  if (!current) return { title: "Options | Big Bear Vans", robots: { index: false, follow: false } };
+  if (!current) return { title: "Options", robots: { index: false, follow: false } };
 
-  const title = `${current.title} | Big Bear Vans`;
+  const title = current.title;
   const description = current.desc;
   const canonical = `https://www.bigbearvans.com/van-options/${options}`;
 

@@ -7,12 +7,12 @@ import { Heart, Users } from "lucide-react";
 
 // ✅ 1. SEO Metadata
 export const metadata = {
-  title: "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+  title: "Careers - Join the Big Bear Vans Team",
   description: `Explore career opportunities at Big Bear Vans. Join our
  team of expert van builders, designers, and engineers in
  Big Bear City, California.`,
   openGraph: {
-     title: "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+     title: "Careers - Join the Big Bear Vans Team",
   description: `Explore career opportunities at Big Bear Vans. Join our
  team of expert van builders, designers, and engineers in
  Big Bear City, California.`,
@@ -51,7 +51,7 @@ export default async function CareersPage() {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Careers - Join the Big Bear Vans Team | Big Bear Vans",
+  "name": "Careers - Join the Big Bear Vans Team",
   "description": `Explore career opportunities at Big Bear Vans. Join our
  team of expert van builders, designers, and engineers in
  Big Bear City, California.`,

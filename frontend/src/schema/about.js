@@ -7,7 +7,7 @@ export const generateAboutSchema = () => ({
       "@type": "AboutPage",
       "@id": `${SITE_URL}/about-us/#webpage`,
       "url": `${SITE_URL}/about-us`,
-      "name": "About Big Bear Vans - Our Story & Team | Big Bear Vans",
+      "name": "About Us - Our Story and Team | Big Bear Vans",
       "description": `Meet the team behind Big Bear Vans. Founded by van lifers
  Artur & Anna, we've delivered 105+ custom Sprinter and
 Transit camper van conversions.`,
