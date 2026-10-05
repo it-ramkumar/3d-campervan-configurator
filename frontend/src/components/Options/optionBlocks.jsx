@@ -47,7 +47,7 @@ export const RenderBlocks = ({ blocks, compact = false }) => {
             case "subheading":
               return (
                 <div key={idx} className="mb-1">
-                  <Heading1 variants="card"
+                  <Heading1 variant="card"
                     text={block.title}
                     textColor="text-primary"
                     className="font-bold text-[11px]"

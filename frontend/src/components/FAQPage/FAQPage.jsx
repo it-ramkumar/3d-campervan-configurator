@@ -15,9 +15,9 @@ export default function FAQClient({ faqData }) {
       {faqData.map((category, catIdx) => (
         <div key={catIdx} className="mb-24">
           <div className="flex items-center gap-4 mb-8">
-            <Heading1 variant='section' textColor='text-primary/80' className="font-bold">
+            <RichParagraph variant='section' textColor='text-primary/80' className="font-bold !text-2xl !text-hover">
               0{catIdx + 1}
-            </Heading1>
+            </RichParagraph>
 
             <Heading1
               variant="section "

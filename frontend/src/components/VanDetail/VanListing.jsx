@@ -299,148 +299,156 @@ const VanPage = ({ vanDetail,variants }) => {
         </div>
       </div>
 
-      {/* ── HERO — light ── */}
-      <section className="bbv-section-light relative">
-        <div className="bbv-dot-grid-light" />
-        <div className="relative max-w-9xl mx-auto md:pt-4 pb-16 px-6 ">
+     <section className="bbv-section-light relative">
+  <div className="bbv-dot-grid-light" />
+  <div className="relative max-w-9xl mx-auto md:pt-4 pb-16 px-6">
 
-          {/* Mobile-only heading: shown above the gallery on small screens.
-              Hidden on lg+ where the title renders inside the info panel instead.
-              This is the page's single <h1> (Google indexes the mobile layout). */}
-          <div className="lg:hidden mb-5 space-y-3">
-            <Heading1 as="h1" variant="section" text={vanDetail?.van_listing?.title} className="!text-primary " />
-            {vanDetail?.van_listing?.subtitle && (
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-0.5 bg-hover shrink-0" />
-                <RichParagraph className="italic !text-primary/55">{vanDetail.van_listing.subtitle}</RichParagraph>
-              </div>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      {/* GALLERY */}
+      <div className="lg:col-span-7">
+        <VanMediaGallery
+          key={vanDetail?.slug || vanDetail?._id}
+          gallery={gallery}
+          media={vanDetail?.media || []}
+          modelUrl={vanDetail?.glbFile}
+          variants={variants || []}
+          title={vanDetail?.van_listing?.title}
+        />
+      </div>
+
+      {/* RIGHT PANEL: mobile par `contents` (children grid itemsban jate hain),
+          desktop par normal sticky panel */}
+      <div className="contents lg:block lg:col-span-5 lg:sticky lg:top-10 lg:h-fit lg:space-y-6">
+
+        {/* TITLE BLOCK: mobile par gallery ke upar (order-first), desktop par panel ke top mein.
+            Page ka single <h1> yahin hai. */}
+        <div className="order-first lg:order-none space-y-3 -mb-3 lg:mb-0">
+
+          {vanDetail?.delivery_date && (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
+              <Calendar className="w-3 h-3 text-hover" />
+              <RichParagraph variant="sub" className="uppercase font-semibold text-hover">
+                {vanDetail.delivery_date}
+              </RichParagraph>
+            </div>
+          )}
+
+          <Heading1
+            as="h1"
+            variant="hero"
+            text={vanDetail?.van_listing?.title}
+            className="!text-primary"
+          />
+
+          {vanDetail?.van_listing?.subtitle && (
+            <div className="flex items-center gap-3 lg:pt-1">
+              <div className="w-8 h-0.5 bg-hover shrink-0 lg:hidden" />
+              <RichParagraph variant="body" className="italic !text-primary/55 lg:!text-inherit">
+                {vanDetail.van_listing.subtitle}
+              </RichParagraph>
+            </div>
+          )}
+        </div>
+
+        {/* BAQI PANEL */}
+        <div className="space-y-6">
+
+          {/* Price card */}
+          {vanDetail.status === "available" && (
+            <div className="relative bbv-card p-6 overflow-hidden">
+              <div className="bbv-amber-line-top" />
+
+              <RichParagraph variant="body" className="mb-2 font-bold">
+                Total Listing Price
+              </RichParagraph>
+
+              {Number(vanDetail.van_listing.price) > 99 ? (
+                <Heading1
+                  variant="section"
+                  text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+                  className="!text-hover !font-bold"
+                />
+              ) : (
+                <RichParagraph variant="body" className="font-bold">
+                  Inquire for Price
+                </RichParagraph>
+              )}
+            </div>
+          )}
+
+          {/* 3D Configurator CTA */}
+          {vanDetail?.glbFile && (
+            <div className="relative">
+              <RichParagraph
+                variant="sub"
+                textColor="text-primary"
+                className="absolute -top-3 -right-3 z-20 rounded-full bg-primary px-2 py-1 uppercase text-secondary shadow-md animate-bounce pointer-events-none"
+              >
+                New · 3D
+              </RichParagraph>
+
+              <a
+                href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
+                className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-8 py-4 font-extrabold uppercase text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_6px_rgba(237,152,95,0.55)] active:scale-[0.98]"
+              >
+                <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <div className="relative flex h-5 w-5 items-center justify-center">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-lg bg-primary/25" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    className="relative z-10 transition-transform duration-700 group-hover:rotate-[360deg]"
+                  >
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
+                    <path d="M12 3v18" />
+                    <path d="M3 12h18" />
+                  </svg>
+                </div>
+                <span className="relative z-10 font-ui font-extrabold text-xs tracking-[0.2em]">
+                  Launch 3D Configurator
+                </span>
+              </a>
+            </div>
+          )}
+
+          {/* Specs grid */}
+          <div className="grid grid-cols-2 gap-x-8">
+            <HeroSpecItem label="Chassis" value={specs?.make_model} />
+            <HeroSpecItem label="Wheelbase" value={specs?.wheelbase} />
+            <HeroSpecItem label="Drivetrain" value={specs?.drivetrain} />
+            {vanDetail.van_listing?.roof && (
+              <HeroSpecItem label="Roof" value={vanDetail.van_listing?.roof} />
             )}
-            {vanDetail?.delivery_date && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
-                <Calendar className="w-3 h-3 text-hover" />
-                        <RichParagraph variant="sub" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
-                {/* <span className="text-[9px] uppercase tracking-[0.28em] font-semibold text-hover font-ui">{vanDetail.delivery_date}</span> */}
-              </div>
-            )}
+            <HeroSpecItem label="Capacity" value={`${specs?.capacity?.sleeps || "2"} Person`} />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-            {/* LEFT: GALLERY */}
-            <div className="lg:col-span-7">
-              <VanMediaGallery
-                key={vanDetail?.slug || vanDetail?._id}
-                gallery={gallery}
-                media={vanDetail?.media || []}
-                modelUrl={vanDetail?.glbFile}
-                variants={variants || []}
-                title={vanDetail?.van_listing?.title}
-              />
-            </div>
-
-            {/* RIGHT: INFO PANEL */}
-            <div className="lg:col-span-5 lg:sticky lg:top-10 h-fit space-y-6">
-
-              {/* Delivery date badge (desktop only — mobile shows it above the gallery instead) */}
-              {vanDetail?.delivery_date && (
-                <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-hover/10 border border-hover/25">
-                  <Calendar className="w-3 h-3 text-hover" />
-                  <RichParagraph variant="sub" className="uppercase font-semibold text-hover">{vanDetail.delivery_date}</RichParagraph>
-                </div>
-              )}
-
-
-              <div>
-                {/* Desktop copy of the title: visual only, the <h1> is the mobile heading above */}
-                <Heading1 as="h1" variant="hero" text={vanDetail?.van_listing?.title} className="hidden lg:block !text-primary  " />
-                {vanDetail?.van_listing?.subtitle && (
-                  <div className="hidden lg:flex items-center gap-3 mt-4">
-                    {/* <div className="w-8 h-0.5 bg-hover shrink-0" /> */}
-                    <RichParagraph variant="body" className="italic">{vanDetail.van_listing.subtitle}</RichParagraph>
-                  </div>
-                )}
-              </div>
-
-
-{/* Price card */}
-{vanDetail.status === "available" && (
-  <div className="relative bbv-card p-6 overflow-hidden">
-    <div className="bbv-amber-line-top" />
-
-    <RichParagraph variant="body" className="mb-2 font-bold ">
-      Total Listing Price
-    </RichParagraph>
-
-    {Number(vanDetail.van_listing.price) > 99 ? (
-      <Heading1
-      variant="section"
-        text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-        className="!text-hover !font-bold"
-      />
-    ) : (
-      <RichParagraph variant="body" className=" font-bold ">
-        Inquire for Price
-      </RichParagraph>
-    )}
-  </div>
-)}
-
-
-
-              {/* 3D Configurator CTA */}
-              {vanDetail?.glbFile && (
-                <div className="relative">
-                  <RichParagraph variant="sub" textColor="text-primary" className="absolute -top-3 -right-3 z-20 rounded-full bg-primary px-2 py-1 uppercase text-secondary shadow-md animate-bounce pointer-events-none">
- New · 3D
-                  </RichParagraph>
-
-                  <a
-                    href={`/camper-vans-for-sale/${vanDetail.slug}/configure`}
-                    className="group relative inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-8 py-4 font-extrabold uppercase text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_6px_rgba(237,152,95,0.55)] active:scale-[0.98]"
-                  >
-                    <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                    <div className="relative flex h-5 w-5 items-center justify-center">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-lg bg-primary/25" />
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="relative z-10 transition-transform duration-700 group-hover:rotate-[360deg]">
-                        <circle cx="12" cy="12" r="3" />
-                        <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" />
-                        <path d="M12 3v18" /><path d="M3 12h18" />
-                      </svg>
-                    </div>
-                    <span className="relative z-10 font-ui font-extrabold text-xs tracking-[0.2em]">Launch 3D Configurator</span>
-                  </a>
-                </div>
-              )}
-
-
-              {/* Specs grid */}
-              <div className="grid grid-cols-2 gap-x-8">
-                <HeroSpecItem label="Chassis" value={specs?.make_model} />
-                <HeroSpecItem label="Wheelbase" value={specs?.wheelbase} />
-                <HeroSpecItem label="Drivetrain" value={specs?.drivetrain} />
-                {vanDetail.van_listing?.roof && (
-                  <HeroSpecItem label="Roof" value={vanDetail.van_listing?.roof} />
-                )}
-                <HeroSpecItem label="Capacity" value={`${specs?.capacity?.sleeps || "2"} Person`} />
-              </div>
-
-              {/* Actions */}
-              <div className="flex flex-col gap-3 pt-2">
-                <PrimaryButton
-                  label="Get This Build"
-                  onClick={() => { setIsFormOpen(true); setData(vanDetail); }}
-                  className="w-full"
-                />
-                <ShareButton title={vanDetail?.van_listing?.title} />
-                <RichParagraph variant="sub" className="text-center uppercase font-bold">
- Limited 2026 Build Slots
-                </RichParagraph>
-
-              </div>
-            </div>
+          {/* Actions */}
+          <div className="flex flex-col gap-3 pt-2">
+            <PrimaryButton
+              label="Get This Build"
+              onClick={() => {
+                setIsFormOpen(true);
+                setData(vanDetail);
+              }}
+              className="w-full"
+            />
+            <ShareButton title={vanDetail?.van_listing?.title} />
+            <RichParagraph variant="sub" className="text-center uppercase font-bold">
+              Limited 2026 Build Slots
+            </RichParagraph>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
 
 
       {/* ── BUILD OVERVIEW — light alt ── */}

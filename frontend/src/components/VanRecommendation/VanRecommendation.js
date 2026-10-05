@@ -116,7 +116,7 @@ export default function VanRecommendation() {
                               BBV Matchmaker Engine
                             </RichParagraph>
 
-                            <Heading1 as="h3" variant="card" text='Find Your Perfect Buil' />
+                            <Heading1 as="h3" variant="card" text='Find Your Perfect Build' />
                         </div>
                         <SpanTag text={`${currentStep} / ${totalSteps}`} />
                     </div>
