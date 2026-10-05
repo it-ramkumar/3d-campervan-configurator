@@ -101,7 +101,7 @@ export default async function Home() {
         }}
       />
 
-      <main>
+      <div>
         <Hero />
 
         <div className="overflow-x-hidden bg-secondary flex flex-col space-y-10 ">
@@ -139,7 +139,7 @@ export default async function Home() {
             <FAQs faqs={faqs} />
           </section>
         </div>
-      </main>
+      </div>
     </>
   );
 }

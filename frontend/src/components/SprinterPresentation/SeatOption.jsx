@@ -741,7 +741,7 @@ export default function SeatOption() {
   }, []);
 
   return (
-    <main
+    <div
       ref={mainRef}
       className="bg-white text-gray-900  min-h-screen overflow-hidden"
     >
@@ -929,6 +929,6 @@ Stock Seats
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { withBrand } from "@/utils/seoTitle";
 import { notFound } from "next/navigation";
 import BlogContentUI from "../../../components/BlogDetail/Blogdetail";
 import { generateBlogSchema } from "@/schema/blogDetail";
@@ -11,7 +12,7 @@ export async function generateMetadata({ params }) {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/test-blog/${slug}`);
     const blog = res.data.data;
 
-    const title = `${blog.title} | Big Bear Vans`;
+    const title = withBrand(blog.title);
 
     // HTML tags hata ke clean text lo, phir 155 chars tak cut karo
     const rawDesc = blog.description?.replace(/<[^>]*>/g, "") || "";

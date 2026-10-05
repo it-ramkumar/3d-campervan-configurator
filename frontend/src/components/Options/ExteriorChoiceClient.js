@@ -74,7 +74,7 @@ export default function ExteriorChoiceClient({
         showButton={false}
       />
 
-      <main>
+      <div>
         <div className="animate-fadeIn">
           <ExteriorChoicesList
             key={options}
@@ -92,7 +92,7 @@ export default function ExteriorChoiceClient({
             <AdditionalAccessories />
           </>
         )}
-      </main>
+      </div>
     </div>
   );
 }

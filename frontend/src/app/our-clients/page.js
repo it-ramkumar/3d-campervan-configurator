@@ -55,7 +55,7 @@ export default function OurClients() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(OurClientSchema) }}
       />
-      <main>
+      <div>
         <div className="tour-hero">
           <HeroSection
             title={newTitleText}
@@ -97,7 +97,7 @@ export default function OurClients() {
           <CTRSection />
           <YoutubeSection />
         </div>
-      </main>
+      </div>
 
     </>
   );

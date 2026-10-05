@@ -46,7 +46,7 @@ export default function Contact() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }}
       />
 
-      <main>
+      <div>
         <div className="tour-hero">
           <HeroSection
             title={newTitleText}
@@ -56,7 +56,7 @@ export default function Contact() {
           />
         </div>
 
-      </main>
+      </div>
     </>
   );
 }

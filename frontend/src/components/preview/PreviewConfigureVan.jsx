@@ -87,7 +87,7 @@ console.log(baseVan,"base van")
         </div>
       </aside>
 
-      <main className="relative flex-1 bg-[#0a0a0a] overflow-hidden">
+      <div className="relative flex-1 bg-[#0a0a0a] overflow-hidden">
         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:flex absolute top-0 left-0 z-40 bg-black text-white w-14 h-14 items-center justify-center border-r border-b border-white/10">
           {sidebarOpen ? <span className="text-[10px] uppercase italic">Close</span> : "Menu"}
         </button>
@@ -112,7 +112,7 @@ console.log(baseVan,"base van")
             </Stage>
           </Suspense>
         </Canvas>
-      </main>
+      </div>
     </div>
   );
 }

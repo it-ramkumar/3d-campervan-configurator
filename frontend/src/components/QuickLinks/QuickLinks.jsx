@@ -17,7 +17,7 @@ const itemVars = {
 export default function QuickLinksClient({ initialLinks }) {
   return (
     <div className="min-h-screen bg-[#F5F5F0] text-[#001F3D] selection:bg-[#001F3D] selection:text-white">
-      <main className="relative pt-24 pb-32">
+      <div className="relative pt-24 pb-32">
 
         {/* Header Section */}
         <section className="flex flex-col items-center px-6 mb-16">
@@ -66,7 +66,7 @@ The official hub for all resources and connections.
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="relative flex-shrink-0 w-12 h-12 border border-[#ACBAC4] rounded-[4px] overflow-hidden group-hover:border-white/20">
                       {link.icon ? (
-                        <Image src={link.icon} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" width={48} height={48} />
+                        <Image src={link.icon} alt={`${link.title} icon`} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" width={48} height={48} />
                       ) : (
                         <div className="w-full h-full bg-[#001F3D] group-hover:bg-white" />
                       )}
@@ -94,7 +94,7 @@ The official hub for all resources and connections.
             )}
           </motion.div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

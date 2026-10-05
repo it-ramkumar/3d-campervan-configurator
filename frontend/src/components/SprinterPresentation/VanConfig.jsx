@@ -304,7 +304,7 @@ export default function VanConfig() {
   };
 
   return (
-    <main
+    <div
       ref={containerRef}
       className=" bg-white min-h-screen w-full overflow-x-hidden"
     >
@@ -558,6 +558,6 @@ export default function VanConfig() {
         {/* Size Calculator */}
         <SizeCalculator />
       </div>
-    </main>
+    </div>
   );
 }

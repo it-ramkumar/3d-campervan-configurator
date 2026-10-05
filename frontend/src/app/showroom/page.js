@@ -48,7 +48,7 @@ export default function ShowroomPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(showroomSchema) }}
       />
 
-      <main>
+      <div>
         {/* Hero Section */}
         <div className="tour-hero">
           <HeroSection
@@ -69,7 +69,7 @@ export default function ShowroomPage() {
           <Virtualroom />
         </div>
 
-      </main>
+      </div>
     </>
   );
 }

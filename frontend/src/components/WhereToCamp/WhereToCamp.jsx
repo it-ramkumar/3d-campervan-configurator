@@ -160,7 +160,7 @@ Start Your Adventure Below
                     </div>
                 </section>
 
-                <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     {campgrounds.map((category, catIndex) => (
                         <div key={catIndex} className="mb-20">
                             <div className="flex items-center gap-4 mb-10">
@@ -197,7 +197,7 @@ Start Your Adventure Below
                         </RichParagraph>
                         <SecondaryButton label={"Book Your Private Tour"} link={"/contact"} />
                     </div>
-                </main>
+                </div>
             </div>
         </>
     );

@@ -11,6 +11,7 @@ export const metadata = {
   description: `Explore career opportunities at Big Bear Vans. Join our
  team of expert van builders, designers, and engineers in
  Big Bear City, California.`,
+  alternates: { canonical: "https://www.bigbearvans.com/careers" },
   openGraph: {
      title: "Careers - Join the Big Bear Vans Team",
   description: `Explore career opportunities at Big Bear Vans. Join our
@@ -132,9 +133,9 @@ const jsonLd = {
           </aside>
 
           {/* Jobs List (Interactive Client Component) */}
-          <main className="lg:w-2/3">
+          <div className="lg:w-2/3">
             <CareersClient initialJobs={initialJobs} />
-          </main>
+          </div>
         </div>
       </div>
     </div>

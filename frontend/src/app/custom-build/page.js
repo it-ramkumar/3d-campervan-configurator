@@ -11,9 +11,11 @@ van conversions. You choose the layout, materials & systems.
     return {
       title,
       description,
+      alternates: { canonical: "https://www.bigbearvans.com/custom-build" },
       openGraph: {
         title,
         description,
+        url: "https://www.bigbearvans.com/custom-build",
         images: ["https://www.bigbearvans.com/Home/home-custom-build-big-bear-vans.webp"],
       },
     };

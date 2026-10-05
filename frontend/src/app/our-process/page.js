@@ -53,7 +53,7 @@ export default function OurProcess() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(processSchema) }}
       />
 
-      <main>
+      <div>
         <div className="tour-hero">
           <HeroSection
             title={newTitleText}
@@ -69,7 +69,7 @@ export default function OurProcess() {
         <div className="tour-processlist">
           <Processlist />
         </div>
-      </main>
+      </div>
     </>
   );
 }

@@ -60,7 +60,7 @@ export default async function page({ searchParams }) {
       />
 
 
-      <main className="bg-secondary min-h-screen">
+      <div className="bg-secondary min-h-screen">
         <HeroSection
           title="Journal & Guides"
           description="Insights, tips, and inspiration for your life on the road."
@@ -149,7 +149,7 @@ export default async function page({ searchParams }) {
             )}
           </div>
         </div>
-      </main>
+      </div>
 
     </>
   );

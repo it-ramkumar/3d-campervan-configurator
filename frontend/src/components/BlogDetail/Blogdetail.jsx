@@ -343,7 +343,7 @@ export default function BlogContentUI({ blog }) {
   return (
     <div className="max-w-[1400px] mx-auto px-4 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
       {/* Main Body */}
-      <main className="lg:col-span-8 bbv-glass p-8 lg:p-20 rounded-lg border border-primary/10">
+      <div className="lg:col-span-8 bbv-glass p-8 lg:p-20 rounded-lg border border-primary/10">
         <div className="prose prose-lg max-w-none">
           {renderContent()}
         </div>
@@ -363,7 +363,7 @@ export default function BlogContentUI({ blog }) {
             Share This Article
           </button>
         </div>
-      </main>
+      </div>
 
       {/* Sidebar Right */}
       <aside className="lg:col-span-3 space-y-10">

@@ -173,7 +173,7 @@ function Lightbox({ images, active, onClose, onPrev, onNext }) {
                 transition: "opacity 0.2s, border-color 0.2s",
               }}
             >
-              <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              <img src={src} alt={`Rendering ${i + 1} thumbnail`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
             </button>
           ))}
         </div>

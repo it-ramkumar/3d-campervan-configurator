@@ -67,7 +67,7 @@ export default function VanMatchmakerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <main className="bg-secondary">
+      <div className="bg-secondary">
         <section className="py-10 px-4">
           <div className="max-w-5xl mx-auto text-center">
             <SpanTag text="BBV Matchmaker Engine" className="font-bold uppercase" />
@@ -87,7 +87,7 @@ export default function VanMatchmakerPage() {
         <section className="tour-Faqs">
           <FAQs faqs={faqs} />
         </section>
-      </main>
+      </div>
     </>
   );
 }

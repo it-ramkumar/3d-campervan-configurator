@@ -97,7 +97,7 @@ export default function OptionDetail({ item, basePath, listingLabel, related }) 
         ]}
       />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-6 pb-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Gallery */}
           <div className="lg:col-span-7 lg:sticky lg:top-24 self-start">
@@ -180,7 +180,7 @@ export default function OptionDetail({ item, basePath, listingLabel, related }) 
             </div>
           </section>
         )}
-      </main>
+      </div>
     </div>
   );
 }

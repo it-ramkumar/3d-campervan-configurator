@@ -37,12 +37,12 @@ export const OPENING_HOURS = [
   }
 ];
 
+// Keep in sync with the footer social icons — only profiles the site links to
 export const SAME_AS = [
   "https://www.instagram.com/bigbearvans",
-  "https://www.facebook.com/bigbearvans",
-  "https://twitter.com/bigbearvans",
-  "https://www.linkedin.com/company/big-bear-vans",
-  "https://www.tiktok.com/@bigbearvans_"
+  "https://x.com/bigbearvans_",
+  "https://www.youtube.com/channel/UCQFzU9eB7Aa8x_E9ov1hD7w",
+  "https://www.linkedin.com/company/big-bear-vans"
 ];
 
 export const AREA_SERVED = { "@type": "Country", "name": "United States" };

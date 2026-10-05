@@ -54,7 +54,7 @@ export default function FinancingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(financingSchema) }}
       />
 
-      <main>
+      <div>
         {/* Hero Section */}
         <div className="tour-hero">
           <HeroSection
@@ -77,7 +77,7 @@ export default function FinancingPage() {
         <div className="tour-consultation">
           {/* Content can be added here */}
         </div>
-      </main>
+      </div>
     </>
   );
 }

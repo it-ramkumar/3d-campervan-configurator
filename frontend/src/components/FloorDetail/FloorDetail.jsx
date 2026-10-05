@@ -108,7 +108,7 @@ const handleViewVans = () => {
           { name: van?.van_listing.title },
         ]}
       />
-      <main className="bg-secondary font-body">
+      <div className="bg-secondary font-body">
 
         {/* TOP SECTION */}
         <div className="max-w-[1440px] mx-auto pt-10 pb-20 px-6 md:px-12">
@@ -288,7 +288,7 @@ const handleViewVans = () => {
             </div>
           </section>
         ) : ""}
-      </main>
+      </div>
 
 
 

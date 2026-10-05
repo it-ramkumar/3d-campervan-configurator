@@ -308,7 +308,7 @@ export default function InquiryForm() {
             </aside>
 
             {/* --- MAIN FORM AREA --- */}
-            <main className="lg:w-2/3 order-1 lg:order-2">
+            <div className="lg:w-2/3 order-1 lg:order-2">
               <div className="bg-white p-8 lg:p-12 rounded-[var(--radius-lg)] border border-primary/5 shadow-2xl min-h-[600px] flex flex-col">
                 {/* Steps Info */}
                 <div className="mb-10 flex justify-between items-center">
@@ -409,7 +409,7 @@ export default function InquiryForm() {
                   )}
                 </div>
               </div>
-            </main>
+            </div>
           </div>
         </div>
 

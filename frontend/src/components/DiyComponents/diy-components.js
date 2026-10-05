@@ -14,7 +14,7 @@ export default function DIYComponentsPage() {
   const filteredCategories = categories.filter(c => c !== "All");
 
   return (
-    <main className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen">
 
       {/* Hero Banner */}
       <section className="bbv-section-light py-20 px-6 text-center relative">
@@ -165,6 +165,6 @@ export default function DIYComponentsPage() {
         })}
       </div>
 
-    </main>
+    </div>
   );
 }

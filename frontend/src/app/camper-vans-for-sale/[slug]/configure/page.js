@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { withBrand } from "@/utils/seoTitle";
 import VanCanvas from "@/components/VanDetail/Models/VanCanvas"; // Path check kar lijiyega apne project ke mutabiq
 
 export async function generateMetadata({ params }) {
@@ -7,7 +8,7 @@ export async function generateMetadata({ params }) {
 
   if (!data?.van?.glbFile) return { title: "Configurator | Big Bear Vans", robots: { index: false, follow: false } };
   return {
-    title: `Configure ${data.van.van_listing?.title} | Big Bear Vans`,
+    title: withBrand(`Configure ${data.van.van_listing?.title}`),
     description: `Customize your dream van. Select variants, view features, and explore the 3D model.`,
   };
 }

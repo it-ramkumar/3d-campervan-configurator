@@ -169,7 +169,7 @@ const heroProductImage =
     : currentContent.title;
 
   return (
-    <main>
+    <div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -187,6 +187,6 @@ const heroProductImage =
         layout={initialData}
         currentParams={cleanParams}
       />
-    </main>
+    </div>
   );
 }

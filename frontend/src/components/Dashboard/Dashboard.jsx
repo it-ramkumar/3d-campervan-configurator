@@ -317,11 +317,11 @@ export default function Dashboard() {
         </header>
 
         {/* The Content Area is the ONLY part that scrolls */}
-        <main className="flex-1 overflow-y-auto p-3 md:p-8 custom-scrollbar bg-[#f8fafc]">
+        <div className="flex-1 overflow-y-auto p-3 md:p-8 custom-scrollbar bg-[#f8fafc]">
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-3 md:p-6 min-h-full">
             {renderContent()}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

@@ -172,7 +172,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
   };
 
   return (
-    <main>
+    <div>
       {/* --- SEO Script --- */}
       <script
         type="application/ld+json"
@@ -198,6 +198,6 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         initialComing={comingData}
       />
           <FAQs faqs={faqs} />
-    </main>
+    </div>
   );
 }

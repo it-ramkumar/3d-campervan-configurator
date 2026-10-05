@@ -96,7 +96,7 @@ const FeatureGridBlock = ({ block }) => {
                   >
                     <Image
                       src={img}
-                      alt=""
+                      alt={`${block.title || "Feature"} - thumbnail ${i + 1}`}
                       fill
                       sizes="56px"
                       className="object-cover"

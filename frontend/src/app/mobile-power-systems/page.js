@@ -93,7 +93,7 @@ const powerPackages = [
 
 export default function MobilePowerSystemsPage() {
   return (
-    <main className="power-page">
+    <div className="power-page">
 
       <section className="hero">
         <img
@@ -438,6 +438,6 @@ export default function MobilePowerSystemsPage() {
         </div>
       </section>
 
-    </main>
+    </div>
   );
 }

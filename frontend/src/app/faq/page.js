@@ -65,7 +65,7 @@ export default function FAQPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <main className="min-h-screen bg-[#f8fafc]">
+      <div className="min-h-screen bg-[#f8fafc]">
         {/* HERO SECTION */}
         <section className="relative h-[400px] md:h-[500px] w-full flex items-center justify-center bg-black overflow-hidden">
           <Image
@@ -88,7 +88,7 @@ export default function FAQPage() {
 
         {/* CLIENT COMPONENT FOR INTERACTION */}
         <FAQClient faqData={faqData} />
-      </main>
+      </div>
     </>
   );
 }

@@ -19,6 +19,7 @@ export const metadata = {
   title: meta.title,
   description: meta.description,
   keywords: meta.keywords,
+  alternates: { canonical: "https://www.bigbearvans.com/sprinter-van-buying-guide" },
   openGraph: {
     title: meta.title,
     description: meta.description,

@@ -31,8 +31,8 @@ about a custom camper van.`,
 
 export default function PrivacyPolicyPage() {
   return (
-    <main>
+    <div>
       <PrivacyPolicy />
-    </main>
+    </div>
   );
 }

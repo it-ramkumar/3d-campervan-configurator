@@ -207,7 +207,7 @@ export default function Van_layout({ layout, currentParams = {} }) {
   const hasActiveFilters = Object.keys(currentParams).length > 0;
 
   return (
-    <main className="bg-secondary min-h-screen py-16">
+    <div className="bg-secondary min-h-screen py-16">
       <div className="container mx-auto max-w-[1300px] px-6">
 
         {/* ── FILTER PANEL ── */}
@@ -621,6 +621,6 @@ export default function Van_layout({ layout, currentParams = {} }) {
         )}
 
       </div>
-    </main>
+    </div>
   );
 }

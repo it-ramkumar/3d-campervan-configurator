@@ -54,7 +54,7 @@ export default function AboutUs() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
       />
 
-      <main>
+      <div>
         <div className="tour-hero">
           <HeroSection
             slogan={newSloganText}
@@ -75,7 +75,7 @@ export default function AboutUs() {
         <div className="tour-adventure">
           <Adventure />
         </div>
-      </main>
+      </div>
     </>
   );
 }

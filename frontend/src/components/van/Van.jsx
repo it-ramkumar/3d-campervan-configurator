@@ -386,7 +386,7 @@ function Van() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
             <img
               src="/images/logoo.webp"
-              alt=""
+              alt="Big Bear Vans logo"
               aria-hidden="true"
               className="w-[70%] max-w-[600px] object-contain opacity-[.5] grayscale select-none text-white"
               draggable={false}

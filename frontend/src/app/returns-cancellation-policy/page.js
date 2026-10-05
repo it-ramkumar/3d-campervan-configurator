@@ -31,8 +31,8 @@ cancellations.`,
 
 export default function ReturnsPolicyPage() {
   return (
-    <main>
+    <div>
       <ReturnsPolicy />
-    </main>
+    </div>
   );
 }

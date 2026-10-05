@@ -109,6 +109,27 @@ const nextConfig = {
     destination: "/blog/:slug+",
     statusCode: 301,
   },
+  // Vans listed under the wrong section
+  {
+    source: "/camper-vans-for-sale/madrid-campervan",
+    destination: "/camper-vans-for-sale/madrid-campervan-2023-edition",
+    statusCode: 301,
+  },
+  {
+    source: "/camper-vans-for-sale/santa-monica-american-oak",
+    destination: "/camper-vans-for-sale/santa-monica-american-oak-2026-edition",
+    statusCode: 301,
+  },
+  {
+    source: "/van-layouts/blue-whale-van",
+    destination: "/van-layouts/blue-whale-van-2024-edition",
+    statusCode: 301,
+  },
+    {
+    source: "/camper-vans-for-sale/santa-monica-golden-brown",
+    destination: "/camper-vans-for-sale/santa-monica-golden-brown-2026-edition",
+    statusCode: 301,
+  },
   // Inquiry page URL migration: /inquiry -> /build-your-own-camper-van
   {
     source: "/inquiry",

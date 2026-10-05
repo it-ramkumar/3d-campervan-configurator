@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { withBrand } from "@/utils/seoTitle";
 import OptionDetail from "@/components/Options/OptionDetail";
 import { PAGE_CONFIG, fetchOptionItems } from "@/components/Options/optionsConfig";
 import { getItemTitle, getItemText } from "@/components/Options/optionBlocks";
@@ -18,6 +19,16 @@ async function getOption(params) {
   return { options, current, items, item };
 }
 
+// Items listed under both exterior and system options (Starlink, WeBoost)
+// point their canonical at the system-options copy
+const CANONICAL_SECTION = "system-options";
+
+async function canonicalSection(options, slug) {
+  if (options === CANONICAL_SECTION) return options;
+  const items = await fetchOptionItems(PAGE_CONFIG[CANONICAL_SECTION].api);
+  return items.some((i) => i.slug === slug) ? CANONICAL_SECTION : options;
+}
+
 // same subcategory first, then the rest of the category
 function getRelated(items, item, limit = 4) {
   const sameId = (a, b) => a && b && (a._id || a) === (b._id || b);
@@ -32,9 +43,9 @@ export async function generateMetadata({ params }) {
   if (!data) return { title: "Option not found | Big Bear Vans", robots: { index: false, follow: false } };
 
   const { options, current, item } = data;
-  const title = `${getItemTitle(item)} | ${current.label} | Big Bear Vans`;
+  const title = withBrand(`${getItemTitle(item)} | ${current.label}`);
   const description = getItemText(item) || current.desc;
-  const canonical = `${BASE_URL}/van-options/${options}/${item.slug}`;
+  const canonical = `${BASE_URL}/van-options/${await canonicalSection(options, item.slug)}/${item.slug}`;
   const ogImage = item.images?.[0] || current.heroImage || "/images/blackLogo.webp";
 
   return {
