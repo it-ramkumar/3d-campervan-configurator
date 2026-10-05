@@ -39,11 +39,6 @@ const dynamicHeroData = {
     // image: "/heroSlider/144.webp",
     desc: "Perfect for city driving, weekend getaways, and agile travel."
   },
-  "flagship-short-van-santa-monica": {
-    title: "Santa Monica Flagship Layouts",
-    // image: "/heroSlider/144.webp",
-    desc: "Premium engineering packed inside an agile 144\" footprint."
-  },
   "148": {
     title: "Standard 148\" Wheelbase Plans",
     // image: "/heroSlider/148.webp",
@@ -64,11 +59,6 @@ const dynamicHeroData = {
     // image: "/heroSlider/170-ext.webp",
     desc: "Maximum structural volume designed for comprehensive cargo configurations."
   },
-  "flagship-long-van-montreal": {
-    title: "Montreal Flagship Layouts",
-    // image: "/heroSlider/170.webp",
-    desc: "Expansive high-end setups built directly on long-wheelbase platforms."
-  },
   "159": {
     title: "Wide-Body 159\" Wheelbase Layouts",
     // image: "/heroSlider/159.webp",
@@ -83,11 +73,6 @@ const dynamicHeroData = {
     title: "Solo & Couple Layout Concepts",
     //  image: "/heroSlider/adventure.webp",
     desc: "Streamlined ergonomics mapped out for workspace freedom and intimate living comfort."
-  },
-  "portfolio-of-custom-builds": {
-    title: "Custom Build Portfolio Maps",
-    // image: "/heroSlider/adventure.webp",
-    desc: "One-of-a-kind bespoke creations tailor-made to rugged engineering specifications."
   },
   "default": {
     title: "Explore Custom Van Portfolios",
