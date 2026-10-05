@@ -5,7 +5,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const data = await fetch(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`).then(res => res.json()).catch(() => null);
 
-  if (!data?.van) return { title: "Configurator | Big Bear Vans" };
+  if (!data?.van?.glbFile) return { title: "Configurator | Big Bear Vans", robots: { index: false, follow: false } };
   return {
     title: `Configure ${data.van.van_listing?.title} | Big Bear Vans`,
     description: `Customize your dream van. Select variants, view features, and explore the 3D model.`,
@@ -22,7 +22,8 @@ export default async function ConfigurePage({ params, searchParams }) {
     { cache: "no-store" }
   ).then(res => res.json()).catch(() => null);
 
-  if (!vanDetail?.van) return notFound();
+  // Sold vans have no 3D model, so there is nothing to configure
+  if (!vanDetail?.van?.glbFile) return notFound();
 
   // 2. Variants Fetching (Jaise aapne bataya)
   const variantsData = await fetch(
