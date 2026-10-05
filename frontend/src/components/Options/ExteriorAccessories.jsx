@@ -34,7 +34,7 @@ export default function AdditionalAccessories() {
     { title: "360° Camera", description: "Get a complete surround view of your campervan for safer parking and navigating tight spots.", image: "/Exterior/360.webp" },
     { title: "Rear Foldable Patio", description: "Adds up to 6 sq ft of functional outdoor space. Unfolds in seconds for chairs or cooking.", image: "/Exterior/Foldablerearpatio.webp" },
     { title: "Van Suspension System", description: "Upgraded Falcon shocks, bump buddies, and leaf springs for a smooth ride on any terrain.", image: "/Exterior/suspension.webp" },
-    { title: "Tires & Wheels", description: "Black Rhino Arsenal wheels (16\"-17\") paired with severe-snow-rated BFGoodrich KO2 All-Terrain Tires.", image: "/Exterior/tiree.webp" },
+    { title: "Tires & Wheels", description: "Black Rhino Arsenal wheels (16\"-17\") paired with severe-snow-rated BFGoodrich KO2 All-Terrain Tires.", image: "/Exterior/tire.webp" },
     { title: "Side Ladder", description: "Lightweight (18 lbs) ladder for easy roof access, typically on the driver's side or rear.", image: "/Exterior/Sideladder.webp" },
     { title: "30A Shore Power Inlet", description: "Charge your campervan before traveling with an easy connection to campground power.", image: "/Exterior/30A.webp" },
     { title: "Dump Valve", description: "For easy & hygienic removal of grey water, positioned for quick connection at disposal stations.", image: "/Exterior/Dumpvalve.webp" },
@@ -70,7 +70,7 @@ Customization
         </div>
 
         {/* --- Accessories Grid --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {accessories.map((item, index) => {
             const Icon = getAccessoryIcon(item.title);
 
@@ -81,40 +81,50 @@ Customization
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true, margin: "-50px" }}
-                className="bbv-card group rounded-lg hover:border-hover/40 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col"
+                className="group relative flex flex-col overflow-hidden rounded-xl bg-white border border-primary/10 shadow-[0_2px_12px_rgba(0,31,61,0.05)] transition-all duration-500 hover:-translate-y-1 hover:border-hover/40 hover:shadow-[0_20px_40px_-12px_rgba(0,31,61,0.25)]"
               >
-                {/* Image Container */}
-                <div className="relative h-64 overflow-hidden">
+                {/* Image Container (1:1) */}
+                <div className="relative aspect-square w-full shrink-0 overflow-hidden [&>div]:h-full">
                   <ImageWithSkeleton
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    overlay={false}
+                    sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Amber top border on hover */}
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-hover opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {/* Floating Badge */}
-                  <div className="absolute top-4 left-4 bg-primary/80 backdrop-blur-md p-3 rounded-lg shadow-xl border border-secondary/10">
-                    <Icon className="w-5 h-5 text-hover" />
+                  {/* Soft bottom fade */}
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-primary/50 to-transparent pointer-events-none" />
+                  {/* Icon Badge */}
+                  <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-lg bg-[rgba(2,12,24,0.72)] backdrop-blur-md border border-white/10">
+                    <Icon className="w-[18px] h-[18px] text-hover" />
                   </div>
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500" />
+                  {/* Index */}
+                  <span className="absolute top-4 right-4 font-ui text-[10px] font-semibold tracking-[0.3em] text-secondary/90">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </div>
 
-                {/* Content */}
-                <div className="p-8 flex-grow flex flex-col">
-                  <div className="flex justify-between items-start mb-4">
-                    <Heading1 variant="card" text={item.title} className="group-hover:!text-hover transition-colors !text-primary" />
-                  </div>
+                {/* Amber accent line */}
+                <div className="h-[2px] w-full bg-hover origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
 
-                  <RichParagraph variant="card" className="text-primary/60 mb-6">
+                {/* Content */}
+                <div className="p-6 h-[200px] flex flex-col">
+                  <Heading1
+                    variant="card"
+                    text={item.title}
+                    className="font-display !text-xl uppercase tracking-wide !text-primary group-hover:!text-hover transition-colors line-clamp-1 mb-2"
+                  />
+
+                  <RichParagraph variant="card" className="!text-sm text-primary/60 line-clamp-3">
                     {item.description}
                   </RichParagraph>
 
                   {/* Footer */}
-                  <div className="pt-6 border-t border-primary/10 flex items-center justify-between">
-                  <RichParagraph variant="sub" className="!text-hover">
-                    Verified Accessory
-                  </RichParagraph>
+                  <div className="mt-auto pt-4 border-t border-primary/10 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-hover" />
+                    <span className="font-ui text-[10px] font-semibold uppercase tracking-[0.3em] text-primary/50">
+                      Verified Accessory
+                    </span>
                   </div>
                 </div>
               </motion.div>
