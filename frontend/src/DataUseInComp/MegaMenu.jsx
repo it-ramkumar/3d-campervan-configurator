@@ -53,6 +53,7 @@ export const menuContent = {
       {
         title: "Company Info",
         items: [
+           { label: "Moto Vans", link: "/moto-vans" },
            { label: "Mobile Power Systems", link: "/mobile-power-systems" },
           { label: "Our Process", link: "/our-process" },
           { label: "Showroom", link: "/showroom" },

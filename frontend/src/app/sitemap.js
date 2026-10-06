@@ -18,6 +18,7 @@ const FALLBACK_PATHS = [
   "/van-options/interior-options",
   "/van-options/system-options",
   "/sprinter-van-buying-guide",
+  "/moto-vans",
   "/mobile-power-systems",
   "/our-process",
   "/our-clients",

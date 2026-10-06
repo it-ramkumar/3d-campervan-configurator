@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Heading2,
   Heading3,
@@ -48,7 +49,11 @@ const HeroSpecItem = ({ icon: Icon, label, value }) => (
   </div>
 );
 
+// Builds that belong to the /moto-vans hub get a breadcrumb + link back to it
+const MOTO_VAN_SLUGS = ["moto-van", "moto-van-2-the-glen-helen-edition"];
+
 export default function LayoutDetail({ van, initialView }) {
+  const isMotoVan = MOTO_VAN_SLUGS.includes(van?.slug);
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   // console.log(initialView, "ye initialView hai jo server se aaya");
@@ -71,7 +76,9 @@ export default function LayoutDetail({ van, initialView }) {
 
       <Breadcrumb
         customItems={[
-          { name: "Layouts", href: "/van-layouts" },
+          isMotoVan
+            ? { name: "Moto Vans", href: "/moto-vans" }
+            : { name: "Layouts", href: "/van-layouts" },
           { name: van?.van_listing.title },
         ]}
       />
@@ -107,6 +114,15 @@ export default function LayoutDetail({ van, initialView }) {
                 <RichParagraph className="mt-6 text-primary/60  italic border-l-2 border-hover pl-6">
                   {van?.van_listing.subtitle}
                 </RichParagraph>
+
+                {isMotoVan && (
+                  <Link
+                    href="/moto-vans"
+                    className="mt-4 inline-block text-xs font-bold uppercase tracking-[0.12em] text-primary border-b-2 border-hover pb-0.5 hover:text-hover transition-colors"
+                  >
+                    See all moto vans →
+                  </Link>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-x-8 gap-y-2">
