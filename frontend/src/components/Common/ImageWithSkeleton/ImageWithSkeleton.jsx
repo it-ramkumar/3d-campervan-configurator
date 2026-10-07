@@ -34,9 +34,15 @@ export default function ImageWithSkeleton({
         }`}
         onClick={() => zoom && setIsModalOpen(true)}
       >
-        {/* Skeleton */}
+        {/* Loading Spinner */}
         {skeleton && !loaded && (
-          <div className="absolute inset-0 animate-pulse bg-gray-200" />
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div
+              className="h-10 w-10 rounded-full border-4 border-gray-300 border-t-gray-700 animate-spin"
+              role="status"
+              aria-label="Loading"
+            />
+          </div>
         )}
 
         {width && height ? (
