@@ -19,10 +19,13 @@ const RichParagraph = ({
 
   const selectedVariantStyle = variantStyles[variant] || variantStyles.body;
 
+  // Collapse whitespace so multi-line className literals render identically on server and client
+  const classes = `${selectedVariantStyle} ${textColor} ${className}`.replace(/\s+/g, " ").trim();
+
   if (html) {
     return (
       <div
-        className={`${selectedVariantStyle} ${textColor} ${className}`}
+        className={classes}
         style={inlineStyle}
         onClick={onClick}
         dangerouslySetInnerHTML={{ __html: html }}
@@ -32,7 +35,7 @@ const RichParagraph = ({
 
   return (
     <p
-      className={`${selectedVariantStyle} ${textColor} ${className}`}
+      className={classes}
       style={inlineStyle}
       onClick={onClick}
     >

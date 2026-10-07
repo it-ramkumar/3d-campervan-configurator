@@ -35,6 +35,7 @@ export default function MapSection() {
             src="/images/map_image.webp"
             alt="Big Bear Vans office location map"
             fill
+            sizes="100vw"
             className="object-cover grayscale-[20%] contrast-[1.1]"
           />
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">

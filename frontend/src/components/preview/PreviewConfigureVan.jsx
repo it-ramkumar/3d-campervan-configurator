@@ -64,7 +64,7 @@ console.log(baseVan,"base van")
                   <div key={part._id} className="group flex items-center justify-between bg-zinc-900/30 p-3 border border-white/5">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-zinc-800 rounded overflow-hidden relative">
-                        <Image src={part.image} alt={part.label} fill className="object-cover grayscale group-hover:grayscale-0 transition-all" />
+                        <Image src={part.image} alt={part.label} fill sizes="40px" className="object-cover grayscale group-hover:grayscale-0 transition-all" />
                       </div>
                       <div>
                         <p className="text-xs text-white font-bold">{part.label}</p>

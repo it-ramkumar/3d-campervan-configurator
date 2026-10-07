@@ -1,29 +1,29 @@
-import React from "react";
-import RichParagraph from "./RichParagraph";
+// import React from "react";
+// import RichParagraph from "./RichParagraph";
 
-/**
- * Paragraph Component
- * Props:
- * - text: string → the paragraph content
- * - textColor: string → Tailwind text color, default: black
- * - className: string → additional Tailwind classes
- * - inlineStyle: object → optional inline styles
- */
-const Paragraph = ({
-  text = "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
-  textColor = "text-secondary",
-  className = "",
-  inlineStyle = {},
-}) => {
-  return (
-    <RichParagraph
-      // style={inlineStyle} ki jagah inlineStyle={inlineStyle} likhein
-      className={`text-sm sm:text-base md:text-lg lg:text-[20px] tracking-tight ${textColor} ${className}`}
-      inlineStyle={inlineStyle}
-    >
-      {text}
-    </RichParagraph>
-  );
-};
+// /**
+//  * Paragraph Component
+//  * Props:
+//  * - text: string → the paragraph content
+//  * - textColor: string → Tailwind text color, default: black
+//  * - className: string → additional Tailwind classes
+//  * - inlineStyle: object → optional inline styles
+//  */
+// const Paragraph = ({
+//   text = "Buy, customize, or try the 3D configurator from Big Bear Vans today.",
+//   textColor = "text-secondary",
+//   className = "",
+//   inlineStyle = {},
+// }) => {
+//   return (
+//     <RichParagraph
+//       // style={inlineStyle} ki jagah inlineStyle={inlineStyle} likhein
+//       className={`text-sm sm:text-base md:text-lg lg:text-[20px] tracking-tight ${textColor} ${className}`}
+//       inlineStyle={inlineStyle}
+//     >
+//       {text}
+//     </RichParagraph>
+//   );
+// };
 
-export default Paragraph;
+// export default Paragraph;

@@ -131,7 +131,7 @@ export default function Footer() {
                 alt="BBV logo"
                 className="w-[170px] h-auto object-contain"
                 width={170}
-                height={76}
+                height={31}
                 priority
               />
             </Link>

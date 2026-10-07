@@ -45,6 +45,9 @@ const ProjectImages = ({ images, alt }) => {
           src={displayImages[0]}
           alt={alt}
           fill
+          sizes={hasMultiple
+            ? "(min-width: 1300px) 490px, (min-width: 1024px) 38vw, 66vw"
+            : "(min-width: 1300px) 730px, (min-width: 1024px) 58vw, 100vw"}
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -54,7 +57,7 @@ const ProjectImages = ({ images, alt }) => {
         <div className="w-1/3 flex flex-col gap-2 h-full">
           {displayImages.slice(1, 3).map((img, i) => (
             <div key={i} className="relative flex-1 w-full overflow-hidden rounded-lg bg-primary/10">
-              <Image src={img} alt={alt} fill className="object-cover" />
+              <Image src={img} alt={alt} fill sizes="(min-width: 1300px) 245px, (min-width: 1024px) 19vw, 33vw" className="object-cover" />
               {i === 1 && displayImages.length > 3 && (
                 <div className="absolute inset-0 bg-primary/60 flex flex-col items-center justify-center text-secondary">
                   <span className="text-xl font-bold font-display">+{displayImages.length - 3}</span>

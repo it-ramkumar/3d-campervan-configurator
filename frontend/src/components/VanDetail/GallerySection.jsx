@@ -63,6 +63,7 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             src="https://www.bigbearvans.com/images/blackLogo.webp"
             alt="Big Bear Vans Logo"
             fill
+            sizes="160px"
             className="object-contain"
             priority
           />

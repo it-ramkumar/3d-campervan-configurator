@@ -462,7 +462,7 @@ const handleItemClick = () => {
                 src="/images/logoo.webp"
                 alt="BBV logo"
                 width={150}
-                height={100}
+                height={27}
                 className="object-contain border-none mb-1"
               />
 
@@ -503,8 +503,7 @@ const handleItemClick = () => {
               <a
                 href="tel:+19514419719"
                 aria-label="Call Big Bear Vans at 951-441-9719"
-                className="inline-flex items-center justify-center px-3
-                 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-hover text-primary border border-hover whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-hover text-primary border border-hover whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
               >
                 <RichParagraph variant="sub" className="!text-[10px] sm:!text-[11px] !opacity-100 font-ui font-semibold !text-secondary">Call Now</RichParagraph>
               </a>
@@ -589,7 +588,7 @@ const handleItemClick = () => {
                   src="/images/logoo.webp"
                   alt="Logo"
                   width={200}
-                  height={100}
+                  height={36}
                   priority={true}
                 />
               </Link>
