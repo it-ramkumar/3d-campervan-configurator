@@ -90,7 +90,7 @@ export default function WhyChoose() {
         <div className="container mx-auto px-6 max-w-7xl py-10 relative z-10">
 
           <div className="flex items-center gap-3 mb-3">
-            <RichParagraph variant="sub" className="uppercase tracking-widest !text-hover">
+            <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
               Our Advantage
             </RichParagraph>
           </div>

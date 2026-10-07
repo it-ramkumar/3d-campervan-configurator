@@ -2,8 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heading1, Heading3, Heading4 } from "../Common/Common";
-import { RichParagraph } from "../Common/Common";
+import { Heading1, RichParagraph } from "../Common/Common";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,9 +119,9 @@ export default function Table() {
                 <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Feature"} className="!text-secondary !text-[18px] !font-bold"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Cargo Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Crew Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Feature"} className="!text-secondary !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Cargo Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Crew Van"} className="!text-secondary !text-[18px] !font-bold"/></th>
 
                   </tr>
                 </thead>
@@ -312,9 +311,9 @@ export default function Table() {
                 <thead className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white">
                   <tr>
                     {/* REDUCED DESKTOP PADDING & FONT SIZE: md:p-4 text-base (from p-6 text-xl) */}
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Aspect"} className="!text-secondary"/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Manual Sliding Door"} className="!text-secondary "/></th>
-                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading4 text={"Electric Sliding Doors"} className="!text-secondary"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Aspect"} className="!text-secondary"/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Manual Sliding Door"} className="!text-secondary "/></th>
+                    <th className="w-1/3 p-3 md:p-4 text-center border-r-2 border-[#364153]"><Heading1 variant="sub" text={"Electric Sliding Doors"} className="!text-secondary"/></th>
 
                   </tr>
                 </thead>

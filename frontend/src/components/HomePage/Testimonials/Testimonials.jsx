@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Quote, X, Copy, Check } from 'lucide-react';
-import { Heading1, RichParagraph, Heading3, SpanTag } from '../../Common/Common'
+import { Heading1, RichParagraph } from '../../Common/Common'
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -70,11 +70,10 @@ const handleCopy = (e) => {
 
         {/* --- Header --- */}
         <div className="text-center mb-16 md:mb-24">
-          <RichParagraph variant="sub" className="!text-hover">
+          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
         Testimonials
           </RichParagraph>
-          {/* <SpanTag text={""} className="mb-4 flex justify-center"/> */}
-          <Heading1 variant="section" text={"Voices of the Van Life"} textColor="text-primary" />
+          <Heading1 variant="section" text={"Voices of the Van Life"} className="!text-primary" />
           <div className="w-20 h-1.5 bg-hover mx-auto rounded-lg mt-6"></div>
         </div>
 
@@ -145,7 +144,7 @@ const handleCopy = (e) => {
           {selectedReview?.initial}
         </div>
 
-        <Heading3 text={selectedReview?.name} className="mb-2 text-primary" />
+        <Heading1 variant="card" text={selectedReview?.name} className="mb-2 !text-primary" />
 
         <FiveStars className="flex gap-[var(--gap-sm)] !text-hover mb-8" starClassName="w-5 h-5" />
 

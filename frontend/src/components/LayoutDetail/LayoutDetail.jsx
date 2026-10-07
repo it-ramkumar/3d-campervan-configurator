@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Heading2,
-  Heading3,
   Heading1,
   ShareButton,
   Breadcrumb,
@@ -189,7 +187,7 @@ export default function LayoutDetail({ van, initialView }) {
               The Design Philosophy
             </RichParagraph>
 
-            <Heading2 text="Build Overview" className="mt-4" />
+            <Heading1 variant="section" text="Build Overview" className="mt-4" />
 
             <div className="h-1.5 w-24 bg-hover mx-auto mt-6 rounded-full" />
 
@@ -226,7 +224,7 @@ export default function LayoutDetail({ van, initialView }) {
                 {/* HEADING */}
                 {block.block_type === "heading" && block.title && (
                   <div className={`flex flex-col gap-3 ${alignClass}`}>
-                    <Heading2 text={block.title} className={titleCls} />
+                    <Heading1 variant="section" text={block.title} className={titleCls} />
                     <div className={`w-12 h-0.5 bg-hover rounded-full ${layout === "center" ? "mx-auto" : layout === "right" ? "ml-auto" : ""}`} />
                     {block.subtitle && <RichParagraph className={subCls}>{block.subtitle}</RichParagraph>}
                   </div>
@@ -235,7 +233,7 @@ export default function LayoutDetail({ van, initialView }) {
                 {/* SUBHEADING */}
                 {block.block_type === "subheading" && block.title && (
                   <div className={`flex flex-col gap-1 ${alignClass}`}>
-                    <Heading3 text={block.title} className={`${titleCls} opacity-85`} />
+                    <Heading1 variant="card" text={block.title} className={`${titleCls} opacity-85`} />
                   </div>
                 )}
 
@@ -249,7 +247,7 @@ export default function LayoutDetail({ van, initialView }) {
                 {/* LIST */}
                 {block.block_type === "list" && block.list_items?.length > 0 && (
                   <div>
-                    {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
+                    {block.title && <Heading1 variant="card" text={block.title} className={`${titleCls} mb-6`} />}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {block.list_items.map((item, i) => (
                         <div key={i} className={`flex flex-col p-5 rounded-lg border-l-4 border-hover ${cardCls}`}>
@@ -275,7 +273,7 @@ export default function LayoutDetail({ van, initialView }) {
                 {/* TABLE */}
                 {block.block_type === "table" && block.table_data?.headers?.length > 0 && (
                   <div>
-                    {block.title && <Heading3 text={block.title} className={`${titleCls} mb-6`} />}
+                    {block.title && <Heading1 variant="card" text={block.title} className={`${titleCls} mb-6`} />}
                     <div className={`overflow-x-auto rounded-lg border ${isDark ? "border-white/10" : "border-primary/10"}`}>
                       <table className="w-full border-collapse">
                         <thead className={isDark ? "bg-white/10" : "bg-primary"}>
@@ -356,7 +354,7 @@ export default function LayoutDetail({ van, initialView }) {
                   <div>
                     {(block.title || block.subtitle) && (
                       <div className={`mb-10 flex flex-col gap-3 ${alignClass}`}>
-                        {block.title && <Heading2 text={block.title} className={titleCls} />}
+                        {block.title && <Heading1 variant="section" text={block.title} className={titleCls} />}
                         {block.title && <div className={`w-12 h-0.5 bg-hover rounded-full ${layout === "center" ? "mx-auto" : ""}`} />}
                         {block.subtitle && <RichParagraph className={subCls}>{block.subtitle}</RichParagraph>}
                       </div>
@@ -365,8 +363,8 @@ export default function LayoutDetail({ van, initialView }) {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                         {block.items.map((item, i) => (
                           <div key={i} className={`p-6 rounded-lg text-center ${cardCls}`}>
-                            {item.value && <p className="text-3xl font-black text-hover mb-1 font-display leading-tight">{item.value}</p>}
-                            {item.title && <p className={`font-ui text-[11px] uppercase tracking-[0.22em] font-bold ${subCls}`}>{item.title}</p>}
+                            {item.value && <RichParagraph textColor="text-hover" className="!text-3xl font-black mb-1 font-display !leading-tight">{item.value}</RichParagraph>}
+                            {item.title && <RichParagraph variant="sub" textColor={subCls} className="font-ui !text-[11px] uppercase tracking-[0.22em] font-bold">{item.title}</RichParagraph>}
                             {item.description && <RichParagraph className={` mt-1 ${subCls}`}>{item.description}</RichParagraph>}
                           </div>
                         ))}
@@ -394,7 +392,7 @@ export default function LayoutDetail({ van, initialView }) {
                 {block.block_type === "cta" && (
                   <div className={`relative rounded-lg p-10 md:p-14 text-center space-y-5 overflow-hidden ${isDark ? "bbv-glass-light" : "bg-primary"}`}>
                     <div className="bbv-amber-line-top" />
-                    {block.title && <Heading2 text={block.title} className="!text-secondary" />}
+                    {block.title && <Heading1 variant="section" text={block.title} className="!text-secondary" />}
                     {block.subtitle && <RichParagraph className="!text-secondary/60 italic">{block.subtitle}</RichParagraph>}
                     {block.content && <RichParagraph className="!text-secondary/50 max-w-xl mx-auto">{block.content}</RichParagraph>}
                     {block.button?.label && block.button?.url && (
@@ -419,7 +417,7 @@ export default function LayoutDetail({ van, initialView }) {
         <section className="py-16 px-4 bg-secondary text-primary">
           <div className="container mx-auto">
             <div className="text-center mb-20">
-              <Heading2 text="Standard Features" className="" />
+              <Heading1 variant="section" text="Standard Features" className="" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {van?.detailed_features?.filter(f => f.items?.length > 0)?.map((feature, index) => (
@@ -427,7 +425,7 @@ export default function LayoutDetail({ van, initialView }) {
                   <div className="!text-hover mb-6 group-hover:scale-110 transition-transform">
                     {getFeatureIcon(feature.category)}
                   </div>
-                  <Heading3 text={feature.category} className="mb-6" />
+                  <Heading1 variant="card" text={feature.category} className="mb-6" />
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
@@ -449,9 +447,7 @@ export default function LayoutDetail({ van, initialView }) {
 
     {/* Heading */}
     <div className="mb-12 text-center">
-      <h2 className="text-3xl font-bold uppercase tracking-tighter text-[#001F3D]">
-        Media Gallery
-      </h2>
+      <Heading1 variant="section" text="Media Gallery" className="uppercase tracking-tighter !text-primary" />
       <div className="mx-auto mt-2 h-1 w-20 bg-[#001F3D]" />
     </div>
 

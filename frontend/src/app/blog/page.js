@@ -3,7 +3,7 @@ import HeroSection from "@/components/Common/HeroSectionNew/HeroSectionNew";
 import BlogSearchUI from "../../components/Blogs/Blogs"; // Client part
 import { generateBlogListingSchema } from "@/schema/blogPage";
 import {
-  Heading2, Heading3, RichParagraph,
+  Heading1, RichParagraph,
   ImageWithSkeleton, SecondaryButton
 } from '@/components/Common/Common';
 import { BookOpen, Search } from "lucide-react";
@@ -77,7 +77,8 @@ export default async function page({ searchParams }) {
           <div className="space-y-12">
             <div className="flex items-center gap-3 border-b border-primary/10 pb-4">
               <BookOpen size={24} className="!text-hover" />
-              <Heading2
+              <Heading1 as="h2"
+                variant="section"
                 text={searchTerm ? `Results for "${searchTerm}"` : "Latest Articles"}
                 className="!mb-0"
               />
@@ -86,7 +87,7 @@ export default async function page({ searchParams }) {
             {blogs.length === 0 ? (
               <div className="text-center py-32 bg-white rounded-[8px] border border-dashed border-primary/10">
                 <Search size={48} className="mx-auto text-primary/10 mb-4" />
-                <p className="text-primary/40 font-medium">No articles found matching your search.</p>
+                <RichParagraph>No articles found matching your search.</RichParagraph>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -105,9 +106,11 @@ export default async function page({ searchParams }) {
 
                     <div className="p-8 flex flex-col flex-grow">
                       <div className="flex-grow space-y-4">
-                        <p className="!text-hover font-bold text-[10px] tracking-widest uppercase">Article</p>
-                        <Heading3 text={blog.title} className="group-hover:!text-hover transition-colors line-clamp-2" />
-                        <RichParagraph className="line-clamp-3 !text-primary/70 !text-sm">
+                        <RichParagraph variant="sub" className="!text-hover">
+                          Article
+                        </RichParagraph>
+                        <Heading1 as="h3" variant="card" text={blog.title} className="group-hover:!text-hover transition-colors line-clamp-2" />
+                        <RichParagraph variant="card" className="line-clamp-3 ">
                           {blog.description}
                         </RichParagraph>
                       </div>
@@ -135,8 +138,12 @@ export default async function page({ searchParams }) {
                 />
 
                 <div className="text-center">
-                  <p className="text-[10px] font-black text-primary/30 uppercase tracking-[0.3em] mb-1">Page</p>
-                  <p className="text-lg font-bold text-primary font-serif">{currentPage} / {totalPages}</p>
+                  <RichParagraph variant="sub" className="mb-1">
+                    Page
+                  </RichParagraph>
+                  <RichParagraph variant="body" className="">
+                    {currentPage} / {totalPages}
+                  </RichParagraph>
                 </div>
 
                 <SecondaryButton

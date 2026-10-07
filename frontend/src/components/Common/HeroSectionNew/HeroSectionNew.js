@@ -64,15 +64,15 @@ export default function HeroImage({
 
             {/* TITLE */}
             {title && (
-              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl leading-tight tracking-tight text-white">
-                <Heading1 as="h1" variant="hero" textColor="text-secondary" text={title} />
-              </div>
+             <div>
+  <Heading1 as="h1" variant="hero" text={title} textColor="text-secondary" />
+</div>
             )}
 
             {/* DESCRIPTION */}
             {description && (
               <div className="max-w-xl">
-                <RichParagraph variant="hero" textColor="secondary">
+                <RichParagraph variant="hero" textColor="text-secondary">
                   {description}
                 </RichParagraph>
               </div>

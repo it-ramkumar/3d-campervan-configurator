@@ -11,8 +11,8 @@ const variantTagMap = {
 // Styling mapping
 const variantStyles = {
   hero: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]",
-  section: "text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.2]",
-  card: "text-xl sm:text-2xl font-semibold tracking-normal leading-[1.3]",
+  section: "text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.2] ",
+  card: "text-xl sm:text-2xl font-semibold tracking-normal leading-[1.3] ",
   sub: "text-lg sm:text-xl font-medium tracking-normal leading-[1.4]",
 };
 

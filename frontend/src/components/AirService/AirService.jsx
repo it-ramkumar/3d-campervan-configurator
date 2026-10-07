@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Plane, Car, MapPin, Navigation, Clock } from "lucide-react";
 import { airportData } from "../../DataUseInComp/AirportData";
-import { Heading2,Heading1, Heading4, RichParagraph } from "../Common/Common";
+import { Heading1, RichParagraph } from "../Common/Common";
 
 const AirportCard = ({
   airport,
@@ -48,7 +48,9 @@ const AirportCard = ({
         </div>
         <div className="flex items-center gap-1.5 bg-secondary/50 px-3 py-1 rounded-full text-[10px] font-bold text-primary">
           <Clock size={12} />
-          {time}
+          <RichParagraph variant="sub" className="!text-[10px] font-bold !text-primary !opacity-100">
+            {time}
+          </RichParagraph>
         </div>
       </div>
 
@@ -58,8 +60,10 @@ const AirportCard = ({
 
       {isPrivate && (
         <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-50 to-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter border border-amber-200">
-          <RichParagraph variant="sub" className="w-1.5 h-1.5 bg-hoverrounded-lg animate-pulse"></RichParagraph>
-          Private Aviation Friendly
+          <span className="w-1.5 h-1.5 bg-hover rounded-lg animate-pulse"></span>
+          <RichParagraph variant="sub" className="!text-[10px] font-black uppercase tracking-tighter !text-amber-700 !opacity-100">
+            Private Aviation Friendly
+          </RichParagraph>
         </div>
       )}
     </div>
@@ -125,7 +129,7 @@ export default function AirService() {
                 <Car size={40} className="text-white" />
               </div>
               <div>
-                <Heading4 text="Complimentary Valet Pickup" className="text-white mb-2" />
+                <Heading1 variant="card" text="Complimentary Valet Pickup" className="!text-white mb-2" />
                 <RichParagraph className="opacity-70 w-max-4xl text-secondary">
                   Skip the rental counter. Our team will meet you directly at arrivals in a custom Sprinter to bring you to HQ.
                 </RichParagraph>

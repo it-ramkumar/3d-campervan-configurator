@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Heading2, RichParagraph, ImageWithSkeleton, SecondaryButton, PrimaryButton } from '../../Common/Common';
+import { Heading1, RichParagraph, ImageWithSkeleton, SecondaryButton, PrimaryButton } from '../../Common/Common';
 import { ArrowBigRightDash, ArrowBigLeftDash } from 'lucide-react';
 
 // Import Swiper styles
@@ -32,15 +32,15 @@ export default function All_Layout({ layout, LayoutText, text }) {
         <div className="text-center max-w-3xl mx-auto mb-12">
           {text && (
             <div className="mb-4">
-              <p className="text-hover text-xs uppercase tracking-widest font-bold mb-3">
+              <RichParagraph variant="sub" textColor="text-hover" className="!text-xs uppercase tracking-widest font-bold mb-3">
                 {introText}
-              </p>
+              </RichParagraph>
               <RichParagraph className="mt-4 italic leading-relaxed text-secondary/60">
                 {description}
               </RichParagraph>
             </div>
           )}
-          <Heading2 text={title} className="!text-center mt-2 font-display text-secondary uppercase tracking-wide" />
+          <Heading1 variant="section" text={title} className="!text-center mt-2 font-display !text-secondary uppercase tracking-wide" />
           <div className="bbv-divider mb-6" />
         </div>
 

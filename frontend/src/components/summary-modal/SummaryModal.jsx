@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setAddedModels } from '../../redux/slices/addedModels.js'
 import Swal from "sweetalert2";
 import { handleGetQuote } from '../../CustomHooks/handleQuote.js';
-import { ImageWithSkeleton, Heading2, RichParagraph } from "../Common/Common"
+import { ImageWithSkeleton, Heading1, RichParagraph } from "../Common/Common"
 
 export default function SummaryModal({
   SummaryModal,
@@ -58,7 +58,7 @@ export default function SummaryModal({
         <div className="flex items-center justify-between px-8 py-5 border-b border-secondary/10 bg-primary/40">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🛒</span>
-            <Heading2 text="Your Selection" className="text-secondary font-bold text-xl" />
+            <Heading1 variant="section" text="Your Selection" className="!text-secondary font-bold !text-xl" />
             <span className="bg-hover text-primary text-xs font-semibold px-2.5 py-1 rounded-full">
               {addedModels.length}
             </span>
@@ -78,7 +78,7 @@ export default function SummaryModal({
             <div className="flex flex-col items-center justify-center h-64 text-secondary/60">
               <span className="text-5xl mb-4 opacity-30">🛒</span>
               <RichParagraph className="text-lg font-medium text-secondary">No items selected</RichParagraph>
-              <p className="text-sm mt-2 text-secondary/50">Add items to see them here</p>
+              <RichParagraph variant="sub" textColor="text-secondary/50" className="mt-2">Add items to see them here</RichParagraph>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -166,10 +166,10 @@ export default function SummaryModal({
 
               {/* Detail Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-secondary/10 bg-primary/40">
-                <h3 className="text-lg font-bold text-secondary flex items-center gap-2">
+                <Heading1 variant="card" className="!text-lg font-bold !text-secondary flex items-center gap-2">
                   <span>📄</span>
                   Item Details
-                </h3>
+                </Heading1>
                 <button
                   onClick={() => setSelectedItem(null)}
                   className="text-secondary/50 hover:text-hover text-2xl font-light transition-colors"
@@ -195,26 +195,26 @@ export default function SummaryModal({
                   <div className="flex-1 space-y-4">
                     <div>
                       <label className="text-xs font-semibold text-hover uppercase tracking-wider">Label</label>
-                      <p className="text-secondary font-semibold text-lg mt-1">{selectedItem.label}</p>
+                      <RichParagraph textColor="text-secondary" className="font-semibold mt-1">{selectedItem.label}</RichParagraph>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-xs font-semibold text-hover uppercase tracking-wider">Category</label>
-                        <p className="text-secondary/80 font-medium mt-1">{selectedItem.category}</p>
+                        <RichParagraph variant="card" textColor="text-secondary/80" className="font-medium mt-1">{selectedItem.category}</RichParagraph>
                       </div>
                       <div>
                         <label className="text-xs font-semibold text-hover uppercase tracking-wider">Group</label>
-                        <p className="text-secondary/80 font-medium mt-1">{selectedItem.group}</p>
+                        <RichParagraph variant="card" textColor="text-secondary/80" className="font-medium mt-1">{selectedItem.group}</RichParagraph>
                       </div>
                     </div>
 
                     <div>
                       <label className="text-xs font-semibold text-hover uppercase tracking-wider">Description</label>
                       <div className="mt-2 bg-primary/30 rounded-lg p-4 border border-secondary/10">
-                        <p className="text-secondary/70 text-sm leading-relaxed whitespace-pre-line">
+                        <RichParagraph variant="sub" textColor="text-secondary/70" className="!leading-relaxed whitespace-pre-line">
                           {selectedItem.description || 'No description available for this item.'}
-                        </p>
+                        </RichParagraph>
                       </div>
                     </div>
                   </div>

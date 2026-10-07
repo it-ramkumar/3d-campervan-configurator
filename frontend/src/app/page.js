@@ -1,7 +1,7 @@
 import Hero from "@/components/HomePage/Hero/Hero";
 import { generateHomeSchema } from "../schema/homeSchema";
 import nextDynamic from "next/dynamic";
-import { Heading2,RichParagraph, SpanTag } from "@/components/Common/Common";
+import { Heading1,RichParagraph, SpanTag } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
 
 // ISR: serve a cached copy, regenerate in the background at most every 5 minutes
@@ -111,12 +111,13 @@ export default async function Home() {
           <section id="quiz-section" className="bg-secondary py-10 border-y border-slate-100 scroll-mt-20">
             <div className="max-w-7xl mx-auto">
               <div className="text-center px-4 mb-8">
-                <SpanTag text={"BBV Matchmaker Engine"} className="font-bold uppercas"/>
+                <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
+                  BBV Matchmaker Engine
+                </RichParagraph>
 
 
-                <Heading2 text="Match Your Vibe with a Layout"/>
-                {/* <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-slate-900 mt-3">
-                </h2> */}
+                <Heading1 variant="section" textColor="text-primary" text="Match Your Vibe with a Layout"/>
+
                <RichParagraph className="mx-auto text-center max-w-2xl">
   Answer a few simple build questions to view live inventory pricing matching or portfolio configuration blueprints instantly.
 </RichParagraph>

@@ -141,7 +141,7 @@ export default function OurProcess() {
       <div className=" mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
-          <RichParagraph variant="sub" className="!text-hover">
+          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
                Our Methodology
           </RichParagraph>
 
@@ -251,7 +251,7 @@ export default function OurProcess() {
 
           {/* Content */}
           <div className="relative z-10 text-center p-8 md:p-14 max-w-2xl mx-auto flex flex-col items-center justify-center">
-        <RichParagraph variant="sub" className="!text-hover">
+        <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
                 Take The Next Step
             </RichParagraph>
 

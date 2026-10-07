@@ -131,7 +131,7 @@ export default function VanRecommendation() {
                 <div className="px-4 pt-8 pb-6 border-b">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <RichParagraph variant="sub" textColor="text-hover/90">
+                            <RichParagraph variant="sub" textColor="text-secondary/80" className="!opacity-100  font-bold uppercase  !tracking-normal">
                               BBV Matchmaker Engine
                             </RichParagraph>
 

@@ -3,8 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
-import { Heading2, Heading3, Heading1 } from "../Common/Common";
+import { ImageWithSkeleton, RichParagraph, Heading1 } from "../Common/Common";
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
 
@@ -800,10 +799,7 @@ Stock Seats
 
           {/* REDUCED MARGIN AND PILL SIZE */}
           <div className="text-center mb-6 md:mb-10">
-            <Heading3 text={"After Market Seats"}/>
-            {/* <h3 className="text-lg md:text-3xl text-gray-600 font-medium">
-              After Market Seats
-            </h3> */}
+            <Heading1 variant="card" text={"After Market Seats"} className="!text-primary"/>
             <div className="w-10 h-1 bg-hover mx-auto mt-2 rounded-full"></div>
           </div>
 
@@ -853,10 +849,7 @@ Stock Seats
         {/* ==================================== */}
         <section className="pt-10 md:pt-12">
           {/* REDUCED TITLE FONT SIZE AND MARGIN */}
-          <Heading1 variant="section" textColor="text-primary" text={"Roof Tracks & 180-Degree Rear Door Hinges"} className="text-center mb-8"/>
-          {/* <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#1a1f2e] mb-10 md:mb-12 max-w-4xl mx-auto leading-tight">
-            Roof Tracks & 180-Degree Rear Door Hinges
-          </h1> */}
+          <Heading1 variant="section" text={"Roof Tracks & 180-Degree Rear Door Hinges"} className="text-center mb-8 !text-primary"/>
 
           {/* FEATURE 1: Roof Tracks - REDUCED MARGIN */}
           <div className="feature-section mb-10 md:mb-12">
@@ -866,9 +859,6 @@ Stock Seats
                 <div className="p-5 lg:p-8 flex flex-col justify-center order-2 lg:order-1">
                   {/* REDUCED TITLE FONT SIZE */}
                   <Heading1 variant="card" text={"Roof Tracks"} className="text-secondary! mb-4"/>
-                  {/* <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
-                    Roof Tracks
-                  </h2> */}
                   <div className="space-y-3 sm:space-y-3">
                     {[
                       "Factory roof rails support up to 440 lbs, compatible with crossbars.",
@@ -911,9 +901,6 @@ Stock Seats
                 <div className="p-5 lg:p-8 flex flex-col justify-center">
                   {/* REDUCED TITLE FONT SIZE */}
                   <Heading1 variant="card" text={"180-Degree Rear Door Hinges"} className="text-secondary! mb-4"/>
-                  {/* <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white group-hover:text-emerald-50 transition-colors duration-300">
-                    180-Degree Rear Door Hinges
-                  </h2> */}
                   <div className="space-y-3 sm:space-y-3">
                     {[
                       "Replaces 270-degree hinges for tire carriers or ladders.",

@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
-import { RichParagraph, Heading2, Heading3, Heading4 } from "@/components/Common/Common";
+import { RichParagraph, Heading1 } from "@/components/Common/Common";
 import CareersClient from "../../components/Career/CareerListing";
 import { Heart, Users } from "lucide-react";
 
@@ -80,13 +80,13 @@ const jsonLd = {
       {/* Hero Section */}
       <section className="relative bg-primary text-secondary py-24 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 text-center">
-          <Heading2
+          <Heading1
             as="h1"
-            className="text-5xl md:text-7xl uppercase tracking-tight"
+            variant="hero"
             text="Build the Future"
             textColor="text-secondary"
           />
-          <RichParagraph className="mt-6 max-w-2xl mx-auto text-secondary/70">
+          <RichParagraph variant="hero" textColor="text-secondary/80">
             Join Big Bear Vans and help us redefine mobile living through precision engineering and design.
           </RichParagraph>
           <a
@@ -104,7 +104,7 @@ const jsonLd = {
           {/* Sidebar (Static Content) */}
           <aside className="lg:w-1/3 space-y-8">
             <div className="bg-white p-8 rounded-lg border border-primary/10 shadow-sm">
-              <Heading3 text="Why Join Us?" textColor="text-primary" />
+              <Heading1 as="h2" variant="section" text="Why Join Us?"  />
               <div className="space-y-6 mt-6">
                 {companyThoughts.map((thought) => (
                   <div key={thought.id} className="flex gap-4">
@@ -112,8 +112,8 @@ const jsonLd = {
                       {thought.icon}
                     </div>
                     <div>
-                      <Heading4 text={thought.title} textColor="text-primary" />
-                      <RichParagraph className="text-primary/60 text-sm">
+                      <Heading1 as="h3" variant="card" text={thought.title} />
+                      <RichParagraph variant="card" >
                         {thought.content}
                       </RichParagraph>
                     </div>
@@ -123,7 +123,7 @@ const jsonLd = {
             </div>
 
             <div className="bg-primary text-secondary p-8 rounded-lg shadow-lg">
-              <Heading4 text="Benefits" textColor="text-secondary" />
+              <Heading1 as="h3" variant="card" text="Benefits"/>
               <ul className="space-y-3 text-sm mt-4">
                 <li className="flex items-center gap-2">✔ Remote & Onsite Roles</li>
                 <li className="flex items-center gap-2">✔ Competitive Salary (USD)</li>

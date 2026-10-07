@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Compass } from 'lucide-react';
-import { RichParagraph, Heading3, SecondaryButton, CustomLink } from '../Common/Common';
+import { RichParagraph, Heading1, SecondaryButton } from '../Common/Common';
 import Link from "next/link";
 
 export default function ExteriorCTR() {
@@ -30,12 +30,13 @@ export default function ExteriorCTR() {
                         className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-hover/10 border border-hover/20 mb-8"
                     >
                         <span className="w-2 h-2 rounded-lg bg-hover animate-pulse"></span>
-                        <span className="text-hover text-[10px] font-black uppercase tracking-[0.2em]">Adventure Awaits</span>
+                        <RichParagraph variant="sub" className="!text-hover !text-[10px] font-black uppercase tracking-[0.2em]">Adventure Awaits</RichParagraph>
                     </motion.div>
 
-                    <Heading3
+                    <Heading1
+                        variant="section"
                         text='Ready to Build Your Dream Van?'
-                        className='text-primary font-display uppercase tracking-wide'
+                        className='!text-primary font-display uppercase tracking-wide'
                     />
 
                     <div className="bbv-divider mb-6" />

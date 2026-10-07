@@ -90,7 +90,7 @@ export default function Hero() {
 
 
                   </div>
-                  <RichParagraph variant="sub" textColor="text-hover">
+                  <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
                     {slide.slogan || "You Dream It. We Build It."}
                   </RichParagraph>
                   {/* Title (stacked lines) — visual only; the page's real <h1> is above the carousel */}

@@ -22,7 +22,7 @@ const packagesData = [
       "Better grip in snow, ice, or rough terrain.",
       "Supports towing (5,000-7,500 lbs) with stability.",
     ],
-    image: "/sprinter/Rectangle 161.webp",
+    image: "/sprinter/sprinter-van-buying-guide.webp",
   },
   {
     id: "COOPKG",
@@ -44,7 +44,7 @@ const packagesData = [
       "Factory-integrated, safety-compliant.",
       "Cost-effective vs. premium options.",
     ],
-    image: "/sprinter/Rectangle 161 (1).webp",
+    image: "/sprinter/sprinter-van-buying-guide (1).webp",
   },
   {
     id: "C01PKG",
@@ -67,7 +67,7 @@ const packagesData = [
       "Simplifies driving tasks, reduces fatigue.",
       "Cost-effective upgrade for convenience.",
     ],
-    image: "/sprinter/Rectangle 161 (2)(1).webp",
+    image: "/sprinter/sprinter-van-buying-guide (2).webp",
   },
   {
     id: "C03PKG",
@@ -90,7 +90,7 @@ const packagesData = [
       "Enhanced safety and luxury.",
       "Comfortable for long drives.",
     ],
-    image: "/sprinter/Rectangle 161 (3)(1).webp",
+    image: "/sprinter/sprinter-van-buying-guide (3).webp",
   },
   {
     id: "COSPKG",
@@ -112,7 +112,7 @@ const packagesData = [
       "Seamless factory integration, maintains safety standards.",
       "Affordable ergonomic upgrade for daily driving.",
     ],
-    image: "/sprinter/Rectangle 161 (4)(1).webp",
+    image: "/sprinter/sprinter-van-buying-guide (4).webp",
   },
   {
     id: "CA2PKG",
@@ -134,7 +134,7 @@ const packagesData = [
       "Adds comfort with premium steering.",
       "Seamless C03 integration.",
     ],
-    image: "/sprinter/Rectangle 161 (5).webp",
+    image: "/sprinter/sprinter-van-buying-guide (5).webp",
   },
   {
     id: "X13PKG",
@@ -155,7 +155,7 @@ const packagesData = [
       "Enhances safety with better lighting.",
       "Modernizes look, boosts confidence.",
     ],
-    image: "/sprinter/Rectangle 161 (6).webp",
+    image: "/sprinter/sprinter-van-buying-guide (6).webp",
   },
   {
     id: "X4ZPKG",
@@ -177,7 +177,7 @@ const packagesData = [
       "Ideal for van conversions.",
       "Durable, factory-integrated.",
     ],
-    image: "/sprinter/Rectangle 161 (7).webp",
+    image: "/sprinter/sprinter-van-buying-guide (7).webp",
   },
   {
     id: "X67PKG",
@@ -198,7 +198,7 @@ const packagesData = [
       "Durable, weather-resistant finish.",
       "Pairs well with X13PKG.",
     ],
-    image: "/sprinter/Rectangle 161 (8).webp",
+    image: "/sprinter/sprinter-van-buying-guide (8).webp",
   },
 ];
 
@@ -976,7 +976,6 @@ export default function Speclist() {
           {/* Reduced margin */}
           <div className="w-20 h-1 bg-gradient-to-r from-[#ED985F] to-[#f4a261]  rounded-full mb-2"></div>{" "}
           {/* Reduced size */}
-          {/* <div className="w-14 h-0.5 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full opacity-80"></div> Reduced size */}
         </div>
         {/* REDUCED MAIN TITLE FONT SIZE */}
         <Heading1 variant="section" textColor="text-primary" text={"Packages & Codes: Decoding The Sprinter Spec List"} />
@@ -1245,7 +1244,8 @@ export default function Speclist() {
                     <ImageWithSkeleton
                       src={pkg.image}
                       alt={`${pkg.title} details`}
-                      className=" absolute inset-0 w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-105"
+                      wrapperClassName="!absolute inset-0"
+                      className="!h-full object-cover transform transition-transform duration-1000 group-hover:scale-105"
                     />
 
                     {/* Shine Overlay */}

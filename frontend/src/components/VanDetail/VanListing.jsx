@@ -12,8 +12,6 @@ import {
   Calendar,
 } from "lucide-react";
 import {
-  Heading2,
-  Heading3,
   Heading1,
   RichParagraph,
   SecondaryButton,
@@ -47,8 +45,8 @@ function GalleryModelLoader({ progress, className = "" }) {
             <path d="m3 7 9 5 9-5M12 12v10M7.5 4.5l9 5" />
           </svg>
         </div>
-        <p className="text-sm font-semibold tracking-wide">Preparing your van</p>
-        <p className="mt-1 text-xs text-white/60">{downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}</p>
+        <RichParagraph variant="card" textColor="text-white" className="!text-sm font-semibold tracking-wide">Preparing your van</RichParagraph>
+        <RichParagraph variant="sub" textColor="text-white/60" className="mt-1 !text-xs">{downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}</RichParagraph>
         <div role="progressbar" aria-label="3D assets loading" aria-valuemin={0} aria-valuemax={100} aria-valuenow={downloading ? percentage : undefined} className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
           <div className={`h-full rounded-full bg-[#ED985F] transition-[width] duration-300 ${downloading ? "" : "animate-pulse motion-reduce:animate-none"}`} style={{ width: downloading ? `${percentage}%` : "40%" }} />
         </div>
@@ -73,7 +71,7 @@ const GalleryModel = dynamic(async () => {
 
   return function GalleryModelScene({ url, parts }) {
     return (
-      <Canvas gl={{ alpha: true }} style={{ background: "transparent" }} camera={{ position: [15, 15, 15], fov: 50 }} fallback={<p className="p-6 text-white">Your browser does not support the 3D viewer.</p>}>
+      <Canvas gl={{ alpha: true }} style={{ background: "transparent" }} camera={{ position: [15, 15, 15], fov: 50 }} fallback={<RichParagraph textColor="text-white" className="p-6">Your browser does not support the 3D viewer.</RichParagraph>}>
         <Suspense fallback={<ModelLoadingProgress />}>
           <OrbitControls makeDefault enableDamping minDistance={5} maxDistance={50} />
           <Model url={url} />
@@ -96,7 +94,7 @@ class GalleryModelBoundary extends React.Component {
 
   render() {
     if (this.state.failed) {
-      return <p role="alert" className="p-6 text-white">The 3D model could not be loaded. Please switch tabs and try again.</p>;
+      return <div role="alert"><RichParagraph textColor="text-white" className="p-6">The 3D model could not be loaded. Please switch tabs and try again.</RichParagraph></div>;
     }
     return this.props.children;
   }
@@ -232,7 +230,7 @@ export function VanMediaGallery({ gallery = [], media = [], modelUrl, variants =
               <GalleryModel url={modelUrl} parts={variant?.parts || []} />
             </GalleryModelBoundary>
           </div>
-          <p className="mt-3 text-sm text-primary/60">Drag to rotate. Scroll or pinch to zoom.</p>
+          <RichParagraph variant="sub" textColor="text-primary/60" className="mt-3 !text-sm">Drag to rotate. Scroll or pinch to zoom.</RichParagraph>
         </div>
       )}
     </div>
@@ -629,7 +627,7 @@ The Design Philosophy
                 <div>
                   {(block.title || block.subtitle) && (
                     <div className={`mb-10 flex flex-col gap-3 ${alignClass}`}>
-                      {block.title && <Heading2 text={block.title} className={titleCls} />}
+                      {block.title && <Heading1 variant="section" text={block.title} className={titleCls} />}
                       {block.title && <div className={`w-12 h-0.5 bg-hover rounded-full ${layout === "center" ? "mx-auto" : ""}`} />}
                       {block.subtitle && <RichParagraph className={subCls}>{block.subtitle}</RichParagraph>}
                     </div>
@@ -638,8 +636,8 @@ The Design Philosophy
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                       {block.items.map((item, i) => (
                         <div key={i} className={`p-6 rounded-lg text-center ${cardCls}`}>
-                          {item.value && <p className="text-3xl font-black text-hover mb-1 font-display leading-tight">{item.value}</p>}
-                          {item.title && <p className={`font-ui text-[11px] uppercase tracking-[0.22em] font-bold ${subCls}`}>{item.title}</p>}
+                          {item.value && <RichParagraph textColor="text-hover" className="!text-3xl font-black mb-1 font-display !leading-tight">{item.value}</RichParagraph>}
+                          {item.title && <RichParagraph variant="sub" textColor={subCls} className="font-ui !text-[11px] uppercase tracking-[0.22em] font-bold">{item.title}</RichParagraph>}
                           {item.description && <RichParagraph className={` mt-1 ${subCls}`}>{item.description}</RichParagraph>}
                         </div>
                       ))}
@@ -667,7 +665,7 @@ The Design Philosophy
               {block.block_type === "cta" && (
                 <div className={`relative rounded-lg p-10 md:p-14 text-center space-y-5 overflow-hidden ${isDark ? "bbv-glass-light" : "bg-primary"}`}>
                   <div className="bbv-amber-line-top" />
-                  {block.title && <Heading2 text={block.title} className="!text-secondary" />}
+                  {block.title && <Heading1 variant="section" text={block.title} className="!text-secondary" />}
                   {block.subtitle && <RichParagraph className="!text-secondary/60 italic">{block.subtitle}</RichParagraph>}
                   {block.content && <RichParagraph className="!text-secondary/50 max-w-xl mx-auto">{block.content}</RichParagraph>}
                   {block.button?.label && block.button?.url && (
@@ -697,7 +695,7 @@ The Design Philosophy
             {/* Header */}
             <div className="text-center mb-12">
               <SpanTag text="Build Standards" className="justify-center mb-5" />
-              <Heading2 text="Every Component Considered" className="!text-primary mt-4" />
+              <Heading1 variant="section" text="Every Component Considered" className="!text-primary mt-4" />
               <div className="bbv-divider mx-auto mt-5" />
             </div>
 
@@ -811,7 +809,7 @@ The Design Philosophy
           <div className="relative">
             <div className="text-center mb-12">
               <SpanTag text="See It In Motion" className="justify-center mb-5" />
-              <Heading2 text="Media Gallery" className="!text-primary mt-4" />
+              <Heading1 variant="section" text="Media Gallery" className="!text-primary mt-4" />
               <div className="bbv-divider mx-auto mt-5" />
             </div>
             {/* 3 or fewer videos: plain row, no slider needed. More than 3: swipeable slider. */}
@@ -886,7 +884,7 @@ The Design Philosophy
         <div className="bbv-amber-line-top" />
         <div className="relative max-w-2xl mx-auto text-center">
           <SpanTag text="Ready to Begin?" className="justify-center mb-5" />
-          <Heading2 text="Build Your Legacy" className="!text-secondary mt-4" />
+          <Heading1 variant="section" text="Build Your Legacy" className="!text-secondary mt-4" />
           <div className="bbv-divider mx-auto mt-5 mb-10" />
           <RichParagraph className="!text-secondary/55 italic leading-relaxed mb-10">
             Limited build slots available for 2026. Connect with our design team to start your custom journey.

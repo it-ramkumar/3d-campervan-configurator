@@ -23,8 +23,9 @@ export default function FAQs({ faqs }) {
           <RichParagraph variant="sub" className="!text-hover">Support</RichParagraph>
           <Heading1
           variant="section"
+          textColor="text-primary"
             text="Frequently Asked Questions"
-            className=" !text-primary uppercase "
+            className="uppercase "
           />
           <RichParagraph variant="body" >
             Everything you need to know about our custom build process and services.

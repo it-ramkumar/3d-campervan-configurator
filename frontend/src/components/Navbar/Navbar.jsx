@@ -8,7 +8,7 @@ import { linksForNavbar } from "../../api/blog/linksForNavbar";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 // import { routes } from "../../DataUseInComp/NavbarRoutes";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
-import { Heading4 } from "../Common/Common";
+import { Heading1, RichParagraph } from "../Common/Common";
 import Image from "next/image";
 
 // --- Sub Components ---
@@ -135,9 +135,9 @@ const CategoryCard = ({ image, title, href, onClick,floorPlans }) => (
       </div>
 
       {/* Title Section */}
-      <span className="block px-2 text-[12px] font-display font-bold uppercase tracking-[0.12em] text-primary group-hover:text-[#ED985F] transition-colors">
+      <RichParagraph variant="sub" className="block px-2 !text-[12px] !opacity-100 font-display font-bold uppercase tracking-[0.12em] !text-primary group-hover:!text-[#ED985F] transition-colors">
         {title}
-      </span>
+      </RichParagraph>
     </Link>
   </div>
 );
@@ -155,7 +155,7 @@ const BlogListItem = ({ href, children, onClick }) => (
 
 
 const MobileSectionTitle = ({ children }) => (
-  <Heading4 text={children} textColor="text-primary" />
+  <Heading1 variant="sub" as="h4" text={children} className="font-bold font-display !text-primary" />
 );
 
 export default function Navbar({ forceMobile }) {
@@ -401,7 +401,7 @@ const handleItemClick = () => {
             >
               Ram ProMaster 159 →
             </NavListItem>
-            <Heading4 text="Built for Every Journey Size" className="my-4" />
+            <Heading1 variant="sub" as="h4" text={"Built for Every Journey Size"} className="font-bold font-display !text-primary my-4" />
             {/* Uske foran baad ye items nazar aayenge */}
             <NavListItem
               href={`/van-layouts?category=layouts-for-solo-and-couple-travelers`}
@@ -466,9 +466,9 @@ const handleItemClick = () => {
                 className="object-contain border-none mb-1"
               />
 
-              <span className="font-ui text-[9px] md:text-[10px] italic tracking-[0.15em] text-[#ED985F] mt-[-8px] ml-1">
+              <RichParagraph variant="sub" className="font-ui !text-[9px] md:!text-[10px] !opacity-100 italic tracking-[0.15em] !text-[#ED985F] mt-[-8px] ml-1">
                 You Dream It. We Build It.
-              </span>
+              </RichParagraph>
             </Link>
           )}
 
@@ -504,10 +504,9 @@ const handleItemClick = () => {
                 href="tel:+19514419719"
                 aria-label="Call Big Bear Vans at 951-441-9719"
                 className="inline-flex items-center justify-center px-3
-                 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-[#ED985F] text-primary border border-[#ED985F] whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
+                 sm:px-4 py-2 rounded-lg text-[10px] sm:text-[11px] font-ui font-semibold uppercase tracking-[0.08em] sm:tracking-[0.12em] bg-hover text-primary border border-hover whitespace-nowrap transition-all duration-200 hover:bg-primary hover:text-secondary hover:border-primary active:scale-95"
               >
-                <span className="sm:hidden text-secondary">Call Now</span>
-                <span className="hidden sm:inline text-secondary">Call Now</span>
+                <RichParagraph variant="sub" className="!text-[10px] sm:!text-[11px] !opacity-100 font-ui font-semibold !text-secondary">Call Now</RichParagraph>
               </a>
             )}
             {!forceMobile && (
@@ -564,7 +563,7 @@ const handleItemClick = () => {
             }
           `}
         >
-          <Heading4 text={sec.title} textColor="text-primary" />
+          <Heading1 variant="sub" as="h4" text={sec.title} className="font-bold font-display !text-primary" />
           <ul className="space-y-1 font-ui mt-4">
             {renderSectionItems(sec)}
           </ul>

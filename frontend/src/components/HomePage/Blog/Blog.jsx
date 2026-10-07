@@ -21,7 +21,7 @@ export default async function Blog() {
 
         {/* --- Header Section --- */}
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <RichParagraph variant="sub" className="!text-hover">
+          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
              Insights &amp; Stories
           </RichParagraph>
 

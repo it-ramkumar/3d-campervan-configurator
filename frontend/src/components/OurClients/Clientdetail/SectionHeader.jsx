@@ -1,4 +1,4 @@
-import { Heading2, RichParagraph } from "../../Common/Common";
+import { Heading1, RichParagraph } from "../../Common/Common";
 
 export default function SectionHeader({ title, subtitle, icon: Icon }) {
   return (
@@ -8,7 +8,7 @@ export default function SectionHeader({ title, subtitle, icon: Icon }) {
           <Icon className="w-8 h-8 text-white" />
         </div>
       </div>
-      <Heading2 text={title} className="text-primary" />
+      <Heading1 variant="section" text={title} className="!text-primary" />
       {subtitle && (
         <RichParagraph className="mt-2 text-primary/60 max-w-2xl mx-auto">
           {subtitle}

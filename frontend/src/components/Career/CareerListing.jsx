@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { MapPin, Briefcase, DollarSign, ChevronRight } from "lucide-react";
-import { Heading2, Heading3, RichParagraph } from "@/components/Common/Common";
+import {  ChevronRight } from "lucide-react";
+import { Heading1, RichParagraph } from "@/components/Common/Common";
 
 export default function CareersClient({ initialJobs }) {
   const [filter, setFilter] = useState("all");
@@ -21,9 +21,9 @@ export default function CareersClient({ initialJobs }) {
     <div id="opportunities">
       {/* Filter Header */}
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
-        <Heading2
+        <Heading1 as="h2" variant="section"
           text={`Open Positions (${filteredJobs.length})`}
-          className="font-display text-primary uppercase tracking-wide"
+
         />
 
         <div className="flex flex-wrap gap-2">
@@ -53,33 +53,32 @@ export default function CareersClient({ initialJobs }) {
             <div className="flex flex-col md:flex-row justify-between gap-6">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[10px] font-bold bg-hover/10 border border-hover/30 text-hover px-2 py-1 rounded uppercase">
+                  <RichParagraph variant="sub" className=" bg-hover/10 border border-hover/30 text-hover px-2 py-1 rounded uppercase">
                     {job.department}
-                  </span>
-                  <span className="text-xs text-primary/40 uppercase tracking-wider">
+                  </RichParagraph>
+<RichParagraph variant="sub" className="uppercase tracking-wider">
                     {job.experienceLevel}
-                  </span>
+                  </RichParagraph>
+
+
                 </div>
 
-                <Heading3
+                <Heading1 as="h3"
+                  variant="card"
                   text={cleanText(job.title)}
-                  className="font-display text-primary uppercase tracking-wide group-hover:text-hover transition-colors"
+                  className="y uppercase tracking-wide group-hover:text-hover transition-colors"
                 />
 
                 <div className="flex flex-wrap gap-4 mt-3 mb-4">
-                  <span className="flex items-center gap-1 text-xs text-primary/60">
-                    <MapPin className="w-3.5 h-3.5 text-hover" /> {job.location}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-primary/60">
-                    <Briefcase className="w-3.5 h-3.5 text-hover" /> {job.type}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs bg-hover/10 border border-hover/20 px-2 py-1 rounded text-hover">
-                    <DollarSign className="w-3.5 h-3.5" />
-                    ${job.salaryMin} - ${job.salaryMax}
-                  </span>
+                  <RichParagraph variant="sub" >
+                    {job.workMode}
+                  </RichParagraph>
+                  <RichParagraph variant="sub">
+                    {job.type}
+                  </RichParagraph>
                 </div>
 
-                <RichParagraph className="text-primary/60 text-sm line-clamp-2">
+                <RichParagraph variant="card">
                   {cleanText(job.description)}
                 </RichParagraph>
               </div>
@@ -104,7 +103,7 @@ export default function CareersClient({ initialJobs }) {
 
         {filteredJobs.length === 0 && (
           <div className="py-20 text-center bbv-card rounded-lg border border-dashed border-primary/20">
-            <RichParagraph className="text-primary/40 uppercase text-xs tracking-widest">
+            <RichParagraph className="text-primary/40 uppercase  tracking-widest">
               No positions found for this category.
             </RichParagraph>
           </div>

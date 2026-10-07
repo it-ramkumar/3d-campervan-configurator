@@ -32,16 +32,16 @@ export default function Buy({ initialVans = [] }) {
         {/* ── HEADER ── */}
         <div className="mb-10">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <RichParagraph variant="sub" textColor="text-hover">
+            <RichParagraph variant="sub" textColor="text-hover" className="uppercase font-bold">
               Premium Builds
             </RichParagraph>
 
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <Heading1 as="h2" variant="section" >
-              <span className="text-primary">Premium Camper Vans</span>
-              <p className="text-hover">Ready for Adventure</p>
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <Heading1 as="h2" variant="section" textColor="text-primary" className="max-w-xl">
+              Premium Camper Vans
+              Ready for Adventure
             </Heading1>
 
             <RichParagraph variant="body" className="max-w-md text-left md:text-right">
@@ -52,162 +52,175 @@ export default function Buy({ initialVans = [] }) {
         </div>
 
         {/* ── CONTROLS BAR ── */}
-        <div className="flex items-center justify-between mb-6 border-b border-primary/10 pb-5">
-          <CustomLink
-            href="/camper-vans-for-sale"
-            text={
-            <RichParagraph variant="sub" textColor="text-hover" className="hover:underline">
-            Browse all available camper vans for sale.
+     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-primary/10 pb-5">
+  {/* Left Link Section */}
+  <CustomLink
+    href="/camper-vans-for-sale"
+    className="group inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-hover transition-colors duration-200"
+    text={
+      <span className="flex items-center gap-2">
+        Browse all available camper vans for sale
+        <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
+          →
+        </span>
+      </span>
+    }
+  />
+
+  {/* Navigation Buttons */}
+  <div className="flex items-center gap-2 self-end sm:self-auto">
+    <button
+      onClick={() => swiper?.slidePrev()}
+      aria-label="Previous slide"
+      className="w-10 h-10 rounded-full border border-primary/15 bg-primary/5 hover:bg-hover hover:border-hover hover:text-white text-primary flex items-center justify-center transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
+    >
+      <ArrowBigLeftDash size={18} />
+    </button>
+
+    <button
+      onClick={() => swiper?.slideNext()}
+      aria-label="Next slide"
+      className="w-10 h-10 rounded-full bg-primary hover:bg-hover text-white flex items-center justify-center transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
+    >
+      <ArrowBigRightDash size={18} />
+    </button>
+  </div>
+</div>
+
+      <Swiper
+  onSwiper={setSwiper}
+  spaceBetween={16}
+  slidesPerView={1.1}
+  breakpoints={{
+    640: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 },
+    1280: { slidesPerView: 3 },
+  }}
+  className="!overflow-visible"
+>
+  {initialVans.map((van, i) => (
+    <SwiperSlide key={i} className="!h-auto flex">
+      {/* Main Card Container with full height */}
+      <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col w-full transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
+
+        {/* Clickable Card Link Area */}
+        <Link
+          href={`/camper-vans-for-sale/${van?.slug}`}
+          className="flex flex-col flex-grow"
+        >
+          {/* Image Container (Strict 1:1 Aspect Ratio) */}
+          <div className="relative aspect-square w-full overflow-hidden bg-primary/5">
+            <RichParagraph
+              variant="sub"
+              textColor="text-secondary"
+              className="absolute top-4 left-4 z-10 bg-hover font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md text-xs"
+            >
+              Available for Sale
             </RichParagraph>
-            }
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={() => swiper?.slidePrev()}
-              aria-label="Previous slide"
-              className="w-10 h-10 rounded-lg border border-primary/20 flex items-center justify-center text-primary/60 hover:border-hover hover:text-hover transition-all cursor-pointer"
-            >
-              <ArrowBigLeftDash size={18} />
-            </button>
-            <button
-              onClick={() => swiper?.slideNext()}
-              aria-label="Next slide"
-              className="w-10 h-10 rounded-lg bg-hover flex items-center justify-center text-secondary hover:bg-hover/80 transition-all cursor-pointer"
-            >
-              <ArrowBigRightDash size={18} />
-            </button>
+
+            {van?.image ? (
+              <Image
+                src={van.image}
+                alt={van?.title || "Van"}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-primary/20 italic text-xs">
+                Coming Soon
+              </div>
+            )}
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+            <div className="bbv-amber-line" />
+          </div>
+
+          {/* Content Area */}
+          <div className="p-5 flex flex-col flex-grow">
+            <Heading1
+              text={van?.title || "New Build"}
+              as="h3"
+              variant="card"
+              className="mb-1 !text-primary"
+            />
+
+            <RichParagraph variant="card" className="mb-3 line-clamp-2">
+              {van?.subtitle ||
+                "High-end craftsmanship meeting rugged durability."}
+            </RichParagraph>
+
+            {/* Price (Pushed to bottom using mt-auto) */}
+            <div className="mt-auto pt-2">
+              {van?.price ? (
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <RichParagraph
+                    variant="card"
+                    textColor="text-hover"
+                    className="!font-black !text-xl"
+                  >
+                    {typeof van.price === "number"
+                      ? `$${van.price.toLocaleString()}`
+                      : van.price}
+                  </RichParagraph>
+                </div>
+              ) : (
+                <RichParagraph
+                  variant="card"
+                  textColor="text-primary/40"
+                  className="italic !normal-case !tracking-normal"
+                >
+                  Pricing upon request
+                </RichParagraph>
+              )}
+            </div>
+          </div>
+        </Link>
+
+        {/* Buttons Action Area (Pinned at bottom of card) */}
+        <div className="p-2 pt-0 mt-auto">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex-1">
+              <PrimaryButton
+                label={"I'm Interested"}
+                onClick={() => {
+                  setIsFormOpen(true);
+                  setData(van);
+                }}
+                className="w-full"
+              />
+            </div>
+
+            {van?.glb ? (
+              <div className="relative flex-1">
+                <span className="absolute -top-2 left-2 z-20 bg-primary text-secondary text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-bounce pointer-events-none">
+                  3D
+                </span>
+                <Link
+                  href={`/camper-vans-for-sale/${van.slug}/configure`}
+                  className="group/3d relative w-full h-full inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-4 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-primary shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-95"
+                >
+                  <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover/3d:translate-x-full" />
+                  <Rotate3d size={16} className="relative z-10 shrink-0" />
+                  <span className="relative z-10 whitespace-nowrap">Explore in 3D</span>
+                </Link>
+              </div>
+            ) : (
+              <div className="flex-1">
+                <PrimaryButton
+                  label={"View Details"}
+                  link={`/camper-vans-for-sale/${van.slug}`}
+                  className="w-full"
+                />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* ── SWIPER ── */}
-        <Swiper
-          onSwiper={setSwiper}
-          spaceBetween={16}
-          slidesPerView={1.1}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-            1280: { slidesPerView: 3 },
-          }}
-          className="!overflow-visible"
-        >
-          {initialVans
-
-            .map((van, i) => (
-              <SwiperSlide key={i} className="h-auto">
-                <div className="bg-white border border-primary/10 shadow-sm rounded-lg overflow-hidden group h-full flex flex-col transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
-
-                  <Link href={`/camper-vans-for-sale/${van?.slug}`}>
-                    <>
-                      {/* Image */}
-                      <div className="relative overflow-hidden bg-primary/5">
-                      <RichParagraph variant="sub" textColor="text-hover" className="absolute top-4 left-4 z-10 bg-hover text-secondary font-bold uppercase px-3 py-1 rounded-lg pointer-events-none shadow-md">
-                        Available for Sale
-                      </RichParagraph>
-
-                        {van?.image ? (
-                          <Image
-                            src={van.image}
-                            alt={van?.title || "Van"}
-                            className="transition-transform duration-700 group-hover:scale-110"
-                            width={1000}
-                            height={800}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-primary/20 italic text-xs">
-                            Coming Soon
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
-                        <div className="bbv-amber-line" />
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-5 flex flex-col flex-grow">
-                        <Heading1
-                          text={van?.title || "New Build"}
-                          as="h3"
-                          variant="card"
-                          className="mb-1 !text-primary"
-                        />
-
-                        <RichParagraph variant="card" className="mb-3">
-                          {van?.subtitle ||
-                            "High-end craftsmanship meeting rugged durability."}
-                        </RichParagraph>
-
-                        {/* Price */}
-                     <div className="mt-auto">
-  {van?.price ? (
-    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <RichParagraph
-        variant="card"
-        textColor="text-hover"
-        className="!font-black !text-xl"
-      >
-        {typeof van.price === "number"
-          ? `$${van.price.toLocaleString()}`
-          : van.price}
-      </RichParagraph>
-    </div>
-  ) : (
-    <RichParagraph
-      variant="card"
-      textColor="text-primary/40"
-      className="italic !normal-case !tracking-normal"
-    >
-      Pricing upon request
-    </RichParagraph>
-  )}
-</div>
-
-                      </div>
-                    </>
-                  </Link>
-
-                  <div className="mt-auto py-3">
-                    <div className="flex flex-col md:flex-row justify-center gap-2">
-                      <div>
-                        <PrimaryButton
-                          label={"I'm Interested"}
-                          onClick={() => {
-                            setIsFormOpen(true);
-                            setData(van);
-                          }}
-                          className="w-full"
-                        />
-                      </div>
-
-                      {van?.glb ? (
-                        <div className="relative">
-                          <span className="absolute -top-2  z-20 bg-primary text-secondary text-[9px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-bounce pointer-events-none">
-                            3D
-                          </span>
-                          <Link
-                            href={`/camper-vans-for-sale/${van.slug}/configure`}
-                            className="group/3d relative w-full inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-hover to-hover/70 px-6 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-primary shadow-[0_0_0_0_rgba(237,152,95,0.6)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_20px_4px_rgba(237,152,95,0.55)] active:scale-95 md:py-3 md:px-6 sm:text-sm"
-                          >
-                            <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/50 to-transparent transition-transform duration-700 group-hover/3d:translate-x-full" />
-                            <Rotate3d size={16} className="relative z-10" />
-                            <span className="relative z-10">Explore in 3D</span>
-                          </Link>
-                        </div>
-                      ) : (
-                        <div>
-                          <PrimaryButton
-                            label={"View Details"}
-                            link={`/camper-vans-for-sale/${van.slug}`}
-                            className="w-full"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                </div>
-              </SwiperSlide>
-            ))}
-        </Swiper>
+      </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
       </div>
 
       {/* ── MODAL ── */}

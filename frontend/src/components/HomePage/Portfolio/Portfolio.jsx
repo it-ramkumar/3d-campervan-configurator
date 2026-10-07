@@ -63,20 +63,20 @@ export default function Portfolio() {
       <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/25 transition-colors duration-500 pointer-events-none" />
 
       {/* Tag */}
-<div className="absolute bottom-4 left-4 z-10">
-    <RichParagraph
-        variant="sub"
-        className="
+      <div className="absolute bottom-4 left-4 z-10">
+        <RichParagraph
+          variant="sub"
+          className="
             px-4 py-1 rounded-lg shadow-lg
             bg-secondary/90 text-primary
             group-hover:bg-hover group-hover:text-white
             transition-all duration-300
             !font-black !tracking-widest !uppercase !text-xs !normal-case
         "
-    >
-        {img.tag}
-    </RichParagraph>
-</div>
+        >
+          {img.tag}
+        </RichParagraph>
+      </div>
     </div>
   );
 
@@ -85,23 +85,20 @@ export default function Portfolio() {
       <div className="container mx-auto px-6 max-w-7xl">
 
         {/* HEADER */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-primary/10 pb-10 gap-6">
-          <div className="max-w-xl">
-            <div className="flex items-center gap-3 mb-6">
-              <RichParagraph variant="sub" className="uppercase tracking-widest">
-Our Craft
+          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
+                Our Craft
               </RichParagraph>
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-12 border-b border-primary/10 pb-10 gap-6">
+          <div className="max-w-xl">
 
-            </div>
-
-       <Heading1
-    variant="section"
-    textColor="text-primary"
->
-    From Dream to
-    <br />
-    <span className="text-hover">Your Driveway</span>
-</Heading1>
+            <Heading1
+              variant="section"
+              textColor="text-primary"
+            >
+              From Dream to
+              <br />
+              <span className="text-hover">Your Driveway</span>
+            </Heading1>
           </div>
 
           <RichParagraph variant="body" className=" max-w-xs md:text-right ">
@@ -164,10 +161,10 @@ Our Craft
             className="!rounded-lg !px-12 !py-4 shadow-md hover:-translate-y-1 transition-all"
           />
 
-<RichParagraph variant="sub" className="mt-5 text-primary/60">
-Updated Weekly • 2026 Collection
-</RichParagraph>
-         
+          <RichParagraph variant="sub" className="mt-5 text-primary/60">
+            Updated Weekly • 2026 Collection
+          </RichParagraph>
+
         </div>
       </div>
     </section>

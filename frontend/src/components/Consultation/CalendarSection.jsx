@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import PrimaryButton from "../Common/Button/PrimaryButton";
-import { Heading4, Heading3, RichParagraph, Heading1 } from "../Common/Common";
+import { RichParagraph, Heading1 } from "../Common/Common";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
 import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
@@ -411,7 +411,7 @@ export default function BookingPage() {
               {bookingStep === 1 && (
                 <div className="animate-in slide-in-from-right-4 duration-500">
                   <header className="text-center mb-8">
-                    <RichParagraph variant="sub" className="!text-hover mb-1">
+                    <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
                       Schedule
                     </RichParagraph>
 
@@ -485,10 +485,10 @@ export default function BookingPage() {
                     </RichParagraph>
 
                     <Heading1 variant="card" text="Available Slots" textColor="text-primary" />
-                    <p className="mt-2 text-xs text-primary/70">
+                    <RichParagraph variant="sub" textColor="text-primary/70" className="mt-2">
                       Times shown in{" "}
                       <strong className="text-primary">{formatTzLabel(displayTz)}</strong>
-                    </p>
+                    </RichParagraph>
                     {browserTz !== PACIFIC_TZ && (
                       <button
                         type="button"
@@ -542,9 +542,9 @@ export default function BookingPage() {
                           }, {}),
                       ).map(([day, daySlots]) => (
                         <div key={day} className="mb-6">
-                          <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary/70">
+                          <Heading1 as="h3" variant="sub" className="mb-3 !text-xs !font-bold uppercase tracking-wider !text-primary/70">
                             {day}
-                          </h3>
+                          </Heading1>
                           <div className="grid grid-cols-2 gap-3">
                             {daySlots.map((s) => (
                               <button
@@ -735,7 +735,7 @@ Phone
                         </RichParagraph>
                       </div>
                     )}
-                 
+
                   </div>
 
                   {bookingError && (
@@ -788,11 +788,11 @@ Phone
                       />
                     </svg>
                   </div>
-                  <Heading3 text="Booking Confirmed!" textColor="text-primary" />
-                  <p className="text-sm text-primary/60 mb-8 max-w-sm mx-auto">
+                  <Heading1 variant="card" text="Booking Confirmed!" className="!text-primary mb-2" />
+                  <RichParagraph variant="card" className="mb-8 max-w-sm mx-auto">
                     Your consultation is confirmed. Check your email for
                     calendar invite and meeting details.
-                  </p>
+                  </RichParagraph>
 
                   {meetLink && (
                     <div className="p-4 bbv-glass rounded-lg border border-secondary/10 flex items-center justify-between gap-4 mb-8">

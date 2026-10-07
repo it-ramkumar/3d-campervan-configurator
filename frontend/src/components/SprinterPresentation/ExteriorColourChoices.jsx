@@ -10,8 +10,6 @@ import { Autoplay, EffectCoverflow } from 'swiper/modules';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
-import { Heading2, Heading3, Heading4 } from '../Common/Common';
-// import { Heading3 } from '../Common/Common';
 // --- ICONS (Keeping for completeness) ---
 const StepIcon = () => (
   <svg className="w-[45px] h-[45px] text-zinc-800" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +143,7 @@ const ColorModal = ({ color, isOpen, onClose }) => {
 
             {/* Color Name on Image - REDUCED LG FONT SIZE */}
             <div className="absolute bottom-3 left-3 lg:bottom-6 lg:left-6">
-              <Heading2 text={color.name} className='text-secondary!'/>
+              <Heading1 variant="section" text={color.name} className='text-secondary!'/>
 
               <div className="w-12 h-1 bg-white/80 rounded-full lg:w-16"></div>
             </div>
@@ -157,7 +155,7 @@ const ColorModal = ({ color, isOpen, onClose }) => {
               {/* Description */}
               <div>
                 {/* REDUCED LG FONT SIZE */}
-                <Heading4 text={"Color Description"} className='text-secondary! mb-2'/>
+                <Heading1 variant="sub" text={"Color Description"} className='text-secondary! mb-2'/>
 
                 {/* REDUCED LG FONT SIZE */}
                 <RichParagraph className='text-secondary!'> {color.description}</RichParagraph>
@@ -167,7 +165,7 @@ const ColorModal = ({ color, isOpen, onClose }) => {
               {/* Features */}
               <div>
                 {/* REDUCED LG FONT SIZE */}
-                <Heading4 text={"Key Features"} className='text-secondary! mb-2'/>
+                <Heading1 variant="sub" text={"Key Features"} className='text-secondary! mb-2'/>
 
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {color.features.map((feature, index) => (
@@ -230,7 +228,7 @@ export default function ExteriorColourChoices() {
       <div className="container mx-auto px-4 py-10 md:py-16">
         {/* Main Title - REDUCED DESKTOP FONT SIZE */}
         <div className="text-center mb-4 sm:mb-5">
-          <Heading1 variant="section" textColor="text-primary" text={"Key Features & Upgrades"}/>
+          <Heading1 variant="section" text={"Key Features & Upgrades"} className="text-primary!"/>
 
         </div>
 
@@ -266,8 +264,7 @@ export default function ExteriorColourChoices() {
               <StepIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <Heading1 variant="card" text={"Rear Steps"} className='!text-secondary!'/>
-            {/* <h4 className="font-serif text-2xl sm:text-3xl md:text-2xl font-bold mb-3">Rear Steps</h4> */}
+            <Heading1 variant="card" text={"Rear Steps"} className='text-secondary!'/>
             <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
             <div className=" space-y-2 text-left">
@@ -306,7 +303,7 @@ export default function ExteriorColourChoices() {
               <HitchIcon />
             </div>
             {/* REDUCED DESKTOP FONT SIZE */}
-            <Heading1 variant='card' text={"Hitch Options"} c/>
+            <Heading1 variant='card' text={"Hitch Options"} className='text-secondary!'/>
                         <hr className="my-2 border-white/20" />
             {/* REDUCED DESKTOP FONT SIZE */}
             <div className="space-y-2 text-left">
@@ -451,9 +448,6 @@ Click to View Details
                   {/* Text part - REDUCED PADDING/FONT SIZE */}
                   <div className="p-3 rounded-b-xl" style={{ backgroundColor: veryDarkCharcoal }}>
                     <Heading1 variant='card' text={color.name} className='text-secondary! text-center'/>
-                    {/* <h3 className="font-serif font-medium text-xl sm:text-2xl text-white text-center">
-                      {color.name}
-                    </h3> */}
                   </div>
                 </div>
               </SwiperSlide>

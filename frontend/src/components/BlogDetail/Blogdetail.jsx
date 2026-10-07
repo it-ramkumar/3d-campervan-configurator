@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Share2, Image as ImageIcon, FileText, ThumbsUp,
+  Share2, Image as ImageIcon, ThumbsUp,
   ThumbsDown, ChevronRight, ChevronDown, HelpCircle, ArrowRight
 } from "lucide-react";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,8 +11,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 import {
-  Heading2, Heading4, Heading3,
-  RichParagraph, SecondaryButton
+  Heading1,
+  RichParagraph
 } from '@/components/Common/Common';
 import Image from "next/image";
 
@@ -25,15 +25,15 @@ function FaqAccordionItem({ question, answer }) {
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between gap-4 p-5 text-left"
       >
-        <span className="font-bold text-primary text-base">{question}</span>
+        <Heading1 as="h3" variant="sub" text={question} />
         <ChevronDown
           size={18}
           className={`text-hover flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && (
-        <div className="px-5 pb-5 text-primary/70 leading-relaxed text-sm font-sans">
-          {answer}
+        <div className="px-5 pb-5">
+          <RichParagraph variant="card">{answer}</RichParagraph>
         </div>
       )}
     </div>
@@ -70,54 +70,13 @@ export default function BlogContentUI({ blog }) {
     const parts = text.split(/(#[^\s#]+)/g);
     return parts.map((part, i) =>
       part.startsWith("#") ? (
-        <strong key={i} className="font-bold text-hover">{part.substring(1)}</strong>
+        <strong key={i}>{part.substring(1)}</strong>
       ) : (
         part
       )
     );
   };
 
-  const formatRichText = (text) => {
-    if (!text) return null;
-
-    const hasColonList = text.includes(":") && (text.includes("\n") || text.split(":").length > 1);
-    const hasBulletPoints = text.includes("\n•") || text.includes("\n-") || text.startsWith("•") || text.startsWith("-");
-
-    if (hasColonList || hasBulletPoints) {
-      let introText = "";
-      let listPart = text;
-
-      if (hasColonList) {
-        const parts = text.split(":");
-        introText = parts[0] + ":";
-        listPart = parts.slice(1).join(":");
-      }
-
-      const listItems = listPart
-        .split(/[,\n•\-\*]/)
-        .map(item => item.trim())
-        .filter(item => item.length > 0);
-
-      if (listItems.length > 0) {
-        return (
-          <>
-            {introText && (
-              <p className="mb-4 text-primary font-semibold">{formatBoldTags(introText)}</p>
-            )}
-            <ul className="space-y-4 ml-2 mb-6">
-              {listItems.map((item, idx) => (
-                <li key={idx} className="flex gap-4 items-start text-primary/80">
-                  <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
-                  <span className="leading-relaxed text-lg">{formatBoldTags(item)}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        );
-      }
-    }
-    return formatBoldTags(text);
-  };
 
   // --- ORIGINAL BLOCKS (Dark-themed) ---
   const renderSingleBlock = (block, index) => {
@@ -125,8 +84,8 @@ export default function BlogContentUI({ blog }) {
       case "heading":
         return (
           <div key={index} className="mb-10 mt-16 group">
-            <p className="text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Section {index + 1}</p>
-            <Heading2 text={formatBoldTags(block.text)} className="!text-left !text-primary" />
+            <RichParagraph variant="sub" className="mb-2">Section {index + 1}</RichParagraph>
+            <Heading1 as="h2" variant="section" text={formatBoldTags(block.text)} />
             <div className="w-20 h-1 bg-hover mt-4 rounded-full transition-all group-hover:w-32" />
           </div>
         );
@@ -134,18 +93,17 @@ export default function BlogContentUI({ blog }) {
       case "subheading":
         return (
           <div key={index} className="mb-6 mt-12">
-            <Heading4 text={formatBoldTags(block.text)} className="!text-left !text-primary/90" />
+            <Heading1 as="h3" variant="card" text={formatBoldTags(block.text)} />
           </div>
         );
 
       case "paragraph":
         return (
-          <div key={index} className="mb-8 p-0 lg:pr-12">
-            <div className="text-primary/80 leading-[1.8] text-lg font-sans">
-              {formatRichText(block.text)}
-            </div>
-          </div>
+          <RichParagraph key={index} variant="body" className="mb-6">
+            {formatBoldTags(block.text)}
+          </RichParagraph>
         );
+
 
       case "image":
         return (
@@ -153,7 +111,7 @@ export default function BlogContentUI({ blog }) {
             <div className="rounded-lg overflow-hidden shadow-2xl border border-primary/10">
               <Image src={block.image} alt="Detail" className="w-full h-auto object-cover" width={800} height={600} />
             </div>
-            {block.caption && <p className="text-center text-sm text-primary/40 mt-4 italic">{block.caption}</p>}
+            {block.caption && <RichParagraph variant="sub" className="text-center mt-4">{block.caption}</RichParagraph>}
           </div>
         );
 
@@ -162,9 +120,9 @@ export default function BlogContentUI({ blog }) {
           <div key={index} className="mb-8 p-0 lg:pr-12">
             <ul className="space-y-4 ml-2">
               {block.items?.map((item, idx) => (
-                <li key={idx} className="flex gap-4 items-start text-primary/80">
+                <li key={idx} className="flex gap-4 items-start">
                   <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-hover flex-shrink-0" />
-                  <span className="leading-relaxed text-lg">{formatBoldTags(item)}</span>
+                  <RichParagraph variant="body">{formatBoldTags(item)}</RichParagraph>
                 </li>
               ))}
             </ul>
@@ -177,12 +135,13 @@ export default function BlogContentUI({ blog }) {
             <div className="bbv-glass p-10 border-b md:border-b-0 md:border-r border-primary/10">
               <div className="flex items-center gap-3 mb-6">
                 <ThumbsUp className="text-emerald-400" size={24} />
-                <Heading4 text="The Benefits" className="!mb-0 !text-primary" />
+                <Heading1 as="h3" variant="sub" text="The Benefits" />
               </div>
               <ul className="space-y-4">
                 {block.pros?.map((p, idx) => (
-                  <li key={idx} className="text-primary/70 text-sm leading-relaxed flex gap-3 italic">
-                    <span className="text-emerald-400 font-bold">+</span> {p}
+                  <li key={idx} className="flex gap-3">
+                    <span className="text-emerald-400">+</span>
+                    <RichParagraph variant="card">{p}</RichParagraph>
                   </li>
                 ))}
               </ul>
@@ -190,12 +149,13 @@ export default function BlogContentUI({ blog }) {
             <div className="bbv-glass p-10">
               <div className="flex items-center gap-3 mb-6">
                 <ThumbsDown className="text-red-400" size={24} />
-                <Heading4 text="Considerations" className="!mb-0 !text-primary" />
+                <Heading1 as="h3" variant="sub" text="Considerations" />
               </div>
               <ul className="space-y-4">
                 {block.cons?.map((c, idx) => (
-                  <li key={idx} className="text-primary/70 text-sm leading-relaxed flex gap-3 italic">
-                    <span className="text-red-400 font-bold">−</span> {c}
+                  <li key={idx} className="flex gap-3">
+                    <span className="text-red-400">−</span>
+                    <RichParagraph variant="card">{c}</RichParagraph>
                   </li>
                 ))}
               </ul>
@@ -208,12 +168,12 @@ export default function BlogContentUI({ blog }) {
           const values = block.rows[1];
           return (
             <div key={index} className="my-12 bbv-glass p-8 rounded-lg border-l-4 border-hover">
-              <h3 className="font-bold text-primary mb-6 text-lg uppercase tracking-widest">At a Glance</h3>
+              <Heading1 as="h3" variant="sub" text="At a Glance" className="mb-6" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {values?.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
                     <ChevronRight size={14} className="text-hover" />
-                    <span className="text-sm font-medium text-primary/80">{formatBoldTags(item)}</span>
+                    <RichParagraph variant="card">{formatBoldTags(item)}</RichParagraph>
                   </div>
                 ))}
               </div>
@@ -224,12 +184,12 @@ export default function BlogContentUI({ blog }) {
           <div key={index} className="my-12 overflow-x-auto rounded-lg border border-primary/10 shadow-lg">
             <table className="w-full text-left">
               <thead className="bg-primary/80">
-                <tr>{block.rows?.[0]?.map((h, idx) => <th key={idx} className="p-5 text-xs uppercase tracking-[0.2em] font-black text-secondary">{formatBoldTags(h)}</th>)}</tr>
+                <tr>{block.rows?.[0]?.map((h, idx) => <th key={idx} className="p-5"><RichParagraph variant="sub" textColor="text-secondary">{formatBoldTags(h)}</RichParagraph></th>)}</tr>
               </thead>
               <tbody className="divide-y divide-primary/10 bg-white">
                 {block.rows?.slice(1).map((row, rIdx) => (
                   <tr key={rIdx} className="hover:bg-primary/5 transition-colors">
-                    {row.map((cell, cIdx) => <td key={cIdx} className="p-5 text-sm text-primary/70 font-medium">{formatBoldTags(cell)}</td>)}
+                    {row.map((cell, cIdx) => <td key={cIdx} className="p-5"><RichParagraph variant="card">{formatBoldTags(cell)}</RichParagraph></td>)}
                   </tr>
                 ))}
               </tbody>
@@ -259,7 +219,7 @@ export default function BlogContentUI({ blog }) {
           <div key={index} className="my-16">
             <div className="flex items-center gap-3 mb-6">
               <HelpCircle className="text-hover" size={24} />
-              <Heading3 text="Frequently Asked Questions" className="!mb-0 !text-primary" />
+              <Heading1 as="h2" variant="card" text="Frequently Asked Questions" />
             </div>
             <div className="space-y-4">
               {block.faqs?.map((faq, idx) => (
@@ -325,8 +285,8 @@ export default function BlogContentUI({ blog }) {
         elements.push(
           <div key={i} className="my-20 flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-1/2">
-              <p className="text-hover font-black text-[10px] tracking-[0.4em] uppercase mb-2">Deep Dive</p>
-              <Heading2 text={block.text} className="!text-left !text-primary !mb-0" />
+              <RichParagraph variant="sub" className="mb-2">Deep Dive</RichParagraph>
+              <Heading1 as="h2" variant="section" text={block.text} />
             </div>
             <div className="w-full lg:w-1/2 rounded-lg overflow-hidden shadow-xl border border-primary/10">
               <Image src={nextBlock.image} alt={block.text} className="w-full h-full object-cover aspect-video" width={800} height={600} />
@@ -354,8 +314,8 @@ export default function BlogContentUI({ blog }) {
             style={{ background: "rgba(237,152,95,0.12)" }}>
             <Share2 size={24} className="text-hover" />
           </div>
-          <Heading3 text="Found this helpful?" className="!mb-2 !text-primary" />
-          <p className="text-primary/50 text-sm mb-8 font-sans">Spread the knowledge with your fellow van-lifers.</p>
+          <Heading1 as="h2" variant="card" text="Found this helpful?" className="mb-2" />
+          <RichParagraph variant="card" className="mb-8">Spread the knowledge with your fellow van-lifers.</RichParagraph>
           <button
             onClick={handleShare}
             className="bg-hover text-primary px-12 py-4 rounded-lg hover:opacity-90 transition-opacity shadow-lg font-black uppercase text-[10px] tracking-widest"
@@ -372,7 +332,7 @@ export default function BlogContentUI({ blog }) {
             <div className="bbv-glass p-6 rounded-lg border border-primary/10">
               <div className="flex items-center gap-2 mb-6 border-b border-primary/10 pb-4">
                 <ImageIcon size={16} className="text-hover" />
-                <p className="text-[10px] font-black uppercase tracking-widest text-primary">Visual Gallery</p>
+                <RichParagraph variant="sub">Visual Gallery</RichParagraph>
               </div>
               <div className="relative rounded-lg overflow-hidden aspect-square mb-4 border border-primary/10">
                 <Image

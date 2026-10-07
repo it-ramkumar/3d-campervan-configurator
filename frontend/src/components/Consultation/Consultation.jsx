@@ -10,13 +10,14 @@ export default function Consultation() {
     <div className="bg-[#F8F8F6] min-h-screen py-20 flex flex-col items-center space-y-16 relative">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl relative z-10">
-<RichParagraph variant="sub" className="!text-hover">
+<RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
   Connect With Us
 </RichParagraph>
 
         <Heading1 variant="section"
+        textColor="text-primary"
           text="Schedule Your Free Consultation Call"
-          className=" uppercase !text-primary"
+          className=" uppercase "
         />
         <div className="bbv-divider mb-2" />
         <RichParagraph variant="body" >

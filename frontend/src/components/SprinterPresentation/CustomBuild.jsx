@@ -10,8 +10,7 @@ import {
   CheckCircle,
   ArrowRight,
 } from "lucide-react";
-import { ImageWithSkeleton, RichParagraph } from "../Common/Common";
-import { Heading2, Heading3, Heading4,Heading1 } from "../Common/Common";
+import { ImageWithSkeleton, RichParagraph, Heading1 } from "../Common/Common";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- DATA: Step Details for the Modal Logic ---
@@ -271,13 +270,13 @@ const TIMELINE_STEPS = [
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{STEP_DATA[activeModal].duration}</span>
                 </div>
-                <Heading4 text={STEP_DATA[activeModal].title} className="mb-2"/>
+                <Heading1 variant="sub" text={STEP_DATA[activeModal].title} className="mb-2" />
 
                 <RichParagraph className="!text-sm mb-4">{STEP_DATA[activeModal].description}</RichParagraph>
 
 
                 <div className="space-y-2">
-                  <Heading4 text={"Key Deliverables:"}/>
+                  <Heading1 variant="sub" text={"Key Deliverables:"} />
 
                   {STEP_DATA[activeModal].deliverables.map((item, idx) => (
                     <div
@@ -314,13 +313,11 @@ const TIMELINE_STEPS = [
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-2xl font-serif text-[#1a1f2e] mb-2">
-              Interested in this build?
-            </h3>
-            <p className="text-gray-500 text-sm mb-6">
+            <Heading1 variant="card" text={"Interested in this build?"} className="mb-2" />
+            <RichParagraph variant="card" className="mb-6">
               Leave your details and our team will send you the full spec sheet
               for this pre-built van.
-            </p>
+            </RichParagraph>
 
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div>

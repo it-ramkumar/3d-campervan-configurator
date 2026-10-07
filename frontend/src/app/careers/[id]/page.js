@@ -10,7 +10,7 @@ import {
   DollarSign,
   CheckCircle
 } from "lucide-react";
-import { Heading2, Heading3, Heading4, RichParagraph } from "@/components/Common/Common";
+import { Heading1, RichParagraph } from "@/components/Common/Common";
 import JobDetailsClient from "../../../components/Career/CareerDetail";
 import { generateJobPostingSchema } from "@/schema/jobPosting";
 
@@ -75,19 +75,23 @@ export default async function JobPage({ params }) {
           <div className="flex flex-col lg:flex-row justify-between gap-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <span className="bg-primary text-secondary text-[10px] px-2 py-1 rounded uppercase">
+                <RichParagraph variant="sub" className=" bg-hover/10 border border-hover/30 text-hover px-2 py-1 rounded uppercase">
                   {job.department}
-                </span>
-                <span className="text-primary/40 text-sm flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5" />
+                </RichParagraph>
+                <RichParagraph variant="sub" className="uppercase flex gap-2 tracking-wider">
+                  <Clock className="w-3.5 h-3.5 mt-0.5" />
                   {new Date(job.createdAt).toLocaleDateString()}
-                </span>
+                </RichParagraph>
+
+
+
               </div>
 
-              <Heading2
+              <Heading1
+                as="h1"
+                variant="section"
                 text={cleanText(job.title)}
-                textColor="text-primary"
-                className="uppercase"
+                className="uppercase text-primary"
               />
 
               <div className="flex flex-wrap gap-5 pt-2 text-primary/70">
@@ -118,26 +122,26 @@ export default async function JobPage({ params }) {
           {/* Main Column */}
           <div className="lg:w-2/3 space-y-10">
             <section>
-              <Heading3 text="Overview" textColor="text-primary" />
-              <RichParagraph className="mt-4 text-primary/70 whitespace-pre-line">
+              <Heading1 as="h2" variant="card" text="Overview" className="text-primary" />
+              <RichParagraph variant="body" textColor="text-primary/70" className="mt-4 whitespace-pre-line">
                 {cleanText(job.description)}
               </RichParagraph>
             </section>
 
             <section className="bg-white rounded-lg p-8 border border-primary/10">
-              <Heading3 text="Responsibilities" textColor="text-primary" />
+              <Heading1 as="h2" variant="card" text="Responsibilities" className="text-primary" />
               <ul className="space-y-4 mt-6">
                 {job.responsibilities?.map((item, index) => (
                   <li key={index} className="flex gap-3 text-primary/70">
                     <div className="mt-2 w-2 h-2 shrink-0 bg-hover rounded-full"></div>
-                    <RichParagraph>{cleanText(item)}</RichParagraph>
+                    <RichParagraph variant="card" textColor="text-primary/70">{cleanText(item)}</RichParagraph>
                   </li>
                 ))}
               </ul>
             </section>
 
             <section>
-              <Heading3 text="Requirements" textColor="text-primary" />
+              <Heading1 as="h2" variant="card" text="Requirements" className="text-primary" />
               <div className="grid md:grid-cols-2 gap-4 mt-6">
                 {job.requirements?.map((req, index) => (
                   <div
@@ -145,7 +149,7 @@ export default async function JobPage({ params }) {
                     className="flex items-center gap-3 bg-white p-4 rounded-lg border border-primary/10"
                   >
                     <CheckCircle className="w-5 h-5 text-hover shrink-0" />
-                    <RichParagraph className="text-sm">
+                    <RichParagraph variant="card" textColor="text-primary/70">
                       {cleanText(req)}
                     </RichParagraph>
                   </div>
@@ -157,7 +161,7 @@ export default async function JobPage({ params }) {
           {/* Sidebar */}
           <aside className="lg:w-1/3 space-y-6">
             <div className="bg-primary text-secondary rounded-lg p-8">
-              <Heading4 text="Perks & Benefits" textColor="text-secondary" />
+              <Heading1 as="h3" variant="sub" text="Perks & Benefits" className="text-secondary" />
               <ul className="space-y-4 mt-6">
                 {job.benefits?.map((benefit, index) => (
                   <li key={index} className="text-secondary/80 text-sm">
@@ -166,7 +170,9 @@ export default async function JobPage({ params }) {
                 ))}
               </ul>
               <div className="mt-8 pt-6 border-t border-secondary/20">
-                <p className="text-xs uppercase text-secondary/50 mb-2">Experience Level</p>
+                <RichParagraph variant="sub" textColor="text-secondary/50" className="uppercase mb-2">
+                  Experience Level
+                </RichParagraph>
                 <span className="bg-secondary/20 px-3 py-1 rounded text-sm">
                   {job.experienceLevel}
                 </span>
@@ -174,8 +180,8 @@ export default async function JobPage({ params }) {
             </div>
 
             <div className="bg-secondary rounded-lg p-8 border border-primary/10">
-              <Heading4 text="Ready to apply?" textColor="text-primary" />
-              <RichParagraph className="text-primary/60 text-sm mt-2">
+              <Heading1 as="h3" variant="sub" text="Ready to apply?" className="text-primary" />
+              <RichParagraph variant="card" textColor="text-primary/60" className="mt-2">
                 Applications close on {new Date(job.deadline).toLocaleDateString()}.
               </RichParagraph>
               <Link

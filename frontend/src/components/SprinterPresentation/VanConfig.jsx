@@ -354,7 +354,7 @@ export default function VanConfig() {
           {/* Reduced margin-bottom: mb-6 md:mb-8 */}
           <div className="text-center mb-6 md:mb-8">
             {/* Smaller text size: md:text-[32px] */}
-            <Heading1 variant="section" textColor="text-promary" text={"Wheelbase Options"} />
+            <Heading1 variant="section" textColor="text-primary" text={"Wheelbase Options"} />
             <div className="w-10 md:w-16 h-1 bg-gradient-to-r from-[var(--color-hover)] to-[var(--color-hover)] mx-auto mt-3 md:mt-4 rounded-full"></div>
           </div>
 

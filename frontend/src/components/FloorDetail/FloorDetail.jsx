@@ -2,8 +2,6 @@
 import React from "react";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import {
-  Heading2,
-  Heading3,
   Heading1,
   ShareButton,
   Breadcrumb,
@@ -127,7 +125,7 @@ const handleViewVans = () => {
                 </RichParagraph>
 
 
-                <Heading1 text={van?.van_listing.title} className="!text-primary mb-4 !text-5xl" />
+                <Heading1 as="h1" text={van?.van_listing.title} className="!text-primary mb-4 !text-5xl" />
 
 
                 <RichParagraph className="mt-6 text-primary/60  italic border-l-2 border-hover pl-6">
@@ -202,7 +200,7 @@ const handleViewVans = () => {
               The Design Philosophy
             </RichParagraph>
 
-            <Heading2 text="Build Overview" className="mt-4" />
+            <Heading1 variant="section" text="Build Overview" className="mt-4" />
 
             <div className="h-1.5 w-24 bg-hover mx-auto mt-6 rounded-full" />
 
@@ -216,7 +214,7 @@ const handleViewVans = () => {
         <section className="py-24 px-6 bg-secondary text-primary">
           <div className="container mx-auto">
             <div className="text-center mb-20">
-              <Heading2 text="Standard Features" className="" />
+              <Heading1 variant="section" text="Standard Features" className="" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {van?.detailed_features?.filter(f => f.items?.length > 0)?.map((feature, index) => (
@@ -224,7 +222,7 @@ const handleViewVans = () => {
                   <div className="!text-hover mb-6 group-hover:scale-110 transition-transform">
                     {getFeatureIcon(feature.category)}
                   </div>
-                  <Heading3 text={feature.category} className="mb-6" />
+                  <Heading1 variant="card" text={feature.category} className="mb-6" />
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
@@ -246,9 +244,7 @@ const handleViewVans = () => {
 
             {/* Heading */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold uppercase tracking-tighter" style={{ color: '#001F3D' }}>
-                Media Gallery
-              </h2>
+              <Heading1 variant="section" text="Media Gallery" className="uppercase tracking-tighter !text-primary" />
               <div className="h-1 w-20 mx-auto mt-2" style={{ backgroundColor: '#001F3D' }}></div>
             </div>
 

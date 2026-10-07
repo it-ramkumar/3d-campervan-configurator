@@ -8,6 +8,7 @@ export default function ImageWithSkeleton({
   src,
   alt = "big bear vans",
   className = "",
+  wrapperClassName = "",
   zoom = false,
   priority = false,
   sizes,
@@ -28,7 +29,7 @@ export default function ImageWithSkeleton({
     <>
       {/* Main Image */}
       <div
-        className={`relative overflow-hidden bg-gray-100 ${
+        className={`relative overflow-hidden bg-gray-100 ${wrapperClassName} ${
           zoom ? "cursor-zoom-in" : ""
         }`}
         onClick={() => zoom && setIsModalOpen(true)}
