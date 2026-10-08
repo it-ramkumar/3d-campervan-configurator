@@ -92,7 +92,7 @@ export default function LayoutDetail({ van, initialView }) {
                 key={`${van?.slug || van?._id || "layout"}-${initialView || "gallery"}`}
                 gallery={initialView === "floorplan" && van?.rendering?.length ? van.rendering : van?.gallery || []}
                 media={van?.media || []}
-                modelUrl={van?.glbFile}
+                modelUrl={van?.glbFile}f
                 variants={van?.variants || []}
                 title={initialView === "floorplan" ? `${van?.van_listing?.title || "Layout"} Blueprint` : van?.van_listing?.title}
               />
@@ -187,7 +187,7 @@ export default function LayoutDetail({ van, initialView }) {
               The Design Philosophy
             </RichParagraph>
 
-            <Heading1 variant="section" text="Build Overview" className="mt-4" />
+            <Heading1 variant="section" text="Build Overview" textColor="text-primary" className="mt-4" />
 
             <div className="h-1.5 w-24 bg-hover mx-auto mt-6 rounded-full" />
 
@@ -417,7 +417,7 @@ export default function LayoutDetail({ van, initialView }) {
         <section className="py-16 px-4 bg-secondary text-primary">
           <div className="container mx-auto">
             <div className="text-center mb-20">
-              <Heading1 variant="section" text="Standard Features" className="" />
+              <Heading1 variant="section" text="Standard Features" textColor="text-primary" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {van?.detailed_features?.filter(f => f.items?.length > 0)?.map((feature, index) => (
@@ -425,7 +425,7 @@ export default function LayoutDetail({ van, initialView }) {
                   <div className="!text-hover mb-6 group-hover:scale-110 transition-transform">
                     {getFeatureIcon(feature.category)}
                   </div>
-                  <Heading1 variant="card" text={feature.category} className="mb-6" />
+                  <Heading1 variant="card" textColor="text-primary" text={feature.category} className="mb-6" />
                   <ul className="space-y-3">
                     {feature.items.map((item, i) => (
                       <li key={i} className="flex items-start text-sm text-primary">
