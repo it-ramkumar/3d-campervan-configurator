@@ -1,10 +1,11 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import PrimaryButton from "../Common/Button/PrimaryButton";
 import { RichParagraph, Heading1 } from "../Common/Common";
-import Image from "next/image";
-import { useRouter } from "next/navigation"; // Agar Next.js 13+ App Router hai
 import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
 import { validateLead } from "@/lib/validateLead";
 
@@ -18,7 +19,6 @@ const getBrowserTz = () => {
   }
 };
 
-// e.g. "Pacific Time (PDT)" or "Europe/Berlin (GMT+2)"
 const formatTzLabel = (tz, date = new Date()) => {
   let abbr = "";
   try {
@@ -27,44 +27,37 @@ const formatTzLabel = (tz, date = new Date()) => {
         .formatToParts(date)
         .find((p) => p.type === "timeZoneName")?.value || "";
   } catch {
-    // unknown zone; show the name only
+    // unknown zone; fallback
   }
   const name = tz === PACIFIC_TZ ? "Pacific Time" : tz.replace(/_/g, " ");
   return abbr ? `${name} (${abbr})` : name;
 };
 
-
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [slots, setSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState();
+  const [selectedSlot, setSelectedSlot] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
-
-  // Your existing functions remain the same...
-  // ✅ FIXED: Get tomorrow's date instead of today
   const getTomorrowDate = () => {
     const now = new Date();
-    now.setDate(now.getDate() + 1); // Add 1 day
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    now.setDate(now.getDate() + 1);
+    const userTimeZone = getBrowserTz();
     const options = {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
       timeZone: userTimeZone,
     };
-    const dateParts = new Intl.DateTimeFormat("en-US", options).formatToParts(
-      now,
-    );
+    const dateParts = new Intl.DateTimeFormat("en-US", options).formatToParts(now);
     const year = dateParts.find((p) => p.type === "year").value;
     const month = dateParts.find((p) => p.type === "month").value;
     const day = dateParts.find((p) => p.type === "day").value;
     return `${year}-${month}-${day}`;
   };
 
-  // ✅ Update default state to tomorrow
   const [selectedDate, setSelectedDate] = useState(getTomorrowDate());
   const [bookingStep, setBookingStep] = useState(1);
   const [meetLink, setMeetLink] = useState("");
@@ -81,12 +74,10 @@ export default function BookingPage() {
   const [bookingError, setBookingError] = useState("");
   const [copied, setCopied] = useState(false);
 
-  // "local" = visitor's browser time zone, "pacific" = our office time
   const [tzMode, setTzMode] = useState("local");
   const browserTz = getBrowserTz();
   const displayTz = tzMode === "pacific" ? PACIFIC_TZ : browserTz;
 
-  // All your existing useEffect and handler functions...
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/auth/url`)
       .then((res) => res.json())
@@ -100,7 +91,7 @@ export default function BookingPage() {
   }, []);
 
   const handleLogin = () => {
-    window.location.href = authUrl;
+    if (authUrl) window.location.href = authUrl;
   };
 
   const handleChange = (e) => {
@@ -119,7 +110,6 @@ export default function BookingPage() {
     });
   };
 
-  // Date of a slot in the shown time zone (late-night slots can land on the next day)
   const formatSlotDate = (slotTime) =>
     new Date(slotTime).toLocaleDateString("en-US", {
       weekday: "long",
@@ -134,7 +124,7 @@ export default function BookingPage() {
     let cancelled = false;
 
     fetch(
-      `${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(displayTz)}`,
+      `${process.env.NEXT_PUBLIC_URL}/calendar/slots?date=${selectedDate}&timezone=${encodeURIComponent(displayTz)}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -196,7 +186,7 @@ export default function BookingPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(bookingData),
-        },
+        }
       );
 
       const data = await res.json().catch(() => ({}));
@@ -207,10 +197,13 @@ export default function BookingPage() {
         return;
       }
 
-      // Booking confirmed by the API: track once, then redirect without PII in the URL.
-      // submitting stays true so the button can't be pressed again during navigation.
       trackLead({ source: "booking", email: formData.email, phone: formData.phone, eventId });
       saveLeadEmail(formData.email);
+
+      if (data.hangoutLink) {
+        setMeetLink(data.hangoutLink);
+      }
+
       router.push("/thank-you?source=booking");
     } catch {
       setBookingError("We couldn't reach our booking system.");
@@ -219,6 +212,7 @@ export default function BookingPage() {
   };
 
   const copyToClipboard = () => {
+    if (!meetLink) return;
     navigator.clipboard
       .writeText(meetLink)
       .then(() => setCopied(true))
@@ -242,13 +236,11 @@ export default function BookingPage() {
     setCopied(false);
   };
 
-  const getDaysInMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
+  const getDaysInMonth = (date) =>
+    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
-  const getFirstDayOfMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
+  const getFirstDayOfMonth = (date) =>
+    new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
   const generateCalendar = () => {
     const daysInMonth = getDaysInMonth(currentMonth);
@@ -261,18 +253,20 @@ export default function BookingPage() {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const date = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth(),
-        day,
-      );
-      const dateString = date.toLocaleDateString("en-CA", {
+      const userTimeZone = getBrowserTz();
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+
+      const dateParts = new Intl.DateTimeFormat("en-US", {
         timeZone: userTimeZone,
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
-      });
+      }).formatToParts(date);
+
+      const year = dateParts.find((p) => p.type === "year").value;
+      const month = dateParts.find((p) => p.type === "month").value;
+      const d = dateParts.find((p) => p.type === "day").value;
+      const dateString = `${year}-${month}-${d}`;
 
       const isToday = dateString === todayString;
       const isSelected = dateString === selectedDate;
@@ -294,25 +288,22 @@ export default function BookingPage() {
 
   const navigateMonth = (direction) => {
     setCurrentMonth(
-      new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth() + direction,
-        1,
-      ),
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1)
     );
   };
 
-  const handleDateSelect = (date) => {
-    if (date.isPast || date.isSunday) return;
-    setSelectedDate(date.date);
+  const handleDateSelect = (dateObj) => {
+    if (dateObj.isPast || dateObj.isSunday) return;
+    setSelectedDate(dateObj.date);
     setSelectedSlot(null);
     setBookingStep(2);
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "";
     const [year, month, day] = dateString.split("-");
     const date = new Date(year, month - 1, day);
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const userTimeZone = getBrowserTz();
 
     return date.toLocaleDateString("en-US", {
       weekday: "long",
@@ -338,35 +329,47 @@ export default function BookingPage() {
     <div className="flex bg-[#F8F8F6] min-h-screen justify-center items-center p-4">
       {/* Main Container */}
       <div className="flex w-full max-w-6xl bg-white border border-primary/10 rounded-lg shadow-2xl overflow-hidden min-h-[700px]">
-        {/* Sidebar: Deep Navy Theme */}
+        {/* Sidebar */}
         <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-secondary p-10 flex-col justify-between relative">
           <div>
-            <Heading1 variant="card"
-              text="Consultation Call"
+            <Heading1
+              variant="card"
               textColor="text-secondary"
               className="mb-8 uppercase tracking-wide"
-            />
+            >
+              Consultation Call
+            </Heading1>
 
             {/* Step Indicators */}
             <div className="space-y-6 relative">
-              <div className="absolute left-[15px] top-2 bottom-2 w-px bg-secondary/10"></div>
+              <div className="absolute left-[15px] top-2 bottom-2 w-px bg-secondary/10" />
               {[1, 2, 3, 4].map((s) => (
                 <div key={s} className="flex items-center gap-4 relative z-10">
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${bookingStep >= s ? "bg-hover text-primary" : "bg-secondary/10 text-secondary/30"}`}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs transition-all duration-500 ${
+                      bookingStep >= s
+                        ? "bg-hover text-primary"
+                        : "bg-secondary/10 text-secondary/30"
+                    }`}
                   >
                     {s}
                   </div>
-                  <RichParagraph variant="sub" className={` font-bold uppercase ${bookingStep >= s ? "!text-secondary" : "!text-secondary/30"}`}>
+                  <RichParagraph
+                    variant="sub"
+                    className={`font-bold uppercase ${
+                      bookingStep >= s
+                        ? "!text-secondary"
+                        : "!text-secondary/30"
+                    }`}
+                  >
                     {s === 1
                       ? "Date"
                       : s === 2
-                        ? "Time"
-                        : s === 3
-                          ? "Details"
-                          : "Review"}
+                      ? "Time"
+                      : s === 3
+                      ? "Details"
+                      : "Review"}
                   </RichParagraph>
-
                 </div>
               ))}
             </div>
@@ -376,8 +379,9 @@ export default function BookingPage() {
             <RichParagraph variant="sub" className="!text-hover mb-1">
               Support Line
             </RichParagraph>
-            <RichParagraph variant="sub" className="!text-secondary mb-1">+1 (951) 441-9719</RichParagraph>
-
+            <RichParagraph variant="sub" className="!text-secondary mb-1">
+              +1 (951) 441-9719
+            </RichParagraph>
           </div>
         </div>
 
@@ -386,19 +390,21 @@ export default function BookingPage() {
           {!isLoggedIn ? (
             <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
               <div className="text-center">
-                <Heading1 variant="card" text="Welcome Back" textColor="text-secondary" />
-                <RichParagraph variant="card" className="text-secondary/70">
+                <Heading1 variant="card" textColor="text-primary" className="mb-2">
+                  Welcome Back
+                </Heading1>
+                <RichParagraph variant="card" className="text-primary/70">
                   Please sign in with Google to manage your bookings.
                 </RichParagraph>
               </div>
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-4 px-8 py-4 bbv-glass border border-secondary/10 rounded-lg font-bold text-secondary hover:bg-hover hover:text-primary transition-all shadow-sm"
+                className="flex items-center gap-4 px-8 py-4 bg-primary text-secondary border border-secondary/10 rounded-lg font-bold hover:bg-hover hover:text-primary transition-all shadow-sm"
               >
                 <Image
                   src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                  className="w-5"
-                  alt="google"
+                  className="w-5 h-5"
+                  alt="Google logo"
                   width={20}
                   height={20}
                 />
@@ -411,11 +417,16 @@ export default function BookingPage() {
               {bookingStep === 1 && (
                 <div className="animate-in slide-in-from-right-4 duration-500">
                   <header className="text-center mb-8">
-                    <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
+                    <RichParagraph
+                      variant="sub"
+                      textColor="!text-hover"
+                      className="uppercase font-bold"
+                    >
                       Schedule
                     </RichParagraph>
-
-                    <Heading1 variant="card" text="Select a Date" textColor="text-primary" />
+                    <Heading1 variant="card" textColor="text-primary">
+                      Select a Date
+                    </Heading1>
                   </header>
 
                   <div className="bbv-glass p-6 rounded-lg">
@@ -426,7 +437,7 @@ export default function BookingPage() {
                       >
                         ←
                       </button>
-                      <Heading1 variant="sub" className=" uppercase  !text-primary">
+                      <Heading1 variant="sub" className="uppercase !text-primary">
                         {currentMonth.toLocaleString("default", {
                           month: "long",
                           year: "numeric",
@@ -457,16 +468,17 @@ export default function BookingPage() {
                           key={i}
                           onClick={() => d && handleDateSelect(d)}
                           disabled={!d || d.isPast || d.isSunday}
-                          className={`h-10 rounded-lg text-xs font-bold transition-all ${!d
-                            ? "invisible"
-                            : d.isSelected
+                          className={`h-10 rounded-lg text-xs font-bold transition-all ${
+                            !d
+                              ? "invisible"
+                              : d.isSelected
                               ? "bg-hover text-primary shadow-lg"
                               : d.isPast || d.isSunday
-                                ? "text-primary/20 cursor-not-allowed"
-                                : d.isToday
-                                  ? "bg-secondary/20 text-hover hover:bg-hover hover:text-primary"
-                                  : "hover:bg-hover hover:text-primary text-primary/80 bg-secondary/5"
-                            }`}
+                              ? "text-primary/20 cursor-not-allowed"
+                              : d.isToday
+                              ? "bg-secondary/20 text-hover hover:bg-hover hover:text-primary"
+                              : "hover:bg-hover hover:text-primary text-primary/80 bg-secondary/5"
+                          }`}
                         >
                           {d?.day}
                         </button>
@@ -483,16 +495,25 @@ export default function BookingPage() {
                     <RichParagraph variant="sub" className="!text-hover mb-1">
                       Time
                     </RichParagraph>
-
-                    <Heading1 variant="card" text="Available Slots" textColor="text-primary" />
-                    <RichParagraph variant="sub" textColor="text-primary/70" className="mt-2">
+                    <Heading1 variant="card" textColor="text-primary">
+                      Available Slots
+                    </Heading1>
+                    <RichParagraph
+                      variant="sub"
+                      textColor="text-primary/70"
+                      className="mt-2"
+                    >
                       Times shown in{" "}
-                      <strong className="text-primary">{formatTzLabel(displayTz)}</strong>
+                      <strong className="text-primary">
+                        {formatTzLabel(displayTz)}
+                      </strong>
                     </RichParagraph>
                     {browserTz !== PACIFIC_TZ && (
                       <button
                         type="button"
-                        onClick={() => setTzMode((m) => (m === "pacific" ? "local" : "pacific"))}
+                        onClick={() =>
+                          setTzMode((m) => (m === "pacific" ? "local" : "pacific"))
+                        }
                         className="mt-1 text-xs font-bold text-primary underline hover:text-hover"
                       >
                         {tzMode === "pacific"
@@ -519,7 +540,10 @@ export default function BookingPage() {
                           />
                         </svg>
                       </div>
-                      <RichParagraph variant="sub" className="!text-primary/70 mb-2">
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary/70 mb-2"
+                      >
                         No slots available for {formatDate(selectedDate)}
                       </RichParagraph>
 
@@ -539,10 +563,14 @@ export default function BookingPage() {
                             const day = formatSlotDate(s.start);
                             (groups[day] ||= []).push(s);
                             return groups;
-                          }, {}),
+                          }, {})
                       ).map(([day, daySlots]) => (
                         <div key={day} className="mb-6">
-                          <Heading1 as="h3" variant="sub" className="mb-3 !text-xs !font-bold uppercase tracking-wider !text-primary/70">
+                          <Heading1
+                            as="h3"
+                            variant="sub"
+                            className="mb-3 !text-xs !font-bold uppercase tracking-wider !text-primary/70"
+                          >
                             {day}
                           </Heading1>
                           <div className="grid grid-cols-2 gap-3">
@@ -554,10 +582,13 @@ export default function BookingPage() {
                                   setSelectedSlot(s);
                                   setBookingStep(3);
                                 }}
-                                className={`p-4 border rounded-lg font-bold text-xs transition-all ${selectedSlot && new Date(selectedSlot.start).getTime() === new Date(s.start).getTime()
-                                  ? "border-hover bg-hover/10 text-hover"
-                                  : "border-secondary/10 hover:border-hover hover:text-hover bg-primary/5 text-primary/70"
-                                  }`}
+                                className={`p-4 border rounded-lg font-bold text-xs transition-all ${
+                                  selectedSlot &&
+                                  new Date(selectedSlot.start).getTime() ===
+                                    new Date(s.start).getTime()
+                                    ? "border-hover bg-hover/10 text-hover"
+                                    : "border-secondary/10 hover:border-hover hover:text-hover bg-primary/5 text-primary/70"
+                                }`}
                               >
                                 {formatTimeSlot(s.start)}
                               </button>
@@ -583,19 +614,41 @@ export default function BookingPage() {
                     <RichParagraph variant="sub" className="!text-hover mb-1">
                       Details
                     </RichParagraph>
-
-                    <Heading1 variant="card" text="Meeting Information" textColor="text-primary" />
+                    <Heading1 variant="card" textColor="text-primary">
+                      Meeting Information
+                    </Heading1>
                   </header>
 
                   <form onSubmit={handleReview} noValidate className="space-y-6">
                     <div className="space-y-4">
                       {[
-                        { name: "name", label: "Full Name *", type: "text", autoComplete: "name", placeholder: "Enter your full name" },
-                        { name: "email", label: "Email Address *", type: "email", autoComplete: "email", placeholder: "your.email@example.com" },
-                        { name: "phone", label: "Phone Number (optional)", type: "tel", autoComplete: "tel", placeholder: "+1 (555) 123-4567" },
+                        {
+                          name: "name",
+                          label: "Full Name *",
+                          type: "text",
+                          autoComplete: "name",
+                          placeholder: "Enter your full name",
+                        },
+                        {
+                          name: "email",
+                          label: "Email Address *",
+                          type: "email",
+                          autoComplete: "email",
+                          placeholder: "your.email@example.com",
+                        },
+                        {
+                          name: "phone",
+                          label: "Phone Number (optional)",
+                          type: "tel",
+                          autoComplete: "tel",
+                          placeholder: "+1 (555) 123-4567",
+                        },
                       ].map((f) => (
                         <div key={f.name}>
-                          <label htmlFor={`booking-${f.name}`} className="text-primary/70 text-sm font-medium mb-1 block">
+                          <label
+                            htmlFor={`booking-${f.name}`}
+                            className="text-primary/70 text-sm font-medium mb-1 block"
+                          >
                             {f.label}
                           </label>
                           <input
@@ -607,11 +660,17 @@ export default function BookingPage() {
                             onChange={handleChange}
                             placeholder={f.placeholder}
                             aria-invalid={!!errors[f.name]}
-                            aria-describedby={errors[f.name] ? `booking-${f.name}-error` : undefined}
-                            className="bbv-input bbv-input--light w-full px-4 py-3"
+                            aria-describedby={
+                              errors[f.name] ? `booking-${f.name}-error` : undefined
+                            }
+                            className="bbv-input bbv-input--light w-full px-4 py-3 border border-primary/10 rounded-lg"
                           />
                           {errors[f.name] && (
-                            <p id={`booking-${f.name}-error`} role="alert" className="mt-1 text-xs font-semibold text-red-700">
+                            <p
+                              id={`booking-${f.name}-error`}
+                              role="alert"
+                              className="mt-1 text-xs font-semibold text-red-700"
+                            >
                               {errors[f.name]}
                             </p>
                           )}
@@ -619,7 +678,10 @@ export default function BookingPage() {
                       ))}
 
                       <div>
-                        <label htmlFor="booking-summary" className="text-primary/70 text-sm font-medium mb-1 block">
+                        <label
+                          htmlFor="booking-summary"
+                          className="text-primary/70 text-sm font-medium mb-1 block"
+                        >
                           Meeting Topic
                         </label>
                         <input
@@ -628,12 +690,15 @@ export default function BookingPage() {
                           value={formData.summary}
                           onChange={handleChange}
                           placeholder="Brief topic or purpose of meeting"
-                          className="bbv-input bbv-input--light w-full px-4 py-3"
+                          className="bbv-input bbv-input--light w-full px-4 py-3 border border-primary/10 rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="booking-description" className="text-primary/70 text-sm font-medium mb-1 block">
+                        <label
+                          htmlFor="booking-description"
+                          className="text-primary/70 text-sm font-medium mb-1 block"
+                        >
                           Additional Notes
                         </label>
                         <textarea
@@ -642,7 +707,7 @@ export default function BookingPage() {
                           value={formData.description}
                           onChange={handleChange}
                           placeholder="Any specific topics or questions you'd like to discuss..."
-                          className="bbv-input bbv-input--light w-full px-4 py-3 resize-none"
+                          className="bbv-input bbv-input--light w-full px-4 py-3 border border-primary/10 rounded-lg resize-none"
                           rows="3"
                         />
                       </div>
@@ -652,7 +717,7 @@ export default function BookingPage() {
                       <button
                         type="button"
                         onClick={() => setBookingStep(2)}
-                        className="flex-1 py-4 rounded-lg bbv-glass text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary transition-colors"
+                        className="flex-1 py-4 rounded-lg bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary hover:bg-primary transition-colors"
                       >
                         Back
                       </button>
@@ -674,72 +739,85 @@ export default function BookingPage() {
                     <RichParagraph variant="sub" className="!text-hover mb-1">
                       Please review your booking details below.
                     </RichParagraph>
-
-                    <Heading1 variant="card" text="Confirm Details" textColor="text-primary" />
+                    <Heading1 variant="card" textColor="text-primary">
+                      Confirm Details
+                    </Heading1>
                   </header>
 
-                  <div className="bbv-glass rounded-lg p-6 space-y-4">
-                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <RichParagraph variant="sub" >
-                        Date
-                      </RichParagraph>
-                      <RichParagraph variant="sub" className="!text-primary font-bold">
-                        {selectedSlot ? formatSlotDate(selectedSlot.start) : formatDate(selectedDate)}
-                      </RichParagraph>
-
-                    </div>
-                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <RichParagraph variant="sub">
-                        Time
-                      </RichParagraph>
-   <RichParagraph variant="sub" className="!text-primary font-bold">
-                       {selectedSlot && formatTimeSlot(selectedSlot.start)}
-                      </RichParagraph>
-
-                    </div>
-                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <RichParagraph variant="sub">
-                        Time Zone
-                      </RichParagraph>
-                      <RichParagraph variant="sub" className="!text-primary font-bold text-right">
-                        {formatTzLabel(displayTz, selectedSlot ? new Date(selectedSlot.start) : undefined)}
+                  <div className="bg-gray-50 border border-primary/5 rounded-lg p-6 space-y-4">
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <RichParagraph variant="sub">Date</RichParagraph>
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary font-bold"
+                      >
+                        {selectedSlot
+                          ? formatSlotDate(selectedSlot.start)
+                          : formatDate(selectedDate)}
                       </RichParagraph>
                     </div>
-                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
 
-                      <RichParagraph variant="sub">
-                        Name
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <RichParagraph variant="sub">Time</RichParagraph>
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary font-bold"
+                      >
+                        {selectedSlot && formatTimeSlot(selectedSlot.start)}
                       </RichParagraph>
-                         <RichParagraph variant="sub" className="!text-primary font-bold">
-                          {formData.name}
-                      </RichParagraph>
-
                     </div>
-                    <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                      <RichParagraph variant="sub">
-                        Email
-                      </RichParagraph>
-   <RichParagraph variant="sub" className="!text-primary font-bold">
-                         {formData.email}
-                      </RichParagraph>
 
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <RichParagraph variant="sub">Time Zone</RichParagraph>
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary font-bold text-right"
+                      >
+                        {formatTzLabel(
+                          displayTz,
+                          selectedSlot ? new Date(selectedSlot.start) : undefined
+                        )}
+                      </RichParagraph>
                     </div>
+
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <RichParagraph variant="sub">Name</RichParagraph>
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary font-bold"
+                      >
+                        {formData.name}
+                      </RichParagraph>
+                    </div>
+
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                      <RichParagraph variant="sub">Email</RichParagraph>
+                      <RichParagraph
+                        variant="sub"
+                        className="!text-primary font-bold"
+                      >
+                        {formData.email}
+                      </RichParagraph>
+                    </div>
+
                     {formData.phone && (
-                      <div className="flex justify-between items-center border-b border-secondary/10 pb-3">
-                       <RichParagraph variant="sub">
-Phone
-                       </RichParagraph>
-
-                        <RichParagraph variant="sub" className="!text-primary font-bold">
+                      <div className="flex justify-between items-center border-b border-primary/10 pb-3">
+                        <RichParagraph variant="sub">Phone</RichParagraph>
+                        <RichParagraph
+                          variant="sub"
+                          className="!text-primary font-bold"
+                        >
                           {formData.phone}
                         </RichParagraph>
                       </div>
                     )}
-
                   </div>
 
                   {bookingError && (
-                    <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                    <div
+                      role="alert"
+                      className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+                    >
                       {bookingError} Please try another time, or call us at{" "}
                       <a href="tel:+19514419719" className="font-bold underline">
                         (951) 441-9719
@@ -753,7 +831,7 @@ Phone
                       type="button"
                       onClick={() => setBookingStep(3)}
                       disabled={submitting}
-                      className="flex-1 py-4 rounded-lg bbv-glass text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:text-secondary transition-colors"
+                      className="flex-1 py-4 rounded-lg bg-gray-100 text-[10px] font-bold uppercase tracking-widest text-primary/70 hover:bg-gray-200 transition-colors"
                     >
                       Edit Details
                     </button>
@@ -770,7 +848,7 @@ Phone
                 </div>
               )}
 
-              {/* Step 5: Success */}
+              {/* Step 5: Success Screen */}
               {bookingStep === 5 && (
                 <div className="text-center py-12 animate-in fade-in zoom-in">
                   <div className="w-20 h-20 bg-hover/10 text-hover rounded-lg flex items-center justify-center mx-auto mb-6">
@@ -788,15 +866,21 @@ Phone
                       />
                     </svg>
                   </div>
-                  <Heading1 variant="card" text="Booking Confirmed!" className="!text-primary mb-2" />
+                  <Heading1
+                    variant="card"
+                    textColor="text-primary"
+                    className="mb-2"
+                  >
+                    Booking Confirmed!
+                  </Heading1>
                   <RichParagraph variant="card" className="mb-8 max-w-sm mx-auto">
-                    Your consultation is confirmed. Check your email for
-                    calendar invite and meeting details.
+                    Your consultation is confirmed. Check your email for calendar
+                    invite and meeting details.
                   </RichParagraph>
 
                   {meetLink && (
-                    <div className="p-4 bbv-glass rounded-lg border border-secondary/10 flex items-center justify-between gap-4 mb-8">
-                      <span className="text-[10px] font-mono truncate text-primary/50 flex-1 text-left">
+                    <div className="p-4 bg-gray-50 rounded-lg border border-primary/10 flex items-center justify-between gap-4 mb-8">
+                      <span className="text-[10px] font-mono truncate text-primary/70 flex-1 text-left">
                         {meetLink}
                       </span>
                       <button
@@ -816,7 +900,7 @@ Phone
                     />
                     <Link
                       href="/"
-                      className="block w-full py-3 text-[10px] font-bold uppercase tracking-widest text-secondary/40 hover:text-secondary transition-colors"
+                      className="block w-full py-3 text-[10px] font-bold uppercase tracking-widest text-primary/40 hover:text-primary transition-colors"
                     >
                       Back to Home
                     </Link>

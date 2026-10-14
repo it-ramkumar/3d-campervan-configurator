@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
             Privacy Policy
           </Heading1>
           <RichParagraph variant='hero' textColor='text-secondary'>
- Last updated: June 23, 2026
+ Last updated: October 14, 2026
           </RichParagraph>
 
         </div>
@@ -81,8 +81,8 @@ export default function PrivacyPolicy() {
               { q: 'What personal information do we process?', a: 'When you visit or use our Services, we may process personal information (like names, emails, and phone numbers) that you voluntarily submit through our inquiry forms.' },
               { q: 'Do we process any sensitive personal information?', a: 'We do not process sensitive personal information (such as racial origins, religious beliefs, etc.).' },
               { q: 'Do we collect any information from third parties?', a: 'No, we do not collect any information from public databases or outside marketing partners.' },
-              { q: 'How do we process your information?', a: 'We process your information solely to respond to your inquiries, offer customer support, and analyze general website traffic.' },
-              { q: 'Do we use cookies?', a: 'Yes, we use basic operational cookies and Google Analytics to monitor website traffic and user locations.' },
+              { q: 'How do we process your information?', a: 'We process your information to respond to your inquiries, offer customer support, analyze website traffic, and show and measure advertising.' },
+              { q: 'Do we use cookies?', a: 'Yes. We use operational cookies, analytics cookies (Google Analytics), and advertising cookies from third parties such as Google (AdSense) and Meta. You can opt out of personalized advertising at any time — see Section 4.' },
             ].map(({ q, a }, i) => (
               <div key={i} className=" gap-4 p-5 border border-[var(--color-primary)] border-opacity-10 rounded-[var(--radius-lg)]">
                 <span className="text-primary font-black text-lg mt-0.5 shrink-0">—</span>
@@ -161,13 +161,18 @@ export default function PrivacyPolicy() {
               label="To monitor general traffic"
               value="We use anonymous data to see how many visitors come to our site and from which countries."
             />
+            <KeyValueItem
+              label="To show and measure advertising"
+              value="We display ads served by Google AdSense on our website, and we use the Meta Pixel to measure our own ads on Facebook and Instagram. These partners may use cookies to show ads based on your interests."
+            />
           </div>
         </PolicySection>
 
         {/* Section 3 */}
         <PolicySection id={3} title="WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?">
           <BulletList items={[
-            'We do not sell, rent, or lease your personal information to third parties.',
+            'We do not sell, rent, or lease the personal information you submit in our forms (such as your name, email, or phone number) to third parties.',
+            'Our advertising and analytics partners (Google and Meta) automatically collect device and browsing information through cookies when you visit our website, as described in Section 4.',
             'We may share information in specific corporate situations, such as during negotiations of any merger, sale of company assets, or financing.',
           ]} />
         </PolicySection>
@@ -175,8 +180,8 @@ export default function PrivacyPolicy() {
         {/* Section 4 */}
         <PolicySection id={4} title="DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?">
           <Body>
-            Yes, we use cookies and similar tracking technologies to gather basic analytical information
-            when you interact with our Services.
+            Yes, we use cookies and similar tracking technologies to gather analytical information and to
+            show and measure advertising when you interact with our Services.
           </Body>
           <SubHeading>Google Analytics</SubHeading>
           <Body>
@@ -192,6 +197,48 @@ export default function PrivacyPolicy() {
             >
               https://tools.google.com/dlpage/gaoptout
             </a>.
+          </Body>
+
+          <SubHeading>Google AdSense advertising</SubHeading>
+          <Body>
+            We use <strong>Google AdSense</strong> to display advertisements on our website. Third-party
+            vendors, including Google, use cookies to serve ads based on your prior visits to our website
+            or other websites. Google's use of advertising cookies enables it and its partners to serve
+            ads to you based on your visits to our site and/or other sites on the Internet. To learn more,
+            see{' '}
+            <PolicyLink href="https://policies.google.com/technologies/partner-sites">
+              How Google uses information from sites that use its services
+            </PolicyLink>.
+          </Body>
+
+          <SubHeading>Meta Pixel</SubHeading>
+          <Body>
+            We use the <strong>Meta Pixel</strong> to measure the effectiveness of our ads on Facebook
+            and Instagram and to show our ads to people who have visited our website. Meta may use
+            cookies and similar technologies to collect information about your visit. You can manage
+            this in your{' '}
+            <PolicyLink href="https://www.facebook.com/adpreferences">Facebook ad preferences</PolicyLink>.
+          </Body>
+
+          <SubHeading>Your advertising choices</SubHeading>
+          <Body>You can opt out of personalized advertising at any time:</Body>
+          <ul className="space-y-2 mt-2">
+            {[
+              { label: 'Google Ads Settings', href: 'https://adssettings.google.com' },
+              { label: 'Digital Advertising Alliance (aboutads.info)', href: 'https://optout.aboutads.info' },
+              { label: 'Network Advertising Initiative', href: 'https://optout.networkadvertising.org' },
+            ].map(({ label, href }) => (
+              <li key={href} className="flex items-start gap-3 text-sm text-primary opacity-70 leading-relaxed">
+                <span className="text-primary font-black mt-0.5 shrink-0">—</span>
+                <PolicyLink href={href}>{label}</PolicyLink>
+              </li>
+            ))}
+          </ul>
+          <Body>
+            You can also block or delete cookies in your browser settings. Opting out does not remove
+            ads; it means the ads you see will be less relevant to your interests. Visitors from the
+            European Economic Area, the United Kingdom, and Switzerland are asked for consent before
+            personalized advertising cookies are used.
           </Body>
         </PolicySection>
 
@@ -254,11 +301,21 @@ export default function PrivacyPolicy() {
             'Right to know whether we process your data.',
             'Right to access and get a copy of your personal data.',
             'Right to correct inaccuracies or request deletion.',
+            'Right to opt out of the "sale" or "sharing" of personal information for cross-context behavioral advertising.',
             'Right to non-discrimination for exercising your rights.',
           ]} />
           <Body>
-            We do not "sell" or "share" your personal data for commercial advertising. To exercise any
-            of these rights, you can email us at{' '}
+            We do not sell the information you submit in our forms. However, the advertising cookies
+            described in Section 4 (Google AdSense and the Meta Pixel) may be considered "sharing" of
+            personal information for cross-context behavioral advertising under California law.
+          </Body>
+          <div id="do-not-sell" className="scroll-mt-8">
+            <SubHeading>Do Not Sell or Share My Personal Information</SubHeading>
+          </div>
+          <Body>
+            To opt out, use the advertising choices links in Section 4 and clear your cookies, or email
+            us with the subject line "Do Not Sell or Share" and we will process your request. To
+            exercise any of these rights, you can email us at{' '}
             <a href="mailto:visit.bigbearvans@gmail.com"
               className="text-primary font-semibold underline underline-offset-2">
               visit.bigbearvans@gmail.com
@@ -355,6 +412,19 @@ function BulletList({ items }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+function PolicyLink({ href, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-primary font-semibold underline underline-offset-2"
+    >
+      {children}
+    </a>
   )
 }
 

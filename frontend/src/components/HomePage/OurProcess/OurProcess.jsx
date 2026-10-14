@@ -3,14 +3,9 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import {
-  CheckCircle2,
-  Calendar,
-} from "lucide-react";
+import { CheckCircle2, Calendar } from "lucide-react";
 import {
   Heading1,
-  Heading3,
-  Heading4,
   RichParagraph,
   ImageWithSkeleton,
   SecondaryButton,
@@ -130,26 +125,32 @@ export default function OurProcess() {
       });
     }, containerRef);
 
+    ScrollTrigger.refresh();
+
     return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#F8F8F6] py-20 antialiased font-sans overflow-hidden"
+      className="relative bg-secondary py-20  overflow-hidden"
     >
-      <div className=" mx-auto px-4 max-w-7xl">
+      <div className="mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
-          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
-               Our Methodology
+          <RichParagraph
+            variant="sub"
+            textColor="!text-hover"
+            className="uppercase font-bold"
+          >
+            Our Methodology
           </RichParagraph>
 
           <Heading1 as="h2" variant="section" textColor="text-primary">
             Big Bear Vans Custom Build Process
           </Heading1>
 
-          <RichParagraph variant="body" className="mt-6 ">
+          <RichParagraph variant="body" className="mt-6">
             Our transparent, collaborative process ensures your vision comes to life, from initial ideas to keys in your hand.
           </RichParagraph>
         </div>
@@ -168,7 +169,7 @@ export default function OurProcess() {
                   key={index}
                   className="process-card relative grid grid-cols-1 lg:grid-cols-2 items-center gap-12 xl:gap-20"
                 >
-                  {/* Image Column (Equal 50% Width) */}
+                  {/* Image Column */}
                   <div
                     className={`w-full ${
                       isEven ? "lg:order-last" : "lg:order-first"
@@ -182,39 +183,38 @@ export default function OurProcess() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#020C18]/60 via-transparent to-transparent pointer-events-none" />
 
                       {/* Time Badge */}
-                      <div
-                        className="absolute top-4 left-4 px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2"
-                        style={{
-                          background: "rgba(2, 12, 24, 0.85)",
-                          backdropFilter: "blur(12px)",
-                          border: "1px solid rgba(237, 152, 95, 0.30)",
-                        }}
-                      >
+                      <div className="absolute top-4 left-4 px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2 bg-[#020C18]/85 backdrop-blur-md border border-hover/30">
                         <Calendar size={14} className="text-hover" />
-                        <RichParagraph variant="sub" className="font-bold text-secondary/100 ">
-{step.time}
+                        <RichParagraph
+                          variant="sub"
+                          className="font-bold text-secondary"
+                        >
+                          {step.time}
                         </RichParagraph>
-
                       </div>
                       <div className="bbv-amber-line" />
                     </div>
                   </div>
 
-                  {/* Content Column (Equal 50% Width) */}
+                  {/* Content Column */}
                   <div
                     className={`w-full flex flex-col ${
                       isEven ? "lg:order-first" : "lg:order-last"
                     }`}
                   >
-                    <div className="inline-flex items-center gap-2 mb-3 ">
+                    <div className="inline-flex items-center gap-2 mb-3">
                       <CheckCircle2 size={16} className="text-hover" />
-                      <RichParagraph variant="sub" className="font-bold !text-hover ">
+                      <RichParagraph
+                        variant="sub"
+                        className="font-bold !text-hover"
+                      >
                         {step.time}
                       </RichParagraph>
-
                     </div>
 
-                    <Heading1 variant="card" text={step.title} className="mb-6 !text-primary" />
+                    <Heading1 variant="card" textColor="!text-primary" className="mb-6">
+                      {step.title}
+                    </Heading1>
 
                     <div className="space-y-6 md:max-w-lg">
                       {step.details.map((detail, dIdx) => (
@@ -222,8 +222,14 @@ export default function OurProcess() {
                           key={dIdx}
                           className="relative pl-5 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-hover before:rounded-full"
                         >
-                          <Heading1 variant="sub" text={detail.subtitle} className="mb-1 !text-primary" />
-                          <RichParagraph variant="card" >
+                          <Heading1
+                            variant="sub"
+                            textColor="!text-primary"
+                            className="mb-1"
+                          >
+                            {detail.subtitle}
+                          </Heading1>
+                          <RichParagraph variant="card">
                             {detail.description}
                           </RichParagraph>
                         </div>
@@ -236,9 +242,8 @@ export default function OurProcess() {
           </div>
         </div>
 
-        {/* Global CTA Banner with Background Image */}
+        {/* Global CTA Banner */}
         <div className="relative mt-28 min-h-[60vh] flex items-center justify-center rounded-2xl overflow-hidden shadow-2xl border border-primary/10">
-          {/* Background Image */}
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
             style={{
@@ -246,20 +251,23 @@ export default function OurProcess() {
             }}
           />
 
-          {/* Dark Overlay for Text Readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#020C18]/90 via-[#020C18]/80 to-[#020C18]/90 backdrop-blur-[1px]" />
 
-          {/* Content */}
           <div className="relative z-10 text-center p-8 md:p-14 max-w-2xl mx-auto flex flex-col items-center justify-center">
-        <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
-                Take The Next Step
+            <RichParagraph
+              variant="sub"
+              textColor="!text-hover"
+              className="uppercase font-bold"
+            >
+              Take The Next Step
             </RichParagraph>
 
             <Heading1
-            variant="section"
-              text="Ready to start your build?"
+              variant="section"
               className="mb-6 text-secondary"
-            />
+            >
+              Ready to start your build?
+            </Heading1>
             <SecondaryButton label="Get a Custom Quote" link="/contact" />
           </div>
         </div>

@@ -25,6 +25,9 @@ const FALLBACK_PATHS = [
   "/showroom",
   "/blog",
   "/faq",
+  "/privacy-policy",
+  "/terms-and-conditions",
+  "/returns-cancellation-policy",
 ];
 
 const CHANGE_FREQUENCIES = ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"];

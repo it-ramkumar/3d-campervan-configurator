@@ -25,7 +25,7 @@ const nextConfig = {
           // Fullscreen/autoplay stay allowed for the YouTube and Maps embeds
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), usb=(), browsing-topics=()",
+            value: "camera=(), microphone=(), geolocation=(), usb=()",
           },
         ],
       },

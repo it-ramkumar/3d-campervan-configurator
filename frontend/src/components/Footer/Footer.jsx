@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { sendGTMEvent } from "@next/third-parties/google";
 import Link from "next/link";
@@ -14,9 +14,8 @@ import {
   FaArrowRight,
   FaYoutube,
   FaCopy,
+  FaCheck,
 } from "react-icons/fa";
-import { FooterListItem } from "../Common/Li/FooterLiItem";
-import { Heading3, RichParagraph, Heading4 } from "../Common/Common";
 import Image from "next/image";
 import { EMAIL_REGEX } from "@/lib/validateLead";
 
@@ -30,10 +29,19 @@ const DOT_GRID = {
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [copiedKey, setCopiedKey] = useState("");
+  const [currentYear, setCurrentYear] = useState(2026); // Default static year to prevent hydration mismatch
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-    alert(`Copied: ${text}`);
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
+  const handleCopy = (text, key) => {
+    if (navigator?.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(""), 2000);
+    }
   };
 
   // { type: "invalid" | "error" | "success", text }
@@ -64,7 +72,9 @@ export default function Footer() {
       setNewsletterStatus({ type: "success", text: "You're subscribed! Watch your inbox for updates." });
       setEmail("");
 
-      if (window.fbq) window.fbq("track", "Subscribe");
+      if (typeof window !== "undefined" && window.fbq) {
+        window.fbq("track", "Subscribe");
+      }
       sendGTMEvent({ event: "sign_up", method: "newsletter" });
     } catch (error) {
       const isDuplicate = error?.response?.status === 400;
@@ -81,11 +91,11 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative font-sans overflow-hidden text-[#FBFBF9]"
+      className="relative font-sans overflow-hidden text-secondary"
       style={{ backgroundColor: "#001F3D" }}
     >
       {/* Amber top accent line */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#ED985F]" />
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-hover" />
 
       {/* Dot grid overlay */}
       <div className="absolute inset-0 pointer-events-none" style={DOT_GRID} />
@@ -103,16 +113,16 @@ export default function Footer() {
       >
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p className="text-[#ED985F] text-xs uppercase tracking-widest font-bold mb-1">
+            <p className="text-hover text-xs uppercase tracking-widest font-bold mb-1">
               Start Your Journey
             </p>
-            <p className="font-display text-xl md:text-2xl font-bold text-[#FBFBF9] leading-tight">
+            <p className="font-display text-xl md:text-2xl font-bold text-secondary leading-tight">
               Ready to build your dream campervan?
             </p>
           </div>
           <Link
             href="/contact"
-            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-[#ED985F] text-[#001F3D] font-bold text-sm uppercase tracking-[0.15em] transition-all duration-200 hover:brightness-110 whitespace-nowrap shrink-0"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-hover text-[#001F3D] font-bold text-sm uppercase tracking-[0.15em] transition-all duration-200 hover:brightness-110 whitespace-nowrap shrink-0"
           >
             Get a Free Quote <FaArrowRight size={12} />
           </Link>
@@ -142,7 +152,7 @@ export default function Footer() {
               journey memorable.
             </p>
 
-            <p className="text-[#ED985F] text-xs italic tracking-wide font-semibold">
+            <p className="text-hover text-xs italic tracking-wide font-semibold">
               You Dream It. We Build It.
             </p>
 
@@ -158,7 +168,7 @@ export default function Footer() {
                   key={index}
                   href={item.link}
                   aria-label={item.label}
-                  className="w-11 h-11 md:w-9 md:h-9 flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-[#ED985F] hover:text-[#001F3D] hover:-translate-y-0.5"
+                  className="w-11 h-11 md:w-9 md:h-9 flex items-center justify-center rounded-lg transition-all duration-300 hover:bg-hover hover:text-[#001F3D] hover:-translate-y-0.5"
                   style={{
                     color: "rgba(251,251,249,0.55)",
                     background: "rgba(255,255,255,0.06)",
@@ -173,8 +183,8 @@ export default function Footer() {
 
           {/* 2. Quick Links */}
           <div>
-            <p className="text-[#FBFBF9] text-xs uppercase tracking-widest font-bold mb-5 flex items-center gap-2">
-              <span className="w-4 h-[2px] bg-[#ED985F] inline-block" />
+            <p className="text-secondary text-xs uppercase tracking-widest font-bold mb-5 flex items-center gap-2">
+              <span className="w-4 h-[2px] bg-hover inline-block" />
               Quick Links
             </p>
             <ul className="grid grid-cols-2 lg:grid-cols-1 gap-y-1 md:gap-y-2.5 gap-x-4">
@@ -194,8 +204,8 @@ export default function Footer() {
                     className={`${TAP_TARGET} text-sm transition-colors duration-200 gap-2 group`}
                     style={{ color: "rgba(251,251,249,0.55)" }}
                   >
-                    <span className="w-0 group-hover:w-3 h-[1px] bg-[#ED985F] transition-all duration-300 inline-block" />
-                    <span className="group-hover:text-[#FBFBF9] transition-colors duration-200">{item.label}</span>
+                    <span className="w-0 group-hover:w-3 h-[1px] bg-hover transition-all duration-300 inline-block" />
+                    <span className="group-hover:text-secondary transition-colors duration-200">{item.label}</span>
                   </Link>
                 </li>
               ))}
@@ -204,26 +214,27 @@ export default function Footer() {
 
           {/* 3. Contact Info */}
           <div>
-            <p className="text-[#FBFBF9] text-xs uppercase tracking-widest font-bold mb-5 flex items-center gap-2">
-              <span className="w-4 h-[2px] bg-[#ED985F] inline-block" />
+            <p className="text-secondary text-xs uppercase tracking-widest font-bold mb-5 flex items-center gap-2">
+              <span className="w-4 h-[2px] bg-hover inline-block" />
               Contact Info
             </p>
             <ul className="flex flex-col gap-5">
               <li className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                   style={{ background: "rgba(237,152,95,0.12)", border: "1px solid rgba(237,152,95,0.2)" }}>
-                  <FaMapMarkerAlt className="text-[#ED985F] text-xs" />
+                  <FaMapMarkerAlt className="text-hover text-xs" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm leading-snug" style={{ color: "rgba(251,251,249,0.6)" }}>
                     320 W Big Bear Blvd, Big Bear, CA 92314, USA
                   </span>
                   <button
-                    onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear, CA 92314, USA")}
+                    onClick={() => handleCopy("320 W Big Bear Blvd, Big Bear, CA 92314, USA", "address")}
                     type="button"
-                    className={`${TAP_TARGET} gap-1 text-[10px] uppercase tracking-wider text-[#ED985F] opacity-40 hover:opacity-100 transition-opacity mt-1 w-fit`}
+                    className={`${TAP_TARGET} gap-1 text-[10px] uppercase tracking-wider text-hover opacity-60 hover:opacity-100 transition-opacity mt-1 w-fit`}
                   >
-                    <FaCopy /> Copy Address
+                    {copiedKey === "address" ? <FaCheck className="text-emerald-400" /> : <FaCopy />}
+                    {copiedKey === "address" ? "Copied!" : "Copy Address"}
                   </button>
                 </div>
               </li>
@@ -231,26 +242,26 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                   style={{ background: "rgba(237,152,95,0.12)", border: "1px solid rgba(237,152,95,0.2)" }}>
-                  <FaPhoneAlt className="text-[#ED985F] text-xs" />
+                  <FaPhoneAlt className="text-hover text-xs" />
                 </div>
                 <div className="flex flex-col md:gap-2">
-                  {["+1 (951) 441-9748", "+1 (951) 441-9719"].map((num) => (
+                  {["+1 (951) 441-9748", "+1 (951) 441-9719"].map((num, i) => (
                     <div key={num} className="flex items-center gap-2 group">
                       <Link
                         href={`tel:+${num.replace(/\D/g, "")}`}
-                        className={`${TAP_TARGET} text-sm hover:text-[#ED985F] transition-colors`}
+                        className={`${TAP_TARGET} text-sm hover:text-hover transition-colors`}
                         style={{ color: "rgba(251,251,249,0.6)" }}
                       >
                         {num}
                       </Link>
                       <button
                         type="button"
-                        onClick={() => handleCopy(num.replace(/\D/g, ""))}
+                        onClick={() => handleCopy(num.replace(/\D/g, ""), `phone-${i}`)}
                         aria-label={`Copy phone number ${num}`}
-                        className="flex items-center justify-center w-11 h-11 md:w-6 md:h-6 text-xs hover:text-[#FBFBF9] transition-colors"
-                        style={{ color: "rgba(255,255,255,0.2)" }}
+                        className="flex items-center justify-center w-11 h-11 md:w-6 md:h-6 text-xs hover:text-secondary transition-colors"
+                        style={{ color: "rgba(255,255,255,0.3)" }}
                       >
-                        <FaCopy />
+                        {copiedKey === `phone-${i}` ? <FaCheck className="text-emerald-400" /> : <FaCopy />}
                       </button>
                     </div>
                   ))}
@@ -260,11 +271,11 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                   style={{ background: "rgba(237,152,95,0.12)", border: "1px solid rgba(237,152,95,0.2)" }}>
-                  <FaEnvelope className="text-[#ED985F] text-xs" />
+                  <FaEnvelope className="text-hover text-xs" />
                 </div>
                 <Link
                   href="mailto:bigbearvans@gmail.com"
-                  className={`${TAP_TARGET} text-sm truncate hover:text-[#ED985F] transition-colors`}
+                  className={`${TAP_TARGET} text-sm truncate hover:text-hover transition-colors`}
                   style={{ color: "rgba(251,251,249,0.6)" }}
                 >
                   bigbearvans@gmail.com
@@ -280,8 +291,8 @@ export default function Footer() {
               className="rounded-lg p-5"
               style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <p className="text-[#FBFBF9] text-xs uppercase tracking-widest font-bold mb-4 flex items-center gap-2">
-                <span className="w-4 h-[2px] bg-[#ED985F] inline-block" />
+              <p className="text-secondary text-xs uppercase tracking-widest font-bold mb-4 flex items-center gap-2">
+                <span className="w-4 h-[2px] bg-hover inline-block" />
                 Business Hours
               </p>
               <div className="flex flex-col text-sm gap-2.5">
@@ -296,7 +307,7 @@ export default function Footer() {
                     style={i < arr.length - 1 ? { borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "8px" } : {}}
                   >
                     <span style={{ color: "rgba(251,251,249,0.4)" }}>{row.day}</span>
-                    <span className={row.amber ? "text-[#ED985F] font-semibold" : "text-[#FBFBF9]/80"}>
+                    <span className={row.amber ? "text-hover font-semibold" : "text-secondary/80"}>
                       {row.hours}
                     </span>
                   </div>
@@ -309,10 +320,10 @@ export default function Footer() {
               className="rounded-lg p-5"
               style={{ background: "rgba(237,152,95,0.06)", border: "1px solid rgba(237,152,95,0.2)" }}
             >
-              <p className="text-[#ED985F] text-xs uppercase tracking-widest font-bold mb-1">
+              <p className="text-hover text-xs uppercase tracking-widest font-bold mb-1">
                 Stay Updated
               </p>
-              <p id="newsletter-hint" className="text-[11px] text-[#FBFBF9]/45 mb-3">
+              <p id="newsletter-hint" className="text-[11px] text-secondary/45 mb-3">
                 New builds, tips & offers — straight to you.
               </p>
               <form name="newsletter" onSubmit={handleSubscribe} noValidate>
@@ -334,13 +345,13 @@ export default function Footer() {
                     }}
                     aria-invalid={newsletterStatus?.type === "invalid"}
                     aria-describedby={newsletterStatus ? "newsletter-hint newsletter-status" : "newsletter-hint"}
-                    className="bbv-input flex-1 min-w-0 min-h-11 px-3 text-sm"
+                    className="flex-1 min-w-0 min-h-11 px-3 text-sm bg-white/5 text-secondary placeholder:text-white/30 border border-white/10 focus:border-hover outline-none rounded-lg transition-colors"
                   />
                   <button
                     type="submit"
                     disabled={subscribing}
                     aria-label="Subscribe to newsletter"
-                    className="w-11 h-11 bg-[#ED985F] text-[#001F3D] rounded-lg transition-all duration-200 flex items-center justify-center hover:brightness-110 shrink-0 disabled:opacity-60"
+                    className="w-11 h-11 bg-hover text-primary rounded-lg transition-all duration-200 flex items-center justify-center hover:brightness-110 shrink-0 disabled:opacity-60"
                   >
                     <FaArrowRight />
                   </button>
@@ -367,20 +378,28 @@ export default function Footer() {
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
         >
           <p className="text-[11px] tracking-[0.18em] uppercase" style={{ color: "rgba(251,251,249,0.3)" }}>
-            © {new Date().getFullYear()} Big Bear Vans. All Rights Reserved.
+            © {currentYear} Big Bear Vans. All Rights Reserved.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6">
             <Link
               href="/privacy-policy"
-              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-hover`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Privacy Policy
             </Link>
             <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
             <Link
+              href="/terms-and-conditions"
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-hover`}
+              style={{ color: "rgba(251,251,249,0.3)" }}
+            >
+              Terms & Conditions
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
+            <Link
               href="/returns-cancellation-policy"
-              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-hover`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Returns & Cancellation
@@ -388,10 +407,18 @@ export default function Footer() {
             <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
             <Link
               href="/contact"
-              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-[#ED985F]`}
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-hover`}
               style={{ color: "rgba(251,251,249,0.3)" }}
             >
               Contact Us
+            </Link>
+            <span style={{ color: "rgba(255,255,255,0.12)" }}>|</span>
+            <Link
+              href="/privacy-policy#do-not-sell"
+              className={`${TAP_TARGET} text-[11px] tracking-[0.15em] uppercase transition-colors hover:text-hover`}
+              style={{ color: "rgba(251,251,249,0.3)" }}
+            >
+              Do Not Sell or Share My Info
             </Link>
           </div>
         </div>

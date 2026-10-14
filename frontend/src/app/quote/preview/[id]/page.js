@@ -1,6 +1,12 @@
 // app/preview/[id]/page.js (Server Component)
 import { notFound } from "next/navigation";
 import PreviewClient from "@/components/preview/PreviewConfigureVan";
+
+export const metadata = {
+  title: "Quote Preview | Big Bear Vans",
+  robots: { index: false, follow: false },
+};
+
 // Data Fetching Functions
 async function getQuoteData(id) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/quote/preview/${id}`, {

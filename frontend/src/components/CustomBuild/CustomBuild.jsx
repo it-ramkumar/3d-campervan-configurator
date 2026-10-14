@@ -4,10 +4,7 @@ import HeroImage from "../Common/HeroSectionNew/HeroSectionNew";
 import OurProcess from "../HomePage/OurProcess/OurProcess";
 import {
   RichParagraph,
-  Heading2,
   Heading1,
-  Heading3,
-  Heading4,
   SecondaryButton,
   ImageWithSkeleton,
   PrimaryButton,
@@ -26,14 +23,14 @@ const DOT_GRID_LIGHT = {
   backgroundSize: "28px 28px",
 };
 
-// Card for light sections (replaces dark GLASS)
+// Card for light sections
 const CARD = {
   background: "#FFFFFF",
   border: "1px solid rgba(0,31,61,0.1)",
   boxShadow: "0 2px 12px rgba(0,31,61,0.05)",
 };
 
-// Keep amber accents unchanged
+// Amber accents
 const AMBER_BORDER = { border: "1px solid rgba(237,152,95,0.22)" };
 const AMBER_GLOW = { boxShadow: "0 0 48px rgba(237,152,95,0.08)" };
 
@@ -125,7 +122,6 @@ const whyFeatures = [
 const CustomBuild = () => {
   return (
     <div>
-
       {/* ═══════════════ HERO ═══════════════ */}
       <HeroImage
         alt="Custom camper van by Big Bear Vans"
@@ -151,11 +147,11 @@ const CustomBuild = () => {
               <span className="text-hover">Blank Slate</span>
             </Heading1>
             <SectionDivider />
-            <RichParagraph variant="body" >
+            <RichParagraph variant="body">
               Our team manages everything in-house — from electrical and plumbing to cabinetry and
               painting — so your van is truly yours at the end.
             </RichParagraph>
-            <RichParagraph variant="body" >
+            <RichParagraph variant="body">
               At Big Bear Vans, "Custom" means every detail is decided by you and built by us. It's
               about co-creating a campervan that is a perfect mirror of your lifestyle and personality.
             </RichParagraph>
@@ -175,7 +171,7 @@ const CustomBuild = () => {
         </div>
       </section>
 
-      {/* ═══════════════ HOW WE DO IT (navy — keep) ═══════════════ */}
+      {/* ═══════════════ HOW WE DO IT (navy) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl">
           <div className="text-center mb-16">
@@ -211,9 +207,13 @@ const CustomBuild = () => {
               <div
                 key={card.num}
                 className="p-8 rounded-xl group transition-all duration-300"
-                style={{ background: "rgba(2,12,24,0.72)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.07)", borderTop: "2px solid #ED985F" }}
+                style={{
+                  background: "rgba(2,12,24,0.72)",
+                  backdropFilter: "blur(24px)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderTop: "2px solid #ED985F",
+                }}
               >
-
                 <Heading1 variant="card" text={card.title} textColor="text-secondary" className="mt-3 mb-4 uppercase tracking-wide" />
                 <RichParagraph variant="card" textColor="text-secondary" className="!opacity-55">
                   {card.desc}
@@ -252,9 +252,8 @@ const CustomBuild = () => {
             </RichParagraph>
           </div>
 
-          {/* Portrait pair (top row) */}
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {whyFeatures.slice(0, 2).map((feature, i) => (
+          <div className="grid md:grid-cols-2 gap-8">
+            {whyFeatures.map((feature, i) => (
               <div key={i} className="rounded-xl overflow-hidden" style={CARD}>
                 <div className="relative overflow-hidden aspect-square">
                   <ImageWithSkeleton src={feature.img} alt={feature.alt} />
@@ -279,28 +278,6 @@ const CustomBuild = () => {
                       ))}
                     </ul>
                   )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Landscape pair (bottom row) */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {whyFeatures.slice(2).map((feature, i) => (
-              <div key={i} className="rounded-xl overflow-hidden" style={CARD}>
-                <div className="relative overflow-hidden aspect-square">
-                  <ImageWithSkeleton src={feature.img} alt={feature.alt} />
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: "linear-gradient(to top, rgba(0,31,61,0.35) 0%, transparent 60%)" }}
-                  />
-                  <AmberLine />
-                </div>
-                <div className="p-8 space-y-4">
-                  <Heading1 variant="card" text={feature.title} textColor="text-primary" className="uppercase" />
-                  <RichParagraph variant="card" >
-                    {feature.desc}
-                  </RichParagraph>
                   {feature.cta && (
                     <div className="pt-2">
                       <SecondaryButton link="/contact" label="Contact Us" />
@@ -313,7 +290,7 @@ const CustomBuild = () => {
         </div>
       </section>
 
-      {/* ═══════════════ 3D CONFIGURATOR (navy — keep) ═══════════════ */}
+      {/* ═══════════════ 3D CONFIGURATOR (navy) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
@@ -370,7 +347,7 @@ const CustomBuild = () => {
                 <span className="text-hover">Delivered</span>
               </Heading1>
             </div>
-            <RichParagraph variant="body"  >
+            <RichParagraph variant="body">
               Every van is designed for a specific person with different requirements.
             </RichParagraph>
           </div>
@@ -396,7 +373,7 @@ const CustomBuild = () => {
                 Consistent 5-Star Rating
               </RichParagraph>
 
-              <Heading1 variant="card" textColor="text-primary" >
+              <Heading1 variant="card" textColor="text-primary">
                 See the full collection of our builds
               </Heading1>
               <PrimaryButton link="/van-layouts" label="View Portfolio" />
@@ -405,7 +382,7 @@ const CustomBuild = () => {
         </div>
       </section>
 
-      {/* ═══════════════ OUR CLIENTS (navy — keep) ═══════════════ */}
+      {/* ═══════════════ OUR CLIENTS (navy) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
@@ -430,7 +407,11 @@ const CustomBuild = () => {
               <div
                 key={label}
                 className="rounded-xl p-8 flex items-center justify-center h-32 group transition-all duration-300"
-                style={{ background: "rgba(2,12,24,0.72)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{
+                  background: "rgba(2,12,24,0.72)",
+                  backdropFilter: "blur(24px)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                }}
               >
                 <span className="font-ui font-bold text-xs uppercase tracking-[0.3em] text-[#FBFBF9]/25 group-hover:text-[#ED985F] transition-colors duration-300">
                   {label}
@@ -442,16 +423,10 @@ const CustomBuild = () => {
       </section>
 
       {/* ═══════════════ SHOWROOM ═══════════════ */}
-      <section className="relative py-24 md:py-32 bg-secodary overflow-hidden">
-        {/* Subtle background detail */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={DOT_GRID_LIGHT}
-        />
+      <section className="relative py-24 md:py-32 bg-secondary overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={DOT_GRID_LIGHT} />
 
         <div className="relative mx-auto max-w-7xl px-6">
-
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
               <RichParagraph variant="sub" textColor="text-hover">
@@ -464,25 +439,16 @@ const CustomBuild = () => {
             </div>
 
             <RichParagraph variant="body" className="max-w-md md:text-right">
-              See where your van comes to life, meet our team, and explore our
-              latest builds in person.
+              See where your van comes to life, meet our team, and explore our latest builds in person.
             </RichParagraph>
-
-
           </div>
 
-          {/* Showroom Image */}
-          <div
-            className="relative rounded-2xl overflow-hidden"
-            style={AMBER_BORDER}
-          >
+          <div className="relative rounded-2xl overflow-hidden" style={AMBER_BORDER}>
             <ImageWithSkeleton
               src={`${imgPath}showroom-ctr-big-bear-vans.webp`}
               alt="Big Bear Vans Showroom"
               className="w-full h-auto"
             />
-
-            {/* Image gradient */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
@@ -490,42 +456,28 @@ const CustomBuild = () => {
                   "linear-gradient(to top, rgba(0,31,61,0.8) 0%, rgba(0,31,61,0.15) 45%, transparent 75%)",
               }}
             />
-
-            {/* Image label */}
             <div className="absolute left-6 bottom-6 md:left-10 md:bottom-8">
-              <RichParagraph variant="sub" textColor="text-secondary" className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 uppercase">
+              <RichParagraph
+                variant="sub"
+                textColor="text-secondary"
+                className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 uppercase"
+              >
                 Big Bear City, California
               </RichParagraph>
-
             </div>
-
             <AmberLine />
           </div>
 
-          {/* Content */}
           <div className="grid md:grid-cols-2 gap-10 md:gap-20 mt-12 items-start">
-
             <div>
-
-
-              <RichParagraph
-                variant="body"
-                className="max-w-xl"
-              >
-                Visit our showroom in Big Bear City, California. See our building
-                process, meet our team, and explore ongoing and completed projects
-                firsthand.
+              <RichParagraph variant="body" className="max-w-xl">
+                Visit our showroom in Big Bear City, California. See our building process, meet our team, and explore ongoing and completed projects firsthand.
               </RichParagraph>
             </div>
 
             <div>
-              <RichParagraph
-               variant="body"
-                className=" max-w-xl"
-              >
-                Walk through finished vans, try different layouts, and sit down for
-                a personal design session with our designers to turn your vision
-                into a detailed plan.
+              <RichParagraph variant="body" className="max-w-xl">
+                Walk through finished vans, try different layouts, and sit down for a personal design session with our designers to turn your vision into a detailed plan.
               </RichParagraph>
 
               <div className="mt-8">
@@ -536,12 +488,11 @@ const CustomBuild = () => {
                 />
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ═══════════════ MEET THE FOUNDERS (navy — keep) ═══════════════ */}
+      {/* ═══════════════ MEET THE FOUNDERS (navy) ═══════════════ */}
       <section className="py-24" style={BG_NAVY}>
         <div className="mx-auto px-6 max-w-7xl grid md:grid-cols-2 gap-16 items-center">
           <div
@@ -554,7 +505,7 @@ const CustomBuild = () => {
 
           <div className="space-y-6">
             <RichParagraph variant="sub" textColor="text-hover">
-Our Story
+              Our Story
             </RichParagraph>
 
             <Heading1 variant="section" textColor="text-secondary" className="uppercase tracking-tighter">

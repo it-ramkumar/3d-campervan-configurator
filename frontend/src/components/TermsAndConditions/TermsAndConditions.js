@@ -1,0 +1,262 @@
+import React from 'react'
+import Link from 'next/link'
+import Heading1 from '../Common/Headings/Heading1'
+import RichParagraph from '../Common/Paragraph/RichParagraph'
+
+const sections = [
+  { id: 1, title: 'ACCEPTANCE OF THESE TERMS' },
+  { id: 2, title: 'USE OF OUR WEBSITE' },
+  { id: 3, title: '3D CONFIGURATOR, PRICING & AVAILABILITY' },
+  { id: 4, title: 'QUOTES, DEPOSITS & ORDERS' },
+  { id: 5, title: 'INTELLECTUAL PROPERTY' },
+  { id: 6, title: 'INFORMATION YOU SUBMIT' },
+  { id: 7, title: 'THIRD-PARTY LINKS & ADVERTISING' },
+  { id: 8, title: 'DISCLAIMERS' },
+  { id: 9, title: 'LIMITATION OF LIABILITY' },
+  { id: 10, title: 'GOVERNING LAW' },
+  { id: 11, title: 'CHANGES TO THESE TERMS' },
+  { id: 12, title: 'HOW CAN YOU CONTACT US?' },
+]
+
+export default function TermsAndConditions() {
+  return (
+    <div className="bg-secondary min-h-screen">
+
+      {/* Hero Header */}
+      <div className="bg-primary py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <RichParagraph textColor='text-hover'>
+            Legal
+          </RichParagraph>
+
+          <Heading1 as="h1" textColor="text-secondary" className="mb-4">
+            Terms & Conditions
+          </Heading1>
+          <RichParagraph variant='hero' textColor='text-secondary'>
+            Last updated: October 14, 2026
+          </RichParagraph>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="max-w-4xl mx-auto px-6 py-16">
+
+        {/* Intro */}
+        <div className="mb-14">
+          <RichParagraph variant='body' textColor="text-primary" className="mb-5">
+            These Terms & Conditions ("Terms") govern your use of the website at{' '}
+            <a href="https://www.bigbearvans.com/" className="text-primary font-semibold underline underline-offset-2">
+              https://www.bigbearvans.com/
+            </a>{' '}
+            and the services offered on it by <strong>Big Bear Vans Corp</strong> ("we," "us," or "our").
+          </RichParagraph>
+          <RichParagraph variant='body' textColor="text-primary" className="opacity-70">
+            Please read them carefully. If you do not agree with these Terms, please do not use our website.
+          </RichParagraph>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-primary opacity-10 mb-14" />
+
+        {/* Table of Contents */}
+        <div className="mb-14">
+          <RichParagraph variant='sub' textColor='text-hover'>Navigation</RichParagraph>
+          <Heading1 textColor="text-primary" className="mb-8">
+            TABLE OF CONTENTS
+          </Heading1>
+          <ol className="space-y-2">
+            {sections.map(({ id, title }) => (
+              <li key={id}>
+                <a
+                  href={`#section-${id}`}
+                  className="flex items-center gap-3 text-sm text-primary opacity-60 hover:opacity-100 hover:text-primary transition-all duration-200 font-medium group"
+                >
+                  <span className="text-primary font-black w-5 shrink-0">{id}.</span>
+                  <RichParagraph className="group-hover:translate-x-1 transition-transform duration-200">{title}</RichParagraph>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-primary opacity-10 mb-14" />
+
+        <PolicySection id={1} title="ACCEPTANCE OF THESE TERMS">
+          <Body>
+            By accessing or using our website, you agree to be bound by these Terms and by our{' '}
+            <InlineLink href="/privacy-policy">Privacy Policy</InlineLink>. You must be at least 18 years
+            old to submit an inquiry, request a quote, or place an order with us.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={2} title="USE OF OUR WEBSITE">
+          <Body>You agree to use our website only for lawful purposes. You agree not to:</Body>
+          <BulletList items={[
+            'Copy, scrape, or republish our content, images, or 3D models without our written permission.',
+            'Attempt to gain unauthorized access to our systems, accounts, or the administrative areas of the website.',
+            'Submit false information or use our forms to send spam or unsolicited messages.',
+            'Interfere with the normal operation of the website, including by uploading malicious code.',
+            'Click on advertisements displayed on the website in an artificial or automated way.',
+          ]} />
+        </PolicySection>
+
+        <PolicySection id={3} title="3D CONFIGURATOR, PRICING & AVAILABILITY">
+          <Body>
+            Our 3D configurator, floorplans, renderings, and photos are provided to help you visualize a
+            build. They are illustrations only — final materials, colors, dimensions, and finishes may
+            vary from what is shown on screen.
+          </Body>
+          <Body>
+            Prices, specifications, and availability shown on the website, including prices generated by
+            the configurator and listings of vans for sale, are estimates and may change without notice.
+            They are not an offer to sell. A price becomes binding only when it is confirmed in a written
+            quote or agreement from Big Bear Vans.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={4} title="QUOTES, DEPOSITS & ORDERS">
+          <Body>
+            Every custom build is governed by the written quote or purchase agreement you sign with us.
+            If that agreement conflicts with these Terms, the agreement controls. Information about
+            deposits and cancellations is available in our{' '}
+            <InlineLink href="/returns-cancellation-policy">Returns & Cancellation Policy</InlineLink>.
+          </Body>
+          <Body>
+            Financing information on our website is provided for general guidance only. Any financing
+            is offered by third-party lenders and is subject to their approval and terms.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={5} title="INTELLECTUAL PROPERTY">
+          <Body>
+            All content on this website — including text, photos, videos, 3D models, layouts, logos, and
+            the Big Bear Vans name — is owned by or licensed to Big Bear Vans Corp and is protected by
+            copyright and trademark laws. You may view and share links to our pages for personal,
+            non-commercial use.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={6} title="INFORMATION YOU SUBMIT">
+          <Body>
+            When you send us an inquiry, application, or review, you confirm that the information is
+            accurate and that you have the right to share it. We handle personal information as described
+            in our <InlineLink href="/privacy-policy">Privacy Policy</InlineLink>. If you submit a
+            testimonial or photos of your van, you allow us to display them on our website and marketing
+            channels.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={7} title="THIRD-PARTY LINKS & ADVERTISING">
+          <Body>
+            Our website may contain links to third-party websites and advertisements served by third
+            parties, including Google. We do not control and are not responsible for the content,
+            products, or privacy practices of those websites or advertisers. An advertisement on our
+            website is not an endorsement by Big Bear Vans.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={8} title="DISCLAIMERS">
+          <Body>
+            Our website and its content are provided "as is" and "as available." Guides, articles, and
+            camping information are for general information only and are not professional, legal, or
+            safety advice. We do not guarantee that the website will be uninterrupted, error-free, or
+            free of harmful components.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={9} title="LIMITATION OF LIABILITY">
+          <Body>
+            To the fullest extent permitted by law, Big Bear Vans Corp will not be liable for any
+            indirect, incidental, or consequential damages arising from your use of, or inability to use,
+            this website. This section does not limit any warranty or obligation contained in a signed
+            purchase agreement.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={10} title="GOVERNING LAW">
+          <Body>
+            These Terms are governed by the laws of the State of California, without regard to its
+            conflict-of-law rules.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={11} title="CHANGES TO THESE TERMS">
+          <Body>
+            We may update these Terms from time to time. The updated version will be indicated by the
+            "Last updated" date at the top of this page. Continuing to use the website after a change
+            means you accept the updated Terms.
+          </Body>
+        </PolicySection>
+
+        <PolicySection id={12} title="HOW CAN YOU CONTACT US?">
+          <Body>
+            If you have questions about these Terms, you may email us at{' '}
+            <a href="mailto:visit.bigbearvans@gmail.com"
+              className="text-primary font-semibold underline underline-offset-2">
+              visit.bigbearvans@gmail.com
+            </a>{' '}
+            or contact us by post at:
+          </Body>
+          <div className="mt-6 p-6 border-l-4 border-[var(--color-hover)] bg-primary bg-opacity-5 rounded-r-[var(--radius-lg)]">
+            <p className="text-secondary font-black text-base tracking-tight">Big Bear Vans Corp</p>
+            <p className="text-secondary text-sm opacity-70 mt-1 leading-relaxed">
+              320 W Big Bear Blvd,<br />
+              Big Bear, CA 92314,<br />
+              United States
+            </p>
+          </div>
+        </PolicySection>
+
+      </div>
+    </div>
+  )
+}
+
+/* ── Sub-components ── */
+
+function PolicySection({ id, title, children }) {
+  return (
+    <div id={`section-${id}`} className="mb-14 scroll-mt-8">
+      <div className="flex items-start gap-4 mb-6">
+        <span className="text-primary font-black text-sm mt-1 shrink-0">{id}.</span>
+        <Heading1 variant='section' className="!text-primary ">
+          {title}
+        </Heading1>
+      </div>
+      <div className="pl-8 space-y-4">
+        {children}
+      </div>
+      <div className="h-px bg-primary opacity-10 mt-14" />
+    </div>
+  )
+}
+
+function Body({ children }) {
+  return (
+    <RichParagraph variant='body' className="opacity-70">
+      {children}
+    </RichParagraph>
+  )
+}
+
+function BulletList({ items }) {
+  return (
+    <ul className="space-y-2 mt-2">
+      {items.map((item, i) => (
+        <li key={i} className="flex items-start gap-3 text-sm text-primary opacity-70 leading-relaxed">
+          <span className="text-primary font-black mt-0.5 shrink-0">—</span>
+          <span><RichParagraph>{item}</RichParagraph></span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function InlineLink({ href, children }) {
+  return (
+    <Link href={href} className="text-primary font-semibold underline underline-offset-2">
+      {children}
+    </Link>
+  )
+}

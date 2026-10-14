@@ -24,6 +24,8 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="yandex-verification" content="94c87c5e22615ea1" />
         <meta name="p:domain_verify" content="77c979538f9054ccc8160b98172edfc4" />
+        <meta name="google-adsense-account" content="ca-pub-5120693596524634" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5120693596524634" crossOrigin="anonymous"></script>
       </head>
       <body className="min-h-full flex flex-col">
         <Providers>

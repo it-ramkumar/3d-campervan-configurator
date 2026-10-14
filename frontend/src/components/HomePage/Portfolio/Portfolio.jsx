@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -7,7 +6,6 @@ import {
   RichParagraph,
   ImageWithSkeleton,
   SecondaryButton,
-  SpanTag,
 } from "../../Common/Common";
 
 const images = [
@@ -43,65 +41,57 @@ const images = [
   },
 ];
 
-export default function Portfolio() {
-  const PortfolioImage = ({ img, className = "" }) => (
-    <div
-      className={`group relative overflow-hidden rounded-lg shadow-md
-        transition-all duration-500 hover:shadow-2xl
-        ${className}`}
-    >
-      {/* Image */}
-      <div className="absolute inset-0">
-        <ImageWithSkeleton
-          src={img.src}
-          alt={img.alt}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/25 transition-colors duration-500 pointer-events-none" />
-
-      {/* Tag */}
-      <div className="absolute bottom-4 left-4 z-10">
-        <RichParagraph
-          variant="sub"
-          className="
-            px-4 py-1 rounded-lg shadow-lg
-            bg-secondary/90 text-primary
-            group-hover:bg-hover group-hover:text-white
-            transition-all duration-300
-            !font-black !tracking-widest !uppercase !text-xs !normal-case
-        "
-        >
-          {img.tag}
-        </RichParagraph>
-      </div>
+// Extracted outside Portfolio to prevent re-creation on re-render
+const PortfolioImage = ({ img, className = "" }) => (
+  <div
+    className={`group relative overflow-hidden rounded-lg shadow-md transition-all duration-500 hover:shadow-2xl ${className}`}
+  >
+    {/* Image */}
+    <div className="absolute inset-0">
+      <ImageWithSkeleton
+        src={img.src}
+        alt={img.alt}
+        className="w-full h-full object-cover"
+      />
     </div>
-  );
 
+    {/* Hover overlay */}
+    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/25 transition-colors duration-500 pointer-events-none" />
+
+    {/* Tag */}
+    <div className="absolute bottom-4 left-4 z-10">
+      <RichParagraph
+        variant="sub"
+        className="px-2 rounded-lg bg-secondary/90 text-primary  "
+      >
+        {img.tag}
+      </RichParagraph>
+    </div>
+  </div>
+);
+
+export default function Portfolio() {
   return (
     <section className="w-full py-10 bg-secondary antialiased overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
-
         {/* HEADER */}
-          <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
-                Our Craft
-              </RichParagraph>
+        <RichParagraph
+          variant="sub"
+          textColor="text-hover"
+          className="uppercase font-bold"
+        >
+          Our Craft
+        </RichParagraph>
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-12 border-b border-primary/10 pb-10 gap-6">
           <div className="max-w-xl">
-
-            <Heading1
-              variant="section"
-              textColor="text-primary"
-            >
+            <Heading1 variant="section" textColor="text-primary">
               From Dream to
               <br />
               <span className="text-hover">Your Driveway</span>
             </Heading1>
           </div>
 
-          <RichParagraph variant="body" className=" max-w-xs md:text-right ">
+          <RichParagraph variant="body" className="max-w-xs md:text-right">
             Explore the craftsmanship and attention to detail in our best custom
             van conversions.
           </RichParagraph>
@@ -109,24 +99,16 @@ export default function Portfolio() {
 
         {/* DESKTOP BENTO GRID */}
         <div className="hidden lg:grid grid-cols-12 gap-4 h-[750px]">
-
           {/* LEFT LARGE IMAGE */}
           <div className="col-span-5 min-h-0">
-            <PortfolioImage
-              img={images[0]}
-              className="w-full h-full"
-            />
+            <PortfolioImage img={images[0]} className="w-full h-full" />
           </div>
 
           {/* RIGHT SIDE */}
           <div className="col-span-7 grid grid-rows-12 gap-4 min-h-0">
-
             {/* LARGE TOP IMAGE */}
             <div className="row-span-7 min-h-0">
-              <PortfolioImage
-                img={images[1]}
-                className="w-full h-full"
-              />
+              <PortfolioImage img={images[1]} className="w-full h-full" />
             </div>
 
             {/* THREE SMALL IMAGES */}
@@ -164,7 +146,6 @@ export default function Portfolio() {
           <RichParagraph variant="sub" className="mt-5 text-primary/60">
             Updated Weekly • 2026 Collection
           </RichParagraph>
-
         </div>
       </div>
     </section>

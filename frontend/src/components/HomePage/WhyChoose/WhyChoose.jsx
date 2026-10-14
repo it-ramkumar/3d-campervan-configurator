@@ -1,47 +1,157 @@
 "use client";
 import React, { useState } from "react";
 import {
-  ChevronDown, ChevronUp,
-  Palette, BedDouble, CookingPot, ShowerHead, Armchair, Caravan,
-  ShieldCheck, Wrench, Computer, Router, Scan,
-  Users, TentTree, Table, Utensils,
-  BatteryCharging, Thermometer, Droplets, AirVent, Sun
-} from 'lucide-react';
-import { Heading1, Heading3, RichParagraph, ImageWithSkeleton, CustomLink } from '../../Common/Common';
+  ChevronDown,
+  ChevronUp,
+  Palette,
+  BedDouble,
+  CookingPot,
+  ShowerHead,
+  Armchair,
+  Caravan,
+  ShieldCheck,
+  Wrench,
+  Computer,
+  Router,
+  Scan,
+  Users,
+  TentTree,
+  Table,
+  Utensils,
+  BatteryCharging,
+  Thermometer,
+  Droplets,
+  AirVent,
+  Sun,
+} from "lucide-react";
+import {
+  Heading1,
+  RichParagraph,
+  ImageWithSkeleton,
+  CustomLink,
+} from "../../Common/Common";
 
 const sections = [
   {
     title: "True Custom Builds",
-    intro: "Big Bear Vans is a fully custom engineering company where we create any configuration and style you want. Instead of pre-built layouts and generic templates, we customize your entire campervan from scratch. Here's what you can choose:",
+    intro:
+      "Big Bear Vans is a fully custom engineering company where we create any configuration and style you want. Instead of pre-built layouts and generic templates, we customize your entire campervan from scratch. Here's what you can choose:",
     features: [
-      { text: "<strong>Ceiling, walls, and flooring kits</strong> in different colours and textures.", icon: <Palette size={18} /> },
-      { text: "Space-saving <strong>elevator bed</strong> front or rear.", icon: <BedDouble size={18} /> },
-      { text: "Kitchen with different <strong>customized cabinets and countertops.</strong>", icon: <CookingPot size={18} /> },
-      { text: "Lightweight <strong>Aluminum bathrooms</strong> in different sizes.", icon: <ShowerHead size={18} /> },
-      { text: "<strong>Swivel seats</strong> or <strong>extendable benches.</strong>", icon: <Armchair size={18} /> },
-      { text: "<strong>Exterior upgrades</strong> like suspension, wheels, tires, awning, storage boxes, etc.", icon: <Caravan size={18} /> },
+      {
+        content: (
+          <>
+            <strong>Ceiling, walls, and flooring kits</strong> in different
+            colours and textures.
+          </>
+        ),
+        icon: Palette,
+      },
+      {
+        content: (
+          <>
+            Space-saving <strong>elevator bed</strong> front or rear.
+          </>
+        ),
+        icon: BedDouble,
+      },
+      {
+        content: (
+          <>
+            Kitchen with different{" "}
+            <strong>customized cabinets and countertops.</strong>
+          </>
+        ),
+        icon: CookingPot,
+      },
+      {
+        content: (
+          <>
+            Lightweight <strong>Aluminum bathrooms</strong> in different sizes.
+          </>
+        ),
+        icon: ShowerHead,
+      },
+      {
+        content: (
+          <>
+            <strong>Swivel seats</strong> or <strong>extendable benches.</strong>
+          </>
+        ),
+        icon: Armchair,
+      },
+      {
+        content: (
+          <>
+            <strong>Exterior upgrades</strong> like suspension, wheels, tires,
+            awning, storage boxes, etc.
+          </>
+        ),
+        icon: Caravan,
+      },
     ],
-    outro: "We're small, but high-tech. That's why we can customize layouts and features other shops won't even touch.",
+    outro:
+      "We're small, but high-tech. That's why we can customize layouts and features other shops won't even touch.",
     image: "/Home/home-custom-build-big-bear-vans.webp",
     isReverse: false,
   },
   {
     title: "Post Build Support",
-    intro: "From first call to last key handover, we guide and support you at every step. Unlike other RV dealers, Big Bear Vans provides great after-sales support to its customers. We offer:",
+    intro:
+      "From first call to last key handover, we guide and support you at every step. Unlike other RV dealers, Big Bear Vans provides great after-sales support to its customers. We offer:",
     features: [
-      { text: "<strong>1-year or 3-year extended warranty</strong> on our craftsmanship.", icon: <ShieldCheck size={18} /> },
-      { text: "<strong>Servicing and installing upgrades</strong> in our workshop.", icon: <Wrench size={18} /> },
+      {
+        content: (
+          <>
+            <strong>1-year or 3-year extended warranty</strong> on our
+            craftsmanship.
+          </>
+        ),
+        icon: ShieldCheck,
+      },
+      {
+        content: (
+          <>
+            <strong>Servicing and installing upgrades</strong> in our workshop.
+          </>
+        ),
+        icon: Wrench,
+      },
     ],
     image: "/Home/home-garrage-big-bear-vans.webp",
     isReverse: true,
   },
   {
     title: "CNC Technology",
-    intro: "Our Big Bear workshop is equipped with the latest industrial CNC technology. At our workshop:",
+    intro:
+      "Our Big Bear workshop is equipped with the latest industrial CNC technology. At our workshop:",
     features: [
-      { text: "A team of 5+ designers uses <strong>CAD/CAM software</strong> to model every part of your van.", icon: <Computer size={18} /> },
-      { text: "Components are cut by our two <strong>CNC router machines</strong> (metal & plywood).", icon: <Router size={18} /> },
-      { text: "We have several <strong>3D scanners</strong> for precise measurements.", icon: <Scan size={18} /> },
+      {
+        content: (
+          <>
+            A team of 5+ designers uses <strong>CAD/CAM software</strong> to
+            model every part of your van.
+          </>
+        ),
+        icon: Computer,
+      },
+      {
+        content: (
+          <>
+            Components are cut by our two <strong>CNC router machines</strong>{" "}
+            (metal & plywood).
+          </>
+        ),
+        icon: Router,
+      },
+      {
+        content: (
+          <>
+            We have several <strong>3D scanners</strong> for precise
+            measurements.
+          </>
+        ),
+        icon: Scan,
+      },
     ],
     outro: "The result? A fully custom campervan, exactly the way you want.",
     image: "/Home/home-cnc-machine-big-bear-vans.webp",
@@ -49,29 +159,116 @@ const sections = [
   },
   {
     title: "Family-friendly Layouts",
-    intro: (<span>While others are built for couples, ours are for the whole crew. We're proud to have built several
-      <CustomLink href={"/van-layouts?category=layouts-for-families-3-9-people"} text={" family-friendly campervans "} /> In our family layouts, you can:</span>),
+    intro: (
+      <span>
+        While others are built for couples, ours are for the whole crew. We're
+        proud to have built several
+        <CustomLink
+          href={"/van-layouts?category=layouts-for-families-3-9-people"}
+          text={" family-friendly campervans "}
+        />{" "}
+        In our family layouts, you can:
+      </span>
+    ),
     features: [
-      { text: "Sit, sleep, and travel safely with <strong>4 or even 9 people.</strong>", icon: <Users size={18} /> },
-      { text: "Enjoy outdoors in the rear <strong>foldable patio and roof deck.</strong>", icon: <TentTree size={18} /> },
-      { text: "Have a <strong>dinette area</strong> for meals, games, and homework.", icon: <Table size={18} /> },
-      { text: "Have a fully functional <strong>kitchen and a lightweight bathroom.</strong>", icon: <Utensils size={18} /> },
+      {
+        content: (
+          <>
+            Sit, sleep, and travel safely with{" "}
+            <strong>4 or even 9 people.</strong>
+          </>
+        ),
+        icon: Users,
+      },
+      {
+        content: (
+          <>
+            Enjoy outdoors in the rear{" "}
+            <strong>foldable patio and roof deck.</strong>
+          </>
+        ),
+        icon: TentTree,
+      },
+      {
+        content: (
+          <>
+            Have a <strong>dinette area</strong> for meals, games, and
+            homework.
+          </>
+        ),
+        icon: Table,
+      },
+      {
+        content: (
+          <>
+            Have a fully functional{" "}
+            <strong>kitchen and a lightweight bathroom.</strong>
+          </>
+        ),
+        icon: Utensils,
+      },
     ],
     image: "/Home/home-family-van-big-bear-vans.webp",
     isReverse: true,
   },
   {
     title: "Off-grid Ready",
-    intro: (<span>Every Big Bear van comes with a professional-grade <CustomLink href={"/van-options/system-options"} text={"electrical and water system "} />
-      so you can go anywhere to stay without a second thought. We install:</span>),
+    intro: (
+      <span>
+        Every Big Bear van comes with a professional-grade{" "}
+        <CustomLink
+          href={"/van-options/system-options"}
+          text={"electrical and water system "}
+        />
+        so you can go anywhere to stay without a second thought. We install:
+      </span>
+    ),
     features: [
-      { text: "<strong>Rapid Alternator Charging:</strong> Up to <strong>250A</strong> with a 2nd alternator.", icon: <BatteryCharging size={18} /> },
-      { text: "Self-heating <strong>lithium batteries (15,600Wh)</strong>.", icon: <Thermometer size={18} /> },
-      { text: "Integrated <strong>grey and fresh water tanks.</strong>", icon: <Droplets size={18} /> },
-      { text: "A <strong>12V slim A/C unit</strong> that runs for up to <strong>20 hours</strong>.", icon: <AirVent size={18} /> },
-      { text: "<strong>Solar panels</strong> on the roof and hood.", icon: <Sun size={18} /> },
+      {
+        content: (
+          <>
+            <strong>Rapid Alternator Charging:</strong> Up to{" "}
+            <strong>250A</strong> with a 2nd alternator.
+          </>
+        ),
+        icon: BatteryCharging,
+      },
+      {
+        content: (
+          <>
+            Self-heating <strong>lithium batteries (15,600Wh)</strong>.
+          </>
+        ),
+        icon: Thermometer,
+      },
+      {
+        content: (
+          <>
+            Integrated <strong>grey and fresh water tanks.</strong>
+          </>
+        ),
+        icon: Droplets,
+      },
+      {
+        content: (
+          <>
+            A <strong>12V slim A/C unit</strong> that runs for up to{" "}
+            <strong>20 hours</strong>.
+          </>
+        ),
+        icon: AirVent,
+      },
+      {
+        content: (
+          <>
+            <strong>Solar panels</strong> on the roof and hood.
+          </>
+        ),
+        icon: Sun,
+      },
     ],
-    outro: "Off-grid freedom isn't an upgrade in our converted vans, it's a standard.",
+    outro:
+      "Off-grid freedom isn't an upgrade in our converted vans, it's a standard.",
     image: "/Home/home-off-grid-road-big-bear-vans.webp",
     isReverse: false,
   },
@@ -79,7 +276,9 @@ const sections = [
 
 export default function WhyChoose() {
   const [expanded, setExpanded] = useState({});
-  const toggle = (i) => setExpanded(prev => ({ ...prev, [i]: !prev[i] }));
+
+  const toggle = (i) =>
+    setExpanded((prev) => ({ ...prev, [i]: !prev[i] }));
 
   return (
     <section className="bbv-section-light overflow-hidden antialiased relative">
@@ -88,130 +287,152 @@ export default function WhyChoose() {
       {/* ── HEADER ── */}
       <div className="relative border-b border-primary/10 overflow-hidden">
         <div className="container mx-auto px-6 max-w-7xl py-10 relative z-10">
-
           <div className="flex items-center gap-3 mb-3">
-            <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
+            <RichParagraph
+              variant="sub"
+              textColor="!text-hover"
+              className="uppercase font-bold"
+            >
               Our Advantage
             </RichParagraph>
           </div>
 
-          <Heading1 variant="section"
-            textColor="text-primary"
-
-          >
-            Why Choose<br />
+          <Heading1 variant="section" textColor="text-primary">
+            Why Choose
+            <br />
             <span className="text-hover">Big Bear Vans?</span>
           </Heading1>
 
-          <RichParagraph variant="body" className="  leading-relaxed max-w-lg">
-            Based in Big Bear, California, our team of expert builders and engineers
-            deliver precision-crafted homes on wheels that stand in a class of their own.
+          <RichParagraph variant="body" className="leading-relaxed max-w-lg">
+            Based in Big Bear, California, our team of expert builders and
+            engineers deliver precision-crafted homes on wheels that stand in a
+            class of their own.
           </RichParagraph>
         </div>
 
         {/* Ghost brand mark */}
         <div className="absolute right-0 inset-y-0 flex items-center pointer-events-none select-none overflow-hidden">
-          <span className="text-[260px] font-black text-primary/[0.025] leading-none pr-6">BBV</span>
+          <span className="text-[260px] font-black text-primary/[0.025] leading-none pr-6">
+            BBV
+          </span>
         </div>
       </div>
 
       {/* ── FEATURE SECTIONS ── */}
       {sections.map((section, i) => {
         const isOpen = !!expanded[i];
-        const num = String(i + 1).padStart(2, '0');
+        const num = String(i + 1).padStart(2, "0");
 
         return (
-          <div key={i} className="relative border-b border-primary/10 overflow-hidden">
-
-
+          <div
+            key={i}
+            className="relative border-b border-primary/10 overflow-hidden"
+          >
             <div className="container mx-auto px-6 max-w-7xl py-20 md:py-10 relative z-10">
               {/* Equal 2-Column Grid (50% - 50%) */}
               <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12 xl:gap-20">
-
                 {/* ── IMAGE SIDE ── */}
-                <div className={`relative w-full ${section.isReverse ? 'lg:order-last' : 'lg:order-first'}`}>
+                <div
+                  className={`relative w-full ${
+                    section.isReverse ? "lg:order-last" : "lg:order-first"
+                  }`}
+                >
                   <div className="relative aspect-square w-full rounded-lg overflow-hidden ring-1 ring-primary/10 shadow-xl">
-                    <ImageWithSkeleton src={section.image} alt={section.title} />
+                    <ImageWithSkeleton
+                      src={section.image}
+                      alt={section.title}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent pointer-events-none" />
                     <div className="bbv-amber-line" />
                   </div>
                 </div>
 
                 {/* ── CONTENT SIDE ── */}
-                <div className={`flex flex-col gap-5 w-full ${section.isReverse ? 'lg:order-first' : 'lg:order-last'}`}>
-
-                  {/* Number badge */}
-                  <div className="flex items-center gap-3">
-                    <RichParagraph variant="sub" className=" text-hover bg-hover/35 border border-hover/20 rounded-lg px-3 py-1.5 uppercase">
-                      {num}
-                    </RichParagraph>
-                   <RichParagraph variant="sub" className=" text-primary/30 uppercase tracking-widest">
-                    / {sections.length} Features
-                    </RichParagraph>
-
-                  </div>
-
+                <div
+                  className={`flex flex-col gap-5 w-full ${
+                    section.isReverse ? "lg:order-first" : "lg:order-last"
+                  }`}
+                >
+               
                   {/* Title */}
                   <Heading1 as="h3" variant="card" textColor="text-primary">
                     {section.title}
                   </Heading1>
 
                   {/* Expandable body */}
-                  <div className={`relative overflow-hidden transition-all duration-500 ${!isOpen ? 'max-h-[320px]' : 'max-h-[2000px]'}`}>
-
+                  <div
+                    className={`relative overflow-hidden transition-all duration-500 ${
+                      !isOpen ? "max-h-[320px]" : "max-h-[2000px]"
+                    }`}
+                  >
                     <RichParagraph variant="card" className="mb-5">
                       {section.intro}
                     </RichParagraph>
 
                     <div className="space-y-2">
-                      {section.features.map((f, fi) => (
-                        <div
-                          key={fi}
-                          className="group flex items-start gap-4 p-4 rounded-lg hover:border-hover/30 transition-all"
-                          style={{ background: 'rgba(0,31,61,0.04)', border: '1px solid rgba(0,31,61,0.08)' }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,31,61,0.08)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(0,31,61,0.04)'}
-                        >
-                          <span className="flex-shrink-0 p-2 rounded-lg bg-hover/20 text-hover group-hover:bg-hover group-hover:text-secondary transition-all mt-0.5">
-                            {f.icon}
-                          </span>
-                          <RichParagraph variant="sub" html={f.text} className="!text-primary/60 " />
-                        </div>
-                      ))}
+                      {section.features.map((f, fi) => {
+                        const IconComponent = f.icon;
+                        return (
+                          <div
+                            key={fi}
+                            className="group flex items-start gap-4 p-4 rounded-lg bg-primary/[0.04] hover:bg-primary/[0.08] border border-primary/[0.08] hover:border-hover/30 transition-all duration-300"
+                          >
+                            <span className="flex-shrink-0 p-2 rounded-lg bg-hover/20 text-hover group-hover:bg-hover group-hover:text-secondary transition-all mt-0.5">
+                              <IconComponent size={18} />
+                            </span>
+                            <RichParagraph
+                              variant="sub"
+                              className="!text-primary/70"
+                            >
+                              {f.content}
+                            </RichParagraph>
+                          </div>
+                        );
+                      })}
                     </div>
 
                     {section.outro && (
-                      <div className="mt-5 p-5 rounded-lg border-l-2 border-hover" style={{ background: 'rgba(237,152,95,0.07)' }}>
-                        <RichParagraph variant="card" html={section.outro} className="!text-primary/65 !text-sm italic" />
+                      <div className="mt-5 p-5 rounded-lg border-l-2 border-hover bg-hover/[0.07]">
+                        <RichParagraph
+                          variant="card"
+                          className="!text-primary/70 !text-sm italic"
+                        >
+                          {section.outro}
+                        </RichParagraph>
                       </div>
                     )}
 
                     {!isOpen && (
-                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-secondary via-secondary/80 to-transparent pointer-events-none" />
                     )}
                   </div>
 
                   {/* Expand toggle */}
                   <button
                     onClick={() => toggle(i)}
-                    className="group self-start flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-hover hover:text-primary transition-colors"
+                    className="group self-start flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-hover hover:text-primary transition-colors mt-2"
                   >
                     <span className="w-8 h-8 rounded-lg border border-hover/40 flex items-center justify-center group-hover:bg-hover group-hover:border-hover transition-all">
-                      {isOpen
-                        ? <ChevronUp size={13} className="group-hover:text-primary transition-colors" />
-                        : <ChevronDown size={13} className="group-hover:text-primary transition-colors" />
-                      }
+                      {isOpen ? (
+                        <ChevronUp
+                          size={13}
+                          className="group-hover:text-primary transition-colors"
+                        />
+                      ) : (
+                        <ChevronDown
+                          size={13}
+                          className="group-hover:text-primary transition-colors"
+                        />
+                      )}
                     </span>
-                    {isOpen ? 'Show Less' : 'Explore Details'}
+                    {isOpen ? "Show Less" : "Explore Details"}
                   </button>
-
                 </div>
               </div>
             </div>
           </div>
         );
       })}
-
     </section>
   );
 }
