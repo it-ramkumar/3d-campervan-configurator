@@ -6,6 +6,7 @@ import ApplyForm from "../../../components/Apply/Apply";
 export const metadata = {
   title: "Join the Team | Big Bear Vans",
   description: "Start your journey with Big Bear Vans. Submit your application today.",
+  robots: { index: false, follow: true },
 };
 
 export default async function ApplyPage({ params }) {

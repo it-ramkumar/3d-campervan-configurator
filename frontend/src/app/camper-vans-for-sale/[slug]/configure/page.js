@@ -7,9 +7,11 @@ export async function generateMetadata({ params }) {
   const data = await fetch(`${process.env.NEXT_PUBLIC_URL}/van/${slug}`).then(res => res.json()).catch(() => null);
 
   if (!data?.van?.glbFile) return { title: "Configurator | Big Bear Vans", robots: { index: false, follow: false } };
+  // A 3D tool with no unique text: keep it out of search, the van detail page is the one to rank
   return {
     title: withBrand(`Configure ${data.van.van_listing?.title}`),
     description: `Customize your dream van. Select variants, view features, and explore the 3D model.`,
+    robots: { index: false, follow: true },
   };
 }
 
