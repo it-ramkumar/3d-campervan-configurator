@@ -54,8 +54,9 @@ const TestblogSchema = new mongoose.Schema({
 });
 
 // ✅ Pre-save middleware to generate unique slug
+// Slug is locked after creation: changing it would break indexed URLs and backlinks.
 TestblogSchema.pre("save", async function (next) {
-  if (this.isModified("title")) {
+  if (!this.slug && this.title) {
     let baseSlug = slugify(this.title, {
       lower: true,
       strict: true,

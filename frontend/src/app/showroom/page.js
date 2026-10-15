@@ -6,7 +6,7 @@ import { generateShowroomSchema } from "../../schema/showroom";
 
 // ✅ Next.js Metadata API for SEO
 export const metadata = {
-  title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+  title: "Camper Van Showroom in Big Bear, CA | Big Bear Vans",
   description: `Tour Big Bear Vans' California showroom and workshop.
  See finished camper van builds in person, meet our team,
 and start your custom conversion.`,
@@ -17,7 +17,7 @@ and start your custom conversion.`,
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/showroom",
-    title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+    title: "Camper Van Showroom in Big Bear, CA | Big Bear Vans",
   description: `Tour Big Bear Vans' California showroom and workshop.
  See finished camper van builds in person, meet our team,
 and start your custom conversion.`,
@@ -25,7 +25,7 @@ and start your custom conversion.`,
   },
   twitter: {
     card: "summary_large_image",
-     title: "Visit Our Camper Van Showroom in Big Bear, CA | Big Bear Vans",
+     title: "Camper Van Showroom in Big Bear, CA | Big Bear Vans",
   description: `Tour Big Bear Vans' California showroom and workshop.
  See finished camper van builds in person, meet our team,
 and start your custom conversion.`,

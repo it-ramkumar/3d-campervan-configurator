@@ -11,9 +11,9 @@ export const generateVanMatchmakerSchema = (faqs) => {
         "@type": "WebPage",
         "@id": `${currentUrl}/#webpage`,
         "url": currentUrl,
-        "name": "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout | Big Bear Vans",
+        "name": "Camper Van Matchmaker Quiz | Big Bear Vans",
         "description":
-          "Answer a few quick questions about passengers, bathroom, and power needs to get instantly matched with in-stock camper vans or custom Big Bear Vans layout blueprints.",
+          "Answer a few quick questions about passengers, bathroom and power needs and get matched with in-stock camper vans or a custom Big Bear Vans layout.",
         "isPartOf": { "@id": `${baseUrl}/#website` },
         "about": { "@id": `${baseUrl}/#organization` },
         "breadcrumb": {

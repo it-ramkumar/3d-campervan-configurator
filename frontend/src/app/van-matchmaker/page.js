@@ -4,9 +4,9 @@ import FAQs from "@/components/Faqs/Faqs";
 import { generateVanMatchmakerSchema } from "@/schema/vanMatchmaker";
 
 export const metadata = {
-  title: "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout | Big Bear Vans",
+  title: "Camper Van Matchmaker Quiz | Big Bear Vans",
   description:
-    "Answer a few quick questions about passengers, bathroom, and power needs to get instantly matched with in-stock camper vans or custom Big Bear Vans layout blueprints.",
+    "Answer a few quick questions about passengers, bathroom and power needs and get matched with in-stock camper vans or a custom Big Bear Vans layout.",
   keywords: [
     "van matchmaker quiz",
     "camper van finder",
@@ -20,14 +20,14 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://www.bigbearvans.com/van-matchmaker",
-    title: "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout",
+    title: "Camper Van Matchmaker Quiz | Big Bear Vans",
     description:
       "Take our free 2-minute quiz and get matched with in-stock camper vans or custom layout blueprints tailored to your build.",
     images: ["https://www.bigbearvans.com/images/blackLogo.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Van Matchmaker Quiz | Find Your Perfect Camper Van Layout",
+    title: "Camper Van Matchmaker Quiz | Big Bear Vans",
     description:
       "Take our free 2-minute quiz and get matched with in-stock camper vans or custom layout blueprints tailored to your build.",
     images: ["https://www.bigbearvans.com/images/blackLogo.webp"],

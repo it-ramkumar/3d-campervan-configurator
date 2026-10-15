@@ -4,7 +4,7 @@ import { generateInquirySchema } from "@/schema/inquerySchema"
 
 // ✅ Next.js Metadata API for SEO
 export const metadata = {
-  title: 'Build Your Own Custom Camper Van - Get a Quote | Big Bear Vans',
+  title: 'Build Your Own Camper Van – Get a Quote | Big Bear Vans',
   description: `Configure your dream Mercedes Sprinter or Ford
 Transit camper van. Choose your layout, electrical system,
 and off-grid power needs, then get a custom quote.`,

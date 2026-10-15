@@ -2140,3 +2140,5 @@
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:04:50:36 +0000] \"GET /api/van/new-slugh-van HTTP/1.1\" 200 1394 \"-\" \"node\"","timestamp":"2026-10-15 09:50:36"}
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:04:50:36 +0000] \"GET /api/van/new-slugh-van HTTP/1.1\" 200 1394 \"-\" \"node\"","timestamp":"2026-10-15 09:50:36"}
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:04:50:36 +0000] \"GET /api/variants?vanSlug=new-slugh-van HTTP/1.1\" 200 40 \"-\" \"node\"","timestamp":"2026-10-15 09:50:36"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-10-15 10:24:51"}
+{"level":"info","message":"127.0.0.1 - - [15/Oct/2026:05:25:17 +0000] \"GET /api/van/new-slugh-van HTTP/1.1\" 200 1394 \"-\" \"node\"","timestamp":"2026-10-15 10:25:17"}

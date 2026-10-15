@@ -9,7 +9,7 @@ export const generateInquirySchema = () => ({
       "@type": "WebPage",
       "@id": `${PAGE_URL}#webpage`,
       "url": PAGE_URL,
-      "name": "Build Your Own Custom Camper Van - Get a Quote | Big Bear Vans",
+      "name": "Build Your Own Camper Van – Get a Quote | Big Bear Vans",
       "description": `Configure your dream Mercedes Sprinter or Ford
 Transit camper van. Choose your layout, electrical system,
 and off-grid power needs, then get a custom quote.`,

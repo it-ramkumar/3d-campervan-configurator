@@ -10,7 +10,7 @@ export const revalidate = 300;
 export const metadata = {
   title: "Custom Camper Van Conversions in California | Big Bear Vans",
   description:
-    "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit camper vans in Big Bear, CA. Off-grid power, CNC precision & 105+ builds delivered. Get a free quote today.",
+    "Big Bear Vans builds 100% custom Sprinter & Transit camper vans in Big Bear, CA, with off-grid power and 105+ builds delivered. Get a free quote.",
   keywords: [
     "custom camper vans",
     "van conversion USA",
@@ -24,7 +24,7 @@ export const metadata = {
   openGraph: {
     title: "Custom Camper Van Conversions in California | Big Bear Vans",
   description:
-    "Big Bear Vans builds 100% custom Mercedes Sprinter & Ford Transit camper vans in Big Bear, CA. Off-grid power, CNC precision & 105+ builds delivered. Get a free quote today.",
+    "Big Bear Vans builds 100% custom Sprinter & Transit camper vans in Big Bear, CA, with off-grid power and 105+ builds delivered. Get a free quote.",
     url: "https://www.bigbearvans.com",
     siteName: "Big Bear Vans",
     images: [

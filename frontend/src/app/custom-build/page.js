@@ -4,7 +4,7 @@ import CustomBuild from "../../components/CustomBuild/CustomBuild"
 
 export async function generateMetadata() {
   try {
-    const title = `Custom Camper Van Builds - Sprinter & Transit | Big Bear Vans`;
+    const title = `Custom Sprinter & Transit Camper Van Builds | Big Bear Vans`;
     const description = `100% custom Mercedes Sprinter & Ford Transit camper
 van conversions. You choose the layout, materials & systems.
  105+ builds delivered - get a free quote.`;
@@ -22,7 +22,7 @@ van conversions. You choose the layout, materials & systems.
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: `Custom Camper Van Builds - Sprinter & Transit | Big Bear Vans`,
+      title: `Custom Sprinter & Transit Camper Van Builds | Big Bear Vans`,
       description: `100% custom Mercedes Sprinter & Ford Transit camper
 van conversions. You choose the layout, materials & systems.
  105+ builds delivered - get a free quote.`,

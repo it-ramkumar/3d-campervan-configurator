@@ -29,7 +29,7 @@ Big Bear Vans conversion.`,
     title: `Camper Van Electrical & Water Systems | Big Bear Vans`,
     desc: `Explore off-grid electrical and water systems for your
 custom camper van - lithium batteries, solar,
-inverters, and fresh/grey water tanks explained..`,
+inverters, and fresh/grey water tanks explained.`,
     heroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
     mobileHeroImage: "/options/santa monica walnut campervan big bear vans (26).webp",
   },
