@@ -173,6 +173,15 @@ const vanListingSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  // Search-result title/description; empty means the frontend builds them from title/specs
+  seo_title: {
+    type: String,
+    trim: true
+  },
+  seo_description: {
+    type: String,
+    trim: true
+  },
   price: {
     type: String,
     trim: true,

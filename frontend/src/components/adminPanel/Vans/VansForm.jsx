@@ -25,6 +25,8 @@ const emptyVanListing = {
   title: "",
   description: "",
   subtitle: "",
+  seo_title: "",
+  seo_description: "",
   roof: "",
   price: "",
   sale_price: "",
@@ -69,7 +71,6 @@ const VansForm = ({ setSelected }) => {
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [originalTitle, setOriginalTitle] = useState(null);
 
   const statusOptions = [
     { value: "available", label: "Available" },
@@ -132,8 +133,6 @@ const VansForm = ({ setSelected }) => {
           ? editData.detailed_features
           : [{ category: "", items: [""] }]
       );
-
-      setOriginalTitle(editData.van_listing?.title || "");
     }
   }, [editData]);
 
@@ -150,7 +149,6 @@ const VansForm = ({ setSelected }) => {
     setMediaUrls([""]);
     setBlocks([]);
     setFeatures([{ category: "", items: [""] }]);
-    setOriginalTitle(null);
     dispatch(clearEditData());
   };
 
@@ -292,13 +290,40 @@ const VansForm = ({ setSelected }) => {
                 <p className="text-xs text-gray-500 mt-1.5">
                   Slug:{" "}
                   <span className="font-mono text-gray-700">
-                    {editData && formData.van_listing.title === originalTitle
-                      ? editData.slug
-                      : slugifyPreview(formData.van_listing.title) || "—"}
+                    {editData ? editData.slug : slugifyPreview(formData.van_listing.title) || "—"}
                   </span>
-                  {editData && formData.van_listing.title !== originalTitle && (
-                    <span className="italic"> (updates automatically on save)</span>
+                  {editData && (
+                    <span className="italic"> (locked — changing the title does not change the URL)</span>
                   )}
+                </p>
+              </div>
+
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">SEO Title</label>
+                <input
+                  name="seo_title"
+                  value={formData.van_listing.seo_title || ""}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. Santa Monica – Sprinter 144 AWD Camper Van for Sale"
+                />
+                <p className="text-xs text-gray-500 mt-1.5">
+                  Shown in Google results. {(formData.van_listing.seo_title || "").length}/60 characters. Leave empty to auto-generate from the title.
+                </p>
+              </div>
+
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">SEO Description</label>
+                <textarea
+                  name="seo_description"
+                  value={formData.van_listing.seo_description || ""}
+                  onChange={(e) => handleInputChange(e, "van_listing", setFormData)}
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  placeholder="e.g. 2024 Sprinter 144 AWD camper van, sleeps 4, 400Ah lithium, ready to ship. See photos, specs & price."
+                />
+                <p className="text-xs text-gray-500 mt-1.5">
+                  {(formData.van_listing.seo_description || "").length}/155 characters. Leave empty to use the subtitle.
                 </p>
               </div>
 

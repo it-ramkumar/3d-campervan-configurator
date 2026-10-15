@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { vanTitle } from "@/utils/seoTitle";
+import { vanTitle, vanDescription } from "@/utils/seoTitle";
 import { SITE_URL, BUSINESS_REF } from "@/schema/business";
 import VanPage from "../../../components/VanDetail/VanListing";
 
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
 
   const van = data.van;
   const title = vanTitle(van.van_listing, "sale");
-  const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
+  const description = vanDescription(van.van_listing);
   const imageUrl = van.gallery?.[0] || "/images/blackLogo.webp"; // Pehli image OG image ke liye
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/camper-vans-for-sale/${slug}`;
 

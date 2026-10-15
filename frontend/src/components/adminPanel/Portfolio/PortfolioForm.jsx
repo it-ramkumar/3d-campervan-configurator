@@ -71,7 +71,8 @@ export default function PortfolioForm({ setSelected }) {
   const [renderingPreviews, setRenderingPreviews] = useState([]);
   const [existingRendering, setExistingRendering] = useState([]);
   const [removedExistingRendering, setRemovedExistingRendering] = useState([]);
-  const [originalTitle, setOriginalTitle] = useState(null);
+  const [seoTitle, setSeoTitle] = useState("");
+  const [seoDescription, setSeoDescription] = useState("");
 
   const clearForm = () => {
     setGalleryFiles([]);
@@ -97,14 +98,16 @@ export default function PortfolioForm({ setSelected }) {
     setRenderingPreviews([]);
     setExistingRendering([]);
     setRemovedExistingRendering([]);
-    setOriginalTitle(null);
+    setSeoTitle("");
+    setSeoDescription("");
   };
 
   useEffect(() => {
     if (editData?._id) {
       setTitle(editData.van_listing?.title || "");
       setClientName(editData.van_listing?.clientName || "");
-      setOriginalTitle(editData.van_listing?.title || "");
+      setSeoTitle(editData.van_listing?.seo_title || "");
+      setSeoDescription(editData.van_listing?.seo_description || "");
       setRoof(editData.van_listing?.roof || "");
       setBedType(editData.van_listing?.bedType || "");
       setBathroomType(editData.van_listing?.bathroomType || "");
@@ -236,6 +239,8 @@ export default function PortfolioForm({ setSelected }) {
         title,
         clientName,
         subtitle,
+        seo_title: seoTitle,
+        seo_description: seoDescription,
         description,
         price,
         size,
@@ -284,13 +289,39 @@ export default function PortfolioForm({ setSelected }) {
               <p className="text-xs text-gray-500 mt-1.5">
                 Slug:{" "}
                 <span className="font-mono text-gray-700">
-                  {editData && title === originalTitle
-                    ? editData.slug
-                    : slugifyPreview(title) || "—"}
+                  {editData ? editData.slug : slugifyPreview(title) || "—"}
                 </span>
-                {editData && title !== originalTitle && (
-                  <span className="italic"> (updates automatically on save)</span>
+                {editData && (
+                  <span className="italic"> (locked — changing the title does not change the URL)</span>
                 )}
+              </p>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">SEO Title</label>
+              <input
+                type="text"
+                placeholder="e.g. Moto Van – Sprinter 170 Toy Hauler Camper Van"
+                value={seoTitle}
+                onChange={(e) => setSeoTitle(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+              <p className="text-xs text-gray-500 mt-1.5">
+                Shown in Google results. {seoTitle.length}/60 characters. Leave empty to auto-generate from the title.
+              </p>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">SEO Description</label>
+              <textarea
+                rows={3}
+                placeholder="e.g. Sprinter 170 AWD camper van, sleeps 2, garage for 2 dirt bikes. See floor plan, specs & price."
+                value={seoDescription}
+                onChange={(e) => setSeoDescription(e.target.value)}
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:border-gray-500"
+              />
+              <p className="text-xs text-gray-500 mt-1.5">
+                {seoDescription.length}/155 characters. Leave empty to use the subtitle.
               </p>
             </div>
 

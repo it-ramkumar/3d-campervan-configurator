@@ -240,12 +240,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       : van.is_published;
     const galleryOrder      = parseJSONField(req.body.galleryOrder, null);
 
-    // Slug regeneration on title change
-    let newSlug = van.slug;
-    if (van_listing.title && van_listing.title !== van.van_listing.title) {
-      newSlug = await Van.generateSlug(van_listing.title, van._id);
-    }
-
     // ── GLB file ──────────────────────────────────────────────────────────────
     let modelUrl = van.glbFile;
 
@@ -295,6 +289,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     updatedGallery.splice(insertAt, 0, ...newGallery);
 
     // ── Save ──────────────────────────────────────────────────────────────────
+    // Slug is locked after creation: changing it would break indexed URLs and backlinks.
     van.van_listing = {
       ...van.van_listing,
       ...van_listing,
@@ -312,7 +307,6 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     van.gallery           = updatedGallery;
     van.blocks            = blocks;
     van.glbFile           = modelUrl;
-    van.slug              = newSlug;
     van.textures          = textures;
 
     const updatedVan = await van.save();

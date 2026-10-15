@@ -22,6 +22,9 @@ export function withBrand(text) {
 // Short van names like "Phenix" say nothing about the page, so names without a
 // van keyword get a descriptor: "Phenix Sprinter Camper Van for Sale | Big Bear Vans"
 export function vanTitle(listing, kind) {
+  // An admin-written SEO title always wins over the generated one
+  if (listing?.seo_title?.trim()) return withBrand(listing.seo_title);
+
   const base = stripBrand(listing?.title);
   if (!base) return BRAND;
   if (/camper|sprinter|transit/i.test(base)) return withBrand(base);
@@ -32,4 +35,13 @@ export function vanTitle(listing, kind) {
 
   const expanded = `${base} ${descriptor} | ${BRAND}`;
   return expanded.length <= MAX_LENGTH ? expanded : withBrand(base);
+}
+
+// Meta description for van pages: admin-written SEO description, else the subtitle
+export function vanDescription(listing) {
+  return (
+    listing?.seo_description?.trim() ||
+    listing?.subtitle ||
+    `Explore the custom ${listing?.title}. High-quality conversion with premium specs.`
+  );
 }

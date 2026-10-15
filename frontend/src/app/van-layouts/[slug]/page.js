@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { vanTitle } from "@/utils/seoTitle";
+import { vanTitle, vanDescription } from "@/utils/seoTitle";
 import VanPage from "../../../components/LayoutDetail/LayoutDetail";
 
 // --- Dynamic Metadata for SEO (Ismein koi change nahi hai) ---
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
 
   const van = data?.data;
   const title = vanTitle(van.van_listing, "layout");
-  const description = van.van_listing?.subtitle || `Explore the custom ${van.van_listing?.title}. High-quality conversion with premium specs.`;
+  const description = vanDescription(van.van_listing);
   const imageUrl = van.gallery?.[0] || "/images/blackLogo.webp";
   const canonical = `${process.env.NEXT_PUBLIC_SITE_URL}/van-layouts/${slug}`;
 
