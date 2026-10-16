@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { withBrand } from "@/utils/seoTitle";
 import OptionDetail from "@/components/Options/OptionDetail";
+import OptionsCrossLinks from "@/components/Options/OptionsCrossLinks";
 import { PAGE_CONFIG, fetchOptionItems } from "@/components/Options/optionsConfig";
 import { getItemTitle, getItemText } from "@/components/Options/optionBlocks";
 
@@ -27,6 +28,20 @@ async function canonicalSection(options, slug) {
   if (options === CANONICAL_SECTION) return options;
   const items = await fetchOptionItems(PAGE_CONFIG[CANONICAL_SECTION].api);
   return items.some((i) => i.slug === slug) ? CANONICAL_SECTION : options;
+}
+
+// Vans and layouts that have this option ticked in the dashboard (Options Used in This Build)
+async function fetchOptionBuilds(section, id) {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/option-builds/${section}/${id}`, { cache: "no-store" });
+    const json = await res.json();
+    const { vans = [], layouts = [] } = json.data || {};
+    // Layouts first: they're the evergreen pages; sold vans drop to the end
+    return [...layouts, ...vans.filter((v) => !v.sold), ...vans.filter((v) => v.sold)];
+  } catch (error) {
+    console.error("Option builds fetch error:", error);
+    return [];
+  }
 }
 
 // same subcategory first, then the rest of the category
@@ -78,6 +93,7 @@ export default async function Page({ params }) {
   const basePath = `/van-options/${options}`;
   const title = getItemTitle(item);
   const url = `${BASE_URL}${basePath}/${item.slug}`;
+  const builds = await fetchOptionBuilds(current.api, item._id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -121,7 +137,9 @@ export default async function Page({ params }) {
         basePath={basePath}
         listingLabel={current.label}
         related={getRelated(items, item)}
+        builds={builds}
       />
+      <OptionsCrossLinks current={options} />
     </>
   );
 }

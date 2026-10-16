@@ -132,19 +132,7 @@ Customization
           })}
         </div>
 
-        {/* --- Bottom CTA Bar --- */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="mt-20 p-8 bg-primary rounded-lg border border-hover/20 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl"
-        >
-          <div className="text-center md:text-left">
-            <Heading1 variant="card" text={"Have a specific accessory in mind?"} className="mb-2 !text-secondary uppercase" />
-            <RichParagraph variant="card" className="text-secondary/60">We can source and install custom equipment tailored to your build.</RichParagraph>
-          </div>
-          <SecondaryButton label={"Discuss Custom Ideas"} link={"/contact"} />
-        </motion.div>
-
+  
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import ExteriorChoiceClient from "../../../components/Options/ExteriorChoiceClient";
+import OptionsCrossLinks from "@/components/Options/OptionsCrossLinks";
 import { generateDynamicSchema } from "@/schema/optionsSchema";
 import { PAGE_CONFIG, fetchOptionItems } from "@/components/Options/optionsConfig";
 
@@ -71,6 +72,7 @@ export default async function Page({ params }) {
         current={current}
         initialRawData={categoriesData}
       />
+      <OptionsCrossLinks current={options} />
     </>
   );
 }

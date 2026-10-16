@@ -17,6 +17,7 @@ export const handlePortfolioSubmit = async ({
   sold,
   is_published,
   blocks,
+  used_options,              // null = not loaded yet, so leave the saved value alone
   van_listing,
   setLoading,
   setRemovedExistingGallery,
@@ -77,6 +78,7 @@ export const handlePortfolioSubmit = async ({
     formDataToSend.append("is_published", String(!!is_published));
     formDataToSend.append("blocks", JSON.stringify(blocks || []));
     formDataToSend.append("category", JSON.stringify(category));
+    if (used_options) formDataToSend.append("used_options", JSON.stringify(used_options));
 
     // Detailed features cleanup
     const cleanedFeatures = features

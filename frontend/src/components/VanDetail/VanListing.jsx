@@ -24,6 +24,7 @@ import BackButton from "../Common/BackButton/BackButton";
 import ContactForm from "@/components/Consultation/ContactForm";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "./BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
+import BuildOptions from "../Common/BuildOptions/BuildOptions";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -800,6 +801,8 @@ The Design Philosophy
         </div>
       </div>
 
+      <BuildOptions usedOptions={vanDetail?.used_options} buildTitle={vanDetail?.van_listing?.title} />
+
       {/* ── MEDIA GALLERY — light ── */}
       <FaqFeatureBlocks blocks={activeBlocks} />
 
@@ -878,24 +881,7 @@ The Design Philosophy
         </section>
       )}
 
-      {/* ── FOOTER CTA — dark navy ── */}
-      <section className="bbv-section-navy relative py-24 px-6">
-        <div className="bbv-dot-grid" />
-        <div className="bbv-amber-line-top" />
-        <div className="relative max-w-2xl mx-auto text-center">
-          <SpanTag text="Ready to Begin?" className="justify-center mb-5" />
-          <Heading1 variant="section" text="Build Your Legacy" className="!text-secondary mt-4" />
-          <div className="bbv-divider mx-auto mt-5 mb-10" />
-          <RichParagraph className="!text-secondary/55 italic leading-relaxed mb-10">
-            Limited build slots available for 2026. Connect with our design team to start your custom journey.
-          </RichParagraph>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <SecondaryButton label="Book A Call" />
-            <PrimaryButton label="View All Builds" link="/van-layouts" />
-          </div>
-        </div>
-      </section>
-
+  
       {/* ── CONTACT FORM MODAL ── */}
       {isFormOpen && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">

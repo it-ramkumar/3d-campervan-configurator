@@ -10,6 +10,7 @@ import { removeMediaUrl } from "@/CustomHooks/removeMediaUrl";
 import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
+import UsedOptionsPicker, { EMPTY_USED_OPTIONS } from "@/components/Common/UsedOptionsPicker/UsedOptionsPicker";
 
 // Mirrors backend/models/vanModel.js `generateSlug` (minus the DB collision suffix,
 // which can only be resolved server-side).
@@ -68,6 +69,8 @@ const VansForm = ({ setSelected }) => {
   const [removeGlbFile, setRemoveGlbFile] = useState(false);
 
   const [textures, setTextures] = useState([]);
+  // null while the picker loads a saved selection (edit mode); only sent once known
+  const [usedOptions, setUsedOptions] = useState(EMPTY_USED_OPTIONS);
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -143,6 +146,7 @@ const VansForm = ({ setSelected }) => {
     setExistingGlbFile(null);
     setRemoveGlbFile(false);
     setTextures([]);
+    setUsedOptions(EMPTY_USED_OPTIONS);
     setGalleryFiles([]);
     setGalleryPreviews([]);
     setExistingGallery([]);
@@ -231,6 +235,7 @@ const VansForm = ({ setSelected }) => {
       formToSend.append("blocks", JSON.stringify(cleanedBlocks));
 
       formToSend.append("textures", JSON.stringify(textures.filter((t) => t && t.trim() !== "")));
+      if (usedOptions) formToSend.append("used_options", JSON.stringify(usedOptions));
       // galleryOrder: existing URLs in final order — backend deletes removed ones from S3
       formToSend.append("galleryOrder", JSON.stringify(existingGallery));
       formToSend.append("insertAt", "0");
@@ -521,6 +526,19 @@ const VansForm = ({ setSelected }) => {
               onChange={(e) => handleInputChange(e, "delivery_date", setFormData)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg"
               placeholder="e.g. Q1 2025 or March 2025"
+            />
+          </section>
+
+          {/* ── Options used in this build ── */}
+          <section className="border border-gray-300 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-1">Options Used in This Build</h2>
+            <p className="text-sm text-gray-500 mb-6">
+              Tick every option fitted to this van. The van will be shown on each option&apos;s page.
+            </p>
+            <UsedOptionsPicker
+              value={usedOptions}
+              onChange={setUsedOptions}
+              loadFrom={editData?.slug ? `${process.env.NEXT_PUBLIC_URL}/van/preview/${editData.slug}` : null}
             />
           </section>
 

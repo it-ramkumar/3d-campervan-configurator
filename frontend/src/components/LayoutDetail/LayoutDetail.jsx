@@ -20,6 +20,7 @@ import {
 import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "../VanDetail/BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
+import BuildOptions from "../Common/BuildOptions/BuildOptions";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -439,6 +440,8 @@ export default function LayoutDetail({ van, initialView }) {
 
           </div>
         </section>
+
+        <BuildOptions usedOptions={van?.used_options} buildTitle={van?.van_listing?.title} />
 
         <FaqFeatureBlocks blocks={activeBlocks} />
 

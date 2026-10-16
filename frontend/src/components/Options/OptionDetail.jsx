@@ -81,8 +81,66 @@ const RelatedCard = ({ item, href }) => {
   );
 };
 
+// ── Build card (vans / layouts this option is fitted to) ──────────────────────
+// "Sprinter 144 AWD · Sleeps 4" from whatever specs the build has
+const buildSpecLine = (specs = {}) => {
+  const make = specs.make_model || "";
+  const chassis = /sprinter/i.test(make) ? "Sprinter" : /transit/i.test(make) ? "Transit" : /promaster/i.test(make) ? "ProMaster" : "";
+  const base = [chassis, specs.wheelbase, specs.drivetrain].filter(Boolean).join(" ");
+  const sleeps = specs.capacity?.sleeps ? `Sleeps ${specs.capacity.sleeps}` : "";
+  return [base, sleeps].filter(Boolean).join(" · ");
+};
+
+const BuildCard = ({ build }) => {
+  const href = build.type === "van" ? `/camper-vans-for-sale/${build.slug}` : `/van-layouts/${build.slug}`;
+  const badge = build.type === "van" ? (build.sold ? "Sold" : "For Sale") : "Layout";
+  const specLine = buildSpecLine(build.specifications);
+
+  return (
+    <Link
+      href={href}
+      className="group rounded-xl overflow-hidden bg-white flex flex-col transition-shadow duration-300 hover:shadow-xl hover:shadow-[#001F3D]/5"
+      style={{ border: BORDER }}
+    >
+      <div className="relative aspect-[4/3] w-full overflow-hidden" style={{ background: "rgba(0,31,61,0.04)" }}>
+        {build.image ? (
+          <Image
+            src={build.image}
+            alt={build.title}
+            fill
+            sizes="(max-width: 640px) 50vw, 25vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-primary/20">
+            <ImageOff size={28} />
+          </div>
+        )}
+        <span
+          className="absolute top-2 left-2 px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest bg-[#001F3D] text-[#FBFBF9]"
+        >
+          {badge}
+        </span>
+      </div>
+      <div className="p-4 flex items-center justify-between gap-2" style={{ borderTop: "1px solid rgba(237,152,95,0.15)" }}>
+        <div className="min-w-0">
+          <RichParagraph variant="sub" textColor="text-primary" className="font-bold !opacity-100">
+            {build.title}
+          </RichParagraph>
+          {specLine && (
+            <RichParagraph variant="sub" className="mt-0.5">
+              {specLine}
+            </RichParagraph>
+          )}
+        </div>
+        <ArrowRight size={14} className="text-[#ED985F] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+      </div>
+    </Link>
+  );
+};
+
 // ── Detail page body ──────────────────────────────────────────────────────────
-export default function OptionDetail({ item, basePath, listingLabel, related }) {
+export default function OptionDetail({ item, basePath, listingLabel, related, builds = [] }) {
   const title = getItemTitle(item);
   const category = item.categoryId?.title;
   const subCategory = item.subCategoryId?.title;
@@ -158,6 +216,25 @@ export default function OptionDetail({ item, basePath, listingLabel, related }) 
             </div>
           </div>
         </div>
+
+        {/* Builds this option is fitted to */}
+        {builds.length > 0 && (
+          <section className="mt-16 md:mt-24">
+            <div className="mb-6">
+              <RichParagraph variant="sub" textColor="text-primary" className="font-bold uppercase tracking-widest !opacity-100">
+                Featured in These Builds
+              </RichParagraph>
+              <RichParagraph variant="card" className="mt-1">
+                {title} is fitted to {builds.length} Big Bear Vans {builds.length === 1 ? "build" : "builds"}.
+              </RichParagraph>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {builds.map((b) => (
+                <BuildCard key={`${b.type}-${b.slug}`} build={b} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Related */}
         {related.length > 0 && (

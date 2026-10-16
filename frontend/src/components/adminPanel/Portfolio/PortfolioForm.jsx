@@ -9,6 +9,7 @@ import { handlePortfolioSubmit } from "@/CustomHooks/handlePortfolioSubmit"
 import DetailedFeatures from "@/components/Common/DetailFeature/DetailedFeatures";
 import GalleryUploader from "@/components/Common/GalleryUploader/GalleryUploader";
 import DynamicBlocks from "@/components/Common/DynamicBlock/DynamicBlock";
+import UsedOptionsPicker, { EMPTY_USED_OPTIONS } from "@/components/Common/UsedOptionsPicker/UsedOptionsPicker";
 
 // Mirrors backend/models/portfolio.js `generateSlug` (minus the DB collision suffix,
 // which can only be resolved server-side).
@@ -73,6 +74,8 @@ export default function PortfolioForm({ setSelected }) {
   const [removedExistingRendering, setRemovedExistingRendering] = useState([]);
   const [seoTitle, setSeoTitle] = useState("");
   const [seoDescription, setSeoDescription] = useState("");
+  // null while the picker loads a saved selection (edit mode); only sent once known
+  const [usedOptions, setUsedOptions] = useState(EMPTY_USED_OPTIONS);
 
   const clearForm = () => {
     setGalleryFiles([]);
@@ -100,6 +103,7 @@ export default function PortfolioForm({ setSelected }) {
     setRemovedExistingRendering([]);
     setSeoTitle("");
     setSeoDescription("");
+    setUsedOptions(EMPTY_USED_OPTIONS);
   };
 
   useEffect(() => {
@@ -235,6 +239,7 @@ export default function PortfolioForm({ setSelected }) {
       sold,
       is_published: isPublished,
       blocks: cleanBlocks(),
+      used_options: usedOptions,
       van_listing: {
         title,
         clientName,
@@ -485,6 +490,19 @@ export default function PortfolioForm({ setSelected }) {
               />
             </button>
           </div>
+        </div>
+
+        {/* OPTIONS USED IN THIS BUILD */}
+        <div className="border border-gray-300 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-1">Options Used in This Build</h3>
+          <p className="text-sm text-gray-500 mb-6">
+            Tick every option fitted to this layout. It will be shown on each option&apos;s page.
+          </p>
+          <UsedOptionsPicker
+            value={usedOptions}
+            onChange={setUsedOptions}
+            loadFrom={editData?.slug ? `${process.env.NEXT_PUBLIC_URL}/portfolio/preview/${editData.slug}` : null}
+          />
         </div>
 
         {/* CONTENT BLOCKS (Dynamic) */}
