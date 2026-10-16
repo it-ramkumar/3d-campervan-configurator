@@ -25,7 +25,7 @@ function FaqAccordionItem({ question, answer }) {
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between gap-4 p-5 text-left"
       >
-        <Heading1 as="h3" variant="sub" text={question} />
+        <Heading1 as="h3" variant="sub" textColor="text-primary" text={question} />
         <ChevronDown
           size={18}
           className={`text-hover flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
@@ -85,7 +85,7 @@ export default function BlogContentUI({ blog }) {
         return (
           <div key={index} className="mb-10 mt-16 group">
             <RichParagraph variant="sub" className="mb-2">Section {index + 1}</RichParagraph>
-            <Heading1 as="h2" variant="section" text={formatBoldTags(block.text)} />
+            <Heading1 as="h2" textColor="text-primary" variant="section" text={formatBoldTags(block.text)} />
             <div className="w-20 h-1 bg-hover mt-4 rounded-full transition-all group-hover:w-32" />
           </div>
         );
@@ -93,7 +93,7 @@ export default function BlogContentUI({ blog }) {
       case "subheading":
         return (
           <div key={index} className="mb-6 mt-12">
-            <Heading1 as="h3" variant="card" text={formatBoldTags(block.text)} />
+            <Heading1 as="h3" variant="card" textColor="text-primary" text={formatBoldTags(block.text)} />
           </div>
         );
 
@@ -135,7 +135,7 @@ export default function BlogContentUI({ blog }) {
             <div className="bbv-glass p-10 border-b md:border-b-0 md:border-r border-primary/10">
               <div className="flex items-center gap-3 mb-6">
                 <ThumbsUp className="text-emerald-400" size={24} />
-                <Heading1 as="h3" variant="sub" text="The Benefits" />
+                <Heading1 as="h3" variant="sub" textColor="text-primary" text="The Benefits" />
               </div>
               <ul className="space-y-4">
                 {block.pros?.map((p, idx) => (
@@ -149,7 +149,7 @@ export default function BlogContentUI({ blog }) {
             <div className="bbv-glass p-10">
               <div className="flex items-center gap-3 mb-6">
                 <ThumbsDown className="text-red-400" size={24} />
-                <Heading1 as="h3" variant="sub" text="Considerations" />
+                <Heading1 as="h3" variant="sub" textColor="text-primary" text="Considerations" />
               </div>
               <ul className="space-y-4">
                 {block.cons?.map((c, idx) => (
@@ -168,7 +168,7 @@ export default function BlogContentUI({ blog }) {
           const values = block.rows[1];
           return (
             <div key={index} className="my-12 bbv-glass p-8 rounded-lg border-l-4 border-hover">
-              <Heading1 as="h3" variant="sub" text="At a Glance" className="mb-6" />
+              <Heading1 as="h3" variant="sub" textColor="text-primary" text="At a Glance" className="mb-6" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {values?.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
@@ -219,7 +219,7 @@ export default function BlogContentUI({ blog }) {
           <div key={index} className="my-16">
             <div className="flex items-center gap-3 mb-6">
               <HelpCircle className="text-hover" size={24} />
-              <Heading1 as="h2" variant="card" text="Frequently Asked Questions" />
+              <Heading1 as="h2" variant="card" textColor="text-primary" text="Frequently Asked Questions" />
             </div>
             <div className="space-y-4">
               {block.faqs?.map((faq, idx) => (
@@ -285,8 +285,8 @@ export default function BlogContentUI({ blog }) {
         elements.push(
           <div key={i} className="my-20 flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-1/2">
-              <RichParagraph variant="sub" className="mb-2">Deep Dive</RichParagraph>
-              <Heading1 as="h2" variant="section" text={block.text} />
+              <RichParagraph variant="sub" className="mb-2" textColor="text-hover">Deep Dive</RichParagraph>
+              <Heading1 as="h2" variant="section" textColor="text-primary" text={block.text} />
             </div>
             <div className="w-full lg:w-1/2 rounded-lg overflow-hidden shadow-xl border border-primary/10">
               <Image src={nextBlock.image} alt={block.text} className="w-full h-full object-cover aspect-video" width={800} height={600} />
@@ -314,8 +314,8 @@ export default function BlogContentUI({ blog }) {
             style={{ background: "rgba(237,152,95,0.12)" }}>
             <Share2 size={24} className="text-hover" />
           </div>
-          <Heading1 as="h2" variant="card" text="Found this helpful?" className="mb-2" />
-          <RichParagraph variant="card" className="mb-8">Spread the knowledge with your fellow van-lifers.</RichParagraph>
+          <Heading1 as="h2" variant="card" textColor="text-primary" text="Found this helpful?" className="mb-2" />
+          <RichParagraph variant="card" className="mb-8" textColor="text-primary ">Spread the knowledge with your fellow van-lifers.</RichParagraph>
           <button
             onClick={handleShare}
             className="bg-hover text-primary px-12 py-4 rounded-lg hover:opacity-90 transition-opacity shadow-lg font-black uppercase text-[10px] tracking-widest"

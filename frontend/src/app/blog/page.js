@@ -79,6 +79,7 @@ export default async function page({ searchParams }) {
               <BookOpen size={24} className="!text-hover" />
               <Heading1 as="h2"
                 variant="section"
+                textColor="text-primary"
                 text={searchTerm ? `Results for "${searchTerm}"` : "Latest Articles"}
                 className="!mb-0"
               />
@@ -109,7 +110,7 @@ export default async function page({ searchParams }) {
                         <RichParagraph variant="sub" className="!text-hover">
                           Article
                         </RichParagraph>
-                        <Heading1 as="h3" variant="card" text={blog.title} className="group-hover:!text-hover transition-colors line-clamp-2" />
+                        <Heading1 as="h3"   textColor="text-primary" variant="card" text={blog.title} className="group-hover:!text-hover transition-colors line-clamp-2" />
                         <RichParagraph variant="card" className="line-clamp-3 ">
                           {blog.description}
                         </RichParagraph>
