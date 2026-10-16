@@ -12,6 +12,7 @@ const ConfiguratorLeads = require("./routes/configuratorLeads");
 const ConfiguratorModels = require("./routes/configuratorModels");
 const van = require('./routes/van')
 const layouts = require('./routes/layouts')
+const optionBuilds = require('./routes/optionBuilds')
 const contactUs = require('./routes/contactUs')
 const inquery = require("./routes/inquery")
 const userRoute = require("./routes/authRoute");
@@ -66,6 +67,7 @@ app.use("/api", DelelteImageFromS3);
 app.use("/api/test-blog", blog)
 app.use("/api/portfolio", layouts)
 app.use("/api/van", van)
+app.use("/api/option-builds", optionBuilds)
 app.use("/api", userRoute);
 app.use("/api/inquery", inquery)
 app.use("/api/contact", contactUs);

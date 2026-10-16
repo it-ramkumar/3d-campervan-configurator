@@ -4,6 +4,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const slugify = require("slugify");
 const {protect, adminOnly} = require("../middleware/authMiddleware");
+const { removeOptionFromBuilds } = require("../models/usedOptions");
 
 const InteriorChoice = require("../models/ExteriorRoute");
 const InteriorCategory = require("../models/ExteriorCategory");
@@ -149,6 +150,7 @@ router.delete("/exterior/:id", protect, adminOnly, async (req, res) => {
     }
 
     await InteriorChoice.findByIdAndDelete(req.params.id);
+    await removeOptionFromBuilds("exterior", req.params.id);
 
     res.status(200).json({ success: true, message: "InteriorChoice deleted successfully" });
   } catch (err) {

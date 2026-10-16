@@ -5,6 +5,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
+const { parseUsedOptions, populateUsedOptions } = require("../models/usedOptions");
 
 router.post(
   "/",
@@ -22,6 +23,7 @@ router.post(
       const blocks = JSON.parse(req.body.blocks || "[]");
       const sold = req.body.sold === "true";
       const is_published = req.body.is_published === "true";
+      const used_options = parseUsedOptions(req.body.used_options, undefined);
 
       if (!van_listing || !van_listing.title) {
         return res.status(400).json({
@@ -95,6 +97,7 @@ router.post(
         rendering,
         detailed_features,
         media,
+        used_options,
       });
 
       await newPortfolio.save();
@@ -453,6 +456,7 @@ router.put(
 
       // 🆕 Parse Category Field (Agar frontend se aayi hai toh parse karein, warna puraani rakhein)
       const category = req.body.category ? JSON.parse(req.body.category) : portfolio.category;
+      const used_options = parseUsedOptions(req.body.used_options, portfolio.used_options);
 
       // 2. GALLERY LOGIC (Reordering + Specific Folder Upload + S3 Cleanup)
       let oldGallery = portfolio.gallery || [];
@@ -502,6 +506,7 @@ router.put(
       portfolio.blocks = blocks;
       portfolio.detailed_features = detailed_features;
       portfolio.media = media;
+      portfolio.used_options = used_options;
 
       // Slug is locked after creation: changing it would break indexed URLs and backlinks.
 
@@ -565,7 +570,7 @@ router.delete("/:slug", protect, adminOnly, async (req, res) => {
 });
 router.get("/preview/:slug", async (req, res) => {
   try {
-    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug }).populate(populateUsedOptions);
 
     if (!portfolio) {
       return res.status(404).json({
@@ -585,7 +590,7 @@ router.get("/preview/:slug", async (req, res) => {
 });
 router.get("/:slug", async (req, res) => {
   try {
-    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug });
+    const portfolio = await PortfolioVan.findOne({ slug: req.params.slug }).populate(populateUsedOptions);
 
     if (!portfolio || !portfolio.is_published) {
       return res.status(404).json({

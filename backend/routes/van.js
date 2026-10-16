@@ -5,6 +5,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { uploadToS3, deleteFromS3 } = require("../services/s3");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
+const { parseUsedOptions, populateUsedOptions } = require("../models/usedOptions");
 
 const parseJSONField = (field, fallback) => {
   try {
@@ -24,6 +25,7 @@ router.post('/', protect, adminOnly, upload.fields([
     const media            = parseJSONField(req.body.media, []);
     const blocks           = parseJSONField(req.body.blocks, []);
     const textures         = parseJSONField(req.body.textures, []);
+    const used_options     = parseUsedOptions(req.body.used_options, undefined);
 
     let delivery_date = req.body.delivery_date;
     try {
@@ -86,7 +88,8 @@ router.post('/', protect, adminOnly, upload.fields([
       delivery_date: delivery_date || null,
       blocks,
       media,
-      textures
+      textures,
+      used_options
     };
 
     const newVan = await Van.create(vanData);
@@ -187,7 +190,7 @@ router.get("/", async (req, res) => {
 
 router.get('/preview/:slug', async (req, res) => {
   try {
-    const van = await Van.findOne({ slug: req.params.slug });
+    const van = await Van.findOne({ slug: req.params.slug }).populate(populateUsedOptions);
     if (!van) return res.status(404).json({ message: 'Van not found' });
 
     res.status(200).json({ message: 'Van fetched successfully', van });
@@ -198,7 +201,7 @@ router.get('/preview/:slug', async (req, res) => {
 
 router.get('/:slug', async (req, res) => {
   try {
-    const van = await Van.findOne({ slug: req.params.slug });
+    const van = await Van.findOne({ slug: req.params.slug }).populate(populateUsedOptions);
     if (!van) return res.status(404).json({ message: 'Van not found' });
     if (!van.is_published) return res.status(404).json({ message: 'Van not found' });
 
@@ -239,6 +242,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
       ? (req.body.is_published === "true" || req.body.is_published === true)
       : van.is_published;
     const galleryOrder      = parseJSONField(req.body.galleryOrder, null);
+    const used_options      = parseUsedOptions(req.body.used_options, van.used_options);
 
     // ── GLB file ──────────────────────────────────────────────────────────────
     let modelUrl = van.glbFile;
@@ -308,6 +312,7 @@ router.put('/:slug', protect, adminOnly, upload.fields([
     van.blocks            = blocks;
     van.glbFile           = modelUrl;
     van.textures          = textures;
+    van.used_options      = used_options;
 
     const updatedVan = await van.save();
 

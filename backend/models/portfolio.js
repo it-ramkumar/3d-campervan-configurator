@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { usedOptionsField } = require('./usedOptions');
 
 /* -------------------------------------------------------------------------- */
 /* Content Block Schema (mirrors backend/models/vanModel.js)                 */
@@ -260,7 +261,10 @@ const portfolioVanSchema = new mongoose.Schema({
   media: [{
     type: String,
     trim: true
-  }]
+  }],
+
+  // Option ids fitted to this build (see ./usedOptions)
+  used_options: usedOptionsField
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -276,6 +280,9 @@ portfolioVanSchema.virtual('formatted_price').get(function () {
 portfolioVanSchema.index({ sold: 1 });
 portfolioVanSchema.index({ is_published: 1 });
 portfolioVanSchema.index({ category: 1 });
+portfolioVanSchema.index({ 'used_options.exterior': 1 });
+portfolioVanSchema.index({ 'used_options.interior': 1 });
+portfolioVanSchema.index({ 'used_options.system': 1 });
 portfolioVanSchema.index({ 'van_listing.title': 'text', 'van_listing.description': 'text' });
 
 // ✅ Slug generator hook

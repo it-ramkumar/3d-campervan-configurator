@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { usedOptionsField } = require("./usedOptions");
 
 /* -------------------------------------------------------------------------- */
 /* Constants & Configurations                                                 */
@@ -205,7 +206,10 @@ const vanSchema = new mongoose.Schema(
     blocks: { type: [contentBlockSchema], default: [] },
 
     media: { type: [String], default: [] },
-    order: { type: Number, default: 0 }
+    order: { type: Number, default: 0 },
+
+    // Option ids fitted to this build (see ./usedOptions)
+    used_options: usedOptionsField
   },
   {
     timestamps: true,
@@ -239,6 +243,9 @@ vanSchema.virtual("formatted_sale_price").get(function () {
 /* -------------------------------------------------------------------------- */
 
 vanSchema.index({ status: 1, order: -1 });
+vanSchema.index({ "used_options.exterior": 1 });
+vanSchema.index({ "used_options.interior": 1 });
+vanSchema.index({ "used_options.system": 1 });
 vanSchema.index({
   "van_listing.title": "text",
   "van_listing.description": "text"
