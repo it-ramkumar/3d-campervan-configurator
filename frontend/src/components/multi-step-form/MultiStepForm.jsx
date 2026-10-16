@@ -14,6 +14,7 @@ import { handleGetQuote } from "@/CustomHooks/handleQuote.js";
 import { fetchAllConfiguratorData } from "@/api/model/modelAll";
 import { useGLTF } from "@react-three/drei";
 import { Loader2, CheckCircle2, Sparkles, ShoppingCart } from "lucide-react";
+import BigBearLoader from "../Loader/Loader";
 
 const MultiStepForm = ({
   addModelToScene,
@@ -89,23 +90,7 @@ const MultiStepForm = ({
   if (loading || !steps || steps.length === 0 || !steps[currentStep] || BaseVan?.layout === null) {
     return (
       <div className="h-full flex items-center justify-center" style={{ background: "#001F3D" }}>
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div
-              className="w-12 h-12 rounded-full animate-spin"
-              style={{ border: "2px solid rgba(237,152,95,0.15)", borderTopColor: "#ED985F" }}
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#ED985F]/60" />
-            </div>
-          </div>
-          <span
-            className="font-ui text-[9px] uppercase tracking-[0.3em] font-semibold"
-            style={{ color: "rgba(251,251,249,0.35)" }}
-          >
-            Assembling Build…
-          </span>
-        </div>
+        <BigBearLoader fullScreen={false} label="Assembling build" />
       </div>
     );
   }

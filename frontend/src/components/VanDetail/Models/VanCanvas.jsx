@@ -7,6 +7,7 @@ import InteriorCamera from "./MidCamera"
 import Model from "./Model"
 import PartModel from "./Parts"
 import { useRouter } from "next/navigation"
+import BigBearLoader from "@/components/Loader/Loader"
 
 const STUDIO_BG = "radial-gradient(ellipse 80% 65% at 50% 58%, #0D2647 0%, #071423 55%, #020C18 100%)"
 
@@ -55,21 +56,7 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
   )
 
   if (!url || url === "loading...") {
-    return (
-      <div className="h-screen flex items-center justify-center" style={{ background: STUDIO_BG }}>
-        <div className="flex flex-col items-center gap-5">
-          <div className="relative">
-            <div className="w-14 h-14 rounded-full border-2 border-[#ED985F]/20 border-t-[#ED985F] animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-[#ED985F]/60" />
-            </div>
-          </div>
-          <p className="font-ui text-[10px] uppercase tracking-[0.3em] text-[#FBFBF9]/35 font-semibold">
-            Preparing Studio
-          </p>
-        </div>
-      </div>
-    )
+    return <BigBearLoader label="Preparing studio" />
   }
 
   return (
@@ -421,42 +408,9 @@ export default function VanCanvas({ url, variants, initialVariantId }) {
 
 function ModelLoadingProgress() {
   const { progress } = useProgress()
-  const percentage = Math.round(progress)
-  const downloading = percentage > 0 && percentage < 100
-
   return (
     <Html center>
-      <div
-        role="status"
-        aria-live="polite"
-        className="w-64 rounded-2xl border border-white/15 bg-[#020C18]/90 px-7 py-6 text-center text-white shadow-2xl backdrop-blur-md"
-      >
-        <div aria-hidden="true" className="relative mx-auto mb-5 flex h-20 w-20 items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-[#ED985F]/20" />
-          <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[#ED985F] border-r-[#ED985F]/50 motion-reduce:animate-none" />
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" className="h-9 w-9 animate-pulse text-[#ED985F] motion-reduce:animate-none">
-            <path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z" />
-            <path d="m3 7 9 5 9-5M12 12v10M7.5 4.5l9 5" />
-          </svg>
-        </div>
-        <p className="text-sm font-semibold tracking-wide">Preparing your van</p>
-        <p className="mt-1 text-xs text-white/60">
-          {downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}
-        </p>
-        <div
-          role="progressbar"
-          aria-label="3D assets loading"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={downloading ? percentage : undefined}
-          className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10"
-        >
-          <div
-            className={`h-full rounded-full bg-[#ED985F] transition-[width] duration-300 ${downloading ? "" : "animate-pulse motion-reduce:animate-none"}`}
-            style={{ width: downloading ? `${percentage}%` : "40%" }}
-          />
-        </div>
-      </div>
+      <BigBearLoader fullScreen={false} label="Preparing your van" progress={progress} />
     </Html>
   )
 }

@@ -366,3 +366,22 @@ body {
   border-radius: 9999px;
 }
 .scrollbar-amber::-webkit-scrollbar-thumb:hover { background: rgba(237,152,95,0.4); }
+
+/* Image placeholder (ImageWithSkeleton): navy-tinted shimmer while the image loads */
+.bbv-skeleton {
+  background: rgba(0,31,61,0.06);
+}
+.bbv-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(251,251,249,0.65) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: bbv-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes bbv-shimmer {
+  to { transform: translateX(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bbv-skeleton::after { animation: none; }
+}

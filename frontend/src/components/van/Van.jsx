@@ -87,96 +87,10 @@ function DynamicModel({ model, modelRefs }) {
 
 
 function CanvasLoader() {
-  const { progress, item } = useProgress();
-  const pct = Math.min(100, Math.round(progress));
-
+  const { progress } = useProgress();
   return (
     <Html center>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 18,
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      >
-        {/* Rotating 3D cube — represents the model being assembled */}
-        <div className="van-loader-scene">
-          <div className="van-loader-cube">
-            <div className="van-loader-face front" />
-            <div className="van-loader-face back" />
-            <div className="van-loader-face right" />
-            <div className="van-loader-face left" />
-            <div className="van-loader-face top" />
-            <div className="van-loader-face bottom" />
-          </div>
-        </div>
-
-        <div
-          style={{
-            background: "rgba(2,12,24,0.92)",
-            border: "1px solid rgba(237,152,95,0.3)",
-            borderRadius: "12px",
-            padding: "14px 22px",
-            color: "#FBFBF9",
-            fontFamily: "sans-serif",
-            textAlign: "center",
-            minWidth: 220,
-          }}
-        >
-          <div
-            style={{
-              fontSize: "11px",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              fontWeight: 600,
-              marginBottom: 10,
-            }}
-          >
-            Loading Experience
-          </div>
-
-          <div
-            style={{
-              width: "100%",
-              height: 4,
-              borderRadius: 999,
-              background: "rgba(255,255,255,0.08)",
-              overflow: "hidden",
-              marginBottom: 8,
-            }}
-          >
-            <div
-              style={{
-                width: `${pct}%`,
-                height: "100%",
-                background: "#ED985F",
-                borderRadius: 999,
-                transition: "width 0.2s ease-out",
-                boxShadow: "0 0 8px rgba(237,152,95,0.7)",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "9px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "rgba(251,251,249,0.4)",
-            }}
-          >
-            <span style={{ maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {item || "Assets"}
-            </span>
-            <span style={{ color: "#ED985F", fontWeight: 700 }}>{pct}%</span>
-          </div>
-        </div>
-      </div>
+      <Loader fullScreen={false} label="Loading experience" progress={progress} />
     </Html>
   );
 }
@@ -602,7 +516,7 @@ function Van() {
 
             )}
 
-            {loading && webGLAvailable && <Loader />}
+            {loading && webGLAvailable && <Loader label="Loading your 3D van" />}
           </div>
 
           {/* View toggle — Exterior / Interior */}
@@ -695,38 +609,6 @@ function Van() {
         .van-scrollbar::-webkit-scrollbar { height: 2px; }
         .van-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .van-scrollbar::-webkit-scrollbar-thumb { background: rgba(237,152,95,0.3); border-radius: 99px; }
-
-        .van-loader-scene {
-          width: 56px;
-          height: 56px;
-          perspective: 300px;
-        }
-        .van-loader-cube {
-          width: 100%;
-          height: 100%;
-          position: relative;
-          transform-style: preserve-3d;
-          animation: van-loader-spin 3.2s linear infinite;
-        }
-        .van-loader-face {
-          position: absolute;
-          width: 56px;
-          height: 56px;
-          background: rgba(237,152,95,0.1);
-          border: 1px solid rgba(237,152,95,0.55);
-          box-shadow: 0 0 14px rgba(237,152,95,0.25) inset;
-        }
-        .van-loader-face.front  { transform: translateZ(28px); }
-        .van-loader-face.back   { transform: translateZ(-28px) rotateY(180deg); }
-        .van-loader-face.right  { transform: rotateY(90deg) translateZ(28px); }
-        .van-loader-face.left   { transform: rotateY(-90deg) translateZ(28px); }
-        .van-loader-face.top    { transform: rotateX(90deg) translateZ(28px); }
-        .van-loader-face.bottom { transform: rotateX(-90deg) translateZ(28px); }
-
-        @keyframes van-loader-spin {
-          from { transform: rotateX(-28deg) rotateY(0deg); }
-          to   { transform: rotateX(-28deg) rotateY(360deg); }
-        }
       `}</style>
     </>
   );

@@ -3,18 +3,20 @@
 import React, { useState, Suspense } from "react";
 import Link from "next/link"; // react-router-dom ki jagah next/link behtar hai
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage, Html } from "@react-three/drei";
+import { OrbitControls, Stage, Html, useProgress } from "@react-three/drei";
+import BigBearLoader from "../Loader/Loader";
 import BaseVanModel from "../van/BaseVanModel";
 import PartModel from "./PartModel";
 import Image from "next/image";
 
-const Loader3D = () => (
-  <Html center>
-    <div className="flex flex-col items-center justify-center">
-      <div className="w-12 h-12 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  </Html>
-);
+const Loader3D = () => {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <BigBearLoader fullScreen={false} label="Loading your quote" progress={progress} />
+    </Html>
+  );
+};
 
 export default function PreviewClient({ quoteData, baseVan, partsData }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);

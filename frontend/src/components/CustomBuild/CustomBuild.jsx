@@ -162,7 +162,7 @@ const CustomBuild = () => {
             className="relative rounded-xl overflow-hidden aspect-square shadow-xl"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src="/custom build/custom-build-big-bear-vans.webp" alt="Big Bear Vans workshop" />
+            <ImageWithSkeleton src="/custom build/custom-build-big-bear-vans.webp" alt="Big Bear Vans workshop" width={1080} height={1080} />
             <div
               className="absolute inset-0 pointer-events-none"
               style={{ background: "linear-gradient(to top, rgba(237,152,95,0.08) 0%, transparent 55%)" }}
@@ -326,7 +326,7 @@ const CustomBuild = () => {
             className="relative rounded-xl overflow-hidden aspect-square"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src={`${imgPath}3d-configurator-big-bear-vans.webp`} alt="3D Configurator preview" />
+            <ImageWithSkeleton src={`${imgPath}3d-configurator-big-bear-vans.webp`} alt="3D Configurator preview" width={1080} height={1080} />
             <AmberLine />
           </div>
         </div>
@@ -358,7 +358,7 @@ const CustomBuild = () => {
               className="relative rounded-xl overflow-hidden aspect-square group"
               style={{ border: "1px solid rgba(0,31,61,0.1)" }}
             >
-              <ImageWithSkeleton src={`${imgPath}105-custom-build-big-bear-vans.webp`} alt="Portfolio build" />
+              <ImageWithSkeleton src={`${imgPath}105-custom-build-big-bear-vans.webp`} alt="Portfolio build" width={1080} height={1080} />
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{ background: "linear-gradient(to top, rgba(0,31,61,0.35) 0%, transparent 60%)" }}
@@ -448,6 +448,8 @@ const CustomBuild = () => {
             <ImageWithSkeleton
               src={`${imgPath}showroom-ctr-big-bear-vans.webp`}
               alt="Big Bear Vans Showroom"
+              width={2048}
+              height={684}
               className="w-full h-auto"
             />
             <div
@@ -500,7 +502,7 @@ const CustomBuild = () => {
             className="relative rounded-xl overflow-hidden aspect-square"
             style={{ ...AMBER_BORDER, ...AMBER_GLOW }}
           >
-            <ImageWithSkeleton src={`${imgPath}anna-arthur-big-bear-vans.webp`} alt="Artur and Anna — Big Bear Vans founders" />
+            <ImageWithSkeleton src={`${imgPath}anna-arthur-big-bear-vans.webp`} alt="Artur and Anna — Big Bear Vans founders" width={2048} height={2048} />
             <AmberLine />
           </div>
 

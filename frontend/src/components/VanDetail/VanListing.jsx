@@ -25,6 +25,7 @@ import ContactForm from "@/components/Consultation/ContactForm";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "./BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import BuildOptions from "../Common/BuildOptions/BuildOptions";
+import BigBearLoader from "../Loader/Loader";
 import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -33,26 +34,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 function GalleryModelLoader({ progress, className = "" }) {
-  const percentage = Number.isFinite(progress) ? Math.min(100, Math.max(0, Math.round(progress))) : null;
-  const downloading = percentage !== null && percentage > 0 && percentage < 100;
-
   return (
     <div className={`flex items-center justify-center ${className}`}>
-      <div role="status" aria-live="polite" className="w-64 rounded-2xl border border-white/15 bg-[#020C18]/90 px-7 py-6 text-center text-white shadow-2xl backdrop-blur-md">
-        <div aria-hidden="true" className="relative mx-auto mb-5 flex h-20 w-20 items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-[#ED985F]/20" />
-          <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[#ED985F] border-r-[#ED985F]/50 motion-reduce:animate-none" />
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" className="h-9 w-9 animate-pulse text-[#ED985F] motion-reduce:animate-none">
-            <path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z" />
-            <path d="m3 7 9 5 9-5M12 12v10M7.5 4.5l9 5" />
-          </svg>
-        </div>
-        <RichParagraph variant="card" textColor="text-white" className="!text-sm font-semibold tracking-wide">Preparing your van</RichParagraph>
-        <RichParagraph variant="sub" textColor="text-white/60" className="mt-1 !text-xs">{downloading ? `Loading 3D assets · ${percentage}%` : "Setting up the 3D view..."}</RichParagraph>
-        <div role="progressbar" aria-label="3D assets loading" aria-valuemin={0} aria-valuemax={100} aria-valuenow={downloading ? percentage : undefined} className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
-          <div className={`h-full rounded-full bg-[#ED985F] transition-[width] duration-300 ${downloading ? "" : "animate-pulse motion-reduce:animate-none"}`} style={{ width: downloading ? `${percentage}%` : "40%" }} />
-        </div>
-      </div>
+      <BigBearLoader fullScreen={false} label="Preparing your van" progress={progress} />
     </div>
   );
 }

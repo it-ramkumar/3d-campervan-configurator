@@ -34,14 +34,22 @@ export default function ImageWithSkeleton({
         }`}
         onClick={() => zoom && setIsModalOpen(true)}
       >
-        {/* Loading Spinner */}
+        {/* Loading skeleton: shimmer + faint van mark (same van as the site loader) */}
         {skeleton && !loaded && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <div
-              className="h-10 w-10 rounded-full border-4 border-gray-300 border-t-gray-700 animate-spin"
-              role="status"
-              aria-label="Loading"
-            />
+          <div
+            className="bbv-skeleton absolute inset-0 z-10 flex items-center justify-center overflow-hidden"
+            role="status"
+            aria-label="Loading image"
+          >
+            <svg viewBox="64 40 194 90" className="w-16 max-w-[30%] h-auto" aria-hidden="true">
+              <path
+                d="M70 112 L70 61 Q70 52 79 52 L200 52 Q209 52 215 59 L231 84 L245 89 Q252 92 252 100 L252 112 Z"
+                fill="#001F3D"
+                opacity="0.12"
+              />
+              <circle cx="100" cy="112" r="13" fill="#001F3D" opacity="0.12" />
+              <circle cx="218" cy="112" r="13" fill="#001F3D" opacity="0.12" />
+            </svg>
           </div>
         )}
 
