@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { Heading1, RichParagraph, SecondaryButton } from "../Common";
+import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
 
 export default function HeroImage({
   image,
@@ -81,7 +82,11 @@ export default function HeroImage({
             {/* BUTTON */}
             {showButton && buttonText && (
               <div className="pt-2">
-                <SecondaryButton link={link} label={buttonText} />
+                <SecondaryButton
+                  link={link}
+                  label={buttonText}
+                  onClick={isContactUrl(link) ? scrollToConsultation : undefined}
+                />
               </div>
             )}
           </div>

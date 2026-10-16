@@ -21,6 +21,7 @@ import { VanMediaGallery, getGalleryVideo } from "../VanDetail/VanListing";
 import FeatureGridBlock, { FaqFeatureBlocks, isFaqFeatureBlock } from "../VanDetail/BlockFeatureCard";
 import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import BuildOptions from "../Common/BuildOptions/BuildOptions";
+import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
 import ContactForm from "@/components/Consultation/ContactForm";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -399,6 +400,7 @@ export default function LayoutDetail({ van, initialView }) {
                     {block.button?.label && block.button?.url && (
                       <a
                         href={block.button.url}
+                        onClick={isContactUrl(block.button.url) ? scrollToConsultation : undefined}
                         target={block.button.target === "blank" ? "_blank" : "_self"}
                         rel={block.button.target === "blank" ? "noopener noreferrer" : undefined}
                         className="inline-block px-8 py-3 bg-hover text-white font-bold uppercase tracking-widest text-xs rounded-lg hover:opacity-90 transition-opacity font-ui"

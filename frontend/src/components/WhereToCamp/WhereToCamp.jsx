@@ -190,13 +190,7 @@ Start Your Adventure Below
                         </div>
                     ))}
 
-                    {/* Call to Action */}
-                    <div className="flex flex-col items-center gap-6 py-12 bg-white rounded-lg border border-primary/20 shadow-sm">
-                        <RichParagraph className="text-primary font-semibold uppercase tracking-widest text-sm">
-                            Ready to visit our showroom?
-                        </RichParagraph>
-                        <SecondaryButton label={"Book Your Private Tour"} link={"/contact"} />
-                    </div>
+                   
                 </div>
             </div>
         </>

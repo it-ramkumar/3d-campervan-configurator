@@ -296,20 +296,7 @@ export default function Flist() {
         </AnimatePresence>
       </section>
 
-      {/* CTA */}
-      <section className="anim-section py-24 bbv-section-navy relative">
-        <div className="bbv-dot-grid" />
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <RichParagraph variant="sub" textColor="text-hover">
-Get in Touch
-          </RichParagraph>
-          <Heading1 variant="section" text="Have Questions?" className="mb-6 !text-secondary" />
-          <RichParagraph variant="body" textColor="text-secondary/60" className="max-w-2xl mx-auto mb-12">
-            Contact us and we will help you choose the best financing path for your project.
-          </RichParagraph>
-          <SecondaryButton label="Contact Us Today" link={"/contact"}/>
-        </div>
-      </section>
+ 
 
     </div>
   );

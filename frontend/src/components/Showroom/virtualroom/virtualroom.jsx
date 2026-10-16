@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Globe, Camera, Users, MapPin } from "lucide-react";
 import AirService from "../../AirService/AirService";
 import { Heading2, Heading1, RichParagraph, Heading3, Heading4, SecondaryButton } from '../../Common/Common';
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 export default function ShowroomAndTours() {
   return (
@@ -84,7 +85,7 @@ export default function ShowroomAndTours() {
                 <RichParagraph variant="sub" className="mb-6 text-secondary/70 text-sm">
                   Book a personalized Zoom session and let's bring your vision to life.
                 </RichParagraph>
-                <SecondaryButton label="Schedule Your Tour" link={"/contact"} className="!rounded-xl" />
+                <SecondaryButton label="Schedule Your Tour" link={"/contact"} onClick={scrollToConsultation} className="!rounded-xl" />
               </div>
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-hover/10 rounded-full blur-3xl group-hover:bg-hover/20 transition-all duration-500"></div>
             </div>

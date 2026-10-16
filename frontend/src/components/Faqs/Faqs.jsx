@@ -85,18 +85,6 @@ export default function FAQs({ faqs }) {
           })}
         </div>
 
-        {/* --- Footer Support --- */}
-        <div className="mt-16 text-center p-8 bbv-card rounded-lg border border-dashed border-primary/20">
-      <RichParagraph variant="body" className="mb-2 !text-primary/60">
-Still have questions?
-      </RichParagraph>
-          <a
-            href="/contact"
-            className="text-hover font-black uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center justify-center gap-2"
-          >
-            Contact Our Support Team <span>→</span>
-          </a>
-        </div>
 
       </div>
     </section>

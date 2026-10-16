@@ -4,10 +4,11 @@ import CalendarSection from "./CalendarSection";
 import ContactForm from "./ContactForm";
 import MapSection from "./MapSection";
 import { Heading1, RichParagraph } from "../Common/Common";
+import { CONSULTATION_ID } from "@/utils/scrollToConsultation";
 
 export default function Consultation() {
   return (
-    <div className="bg-[#F8F8F6] min-h-screen py-20 flex flex-col items-center space-y-16 relative">
+    <div id={CONSULTATION_ID} className="bg-[#F8F8F6] min-h-screen py-20 flex flex-col items-center space-y-16 relative scroll-mt-20">
       {/* ===== Header Text ===== */}
       <div className="flex flex-col items-center text-center px-4 space-y-4 max-w-3xl relative z-10">
 <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">

@@ -199,50 +199,7 @@ The Founders
         </div>
       </section>
 
-      {/* SECTION 3: Minimalist CTA */}
-      <section className="relative py-32 lg:py-48 flex items-center justify-center overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div className="absolute aspect-[9/5] inset-0 z-0">
-          <ImageWithSkeleton
-            src={ctaBgImage}
-            alt="Adventure"
-            width={1920}
-            height={1080}
-          />
-          <div className="absolute inset-0 bg-primary/85 backdrop-blur-sm"></div>
-        </div>
-
-        <div className="relative z-10 text-center max-w-4xl px-6">
-          <RichParagraph variant="sub" className="!text-hover">
-            Ready to Roll
-          </RichParagraph>
-          <Heading1
-          variant="section"
-            text="Join the Adventure"
-            className="font-display text-secondary uppercase tracking-wide mb-4"
-          />
-          <div className="bbv-divider mb-6" />
-
-          <div className="bbv-divider mb-6" />
-
-         <RichParagraph variant="body" className="!text-hover mb-10">
-           You Dream It. We Build It.
-          </RichParagraph>
-
-          <RichParagraph variant="body" className="text-secondary/80 mb-10 text-lg">
-            Become a creator of your own home on wheels. Design your floor plan,
-            select materials, and customize finishes for your dream rig.
-          </RichParagraph>
-          <div className="flex justify-center">
-            <Link
-              href="/contact"
-              className="bg-hover text-secondary uppercase  px-8 py-4 rounded-lg hover:opacity-50 transition-opacity"
-            >
-              Start Your Build
-            </Link>
-          </div>
-        </div>
-      </section>
+  
     </div>
   );
 }

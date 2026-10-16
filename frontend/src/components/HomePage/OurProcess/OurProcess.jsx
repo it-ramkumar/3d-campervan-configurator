@@ -10,6 +10,7 @@ import {
   ImageWithSkeleton,
   SecondaryButton,
 } from "../../Common/Common";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -268,7 +269,7 @@ export default function OurProcess() {
             >
               Ready to start your build?
             </Heading1>
-            <SecondaryButton label="Get a Custom Quote" link="/contact" />
+            <SecondaryButton label="Get a Custom Quote" link="/contact" onClick={scrollToConsultation} />
           </div>
         </div>
       </div>

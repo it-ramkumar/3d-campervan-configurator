@@ -11,6 +11,7 @@ import { linksForNavbar } from "../../api/blog/linksForNavbar";
 import { menuContent } from "../../DataUseInComp/MegaMenu";
 import { FooterListItem } from "../Common/Li/FooterLiItem";
 import { Heading1, RichParagraph } from "../Common/Common";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 // --- Sub Components ---
 const NavListItem = ({ href, children, isActive, onClick }) => (
@@ -451,6 +452,7 @@ export default function Navbar({ forceMobile }) {
             {!forceMobile && (
               <Link
                 href="/contact"
+                onClick={scrollToConsultation}
                 className="hidden lg:block px-5 py-2 rounded-lg text-[11px] font-ui font-semibold uppercase tracking-[0.15em] bg-primary text-secondary border border-primary/20 transition-all duration-200 hover:bg-[#ED985F] hover:border-[#ED985F] hover:scale-105"
               >
                 Book Consultation
@@ -588,7 +590,10 @@ export default function Navbar({ forceMobile }) {
                 <Link
                   href="/contact"
                   className="block w-full bg-primary font-ui text-secondary text-center py-4 rounded-lg font-semibold uppercase tracking-[0.15em] text-xs transition-all hover:bg-[#ED985F] hover:scale-105"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    setIsMobileMenuOpen(false);
+                    scrollToConsultation(e);
+                  }}
                 >
                   Book Free Consultation
                 </Link>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Compass } from 'lucide-react';
 import { RichParagraph, Heading1, SecondaryButton } from '../Common/Common';
 import Link from "next/link";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 export default function ExteriorCTR() {
     return (
@@ -56,6 +57,7 @@ export default function ExteriorCTR() {
                             <SecondaryButton
                                 label="Start Your Build Journey"
                                 link="/contact"
+                                onClick={scrollToConsultation}
                             />
                         </motion.div>
 

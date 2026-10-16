@@ -17,6 +17,7 @@ import {
 import Customize from "../../Customize/Cutomize";
 import { Heading2,Heading1, PrimaryButton, RichParagraph, CustomLink } from '../../Common/Common'
 import Link from "next/link";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 export default function Showroom() {
 
@@ -113,7 +114,7 @@ Private Workshop Tour
             <RichParagraph variant="body" className="max-w-xl mx-auto text-primary/70">
               Schedule your private workshop tour today. The coffee is on us.
             </RichParagraph>
-            <Link href="/contact">
+            <Link href="/contact" onClick={scrollToConsultation}>
               <PrimaryButton label="Book My Tour" />
             </Link>
           </div>

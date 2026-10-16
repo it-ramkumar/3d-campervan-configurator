@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Heading2,Heading1, Heading3, Heading4, RichParagraph, SecondaryButton } from "../Common/Common";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function DecisionFactors() {
@@ -229,7 +230,7 @@ Expert Guidance
           </RichParagraph>
           <Heading1 variant="section" text={"Consult Experts"} className="!text-secondary uppercase mb-4" />
           <RichParagraph variant="body" className="!text-secondary/70 mb-6">{"Leverage our team's experience to select the optimal van for your vision."}</RichParagraph>
-          <SecondaryButton label={"CONTACT US"} link="/contact" />
+          <SecondaryButton label={"CONTACT US"} link="/contact" onClick={scrollToConsultation} />
         </div>
       </section>
     </div>

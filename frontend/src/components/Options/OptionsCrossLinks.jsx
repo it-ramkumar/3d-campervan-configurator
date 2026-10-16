@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Heading1, RichParagraph, SpanTag, PrimaryButton } from "../Common/Common";
+import { Heading1, RichParagraph, SpanTag, ConsultationButton } from "../Common/Common";
 import { PAGE_CONFIG } from "./optionsConfig";
 
 // What each section covers, in a few words for the banner cards
@@ -61,9 +61,9 @@ export default function OptionsCrossLinks({ current }) {
           <RichParagraph className="!text-secondary/70 mb-5">
             Not sure which upgrades fit your van? Our team will help you plan the build.
           </RichParagraph>
-          <PrimaryButton
+          <ConsultationButton
             label="Book a Free Consultation"
-            link="/contact"
+            variant="primary"
             className="!bg-hover !border-hover !text-primary hover:!bg-secondary hover:!border-secondary"
           />
         </div>

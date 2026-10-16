@@ -9,6 +9,7 @@ import {
   ImageWithSkeleton,
   PrimaryButton,
   SpanTag,
+  ConsultationButton,
 } from "../Common/Common";
 
 // ── Navy sections (keep dark) ────────────────────────────────────────────────
@@ -223,7 +224,7 @@ const CustomBuild = () => {
           </div>
 
           <div className="text-center mt-14">
-            <SecondaryButton link="/contact" label="Start a Custom Build" />
+            <ConsultationButton label="Start a Custom Build" />
           </div>
         </div>
       </section>
@@ -280,7 +281,7 @@ const CustomBuild = () => {
                   )}
                   {feature.cta && (
                     <div className="pt-2">
-                      <SecondaryButton link="/contact" label="Contact Us" />
+                      <ConsultationButton label="Contact Us" />
                     </div>
                   )}
                 </div>

@@ -9,6 +9,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import { Heading1, RichParagraph, SpanTag, PrimaryButton } from "../Common";
 import { getItemTitle } from "@/components/Options/optionBlocks";
+import { scrollToConsultation } from "@/utils/scrollToConsultation";
 
 const GROUPS = [
   { key: "exterior", label: "Exterior", path: "/van-options/exterior-options" },
@@ -148,7 +149,7 @@ export default function BuildOptions({ usedOptions, buildTitle }) {
         </Swiper>
 
         <div className="flex flex-col items-center gap-5 mt-10">
-          <PrimaryButton label="Book a Free Consultation Call" link="/contact" />
+          <PrimaryButton label="Book a Free Consultation Call" link="/contact" onClick={scrollToConsultation} />
           <Link
             href="/van-options/exterior-options"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest !text-hover hover:underline"
