@@ -25,6 +25,7 @@ const MultiStepForm = ({
   modelRefs,
   orbitControlsRef,
   BaseVan,
+  onReady, // called once the options data has been fetched, so the page can drop its loader
 }) => {
   const dispatch = useDispatch();
   const [showQuoteConfirm, setShowQuoteConfirm] = useState(false);
@@ -63,6 +64,12 @@ const MultiStepForm = ({
     };
     loadUnifiedDataPayload();
   }, []);
+
+  // `loading` also flips on later while a quote is saved; only the first fetch matters here
+  // (the page keeps its loader hidden once it has been told the data is ready)
+  useEffect(() => {
+    if (!loading) onReady?.();
+  }, [loading, onReady]);
 
   useEffect(() => {
     if (!loading) {

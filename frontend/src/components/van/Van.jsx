@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, Suspense, Component } from "react";
+import React, { useEffect, useState, useRef, useCallback, Suspense, Component } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Environment, Html, Preload, useProgress } from "@react-three/drei";
@@ -86,6 +86,15 @@ function DynamicModel({ model, modelRefs }) {
 }
 
 
+// Mounts only once everything inside the <Suspense> boundary (van + parts) has loaded, so its
+// effect marks the scene ready. (onAfterRender can't be used: three.js never calls it on a Group.)
+function SceneReady({ onReady }) {
+  useEffect(() => {
+    onReady(false);
+  }, [onReady]);
+  return null;
+}
+
 function CanvasLoader() {
   const { progress } = useProgress();
   return (
@@ -107,7 +116,12 @@ function Van() {
   const [isIntView, setIsIntView] = useState(false);
   const [targetPos, setTargetPos] = useState([0, 0, 0]);
   const [vans, setVans] = useState([]);
+  // One full-screen loader until everything is ready: the van list has been fetched, the 3D van
+  // is on screen (loading) and the options panel has its data (formReady)
+  const [vansLoaded, setVansLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [formReady, setFormReady] = useState(false);
+  const markFormReady = useCallback(() => setFormReady(true), []);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const CAMERA_OFFSET = 0.2;
 
@@ -135,6 +149,7 @@ function Van() {
     } catch (err) {
       console.error("Error fetching vans:", err);
     } finally {
+      setVansLoaded(true);
     }
   };
 
@@ -474,10 +489,11 @@ function Van() {
               <Preload all />
 
               <Suspense fallback={<CanvasLoader />}>
+                {/* Only once there is a van to load; an empty scene isn't "ready" */}
+                {currentVanUrl && <SceneReady onReady={setLoading} />}
                 <group
                   ref={groupRef}
                   position={isIntView ? [0, -1.7, 0] : [0, -1.3, 0]}
-                  onAfterRender={() => setLoading(false)}
                 >
                   <Environment
                     files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/zwartkops_straight_afternoon_1k.hdr"
@@ -516,7 +532,10 @@ function Van() {
 
             )}
 
-            {loading && webGLAvailable && <Loader label="Loading your 3D van" />}
+            {/* If the van list failed or came back empty there is no model to wait for */}
+            {webGLAvailable && (!vansLoaded || (currentVanUrl && loading) || !formReady) && (
+              <Loader label="Loading your 3D van" />
+            )}
           </div>
 
           {/* View toggle — Exterior / Interior */}
@@ -601,6 +620,7 @@ function Van() {
             modelRefs={modelRefs}
             orbitControlsRef={orbitControlsRef}
             BaseVan={vans[isSanta]}
+            onReady={markFormReady}
           />
         </div>
       </div>

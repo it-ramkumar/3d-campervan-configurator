@@ -2238,3 +2238,5 @@
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:15:06:19 +0000] \"GET /api/portfolio/titles-only?page=1&limit=12&category=&search=&bathroomType=&wheelbase=&seating=&model=&bedType=&t=1792076778918 HTTP/1.1\" 200 729 \"http://localhost:3000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36\"","timestamp":"2026-10-15 20:06:19"}
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:15:06:26 +0000] \"GET /api/portfolio/new-slug-rrr HTTP/1.1\" 200 1927 \"-\" \"node\"","timestamp":"2026-10-15 20:06:26"}
 {"level":"info","message":"127.0.0.1 - - [15/Oct/2026:15:06:27 +0000] \"GET /api/portfolio/new-slug-rrr HTTP/1.1\" 200 1927 \"-\" \"node\"","timestamp":"2026-10-15 20:06:27"}
+{"level":"info","message":" Connected to MongoDB","timestamp":"2026-10-19 11:37:23"}
+{"level":"info","message":"127.0.0.1 - - [19/Oct/2026:06:37:25 +0000] \"GET /api/models/all HTTP/1.1\" 200 596 \"-\" \"curl/8.12.1\"","timestamp":"2026-10-19 11:37:25"}
