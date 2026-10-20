@@ -90,6 +90,7 @@ export default function Hero() {
 
                     {/* SEO FIX: First slide is h1, others are h2 */}
                     <Heading1
+                    textColor="text-white"
                       as={isFirst ? "h1" : "h2"}
                       variant="hero"
                     >

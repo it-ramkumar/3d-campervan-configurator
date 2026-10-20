@@ -5,3 +5,6 @@
 # Ye line frontend waale .env ko ignore karegi
 /frontend/.env
 /frontend/node_modules
+
+# Local docs (Claude project knowledge files, notes)
+/docs/

@@ -18,7 +18,7 @@ const inquery = require("./routes/inquery")
 const userRoute = require("./routes/authRoute");
 const blog = require("./routes/blog")
 const DelelteImageFromS3 = require("./routes/deleteImageFroms3");
-const ZohoToken = require("./routes/googleCalender")
+const GoogleCalendar = require("./routes/googleCalender")
 const InteriorCategory = require("./routes/interiorCategory")
 const InteriorChoices = require("./routes/interiorRoute")
 const InteriorSubCategory = require("./routes/interiorSubCategory")
@@ -73,7 +73,7 @@ app.use("/api/inquery", inquery)
 app.use("/api/contact", contactUs);
 app.use("/api/quote", ConfiguratorLeads);
 app.use("/api/models", ConfiguratorModels);
-app.use("/api/calendar", ZohoToken)
+app.use("/api/calendar", GoogleCalendar)
 app.use("/api", InteriorCategory)
 app.use("/api", InteriorChoices)
 app.use("/api", InteriorSubCategory)
