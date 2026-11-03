@@ -43,7 +43,7 @@ function HeroPicture({ slide, isFirst }) {
         {...imgProps}
         alt={slide.title || "Hero Image"}
         srcSet={mobileSrcSet}
-        className="object-cover [object-position:var(--hero-pos)] md:[object-position:center]"
+        className="object-cover w-full h-full [object-position:var(--hero-pos)] md:[object-position:center]"
         style={{ ...style, "--hero-pos": slide.objectPosition || "center center" }}
       />
     </picture>
@@ -59,7 +59,7 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative w-full h-[88vh] sm:h-[92vh] md:h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-[88vh] sm:h-[92vh] md:h-auto md:aspect-video md:max-h-screen overflow-hidden bg-black">
       <Swiper
         onSwiper={(s) => (swiperRef.current = s)}
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
@@ -77,12 +77,17 @@ export default function Hero() {
                 <HeroPicture slide={slide} isFirst={isFirst} />
 
                 {/* Overlays */}
-                <div className="absolute inset-0 z-10 bg-gradient-to-tr from-black/80 via-black/35 to-transparent" />
-                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                {/* Left fade behind the text on desktop, bottom fade on mobile; the rest of the image stays clear */}
+                <div className="absolute inset-0 z-10 hidden md:block bg-gradient-to-r from-black/75 via-black/30 via-45% to-transparent to-70%" />
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/85 via-black/30 via-40% to-transparent to-65% md:from-black/50 md:via-transparent md:via-30%" />
+                {/* Mobile: busy images (e.g. with UI in them) get a solid backdrop behind the text */}
+                {slide.mobileFade === "solid" && (
+                  <div className="absolute inset-0 z-10 md:hidden bg-gradient-to-t from-black via-black/95 via-55% to-transparent to-70%" />
+                )}
 
                 {/* Content Box */}
                 <div className="relative z-20 h-full flex items-end md:items-center">
-                  <div className="w-full px-5 pb-24 md:pb-0 text-white flex flex-col justify-end md:justify-center h-auto md:h-full md:pl-16 md:pr-12 lg:pl-24 lg:pr-20">
+                  <div className="w-full px-5 pb-24 md:pb-0 text-white flex flex-col justify-end md:justify-center h-auto md:h-full md:pl-16 lg:pl-24 md:max-w-[62%] lg:max-w-[55%] xl:max-w-[50%]">
 
                     <RichParagraph variant="sub" textColor="!text-hover" className="uppercase font-bold">
                       {slide.slogan || "You Dream It. We Build It."}
@@ -93,6 +98,7 @@ export default function Hero() {
                     textColor="text-white"
                       as={isFirst ? "h1" : "h2"}
                       variant="hero"
+                      className="!text-4xl sm:!text-5xl lg:!text-6xl"
                     >
                       {slide.title} <span className="text-hover">{slide.subtitle}</span>
                     </Heading1>
@@ -101,7 +107,7 @@ export default function Hero() {
                     <div className="w-12 h-[3px] bg-hover rounded-full my-3 md:my-4 animate-[fadeUp_0.8s_ease_forwards] [animation-delay:200ms]" />
 
                     {/* Description */}
-                    <RichParagraph variant="hero" textColor="text-secondary/90" className="max-w-2xl animate-[fadeUp_0.8s_ease_forwards] [animation-delay:300ms]">
+                    <RichParagraph variant="hero" textColor="text-secondary/90" className="max-w-xl !text-base md:!text-lg animate-[fadeUp_0.8s_ease_forwards] [animation-delay:300ms]">
                       {slide.desc}
                     </RichParagraph>
 
@@ -115,11 +121,13 @@ export default function Hero() {
                       <SecondaryButton
                         label={
                           <>
-                            <Sparkles size={14} className="animate-pulse mr-2 inline" />
-                            Van Matchmaker Quiz
+                            {slide.btnText2 || "Take the Quiz"}
+
                           </>
                         }
-                        onClick={scrollToQuiz}
+                        link={slide.btnLink}
+                        ariaLabel={slide.btnText2 || "Take the Quiz"}
+                        onClick={slide.btnLink ? undefined : scrollToQuiz}
                         className="!bg-hover !text-secondary !border-hover hover:!bg-white hover:!text-black"
                       />
                     </div>

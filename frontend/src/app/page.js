@@ -54,7 +54,7 @@ const OurProcess = nextDynamic(
 const Testimonials = nextDynamic(
   () => import("@/components/HomePage/Testimonials/Testimonials"),
 );
-const Blog = nextDynamic(() => import("@/components/HomePage/Blog/Blog"));
+// const Blog = nextDynamic(() => import("@/components/HomePage/Blog/Blog"));
 const FAQs = nextDynamic(() => import("@/components/Faqs/Faqs"));
 
 export default async function Home() {
@@ -134,7 +134,7 @@ export default async function Home() {
 
           <Testimonials />
 
-          <Blog />
+          {/* <Blog /> */}
 
           <section className="tour-Faqs">
             <FAQs faqs={faqs} />
