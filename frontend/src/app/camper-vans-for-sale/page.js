@@ -5,6 +5,7 @@ import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
 import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
 import FAQs from '@/components/Faqs/Faqs';
+import { effectivePrice } from "@/utils/salePrice";
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
 
@@ -96,7 +97,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
     "numberOfItems": allActiveVans.length,
     "itemListElement": allActiveVans.map((van, index) => {
 
-      const price = van.van_listing.price;
+      const price = effectivePrice(van.van_listing);
       const hasPrice = price && price >= 10;
 
       const rawImage = van.gallery?.[0] || "";
