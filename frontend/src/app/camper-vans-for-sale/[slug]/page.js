@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { vanTitle, vanDescription } from "@/utils/seoTitle";
 import { SITE_URL, BUSINESS_REF } from "@/schema/business";
 import VanPage from "../../../components/VanDetail/VanListing";
+import { effectivePrice } from "@/utils/salePrice";
 
 // --- Dynamic Metadata for SEO ---
 export async function generateMetadata({ params }) {
@@ -59,7 +60,7 @@ export default async function Page({ params }) {
   // console.log(vanDetail.van, "detail page ")
   // Same >=10 floor the listing page uses — filters out placeholder prices
   // (some listings were saved with a stray "1" or "2" before the real price was set).
-  const price = vanDetail?.van?.van_listing?.price;
+  const price = effectivePrice(vanDetail?.van?.van_listing);
   const hasPrice = price && price >= 10;
   const listing = vanDetail.van.van_listing;
   const url = `${SITE_URL}/camper-vans-for-sale/${slug}`;
