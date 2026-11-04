@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { hasSale } from "@/utils/salePrice";
 import {
   Heading1, RichParagraph,
   ImageWithSkeleton, PrimaryButton, SecondaryButton, CustomLink,
@@ -127,11 +128,24 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                       />
 
                       {van?.van_listing?.price > 100 && (
-                        <Heading1
-                        variant="card"
-                          text={`$${Number(van.van_listing.price).toLocaleString()}`}
-                          className="!text-hover"
-                        />
+                        hasSale(van.van_listing) ? (
+                          <div className="text-right shrink-0">
+                            <p className="text-xs font-semibold text-primary/50 line-through">
+                              ${Number(van.van_listing.price).toLocaleString()}
+                            </p>
+                            <Heading1
+                              variant="card"
+                              text={`$${Number(van.van_listing.sale_price).toLocaleString()}`}
+                              className="!text-hover"
+                            />
+                          </div>
+                        ) : (
+                          <Heading1
+                          variant="card"
+                            text={`$${Number(van.van_listing.price).toLocaleString()}`}
+                            className="!text-hover"
+                          />
+                        )
                       )}
                     </div>
                     <RichParagraph variant="card" >
