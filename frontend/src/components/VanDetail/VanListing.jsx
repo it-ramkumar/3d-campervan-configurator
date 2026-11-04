@@ -27,6 +27,7 @@ import FeatureItemText from "../Common/DetailFeature/FeatureItemText";
 import BuildOptions from "../Common/BuildOptions/BuildOptions";
 import BigBearLoader from "../Loader/Loader";
 import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
+import { hasSale } from "@/utils/salePrice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -348,11 +349,27 @@ const VanPage = ({ vanDetail,variants }) => {
               </RichParagraph>
 
               {Number(vanDetail.van_listing.price) > 99 ? (
-                <Heading1
-                  variant="section"
-                  text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
-                  className="!text-hover !font-bold"
-                />
+                hasSale(vanDetail.van_listing) ? (
+                  <div>
+                    <p className="text-lg md:text-xl font-semibold text-primary/50 line-through">
+                      ${Number(vanDetail.van_listing.price).toLocaleString()}
+                    </p>
+                    <Heading1
+                      variant="section"
+                      text={`$${Number(vanDetail.van_listing.sale_price).toLocaleString()}`}
+                      className="!text-hover !font-bold"
+                    />
+                    <p className="mt-2 text-sm font-semibold text-primary">
+                      You save ${(Number(vanDetail.van_listing.price) - Number(vanDetail.van_listing.sale_price)).toLocaleString()}
+                    </p>
+                  </div>
+                ) : (
+                  <Heading1
+                    variant="section"
+                    text={`$${Number(vanDetail.van_listing.price).toLocaleString()}`}
+                    className="!text-hover !font-bold"
+                  />
+                )
               ) : (
                 <RichParagraph variant="body" className="font-bold">
                   Inquire for Price
