@@ -3,6 +3,30 @@ import { generateHomeSchema } from "../schema/homeSchema";
 import nextDynamic from "next/dynamic";
 import { Heading1,RichParagraph, SpanTag } from "@/components/Common/Common";
 import { availableVans } from "@/api/van/availableVans";
+import { hasSale } from "@/utils/salePrice";
+import BlackFridayBanner from "@/components/BlackFriday/BlackFridayBanner";
+
+// Sale prices by van slug (the /van/available endpoint doesn't include them).
+async function salePricesBySlug() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/van/van-by-status?status=available&page=1&limit=50`,
+      { next: { revalidate: 300 } },
+    );
+    if (!res.ok) return {};
+    const json = await res.json();
+    const map = {};
+    for (const van of json?.data || []) {
+      if (van?.slug && hasSale(van.van_listing)) {
+        map[van.slug] = Number(van.van_listing.sale_price);
+      }
+    }
+    return map;
+  } catch (error) {
+    console.error("Error fetching sale prices on home page:", error);
+    return {};
+  }
+}
 
 // ISR: serve a cached copy, regenerate in the background at most every 5 minutes
 export const revalidate = 300;
@@ -88,6 +112,16 @@ export default async function Home() {
     console.error("Error fetching vans on home page:", error);
   }
 
+  const salePrices = await salePricesBySlug();
+  readyToGoVans = readyToGoVans.map((van) =>
+    salePrices[van?.slug] ? { ...van, sale_price: salePrices[van.slug] } : van,
+  );
+  const maxSavings = readyToGoVans.reduce(
+    (max, van) =>
+      hasSale(van) ? Math.max(max, Number(van.price) - Number(van.sale_price)) : max,
+    0,
+  );
+
   const homeSchemaData = generateHomeSchema(faqs);
 
 
@@ -103,6 +137,8 @@ export default async function Home() {
 
       <div>
         <Hero />
+
+        <BlackFridayBanner maxSavings={maxSavings} />
 
         <div className="overflow-x-hidden bg-secondary flex flex-col space-y-10 ">
           <Buy initialVans={readyToGoVans} />
