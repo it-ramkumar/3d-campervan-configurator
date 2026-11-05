@@ -5,7 +5,8 @@ import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
 import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
 import FAQs from '@/components/Faqs/Faqs';
-import { effectivePrice } from "@/utils/salePrice";
+import { effectivePrice, hasSale } from "@/utils/salePrice";
+import BlackFridayBanner from "@/components/BlackFriday/BlackFridayBanner";
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
 
@@ -87,6 +88,13 @@ export default async function VansForSale() {
     ...(pendingData?.data || []),
     ...(comingData?.data || [])
   ];
+  const maxSavings = (availableData?.data || []).reduce(
+    (max, van) =>
+      hasSale(van.van_listing)
+        ? Math.max(max, Number(van.van_listing.price) - Number(van.van_listing.sale_price))
+        : max,
+    0,
+  );
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -192,6 +200,12 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         buttonText="Reserve your van"
         showButton={true}
       />
+      <BlackFridayBanner
+        maxSavings={maxSavings}
+        ctaHref="#black-friday-vans"
+        ctaLabel="See the deals ↓"
+      />
+      <div id="black-friday-vans" className="scroll-mt-24" />
       <VanListClient
         initialAvailable={availableData}
         initialSold={soldData}
