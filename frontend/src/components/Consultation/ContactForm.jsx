@@ -7,7 +7,7 @@ import { Heading1, RichParagraph } from "../Common/Common";
 import { contact } from "@/api/contact/contact";
 import { validateLead } from "@/lib/validateLead";
 import { trackLead, saveLeadEmail, cleanPageUrl, createEventId } from "@/lib/track";
-import { hasSale, isBlackFriday } from "@/utils/salePrice";
+import { hasSale } from "@/utils/salePrice";
 import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 
 const EMPTY_FORM = { name: "", email: "", phone: "", message: "" };
@@ -29,6 +29,7 @@ const normalizeVan = (data) => {
     description: listing?.description,
     price: listing?.price,
     sale_price: listing?.sale_price ?? rawData.sale_price,
+    tagline: listing?.tagline ?? rawData.tagline,
     image:
       [rawData.image, ...(Array.isArray(rawData.gallery) ? rawData.gallery : [])].find(
         (src) => typeof src === "string" && src.trim() && !NON_IMAGE_EXT.test(src)
@@ -51,7 +52,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
   const isInventory = leadSource === "inventory";
   const isPriceValid = van?.price && Number(van.price) >= 1000;
   const onSale = isPriceValid && hasSale(van);
-  const blackFridayDeal = onSale && isBlackFriday();
+  // Sale name comes from the van's Tagline field in the dashboard.
+  const saleName = (typeof van?.tagline === "string" && van.tagline.trim()) || "Sale";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,10 +70,13 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
     setSubmitError("");
     if (Object.keys(fieldErrors).length) return;
 
+    // Always tag sale leads at the end, even when the customer typed a message.
     const message =
-      formData.message.trim() ||
-      (van?.title ? `Interested in ${van.title}` : "No message provided") +
-      (onSale ? ` [${blackFridayDeal ? "Black Friday" : "Sale"} price shown: $${Number(van.sale_price).toLocaleString("en-US")}]` : "");
+      (formData.message.trim() ||
+        (van?.title ? `Interested in ${van.title}` : "No message provided")) +
+      (onSale
+        ? `\n\n[Lead from ${saleName}: sale price $${Number(van.sale_price).toLocaleString("en-US")}, regular $${Number(van.price).toLocaleString("en-US")}]`
+        : "");
 
     const eventId = createEventId();
     setLoading(true);
@@ -84,6 +89,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
         vanSlug: van?.slug,
         vanTitle: van?.title,
         vanPrice: isPriceValid ? Number(van.price) : 0,
+        ...(onSale && { salePrice: Number(van.sale_price) }),
+        ...(onSale && van.tagline?.trim() && { saleTagline: van.tagline.trim() }),
         pageUrl: cleanPageUrl(),
         event_id: eventId,
         lead_source: leadSource,
@@ -141,7 +148,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
                     <span className="text-base sm:text-lg font-black text-hover">
                       ${Number(van.sale_price).toLocaleString("en-US")}
                     </span>
-                    <BlackFridayTag />
+                    <BlackFridayTag label={van.tagline} />
                   </>
                 ) : (
                   <span className="text-base sm:text-lg font-black text-[#001F3D]">
@@ -163,8 +170,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
             {isInventory ? "Check availability" : "Let’s Custom Build It"}
           </h2>
           <p className="mt-1.5 text-sm sm:text-base text-primary/60">
-            {blackFridayDeal
-              ? `Lock in the Black Friday price of $${Number(van.sale_price).toLocaleString("en-US")} before November 28.`
+            {onSale
+              ? `Lock in the ${saleName} price of $${Number(van.sale_price).toLocaleString("en-US")}.`
               : "Leave your details and our team will get back to you about this van."}
           </p>
         </div>
@@ -309,15 +316,15 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
             type="submit"
             disabled={loading}
             className={`w-full rounded-lg py-3.5 md:py-4 text-sm font-black uppercase tracking-[0.12em] shadow-md transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer ${
-              blackFridayDeal
+              onSale
                 ? "bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] text-white shadow-orange-500/30 hover:brightness-110"
                 : "bg-primary text-secondary hover:bg-hover hover:text-primary"
             }`}
           >
             {loading
               ? "Submitting..."
-              : blackFridayDeal && isInventory
-              ? "Claim Black Friday Price"
+              : onSale && isInventory
+              ? "Claim Sale Price"
               : isInventory && hasSelectedVan
               ? "Check Availability"
               : "Send Message"}

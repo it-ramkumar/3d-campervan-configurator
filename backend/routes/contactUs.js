@@ -32,6 +32,12 @@ router.post("/", async (req, res) => {
     // have different URL structures, so we can't safely rebuild it from vanSlug alone).
     const vanUrl = pageUrl || null;
 
+    // Sale fields are only kept when a real sale price (below the regular price) was sent
+    const salePrice = Number(req.body.salePrice);
+    const onSale = salePrice > 0 && Number(vanPrice) > salePrice;
+    const saleTagline =
+      onSale && typeof req.body.saleTagline === "string" ? req.body.saleTagline.trim() : "";
+
     // ==========================
     // Lead Tracking Detection
     // ==========================
@@ -47,6 +53,8 @@ router.post("/", async (req, res) => {
       vanSlug:vanUrl || null,
       vanTitle: vanTitle || null,
       vanPrice: vanPrice || null,
+      ...(onSale && { salePrice }),
+      ...(saleTagline && { saleTagline }),
       leadSource,
       lead_source: req.body.lead_source,
       ...trackingFields(req.body),
@@ -124,6 +132,8 @@ const adminHtml = `
         <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
           <p style="margin:5px 0;"><strong>Van:</strong> ${vanTitle}</p>
           <p style="margin:5px 0;"><strong>Price:</strong> ${vanPrice && Number(vanPrice) > 0 ? `$${Number(vanPrice).toLocaleString()}` : "Pricing Not Mentioned"}</p>
+          ${onSale ? `<p style="margin:5px 0;"><strong>Sale Price:</strong> $${salePrice.toLocaleString()}</p>` : ""}
+          ${saleTagline ? `<p style="margin:5px 0;"><strong>Sale:</strong> ${saleTagline}</p>` : ""}
           ${
             vanUrl
               ? `<p style="margin:5px 0;"><strong>Van URL:</strong> <a href="${vanUrl}" target="_blank">${vanUrl}</a></p>`

@@ -352,7 +352,7 @@ const VanPage = ({ vanDetail,variants }) => {
               {Number(vanDetail.van_listing.price) > 99 ? (
                 hasSale(vanDetail.van_listing) ? (
                   <div>
-                    <BlackFridayTag size="md" className="mb-2" />
+                    <BlackFridayTag label={vanDetail.van_listing.tagline} size="md" className="mb-2" />
                     <p className="text-lg md:text-xl font-semibold text-primary/50 line-through">
                       ${Number(vanDetail.van_listing.price).toLocaleString()}
                     </p>

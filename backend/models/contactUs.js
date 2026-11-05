@@ -52,6 +52,16 @@ const contactSchema = new mongoose.Schema(
       default: null,
     },
 
+    // Only stored when the van was on sale (no default, so non-sale leads don't get these fields)
+    salePrice: {
+      type: Number,
+    },
+
+    saleTagline: {
+      type: String,
+      trim: true,
+    },
+
     // ==========================
     // Marketing / Tracking Data
     // ==========================

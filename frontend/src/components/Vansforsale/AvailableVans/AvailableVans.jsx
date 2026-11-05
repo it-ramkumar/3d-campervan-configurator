@@ -131,7 +131,7 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
                       {van?.van_listing?.price > 100 && (
                         hasSale(van.van_listing) ? (
                           <div className="text-right shrink-0 flex flex-col items-end gap-1">
-                            <BlackFridayTag />
+                            <BlackFridayTag label={van.van_listing.tagline} />
                             <p className="text-xs font-semibold text-primary/50 line-through">
                               ${Number(van.van_listing.price).toLocaleString()}
                             </p>

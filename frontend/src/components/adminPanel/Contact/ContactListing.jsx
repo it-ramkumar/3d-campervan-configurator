@@ -16,6 +16,8 @@ const CSV_COLUMNS = [
   { key: "vanTitle", label: "Van Title" },
   { key: "vanSlug", label: "Van Slug" },
   { key: "vanPrice", label: "Van Price", accessor: (r) => (r.vanPrice && Number(r.vanPrice) > 0 ? r.vanPrice : "Pricing Not Mentioned") },
+  { key: "salePrice", label: "Sale Price", accessor: (r) => r.salePrice ?? "" },
+  { key: "saleTagline", label: "Sale Tagline", accessor: (r) => r.saleTagline ?? "" },
   { key: "status", label: "Status" },
   { key: "leadSource", label: "Lead Source" },
   { key: "gclid", label: "GCLID" },
@@ -104,6 +106,29 @@ export default function ContactListing() {
       label: "Lead Source",
       hideOnMobile: true,
       render: (c) => <span className="text-xs font-bold text-slate-500">{c.leadSource}</span>,
+    },
+    {
+      key: "sale",
+      label: "Sale",
+      hideOnMobile: true,
+      render: (c) =>
+        c.salePrice ? (
+          <>
+            {c.saleTagline && (
+              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-orange-100 text-orange-700 border border-orange-200">
+                {c.saleTagline}
+              </span>
+            )}
+            <div className="text-xs font-bold text-slate-700 mt-1">
+              ${Number(c.salePrice).toLocaleString()}{" "}
+              {c.vanPrice > 0 && (
+                <span className="font-medium text-slate-400 line-through">${Number(c.vanPrice).toLocaleString()}</span>
+              )}
+            </div>
+          </>
+        ) : (
+          <span className="text-xs text-slate-300">—</span>
+        ),
     },
     {
       key: "status",

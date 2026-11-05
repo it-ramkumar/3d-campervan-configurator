@@ -6,8 +6,8 @@ import { availableVans } from "@/api/van/availableVans";
 import { hasSale } from "@/utils/salePrice";
 import BlackFridayBanner from "@/components/BlackFriday/BlackFridayBanner";
 
-// Sale prices by van slug (the /van/available endpoint doesn't include them).
-async function salePricesBySlug() {
+// Sale prices and sale tags by van slug (the /van/available endpoint doesn't include them).
+async function saleInfoBySlug() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/van/van-by-status?status=available&page=1&limit=50`,
@@ -18,7 +18,10 @@ async function salePricesBySlug() {
     const map = {};
     for (const van of json?.data || []) {
       if (van?.slug && hasSale(van.van_listing)) {
-        map[van.slug] = Number(van.van_listing.sale_price);
+        map[van.slug] = {
+          sale_price: Number(van.van_listing.sale_price),
+          tagline: van.van_listing.tagline,
+        };
       }
     }
     return map;
@@ -112,9 +115,9 @@ export default async function Home() {
     console.error("Error fetching vans on home page:", error);
   }
 
-  const salePrices = await salePricesBySlug();
+  const saleInfo = await saleInfoBySlug();
   readyToGoVans = readyToGoVans.map((van) =>
-    salePrices[van?.slug] ? { ...van, sale_price: salePrices[van.slug] } : van,
+    saleInfo[van?.slug] ? { ...van, ...saleInfo[van.slug] } : van,
   );
   const maxSavings = readyToGoVans.reduce(
     (max, van) =>

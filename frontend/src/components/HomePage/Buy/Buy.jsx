@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowBigRightDash, ArrowBigLeftDash, Rotate3d, X } from "lucide-react";
 import "swiper/css";
-
 import {
   Heading1,
   RichParagraph,
@@ -183,7 +182,7 @@ export default function Buy({ initialVans = [] }) {
                           {van?.price ? (
                             hasSale(van) ? (
                               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                <BlackFridayTag />
+                                <BlackFridayTag label={van.tagline} />
                                 <span className="text-sm font-semibold text-primary/50 line-through">
                                   ${Number(van.price).toLocaleString()}
                                 </span>

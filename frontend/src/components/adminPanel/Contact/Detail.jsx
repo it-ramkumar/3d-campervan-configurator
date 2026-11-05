@@ -65,6 +65,36 @@ export default function Detail({ contact, onClose, onStatusChange }) {
             </div>
           </div>
 
+          {/* Van & Sale Info */}
+          {contact.vanTitle && (
+            <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-1">Selected Van</label>
+              <div className="text-slate-800 font-bold">{contact.vanTitle}</div>
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                <div>
+                  <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Regular Price</span>
+                  <span className="font-bold text-slate-700">
+                    {contact.vanPrice > 0 ? `$${Number(contact.vanPrice).toLocaleString()}` : "Pricing Not Mentioned"}
+                  </span>
+                </div>
+                {contact.salePrice && (
+                  <div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Sale Price</span>
+                    <span className="font-bold text-orange-600">${Number(contact.salePrice).toLocaleString()}</span>
+                  </div>
+                )}
+                {contact.saleTagline && (
+                  <div>
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Sale</span>
+                    <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-orange-100 text-orange-700 border border-orange-200">
+                      {contact.saleTagline}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Message Box */}
           <div className="bg-white p-6 rounded-[1.5rem] border border-slate-100 shadow-sm">
             <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest block mb-3">Inquiry Message</label>
