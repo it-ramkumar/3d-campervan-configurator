@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { hasSale } from "@/utils/salePrice";
+import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 import {
   Heading1, RichParagraph,
   ImageWithSkeleton, PrimaryButton, SecondaryButton, CustomLink,
@@ -129,7 +130,8 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
 
                       {van?.van_listing?.price > 100 && (
                         hasSale(van.van_listing) ? (
-                          <div className="text-right shrink-0">
+                          <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                            <BlackFridayTag />
                             <p className="text-xs font-semibold text-primary/50 line-through">
                               ${Number(van.van_listing.price).toLocaleString()}
                             </p>
