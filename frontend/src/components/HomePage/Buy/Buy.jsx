@@ -14,6 +14,8 @@ import {
   CustomLink,
 } from "../../Common/Common";
 import ContactForm from "@/components/Consultation/ContactForm";
+import { hasSale } from "@/utils/salePrice";
+import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 
 export default function Buy({ initialVans = [] }) {
   const [swiper, setSwiper] = useState(null);
@@ -179,6 +181,21 @@ export default function Buy({ initialVans = [] }) {
                         {/* Price (Locked at bottom) */}
                         <div className="mt-auto pt-2">
                           {van?.price ? (
+                            hasSale(van) ? (
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <BlackFridayTag />
+                                <span className="text-sm font-semibold text-primary/50 line-through">
+                                  ${Number(van.price).toLocaleString()}
+                                </span>
+                                <RichParagraph
+                                  variant="card"
+                                  textColor="text-hover"
+                                  className="!font-black !text-xl"
+                                >
+                                  {`$${Number(van.sale_price).toLocaleString()}`}
+                                </RichParagraph>
+                              </div>
+                            ) : (
                             <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                               <RichParagraph
                                 variant="card"
@@ -190,6 +207,7 @@ export default function Buy({ initialVans = [] }) {
                                   : van.price}
                               </RichParagraph>
                             </div>
+                            )
                           ) : (
                             <RichParagraph
                               variant="card"
@@ -256,11 +274,11 @@ export default function Buy({ initialVans = [] }) {
       {/* ── CONSULTATION MODAL ── */}
       {isFormOpen && (
         <div
-          className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#020C18]/90 backdrop-blur-md pointer-events-auto p-4"
+          className="fixed inset-0 z-[10000] flex items-center justify-center bg-[#020C18]/90 backdrop-blur-md pointer-events-auto p-3 sm:p-6"
           onClick={handleCloseForm}
         >
           <div
-            className="relative w-full max-w-2xl rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.9)] max-h-[90vh] overflow-y-auto pointer-events-auto"
+            className="relative w-full max-w-2xl rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.9)] max-h-[92dvh] overflow-y-auto pointer-events-auto"
             style={{
               background: "rgba(2,12,24,0.95)",
               border: "1px solid rgba(255,255,255,0.07)",
