@@ -163,6 +163,7 @@ export default function VanRecommendation() {
           source: "quiz",
           email: formData.customer_email,
           phone: formData.customer_phone,
+          name: formData.customer_name,
           eventId,
         });
         setRecommendation(data);
