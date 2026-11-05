@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Amplify only exposes console env vars at build time, so server-only secrets
+  // are inlined here. Only read them from server code (app/api/meta-capi/route.js),
+  // never from a client component.
+  env: {
+    META_CAPI_ACCESS_TOKEN: process.env.META_CAPI_ACCESS_TOKEN || "",
+    META_TEST_EVENT_CODE: process.env.META_TEST_EVENT_CODE || "",
+  },
   reactCompiler: true,
   // Strip console.* (except errors) from production bundles
   compiler: {
