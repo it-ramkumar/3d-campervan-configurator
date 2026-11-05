@@ -5,16 +5,33 @@ import HeroImage from '@/components/Common/HeroSectionNew/HeroSectionNew';
 import VanListClient from "../../components/Vansforsale/VanListClient"
 export const dynamic = 'force-dynamic';
 import FAQs from '@/components/Faqs/Faqs';
-import { effectivePrice, hasSale } from "@/utils/salePrice";
+import { effectivePrice, hasSale, isBlackFriday } from "@/utils/salePrice";
 import BlackFridayBanner from "@/components/BlackFriday/BlackFridayBanner";
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
 
   try {
-    const title = `Camper Vans for Sale - Sprinter & Transit | Big Bear Vans`;
-    const description = `Shop ready-to-buy custom camper vans on Mercedes
+    let title = `Camper Vans for Sale - Sprinter & Transit | Big Bear Vans`;
+    let description = `Shop ready-to-buy custom camper vans on Mercedes
 Sprinter & Ford Transit chassis. Layouts for 2-8 people,
  AWD available. Financing options. 100+ sold.`;
+
+    // During Black Friday, put the sale in front of the normal title/description.
+    // Same request as the page body, so Next.js dedupes it. Reverts on its own after the end date.
+    if (isBlackFriday()) {
+      const availableData = await vansByStatus("available", 1, 9);
+      const maxSavings = (availableData?.data || []).reduce(
+        (max, van) =>
+          hasSale(van.van_listing)
+            ? Math.max(max, Number(van.van_listing.price) - Number(van.van_listing.sale_price))
+            : max,
+        0,
+      );
+      if (maxSavings > 0) {
+        title = `Black Friday Sale: ${title}`;
+        description = `Black Friday camper van sale: save up to $${maxSavings.toLocaleString("en-US")}. ${description}`;
+      }
+    }
 
     return {
       title,
