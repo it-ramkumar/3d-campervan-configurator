@@ -29,7 +29,36 @@ export const toE164 = (phone) => {
   return `+${digits}`;
 };
 
-export const trackLead = ({ source, email, phone, eventId = createEventId() } = {}) => {
+// Server-side copy of a Pixel event (Meta Conversions API), same event_id for dedupe.
+export const sendMetaCapi = ({ eventName, eventId, source, email, phone, firstName, lastName } = {}) => {
+  if (!isBrowser() || !eventName || !eventId) return;
+  const tracking = readTracking();
+  const body = JSON.stringify({
+    event_name: eventName,
+    event_id: eventId,
+    source,
+    email,
+    phone,
+    first_name: firstName,
+    last_name: lastName,
+    fbclid: tracking.fbclid,
+    event_source_url: cleanPageUrl(),
+  });
+  try {
+    fetch("/api/meta-capi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // never block a lead on tracking
+  }
+};
+
+export const trackLead = ({ source, email, phone, name, eventId = createEventId() } = {}) => {
+  const [firstName, ...rest] = String(name || "").trim().split(/\s+/);
+  const lastName = rest.join(" ");
   if (!isBrowser()) return;
 
   const userData = {};
@@ -44,12 +73,9 @@ export const trackLead = ({ source, email, phone, eventId = createEventId() } = 
     user_data: userData,
   });
 
-  window.fbq?.(
-    "track",
-    source === "booking" ? "Schedule" : "Lead",
-    { source },
-    { eventID: eventId }
-  );
+  const metaEvent = source === "booking" ? "Schedule" : "Lead";
+  window.fbq?.("track", metaEvent, { source }, { eventID: eventId });
+  sendMetaCapi({ eventName: metaEvent, eventId, source, email, phone, firstName, lastName });
 
   return eventId;
 };
