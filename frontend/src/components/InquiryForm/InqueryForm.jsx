@@ -217,7 +217,7 @@ export default function InquiryForm() {
     try {
       const result = await submitInquiry(payload);
       if (result.success) {
-        trackLead({ source: "build_your_own", email, phone: formData.phone, eventId });
+        trackLead({ source: "build_your_own", email, phone: formData.phone, name: formData.name, eventId });
         saveLeadEmail(email);
         setFormData({});
         setCurrentStep(0);
