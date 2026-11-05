@@ -542,10 +542,11 @@ export default function LayoutDetail({ van, initialView }) {
 
         {/* ── CONTACT FORM MODAL ── */}
         {isFormOpen && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">
-            <div className="relative w-full max-w-2xl bbv-card max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md p-3 sm:p-6" onClick={() => setIsFormOpen(false)}>
+            <div className="relative w-full max-w-2xl bbv-card max-h-[92dvh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={() => setIsFormOpen(false)}
+              aria-label="Close form"
                 className="absolute top-4 right-4 text-primary hover:text-hover transition-colors cursor-pointer z-30 text-xl font-bold"
               >✕</button>
               <ContactForm
