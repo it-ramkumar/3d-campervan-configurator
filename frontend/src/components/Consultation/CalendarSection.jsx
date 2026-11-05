@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import PrimaryButton from "../Common/Button/PrimaryButton";
 import { RichParagraph, Heading1 } from "../Common/Common";
@@ -35,7 +34,8 @@ const formatTzLabel = (tz, date = new Date()) => {
 
 export default function BookingPage() {
   const [authUrl, setAuthUrl] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // null = still checking; false = the business calendar isn't connected
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -86,8 +86,11 @@ export default function BookingPage() {
 
     fetch(`${process.env.NEXT_PUBLIC_URL}/calendar/status`)
       .then((res) => res.json())
-      .then((data) => setIsLoggedIn(data.loggedIn))
-      .catch((err) => console.error("Error fetching Status:", err));
+      .then((data) => setIsLoggedIn(!!data.loggedIn))
+      .catch((err) => {
+        console.error("Error fetching Status:", err);
+        setIsLoggedIn(false);
+      });
   }, []);
 
   const handleLogin = () => {
@@ -197,7 +200,7 @@ export default function BookingPage() {
         return;
       }
 
-      trackLead({ source: "booking", email: formData.email, phone: formData.phone, eventId });
+      trackLead({ source: "booking", email: formData.email, phone: formData.phone, name: formData.name, eventId });
       saveLeadEmail(formData.email);
 
       if (data.hangoutLink) {
@@ -328,7 +331,7 @@ export default function BookingPage() {
   return (
     <div className="flex bg-[#F8F8F6] min-h-screen justify-center items-center p-4">
       {/* Main Container */}
-      <div className="flex w-full max-w-6xl bg-white border border-primary/10 rounded-lg shadow-2xl overflow-hidden min-h-[700px]">
+      <div className="flex w-full max-w-6xl bg-white border border-primary/10 rounded-lg shadow-2xl overflow-hidden lg:min-h-[700px]">
         {/* Sidebar */}
         <div className="hidden lg:flex lg:w-1/3 bg-[#001F3D] text-secondary p-10 flex-col justify-between relative">
           <div>
@@ -386,30 +389,38 @@ export default function BookingPage() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-8 md:p-12 overflow-y-auto bg-transparent">
-          {!isLoggedIn ? (
-            <div className="flex flex-col items-center justify-center h-full space-y-8 animate-in fade-in zoom-in-95">
-              <div className="text-center">
+        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-auto bg-transparent">
+          {isLoggedIn === null ? (
+            <div className="flex h-full min-h-[240px] items-center justify-center" aria-live="polite">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary/15 border-t-hover" />
+              <span className="sr-only">Loading available times…</span>
+            </div>
+          ) : !isLoggedIn ? (
+            // Visitors only see this if the business Google Calendar is disconnected
+            <div className="flex flex-col items-center justify-center h-full min-h-[240px] space-y-6 text-center animate-in fade-in zoom-in-95">
+              <div>
                 <Heading1 variant="card" textColor="text-primary" className="mb-2">
-                  Welcome Back
+                  Online booking is briefly unavailable
                 </Heading1>
                 <RichParagraph variant="card" className="text-primary/70">
-                  Please sign in with Google to manage your bookings.
+                  Call us and we’ll set up your consultation right away, or send us a message below.
                 </RichParagraph>
               </div>
-              <button
-                onClick={handleLogin}
-                className="flex items-center gap-4 px-8 py-4 bg-primary text-secondary border border-secondary/10 rounded-lg font-bold hover:bg-hover hover:text-primary transition-all shadow-sm"
+              <a
+                href="tel:+19514419719"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-secondary rounded-lg font-bold hover:bg-hover hover:text-primary transition-all shadow-sm"
               >
-                <Image
-                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                  className="w-5 h-5"
-                  alt="Google logo"
-                  width={20}
-                  height={20}
-                />
-                Continue with Google
-              </button>
+                Call (951) 441-9719
+              </a>
+              {authUrl && (
+                <button
+                  type="button"
+                  onClick={handleLogin}
+                  className="text-xs text-primary/40 underline underline-offset-2 hover:text-primary/70"
+                >
+                  Staff: reconnect Google Calendar
+                </button>
+              )}
             </div>
           ) : (
             <div className="max-w-md mx-auto">
