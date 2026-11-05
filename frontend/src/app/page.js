@@ -11,7 +11,7 @@ async function saleInfoBySlug() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/van/van-by-status?status=available&page=1&limit=50`,
-      { next: { revalidate: 300 } },
+      { cache: "no-store" },
     );
     if (!res.ok) return {};
     const json = await res.json();
@@ -31,8 +31,8 @@ async function saleInfoBySlug() {
   }
 }
 
-// ISR: serve a cached copy, regenerate in the background at most every 5 minutes
-export const revalidate = 300;
+// No caching: render on every request so van, sale price and tagline changes show immediately
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Custom Camper Van Conversions in California | Big Bear Vans",
