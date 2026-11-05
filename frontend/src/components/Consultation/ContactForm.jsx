@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SecondaryButton from "../Common/Button/SecondaryButton";
 import { Heading1, RichParagraph } from "../Common/Common";
 import { contact } from "@/api/contact/contact";
 import { validateLead } from "@/lib/validateLead";
 import { trackLead, saveLeadEmail, cleanPageUrl, createEventId } from "@/lib/track";
+import { hasSale, isBlackFriday } from "@/utils/salePrice";
+import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 
 const EMPTY_FORM = { name: "", email: "", phone: "", message: "" };
 const FALLBACK_VAN_IMAGE = "/images/blackLogo.webp";
@@ -27,6 +28,7 @@ const normalizeVan = (data) => {
     subtitle: listing?.subtitle,
     description: listing?.description,
     price: listing?.price,
+    sale_price: listing?.sale_price ?? rawData.sale_price,
     image:
       [rawData.image, ...(Array.isArray(rawData.gallery) ? rawData.gallery : [])].find(
         (src) => typeof src === "string" && src.trim() && !NON_IMAGE_EXT.test(src)
@@ -48,6 +50,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
   const imageSrc = van?.image && van.image !== failedImage ? van.image : FALLBACK_VAN_IMAGE;
   const isInventory = leadSource === "inventory";
   const isPriceValid = van?.price && Number(van.price) >= 1000;
+  const onSale = isPriceValid && hasSale(van);
+  const blackFridayDeal = onSale && isBlackFriday();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +70,8 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
 
     const message =
       formData.message.trim() ||
-      (van?.title ? `Interested in ${van.title}` : "No message provided");
+      (van?.title ? `Interested in ${van.title}` : "No message provided") +
+      (onSale ? ` [${blackFridayDeal ? "Black Friday" : "Sale"} price shown: $${Number(van.sale_price).toLocaleString("en-US")}]` : "");
 
     const eventId = createEventId();
     setLoading(true);
@@ -89,96 +94,93 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
       return;
     }
 
-    trackLead({ source: leadSource, email: formData.email, phone: formData.phone, eventId });
+    trackLead({ source: leadSource, email: formData.email, phone: formData.phone, name: formData.name, eventId });
     saveLeadEmail(formData.email);
     router.push(`/thank-you?source=${encodeURIComponent(leadSource)}`);
   };
 
   return (
-    <div className="bg-white p-6 md:p-12 rounded-xl border border-primary/5 shadow-sm max-w-[760px] mx-auto w-full">
-      {/* 🚐 SELECTED VAN DETAILS */}
+    <div
+      className={`bg-white rounded-xl border border-primary/5 shadow-sm max-w-[760px] mx-auto w-full ${
+        hasSelectedVan ? "px-5 pb-6 pt-12 sm:px-8 sm:pb-8 md:px-10 md:pb-10" : "p-5 sm:p-8 md:p-12"
+      }`}
+    >
+      {/* SELECTED VAN SUMMARY */}
       {hasSelectedVan && (
-        <div className="mb-10 w-full animate-fadeIn">
-          <div className="bg-secondary/30 p-4 sm:p-6 rounded-xl border border-primary/5 flex flex-col md:flex-row gap-6 items-center shadow-inner">
-            {/* IMAGE */}
-            {imageSrc && (
-              <div className="relative w-full md:w-2/5 aspect-[16/10] bg-white rounded-lg overflow-hidden border border-primary/10 shadow-sm flex-shrink-0 group">
-                <Image
-                  src={imageSrc}
-                  onError={() => setFailedImage(van.image)}
-                  alt={van.title || "Selected Van"}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 300px"
-                  className={`${
-                    imageSrc === FALLBACK_VAN_IMAGE ? "object-contain p-6" : "object-cover"
-                  } transition-transform duration-500 group-hover:scale-105`}
-                  priority
-                />
-              </div>
-            )}
-
-            {/* DETAILS */}
-            <div className="w-full md:w-3/5 space-y-2 text-center md:text-left flex flex-col justify-between h-full">
-              <div>
-                <RichParagraph variant="card">Selected Configuration</RichParagraph>
-                <Heading1 variant="card" textColor="text-[#001F3D]">
-                  {van.title}
-                </Heading1>
-                {van.subtitle && (
-                  <RichParagraph variant="card" className="text-xs text-slate-500 mt-1 line-clamp-2">
-                    {van.subtitle}
-                  </RichParagraph>
-                )}
-              </div>
-
-              {/* PRICE */}
-              <div className="pt-3 border-t border-slate-200/60 mt-2">
-                <div className="flex items-center justify-between">
-                  <RichParagraph variant="card">Price</RichParagraph>
-                  {isPriceValid ? (
-                    <RichParagraph variant="card" className="text-lg font-black text-[#001F3D]">
-                      ${Number(van.price).toLocaleString("en-US")}
-                    </RichParagraph>
-                  ) : (
-                    <RichParagraph variant="card" className="text-base font-black text-[#001F3D]">
-                      Pricing Not Mentioned
-                    </RichParagraph>
-                  )}
-                </div>
-              </div>
-            </div>
+        <div className="mb-5 md:mb-6 flex items-center gap-3 sm:gap-5 rounded-xl border border-primary/10 bg-secondary/30 p-3 sm:p-4">
+          <div className="relative h-20 w-24 sm:h-28 sm:w-40 shrink-0 overflow-hidden rounded-lg border border-primary/10 bg-white">
+            <Image
+              src={imageSrc}
+              onError={() => setFailedImage(van.image)}
+              alt={van.title || "Selected Van"}
+              fill
+              sizes="(max-width: 640px) 96px, 160px"
+              className={imageSrc === FALLBACK_VAN_IMAGE ? "object-contain p-3" : "object-cover"}
+              priority
+            />
           </div>
 
-          {/* DIVIDER */}
-          <div className="relative flex py-5 items-center">
-            <div className="flex-grow border-t border-slate-100" />
-            <RichParagraph variant="card" className="px-4 text-primary/20 font-bold uppercase">
-              Inquiry Details
-            </RichParagraph>
-            <div className="flex-grow border-t border-slate-100" />
+          <div className="min-w-0 flex-1 text-left">
+            <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-primary/50">
+              Selected van
+            </p>
+            <h3 className="text-base sm:text-lg font-bold leading-snug text-[#001F3D] line-clamp-2">
+              {van.title}
+            </h3>
+            {van.subtitle && (
+              <p className="hidden sm:block mt-0.5 text-xs text-slate-500 line-clamp-1">{van.subtitle}</p>
+            )}
+
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+              {isPriceValid ? (
+                onSale ? (
+                  <>
+                    <span className="text-xs sm:text-sm font-semibold text-primary/45 line-through">
+                      ${Number(van.price).toLocaleString("en-US")}
+                    </span>
+                    <span className="text-base sm:text-lg font-black text-hover">
+                      ${Number(van.sale_price).toLocaleString("en-US")}
+                    </span>
+                    <BlackFridayTag />
+                  </>
+                ) : (
+                  <span className="text-base sm:text-lg font-black text-[#001F3D]">
+                    ${Number(van.price).toLocaleString("en-US")}
+                  </span>
+                )
+              ) : (
+                <span className="text-sm font-bold text-[#001F3D]">Price on request</span>
+              )}
+            </div>
           </div>
         </div>
       )}
 
       {/* HEADING SECTION */}
-      <div className="text-center mb-10">
-        <Heading1 variant="section" textColor="text-primary">
-          {hasSelectedVan
-            ? isInventory
-              ? `Ask about ${van.title}`
-              : "Let’s Custom Build It"
-            : "Let’s Connect"}
-        </Heading1>
-
-        <RichParagraph variant="body" className="mt-2">
-          {hasSelectedVan
-            ? `Fill out the form below for ${van.title}.`
-            : "Tell us what’s on your mind!"}
-        </RichParagraph>
-      </div>
+      {hasSelectedVan ? (
+        <div className="mb-5 md:mb-6 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
+            {isInventory ? "Check availability" : "Let’s Custom Build It"}
+          </h2>
+          <p className="mt-1.5 text-sm sm:text-base text-primary/60">
+            {blackFridayDeal
+              ? `Lock in the Black Friday price of $${Number(van.sale_price).toLocaleString("en-US")} before November 28.`
+              : "Leave your details and our team will get back to you about this van."}
+          </p>
+        </div>
+      ) : (
+        <div className="text-center mb-6 md:mb-10">
+          <Heading1 variant="section" textColor="text-primary">
+            Let’s Connect
+          </Heading1>
+          <RichParagraph variant="body" className="mt-2">
+            Tell us what’s on your mind!
+          </RichParagraph>
+        </div>
+      )}
 
       {/* FORM SECTION */}
-      <form onSubmit={handleSubmit} noValidate className="space-y-6 w-full">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4 w-full">
         {hasSelectedVan && (
           <>
             <input type="hidden" name="vanSlug" value={van.slug || ""} />
@@ -194,7 +196,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* NAME */}
           <div className="flex flex-col">
-            <label htmlFor="contact-name" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
+            <label htmlFor="contact-name" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
               Full Name *
             </label>
             <input
@@ -207,7 +209,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-4 rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-secondary/80 focus:outline-none transition-all"
+              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-secondary/80 focus:outline-none transition-all"
             />
             {errors.name && (
               <p id="contact-name-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
@@ -218,7 +220,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
 
           {/* EMAIL */}
           <div className="flex flex-col">
-            <label htmlFor="contact-email" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
+            <label htmlFor="contact-email" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
               Email Address *
             </label>
             <input
@@ -231,7 +233,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-4 rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
+              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
             />
             {errors.email && (
               <p id="contact-email-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
@@ -242,7 +244,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
 
           {/* PHONE (Span 2 Columns for symmetry) */}
           <div className="flex flex-col md:col-span-2">
-            <label htmlFor="contact-phone" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
+            <label htmlFor="contact-phone" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
               Phone Number *
             </label>
             <input
@@ -250,6 +252,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               id="contact-phone"
               name="phone"
               autoComplete="tel"
+              inputMode="tel"
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? "contact-phone-error" : undefined}
               value={formData.phone}
@@ -260,7 +263,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
                 }
               }}
               required
-              className="w-full p-4 rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
+              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
             />
             {errors.phone && (
               <p id="contact-phone-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
@@ -272,7 +275,7 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
 
         {/* MESSAGE TEXTAREA */}
         <div className="flex flex-col">
-          <label htmlFor="contact-message" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-2 ml-1">
+          <label htmlFor="contact-message" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
             Message
           </label>
           <textarea
@@ -280,13 +283,13 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
             name="message"
             value={formData.message}
             onChange={handleChange}
-            rows={4}
+            rows={3}
             placeholder={
               hasSelectedVan
                 ? `Interested in ${van.title}`
                 : "Your Message"
             }
-            className="w-full p-4 text-black rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all resize-none"
+            className="w-full px-4 py-3 text-base text-black rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all resize-none"
           />
         </div>
 
@@ -301,18 +304,30 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
         )}
 
         {/* SUBMIT BUTTON */}
-        <div className="pt-4 flex justify-center">
-          <SecondaryButton
+        <div className="pt-2">
+          <button
             type="submit"
             disabled={loading}
-            label={
-              loading
-                ? "Submitting..."
-                : isInventory && hasSelectedVan
-                ? "Check Availability"
-                : "Send Message"
-            }
-          />
+            className={`w-full rounded-lg py-3.5 md:py-4 text-sm font-black uppercase tracking-[0.12em] shadow-md transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer ${
+              blackFridayDeal
+                ? "bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] text-white shadow-orange-500/30 hover:brightness-110"
+                : "bg-primary text-secondary hover:bg-hover hover:text-primary"
+            }`}
+          >
+            {loading
+              ? "Submitting..."
+              : blackFridayDeal && isInventory
+              ? "Claim Black Friday Price"
+              : isInventory && hasSelectedVan
+              ? "Check Availability"
+              : "Send Message"}
+          </button>
+          <p className="mt-3 text-center text-xs sm:text-sm text-primary/60">
+            Prefer to talk?{" "}
+            <a href="tel:+19514419719" className="font-bold text-primary underline underline-offset-2">
+              Call (951) 441-9719
+            </a>
+          </p>
         </div>
       </form>
     </div>
