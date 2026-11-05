@@ -28,6 +28,7 @@ import BuildOptions from "../Common/BuildOptions/BuildOptions";
 import BigBearLoader from "../Loader/Loader";
 import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
 import { hasSale } from "@/utils/salePrice";
+import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -351,6 +352,7 @@ const VanPage = ({ vanDetail,variants }) => {
               {Number(vanDetail.van_listing.price) > 99 ? (
                 hasSale(vanDetail.van_listing) ? (
                   <div>
+                    <BlackFridayTag size="md" className="mb-2" />
                     <p className="text-lg md:text-xl font-semibold text-primary/50 line-through">
                       ${Number(vanDetail.van_listing.price).toLocaleString()}
                     </p>
@@ -887,10 +889,11 @@ The Design Philosophy
   
       {/* ── CONTACT FORM MODAL ── */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md">
-          <div className="relative w-full max-w-2xl bbv-card max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-canvas/90 backdrop-blur-md p-3 sm:p-6" onClick={() => setIsFormOpen(false)}>
+          <div className="relative w-full max-w-2xl bbv-card max-h-[92dvh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setIsFormOpen(false)}
+              aria-label="Close form"
               className="absolute top-4 right-4 text-primary  transition-colors cursor-pointer z-30 text-xl font-bold"
             >✕</button>
             <ContactForm
