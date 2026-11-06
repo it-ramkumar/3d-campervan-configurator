@@ -7,121 +7,142 @@ import { Search, ChevronDown, ChevronUp, Zap, Shield, Droplets, Sun, Grid, Palet
 import { RichParagraph, Heading1 } from "@/components/Common/Common";
 // Fabric data with colors and images (Data is unchanged, kept for completeness)
 const fabricData = {
-  "Chenille Fleece": {
-    description: "Chenille fleece has twisted fibers, which make it durable and smooth to the touch. This heat-absorbing fabric requires low maintenance.",
+  "Classic Chenille": {
+    description: "Our everyday favorite. A soft chenille with a linen-style weave that feels warm and relaxed, and keeps its shape after years of sitting, lounging and sleeping.",
     colors: [
-      { name: "Burnt Sienna", code: "#A67360", image: "Cushion fabric Optimize/Chenille Fleece/Burnt Sienna.webp" },
-      { name: "Dark Brown", code: "#40362E", image: "Cushion fabric Optimize/Chenille Fleece/Dark Brown.webp" },
-      { name: "Dark Olive Green", code: "#32402C", image: "Cushion fabric Optimize/Chenille Fleece/Dark Olive.webp" },
-      { name: "Davy's Grey", code: "#585959", image: "Cushion fabric Optimize/Chenille Fleece/Davy_s Grey.webp" },
-      { name: "Grayish-Blue", code: "#313640", image: "Cushion fabric Optimize/Chenille Fleece/Grayish-blue.webp" },
-      { name: "Raisin Black", code: "#262526", image: "Cushion fabric Optimize/Chenille Fleece/Raisin black.webp" },
-      { name: "Rustic Orange", code: "#A65437", image: "Cushion fabric Optimize/Chenille Fleece/Rustic Orange.webp" }
+      { id: "CC-01", name: "Dark Chocolate", code: "#2E2B27", image: "cushion-fabrics/cc-01.webp" },
+      { id: "CC-02", name: "Mocha", code: "#483E32", image: "cushion-fabrics/cc-02.webp" },
+      { id: "CC-03", name: "Light Tan", code: "#91725F", image: "cushion-fabrics/cc-03.webp" },
+      { id: "CC-04", name: "Off-White", code: "#E1D6CB", image: "cushion-fabrics/cc-04.webp" },
+      { id: "CC-05", name: "Mustard", code: "#BD8C4A", image: "cushion-fabrics/cc-05.webp" },
+      { id: "CC-06", name: "Grass Green", code: "#69795F", image: "cushion-fabrics/cc-06.webp" },
+      { id: "CC-07", name: "Navy", code: "#262A34", image: "cushion-fabrics/cc-07.webp" },
+      { id: "CC-08", name: "Light Heather Gray", code: "#767676", image: "cushion-fabrics/cc-08.webp" },
+      { id: "CC-09", name: "Medium Heather Gray", code: "#5B5B5B", image: "cushion-fabrics/cc-09.webp" },
+      { id: "CC-10", name: "Black", code: "#1D1F21", image: "cushion-fabrics/cc-10.webp" }
     ]
   },
-  "Warp Knitted Polyester Chenille": {
-    description: "Knitted polyester chenille fabric has a soft and plush texture and can maintain its shape well over time, even with frequent use.",
+  "Textured Weave": {
+    description: "A breathable, nubby woven fabric with real texture. The weave hides crumbs, dust and everyday wear, so it is a great pick for vans that see trails, beaches and kids.",
     colors: [
-      { name: "Almond Frost", code: "#9A8678", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Almond.webp" },
-      { name: "Ash Grey", code: "#8C8B88", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Ash Grey.webp" },
-      { name: "Black Eel", code: "#463E3F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Black Eel.webp" },
-      { name: "Deep Brown", code: "#591E1E", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep brown.webp" },
-      { name: "Deep Olive", code: "#3D4034", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Deep Olive.webp" },
-      { name: "Dusty Green", code: "#808C85", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty Green.webp" },
-      { name: "Dusty Rose", code: "#D9A79C", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Dusty rose.webp" },
-      { name: "Gold", code: "#D9AA55", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Gold.webp" },
-      { name: "Light Silver", code: "#D9D9D9", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Light silver.webp" },
-      { name: "Pale Beige", code: "#D9D0C1", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pale beige.webp" },
-      { name: "Pearl White", code: "#F2F2EB", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Pearl White.webp" },
-      { name: "Redwood", code: "#A66249", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Redwood.webp" },
-      { name: "Shuttle Grey", code: "#565672", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Shuttle Grey.webp" },
-      { name: "Slate Gray", code: "#72736F", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/Slate gray.webp" },
-      { name: "White Rock", code: "#D4CFB4", image: "Cushion fabric Optimize/Warp Knitted Polyester Chenille/White Rock.webp" }
+      { id: "TW-01", name: "Cloud White", code: "#CCCCC7", image: "cushion-fabrics/tw-01.webp" },
+      { id: "TW-02", name: "Ivory", code: "#C6BEB7", image: "cushion-fabrics/tw-02.webp" },
+      { id: "TW-03", name: "Linen Beige", code: "#B6AFA5", image: "cushion-fabrics/tw-03.webp" },
+      { id: "TW-04", name: "Driftwood", code: "#857D74", image: "cushion-fabrics/tw-04.webp" },
+      { id: "TW-05", name: "Mushroom", code: "#625951", image: "cushion-fabrics/tw-05.webp" },
+      { id: "TW-06", name: "Espresso", code: "#281B14", image: "cushion-fabrics/tw-06.webp" },
+      { id: "TW-07", name: "Blush", code: "#E1CCC2", image: "cushion-fabrics/tw-07.webp" },
+      { id: "TW-08", name: "Burnt Orange", code: "#B14B2C", image: "cushion-fabrics/tw-08.webp" },
+      { id: "TW-09", name: "Sunflower", code: "#D7AE60", image: "cushion-fabrics/tw-09.webp" },
+      { id: "TW-10", name: "Sky Blue", code: "#8D9EA8", image: "cushion-fabrics/tw-10.webp" },
+      { id: "TW-11", name: "Sage Mint", code: "#99AAA0", image: "cushion-fabrics/tw-11.webp" },
+      { id: "TW-12", name: "Teal", code: "#47706B", image: "cushion-fabrics/tw-12.webp" },
+      { id: "TW-13", name: "Forest Green", code: "#31443D", image: "cushion-fabrics/tw-13.webp" },
+      { id: "TW-14", name: "Denim Blue", code: "#34516D", image: "cushion-fabrics/tw-14.webp" },
+      { id: "TW-15", name: "Pale Silver", code: "#A9B0B9", image: "cushion-fabrics/tw-15.webp" },
+      { id: "TW-16", name: "Pebble Gray", code: "#A1A2A1", image: "cushion-fabrics/tw-16.webp" },
+      { id: "TW-17", name: "Slate Gray", code: "#707274", image: "cushion-fabrics/tw-17.webp" },
+      { id: "TW-18", name: "Charcoal", code: "#2F2F31", image: "cushion-fabrics/tw-18.webp" },
+      { id: "TW-19", name: "Black", code: "#262626", image: "cushion-fabrics/tw-19.webp" }
     ]
   },
-  "Waterproof Oxford": {
-    description: "Waterproof Oxford fabric is lightweight, PU-coated, and easy to maintain. It's ideal for those who need moisture-resistant and easy-to-clean cushions.",
+  "Fine Linen": {
+    description: "A fine, tightly woven linen-style fabric. Breathable and smooth, with a crisp tailored look that suits modern and minimalist interiors.",
     colors: [
-      { name: "Crimson", code: "#400D16", image: "Cushion fabric Optimize/Waterproof Oxford/Crimson.webp" },
-      { name: "Dark Gray", code: "#262626", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Gray.webp" },
-      { name: "Dark Green", code: "#2E4039", image: "Cushion fabric Optimize/Waterproof Oxford/Dark Green.webp" },
-      { name: "Dark Sage", code: "#425951", image: "Cushion fabric Optimize/Waterproof Oxford/Dark sage.webp" },
-      { name: "Dark Vanilla", code: "#D9C1B4", image: "Cushion fabric Optimize/Waterproof Oxford/Dark vanilla.webp" },
-      { name: "Espresso", code: "#401F18", image: "Cushion fabric Optimize/Waterproof Oxford/espresso.webp" },
-      { name: "Garnet", code: "#A63232", image: "Cushion fabric Optimize/Waterproof Oxford/garnet.webp" },
-      { name: "Indigo", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/indigo.webp" },
-      { name: "Ivory", code: "#F2E4D8", image: "Cushion fabric Optimize/Waterproof Oxford/ivory.webp" },
-      { name: "Lavender", code: "#957BA6", image: "Cushion fabric Optimize/Waterproof Oxford/lavender.webp" },
-      { name: "Light Brown", code: "#A68877", image: "Cushion fabric Optimize/Waterproof Oxford/light brown.webp" },
-      { name: "Light Gray", code: "#A6A1A1", image: "Cushion fabric Optimize/Waterproof Oxford/light grey.webp" },
-      { name: "Moss Green", code: "#A2A629", image: "Cushion fabric Optimize/Waterproof Oxford/moss green.webp" },
-      { name: "Mustard Brown", code: "#BF923F", image: "Cushion fabric Optimize/Waterproof Oxford/mustard brown.webp" },
-      { name: "Muted Plum", code: "#40212F", image: "Cushion fabric Optimize/Waterproof Oxford/muted plum.webp" },
-      { name: "Muted Tan", code: "#A69485", image: "Cushion fabric Optimize/Waterproof Oxford/muted tan.webp" },
-      { name: "Navy", code: "#2A2D40", image: "Cushion fabric Optimize/Waterproof Oxford/navy.webp" },
-      { name: "Nobel", code: "#9FA4BF", image: "Cushion fabric Optimize/Waterproof Oxford/nobel.webp" },
-      { name: "Olive", code: "#8C783B", image: "Cushion fabric Optimize/Waterproof Oxford/olive.webp" },
-      { name: "Orange-Brown", code: "#BF6E3F", image: "Cushion fabric Optimize/Waterproof Oxford/orange brown.webp" },
-      { name: "Pink-Magenta", code: "#D996BB", image: "Cushion fabric Optimize/Waterproof Oxford/pink magenta.webp" },
-      { name: "Sandy Brown", code: "#A6845B", image: "Cushion fabric Optimize/Waterproof Oxford/sandy brown.webp" }
+      { id: "FL-01", name: "Deep Teal", code: "#1D363D", image: "cushion-fabrics/fl-01.webp" },
+      { id: "FL-02", name: "White", code: "#C5C8CE", image: "cushion-fabrics/fl-02.webp" },
+      { id: "FL-03", name: "Oatmeal", code: "#979187", image: "cushion-fabrics/fl-03.webp" },
+      { id: "FL-04", name: "Natural Flax", code: "#999283", image: "cushion-fabrics/fl-04.webp" },
+      { id: "FL-05", name: "Graphite", code: "#1F1C18", image: "cushion-fabrics/fl-05.webp" },
+      { id: "FL-06", name: "Dusty Rose", code: "#834A51", image: "cushion-fabrics/fl-06.webp" },
+      { id: "FL-07", name: "Terracotta", code: "#6E3E2F", image: "cushion-fabrics/fl-07.webp" },
+      { id: "FL-08", name: "Cinnamon", code: "#65412B", image: "cushion-fabrics/fl-08.webp" },
+      { id: "FL-09", name: "Golden Ochre", code: "#7F5526", image: "cushion-fabrics/fl-09.webp" },
+      { id: "FL-10", name: "Ocean Blue", code: "#182836", image: "cushion-fabrics/fl-10.webp" },
+      { id: "FL-11", name: "Light Gray", code: "#91959C", image: "cushion-fabrics/fl-11.webp" },
+      { id: "FL-12", name: "Steel Gray", code: "#515457", image: "cushion-fabrics/fl-12.webp" },
+      { id: "FL-13", name: "Midnight Navy", code: "#1D1E1F", image: "cushion-fabrics/fl-13.webp" },
+      { id: "FL-14", name: "Black", code: "#171717", image: "cushion-fabrics/fl-14.webp" }
     ]
   },
-  "Waterproof Chenille": {
-    description: "Water-resistant chenille has a soft and luxurious texture. Its woven, thick, and insulating properties make it water and stain-resistant.",
+  "Soft-Touch Fleece": {
+    description: "A brushed, skin-friendly fleece that feels great against bare legs and is cozy for sleeping on. The heathered colors are forgiving and easy to live with.",
     colors: [
-      { name: "Ash Gray", code: "#BFBEBD", image: "Cushion fabric Optimize/Waterproof Chenille/Ash Gray.webp" },
-      { name: "Dark Charcoal", code: "#595654", image: "Cushion fabric Optimize/Waterproof Chenille/Dark charcoal.webp" },
-      { name: "Dark Red", code: "#733C40", image: "Cushion fabric Optimize/Waterproof Chenille/Dark red.webp" },
-      { name: "Dusty Teal", code: "#639FA6", image: "Cushion fabric Optimize/Waterproof Chenille/Dusty teal.webp" },
-      { name: "Light Beige", code: "#D9CAB8", image: "Cushion fabric Optimize/Waterproof Chenille/Light Beige.webp" },
-      { name: "Mint Frost", code: "#BAD9CE", image: "Cushion fabric Optimize/Waterproof Chenille/Mint Frost.webp" },
-      { name: "Raisin Black", code: "#262626", image: "Cushion fabric Optimize/Waterproof Chenille/Raisin black.webp" },
-      { name: "Saffron Yellow", code: "#F2B749", image: "Cushion fabric Optimize/Waterproof Chenille/Saffron Yellow.webp" },
-      { name: "Slate Blue", code: "#394459", image: "Cushion fabric Optimize/Waterproof Chenille/Slate blue.webp" },
-      { name: "Smoky Cocoa", code: "#594842", image: "Cushion fabric Optimize/Waterproof Chenille/Smoky Cocoa.webp" },
-      { name: "Stone Gray", code: "#8C8887", image: "Cushion fabric Optimize/Waterproof Chenille/Stone Gray.webp" }
+      { id: "SF-01", name: "Silver Mist", code: "#B4B6B6", image: "cushion-fabrics/sf-01.webp" },
+      { id: "SF-02", name: "Oat Beige", code: "#C0BAAE", image: "cushion-fabrics/sf-02.webp" },
+      { id: "SF-03", name: "Dusty Pink", code: "#BB9291", image: "cushion-fabrics/sf-03.webp" },
+      { id: "SF-04", name: "Moss Green", code: "#728260", image: "cushion-fabrics/sf-04.webp" },
+      { id: "SF-05", name: "Cocoa", code: "#856A57", image: "cushion-fabrics/sf-05.webp" },
+      { id: "SF-06", name: "Chestnut", code: "#573A28", image: "cushion-fabrics/sf-06.webp" },
+      { id: "SF-07", name: "Snow White", code: "#DDDED8", image: "cushion-fabrics/sf-07.webp" },
+      { id: "SF-08", name: "Sage Gray", code: "#767C71", image: "cushion-fabrics/sf-08.webp" },
+      { id: "SF-09", name: "Dove Gray", code: "#9A9B98", image: "cushion-fabrics/sf-09.webp" },
+      { id: "SF-10", name: "Taupe", code: "#776C63", image: "cushion-fabrics/sf-10.webp" },
+      { id: "SF-11", name: "Pumpkin", code: "#9B5834", image: "cushion-fabrics/sf-11.webp" },
+      { id: "SF-12", name: "Brick Red", code: "#933F2D", image: "cushion-fabrics/sf-12.webp" },
+      { id: "SF-13", name: "Navy", code: "#181E27", image: "cushion-fabrics/sf-13.webp" },
+      { id: "SF-14", name: "Ash Gray", code: "#797B77", image: "cushion-fabrics/sf-14.webp" },
+      { id: "SF-15", name: "Olive", code: "#464E2F", image: "cushion-fabrics/sf-15.webp" },
+      { id: "SF-16", name: "Black", code: "#181818", image: "cushion-fabrics/sf-16.webp" }
     ]
   },
-  "Imitation Linen": {
-    description: "Imitation Linen fabric has a classy texture. This shrinkage-resistant fabric is easy to clean and built to last.",
+  "Plush Velvet": {
+    description: "Our softest and thickest fabric. A plush chenille-velvet with a rich, luxurious hand and deep color, from crisp whites to jewel tones.",
     colors: [
-      { name: "Charcoal Brown", code: "#40332C", image: "Cushion fabric Optimize/Imitation Linen/Charcoal brown.webp" },
-      { name: "Dark Taupe", code: "#403F3E", image: "Cushion fabric Optimize/Imitation Linen/Dark taupe.webp" },
-      { name: "English Violet", code: "#593C54", image: "Cushion fabric Optimize/Imitation Linen/English violet.webp" },
-      { name: "Mauve", code: "#8C3B61", image: "Cushion fabric Optimize/Imitation Linen/Mauve.webp" },
-      { name: "Slate Blue", code: "#9BA7BF", image: "Cushion fabric Optimize/Imitation Linen/Slate blue.webp" },
-      { name: "Stone Cold", code: "#595857", image: "Cushion fabric Optimize/Imitation Linen/Stone cold.webp" }
+      { id: "PV-01", name: "Pure White", code: "#D1D1D5", image: "cushion-fabrics/pv-01.webp" },
+      { id: "PV-02", name: "Ivory", code: "#D7D5D0", image: "cushion-fabrics/pv-02.webp" },
+      { id: "PV-03", name: "Cream", code: "#D6D0C6", image: "cushion-fabrics/pv-03.webp" },
+      { id: "PV-04", name: "Greige", code: "#7B7463", image: "cushion-fabrics/pv-04.webp" },
+      { id: "PV-05", name: "Apricot", code: "#965427", image: "cushion-fabrics/pv-05.webp" },
+      { id: "PV-06", name: "Rose", code: "#8E595F", image: "cushion-fabrics/pv-06.webp" },
+      { id: "PV-07", name: "Burgundy", code: "#460B1D", image: "cushion-fabrics/pv-07.webp" },
+      { id: "PV-08", name: "Bark Brown", code: "#423A2C", image: "cushion-fabrics/pv-08.webp" },
+      { id: "PV-09", name: "Olive", code: "#4A4932", image: "cushion-fabrics/pv-09.webp" },
+      { id: "PV-10", name: "Emerald", code: "#233A31", image: "cushion-fabrics/pv-10.webp" },
+      { id: "PV-11", name: "Hunter Green", code: "#343E33", image: "cushion-fabrics/pv-11.webp" },
+      { id: "PV-12", name: "Royal Navy", code: "#242C41", image: "cushion-fabrics/pv-12.webp" },
+      { id: "PV-13", name: "Heather Gray", code: "#44494D", image: "cushion-fabrics/pv-13.webp" },
+      { id: "PV-14", name: "Charcoal", code: "#34353A", image: "cushion-fabrics/pv-14.webp" },
+      { id: "PV-15", name: "Smoke", code: "#2B2A2A", image: "cushion-fabrics/pv-15.webp" },
+      { id: "PV-16", name: "Black", code: "#0E0E0E", image: "cushion-fabrics/pv-16.webp" }
     ]
   },
-  "Faux Leather": {
-    description: "Faux leather fabric is wipeable and luxurious, making it ideal for busy households. It is durable, resistant to stains, wear & tears, and fading, ensuring long-lasting use.",
+  "Corduroy": {
+    description: "A fine-wale corduroy with a delicate ribbed texture. Comfortable to the touch, with a warm vintage character that pairs beautifully with wood interiors.",
     colors: [
-      { name: "Baltic Sea", code: "#3C3D3E", image: "Cushion fabric Optimize/Faux Leather/Baltic Sea.webp" },
-      { name: "Dim Gray", code: "#67655E", image: "Cushion fabric Optimize/Faux Leather/Dim Gray.webp" },
-      { name: "Hampton", code: "#EAD2A4", image: "Cushion fabric Optimize/Faux Leather/Hampton.webp" },
-      { name: "Pearl Bush", code: "#DED3CB", image: "Cushion fabric Optimize/Faux Leather/Pearl bush.webp" },
-      { name: "Pinkish Brown", code: "#B17261", image: "Cushion fabric Optimize/Faux Leather/Pinkish brown.webp" },
-      { name: "Radish Orange", code: "#FF872C", image: "Cushion fabric Optimize/Faux Leather/Radish Orange.webp" },
-      { name: "Storm Dust", code: "#747473", image: "Cushion fabric Optimize/Faux Leather/Storm Dust.webp" },
-      { name: "Warm Gray", code: "#A6A197", image: "Cushion fabric Optimize/Faux Leather/Warm Gray.webp" }
+      { id: "CD-01", name: "Cream", code: "#CDCAC2", image: "cushion-fabrics/cd-01.webp" },
+      { id: "CD-02", name: "Light Stone", code: "#A6A299", image: "cushion-fabrics/cd-02.webp" },
+      { id: "CD-03", name: "Rust", code: "#A54D34", image: "cushion-fabrics/cd-03.webp" },
+      { id: "CD-04", name: "Ochre", code: "#A56B30", image: "cushion-fabrics/cd-04.webp" },
+      { id: "CD-05", name: "Blush Pink", code: "#B1777B", image: "cushion-fabrics/cd-05.webp" },
+      { id: "CD-06", name: "Pine Green", code: "#526157", image: "cushion-fabrics/cd-06.webp" },
+      { id: "CD-07", name: "Powder Blue", code: "#899697", image: "cushion-fabrics/cd-07.webp" },
+      { id: "CD-08", name: "Slate Blue", code: "#4C5765", image: "cushion-fabrics/cd-08.webp" },
+      { id: "CD-09", name: "Graphite", code: "#6A6A6A", image: "cushion-fabrics/cd-09.webp" },
+      { id: "CD-10", name: "Midnight Navy", code: "#23252A", image: "cushion-fabrics/cd-10.webp" }
     ]
   },
-  "Dutch Velvet": {
-    description: "Dutch velvet has a luxurious feel and is resistant to wear and tear. It's mainly popular due to its soft texture, resistance to piling, and fading.",
+  "Pet-Proof Performance": {
+    description: "Built for vans that travel with dogs and cats. The tight, smooth surface resists claws and snagging, and wipes clean with a damp cloth.",
     colors: [
-      { name: "Champagne Pink", code: "#F2DFCE", image: "Cushion fabric Optimize/Dutch Velvet/Champagne pink.webp" },
-      { name: "Muted Blue-Gray", code: "#76A1A6", image: "Cushion fabric Optimize/Dutch Velvet/Muted Blue-Gray.webp" },
-      { name: "Bleached Silk", code: "#F2E5D5", image: "Cushion fabric Optimize/Dutch Velvet/Bleached silk.webp" },
-      { name: "Dark Green Pea", code: "#255C3B", image: "Cushion fabric Optimize/Dutch Velvet/Dark Green pea.webp" },
-      { name: "Dark Grey", code: "#737272", image: "Cushion fabric Optimize/Dutch Velvet/Dark grey.webp" },
-      { name: "Nile Blue", code: "#245F4E", image: "Cushion fabric Optimize/Dutch Velvet/Nile blue.webp" },
-      { name: "Pale Aqua", code: "#A3D9C9", image: "Cushion fabric Optimize/Dutch Velvet/Pale Aqua.webp" },
-      { name: "Saddle Brown", code: "#8C593B", image: "Cushion fabric Optimize/Dutch Velvet/Saddle Brown.webp" },
-      { name: "Shadow Gray", code: "#565956", image: "Cushion fabric Optimize/Dutch Velvet/Shadow gray.webp" },
-      { name: "Star Dust", code: "#9F9F9C", image: "Cushion fabric Optimize/Dutch Velvet/Star dust.webp" },
-      { name: "Sun Yellow", code: "#FFDF22", image: "Cushion fabric Optimize/Dutch Velvet/Sun Yellow.webp" },
-      { name: "Taupe", code: "#A68B81", image: "Cushion fabric Optimize/Dutch Velvet/Taupe.webp" },
-      { name: "Timberwolf", code: "#D9D4CC", image: "Cushion fabric Optimize/Dutch Velvet/Timberwolf.webp" }
+      { id: "PP-01", name: "Cream", code: "#E6E0D6", image: "cushion-fabrics/pp-01.webp" },
+      { id: "PP-02", name: "Stone Gray", code: "#58554E", image: "cushion-fabrics/pp-02.webp" },
+      { id: "PP-03", name: "Honey Gold", code: "#D19A49", image: "cushion-fabrics/pp-03.webp" },
+      { id: "PP-04", name: "Caramel", code: "#A1613A", image: "cushion-fabrics/pp-04.webp" },
+      { id: "PP-05", name: "Sand", code: "#AB8E6F", image: "cushion-fabrics/pp-05.webp" },
+      { id: "PP-06", name: "Black", code: "#1E1E1E", image: "cushion-fabrics/pp-06.webp" }
+    ]
+  },
+  "Waterproof Outdoor": {
+    description: "A tough, waterproof outdoor fabric with a UV-resistant finish. Water beads right off, which makes it ideal for rear garages, moto vans, wet gear and outdoor seating.",
+    colors: [
+      { id: "OX-01", name: "Royal Blue", code: "#3A4D81", image: "cushion-fabrics/ox-01.webp" },
+      { id: "OX-02", name: "Army Green", code: "#444C38", image: "cushion-fabrics/ox-02.webp" },
+      { id: "OX-03", name: "Slate Teal", code: "#57686A", image: "cushion-fabrics/ox-03.webp" },
+      { id: "OX-04", name: "Sand", code: "#D4BA9E", image: "cushion-fabrics/ox-04.webp" },
+      { id: "OX-05", name: "White", code: "#D7D8CF", image: "cushion-fabrics/ox-05.webp" },
+      { id: "OX-06", name: "Sunshine Yellow", code: "#DF9F1E", image: "cushion-fabrics/ox-06.webp" },
+      { id: "OX-07", name: "Charcoal", code: "#373737", image: "cushion-fabrics/ox-07.webp" }
     ]
   }
 };
@@ -171,7 +192,7 @@ useEffect(() => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `${fabricName}_${color.name}_fabric.webp`;
+      link.download = `${color.id}_${fabricName}_${color.name}.webp`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -210,7 +231,7 @@ useEffect(() => {
             />
             <div>
               <Heading1 variant="card" text={color.name}/>
-              <RichParagraph>{color.code}</RichParagraph>
+              <RichParagraph>{color.id}</RichParagraph>
             </div>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -311,8 +332,8 @@ useEffect(() => {
                 <Heading1 variant="sub" text={"Color Properties"} className="mb-2" />
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg sm:rounded-xl">
-                    <Heading1 variant="sub" text={"Hex Code"} className="!text-sm !text-gray-500 mb-2"/>
-                    <Heading1 variant="sub" text={color.code} className="!text-base "/>
+                    <Heading1 variant="sub" text={"Color Code"} className="!text-sm !text-gray-500 mb-2"/>
+                    <Heading1 variant="sub" text={color.id} className="!text-base "/>
                     {/* <span className="text-xs sm:text-sm text-gray-500 block mb-1">Hex Code</span> */}
                     {/* <span className="font-mono font-bold text-gray-900 text-sm sm:text-base">{color.code}</span> */}
                   </div>
@@ -522,7 +543,7 @@ function ColorSwatch({ color, index, isSelected, onClick, onViewDetails, fabricN
 
           {/* Floating Badge */}
           <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-black/80 backdrop-blur-sm text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-bold">
-            #{String(index + 1).padStart(2, '0')}
+            {color.id}
           </div>
         </div>
 
@@ -539,7 +560,7 @@ function ColorSwatch({ color, index, isSelected, onClick, onViewDetails, fabricN
           </div>
           <div className="flex items-center justify-between">
 
-            <RichParagraph variant="sub" className="!text-gray-600 font-mono bg-gray-100 px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg">{color.code}</RichParagraph>
+            <RichParagraph variant="sub" className="!text-gray-600 font-mono bg-gray-100 px-1.5 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg">{color.id}</RichParagraph>
             <motion.div
               whileHover={{ scale: 1.1 }}
               className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 bg-gray-100 rounded-md sm:rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors"
@@ -646,7 +667,7 @@ function FabricSection({ fabricName, fabricInfo, isExpanded, onToggle, selectedC
 }
 
 export default function CushionCatalog() {
-  const [expandedFabric, setExpandedFabric] = useState("Chenille Fleece");
+  const [expandedFabric, setExpandedFabric] = useState("Classic Chenille");
   const [selectedColor, setSelectedColor] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
@@ -678,7 +699,7 @@ export default function CushionCatalog() {
     {
       icon: Shield,
       title: "Easy Maintenance",
-      description: "Have removable and machine-washable covers"
+      description: "Removable covers for easy cleaning"
     },
     {
       icon: Grid,
@@ -774,6 +795,14 @@ export default function CushionCatalog() {
               </span>
             </motion.h1> */}
             <RichParagraph className="!text-xl">{"Premium fabrics for dinette bench cushions"}</RichParagraph>
+            <a
+              href="/cushion-fabrics/big-bear-vans-cushion-fabric-guide.pdf"
+              download
+              className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-2xl bg-primary text-white font-semibold shadow-lg hover:bg-gray-800 transition-all duration-300"
+            >
+              <Download className="w-5 h-5" />
+              Download the PDF Fabric &amp; Color Guide
+            </a>
             {/* <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -812,7 +841,7 @@ export default function CushionCatalog() {
       {/* Enhanced Introduction Section */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-16 bg-white relative">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
-          {/* <RichParagraph>{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors."}</RichParagraph> */}
+          {/* <RichParagraph>{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer 8 premium cushion fabrics in 98 colors, each made to measure for your van. Note the color code (for example CC-07) and send it to your build coordinator."}</RichParagraph> */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -826,7 +855,7 @@ export default function CushionCatalog() {
               // className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 mb-6 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-5xl mx-auto font-light px-2"
               className="mb-12 text-xl"
             >
-              <RichParagraph className="!text-xl">{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer a range of premium, ultra-soft cushion fabrics in multiple colors."}</RichParagraph>
+              <RichParagraph className="!text-xl">{"Dinette benches are the epitome of smart furniture, ideal for lounging during the day and sleeping at night. At Big Bear Vans, we offer 8 premium cushion fabrics in 98 colors, each made to measure for your van. Note the color code (for example CC-07) and send it to your build coordinator."}</RichParagraph>
             </motion.p>
 
             {/* Premium Features Grid */}
@@ -1016,7 +1045,7 @@ export default function CushionCatalog() {
               />
               <div className="flex-1 min-w-0">
                 <RichParagraph className="font-bold">{selectedColor.name}</RichParagraph>
-                <RichParagraph className="text-gray-600 ">{selectedColor.code}</RichParagraph>
+                <RichParagraph className="text-gray-600 ">{selectedColor.id}</RichParagraph>
               </div>
             </div>
             <button
