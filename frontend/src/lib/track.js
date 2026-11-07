@@ -7,6 +7,10 @@ const LEAD_EMAIL_KEY = "bbv_lead_email";
 
 const isBrowser = () => typeof window !== "undefined";
 
+// Google Ads conversion "BBV Lead - Website Form" (account 524-003-2500)
+export const GOOGLE_ADS_ID = "AW-17907771927";
+const GOOGLE_ADS_LEAD = `${GOOGLE_ADS_ID}/nJ9SCMP1hbQdEJfUi9tC`;
+
 // Generate before the API call so the backend can store the same id Meta/Ads dedupe on
 export const createEventId = () => {
   try {
@@ -72,6 +76,21 @@ export const trackLead = ({ source, email, phone, name, eventId = createEventId(
     event_id: eventId,
     user_data: userData,
   });
+
+  // Google Ads lead conversion (+ enhanced conversions user data; gtag hashes it)
+  try {
+    if (typeof window.gtag === "function") {
+      if (Object.keys(userData).length) window.gtag("set", "user_data", userData);
+      window.gtag("event", "conversion", {
+        send_to: GOOGLE_ADS_LEAD,
+        value: 1.0,
+        currency: "USD",
+        transaction_id: eventId,
+      });
+    }
+  } catch {
+    // never block a lead on tracking
+  }
 
   const metaEvent = source === "booking" ? "Schedule" : "Lead";
   window.fbq?.("track", metaEvent, { source }, { eventID: eventId });
