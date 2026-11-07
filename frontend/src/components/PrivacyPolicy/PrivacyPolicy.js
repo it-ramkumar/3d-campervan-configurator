@@ -81,8 +81,8 @@ export default function PrivacyPolicy() {
               { q: 'What personal information do we process?', a: 'When you visit or use our Services, we may process personal information (like names, emails, and phone numbers) that you voluntarily submit through our inquiry forms.' },
               { q: 'Do we process any sensitive personal information?', a: 'We do not process sensitive personal information (such as racial origins, religious beliefs, etc.).' },
               { q: 'Do we collect any information from third parties?', a: 'No, we do not collect any information from public databases or outside marketing partners.' },
-              { q: 'How do we process your information?', a: 'We process your information to respond to your inquiries, offer customer support, analyze website traffic, and show and measure advertising.' },
-              { q: 'Do we use cookies?', a: 'Yes. We use operational cookies, analytics cookies (Google Analytics), and advertising cookies from third parties such as Google (AdSense) and Meta. You can opt out of personalized advertising at any time — see Section 4.' },
+              { q: 'How do we process your information?', a: 'We process your information to respond to your inquiries, offer customer support, analyze website traffic, and measure our own advertising.' },
+              { q: 'Do we use cookies?', a: 'Yes. We use operational cookies, analytics cookies (Google Analytics), and advertising cookies from Meta (the Meta Pixel), which we use to measure our own ads. You can opt out of personalized advertising at any time — see Section 4.' },
             ].map(({ q, a }, i) => (
               <div key={i} className=" gap-4 p-5 border border-[var(--color-primary)] border-opacity-10 rounded-[var(--radius-lg)]">
                 <span className="text-primary font-black text-lg mt-0.5 shrink-0">—</span>
@@ -162,8 +162,8 @@ export default function PrivacyPolicy() {
               value="We use anonymous data to see how many visitors come to our site and from which countries."
             />
             <KeyValueItem
-              label="To show and measure advertising"
-              value="We display ads served by Google AdSense on our website, and we use the Meta Pixel to measure our own ads on Facebook and Instagram. These partners may use cookies to show ads based on your interests."
+              label="To measure our advertising"
+              value="We use the Meta Pixel to measure our own ads on Facebook and Instagram. We do not display third-party ads on our website."
             />
           </div>
         </PolicySection>
@@ -181,7 +181,8 @@ export default function PrivacyPolicy() {
         <PolicySection id={4} title="DO WE USE COOKIES AND OTHER TRACKING TECHNOLOGIES?">
           <Body>
             Yes, we use cookies and similar tracking technologies to gather analytical information and to
-            show and measure advertising when you interact with our Services.
+            measure our own advertising when you interact with our Services. We do not display
+            third-party ads on our website.
           </Body>
           <SubHeading>Google Analytics</SubHeading>
           <Body>
@@ -197,18 +198,6 @@ export default function PrivacyPolicy() {
             >
               https://tools.google.com/dlpage/gaoptout
             </a>.
-          </Body>
-
-          <SubHeading>Google AdSense advertising</SubHeading>
-          <Body>
-            We use <strong>Google AdSense</strong> to display advertisements on our website. Third-party
-            vendors, including Google, use cookies to serve ads based on your prior visits to our website
-            or other websites. Google's use of advertising cookies enables it and its partners to serve
-            ads to you based on your visits to our site and/or other sites on the Internet. To learn more,
-            see{' '}
-            <PolicyLink href="https://policies.google.com/technologies/partner-sites">
-              How Google uses information from sites that use its services
-            </PolicyLink>.
           </Body>
 
           <SubHeading>Meta Pixel</SubHeading>
@@ -236,9 +225,7 @@ export default function PrivacyPolicy() {
           </ul>
           <Body>
             You can also block or delete cookies in your browser settings. Opting out does not remove
-            ads; it means the ads you see will be less relevant to your interests. Visitors from the
-            European Economic Area, the United Kingdom, and Switzerland are asked for consent before
-            personalized advertising cookies are used.
+            ads; it means the ads you see will be less relevant to your interests.
           </Body>
         </PolicySection>
 
@@ -306,7 +293,7 @@ export default function PrivacyPolicy() {
           ]} />
           <Body>
             We do not sell the information you submit in our forms. However, the advertising cookies
-            described in Section 4 (Google AdSense and the Meta Pixel) may be considered "sharing" of
+            described in Section 4 (the Meta Pixel) may be considered "sharing" of
             personal information for cross-context behavioral advertising under California law.
           </Body>
           <div id="do-not-sell" className="scroll-mt-8">
