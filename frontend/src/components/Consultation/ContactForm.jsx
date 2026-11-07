@@ -7,6 +7,7 @@ import { Heading1, RichParagraph } from "../Common/Common";
 import { contact } from "@/api/contact/contact";
 import { validateLead } from "@/lib/validateLead";
 import { trackLead, saveLeadEmail, cleanPageUrl, createEventId } from "@/lib/track";
+import { sendToCrm } from "@/lib/crm";
 import { hasSale } from "@/utils/salePrice";
 import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 
@@ -101,6 +102,18 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
       return;
     }
 
+    sendToCrm({
+      event_id: eventId,
+      lead_source: leadSource,
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      van_slug: van?.slug || "",
+      van_title: van?.title || "",
+      van_price: isPriceValid ? Number(van.price) : "",
+      sale_price: onSale ? Number(van.sale_price) : "",
+      message: formData.message.trim(),
+    });
     trackLead({ source: leadSource, email: formData.email, phone: formData.phone, name: formData.name, eventId });
     saveLeadEmail(formData.email);
     router.push(`/thank-you?source=${encodeURIComponent(leadSource)}`);
