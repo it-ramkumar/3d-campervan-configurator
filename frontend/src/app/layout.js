@@ -7,6 +7,9 @@ import Script from "next/script";
 import { GoogleTagManager } from '@next/third-parties/google'
 import { Toaster } from "react-hot-toast";
 
+// Google Ads account 524-003-2500 (keep in sync with GOOGLE_ADS_ID in lib/track.js)
+const GOOGLE_ADS_ID = "AW-17907771927";
+
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 const barlowCond = Barlow_Condensed({ subsets: ["latin"], weight: ["600", "700", "800"], display: "swap", variable: "--font-barlow-cond" });
 const dmSans = DM_Sans({ subsets: ["latin"], display: "swap", variable: "--font-dm-sans" });
@@ -50,6 +53,20 @@ export default function RootLayout({ children }) {
         />
 
         <GoogleTagManager gtmId="GTM-WCMSZ3TJ" />
+
+        {/* Google Ads tag (conversion tracking + enhanced conversions) */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function(){dataLayer.push(arguments);};
+            gtag('js', new Date());
+            gtag('config', '${GOOGLE_ADS_ID}', { allow_enhanced_conversions: true });
+          `}
+        </Script>
 
         {/* ✅ Meta Pixel Code */}
         <Script id="facebook-pixel" strategy="lazyOnload">
