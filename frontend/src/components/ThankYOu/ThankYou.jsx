@@ -11,6 +11,7 @@ const SOURCE_LABELS = {
   quiz: "Van Matchmaker",
   booking: "Consultation Booking",
   build_your_own: "Custom Build Inquiry",
+  black_friday: "Black Friday Van Request",
 };
 
 const noopSubscribe = () => () => {};
