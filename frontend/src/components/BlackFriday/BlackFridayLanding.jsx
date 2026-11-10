@@ -16,6 +16,7 @@ import { BLACK_FRIDAY_END, isBlackFriday } from "@/utils/salePrice";
 const PHONE = "951-441-9719";
 const PHONE_HREF = "tel:+19514419719";
 const SOURCE = "black_friday";
+const SPEC_SOURCE = "bf_specs";
 
 const HIGHLIGHTS = {
   "santa-monica-awd-charcoal-matte-gray": {
@@ -90,7 +91,7 @@ function Countdown({ compact = false }) {
   );
 }
 
-function VanCard({ van, onClaim }) {
+function VanCard({ van, onClaim, onSpecs }) {
   const info = HIGHLIGHTS[van.slug];
   const savings = van.price - van.sale_price;
   const pct = Math.round((savings / van.price) * 100);
@@ -169,6 +170,13 @@ function VanCard({ van, onClaim }) {
               Photos & specs
             </Link>
           </div>
+          <button
+            type="button"
+            onClick={() => onSpecs(van)}
+            className="mt-3 w-full text-center text-sm font-bold text-hover underline underline-offset-4 hover:text-primary"
+          >
+            Email me the full spec sheet
+          </button>
         </div>
       </div>
     </article>
@@ -327,6 +335,117 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
   );
 }
 
+
+// Low-commitment offer: the full spec sheet by email (phone optional).
+// Same Lead event as the main form, so Meta/Google learn from it too; the CRM
+// emails the sheet and starts the Black Friday follow-up sequence.
+function SpecSheetForm({ vans, selected, setSelected, formRef }) {
+  const router = useRouter();
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const van = vans.find((v) => v.slug === selected) || vans[0];
+
+  const change = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+    if (errors[name]) setErrors((x) => ({ ...x, [name]: undefined }));
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (loading || !van) return;
+    const fieldErrors = validateLead(form, { requirePhone: false });
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length) return;
+
+    const eventId = createEventId();
+    setLoading(true);
+    try {
+      await contact({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        message: `[Black Friday spec sheet request]\nVan: ${van.title}: Black Friday price ${money(van.sale_price)} (regular ${money(van.price)})`,
+        vanSlug: van.slug,
+        vanTitle: van.title,
+        vanPrice: van.price,
+        salePrice: van.sale_price,
+        saleTagline: "Black Friday Sale",
+        pageUrl: cleanPageUrl(),
+        event_id: eventId,
+        lead_source: SPEC_SOURCE,
+      });
+    } catch {
+      // The CRM copy below still captures the request and emails the sheet.
+    }
+
+    sendToCrm({
+      event_id: eventId,
+      lead_source: SPEC_SOURCE,
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      van_slug: van.slug,
+      van_title: van.title,
+      van_price: van.price,
+      sale_price: van.sale_price,
+      message: "Requested the spec sheet",
+    });
+    trackLead({ source: SPEC_SOURCE, email: form.email, phone: form.phone, name: form.name, eventId });
+    saveLeadEmail(form.email);
+    router.push(`/black-friday/spec-sheet/${van.slug}?sent=1`);
+  };
+
+  const input =
+    "w-full rounded-xl border-2 border-white/20 bg-white px-4 py-3 text-base text-primary outline-none transition focus:border-hover focus:ring-4 focus:ring-hover/20 placeholder:text-primary/35";
+
+  return (
+    <form ref={formRef} id="spec-sheet" onSubmit={submit} noValidate className="scroll-mt-24">
+      <div className="flex flex-wrap gap-2">
+        {vans.map((v) => (
+          <button
+            key={v.slug}
+            type="button"
+            onClick={() => setSelected(v.slug)}
+            aria-pressed={van?.slug === v.slug}
+            className={`rounded-full border-2 px-4 py-2 text-sm font-bold transition ${
+              van?.slug === v.slug ? "border-hover bg-hover text-white" : "border-white/25 text-white hover:border-white"
+            }`}
+          >
+            {HIGHLIGHTS[v.slug]?.short || v.title}
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div>
+          <label htmlFor="ss-name" className="sr-only">Name</label>
+          <input id="ss-name" name="name" autoComplete="name" value={form.name} onChange={change} className={input} placeholder="Your name" aria-invalid={!!errors.name} />
+          {errors.name && <p className="mt-1 text-xs text-red-300">{errors.name}</p>}
+        </div>
+        <div>
+          <label htmlFor="ss-email" className="sr-only">Email</label>
+          <input id="ss-email" name="email" type="email" autoComplete="email" value={form.email} onChange={change} className={input} placeholder="you@email.com" aria-invalid={!!errors.email} />
+          {errors.email && <p className="mt-1 text-xs text-red-300">{errors.email}</p>}
+        </div>
+        <div>
+          <label htmlFor="ss-phone" className="sr-only">Phone (optional)</label>
+          <input id="ss-phone" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={change} className={input} placeholder="Phone (optional)" aria-invalid={!!errors.phone} />
+          {errors.phone && <p className="mt-1 text-xs text-red-300">{errors.phone}</p>}
+        </div>
+      </div>
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-4 w-full rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-6 py-4 text-base font-black uppercase tracking-wider text-white shadow-lg shadow-orange-500/30 transition-transform hover:scale-[1.01] disabled:opacity-60"
+      >
+        {loading ? "Sending…" : `Send me the ${HIGHLIGHTS[van?.slug]?.short || "van"} spec sheet`}
+      </button>
+      <p className="mt-2 text-center text-xs text-white/60">Opens right away and lands in your inbox. No spam, no pressure.</p>
+    </form>
+  );
+}
+
 const FAQS = [
   {
     q: "Are these vans really ready, or do I wait for a build?",
@@ -357,12 +476,21 @@ const FAQS = [
 export default function BlackFridayLanding({ vans = [] }) {
   const [selected, setSelected] = useState(vans[0]?.slug || "");
   const formRef = useRef(null);
+  const specRef = useRef(null);
+  const [specVan, setSpecVan] = useState(vans[0]?.slug || "");
   const [live, setLive] = useState(true);
   const maxSavings = vans.reduce((m, v) => Math.max(m, v.price - v.sale_price), 0);
   const lowest = vans.reduce((m, v) => (m === null || v.sale_price < m ? v.sale_price : m), null);
 
   useEffect(() => {
     setLive(isBlackFriday());
+    // ?van=<slug> (from the spec sheet "Book a FaceTime walkthrough" link) preselects that van
+    try {
+      const want = new URLSearchParams(window.location.search).get("van");
+      if (want && vans.some((v) => v.slug === want)) setSelected(want);
+    } catch {
+      // ignore
+    }
     // ViewContent: lets Meta build "viewed the Black Friday page" retargeting audiences
     // from both the Pixel and the Conversions API (same event_id, counted once).
     try {
@@ -377,6 +505,10 @@ export default function BlackFridayLanding({ vans = [] }) {
   const claim = (van) => {
     setSelected(van.slug);
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const specs = (van) => {
+    setSpecVan(van.slug);
+    specRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
   const toForm = () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -444,7 +576,7 @@ export default function BlackFridayLanding({ vans = [] }) {
         </div>
         {vans.length ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {vans.map((v) => <VanCard key={v.slug} van={v} onClaim={claim} />)}
+            {vans.map((v) => <VanCard key={v.slug} van={v} onClaim={claim} onSpecs={specs} />)}
           </div>
         ) : (
           <p className="text-center text-primary/70">
@@ -452,6 +584,24 @@ export default function BlackFridayLanding({ vans = [] }) {
           </p>
         )}
       </section>
+
+      {/* SPEC SHEET OFFER */}
+      {vans.length > 0 && (
+        <section className="bg-black text-white">
+          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 md:grid-cols-5 md:py-16">
+            <div className="md:col-span-2">
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-hover">Not ready to talk yet?</p>
+              <h2 className="mt-2 text-3xl font-black md:text-4xl">Get the full spec sheet</h2>
+              <p className="mt-3 text-white/75">
+                Every detail in one page: chassis, electrical system, heating & A/C, water tanks, kitchen appliances and bathroom. Save it as a PDF and compare at your own pace.
+              </p>
+            </div>
+            <div className="md:col-span-3">
+              <SpecSheetForm vans={vans} selected={specVan} setSelected={setSpecVan} formRef={specRef} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* WHY NOW */}
       <section className="bg-primary text-white">
