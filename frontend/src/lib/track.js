@@ -1,8 +1,8 @@
 "use client";
 
 import { sendGTMEvent } from "@next/third-parties/google";
+import { loadTracking } from "@/components/Tracking/tracking";
 
-const TRACKING_KEY = "tracking";
 const LEAD_EMAIL_KEY = "bbv_lead_email";
 
 const isBrowser = () => typeof window !== "undefined";
@@ -99,13 +99,33 @@ export const trackLead = ({ source, email, phone, name, eventId = createEventId(
   return eventId;
 };
 
+const readCookie = (name) => {
+  try {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+    return m ? decodeURIComponent(m[1]) : "";
+  } catch {
+    return "";
+  }
+};
+
+// Stored UTMs/click ids (see components/Tracking/tracking.js). If storage missed the
+// click id, recover it from the cookies the Meta Pixel (_fbc = fb.1.<ts>.<fbclid>) and
+// the Google tag (_gcl_aw = GCL.<ts>.<gclid>) set on ad clicks.
 export const readTracking = () => {
   if (!isBrowser()) return {};
-  try {
-    return JSON.parse(window.sessionStorage.getItem(TRACKING_KEY)) || {};
-  } catch {
-    return {};
+  let t = loadTracking();
+  if (!t || typeof t !== "object") t = {};
+  t = { ...t };
+  delete t.saved_at;
+  if (!t.fbclid) {
+    const fbc = readCookie("_fbc").split(".");
+    if (fbc.length >= 4) t.fbclid = fbc.slice(3).join(".");
   }
+  if (!t.gclid) {
+    const gcl = readCookie("_gcl_aw").split(".");
+    if (gcl.length >= 3) t.gclid = gcl.slice(2).join(".");
+  }
+  return t;
 };
 
 export const withTracking = (data = {}) => ({ ...data, ...readTracking() });
