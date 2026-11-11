@@ -128,7 +128,7 @@ const PICK_CARDS = [
   {
     title: "Want something else?",
     text: "Both builds began as a conversation about bikes and crew. Start a custom build and we will design yours.",
-    href: "/custom-build",
+    href: "/build-your-own-camper-van",
   },
 ];
 
@@ -347,7 +347,7 @@ export default function MotoVansPage() {
                   Built on Sprinter and Ford Transit chassis in Big Bear, California.
                 </RichParagraph>
                 <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                  <Link href="/custom-build" className={BTN.accent}>
+                  <Link href="/build-your-own-camper-van" className={BTN.accent}>
                     Build One Like This
                   </Link>
                   <a href="#builds" className={BTN.ghostLight}>
@@ -617,7 +617,7 @@ export default function MotoVansPage() {
               </RichParagraph>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              <Link href="/custom-build" className={BTN.primary}>
+              <Link href="/build-your-own-camper-van" className={BTN.primary}>
                 Start a custom build
               </Link>
               <Link href="/camper-vans-for-sale" className={BTN.ghostDark}>

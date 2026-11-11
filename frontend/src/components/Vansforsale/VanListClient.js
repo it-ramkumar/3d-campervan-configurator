@@ -76,16 +76,7 @@ export default function VanListClient({
         status="coming_soon"
         vans={comingVans}
         soldHeading="Upcoming Custom Camper Vans in Development"
-        soldDesc="Get a head start on your next journey by exploring the custom camper vans currently rolling through our workshop. These upcoming units feature our latest innovations in off-grid electrical architecture, high-performance insulation, and clever spatial design.
-
-From off-road ready AWD Sprinter conversions to luxury Ford Transit camper vans, these upcoming units are crafted with our signature attention to detail.
-
-Explore Our Upcoming Build Styles:
-Off-Grid Adventurers: Built for remote exploration with massive lithium battery banks, high-output solar arrays, and robust fresh/grey water systems.
-
-Family Campers: Optimized with safe, certified passenger seating options and multi-bed configurations designed to comfortably sleep families on the road.
-
-Couple Campers: Premium finishes, spacious layouts, and custom sit-and-sleep designs tailored for seamless full-time couple travel."
+        soldDesc="These vans are being built in our Big Bear workshop right now. Contact us to reserve one before it is listed for sale."
         hasMore={comingHasMore}
         loading={comingLoading}
         onLoadMore={() => loadMore("coming_soon", comingPage, setComingVans, setComingHasMore, setComingLoading)}
@@ -107,8 +98,7 @@ Couple Campers: Premium finishes, spacious layouts, and custom sit-and-sleep des
         status="sold"
         vans={soldVans}
         soldHeading="The Archive: A Showcase of Sold Custom Camper Vans"
-        soldDesc="Take a look through our gallery of 111+ successfully delivered custom camper vans and completed past projects. Our portfolio demonstrates a wide range of specialized builds, from heavy-duty cargo configurations to luxury passenger layouts.
-We have successfully delivered high-quality custom vans for sale to clients nationwide. Whether you are looking for inspiration for a rugged 4x4 van build or a sleek Mercedes camper van layout, our archive showcases the limitless possibilities of our custom interior engineering. Even if you don't see an identical layout in our current stock, our past projects highlight what we can custom-build for you."
+        soldDesc="111+ custom camper vans delivered to owners across the US. These vans are sold, but we can build any of these layouts again for you."
         hasMore={soldHasMore}
         loading={soldLoading}
         onLoadMore={() => loadMore("sold", soldPage, setSoldVans, setSoldHasMore, setSoldLoading)}

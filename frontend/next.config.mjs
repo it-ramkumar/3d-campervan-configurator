@@ -116,6 +116,27 @@ const nextConfig = {
     destination: "/blog/:slug+",
     statusCode: 301,
   },
+  // Old / mistyped blog URLs still getting impressions in GSC (they showed "Blog Not Found" with a 200)
+  {
+    source: "/blog/how-many-watts-does-a-camper-use-a-complete-breakdown",
+    destination: "/blog/how-many-watts-does-a-camper-ac-use-a-complete-breakdown",
+    statusCode: 301,
+  },
+  {
+    source: "/blog/best-vans-for-van-life",
+    destination: "/blog/best-vans-for-van-life-which-one-is-right-for-you",
+    statusCode: 301,
+  },
+  {
+    source: "/blog/best-vans-for-van-life-which-one-is-ready-for-you",
+    destination: "/blog/best-vans-for-van-life-which-one-is-right-for-you",
+    statusCode: 301,
+  },
+  {
+    source: "/blogs/power-solution/what-states-allow-you-to-live-in-an-rv-on-your-property",
+    destination: "/blog/what-states-allow-you-to-live-in-an-rv-on-your-property",
+    statusCode: 301,
+  },
   // Vans listed under the wrong section
   {
     source: "/camper-vans-for-sale/madrid-campervan",

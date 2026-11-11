@@ -1,33 +1,32 @@
 import React from 'react'
 import WhereToCamp from '@/components/WhereToCamp/WhereToCamp'
-import { campgrounds } from "@/DataUseInComp/WhereToCamp";
+import { campgrounds, campingFaqs } from "@/DataUseInComp/WhereToCamp";
 
-// Metadata export (bahar)
+// Targets the GSC queries for this page: "big bear camping", "big bear campgrounds",
+// "big bear lake camping", "pineknot campground", "big bear rv parks", "camping near big bear".
+const SEO_TITLE = "Big Bear Camping: 9 Campgrounds & RV Parks Near Big Bear Lake";
+const SEO_DESCRIPTION =
+  "Compare 9 campgrounds and RV parks near Big Bear Lake, CA: Serrano, Pineknot, Holcomb Valley and more. Prices, hookups, season dates and free sites.";
+const OG_IMAGE = "https://www.bigbearvans.com/whereToCamp/Pineknot%20campground%202.webp";
+
 export const metadata = {
-  title: "Where to Camp Near Big Bear Lake, CA | Big Bear Vans",
-  description: `The best campgrounds and RV parks near Big Bear Lake -
- from full-hookup sites to quiet dispersed camping, curated
- by Big Bear Vans.`,
-  keywords: "Big Bear Lake camping, RV parks Big Bear, Serrano Campground, Pineknot Campground, campervan basecamp California, RV hookups Big Bear",
+  title: SEO_TITLE,
+  description: SEO_DESCRIPTION,
   alternates: {
     canonical: "https://www.bigbearvans.com/where-to-camp",
   },
   openGraph: {
-    title: "Where to Camp Near Big Bear Lake, CA | Big Bear Vans",
-  description: `The best campgrounds and RV parks near Big Bear Lake -
- from full-hookup sites to quiet dispersed camping, curated
- by Big Bear Vans.`,
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
     url: "https://www.bigbearvans.com/where-to-camp",
     type: "article",
-    images: ["https://www.bigbearvans.com/whereToCamp/Pineknot%20campground%202.webp"],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-   title: "Where to Camp Near Big Bear Lake, CA | Big Bear Vans",
-  description: `The best campgrounds and RV parks near Big Bear Lake -
- from full-hookup sites to quiet dispersed camping, curated
- by Big Bear Vans.`,
-    images: ["/whereToCamp/Pineknot%20campground%202.webp"],
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 
@@ -35,19 +34,32 @@ export default function Page() {
   const campingSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": "Where to Camp Near Big Bear Lake, CA | Big Bear Vans",
-    "description": `The best campgrounds and RV parks near Big Bear Lake -
- from full-hookup sites to quiet dispersed camping, curated
- by Big Bear Vans.`,
+    "name": SEO_TITLE,
+    "description": SEO_DESCRIPTION,
     "itemListElement": campgrounds.flatMap(cat => cat.locations).map((loc, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "item": {
-            "@type": "Campground",
-            "name": loc.name,
-            "description": loc.desc,
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Campground",
+        "name": loc.name,
+        "description": loc.desc,
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "CA",
+          "addressCountry": "US"
         }
+      }
     }))
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": campingFaqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.answer },
+    })),
   };
 
   return (
@@ -56,6 +68,10 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(campingSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <WhereToCamp campgrounds={campgrounds} />
     </div>

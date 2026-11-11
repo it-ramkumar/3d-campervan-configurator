@@ -52,12 +52,8 @@ export default function AvailableVans({ availableVans, hasMore, loading, onLoadM
             <Heading1 variant="section" textColor="text-primary" text='In-Stock Sprinter & Ford Transit Camper Vans for Sale' />
             <div className="mt-3">
               <RichParagraph variant="body" >
-                Looking to hit the road without the wait? Explore our current inventory of ready-to-buy custom camper vans.
-                <br></br>
-                Whether you need a high-roof cargo van for extra standing clearance or a spacious long-haul layout, we specialize in bespoke builds across 144, 148, and 170 wheelbases. Every sprinter camper van for sale and ford transit camper van for sale in our inventory is designed for exceptional structural durability, all-season comfort, and the ultimate van life experience.
-                <br>
-                </br>
-                Browse our available inventory below to find your next adventure-ready rig.              </RichParagraph>
+                Ready-to-buy custom camper vans on 144&quot; and 170&quot; Sprinter and 148&quot; Ford Transit chassis, most with AWD. Each listing shows the price, layout, beds and bathroom.
+              </RichParagraph>
             </div>
           </div>
 

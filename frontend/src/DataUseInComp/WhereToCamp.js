@@ -1,6 +1,6 @@
   export const campgrounds = [
         {
-            categoryTitle: "Campgrounds Closest to Our Showroom (~20 minutes Drive)",
+            categoryTitle: "Big Bear Lake Campgrounds (~20 Minutes From Our Showroom)",
             locations: [
                 {
                     name: "Serrano Campground",
@@ -11,7 +11,7 @@
 
                     ],
                     table: [
-                        { seasonDates: "March 7, 2025 - November 29, 2025", siteType: "Standard non-electric",dailyRates:"$44 nightly- $2/holiday additional", maximumStay:"14 nights within a rolling 30-day period" },
+                        { seasonDates: "March 27, 2026 - November 29, 2026", siteType: "Standard non-electric",dailyRates:"$44 nightly- $2/holiday additional", maximumStay:"14 nights within a rolling 30-day period" },
                         { seasonDates: "March 27, 2026 - November 29, 2026", siteType: "RV electric", dailyRates:"$56 nightly",maximumStay:"" },
                     ],
                     facilities: ["Various sites for RV camping", "Full hookups (sewer, water, electricity)", "A dump station ($10 fee)", "Picnic tables", "Campfire rings with grills","Flush toilets & showers","Drinking water","Firewood vendor","Food storage locker"],
@@ -21,10 +21,8 @@
                     name: "Pineknot Campground",
                     desc: "Pineknot Campground is located in the San Bernardino Mountains at Big Bear Lake. It accommodates both tents and RVs and is considered one of the best spots for mountain biking due to its proximity to ski mountain trails.",
                     images: [
-                        "/whereToCamp/pine tree rv park 2.webp",
-                        "/whereToCamp/pine tree rv park 3.webp",
-
-
+                        "/whereToCamp/Pineknot campground.webp",
+                        "/whereToCamp/Pineknot campground 2.webp",
                     ],
                    table: [
                         { seasonDates: "April 17, 2026 - October 17, 2026", siteType: "Standard non-electric",dailyRates:"$34", maximumStay:"14 days" },
@@ -60,7 +58,7 @@
 
                     ],
                  table: [
-                        { seasonDates: "Mid-May through October", siteType: "",dailyRates:"$27", maximumStay:"Per Night" },
+                        { seasonDates: "Mid-May through October", siteType: "",dailyRates:"$27 per night", maximumStay:"" },
                     ],
                     facilities: [
                         "Picnic table",
@@ -86,7 +84,7 @@
                         "/whereToCamp/Hanna flat campground.webp"
                     ],
                      table: [
-                        { seasonDates: "April 17, 2026 - October 24, 2026", siteType: "Standard non-electric",dailyRates:"$33 nightly-$2/ holiday additional", maximumStay:"14 nights within a rolling 30-period" },
+                        { seasonDates: "April 17, 2026 - October 24, 2026", siteType: "Standard non-electric",dailyRates:"$33 nightly-$2/ holiday additional", maximumStay:"14 nights within a rolling 30-day period" },
                     ],
                     facilities: [
                         "Picnic table",
@@ -111,7 +109,7 @@
             ]
         },
         {
-            categoryTitle: "Campgrounds at ~ 20-30 minutes Drive From Our Showroom",
+            categoryTitle: "Campgrounds Near Big Bear (~20-30 Minutes From Our Showroom)",
             locations: [
                 {
                     name: "Keller Peak Yellow Sites",
@@ -194,17 +192,17 @@
             ]
         },
         {
-            categoryTitle: "RV Parks",
+            categoryTitle: "Big Bear Lake RV Parks",
             locations: [
                 {
                     name: "Holloway's Marina & RV Park",
-                    desc: "Holloway’s Marina & RV Park is situated on the water of Big Bear Lake in Metacalf Bay. With up to 100 sites, visitors can enjoy stunning views and easy access to Big Bear Lake and nearby attractions.",
+                    desc: "Holloway’s Marina & RV Park is situated on the water of Big Bear Lake in Metcalf Bay. With up to 100 sites, visitors can enjoy stunning views and easy access to Big Bear Lake and nearby attractions.",
                     images: [
                         "/whereToCamp/RV marina park 2.webp",
                         "/whereToCamp/RV marina park 3.webp"
                     ],
                     table: [
-                        { seasonDates: "", siteType: "",dailyRates:"Starting at $73", maximumStay:"Per Night" },
+                        { seasonDates: "", siteType: "",dailyRates:"From $73 per night", maximumStay:"" },
                     ],
                     facilities: [
                         "Full hookups",
@@ -230,7 +228,7 @@
 
                     ],
                   table: [
-                        { seasonDates: "", siteType: "",dailyRates:"$40-50", maximumStay:"For Guest" },
+                        { seasonDates: "", siteType: "",dailyRates:"$40-50 per night", maximumStay:"" },
                     ],
                     facilities: [
                         "Full hookups available (water, sewer, & electric)",
@@ -250,3 +248,44 @@
 
         }
     ];
+// Quick comparison table at the top of /where-to-camp. Keep in sync with the
+// cards above (prices and seasons come from their tables).
+export const campgroundSummary = [
+    { name: "Serrano Campground", type: "Tent & RV", price: "$44-56", hookups: "Electric & full hookup sites", season: "Late Mar - Nov" },
+    { name: "Pineknot Campground", type: "Tent & RV", price: "$34", hookups: "None", season: "Mid Apr - mid Oct" },
+    { name: "Holcomb Valley Campground", type: "Tent & RV", price: "$27", hookups: "None (no water)", season: "Mid May - Oct" },
+    { name: "Hanna Flat Campground", type: "Tent & RV", price: "$33", hookups: "None", season: "Mid Apr - late Oct" },
+    { name: "Keller Peak Yellow Sites", type: "Tent & RV", price: "Free", hookups: "None", season: "First-come, first-served" },
+    { name: "Barton Flats Campground", type: "Tent & RV", price: "$36", hookups: "Dump station only", season: "Early Apr - late Oct" },
+    { name: "Green Valley Campground", type: "Tent & RV", price: "$29", hookups: "None", season: "Mid Apr - mid Oct" },
+    { name: "Holloway's Marina & RV Park", type: "RV park", price: "From $73", hookups: "Full hookups", season: "Check with park" },
+    { name: "Pine Tree RV & Mobile Home Park", type: "RV park", price: "$40-50", hookups: "Full hookups", season: "Check with park" },
+];
+
+// Answers the Big Bear camping questions people search for (GSC).
+export const campingFaqs = [
+    {
+        question: "Can you camp at Big Bear Lake?",
+        answer: "Yes. Serrano Campground is a short walk from the north shore of Big Bear Lake, Pineknot Campground sits near the ski trails on the south side, and Holloway's Marina & RV Park and Pine Tree RV Park are right by the lake. Several more Forest Service campgrounds are within a 20-30 minute drive.",
+    },
+    {
+        question: "What are the best campgrounds in Big Bear?",
+        answer: "Serrano is the most popular for lake views and RV sites with hookups, Pineknot is best for mountain biking near the ski trails, Holcomb Valley is the quietest and most spacious, and Hanna Flat is a good shaded, family-friendly option.",
+    },
+    {
+        question: "Which Big Bear campgrounds have RV hookups?",
+        answer: "Serrano Campground has electric and full hookup RV sites. Holloway's Marina & RV Park and Pine Tree RV & Mobile Home Park both offer full hookups. Barton Flats has a dump station, and the other Forest Service campgrounds on this page have no hookups.",
+    },
+    {
+        question: "How much does camping in Big Bear cost?",
+        answer: "Forest Service campgrounds around Big Bear cost about $27 to $56 per night, with a small extra fee on holidays at some sites. RV parks with full hookups cost about $40 to $73 or more per night, and Keller Peak Yellow Sites are free. Check the campground's own site for current rates.",
+    },
+    {
+        question: "Is there free camping near Big Bear?",
+        answer: "Yes. Keller Peak Yellow Sites near Running Springs are free, first-come, first-served sites for up to 8 people each. There are no hookups, and you need a campfire permit to use fire.",
+    },
+    {
+        question: "When is camping season in Big Bear?",
+        answer: "Most campgrounds around Big Bear open between late March and May and close between mid-October and the end of November. Serrano has the longest season, from late March to late November. Most Forest Service sites have a 14-night maximum stay.",
+    },
+];

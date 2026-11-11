@@ -7,14 +7,19 @@ export const dynamic = 'force-dynamic';
 import FAQs from '@/components/Faqs/Faqs';
 import { effectivePrice, hasSale, isBlackFriday } from "@/utils/salePrice";
 import BlackFridayBanner from "@/components/BlackFriday/BlackFridayBanner";
+import ForSaleGuide from "@/components/Vansforsale/ForSaleGuide";
+
+// Targets the non-branded buying queries in GSC ("camper vans for sale",
+// "... with bed / shower / pop top / awd", "... california").
+const SEO_TITLE = "Camper Vans for Sale in California | AWD Sprinter & Transit";
+const SEO_DESCRIPTION =
+  "Ready-to-buy custom camper vans: AWD Mercedes Sprinter & Ford Transit with elevator beds, showers & toilets, pop tops and off-grid power. Financing available.";
 // --- Dynamic Metadata (SEO) ---
 export async function generateMetadata() {
 
   try {
-    let title = `Camper Vans for Sale - Sprinter & Transit | Big Bear Vans`;
-    let description = `Shop ready-to-buy custom camper vans on Mercedes
-Sprinter & Ford Transit chassis. Layouts for 2-8 people,
- AWD available. Financing options. 100+ sold.`;
+    let title = SEO_TITLE;
+    let description = SEO_DESCRIPTION;
 
     // During Black Friday, put the sale in front of the normal title/description.
     // Same request as the page body, so Next.js dedupes it. Reverts on its own after the end date.
@@ -46,7 +51,7 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
             url: "https://www.bigbearvans.com/Home/home-portfolio-elevator-bed-big-bear-vans.webp",
             width: 1200,
             height: 630,
-            alt: "Custom Camper Vans for Sale | Big Bear Vans",
+            alt: "Custom camper van for sale with elevator bed | Big Bear Vans",
           },
         ],
       },
@@ -63,33 +68,13 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
   } catch (error) {
     console.error("Metadata fetch error:", error);
     return {
-      title: "Camper Vans for Sale - Sprinter & Transit | Big Bear Vans",
-      description: `Shop ready-to-buy custom camper vans on Mercedes
-Sprinter & Ford Transit chassis. Layouts for 2-8 people,
- AWD available. Financing options. 100+ sold.`,
+      title: SEO_TITLE,
+      description: SEO_DESCRIPTION,
     };
   }
 }
 export default async function VansForSale() {
   const limit = 9;
- const faqs = [
-    {
-      question: "Do you build camper vans with elevator beds?",
-      answer: "Yes, we build custom camper vans featuring motorized or manual elevator bed systems. This layout allows you to raise the bed to the ceiling when you need maximum garage or cargo space for bikes and gear, and lower it down easily for sleeping at night.",
-    },
-    {
-      question: "How many watts does a camper van air conditioner use, and can it run off-grid?",
-      answer:
-        "A typical 12V or rooftop RV air conditioner draws between 600 to 1,200 watts depending on the compressor speed and setting. Our custom electrical systems are engineered with high-capacity Lithium battery banks and high-output inverters specifically to handle running an AC unit off-grid for extended periods.",
-    },
-    { question: "Can I get a custom moto van layout for hauling motorcycles?",
-      answer: "Yes, our garage spaces are fully customizable. We frequently design layouts optimized for moto van featuring reinforced heavy-duty tie-down tracks, waterproof and slip-resistant flooring, and specialized storage for gear, helmets, and ramps." },
-    {
-      question: "Can you legally live in an RV or camper van on your own property?",
-      answer: "Legalities regarding living in an RV or camper van on private property vary significantly by state, county, and local zoning laws. While some states and rural areas permit full-time living or building on your own land, many urban and suburban municipalities have restrictions or time limits. We always recommend checking with your local county zoning or code enforcement office before parking full-time.",
-    }
-  ];
-
   // 1. Next.js Fetching Pattern: Promise.all use karein taake saari requests parallel chalein (Fast load)
   // Hum pehle page ka data server par hi mangwa rahe hain
   const [availableData, soldData, pendingData, comingData] = await Promise.all([
@@ -112,13 +97,55 @@ export default async function VansForSale() {
         : max,
     0,
   );
+
+  // Live price range of the available vans, used in the copy and the price FAQ
+  const availablePrices = (availableData?.data || [])
+    .map((van) => Number(effectivePrice(van.van_listing)))
+    .filter((p) => p >= 10);
+  const priceRange = availablePrices.length
+    ? { min: Math.min(...availablePrices), max: Math.max(...availablePrices) }
+    : null;
+  const fmtPrice = (n) => `$${Math.round(n).toLocaleString("en-US")}`;
+
+  // Buyer-intent FAQs (keep answers in line with docs/claude-project-knowledge/02-faq.md)
+  const faqs = [
+    {
+      question: "How much does a camper van for sale cost at Big Bear Vans?",
+      answer: priceRange
+        ? `Our ready-to-buy camper vans are currently listed from ${fmtPrice(priceRange.min)} to ${fmtPrice(priceRange.max)}. The price depends on the chassis (Mercedes Sprinter or Ford Transit), wheelbase, AWD, battery and solar system, and whether the van has a full bathroom or pop top. Financing is available.`
+        : "The price depends on the chassis (Mercedes Sprinter or Ford Transit), wheelbase, AWD, battery and solar system, and whether the van has a full bathroom or pop top. Each listing shows its current price, and financing is available.",
+    },
+    {
+      question: "Are your camper vans for sale new or used?",
+      answer: "They are not used RVs. Every van for sale is a custom conversion built in our Big Bear, California workshop on a Mercedes-Benz Sprinter or Ford Transit chassis. Each listing shows the chassis year, wheelbase, drivetrain, engine, seats and sleeping capacity.",
+    },
+    {
+      question: "Do you have camper vans for sale with a shower and toilet?",
+      answer: "Yes. Many of our builds, including the Montreal 170 and Santa Monica layouts, have a full indoor wet bath with hot water, a shower and a toilet. Other builds use a hide-away indoor shower to keep more open floor space.",
+    },
+    {
+      question: "Do you build camper vans with elevator beds?",
+      answer: "Yes. Our signature elevator bed lowers with a button for sleeping and lifts to the ceiling during the day, giving you a full garage for bikes, boards and gear underneath.",
+    },
+    {
+      question: "Can I buy a camper van if I live outside California?",
+      answer: "Yes. Owners across the US buy from us. You can book a showroom tour in Big Bear or a virtual tour by FaceTime or Zoom. Vans are picked up at our Big Bear workshop, about 2 to 2.5 hours from Los Angeles, with a full walkthrough and test drive of every system.",
+    },
+    {
+      question: "Do you offer financing and a warranty?",
+      answer: "Yes. Financing options are available on our camper vans for sale. Every van includes a 1-year warranty on craftsmanship, with a 3-year extended warranty available, plus servicing and remote support from our California workshop.",
+    },
+    {
+      question: "Can I change a van that is listed for sale?",
+      answer: "You can explore changes to a listed van in our 3D configurator, and our team will confirm what can be updated. If nothing in stock fits, we can design and build a fully custom camper van for you.",
+    },
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-      "name": "Camper Vans for Sale - Sprinter & Transit | Big Bear Vans",
-    "description": `Shop ready-to-buy custom camper vans on Mercedes
-Sprinter & Ford Transit chassis. Layouts for 2-8 people,
- AWD available. Financing options. 100+ sold.`,
+      "name": SEO_TITLE,
+    "description": SEO_DESCRIPTION,
     "numberOfItems": allActiveVans.length,
     "itemListElement": allActiveVans.map((van, index) => {
 
@@ -210,9 +237,10 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
       />
 
       <HeroImage
-        title="Custom Sprinter & Ford Transit Camper Vans"
-        description="At Big Bear Vans, we build fully custom luxury Mercedes Sprinter and Ford Transit camper vans. From rugged off-grid setups to full-time travel homes, every rig is engineered around your lifestyle. Trusted by 111+ owners across the US."
+        title="Camper Vans for Sale: Custom AWD Sprinter & Transit Builds"
+        description="Ready-to-buy custom Mercedes Sprinter and Ford Transit camper vans, built in Big Bear, California. Elevator beds, indoor showers and toilets, pop tops and off-grid lithium power. Trusted by 111+ owners across the US."
         image="/Home/home-portfolio-elevator-bed-big-bear-vans.webp"
+        alt="Custom camper van for sale with an elevator bed by Big Bear Vans"
         link="/build-your-own-camper-van"
         buttonText="Reserve your van"
         showButton={true}
@@ -229,7 +257,11 @@ Sprinter & Ford Transit chassis. Layouts for 2-8 people,
         initialPending={pendingData}
         initialComing={comingData}
       />
-          <FAQs faqs={faqs} />
+      <ForSaleGuide
+        priceRange={priceRange}
+        availableCount={availableData?.total || availableData?.data?.length || 0}
+      />
+      <FAQs faqs={faqs} />
     </div>
   );
 }

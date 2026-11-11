@@ -47,41 +47,67 @@ function AmberLine() {
 
 // ── Main component ──────────────────────────────────────────────────────────
 
-const faqs = [
+// Buyer-intent FAQs. Exported so app/custom-build/page.js can build FAQPage schema.
+// Prices are estimates only (see docs/claude-project-knowledge/04-build-process.md).
+export const faqs = [
   {
-    question: "Do you work with clients remotely?",
+    question: "How much does a custom camper van conversion cost?",
     answer:
-      "Yes. We successfully collaborate with clients across the country via video calls, shared design boards, and regular photo/video updates during the build.",
+      "A custom conversion typically costs about $90,000 to $150,000, plus the cost of the base van. This is an estimate to help you plan. Your actual price depends on the layout, power system and options you choose, and is set in a written quote after we design your van.",
   },
   {
-    question: "What if I don't have a clear design idea yet?",
+    question: "How long does a custom camper van build take?",
     answer:
-      "That's perfectly normal. Our consultation is designed to help clarify your needs. We use your lifestyle, budget, and inspiration photos to create initial concepts.",
+      "About 5 months from the first sketch to pickup: around 1 month of design with 3D renders, about 2 months of engineering and planning, then the build and assembly in months 3 and 4, followed by quality checks and handover.",
   },
   {
-    question: "Can I see physical samples of materials (countertops, fabrics, wood)?",
+    question: "Do I need to bring my own van?",
     answer:
-      "Yes. We offer sample kits and encourage you to visit our showroom to touch and feel all material options.",
+      "No. You can bring your own Sprinter or Transit and we will inspect it and plan the build, or we can source a new van for you through our dealership partners in Los Angeles and San Diego at a discounted price.",
   },
   {
-    question: "Can you integrate specific appliances or technology I want?",
+    question: "Should I build on a Mercedes Sprinter or a Ford Transit?",
     answer:
-      "Absolutely. If you have a favorite audio system or any exterior accessory, we can design the van to accommodate it.",
+      "We build on the Mercedes-Benz Sprinter 144\" and 170\" and the Ford Transit 148\", most with AWD. The Sprinter 170\" gives the most living space and room for a full bathroom, while the Sprinter 144\" and Transit 148\" are easier to drive and park. We help you choose based on how many people travel and what gear you carry.",
   },
   {
-    question: "What kind of training do you provide at delivery?",
+    question: "How does payment work for a custom build?",
     answer:
-      "We schedule a thorough walk-through, demonstrating every system (electrical, plumbing, heating, appliances) and provide you with a detailed manual for reference.",
+      "50% upfront to start, 12% after the large parts are built, and the rest on completion. Financing options are available, and our team can walk you through them on a call.",
   },
   {
-    question: "What if something needs repair or service after I take delivery?",
+    question: "Where are you located, and do you build for clients outside California?",
     answer:
-      "A strong warranty backs our workmanship. We can schedule service at our workshop and also provide remote assistance to our clients.",
+      "Our workshop is in Big Bear City, California, about 2 to 2.5 hours from Los Angeles and Orange County and about 2.5 to 3 hours from San Diego. We also build for clients across the US through video calls, shared design boards and weekly photo and video updates, and most out-of-state owners simply fly in to pick up their van.",
   },
   {
-    question: "How do I prepare for our first consultation?",
+    question: "Will I see the design before you start building?",
     answer:
-      "Think about your must-haves, your budget, and how you plan to use the van. Browsing our portfolio and saving inspiration photos is a great start.",
+      "Yes. We create photorealistic 3D renderings of your layout and materials, with unlimited changes until you are happy. You approve every final choice, and you can see physical material samples, before we start.",
+  },
+  {
+    question: "What warranty and support do I get after delivery?",
+    answer:
+      "Every build includes a 1-year warranty on craftsmanship, with a 3-year extended warranty available, plus a full walkthrough and test drive at pickup, remote assistance and service at our California workshop.",
+  },
+];
+
+// Prices are estimates, not quotes (see docs/claude-project-knowledge/04-build-process.md)
+const planCards = [
+  {
+    label: "Cost",
+    title: "From about $90k to $150k",
+    desc: "Typical cost of a custom conversion, plus the base van. This is an estimate for planning. Your exact price comes in a written quote once your design is ready. Financing options are available.",
+  },
+  {
+    label: "Timeline",
+    title: "About 5 months",
+    desc: "Around 1 month of design with 3D renders, 2 months of engineering and planning, then the build in months 3 and 4, with weekly photo and video updates until pickup.",
+  },
+  {
+    label: "Chassis",
+    title: "Sprinter or Transit",
+    desc: "Mercedes-Benz Sprinter 144\" or 170\", or Ford Transit 148\", most with AWD. Bring your own van, or we source a new one through our dealership partners at a discount.",
   },
 ];
 
@@ -127,8 +153,8 @@ const CustomBuild = () => {
       <HeroImage
         alt="Custom camper van by Big Bear Vans"
         slogan="You Dream It. We Build It."
-        title="Custom Campervan Builders"
-        description="At Big Bear Vans, we build custom campervans from the chassis up. You choose the layout, features, and finishes — we handle the design, build, and quality checks."
+        title="Custom Camper Van Builders in California"
+        description="Big Bear Vans builds fully custom Mercedes Sprinter and Ford Transit camper van conversions from an empty van. You choose the layout, features and finishes; we handle the 3D design, build and quality checks in our Big Bear, California workshop."
         image="/Home/home-custom-build-big-bear-vans.webp"
         link="/build-your-own-camper-van"
         showButton={false}
@@ -144,8 +170,8 @@ const CustomBuild = () => {
           <div className="space-y-6">
             <SpanTag text="Our Philosophy" />
             <Heading1 variant="section" textColor="text-primary">
-              Built From a<br />
-              <span className="text-hover">Blank Slate</span>
+              Custom Camper Van Conversions,<br />
+              <span className="text-hover">Built From an Empty Van</span>
             </Heading1>
             <SectionDivider />
             <RichParagraph variant="body">
@@ -181,8 +207,8 @@ const CustomBuild = () => {
             </RichParagraph>
 
             <Heading1 variant="section" textColor="text-secondary" className="mt-4 mb-4">
-              This Is Exactly<br />
-              <span className="text-hover">How We Do It</span>
+              How Our Custom<br />
+              <span className="text-hover">Van Conversion Works</span>
             </Heading1>
             <div className="w-12 h-[2px] bg-[#ED985F] mx-auto" />
           </div>
@@ -229,6 +255,41 @@ const CustomBuild = () => {
         </div>
       </section>
 
+      {/* ═══════════════ COST, TIMELINE & CHASSIS ═══════════════ */}
+      <section className="py-24 relative overflow-hidden" style={BG_LIGHT}>
+        <div className="absolute inset-0 pointer-events-none" style={DOT_GRID_LIGHT} />
+
+        <div className="relative mx-auto px-6 max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-10 border-b border-primary/10 gap-6">
+            <div className="max-w-xl">
+              <RichParagraph variant="sub" textColor="text-hover">
+                Plan Your Build
+              </RichParagraph>
+              <Heading1 variant="section" textColor="text-primary" className="mt-4">
+                Cost, Timeline &<br />
+                <span className="text-hover">Chassis Options</span>
+              </Heading1>
+            </div>
+            <RichParagraph variant="body" className="max-w-md md:text-right">
+              Our workshop is in Big Bear City, California, about 2 to 2.5 hours from Los Angeles and
+              Orange County and 2.5 to 3 hours from San Diego. We also build for clients across the US.
+            </RichParagraph>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {planCards.map((card) => (
+              <div key={card.title} className="rounded-xl p-8 space-y-4" style={{ ...CARD, borderTop: "2px solid #ED985F" }}>
+                <RichParagraph variant="sub" textColor="text-hover">
+                  {card.label}
+                </RichParagraph>
+                <Heading1 variant="card" text={card.title} textColor="text-primary" className="uppercase" />
+                <RichParagraph variant="card">{card.desc}</RichParagraph>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════ OUR PROCESS ═══════════════ */}
       <OurProcess />
 
@@ -244,8 +305,8 @@ const CustomBuild = () => {
               </RichParagraph>
 
               <Heading1 variant="section" textColor="text-primary" className="mt-4">
-                Built Different,<br />
-                <span className="text-hover">By Design</span>
+                Why Choose Us as<br />
+                <span className="text-hover">Your Van Builder</span>
               </Heading1>
             </div>
             <RichParagraph variant="body" textColor="text-primary" className="max-w-xs md:text-right !opacity-50">
@@ -344,7 +405,7 @@ const CustomBuild = () => {
               </RichParagraph>
 
               <Heading1 variant="section" textColor="text-primary" className="mt-4">
-                105+ Campervans<br />
+                111+ Custom Camper Vans<br />
                 <span className="text-hover">Delivered</span>
               </Heading1>
             </div>
@@ -391,8 +452,8 @@ const CustomBuild = () => {
               Who We Build For
             </RichParagraph>
             <Heading1 variant="section" textColor="text-secondary">
-              Built for<br />
-              <span className="text-hover">Everyone</span>
+              Custom Vans for Families,<br />
+              <span className="text-hover">Couples, Bikers & Full-Timers</span>
             </Heading1>
             <SectionDivider />
             <RichParagraph variant="body" textColor="text-secondary" className="!opacity-60">

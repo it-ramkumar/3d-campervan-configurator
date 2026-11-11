@@ -34,23 +34,8 @@ export default function SoldVans({
             </div>
             <Heading1 variant="section" text={soldHeading} textColor="text-primary" />
             <div>
-              {/* Check if at least one van is sold before rendering the content */}
-              {vans.some((van) => van.status === "sold") && (
-                <RichParagraph variant="body">
-                  Take a look at our gallery of 111+ sold custom camper vans and
-                  recently completed projects. Our portfolio includes a wide
-                  range of specialized builds, from heavy-duty cargo
-                  configurations to comfortable, spacious passenger vans.
-                  <br />
-                  <br />
-                  We have successfully delivered high-quality custom vans for
-                  sale to clients across the country. Whether it’s a rugged 4x4
-                  van for sale or a sleek Mercedes camper van for sale, our team
-                  ensures every build meets the highest standards of safety and
-                  luxury. Even if you don’t see your specific model today, our
-                  past projects showcase the limitless possibilities of our
-                  signature custom sit and sleep layouts.
-                </RichParagraph>
+              {soldDesc && (
+                <RichParagraph variant="body">{soldDesc}</RichParagraph>
               )}
             </div>
           </div>
@@ -150,26 +135,6 @@ export default function SoldVans({
           </div>
         </div>
 
-        <div className="my-8 max-w-2xl">
-          {/* Check for "coming-soon" status to show the upcoming builds text */}
-          {vans.some((van) => van.status === "coming_soon") && (
-            <RichParagraph variant="body">
-              Exciting new projects are on the horizon at Big Bear Vans. Our
-              upcoming custom camper builds are currently in the workshop,
-              featuring our latest innovations in off-grid living and
-              high-performance van architecture.
-              <br />
-              <br />
-              From off-road ready AWD Sprinter conversions to luxury Ford
-              Transit camper vans, these upcoming units are being crafted with
-              our signature attention to detail. Whether you're looking for a
-              Mercedes Sprinter 144 AWD or a custom 4x4 camper, get a head start
-              on your next adventure by exploring what’s joining our inventory
-              soon. Stay tuned for new sit and sleep layouts designed for the
-              ultimate travel experience.
-            </RichParagraph>
-          )}
-        </div>
 
         {/* --- Vans Grid --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

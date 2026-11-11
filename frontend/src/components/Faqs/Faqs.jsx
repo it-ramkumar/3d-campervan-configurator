@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
 import { Heading1, RichParagraph } from '../Common/Common'
 
-export default function FAQs({ faqs }) {
+export default function FAQs({ faqs, description = "Everything you need to know about our custom build process and services." }) {
   const [openIndex, setOpenIndex] = useState(null);
 
   const handleToggle = (index) => {
@@ -28,7 +28,7 @@ export default function FAQs({ faqs }) {
             className="uppercase "
           />
           <RichParagraph variant="body" >
-            Everything you need to know about our custom build process and services.
+            {description}
           </RichParagraph>
         </div>
 
