@@ -28,6 +28,7 @@ import BuildOptions from "../Common/BuildOptions/BuildOptions";
 import BigBearLoader from "../Loader/Loader";
 import { isContactUrl, scrollToConsultation } from "@/utils/scrollToConsultation";
 import { hasSale } from "@/utils/salePrice";
+import { setLeadContext } from "@/lib/leadContext";
 import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -252,6 +253,21 @@ const VanPage = ({ vanDetail,variants }) => {
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
+
+  // Site-wide contact bar: "Check availability" opens this page's form for this van; chat knows the van.
+  useEffect(() => {
+    const l = vanDetail?.van_listing || {};
+    if (!vanDetail) return undefined;
+    return setLeadContext({
+      primaryLabel: "Check availability",
+      source: "inventory",
+      van: { slug: vanDetail.slug, title: l.title, price: l.price, sale_price: l.sale_price ?? vanDetail.sale_price },
+      onPrimary: () => {
+        setData(vanDetail);
+        setIsFormOpen(true);
+      },
+    });
+  }, [vanDetail]);
 
   const specs = vanDetail?.van_listing?.specifications;
 

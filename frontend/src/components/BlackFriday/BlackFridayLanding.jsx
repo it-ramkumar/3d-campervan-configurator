@@ -8,6 +8,7 @@ import { validateLead } from "@/lib/validateLead";
 import { trackLead, saveLeadEmail, cleanPageUrl, createEventId, sendMetaCapi } from "@/lib/track";
 import { sendToCrm } from "@/lib/crm";
 import { BLACK_FRIDAY_END, isBlackFriday } from "@/utils/salePrice";
+import { setLeadContext } from "@/lib/leadContext";
 
 // Black Friday 2026 ad landing page (/black-friday). Prices come live from the
 // dashboard (Price + Sale Price), so editing a van there updates this page.
@@ -183,12 +184,11 @@ function VanCard({ van, onClaim, onSpecs }) {
   );
 }
 
-const CONTACT_PREFS = ["Phone call", "FaceTime video tour", "Visit in Big Bear, CA", "Text me"];
-const TIMELINES = ["Ready to buy now", "Within 1–3 months", "Just comparing"];
 
 function LeadForm({ vans, selected, setSelected, formRef }) {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", contactPref: CONTACT_PREFS[0], timeline: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [showNote, setShowNote] = useState(false);
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -212,7 +212,7 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
       ? `${van.title}: Black Friday price ${money(van.sale_price)} (regular ${money(van.price)})`
       : "Not sure yet, wants help choosing";
     const message =
-      `[Black Friday landing page]\nVan: ${vanLine}\nPreferred contact: ${form.contactPref}\nTimeline: ${form.timeline || "not given"}` +
+      `[Black Friday landing page]\nVan: ${vanLine}` +
       (form.message.trim() ? `\n\n${form.message.trim()}` : "");
 
     const eventId = createEventId();
@@ -247,8 +247,6 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
       van_title: van?.title || "",
       van_price: van?.price || "",
       sale_price: van?.sale_price || "",
-      contact_pref: form.contactPref,
-      timeline: form.timeline,
       message: form.message.trim(),
     });
     trackLead({ source: SOURCE, email: form.email, phone: form.phone, name: form.name, eventId });
@@ -260,10 +258,10 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
     "w-full rounded-xl border-2 border-primary/10 bg-white px-4 py-3 text-base text-primary outline-none transition focus:border-hover focus:ring-4 focus:ring-hover/10 placeholder:text-primary/35";
 
   return (
-    <form ref={formRef} id="hold-price" onSubmit={submit} noValidate className="scroll-mt-24 rounded-2xl bg-white p-5 shadow-xl sm:p-8">
+    <form ref={formRef} id="hold-price" data-bbv-form="bf_hold_price" data-van-slug={van?.slug || ""} data-van-title={van?.title || ""} onSubmit={submit} noValidate className="scroll-mt-24 rounded-2xl bg-white p-5 shadow-xl sm:p-8">
       <h2 className="text-2xl font-black text-primary md:text-3xl">Hold your Black Friday price</h2>
       <p className="mt-2 text-sm text-primary/70">
-        Tell us which van and how to reach you. Anna will get back to you the same day with a video walkthrough, answers and next steps. No obligation.
+        Pick a van and leave your number. Anna will text or call you the same day with a walkaround video and answers. No obligation.
       </p>
 
       <fieldset className="mt-6">
@@ -284,39 +282,32 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
         </div>
       </fieldset>
 
-      <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <label htmlFor="bf-name" className="mb-1 block text-sm font-bold text-primary">Name</label>
-          <input id="bf-name" name="name" autoComplete="name" value={form.name} onChange={change} className={input} placeholder="Your name" aria-invalid={!!errors.name} />
-          {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+      <div className="mt-5 grid grid-cols-1 gap-3">
+        <div>
+          <label htmlFor="bf-name" className="mb-1 block text-sm font-bold text-primary">Your name</label>
+          <input id="bf-name" name="name" autoComplete="name" enterKeyHint="next" value={form.name} onChange={change} className={input} placeholder="First and last name" aria-invalid={!!errors.name} aria-describedby={errors.name ? "bf-name-err" : undefined} />
+          {errors.name && <p id="bf-name-err" role="alert" className="mt-1 text-xs font-semibold text-red-600">{errors.name}</p>}
+        </div>
+        <div>
+          <label htmlFor="bf-phone" className="mb-1 block text-sm font-bold text-primary">Mobile phone</label>
+          <input id="bf-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" enterKeyHint="next" value={form.phone} onChange={change} className={input} placeholder="(555) 555-5555" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "bf-phone-err" : undefined} />
+          {errors.phone && <p id="bf-phone-err" role="alert" className="mt-1 text-xs font-semibold text-red-600">{errors.phone}</p>}
         </div>
         <div>
           <label htmlFor="bf-email" className="mb-1 block text-sm font-bold text-primary">Email</label>
-          <input id="bf-email" name="email" type="email" autoComplete="email" value={form.email} onChange={change} className={input} placeholder="you@email.com" aria-invalid={!!errors.email} />
-          {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+          <input id="bf-email" name="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} enterKeyHint="send" value={form.email} onChange={change} className={input} placeholder="you@email.com" aria-invalid={!!errors.email} aria-describedby={errors.email ? "bf-email-err" : undefined} />
+          {errors.email && <p id="bf-email-err" role="alert" className="mt-1 text-xs font-semibold text-red-600">{errors.email}</p>}
         </div>
-        <div>
-          <label htmlFor="bf-phone" className="mb-1 block text-sm font-bold text-primary">Phone</label>
-          <input id="bf-phone" name="phone" type="tel" autoComplete="tel" value={form.phone} onChange={change} className={input} placeholder="(555) 555-5555" aria-invalid={!!errors.phone} />
-          {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
-        </div>
-        <div>
-          <label htmlFor="bf-pref" className="mb-1 block text-sm font-bold text-primary">Best way to talk</label>
-          <select id="bf-pref" name="contactPref" value={form.contactPref} onChange={change} className={input}>
-            {CONTACT_PREFS.map((p) => <option key={p}>{p}</option>)}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="bf-timeline" className="mb-1 block text-sm font-bold text-primary">When are you buying?</label>
-          <select id="bf-timeline" name="timeline" value={form.timeline} onChange={change} className={input}>
-            <option value="">Choose one</option>
-            {TIMELINES.map((t) => <option key={t}>{t}</option>)}
-          </select>
-        </div>
-        <div className="sm:col-span-2">
-          <label htmlFor="bf-msg" className="mb-1 block text-sm font-bold text-primary">Questions? <span className="font-normal text-primary/50">(optional)</span></label>
-          <textarea id="bf-msg" name="message" rows={3} value={form.message} onChange={change} className={input} placeholder="Trade-in, delivery to your state, how many seats you need…" />
-        </div>
+        {showNote ? (
+          <div>
+            <label htmlFor="bf-msg" className="mb-1 block text-sm font-bold text-primary">Question <span className="font-normal text-primary/50">(optional)</span></label>
+            <textarea id="bf-msg" name="message" rows={3} value={form.message} onChange={change} className={input} placeholder="Trade-in, delivery to your state, how many seats you need…" />
+          </div>
+        ) : (
+          <button type="button" onClick={() => setShowNote(true)} className="justify-self-start text-sm font-bold text-primary/70 underline underline-offset-4 hover:text-primary">
+            + Add a question (optional)
+          </button>
+        )}
       </div>
 
       {submitError && <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{submitError}</p>}
@@ -328,9 +319,12 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
       >
         {loading ? "Sending…" : van ? `Hold ${money(van.sale_price)} for me` : "Send my request"}
       </button>
-      <p className="mt-3 text-center text-xs text-primary/50">
-        Prefer to talk now? Call or text <a href={PHONE_HREF} className="font-bold text-primary underline">{PHONE}</a>
+      <p className="mt-3 text-center text-sm text-primary/60">
+        Prefer to talk now?{" "}
+        <a href={PHONE_HREF} data-bbvt-click="bf_form_call" className="font-bold text-primary underline">Call Anna {PHONE}</a>{" "}
+        or <a href="sms:+19514419719" data-bbvt-click="bf_form_text" className="font-bold text-primary underline">text her</a>
       </p>
+      <p className="mt-1 text-center text-xs text-primary/40">We only use your details to answer you. No spam.</p>
     </form>
   );
 }
@@ -401,7 +395,7 @@ function SpecSheetForm({ vans, selected, setSelected, formRef }) {
     "w-full rounded-xl border-2 border-white/20 bg-white px-4 py-3 text-base text-primary outline-none transition focus:border-hover focus:ring-4 focus:ring-hover/20 placeholder:text-primary/35";
 
   return (
-    <form ref={formRef} id="spec-sheet" onSubmit={submit} noValidate className="scroll-mt-24">
+    <form ref={formRef} id="spec-sheet" data-bbv-form="bf_spec_sheet" data-van-slug={van?.slug || ""} data-van-title={van?.title || ""} onSubmit={submit} noValidate className="scroll-mt-24">
       <div className="flex flex-wrap gap-2">
         {vans.map((v) => (
           <button
@@ -511,6 +505,8 @@ export default function BlackFridayLanding({ vans = [] }) {
     specRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
   const toForm = () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // The site-wide contact bar (LeadDock) shows "Hold my price" here and scrolls to the form.
+  useEffect(() => setLeadContext({ primaryLabel: "Hold my price", onPrimary: toForm, source: SOURCE }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="bg-secondary pb-24 md:pb-0">
@@ -666,13 +662,6 @@ export default function BlackFridayLanding({ vans = [] }) {
         </div>
       </section>
 
-      {/* MOBILE STICKY CTA */}
-      <div className="fixed inset-x-0 bottom-0 z-40 flex gap-2 border-t border-primary/10 bg-white/95 p-3 backdrop-blur md:hidden">
-        <a href={PHONE_HREF} className="flex-1 rounded-full border-2 border-primary/20 py-3 text-center text-sm font-bold text-primary">Call</a>
-        <button type="button" onClick={toForm} className="flex-[2] rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] py-3 text-sm font-black uppercase tracking-wider text-white">
-          Hold my price
-        </button>
-      </div>
     </main>
   );
 }

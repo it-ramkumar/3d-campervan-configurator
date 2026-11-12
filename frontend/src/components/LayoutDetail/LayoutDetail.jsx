@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Heading1,
@@ -27,6 +27,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { setLeadContext } from "@/lib/leadContext";
 import "swiper/css/pagination";
 
 const SvgCheck = () => (
@@ -56,6 +57,19 @@ export default function LayoutDetail({ van, initialView }) {
   const isMotoVan = MOTO_VAN_SLUGS.includes(van?.slug);
   const [data, setData] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  // Site-wide contact bar: "Get a quote" opens this layout's form.
+  useEffect(() => {
+    if (!van) return undefined;
+    return setLeadContext({
+      primaryLabel: "Get a quote",
+      source: "layout",
+      van: { slug: van.slug, title: van?.van_listing?.title || van.title },
+      onPrimary: () => {
+        setData(van);
+        setIsFormOpen(true);
+      },
+    });
+  }, [van]);
   // console.log(initialView, "ye initialView hai jo server se aaya");
   const getFeatureIcon = (cat) => {
     if (cat.includes("Electric")) return <Zap size={24} />;

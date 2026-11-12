@@ -39,13 +39,14 @@ const normalizeVan = (data) => {
   };
 };
 
-export default function ContactForm({ leadSource = "contact", initialVans }) {
+export default function ContactForm({ leadSource = "contact", initialVans, compact = false, autoFocus = false }) {
   const router = useRouter();
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
   const [failedImage, setFailedImage] = useState(null);
+  const [showNote, setShowNote] = useState(false);
 
   const van = normalizeVan(initialVans);
   const hasSelectedVan = !!van?.id && !!van?.title;
@@ -189,18 +190,29 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
           </p>
         </div>
       ) : (
-        <div className="text-center mb-6 md:mb-10">
-          <Heading1 variant="section" textColor="text-primary">
-            Let’s Connect
-          </Heading1>
+        <div className={`text-center ${compact ? "mb-5" : "mb-6 md:mb-10"}`}>
+          {compact ? (
+            <h2 className="text-2xl font-bold tracking-tight text-primary">Get prices &amp; answers</h2>
+          ) : (
+            <Heading1 variant="section" textColor="text-primary">
+              Let’s Connect
+            </Heading1>
+          )}
           <RichParagraph variant="body" className="mt-2">
-            Tell us what’s on your mind!
+            Leave your number and Anna will text or call you back today.
           </RichParagraph>
         </div>
       )}
 
-      {/* FORM SECTION */}
-      <form onSubmit={handleSubmit} noValidate className="space-y-4 w-full">
+      {/* FORM SECTION: 3 short fields, one per row (easy on phones), note is optional */}
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        data-bbv-form={leadSource === "inventory" ? "van_availability" : "contact"}
+        data-van-slug={van?.slug || ""}
+        data-van-title={van?.title || ""}
+        className="space-y-4 w-full"
+      >
         {hasSelectedVan && (
           <>
             <input type="hidden" name="vanSlug" value={van.slug || ""} />
@@ -213,23 +225,26 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
           </>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {/* NAME */}
           <div className="flex flex-col">
-            <label htmlFor="contact-name" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
-              Full Name *
+            <label htmlFor="contact-name" className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-1.5 ml-1">
+              Your name
             </label>
             <input
               type="text"
               id="contact-name"
               name="name"
               autoComplete="name"
+              enterKeyHint="next"
+              autoFocus={autoFocus}
+              placeholder="First and last name"
               aria-invalid={!!errors.name}
               aria-describedby={errors.name ? "contact-name-error" : undefined}
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-secondary/80 focus:outline-none transition-all"
+              className="w-full px-4 py-3.5 text-base text-primary rounded-lg bg-primary/10 border-2 border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all placeholder:text-primary/35"
             />
             {errors.name && (
               <p id="contact-name-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
@@ -238,34 +253,10 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
             )}
           </div>
 
-          {/* EMAIL */}
+          {/* PHONE */}
           <div className="flex flex-col">
-            <label htmlFor="contact-email" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
-              Email Address *
-            </label>
-            <input
-              type="email"
-              id="contact-email"
-              name="email"
-              autoComplete="email"
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "contact-email-error" : undefined}
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
-            />
-            {errors.email && (
-              <p id="contact-email-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
-                {errors.email}
-              </p>
-            )}
-          </div>
-
-          {/* PHONE (Span 2 Columns for symmetry) */}
-          <div className="flex flex-col md:col-span-2">
-            <label htmlFor="contact-phone" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
-              Phone Number *
+            <label htmlFor="contact-phone" className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-1.5 ml-1">
+              Mobile phone
             </label>
             <input
               type="tel"
@@ -273,17 +264,20 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               name="phone"
               autoComplete="tel"
               inputMode="tel"
+              enterKeyHint="next"
+              placeholder="(555) 555-5555"
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? "contact-phone-error" : undefined}
               value={formData.phone}
               onChange={(e) => {
-                const val = e.target.value.replace(/\D/g, "");
-                if (val.length <= 15) {
+                // Allow the usual phone formatting characters; validation counts digits only
+                const val = e.target.value.replace(/[^\d+()\-.\s]/g, "");
+                if (val.replace(/\D/g, "").length <= 15) {
                   handleChange({ target: { name: "phone", value: val } });
                 }
               }}
               required
-              className="w-full px-4 py-3 md:py-3.5 text-base rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all"
+              className="w-full px-4 py-3.5 text-base text-primary rounded-lg bg-primary/10 border-2 border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all placeholder:text-primary/35"
             />
             {errors.phone && (
               <p id="contact-phone-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
@@ -291,27 +285,63 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               </p>
             )}
           </div>
+
+          {/* EMAIL */}
+          <div className="flex flex-col">
+            <label htmlFor="contact-email" className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-1.5 ml-1">
+              Email
+            </label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              autoComplete="email"
+              inputMode="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              enterKeyHint={showNote ? "next" : "send"}
+              placeholder="you@email.com"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "contact-email-error" : undefined}
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3.5 text-base text-primary rounded-lg bg-primary/10 border-2 border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all placeholder:text-primary/35"
+            />
+            {errors.email && (
+              <p id="contact-email-error" role="alert" className="mt-1 ml-1 text-xs font-semibold text-red-600">
+                {errors.email}
+              </p>
+            )}
+          </div>
         </div>
 
-        {/* MESSAGE TEXTAREA */}
-        <div className="flex flex-col">
-          <label htmlFor="contact-message" className="text-[11px] font-bold uppercase tracking-wider text-primary/40 mb-1.5 ml-1">
-            Message
-          </label>
-          <textarea
-            id="contact-message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            rows={3}
-            placeholder={
-              hasSelectedVan
-                ? `Interested in ${van.title}`
-                : "Your Message"
-            }
-            className="w-full px-4 py-3 text-base text-black rounded-lg bg-primary/10 border border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all resize-none"
-          />
-        </div>
+        {/* OPTIONAL NOTE */}
+        {showNote ? (
+          <div className="flex flex-col">
+            <label htmlFor="contact-message" className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-1.5 ml-1">
+              Question <span className="normal-case font-normal tracking-normal">(optional)</span>
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              rows={3}
+              autoFocus
+              placeholder={hasSelectedVan ? `Anything you want to know about the ${van.title}?` : "How can we help?"}
+              className="w-full px-4 py-3 text-base text-primary rounded-lg bg-primary/10 border-2 border-transparent focus:border-hover focus:bg-white focus:outline-none transition-all resize-none placeholder:text-primary/35"
+            />
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowNote(true)}
+            className="ml-1 text-sm font-bold text-primary/70 underline underline-offset-4 hover:text-primary cursor-pointer"
+          >
+            + Add a question (optional)
+          </button>
+        )}
 
         {submitError && (
           <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
@@ -340,14 +370,21 @@ export default function ContactForm({ leadSource = "contact", initialVans }) {
               ? "Claim Sale Price"
               : isInventory && hasSelectedVan
               ? "Check Availability"
-              : "Send Message"}
+              : hasSelectedVan
+              ? "Get Price & Details"
+              : "Send"}
           </button>
           <p className="mt-3 text-center text-xs sm:text-sm text-primary/60">
-            Prefer to talk?{" "}
-            <a href="tel:+19514419719" className="font-bold text-primary underline underline-offset-2">
+            Anna replies the same day (8am–7pm PT). Prefer to talk?{" "}
+            <a href="tel:+19514419719" data-bbvt-click="form_call" className="font-bold text-primary underline underline-offset-2">
               Call (951) 441-9719
+            </a>{" "}
+            or{" "}
+            <a href="sms:+19514419719" data-bbvt-click="form_text" className="font-bold text-primary underline underline-offset-2">
+              text
             </a>
           </p>
+          <p className="mt-1 text-center text-[11px] text-primary/40">We only use your details to answer you. No spam.</p>
         </div>
       </form>
     </div>
