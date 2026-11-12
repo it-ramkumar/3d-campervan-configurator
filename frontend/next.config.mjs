@@ -20,6 +20,14 @@ const nextConfig = {
   },
   poweredByHeader: false,
 
+  // Dynamic pages (vans for sale, van detail, blog posts) stream their metadata,
+  // which puts <title> and <link rel="canonical"> in the <body>. Google ignores a
+  // canonical in the body (GSC showed "User-declared canonical: None"). For these
+  // bots, block until metadata is ready so it lands in <head>. Regular visitors
+  // keep streaming. Overrides Next's default list, so the usual bots are included.
+  htmlLimitedBots:
+    /Googlebot|Google-InspectionTool|Storebot-Google|AdsBot-Google|Mediapartners-Google|bingbot|BingPreview|Slurp|DuckDuckBot|Baiduspider|YandexBot|Applebot|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|Pinterest|GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|PerplexityBot/i,
+
   async headers() {
     return [
       {
