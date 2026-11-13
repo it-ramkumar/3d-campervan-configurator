@@ -132,11 +132,26 @@ camera.position.set(9.5, 4.2, 10.5);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0,1.1,0); controls.enableZoom=false; controls.enablePan=false; controls.enableDamping=true;
 controls.minPolarAngle=0.6; controls.maxPolarAngle=1.45; controls.autoRotate=!reduce; controls.autoRotateSpeed=0.55;
-// On touch screens the van isn't draggable, so let swipes scroll the page instead of being swallowed.
-// OrbitControls calls preventDefault() on every touchstart/touchmove unless it is disabled, and sets
-// touch-action:none on the canvas; both trap the visitor on the hero. Auto-rotate keeps running
-// (update() rotates regardless of `enabled`).
-if(coarse){ controls.enabled=false; renderer.domElement.style.touchAction='pan-y'; }
+// Touch screens: vertical swipes scroll the page, horizontal swipes turn the van.
+// OrbitControls calls preventDefault() on every touchstart/touchmove unless disabled (and sets
+// touch-action:none), which traps visitors on the hero, so it is turned off here. With
+// touch-action:pan-y the browser keeps vertical pans for scrolling (and sends pointercancel),
+// while horizontal moves arrive as pointer events that we turn into rotation. Auto-rotate keeps
+// working with the controls off (update() rotates regardless of `enabled`).
+if(coarse){
+  controls.enabled=false;
+  const el=renderer.domElement; el.style.touchAction='pan-y';
+  const up=new THREE.Vector3(0,1,0), offset=new THREE.Vector3();
+  let dragX=null, resumeTimer=0;
+  const turn=dx=>{ // same speed as OrbitControls' own drag: a full screen height = one full turn
+    offset.copy(camera.position).sub(controls.target).applyAxisAngle(up,-2*Math.PI*dx/el.clientHeight);
+    camera.position.copy(controls.target).add(offset);
+  };
+  el.addEventListener('pointerdown',e=>{ if(e.pointerType!=='touch') return; dragX=e.clientX; controls.autoRotate=false; clearTimeout(resumeTimer); });
+  el.addEventListener('pointermove',e=>{ if(dragX===null||e.pointerType!=='touch') return; turn(e.clientX-dragX); dragX=e.clientX; });
+  const endDrag=()=>{ if(dragX===null) return; dragX=null; resumeTimer=setTimeout(()=>{ controls.autoRotate=!reduce; },2500); };
+  el.addEventListener('pointerup',endDrag); el.addEventListener('pointercancel',endDrag);
+}
 
 scene.add(new THREE.HemisphereLight('#dfefff','#24425f',0.9));
 const key = new THREE.DirectionalLight('#fff1dc',1.6); key.position.set(6,10,7); key.castShadow=true;
