@@ -7,7 +7,8 @@ import dynamic from "next/dynamic";
 const Consultation = dynamic(() => import("@/components/Consultation/Consultation"));
 import SideShareBar from "@/components/Common/ShareIcon/ShareIcon";
 import SmoothScroll from "@/components/SmoothScrolling/SmoothScrolling";
-import FloatingCallButton from "../Common/FloatingCallButton/FloatingCallButton";
+import LeadDock from "@/components/LeadDock/LeadDock";
+import BbvTracker from "@/components/Tracking/BbvTracker";
 // import LaborDayPopup from "../LaborDayPopup/LaborDayPopup";
 
 export default function ConditionalLayout({ children }) {
@@ -19,6 +20,7 @@ export default function ConditionalLayout({ children }) {
 
   // 2. Dynamic checks (Jo paths variable elements contain karte hain)
   const isQuotePreview = pathname.startsWith("/quote/preview/");
+  const isTeamPage = pathname.startsWith("/team/"); // private BBV Live inbox/analytics
 
   // Naya Check: Agar URL /configure par end ho raha ho (e.g., /camper-vans-for-sale/my-van/configure)
   const isConfiguratorPage = pathname.endsWith("/configure");
@@ -27,10 +29,12 @@ export default function ConditionalLayout({ children }) {
   const hideLayout =
     exactHideLayoutPaths.includes(pathname) ||
     isQuotePreview ||
+    isTeamPage ||
     isConfiguratorPage;
   const hideConsultation =
     exactHideConsultationPaths.includes(pathname) ||
     isQuotePreview ||
+    isTeamPage ||
     isConfiguratorPage;
   const hideShareBar = isConfiguratorPage;
   const hideFloatingButtonPaths = ["/configurator", "/build-your-own-camper-van"];
@@ -45,7 +49,8 @@ export default function ConditionalLayout({ children }) {
         {!hideLayout && <Navbar />}
         {/* <LaborDayPopup /> */}
         {!hideShareBar && hideShareBar && <SideShareBar />}
-        {!hideFloatingButton && <FloatingCallButton />}
+        {!hideFloatingButton && <LeadDock />}
+        <BbvTracker />
         <main className="flex-1">{children}</main>
 
         {!hideLayout && !hideConsultation && <Consultation />}
