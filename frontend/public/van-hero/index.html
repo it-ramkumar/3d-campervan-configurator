@@ -132,9 +132,11 @@ camera.position.set(9.5, 4.2, 10.5);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0,1.1,0); controls.enableZoom=false; controls.enablePan=false; controls.enableDamping=true;
 controls.minPolarAngle=0.6; controls.maxPolarAngle=1.45; controls.autoRotate=!reduce; controls.autoRotateSpeed=0.55;
-// On touch screens the van isn't draggable, so let swipes scroll the page instead of being swallowed
-// (OrbitControls sets touch-action:none on the canvas, which would trap the visitor on the hero)
-if(coarse){ controls.enableRotate=false; renderer.domElement.style.touchAction='pan-y'; }
+// On touch screens the van isn't draggable, so let swipes scroll the page instead of being swallowed.
+// OrbitControls calls preventDefault() on every touchstart/touchmove unless it is disabled, and sets
+// touch-action:none on the canvas; both trap the visitor on the hero. Auto-rotate keeps running
+// (update() rotates regardless of `enabled`).
+if(coarse){ controls.enabled=false; renderer.domElement.style.touchAction='pan-y'; }
 
 scene.add(new THREE.HemisphereLight('#dfefff','#24425f',0.9));
 const key = new THREE.DirectionalLight('#fff1dc',1.6); key.position.set(6,10,7); key.castShadow=true;
