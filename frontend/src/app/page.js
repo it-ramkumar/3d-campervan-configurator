@@ -1,4 +1,6 @@
-import Hero from "@/components/HomePage/Hero/Hero";
+// Old slider hero, replaced by the 3D van build hero (VanHero). Kept for switching back.
+// import Hero from "@/components/HomePage/Hero/Hero";
+import VanHero from "@/components/HomePage/VanHero/VanHero";
 import { generateHomeSchema } from "../schema/homeSchema";
 import nextDynamic from "next/dynamic";
 import { Heading1,RichParagraph, SpanTag } from "@/components/Common/Common";
@@ -139,7 +141,8 @@ export default async function Home() {
       />
 
       <div>
-        <Hero />
+        {/* <Hero /> */}
+        <VanHero />
 
         <BlackFridayBanner maxSavings={maxSavings} />
 
