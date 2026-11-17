@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { hasSale } from "@/utils/salePrice";
+import { sortVansByPriority } from "@/utils/vanOrder";
 import BlackFridayTag from "@/components/BlackFriday/BlackFridayTag";
 import {
   Heading1, RichParagraph,
@@ -37,7 +38,8 @@ const FEATURES = [
 
 export default function AvailableVans({ availableVans, hasMore, loading, onLoadMore }) {
   // console.log(availableVans, "availableVans");
-  const filteredVans = availableVans ? [...availableVans] : [];
+  // Anna's priority order (by slug); other vans follow in API order.
+  const filteredVans = sortVansByPriority(availableVans ? [...availableVans] : []);
   return (
     <section className="bg-secondary py-12 md:py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">

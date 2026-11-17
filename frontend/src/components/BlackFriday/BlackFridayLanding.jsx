@@ -9,6 +9,7 @@ import { trackLead, saveLeadEmail, cleanPageUrl, createEventId, sendMetaCapi } f
 import { sendToCrm } from "@/lib/crm";
 import { BLACK_FRIDAY_END, isBlackFriday } from "@/utils/salePrice";
 import { setLeadContext } from "@/lib/leadContext";
+import PhotoViewer from "@/components/PhotoViewer/PhotoViewer";
 
 // Black Friday 2026 ad landing page (/black-friday). Prices come live from the
 // dashboard (Price + Sale Price), so editing a van there updates this page.
@@ -16,6 +17,10 @@ import { setLeadContext } from "@/lib/leadContext";
 
 const PHONE = "951-441-9719";
 const PHONE_HREF = "tel:+19514419719";
+const smsHref = (van) =>
+  `sms:+19514419719?&body=${encodeURIComponent(`Hi Anna, I saw the Black Friday price on the ${HIGHLIGHTS[van.slug]?.short || van.title}. Is it still available?`)}`;
+const POPTOP_SLUG = "montreal-170-awd-pop-top-blue-gray";
+const STONE_SLUG = "montreal-stone-gray-awd-170";
 const SOURCE = "black_friday";
 const SPEC_SOURCE = "bf_specs";
 
@@ -92,34 +97,49 @@ function Countdown({ compact = false }) {
   );
 }
 
-function VanCard({ van, onClaim, onSpecs }) {
+function VanCard({ van, onClaim, onSpecs, onPick, hasStone = false, featured = false }) {
   const info = HIGHLIGHTS[van.slug];
   const savings = van.price - van.sale_price;
   const pct = Math.round((savings / van.price) * 100);
   const [img, setImg] = useState(0);
+  const [viewer, setViewer] = useState(null);
   const href = `/camper-vans-for-sale/${van.slug}`;
+  const short = info?.short || van.title;
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-primary/10 bg-white shadow-sm transition-shadow hover:shadow-xl">
+    <article id={`van-${van.slug}`} className={`flex scroll-mt-24 flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow hover:shadow-xl ${featured ? "border-hover/40" : "border-primary/10"}`}>
       <div className="relative aspect-[16/10] bg-primary/5">
         {van.images[img] && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={van.images[img]}
-            alt={van.title}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
+          <button
+            type="button"
+            onClick={() => setViewer(img)}
+            aria-label={`Open ${van.images.length} photos of ${van.title}`}
+            data-bbvt-click="bf_card_photo"
+            className="block h-full w-full cursor-zoom-in"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={van.images[img]} alt={van.title} loading={featured ? "eager" : "lazy"} className="h-full w-full object-cover" />
+          </button>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-3 py-1 text-xs font-black uppercase tracking-wider text-white shadow-lg">
+        <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-3 py-1 text-xs font-black uppercase tracking-wider text-white shadow-lg">
           ⚡ Save {money(savings)}
         </span>
-        <span className="absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-bold text-white">
+        <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-bold text-white">
           Only 1 available
         </span>
         {van.images.length > 1 && (
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-            {van.images.map((_, i) => (
+          <button
+            type="button"
+            onClick={() => setViewer(img)}
+            data-bbvt-click="bf_card_photos"
+            className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1.5 text-xs font-bold text-white"
+          >
+            📷 {van.images.length} photos
+          </button>
+        )}
+        {van.images.length > 1 && (
+          <div className="absolute bottom-3 left-3 flex gap-1.5">
+            {van.images.slice(0, 5).map((_, i) => (
               <button
                 key={i}
                 type="button"
@@ -132,12 +152,61 @@ function VanCard({ van, onClaim, onSpecs }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-5 md:p-6">
+      <div className="flex flex-1 flex-col p-4 md:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-hover">{info?.chassis || van.roof}</p>
         <h3 className="mt-1 text-xl font-black text-primary md:text-2xl">{van.title}</h3>
-        {info?.bestFor && <p className="mt-1 text-sm text-primary/70">Best for: {info.bestFor}</p>}
 
-        <ul className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2 text-sm text-primary">
+        <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-1">
+          <span className="text-3xl font-black text-primary">{money(van.sale_price)}</span>
+          <span className="pb-1 text-base text-primary/50 line-through">{money(van.price)}</span>
+          <span className="pb-1 text-sm font-bold text-[#E11D48]">{pct}% off</span>
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => onClaim(van)}
+            data-bbvt-click="bf_card_hold"
+            className="rounded-full bg-primary px-3 py-3 text-sm font-black uppercase tracking-wide text-white transition-colors hover:bg-hover"
+          >
+            Hold this price
+          </button>
+          <button
+            type="button"
+            onClick={() => onSpecs(van)}
+            data-bbvt-click="bf_card_specs"
+            className="rounded-full border-2 border-primary/15 px-3 py-3 text-sm font-bold uppercase tracking-wide text-primary transition-colors hover:border-hover hover:text-hover"
+          >
+            Get spec sheet
+          </button>
+          <a
+            href={PHONE_HREF}
+            data-bbvt-click="bf_card_call"
+            className="flex items-center justify-center gap-1.5 rounded-full bg-secondary px-3 py-2.5 text-sm font-bold text-primary hover:text-hover"
+          >
+            📞 Call Anna
+          </a>
+          <a
+            href={smsHref(van)}
+            data-bbvt-click="bf_card_text"
+            className="flex items-center justify-center gap-1.5 rounded-full bg-secondary px-3 py-2.5 text-sm font-bold text-primary hover:text-hover"
+          >
+            💬 Text Anna
+          </a>
+        </div>
+
+        {van.slug === POPTOP_SLUG && hasStone && (
+          <button
+            type="button"
+            onClick={() => onPick?.(STONE_SLUG)}
+            data-bbvt-click="bf_poptop_upsell"
+            className="mt-3 rounded-lg bg-hover/10 px-3 py-2 text-left text-sm font-semibold text-primary"
+          >
+            Love the pop top? We can add one to the Montreal Stone Gray. <span className="underline underline-offset-2">See it →</span>
+          </button>
+        )}
+
+        <ul className="mt-4 grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm text-primary">
           {(info?.points || [van.subtitle]).map((p) => (
             <li key={p} className="flex items-start gap-1.5">
               <span className="mt-0.5 text-hover" aria-hidden="true">✓</span>
@@ -145,41 +214,17 @@ function VanCard({ van, onClaim, onSpecs }) {
             </li>
           ))}
         </ul>
+        {info?.bestFor && <p className="mt-2 text-sm text-primary/70">Best for: {info.bestFor}</p>}
 
         {van.availability && !/black friday/i.test(van.availability) && (
           <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-xs font-semibold text-primary/80">{van.availability}</p>
         )}
 
-        <div className="mt-auto pt-5">
-          <div className="flex flex-wrap items-end gap-x-3 gap-y-1">
-            <span className="text-3xl font-black text-primary">{money(van.sale_price)}</span>
-            <span className="pb-1 text-base text-primary/50 line-through">{money(van.price)}</span>
-            <span className="pb-1 text-sm font-bold text-[#E11D48]">{pct}% off</span>
-          </div>
-          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => onClaim(van)}
-              className="rounded-full bg-primary px-5 py-3 text-sm font-black uppercase tracking-wider text-white transition-colors hover:bg-hover"
-            >
-              Hold this price
-            </button>
-            <Link
-              href={href}
-              className="rounded-full border-2 border-primary/15 px-5 py-3 text-center text-sm font-bold uppercase tracking-wider text-primary transition-colors hover:border-hover hover:text-hover"
-            >
-              Photos & specs
-            </Link>
-          </div>
-          <button
-            type="button"
-            onClick={() => onSpecs(van)}
-            className="mt-3 w-full text-center text-sm font-bold text-hover underline underline-offset-4 hover:text-primary"
-          >
-            Email me the full spec sheet
-          </button>
-        </div>
+        <Link href={href} className="mt-3 text-sm font-bold text-hover underline underline-offset-4 hover:text-primary">
+          All photos, video & full specs of the {short} →
+        </Link>
       </div>
+      {viewer !== null && <PhotoViewer images={van.images} start={viewer} title={van.title} onClose={() => setViewer(null)} />}
     </article>
   );
 }
@@ -261,16 +306,16 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
     <form ref={formRef} id="hold-price" data-bbv-form="bf_hold_price" data-van-slug={van?.slug || ""} data-van-title={van?.title || ""} onSubmit={submit} noValidate className="scroll-mt-24 rounded-2xl bg-white p-5 shadow-xl sm:p-8">
       <h2 className="text-2xl font-black text-primary md:text-3xl">Hold your Black Friday price</h2>
       <p className="mt-2 text-sm text-primary/70">
-        Pick a van and leave your number. Anna will text or call you the same day with a walkaround video and answers. No obligation.
+        Leave your number. Anna texts or calls you the same day with a walkaround video. No obligation.
       </p>
 
-      <fieldset className="mt-6">
+      <fieldset className="mt-4">
         <legend className="mb-2 text-sm font-bold text-primary">Which van?</legend>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2">
           {[...vans, { slug: "", title: "Not sure yet, help me choose" }].map((v) => (
             <label
               key={v.slug || "unsure"}
-              className={`flex cursor-pointer items-center justify-between gap-2 rounded-xl border-2 px-4 py-3 text-sm transition ${
+              className={`flex cursor-pointer flex-col justify-between gap-0.5 rounded-xl border-2 px-3 py-2 text-sm leading-tight transition sm:flex-row sm:items-center sm:gap-2 sm:px-4 sm:py-3 ${v.slug ? "" : "col-span-2 sm:col-span-2"} ${
                 selected === v.slug ? "border-hover bg-hover/10 font-bold text-primary" : "border-primary/10 text-primary hover:border-hover/60"
               }`}
             >
@@ -282,7 +327,7 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
         </div>
       </fieldset>
 
-      <div className="mt-5 grid grid-cols-1 gap-3">
+      <div className="mt-4 grid grid-cols-1 gap-3">
         <div>
           <label htmlFor="bf-name" className="mb-1 block text-sm font-bold text-primary">Your name</label>
           <input id="bf-name" name="name" autoComplete="name" enterKeyHint="next" value={form.name} onChange={change} className={input} placeholder="First and last name" aria-invalid={!!errors.name} aria-describedby={errors.name ? "bf-name-err" : undefined} />
@@ -467,21 +512,32 @@ const FAQS = [
   },
 ];
 
-export default function BlackFridayLanding({ vans = [] }) {
-  const [selected, setSelected] = useState(vans[0]?.slug || "");
+export default function BlackFridayLanding({ vans = [], initialVan = "" }) {
+  // The van the visitor came for (ad utm_content or ?van=, picked on the server) goes first
+  // and is preselected in both forms; otherwise the dashboard order is kept.
+  const firstSlug = (initialVan && vans.some((v) => v.slug === initialVan) ? initialVan : vans[0]?.slug) || "";
+  const [featured, setFeatured] = useState(firstSlug);
+  const [selected, setSelected] = useState(firstSlug);
+  const [specVan, setSpecVan] = useState(firstSlug);
   const formRef = useRef(null);
   const specRef = useRef(null);
-  const [specVan, setSpecVan] = useState(vans[0]?.slug || "");
   const [live, setLive] = useState(true);
   const maxSavings = vans.reduce((m, v) => Math.max(m, v.price - v.sale_price), 0);
   const lowest = vans.reduce((m, v) => (m === null || v.sale_price < m ? v.sale_price : m), null);
+  const featuredVan = vans.find((v) => v.slug === featured) || vans[0];
+  const others = vans.filter((v) => v.slug !== featuredVan?.slug);
+  const hasStone = vans.some((v) => v.slug === STONE_SLUG);
 
   useEffect(() => {
     setLive(isBlackFriday());
-    // ?van=<slug> (from the spec sheet "Book a FaceTime walkthrough" link) preselects that van
+    // ?van=<slug> (spec sheet "Book a FaceTime walkthrough" link) preselects that van
     try {
       const want = new URLSearchParams(window.location.search).get("van");
-      if (want && vans.some((v) => v.slug === want)) setSelected(want);
+      if (want && vans.some((v) => v.slug === want)) {
+        setFeatured(want);
+        setSelected(want);
+        setSpecVan(want);
+      }
     } catch {
       // ignore
     }
@@ -494,42 +550,57 @@ export default function BlackFridayLanding({ vans = [] }) {
     } catch {
       // tracking never breaks the page
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const scrollTo = (el, block = "start") => el?.scrollIntoView({ behavior: "smooth", block });
+  const pick = (slug, scroll = true) => {
+    setFeatured(slug);
+    setSelected(slug);
+    setSpecVan(slug);
+    if (scroll) requestAnimationFrame(() => scrollTo(document.getElementById("featured")));
+  };
   const claim = (van) => {
+    setFeatured(van.slug);
     setSelected(van.slug);
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    requestAnimationFrame(() => scrollTo(formRef.current));
   };
   const specs = (van) => {
     setSpecVan(van.slug);
-    specRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    scrollTo(specRef.current, "center");
   };
-  const toForm = () => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const toForm = () => scrollTo(formRef.current);
+  // Keep the active van chip visible in the horizontal switcher (without moving the page).
+  const chipsRef = useRef(null);
+  useEffect(() => {
+    const row = chipsRef.current;
+    const chip = row?.querySelector('[aria-selected="true"]');
+    if (row && chip) row.scrollTo({ left: Math.max(0, chip.offsetLeft - 16), behavior: "smooth" });
+  }, [featured]);
   // The site-wide contact bar (LeadDock) shows "Hold my price" here and scrolls to the form.
   useEffect(() => setLeadContext({ primaryLabel: "Hold my price", onPrimary: toForm, source: SOURCE }), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="bg-secondary pb-24 md:pb-0">
-      {/* HERO */}
+      {/* HERO: short on phones so the van and the form come first */}
       <section className="relative overflow-hidden bg-black text-white">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(249,115,22,0.35),transparent_45%),radial-gradient(circle_at_85%_80%,rgba(225,29,72,0.35),transparent_45%)]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 md:grid-cols-2 md:py-20">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-6 md:grid-cols-2 md:py-16">
           <div>
-            <p className="mb-4 inline-block rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-white shadow-lg shadow-orange-500/40">
+            <p className="mb-3 inline-block rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-3 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-lg shadow-orange-500/40 md:mb-4 md:px-4 md:text-xs">
               {live ? "⚡ Black Friday · Ends Nov 28" : "Sale ended"}
             </p>
-            <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight md:text-6xl">
+            <h1 className="text-3xl font-black uppercase leading-[0.95] tracking-tight md:text-6xl">
               <span className="bg-gradient-to-r from-[#FACC15] via-[#F97316] to-[#E11D48] bg-clip-text text-transparent">Black Friday</span>
               <br />Camper Van Sale
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-white/90">
+            <p className="mt-3 max-w-xl text-sm text-white/90 md:mt-5 md:text-lg">
               {vans.length} AWD camper vans, built and ready, each with an indoor shower and an elevator bed.
               {maxSavings > 0 && <> Save up to <strong className="text-white">{money(maxSavings)}</strong>.</>}
               {lowest && <> From <strong className="text-white">{money(lowest)}</strong>.</>}
             </p>
-            <div className="mt-7"><Countdown /></div>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#vans" className="rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-8 py-4 text-center text-sm font-black uppercase tracking-wider text-white shadow-lg shadow-orange-500/40 transition-transform hover:scale-105">
+            <div className="mt-4 md:mt-7"><span className="md:hidden"><Countdown compact /></span><span className="hidden md:block"><Countdown /></span></div>
+            <div className="mt-7 hidden gap-3 md:flex">
+              <a href="#featured" className="rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-8 py-4 text-center text-sm font-black uppercase tracking-wider text-white shadow-lg shadow-orange-500/40 transition-transform hover:scale-105">
                 See the {vans.length} vans
               </a>
               <a href={PHONE_HREF} className="rounded-full border-2 border-white/30 px-8 py-4 text-center text-sm font-bold uppercase tracking-wider text-white transition-colors hover:border-white">
@@ -537,14 +608,14 @@ export default function BlackFridayLanding({ vans = [] }) {
               </a>
             </div>
           </div>
-          {vans[0]?.images?.[0] && (
+          {featuredVan?.images?.[0] && (
             <div className="relative hidden overflow-hidden rounded-2xl shadow-2xl md:block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={vans[0].images[0]} alt={vans[0].title} className="aspect-[4/3] w-full object-cover" />
+              <img src={featuredVan.images[0]} alt={featuredVan.title} className="aspect-[4/3] w-full object-cover" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-5">
-                <p className="text-sm font-bold">{vans[0].title}</p>
+                <p className="text-sm font-bold">{featuredVan.title}</p>
                 <p className="text-2xl font-black">
-                  {money(vans[0].sale_price)} <span className="text-base font-normal text-white/60 line-through">{money(vans[0].price)}</span>
+                  {money(featuredVan.sale_price)} <span className="text-base font-normal text-white/60 line-through">{money(featuredVan.price)}</span>
                 </p>
               </div>
             </div>
@@ -552,39 +623,65 @@ export default function BlackFridayLanding({ vans = [] }) {
         </div>
       </section>
 
-      {/* TRUST STRIP */}
-      <section className="border-b border-primary/10 bg-white">
-        <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 text-center text-sm font-bold text-primary md:grid-cols-5">
-          {["Built in Big Bear, CA", "Ready now, no build wait", "AWD on every van", "Indoor shower in every van", "Delivery across the US"].map((t) => (
-            <li key={t} className="flex items-center justify-center gap-2"><span className="text-hover">●</span>{t}</li>
-          ))}
-        </ul>
-      </section>
+      {vans.length ? (
+        <>
+          {/* VAN SWITCHER */}
+          <section id="vans" className="scroll-mt-20 border-b border-primary/10 bg-white">
+            <div className="mx-auto max-w-7xl px-4 py-3">
+              <p className="mb-2 text-[11px] font-black uppercase tracking-[0.2em] text-primary/60">Pick a van · one of each</p>
+              <div ref={chipsRef} className="relative -mx-4 flex gap-2 overflow-x-auto px-4 pb-1" role="tablist" aria-label="Black Friday vans">
+                {vans.map((v) => {
+                  const on = v.slug === featuredVan?.slug;
+                  return (
+                    <button
+                      key={v.slug}
+                      type="button"
+                      role="tab"
+                      aria-selected={on}
+                      onClick={() => pick(v.slug)}
+                      data-bbvt-click="bf_switch_van"
+                      className={`shrink-0 rounded-full border-2 px-3 py-1.5 text-left text-sm leading-tight transition ${on ? "border-hover bg-hover text-white" : "border-primary/15 text-primary hover:border-hover"}`}
+                    >
+                      <span className="block font-bold">{HIGHLIGHTS[v.slug]?.short || v.title}</span>
+                      <span className={`block text-xs font-black ${on ? "text-white" : "text-primary/70"}`}>{money(v.sale_price)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
 
-      {/* VANS */}
-      <section id="vans" className="mx-auto max-w-7xl scroll-mt-20 px-4 py-14 md:py-20">
-        <div className="mb-10 text-center">
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-hover">One of each</p>
-          <h2 className="mt-2 text-3xl font-black text-primary md:text-5xl">Pick your van</h2>
-          <p className="mx-auto mt-3 max-w-2xl text-primary/70">
-            Each van is a one-off build. When it sells, that layout and price are gone.
-          </p>
-        </div>
-        {vans.length ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {vans.map((v) => <VanCard key={v.slug} van={v} onClaim={claim} onSpecs={specs} />)}
-          </div>
-        ) : (
+          {/* FEATURED VAN + HOLD FORM: the first form starts within ~1.5 phone screens */}
+          <section id="featured" className="mx-auto grid max-w-7xl scroll-mt-20 items-start gap-5 px-4 py-5 md:grid-cols-2 md:gap-8 md:py-12">
+            <VanCard key={featuredVan.slug} van={featuredVan} onClaim={claim} onSpecs={specs} onPick={pick} hasStone={hasStone} featured />
+            <LeadForm vans={vans} selected={selected} setSelected={setSelected} formRef={formRef} />
+          </section>
+
+          {/* OTHER VANS */}
+          {others.length > 0 && (
+            <section className="mx-auto max-w-7xl px-4 py-8 md:py-14">
+              <h2 className="text-2xl font-black text-primary md:text-4xl">More Black Friday vans</h2>
+              <p className="mt-1 text-sm text-primary/70">Each van is a one-off build. When it sells, that layout and price are gone.</p>
+              <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {others.map((v) => (
+                  <VanCard key={v.slug} van={v} onClaim={claim} onSpecs={specs} onPick={pick} hasStone={hasStone} />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      ) : (
+        <section className="mx-auto max-w-7xl px-4 py-14">
           <p className="text-center text-primary/70">
             The Black Friday vans have sold. <Link href="/camper-vans-for-sale" className="font-bold underline">See vans for sale</Link>.
           </p>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* SPEC SHEET OFFER */}
       {vans.length > 0 && (
         <section className="bg-black text-white">
-          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-12 md:grid-cols-5 md:py-16">
+          <div className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-10 md:grid-cols-5 md:gap-8 md:py-16">
             <div className="md:col-span-2">
               <p className="text-xs font-black uppercase tracking-[0.3em] text-hover">Not ready to talk yet?</p>
               <h2 className="mt-2 text-3xl font-black md:text-4xl">Get the full spec sheet</h2>
@@ -599,29 +696,34 @@ export default function BlackFridayLanding({ vans = [] }) {
         </section>
       )}
 
-      {/* WHY NOW */}
-      <section className="bg-primary text-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-3 md:py-20">
-          {[
-            ["Skip the wait", "Ordering a custom build means months in a queue. These vans are finished, so you can be camping this winter."],
-            ["Built for 4 seasons", "AWD, insulated, with big lithium power systems. We build in Big Bear, which is snow country, so our vans are made for winter trips too."],
-            ["Real bathrooms", "Every van on sale has an indoor shower, and both Montreals have a full indoor bathroom. That's rare at this price."],
-          ].map(([h, p]) => (
-            <div key={h}>
-              <h3 className="text-xl font-black text-hover">{h}</h3>
-              <p className="mt-2 text-white/80">{p}</p>
-            </div>
+      {/* TRUST STRIP */}
+      <section className="border-b border-primary/10 bg-white">
+        <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 text-center text-sm font-bold text-primary md:grid-cols-5">
+          {["Built in Big Bear, CA", "Ready now, no build wait", "AWD on every van", "Indoor shower in every van", "Delivery across the US"].map((t) => (
+            <li key={t} className="flex items-center justify-center gap-2"><span className="text-hover">●</span>{t}</li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      {/* HOW IT WORKS + FORM */}
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-5 md:py-20">
-        <div className="md:col-span-2">
+      {/* WHY NOW (collapsed on phones) */}
+      <section className="bg-primary text-white">
+        <details className="group mx-auto max-w-7xl px-4 py-6 md:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between text-lg font-black text-hover">
+            Why buy a ready van now?
+            <span className="text-xl transition-transform group-open:rotate-45">+</span>
+          </summary>
+          <WhyNow />
+        </details>
+        <div className="mx-auto hidden max-w-7xl px-4 py-16 md:block"><WhyNow /></div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-2 md:py-16">
+        <div>
           <h2 className="text-3xl font-black text-primary md:text-4xl">How it works</h2>
           <ol className="mt-6 space-y-6">
             {[
-              ["Tell us which van", "Send the form or call. Anna gets back to you the same day."],
+              ["Tell us which van", "Send the form, call or text. Anna gets back to you the same day."],
               ["See it live", "Get a FaceTime walkthrough of the exact van, or come drive it in Big Bear."],
               ["Hold your price", "A $5,000 deposit holds the Black Friday price. Pick up in Big Bear or we deliver."],
             ].map(([h, p], i) => (
@@ -634,21 +736,21 @@ export default function BlackFridayLanding({ vans = [] }) {
               </li>
             ))}
           </ol>
-          <div className="mt-8 rounded-2xl bg-black p-5 text-white">
-            <p className="text-sm font-bold uppercase tracking-widest text-white/70">Sale ends in</p>
-            <div className="mt-3"><Countdown compact /></div>
-          </div>
         </div>
-        <div className="md:col-span-3">
-          <LeadForm vans={vans} selected={selected} setSelected={setSelected} formRef={formRef} />
+        <div className="self-center rounded-2xl bg-black p-6 text-white">
+          <p className="text-sm font-bold uppercase tracking-widest text-white/70">Sale ends in</p>
+          <div className="mt-3"><Countdown compact /></div>
+          <button type="button" onClick={toForm} data-bbvt-click="bf_how_hold" className="mt-5 w-full rounded-full bg-gradient-to-r from-[#E11D48] via-[#F97316] to-[#FACC15] px-6 py-3 text-sm font-black uppercase tracking-wider text-white">
+            Hold my price
+          </button>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-14 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 py-10 md:py-20">
           <h2 className="text-center text-3xl font-black text-primary md:text-4xl">Questions</h2>
-          <div className="mt-8 divide-y divide-primary/10">
+          <div className="mt-6 divide-y divide-primary/10">
             {FAQS.map((f) => (
               <details key={f.q} className="group py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-primary">
@@ -661,7 +763,23 @@ export default function BlackFridayLanding({ vans = [] }) {
           </div>
         </div>
       </section>
-
     </main>
+  );
+}
+
+function WhyNow() {
+  return (
+    <div className="mt-4 grid gap-6 md:mt-0 md:grid-cols-3 md:gap-8">
+      {[
+        ["Skip the wait", "Ordering a custom build means months in a queue. These vans are finished, so you can be camping this winter."],
+        ["Built for 4 seasons", "AWD, insulated, with big lithium power systems. We build in Big Bear, which is snow country, so our vans are made for winter trips too."],
+        ["Real bathrooms", "Every van on sale has an indoor shower, and both Montreals have a full indoor bathroom. That's rare at this price."],
+      ].map(([h, p]) => (
+        <div key={h}>
+          <h3 className="text-xl font-black text-hover">{h}</h3>
+          <p className="mt-2 text-white/80">{p}</p>
+        </div>
+      ))}
+    </div>
   );
 }

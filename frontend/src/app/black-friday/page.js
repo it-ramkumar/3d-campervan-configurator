@@ -1,5 +1,6 @@
 import { vansByStatus } from "@/api/van/van-by-status";
 import { hasSale } from "@/utils/salePrice";
+import { sortVansByPriority } from "@/utils/vanOrder";
 import BlackFridayLanding from "@/components/BlackFriday/BlackFridayLanding";
 
 export const dynamic = "force-dynamic";
@@ -28,10 +29,14 @@ async function saleVans() {
         sale_price: Number(l.sale_price),
         tagline: l.tagline || "",
         availability: typeof v.delivery_date === "string" ? v.delivery_date : "",
-        images: images.slice(0, 4),
+        images: images.slice(0, 12),
       };
-    })
-    .sort((a, b) => b.price - b.sale_price - (a.price - a.sale_price));
+    });
+}
+
+// Card/switcher order: Anna's priority list (the ad's van is moved first in the component).
+async function orderedSaleVans() {
+  return sortVansByPriority(await saleVans());
 }
 
 export async function generateMetadata() {
@@ -50,8 +55,38 @@ export async function generateMetadata() {
   };
 }
 
-export default async function BlackFridayPage() {
-  const vans = await saleVans();
+// Which van the visitor came for: ?van=<slug>, or the Meta ad's utm_content
+// (e.g. tof_santa_monica_exterior, bof_montreal_family). That van is shown first
+// and preselected in both forms. No match = the default order.
+const AD_VAN_KEYS = [
+  ["santa_monica", "santa-monica"],
+  ["stone_gray", "montreal-stone-gray"],
+  ["montreal_pop_top", "montreal-170-awd-pop-top"],
+  ["montreal_family", "montreal-170-awd-pop-top"],
+  ["lowroof", "poptop-adventure-family-build"],
+  ["low_roof", "poptop-adventure-family-build"],
+];
+function pickVan(vans, sp = {}) {
+  const one = (v) => (Array.isArray(v) ? v[0] : v) || "";
+  const want = one(sp.van).toLowerCase();
+  if (want) {
+    const hit = vans.find((v) => v.slug === want) || vans.find((v) => v.slug.startsWith(want));
+    if (hit) return hit.slug;
+  }
+  const content = one(sp.utm_content).toLowerCase();
+  for (const [key, slugStart] of AD_VAN_KEYS) {
+    if (content.includes(key)) {
+      const hit = vans.find((v) => v.slug.startsWith(slugStart));
+      if (hit) return hit.slug;
+    }
+  }
+  return "";
+}
+
+export default async function BlackFridayPage({ searchParams }) {
+  const vans = await orderedSaleVans();
+  const sp = (await searchParams) || {};
+  const initialVan = pickVan(vans, sp);
 
   const jsonld = {
     "@context": "https://schema.org",
@@ -81,7 +116,7 @@ export default async function BlackFridayPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonld) }} />
-      <BlackFridayLanding vans={vans} />
+      <BlackFridayLanding vans={vans} initialVan={initialVan} />
     </>
   );
 }

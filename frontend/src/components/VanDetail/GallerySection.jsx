@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, ChevronDown, Image as ImageIcon, Maximize2 }
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import PhotoViewer from "@/components/PhotoViewer/PhotoViewer";
 
 const VanGallery = ({ gallery = [], title = "" }) => {
   const [activeImage, setActiveImage] = useState(0);
@@ -107,8 +108,13 @@ const VanGallery = ({ gallery = [], title = "" }) => {
   <Swiper
     onSwiper={(swiper) => (mainSwiperRef.current = swiper)}
     onSlideChange={(swiper) => setActiveImage(swiper.activeIndex)}
+    onClick={(swiper) => {
+      // A tap (not a swipe) on the photo opens the full-screen viewer.
+      if (typeof swiper.clickedIndex === "number") setActiveImage(swiper.clickedIndex);
+      setIsFullscreen(true);
+    }}
     initialSlide={activeImage}
-    className="absolute inset-0 h-full w-full"
+    className="absolute inset-0 h-full w-full cursor-zoom-in"
   >
     {gallery.map((img, i) => (
       <SwiperSlide key={img} className="relative h-full w-full">
@@ -133,7 +139,8 @@ const VanGallery = ({ gallery = [], title = "" }) => {
       backdropFilter: "blur(16px)",
       border: "1px solid rgba(255,255,255,0.07)",
     }}
-    aria-label="View full image"
+    aria-label="View photos full screen"
+    data-bbvt-click="gallery_expand"
   >
     <Maximize2 size={16} className="text-[#FBFBF9]" />
   </button>
@@ -179,11 +186,18 @@ const VanGallery = ({ gallery = [], title = "" }) => {
             tabIndex={0}
 className="!scrollbar grid max-h-[180px] grid-cols-5 gap-3 !overflow-y-scroll !overscroll-y-contain !p-1 sm:max-h-[320px] !focus-visible:outline-5 !focus-visible:outline-hover"          >
             {gallery.map((img, i) => (
-              <div
+              <button
+                type="button"
                 key={i}
-                onClick={() => setActiveImage(i)}
+                aria-label={`Photo ${i + 1} of ${gallery.length}`}
+                data-bbvt-click="gallery_thumb"
+                onClick={() => {
+                  setActiveImage(i);
+                  // On phones/tablets a thumbnail tap opens the swipeable full-screen viewer.
+                  if (window.matchMedia?.("(pointer: coarse)").matches) setIsFullscreen(true);
+                }}
                 // FIX 2: Removed "opacity-40 hover:opacity-80" from the inactive state string below
-                className={`aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                className={`block w-full p-0 aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
                   activeImage === i
                     ? "border-hover opacity-40 scale-[0.98]"
                     : "border-transparent hover:border-hover/50"
@@ -202,7 +216,7 @@ className="!scrollbar grid max-h-[180px] grid-cols-5 gap-3 !overflow-y-scroll !o
                   className="w-full h-full object-cover"
                   priority={i < 5}
                 />
-              </div>
+              </button>
             ))}
           </div>
 
@@ -224,89 +238,9 @@ className="!scrollbar grid max-h-[180px] grid-cols-5 gap-3 !overflow-y-scroll !o
         </div>
       )}
 
-      {/* FULLSCREEN BOX */}
+      {/* FULLSCREEN VIEWER: swipe, pinch/double-tap zoom, Esc or X to close */}
       {isFullscreen && (
-        <div className="fixed inset-0 bg-[#020C18]/95 z-[9999] flex flex-col">
-          {/* TOP BAR */}
-          <div
-            className="flex items-center justify-between px-5 py-4 shrink-0"
-            style={{
-              background: "rgba(2,12,24,0.72)",
-              backdropFilter: "blur(16px)",
-              borderBottom: "1px solid rgba(255,255,255,0.07)",
-            }}
-          >
-            <div className="flex flex-col">
-              <span className="text-[#FBFBF9] text-sm font-bold uppercase tracking-wide truncate max-w-[60vw]">
-                {title}
-              </span>
-              {gallery.length > 1 && (
-                <span className="text-[#FBFBF9]/50 text-xs font-medium">
-                  {activeImage + 1} / {gallery.length}
-                </span>
-              )}
-            </div>
-
-            <button
-              onClick={() => setIsFullscreen(false)}
-              className="text-[#FBFBF9] text-2xl hover:text-[#ED985F] hover:scale-110 transition-all"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div className="relative flex-1">
-            {/* SAME sizes AS THE MAIN GALLERY IMAGE SO THIS REUSES THE EXACT
-                SAME CACHED URL THE MAIN VIEW ALREADY LOADED — INSTANT SWITCH */}
-            <Swiper
-              onSwiper={(swiper) => (fullscreenSwiperRef.current = swiper)}
-              onSlideChange={(swiper) => setActiveImage(swiper.activeIndex)}
-              initialSlide={activeImage}
-              className="absolute inset-0 h-full w-full"
-            >
-              {gallery.map((img, i) => (
-                <SwiperSlide key={img} className="relative h-full w-full">
-                  <Image
-                    src={img}
-                    fill
-                    alt={`${title} - image ${i + 1}`}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-                    className="object-contain"
-                    priority={i === 0}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-          {gallery.length > 1 && (
-            <>
-              <button
-                onClick={prevImage}
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full z-20 transition-colors"
-                style={{
-                  background: "rgba(13,38,71,0.4)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                }}
-              >
-                <ChevronLeft size={32} />
-              </button>
-
-              <button
-                onClick={nextImage}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-[#FBFBF9] p-3 rounded-full z-20 transition-colors"
-                style={{
-                  background: "rgba(13,38,71,0.4)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                }}
-              >
-                <ChevronRight size={32} />
-              </button>
-            </>
-          )}
-          </div>
-        </div>
+        <PhotoViewer images={gallery} start={activeImage} title={title} onClose={() => setIsFullscreen(false)} />
       )}
     </div>
   );
