@@ -11,6 +11,7 @@ import {
 import { ShowerHead, Armchair, Ruler, Zap } from "lucide-react";
 import { validateLead } from "@/lib/validateLead";
 import { trackLead, withTracking, createEventId } from "@/lib/track";
+import { sendToCrm } from "@/lib/crm";
 
 const OPTIONS = {
   van_length: [
@@ -140,6 +141,19 @@ export default function VanRecommendation() {
     }
 
     const eventId = createEventId();
+    // Copy the finished quiz to the CRM right away (whatever the result), so it is a full lead.
+    const answers = Object.entries(formData)
+      .filter(([k, v]) => !/^customer_/.test(k) && v !== "" && v != null && !(Array.isArray(v) && !v.length))
+      .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : typeof v === "object" ? JSON.stringify(v) : v}`)
+      .join("; ");
+    sendToCrm({
+      event_id: eventId,
+      lead_source: "quiz",
+      name: formData.customer_name.trim(),
+      email: formData.customer_email.trim(),
+      phone: formData.customer_phone.trim(),
+      message: "Van Matchmaker quiz: " + answers,
+    });
     setLoading(true);
     setError("");
     try {
