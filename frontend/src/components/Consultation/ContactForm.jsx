@@ -98,9 +98,9 @@ export default function ContactForm({ leadSource = "contact", initialVans, compa
         lead_source: leadSource,
       });
     } catch (error) {
-      setSubmitError(error.message || "We couldn't send your message.");
-      setLoading(false);
-      return;
+      // The CRM copy below still captures the lead and alerts Anna, so the visitor
+      // never sees an error because of a server or email problem.
+      console.error("contact API failed, lead sent to CRM only:", error?.message);
     }
 
     sendToCrm({

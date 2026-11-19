@@ -7,6 +7,7 @@ import PrimaryButton from "../Common/Button/PrimaryButton";
 import { RichParagraph, Heading1 } from "../Common/Common";
 import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
 import { validateLead } from "@/lib/validateLead";
+import { sendToCrm } from "@/lib/crm";
 
 const PACIFIC_TZ = "America/Los_Angeles";
 
@@ -181,6 +182,25 @@ export default function BookingPage() {
       lead_source: "booking",
     });
 
+    const slotText = (() => {
+      try {
+        return new Date(selectedSlot.start).toLocaleString("en-US", { timeZone: displayTz || browserTz, weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      } catch {
+        return String(selectedSlot.start);
+      }
+    })();
+    const crmBooking = (ok) =>
+      sendToCrm({
+        event_id: eventId,
+        lead_source: "booking",
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: (formData.phone || "").trim(),
+        contact_pref: "call booked",
+        message: (ok ? "Booked a consultation call: " : "Tried to book a consultation call (booking failed, please call them): ") + slotText +
+          (formData.description ? "\n" + String(formData.description).trim() : ""),
+      });
+
     setSubmitting(true);
     try {
       const res = await fetch(
@@ -195,11 +215,13 @@ export default function BookingPage() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok || data.success === false) {
+        crmBooking(false);
         setBookingError(data.message || data.error || "We couldn't book this time slot.");
         setSubmitting(false);
         return;
       }
 
+      crmBooking(true);
       trackLead({ source: "booking", email: formData.email, phone: formData.phone, name: formData.name, eventId });
       saveLeadEmail(formData.email);
 
@@ -209,6 +231,7 @@ export default function BookingPage() {
 
       router.push("/thank-you?source=booking");
     } catch {
+      crmBooking(false);
       setBookingError("We couldn't reach our booking system.");
       setSubmitting(false);
     }
