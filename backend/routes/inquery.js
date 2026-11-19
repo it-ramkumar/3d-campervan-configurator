@@ -194,6 +194,8 @@ router.post("/", async (req, res) => {
     // Get Admin Emails
     // ==========================
 
+    // Lead is already saved: a mail problem must never show the visitor an error (hotfix 2026-11-18).
+    try {
     const leads = await Lead.find({}, { email: 1, _id: 0 });
 
     const leadEmails = leads.map((l) => l.email).filter(Boolean);
@@ -245,6 +247,9 @@ router.post("/", async (req, res) => {
     // ==========================
     // Response (tracking data wapas nahi bhej rahe)
     // ==========================
+    } catch (mailErr) {
+      console.error("LEAD SAVED BUT EMAIL FAILED:", mailErr.message);
+    }
 
     res.status(201).json({
       success: true,

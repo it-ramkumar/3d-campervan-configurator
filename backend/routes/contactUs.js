@@ -241,6 +241,8 @@ const userHtml = `
 </div>
 `;
     // Send emails (unchanged logic)
+    // Lead is already saved: a mail problem must never show the visitor an error (hotfix 2026-11-18).
+    try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -270,6 +272,9 @@ const userHtml = `
         subject: "Thank You for Your Inquiry!",
         html: userHtml,
       });
+    }
+    } catch (mailErr) {
+      console.error("LEAD SAVED BUT EMAIL FAILED:", mailErr.message);
     }
 
     return res.status(201).json({
