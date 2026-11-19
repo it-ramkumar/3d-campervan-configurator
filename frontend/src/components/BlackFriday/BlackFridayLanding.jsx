@@ -277,9 +277,8 @@ function LeadForm({ vans, selected, setSelected, formRef }) {
         lead_source: SOURCE,
       });
     } catch (err) {
-      setSubmitError(err.message || "We couldn't send your request. Please call us.");
-      setLoading(false);
-      return;
+      // The CRM copy below still captures the lead and alerts Anna.
+      console.error("contact API failed, lead sent to CRM only:", err?.message);
     }
 
     sendToCrm({
