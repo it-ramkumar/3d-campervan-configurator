@@ -3,6 +3,7 @@ import { useState } from "react";
 import { submitInquiry } from "../../api/inquiry/submitInquiry";
 import { validateLead } from "@/lib/validateLead";
 import { trackLead, withTracking, saveLeadEmail, createEventId } from "@/lib/track";
+import { sendToCrm } from "@/lib/crm";
 import {
   ArrowUpRight,
   X,
@@ -214,6 +215,23 @@ export default function InquiryForm() {
     const eventId = createEventId();
     const payload = withTracking({ ...formData, event_id: eventId, lead_source: "build_your_own" });
 
+    // Copy to the BBV CRM first (fire-and-forget), so the lead is never lost even if the API fails (2026-11-20).
+    const answers = Object.entries(formData)
+      .filter(([k, v]) => !["name", "email", "phone"].includes(k) && v !== "" && v != null)
+      .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : typeof v === "object" ? JSON.stringify(v) : v}`)
+      .join(" · ");
+    sendToCrm({
+      name: formData.name, email, phone: formData.phone || "", event_id: eventId,
+      lead_source: "build_your_own", message: ("Build-your-own configurator. " + answers).slice(0, 1400),
+    });
+    const done = () => {
+      trackLead({ source: "build_your_own", email, phone: formData.phone, name: formData.name, eventId });
+      saveLeadEmail(email);
+      setFormData({});
+      setCurrentStep(0);
+      navigate.push("/thank-you?source=build_your_own");
+    };
+
     try {
       const result = await submitInquiry(payload);
       if (result.success) {
@@ -223,16 +241,13 @@ export default function InquiryForm() {
         setCurrentStep(0);
         navigate.push("/thank-you?source=build_your_own");
       } else {
-        setMessage({
-          type: "error",
-          text: "Something went wrong. Please try again.",
-        });
+        // The CRM already has the lead: never show the visitor an error.
+        console.error("inquiry API failed, lead sent to CRM only:", result);
+        done();
       }
-    } catch {
-      setMessage({
-        type: "error",
-        text: "Network error. Please try again later.",
-      });
+    } catch (err) {
+      console.error("inquiry API failed, lead sent to CRM only:", err);
+      done();
     } finally {
       setIsLoading(false);
     }
