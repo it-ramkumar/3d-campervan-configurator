@@ -146,16 +146,22 @@ const adminHtml = `
 
       <div style="margin-top:15px;padding:12px;border:1px solid #eee;border-radius:8px;">
         <p style="margin:5px 0;"><strong>Lead Source:</strong> ${leadSource}</p>
-        <p style="margin:5px 0;"><strong>Form Type:</strong> ${req.body.lead_source || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>Gclid:</strong> ${req.body.gclid || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>Fbclid:</strong> ${req.body.fbclid || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>UTM Source:</strong> ${req.body.utm_source || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>UTM Medium:</strong> ${req.body.utm_medium || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>UTM Campaign:</strong> ${req.body.utm_campaign || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>UTM Term:</strong> ${req.body.utm_term || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>UTM Content:</strong> ${req.body.utm_content || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>Referrer:</strong> ${req.body.referrer || "N/A"}</p>
-        <p style="margin:5px 0;"><strong>Landing Page:</strong> ${req.body.landing_page || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>Form:</strong> ${req.body.lead_source || "N/A"} on ${req.body.landing_page || "N/A"}</p>
+        <p style="margin:5px 0;"><strong>What they clicked:</strong> ${(() => {
+          // Readable ad source instead of the raw fbclid code (Anna 2026-11-20)
+          const b = req.body || {};
+          const esc = (x) => String(x || "").replace(/[<>&"]/g, "");
+          const adSet = /^\d{10,}$/.test(String(b.utm_term || "")) ? String(b.utm_term) : ""; // Meta url_tags put the ad set id in utm_term
+          if (b.utm_source === "meta" || (b.fbclid && (b.utm_content || b.utm_campaign))) {
+            const link = adSet ? ` · <a href="https://adsmanager.facebook.com/adsmanager/manage/ads?act=526368357823208&selected_adset_ids=${adSet}">see the ads in Ads Manager</a>` : "";
+            return `Meta ad <b>${esc(b.utm_content) || "(ad name not tagged)"}</b> in campaign ${esc(b.utm_campaign) || "?"}${link}`;
+          }
+          if (b.gclid || b.utm_source === "google") return `Google ad${b.utm_campaign ? " · campaign " + esc(b.utm_campaign) : ""}${b.utm_term ? " · search: " + esc(b.utm_term) : ""}`;
+          if (b.fbclid) return "Facebook/Instagram link without an ad name (an organic post, the bio link, or an ad without URL tags)";
+          if (b.referrer) return "Came from " + esc(b.referrer);
+          return "Typed the address or a bookmark (no ad)";
+        })()}</p>
+        <p style="margin:5px 0;font-size:12px;color:#888;">utm: ${req.body.utm_source || "-"} / ${req.body.utm_medium || "-"} / ${req.body.utm_campaign || "-"} / ${req.body.utm_content || "-"} · referrer: ${req.body.referrer || "-"}</p>
       </div>
 
       <div style="margin-top:20px;text-align:center;">
